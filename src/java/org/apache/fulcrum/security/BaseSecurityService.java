@@ -122,7 +122,7 @@ public abstract class BaseSecurityService
     private int readerCount = 0;
 
     /** The instance of UserManager the SecurityService uses */
-    private UserManager userManager = null;
+    protected UserManager userManager = null;
 
     /** The class of User the SecurityService uses */
     private Class userClass = null;
