@@ -5,7 +5,7 @@
   <extend>${basedir}/../../project.xml</extend>
   <id>fulcrum-mimetype-api</id>
   <name>Fulcrum Mimetype API</name>
-  <currentVersion>1.0.4</currentVersion>
+  <currentVersion>1.0.4-dev</currentVersion>
   <package>org.apache.fulcrum.mimetype</package>
  
 </project>
