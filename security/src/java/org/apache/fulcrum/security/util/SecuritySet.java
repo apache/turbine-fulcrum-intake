@@ -122,10 +122,9 @@ public abstract class SecuritySet implements Serializable, Set
 	 *         match.
 	 */
     public boolean containsName(String name)
-    {
-        name = name.toLowerCase();
+    {        
         return (StringUtils.isNotEmpty(name))
-            ? nameMap.containsKey(name)
+            ? nameMap.containsKey(name.toLowerCase())
             : false;
     }
     /**
