@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Fulcrum Mimetype</title>
+    <author email="epugh@upstate.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+    <release version="1.0-alpha-4" date="in cvs">
+      <action dev="epugh" type="add">
+        Committing first cut of Merlin enabled components..
+      </action>
+    </release>
+    
+    <release version="1.0-alpha-3" date="11-01-2003">
+      <action dev="epugh" type="add">
+        Initial creation of project.
+      </action>
+    </release>
+
+  </body>
+</document>
+
