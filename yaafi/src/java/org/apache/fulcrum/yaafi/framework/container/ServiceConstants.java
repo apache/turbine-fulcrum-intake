@@ -18,32 +18,19 @@ package org.apache.fulcrum.yaafi.framework.container;
  */
 
 /**
- * This service allows access to avalon components.
+ * Commonly used constants.
+ * 
+ *  @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
 public interface ServiceConstants
 {
     /** The name of this component */
     String ROLE_NAME = "YAAFI";
-    
-	/** default file name of the component config file */
-	String COMPONENT_CONFIG_VALUE = "/componentConfiguration.xml";
-
-	/** default file name of the component role file */
-	String COMPONENT_ROLE_VALUE = "/componentRoles.xml";
-
-	/** default file name of the parameters file */
-	String COMPONENT_PARAMETERS_VALUE = "/parameters.properties";
-	
+    	
 	/** Key used in the context for defining the application root */
 	String COMPONENT_APP_ROOT = "componentAppRoot";
 
-    /** Alternate Merlin Friendly Key used in the context for defining the application root */
-    String URN_AVALON_HOME = "urn:avalon:home";
-
-    /** Alternate Merlin Friendly Key used in the context for defining the temp root */
-    String URN_AVALON_TEMP = "urn:avalon:temp";    	
-    
 	/** property to lookup the component config file */
 	String COMPONENT_CONFIG_KEY = "componentConfiguration";
 
@@ -52,4 +39,65 @@ public interface ServiceConstants
 
 	/** property to lookup the parameters file */
 	String COMPONENT_PARAMETERS_KEY = "parameters";
+
+	/////////////////////////////////////////////////////////////////////////
+	// Default values for YAAFI configuration files
+	/////////////////////////////////////////////////////////////////////////
+	
+	/** default file name of the component config file */
+	String COMPONENT_CONFIG_VALUE = "/componentConfiguration.xml";
+
+	/** default file name of the component role file */
+	String COMPONENT_ROLE_VALUE = "/componentRoles.xml";
+
+	/** default file name of the parameters file */
+	String COMPONENT_PARAMETERS_VALUE = "/parameters.properties";
+
+	/////////////////////////////////////////////////////////////////////////
+	// Merlin keys for Context
+	/////////////////////////////////////////////////////////////////////////
+	
+    /** define the Merlin application root (File) */
+    String URN_AVALON_HOME = "urn:avalon:home";
+
+    /** define the Merlin temporary directory (File) */
+    String URN_AVALON_TEMP = "urn:avalon:temp";    	
+
+    /** define the Merlin component name (String) */
+    String URN_AVALON_NAME = "urn:avalon:name";    
+    
+    /** define the Merlin partition name (String) */
+    String URN_AVALON_PARTITION = "urn:avalon:partition";    	
+    
+    /** define the Merlin component classloader (ClassLoader) */
+    String URN_AVALON_CLASSLOADER = "urn:avalon:classloader";
+    
+	/////////////////////////////////////////////////////////////////////////
+	// Phoenix keys for Context
+	/////////////////////////////////////////////////////////////////////////
+    
+    /** Phoenix alias for "urn:avalon:partition" */
+    String PHOENIX_APP_NAME = "app.name";
+
+    /** Phoenix alias for "urn:avalon:name" */
+    String PHOENIX_BLOCK_NAME = "block.name";
+
+    /** Phoenix alias for "urn:avalon:home" */
+    String PHOENIX_APP_HOME = "app.home";
+
+	/////////////////////////////////////////////////////////////////////////
+	// Fortress keys for Context
+	/////////////////////////////////////////////////////////////////////////
+
+    /** Fortress alias for "urn:avalon:partition" */
+    String FORTRESS_COMPONENT_ID = "component.id";
+
+    /** Fortress alias for "urn:avalon:name" */
+    String FORTRESS_COMPONENT_LOGGER = "component.logger";
+
+    /** Fortress alias for "urn:avalon:home" */
+    String FORTRESS_CONTEXT_ROOT = "context-root";
+
+    /** Fortress alias for "urn:avalon:home" */
+    String FORTRESS_IMPL_WORKDIR = "impl.workDir";
 }

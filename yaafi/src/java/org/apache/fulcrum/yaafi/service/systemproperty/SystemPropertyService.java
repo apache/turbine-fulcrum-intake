@@ -26,4 +26,5 @@ package org.apache.fulcrum.yaafi.service.systemproperty;
 
 public interface SystemPropertyService
 {
+    // This interface doesn't exposes any other methods
 }

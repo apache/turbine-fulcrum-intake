@@ -47,6 +47,7 @@ public class TestComponentImpl
     public String foo;
     public String bar;
     public static boolean decomissioned;
+    public String componentName;
 
     public void initialize() throws Exception
     {
@@ -56,7 +57,8 @@ public class TestComponentImpl
 
     public void contextualize(Context context) throws ContextException
     {
-        appRoot 	= (File) context.get( "urn:avalon:home" );
+        this.appRoot = (File) context.get( "urn:avalon:home" );
+        this.componentName = (String) context.get( "urn:avalon:name" );
     }
 
     public void configure(Configuration configuration) throws ConfigurationException
@@ -79,7 +81,8 @@ public class TestComponentImpl
     {
         setupLogger(this, "TestComponent");
         getLogger().debug("TestComponent.test() was called");
-        getLogger().debug("componentAppRoot = " + appRoot.getAbsolutePath());
+        getLogger().debug("componentAppRoot = " + this.appRoot.getAbsolutePath());
+        getLogger().debug("componentName = " + this.componentName);
         getLogger().debug("foo = " + this.foo );
         getLogger().debug("bar = " + this.bar );
     }

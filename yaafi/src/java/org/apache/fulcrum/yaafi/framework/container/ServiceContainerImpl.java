@@ -18,7 +18,6 @@ package org.apache.fulcrum.yaafi.framework.container;
  */
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +35,8 @@ import org.apache.avalon.framework.logger.Logger;
 import org.apache.avalon.framework.parameters.ParameterException;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.service.ServiceException;
+import org.apache.fulcrum.yaafi.framework.util.AvalonContextHelper;
+import org.apache.fulcrum.yaafi.framework.util.InputStreamLocator;
 
 /**
  * Yet another avalon framework implementation (yaafi).
@@ -44,7 +45,7 @@ import org.apache.avalon.framework.service.ServiceException;
  */
 
 public class ServiceContainerImpl
-    implements ServiceContainer
+    implements ServiceContainer, ServiceConstants
 {
     /** The role configuration file to be used */
     private String componentRolesLocation = COMPONENT_ROLE_VALUE;
@@ -61,7 +62,7 @@ public class ServiceContainerImpl
 	/** The directory for storing temporary files */
 	private File tempRootDir;
 
-    /** The logger to be used */
+    /** The logger to be used passed by the caller */
     private Logger logger;
 
     /** The list of services instantiated */
@@ -82,7 +83,7 @@ public class ServiceContainerImpl
 	/** The default Avalon parameters */
 	private Parameters parameters;
 	
-	/** Is this instance initiaized */
+	/** Is this instance initialized */
 	private boolean isDisposed;
 
     /////////////////////////////////////////////////////////////////////////
@@ -149,11 +150,11 @@ public class ServiceContainerImpl
         // print some diagnostics
         
         this.getLogger().debug( 
-            "Using the following applicationRootDir : " + this.applicationRootDir.getAbsolutePath() 
+            "Using the following applicationRootDir : " + this.getApplicationRootDir().getAbsolutePath() 
             );
 
         this.getLogger().debug( 
-            "Using the following tempRootDir : " + this.tempRootDir.getAbsolutePath() 
+            "Using the following tempRootDir : " + this.getTempRootDir().getAbsolutePath() 
             );
 
 		// get the configuration files
@@ -161,7 +162,7 @@ public class ServiceContainerImpl
 		this.serviceConfiguration 	= loadConfiguration(this.componentConfigurationLocation);
 		this.roleConfiguration 		= loadConfiguration(this.componentRolesLocation);
 
-		if( roleConfiguration == null )
+		if( this.roleConfiguration == null )
 		{
 			String msg = "Unable to locate the role configuration : " + this.componentRolesLocation;
 			this.getLogger().error( msg );
@@ -207,6 +208,7 @@ public class ServiceContainerImpl
     }
 
     /**
+     * 
      * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
      */
     public void contextualize(Context context) throws ContextException
@@ -214,15 +216,20 @@ public class ServiceContainerImpl
         Object entry = null;
         File currApplicationRootDir = null;
         File currTempRootDir = null;
+        boolean contextHasHomeEntry = false;
+        boolean contextHasTempEntry = false;
+        Context currContext = context;
         
-        this.context = context;
+        // 1) set the application directory
         
-        // check for URN_AVALON_HOME - according to the Merlin Spec it is a file 
-        // but Fulcrum passes in a string ... :-(
+        // 1.1) check for URN_AVALON_HOME
          
-        if( this.isInContext( context, URN_AVALON_HOME ) )
+        if( AvalonContextHelper.isInContext( currContext, URN_AVALON_HOME ) )
         { 
-            entry = context.get( URN_AVALON_HOME );
+            contextHasHomeEntry = true;
+            entry = currContext.get( URN_AVALON_HOME );
+            
+            // handle Fulcrum behaviour which passes a String
             
             if( entry instanceof String )
             {
@@ -238,22 +245,29 @@ public class ServiceContainerImpl
                 }
             }
             
+            // handle Merlin behaviour which passes a File
+            
             if( entry instanceof File )
             {
-                currApplicationRootDir = (File) context.get( URN_AVALON_HOME );    
+                currApplicationRootDir = (File) currContext.get( URN_AVALON_HOME );    
             }
         }
+        
+        // 1.2) if we found a value for URN_AVALON_HOME overwrite our default
         
         if( currApplicationRootDir != null )
         {
             this.setApplicationRootDir( currApplicationRootDir );
         }
-                
-        // check for URN_AVALON_TEMP
+             
+        // 2) set the temporary directory
         
-        if( this.isInContext( context, URN_AVALON_TEMP ) )
+        // 2.1) check for URN_AVALON_TEMP
+        
+        if( AvalonContextHelper.isInContext( context, URN_AVALON_TEMP ) )
         {
-            entry = context.get( URN_AVALON_TEMP );
+            contextHasTempEntry = true;
+            entry = currContext.get( URN_AVALON_TEMP );
             
             if( entry instanceof String )
             {
@@ -262,18 +276,50 @@ public class ServiceContainerImpl
             
             if( entry instanceof File )
             {
-                currTempRootDir = (File) context.get( URN_AVALON_TEMP );    
+                currTempRootDir = (File) currContext.get( URN_AVALON_TEMP );    
             }
         }        
 
+        // 2.2) if we found a value for URN_AVALON_TEMP overwrite our default
+        
         if( currTempRootDir != null )
         {
             this.setTempRootDir( currTempRootDir );
         }
+                
+        // 3) E.g. Phoenix does not provide a value for URN_AVALON_HOME/URN_AVALON_TEMP
+        //    which breaks the Merlin services .... :-(
+
+        // 3.1) add en entry for URN_AVALON_HOME 
+        
+        if( contextHasHomeEntry == false )
+        {
+            currContext = AvalonContextHelper.addToContext( 
+                currContext,
+                URN_AVALON_HOME,
+                this.getApplicationRootDir()
+                );                
+        }
+        
+        // 3.2) add en entry for URN_AVALON_HOME 
+        
+        if( contextHasTempEntry == false )
+        {
+            currContext = AvalonContextHelper.addToContext( 
+                currContext,
+                URN_AVALON_TEMP,
+                this.getTempRootDir()
+                );                
+        }
+        
+        // 4) set our context finally
+        
+        this.context = currContext;
     }
     
     /**
      * Disposes the service container implementation.
+     * 
      * @see org.apache.avalon.framework.activity.Disposable#dispose()
      */
     public synchronized void dispose()
@@ -307,6 +353,7 @@ public class ServiceContainerImpl
      * Reconfiguring the services. I'm not sure hopw to implement this properly since
      * the Avalon docs is vague on this subject. For now we suspend, reconfigure and
      * resume the services in the correct order.
+     * 
      * @see org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.apache.avalon.framework.configuration.Configuration)
      */
     public synchronized void reconfigure(Configuration configuration) throws ConfigurationException
@@ -376,7 +423,7 @@ public class ServiceContainerImpl
                 }
                 else
                 {
-                    // This component is initialized lazily
+                    // This component is initialized lazily or was disposed before
                     result = serviceComponent.create();
                     this.incarnate( serviceComponent );
                 }
@@ -406,8 +453,54 @@ public class ServiceContainerImpl
      */
     public synchronized void release(Object arg0)
     {
+        // AFAIK this is only useful for lifecycle management regarding
+        // lifestyle other than singleton. 
     }
+    
+    /**
+     * @see org.apache.fulcrum.yaafi.framework.container.ServiceContainer#decommision(java.lang.String)
+     */
+    public synchronized void decommision(String name) throws ServiceException
+    {
+        ServiceComponent serviceComponent = null;
 
+        serviceComponent = (ServiceComponent) this. getServiceMap().get(name);
+       
+        // lookup the service component
+        
+        if( serviceComponent == null )
+        {
+            String msg = "Service not found : " + name;
+            this.getLogger().error(msg);
+            throw new ServiceException(name, msg );
+        }
+        
+        // stop the service component
+        
+        try
+        {
+            serviceComponent.stop();
+        }
+        catch (Exception e)
+        {
+            String msg = "Unable to stop the service : " + name ;
+            throw new ServiceException( name, msg, e );
+        }
+        
+        // dispose the service component
+        
+        try
+        {
+            serviceComponent.dispose();
+        }
+        catch (Exception e)
+        {
+            String msg = "Unable to diospose the service : " + name ;
+            throw new ServiceException( name, msg, e );
+        }        
+       
+    }
+    
     /////////////////////////////////////////////////////////////////////////
     // Service YaffiContainer Implementation
     /////////////////////////////////////////////////////////////////////////
@@ -441,7 +534,7 @@ public class ServiceContainerImpl
      */
     protected Logger getLogger()
     {
-        return logger;
+        return this.logger;
     }
 
     /**
@@ -449,7 +542,7 @@ public class ServiceContainerImpl
      */
     protected Hashtable getServiceMap()
     {
-        return serviceMap;
+        return this.serviceMap;
     }
     
     /**
@@ -461,14 +554,23 @@ public class ServiceContainerImpl
      */
     protected void incarnate( ServiceComponent serviceComponent )
     	throws ContextException, ServiceException, ConfigurationException, ParameterException, Exception
-    {
+    {        
         this.getLogger().debug( "Incarnating the service " + serviceComponent.getShorthand() );
+     
+        // setup a context for the individual component containing
+        // "urn:avalon:name" and "urn:avalon:classLoader"
+        
+        DefaultContext serviceComponentContext = new DefaultContext( this.context );        
+        serviceComponentContext.put( URN_AVALON_NAME, serviceComponent.getName() );
+        serviceComponentContext.put( URN_AVALON_CLASSLOADER, serviceComponent.getClass().getClassLoader() );
+        
+        // process the lifecycle definition
         
         serviceComponent.enableLogging( this.getLogger() );
-        serviceComponent.contextualize( context );
+        serviceComponent.contextualize( serviceComponentContext );
         serviceComponent.service( this );
         serviceComponent.configure( this.getServiceConfiguration() );
-	    serviceComponent.parameterize( parameters );
+	    serviceComponent.parameterize( this.parameters );
 	    serviceComponent.initialize();
         serviceComponent.execute();
         serviceComponent.start();
@@ -507,7 +609,7 @@ public class ServiceContainerImpl
             this.getLogger().error( msg, e );
         }
     }
-
+    
     /**
      * Incarnation of a list of services
      */
@@ -622,7 +724,8 @@ public class ServiceContainerImpl
     private Configuration loadConfiguration( String location ) throws Exception
     {
 		Configuration result = null;
-    	InputStream is = this.getInputStream( location );
+		InputStreamLocator locator = this.createInputStreamLocator();
+    	InputStream is = locator.locate( location );
 		DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
 
 		if( is != null )
@@ -641,9 +744,10 @@ public class ServiceContainerImpl
 	 */
 	private Parameters loadParameters( String location ) throws Exception
 	{
-		InputStream is 		= this.getInputStream( location );
-		Configuration conf  = null;
-		Parameters result 	= new Parameters();
+	    InputStreamLocator locator = this.createInputStreamLocator();
+		InputStream is = locator.locate( location );
+		Configuration conf = null;
+		Parameters result = new Parameters();
 
 		if( is != null )
 		{
@@ -664,67 +768,12 @@ public class ServiceContainerImpl
 
 
 	/**
-	 * Locate the file with the given position
+	 * Creates a locator to find a resource either in the file system or in
+	 * the classpath
 	 */
-	private InputStream getInputStream( String location ) throws Exception
+	private InputStreamLocator createInputStreamLocator()
 	{
-        if( ( location == null ) || ( location.length() == 0 ) )
-        {
-            return null;
-        }
-
-		File file = null;
-		InputStream is = null;
-
-		// try to load a relative location with the given application root dir
-		// e.g. "componentRoles.xml" located in the current working directory
-
-		if( ( is == null ) && ( location.startsWith( "/" ) == false ) )
-		{
-			file = new File( this.applicationRootDir, location );
-
-			this.getLogger().debug("Looking for " + location + " in the application directory");
-			
-			if( file.exists() )
-			{
-				is = new FileInputStream( file );
-			}
-		}
-
-		// try to load an absolute location as file
-		// e.g. "/foo/componentRoles.xml" from the root of the file system
-
-		if( is == null ) 
-		{
-			file = new File( location );
-
-			this.getLogger().debug("Looking for " + location + " as absolute file location");
-			
-			if( file.isAbsolute() && file.exists() )
-			{
-				is = new FileInputStream( file );
-			}
-		}
-
-		// try to load an absolute location through the classpath
-		// e.g. "/componentRoles.xml" located in the classpath
-
-		if( ( is == null ) && ( location.startsWith( "/" ) == true ) )
-		{
-		    this.getLogger().debug("Looking for " + location + " using the class loader");
-			is =  getClass().getResourceAsStream( location );
-		}
-
-		if( is == null )
-		{
-		    this.getLogger().warn("Unable to locate " + location);
-		}
-		else
-		{
-		    this.getLogger().debug("Successfully located " + location);
-		}
-		
-		return is;
+	    return new InputStreamLocator( this.getApplicationRootDir(), this.getLogger() );	    
 	}
 	
 	/**
@@ -771,48 +820,27 @@ public class ServiceContainerImpl
         return result;
 	}
 	
+	/**
+	 * Create a default context. The context contains the following entries
+	 * <ul>
+	 *   <li>urn:avalon:home</li> 
+	 *   <li>urn:avalon:temp</li>
+	 *   <li>componentAppRoot</li>
+	 * </ul>
+	 * 
+	 * @return a DefaultContext
+	 */
 	private DefaultContext createDefaultContext()
 	{
 		DefaultContext result = new DefaultContext();
 
-		result.put( ServiceConstants.URN_AVALON_HOME, this.applicationRootDir );
-		result.put( ServiceConstants.URN_AVALON_TEMP, this.tempRootDir );
-		result.put( ServiceConstants.COMPONENT_APP_ROOT, this.applicationRootDir.getAbsolutePath() );
+		result.put( ServiceConstants.URN_AVALON_HOME, this.getApplicationRootDir() );
+		result.put( ServiceConstants.URN_AVALON_TEMP, this.getTempRootDir() );
+		result.put( ServiceConstants.COMPONENT_APP_ROOT, this.getApplicationRootDir().getAbsolutePath() );
 		
 		return result;
 	}
-	
-	/** 
-	 * Determines if an entry exists within the given context. 
-	 * 
-	 * @param context the contect to look at
-	 * @param name the name of the parameter within the context  
-	 */
-	
-	private boolean isInContext( Context context, String name )
-	{
-	    if( context == null )
-	    {
-	        return false;
-	    }
-	    
-	    try
-        {
-            if( context.get(name) != null )
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        catch (ContextException e)
-        {
-            return false;
-        }
-	}
-	
+		
     /**
      * @param applicationRootDir The applicationRootDir to set.
      */
@@ -836,9 +864,17 @@ public class ServiceContainerImpl
     }
     
     /**
+     * @return Returns the applicationRootDir.
+     */
+    private File getApplicationRootDir()
+    {
+        return this.applicationRootDir;
+    }
+    
+    /**
      * @param tempRootDir The tempRootDir to set.
      */
-    public void setTempRootDir(File dir)
+    private void setTempRootDir(File dir)
     {
         if( dir == null )
         {
@@ -855,5 +891,13 @@ public class ServiceContainerImpl
         this.getLogger().debug( "Setting tempRootDir to " + dir.getAbsolutePath() );
         
         this.tempRootDir = dir;
+    }
+    
+    /**
+     * @return Returns the tempRootDir.
+     */
+    private File getTempRootDir()
+    {
+        return tempRootDir;
     }
 }

@@ -22,6 +22,7 @@ import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.logger.ConsoleLogger;
 import org.apache.avalon.framework.logger.Logger;
 
+import org.apache.fulcrum.yaafi.framework.container.ServiceConstants;
 import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
 
 
@@ -48,6 +49,12 @@ public class ServiceManagerFactory
     
     /**
      * Create a fully initialized YAFFI service container
+     * 
+     * @param logger the logger to use
+     * @param componentRolesLocation the location of role definition file
+     * @param componentConfigurationLocation the location of configuration file
+     * @param parametersLocation The location of the additional parameters
+     * @throws Exception the creation failed
      */
     public static ServiceContainer create(
         Logger logger,
@@ -67,6 +74,13 @@ public class ServiceManagerFactory
 
     /**
      * Create a fully initialized YAFFI service container
+     * 
+     * @param logger the logger to use
+     * @param componentRolesLocation the location of role definition file
+     * @param componentConfigurationLocation the location of configuration file
+     * @param parametersLocation The location of the additional parameters
+     * @param context the context to pass
+     * @throws Exception the creation failed
      */
     public static ServiceContainer create( 
         Logger logger,
@@ -92,7 +106,7 @@ public class ServiceManagerFactory
         {
             // bootstrap the logging
             
-            ServiceManagerFactory.logger = logger.getChildLogger( ServiceManagerFactory.class.getName() );
+            ServiceManagerFactory.logger = logger;
             ServiceManagerFactory.logger.debug( "Loading the service container class " + serviceContainerClazzName );
             
             // bootstrap the service container
@@ -110,9 +124,7 @@ public class ServiceManagerFactory
         
         // LogEnabled.enableLogging() to set the logger 
         
-        Logger serviceContainerLogger = ServiceManagerFactory.logger.getChildLogger( 
-            ServiceContainer.class.getName() 
-        	);
+        Logger serviceContainerLogger = logger;
         
         result.enableLogging( serviceContainerLogger );
         
@@ -126,7 +138,7 @@ public class ServiceManagerFactory
         // Configurable.configure() to set the configurattion files
         
         DefaultConfiguration configuration = new DefaultConfiguration(
-            ServiceContainer.ROLE_NAME
+            ServiceConstants.ROLE_NAME
             );
         
         configuration = createConfiguration(
@@ -144,7 +156,11 @@ public class ServiceManagerFactory
     }
 
     /**
-     * @return A configuration to be passed to the service container
+     * Create a default configuration (i.e. XML) with the given parameters.
+     * 
+     * @param componentRolesLocation the location of role definition file
+     * @param componentConfigurationLocation the location of configuration file
+     * @param parametersLocation The location of the additional parameters 
      */
     private static DefaultConfiguration createConfiguration(
         String componentRolesLocation,
@@ -152,13 +168,13 @@ public class ServiceManagerFactory
         String parametersLocation )
     {
         DefaultConfiguration result = new DefaultConfiguration(
-            ServiceContainer.ROLE_NAME
+            ServiceConstants.ROLE_NAME
             );
         
         // 1) componentRolesLocation
         
         DefaultConfiguration componentRolesLocationConfig = new DefaultConfiguration(
-            ServiceContainer.COMPONENT_ROLE_KEYS
+            ServiceConstants.COMPONENT_ROLE_KEYS
             );
            
         componentRolesLocationConfig.setValue( 
@@ -170,7 +186,7 @@ public class ServiceManagerFactory
         // 2) componentConfigurationLocation
         
         DefaultConfiguration componentConfigurationLocationConfig = new DefaultConfiguration(
-            ServiceContainer.COMPONENT_CONFIG_KEY
+            ServiceConstants.COMPONENT_CONFIG_KEY
             );
            
         componentConfigurationLocationConfig.setValue( 
@@ -182,7 +198,7 @@ public class ServiceManagerFactory
         // 3) parametersLocation
 
         DefaultConfiguration parametersLocationConfig = new DefaultConfiguration(
-            ServiceContainer.COMPONENT_PARAMETERS_KEY
+            ServiceConstants.COMPONENT_PARAMETERS_KEY
             );
            
         parametersLocationConfig.setValue( 

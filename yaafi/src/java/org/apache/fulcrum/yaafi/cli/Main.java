@@ -86,7 +86,7 @@ public class Main
        {
            try
            {
-               Thread.currentThread().sleep(1000);
+               Thread.sleep(1000);
            }
     	   catch (InterruptedException e)
     	   {
@@ -111,8 +111,8 @@ public class Main
         // initialize shutdown hoook of JVM
         
         Shutdown shutdown = new Shutdown( this.getManager(), this.getLogger() );
-        this.shutdownThread = new Thread(shutdown);
-        Runtime.getRuntime().addShutdownHook(shutdownThread);		       
+        this.shutdownThread = new Thread( shutdown );
+        Runtime.getRuntime().addShutdownHook( this.shutdownThread );		       
     }
 
     protected synchronized void dispose() throws Exception
@@ -128,7 +128,7 @@ public class Main
      */
     protected Logger getLogger()
     {
-        return logger;
+        return this.logger;
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -140,7 +140,7 @@ public class Main
      */
     public ServiceContainer getManager()
     {
-        return manager;
+        return this.manager;
     }
     /**
      * @param manager The manager to set.

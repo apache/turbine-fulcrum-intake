@@ -31,6 +31,8 @@ import org.apache.avalon.framework.service.Serviceable;
 
 /**
  * This service allows access to avalon components.
+ * 
+ * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a> 
  */
 
 public interface ServiceComponent

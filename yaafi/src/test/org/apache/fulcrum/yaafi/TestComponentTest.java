@@ -58,12 +58,21 @@ public class TestComponentTest extends BaseUnitTest
      */
     public void testTestComponentDecomissioned() throws Exception
     {
+        // lookup the test component
         TestComponent testComponent = (TestComponent) this.lookup( 
             TestComponent.ROLE 
             );
         assertFalse( TestComponentImpl.decomissioned );
-        tearDown();  //only way to work
-       //this.release((Object)testComponent);
-       assertTrue( TestComponentImpl.decomissioned );
+        
+        // decommision the test component
+        this.decommision( TestComponent.ROLE );
+        assertTrue( TestComponentImpl.decomissioned );
+
+        // resurrect the test component - resurrecting a decommisioned service
+        // might need some reviewing but I'm quite happy with the semantics
+        testComponent = (TestComponent) this.lookup( 
+            TestComponent.ROLE 
+            );
+        assertFalse( TestComponentImpl.decomissioned );
     }    
 }

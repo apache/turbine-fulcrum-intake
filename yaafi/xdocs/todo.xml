@@ -17,6 +17,29 @@
           BlowfishJ from Markus Hahn (see http://www.lassekolb.info/bfacs.htm). 
         </p>
       </subsection>
+
+      <subsection name="Adding a component personality">
+        <p>
+          Based on the component personality a proper Context will be 
+          created (e.g. 'merlin', 'fortress', 'phoenix') and passed 
+          to the component. This would allow to reuse Avalon service
+          written for other containers (I'm not jokink)
+        </p>
+      </subsection>
+
+      <subsection name="Adding a container personality">
+        <p>
+          This would allow to embed YAAFI cleanly in another
+          Avalon Container, e.g. within James.
+        </p>
+      </subsection>
+
+      <subsection name="Add automatic reconfiguration">
+        <p>
+          It would be nice to poll the configuration files
+          and trigger a reconfiguration if they were changed
+        </p>
+      </subsection>
       
     </section>
 

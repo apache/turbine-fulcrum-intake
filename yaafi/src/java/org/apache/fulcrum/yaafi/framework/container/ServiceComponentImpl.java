@@ -68,6 +68,9 @@ public class ServiceComponentImpl
     /** Do we incarnate this instance during start-up */
     private boolean isEarlyInit;
     
+    /** A description for the service if any */
+    private String description;
+    
     /**
      * Constructor
      * @param configuration The configuration to obtain the meta informations
@@ -86,6 +89,7 @@ public class ServiceComponentImpl
 	        this.shorthand		= configuration.getAttribute("shorthand",this.name);
 	        this.logger			= logger;
 	        this.isEarlyInit 	= configuration.getAttributeAsBoolean("early-init",true);
+	        this.description	= configuration.getAttribute("description",null);
         }
         else
         {
@@ -93,7 +97,8 @@ public class ServiceComponentImpl
 	        this.name			= configuration.getAttribute("name",this.clazzName);
 	        this.shorthand		= configuration.getAttribute("shorthand",this.name);
 	        this.logger			= logger;
-	        this.isEarlyInit 	= configuration.getAttributeAsBoolean("early-init",true);            
+	        this.isEarlyInit 	= configuration.getAttributeAsBoolean("early-init",true);
+	        this.description	= configuration.getAttribute("description",null);
         }
     }
 	
@@ -138,14 +143,14 @@ public class ServiceComponentImpl
 			try
 			{
 				this.getLogger().debug( "LogEnabled.enableLogging() for " + this.getShorthand() );
-				Logger avalonLogger = logger.getChildLogger( this.getClazzName() ); 
+				Logger avalonLogger = logger.getChildLogger( this.getShorthand() ); 
 				((LogEnabled )this.getInstance()).enableLogging(avalonLogger);
 			}
 			catch (Throwable t)
 			{
 				String msg = "LogEnable the following service failed : " + this.getName();
 				this.getLogger().error(msg,t);
-				throw new RuntimeException(msg,t);
+				throw new RuntimeException(msg);
 			}		    
 		}
     }
@@ -203,7 +208,7 @@ public class ServiceComponentImpl
 			{
 				String msg = "Servicing the following service failed : " + this.getShorthand();
 				this.getLogger().error(msg,t);
-				throw new RuntimeException(msg,t);
+				throw new RuntimeException(msg);
 			}
 		}
 	}
@@ -343,7 +348,7 @@ public class ServiceComponentImpl
             {
                 String msg = "Starting the following service failed : " + this.getShorthand();
                 this.getLogger().error(msg,t);
-                throw new RuntimeException(msg,t);
+                throw new RuntimeException(msg);
             }
         }        
     }
@@ -468,7 +473,7 @@ public class ServiceComponentImpl
      */
     public boolean isEarlyInit()
     {
-        return isEarlyInit;
+        return this.isEarlyInit;
     }
     
     /**
@@ -487,7 +492,7 @@ public class ServiceComponentImpl
             return this.create();
         }
     }
-
+        
     /////////////////////////////////////////////////////////////////////////
     // Generated getters and setters
     /////////////////////////////////////////////////////////////////////////
@@ -497,7 +502,7 @@ public class ServiceComponentImpl
      */
     public Class getClazz()
     {
-        return clazz;
+        return this.clazz;
     }
     /**
      * @param clazz The clazz to set.
@@ -511,7 +516,7 @@ public class ServiceComponentImpl
      */
     public String getClazzName()
     {
-        return clazzName;
+        return this.clazzName;
     }
     /**
      * @param clazzName The clazzName to set.
@@ -532,7 +537,7 @@ public class ServiceComponentImpl
      */
     public Logger getLogger()
     {
-        return logger;
+        return this.logger;
     }
     /**
      * @param logger The logger to set.
@@ -546,7 +551,7 @@ public class ServiceComponentImpl
      */
     public String getName()
     {
-        return name;
+        return this.name;
     }
     /**
      * @param name The name to set.
@@ -560,7 +565,7 @@ public class ServiceComponentImpl
      */
     public String getShorthand()
     {
-        return shorthand;
+        return this.shorthand;
     }
     /**
      * @param shorthand The shorthand to set.
@@ -568,6 +573,22 @@ public class ServiceComponentImpl
     public void setShorthand(String shorthand)
     {
         this.shorthand = shorthand;
+    }
+    
+    /**
+     * @return Returns the description if any.
+     */
+    public String getDescription()
+    {
+        return description;
+    }
+
+    /**
+     * @param description The description to set.
+     */
+    public void setDescription(String description)
+    {
+        this.description = description;
     }
     
     /////////////////////////////////////////////////////////////////////////

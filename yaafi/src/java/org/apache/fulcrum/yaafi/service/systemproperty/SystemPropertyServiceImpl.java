@@ -41,6 +41,7 @@ public class SystemPropertyServiceImpl
      */
     public SystemPropertyServiceImpl()
     {
+        // nothing to do here
     }
 
     /**

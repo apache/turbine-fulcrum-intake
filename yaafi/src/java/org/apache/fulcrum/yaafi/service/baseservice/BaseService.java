@@ -34,5 +34,6 @@ import org.apache.avalon.framework.service.Serviceable;
 
 public interface BaseService
     extends LogEnabled, Contextualizable, Serviceable, Configurable, Parameterizable
-{    
+{
+    // This interface doesn't exposes any other methods
 }

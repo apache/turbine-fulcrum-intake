@@ -90,7 +90,7 @@ public abstract class BaseServiceImpl
      */
     protected Configuration getConfiguration()
     {
-        return configuration;
+        return this.configuration;
     }
     
     /**
@@ -98,7 +98,7 @@ public abstract class BaseServiceImpl
      */
     protected Context getContext()
     {
-        return context;
+        return this.context;
     }
         
     /**
@@ -106,7 +106,7 @@ public abstract class BaseServiceImpl
      */
     protected Parameters getParameters()
     {
-        return parameters;
+        return this.parameters;
     }
     
     /**
@@ -114,6 +114,6 @@ public abstract class BaseServiceImpl
      */
     protected ServiceManager getServiceManager()
     {
-        return serviceManager;
+        return this.serviceManager;
     }
 }

@@ -26,6 +26,7 @@ import org.apache.avalon.framework.context.DefaultContext;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.logger.ConsoleLogger;
 import org.apache.avalon.framework.logger.Logger;
+import org.apache.avalon.framework.service.ServiceException;
 import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
 import org.apache.fulcrum.yaafi.framework.container.ServiceContainerImpl;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceManagerFactory;
@@ -178,4 +179,18 @@ public class Container extends AbstractLogEnabled implements Initializable, Disp
     {
         ServiceManagerService.getServiceManager().release(component);
     }
+    
+    /**
+     * Decommision the service
+     * @param name the name of the service
+     */
+    protected void decommision( String name )
+    	throws ServiceException, Exception
+    {
+        if( this.manager != null )
+        {
+            this.manager.decommision( name );
+        }
+    }
+    
 }

@@ -6,11 +6,30 @@
   </properties>
 
   <body>
-    <release version="1.0.3" date="2004-11-24">
-      <action dev="goeschsi" type="add">
-        Added a little bi of documentation
+    <release version="1.0.4" date="as in CVS">
+      <action dev="sgoeschl" type="add">
+        Refactored some code into AvalonContextHelper and InputStreamLocator
       </action>
-      <action dev="goeschsi" type="fix">
+      <action dev="sgoeschl" type="add">
+        Parsing a "description" element of the role configuration file
+      </action>
+      <action dev="sgoeschl" type="update">
+        Improved creation of child logger to avoid overly long names by using the shorthand
+        instead of the class name
+      </action>
+      <action dev="sgoeschl" type="add">
+        Extending ServiceManagerService to store Parameters and Context
+      </action>
+      <action dev="sgoeschl" type="add">
+        Setting proper context to achive compatibility with Phoenix container. YAAFI
+        now works embedded into JAMES.
+      </action>    
+    </release>
+    <release version="1.0.3" date="2004-11-24">
+      <action dev="sgoeschl" type="add">
+        Added a little bit of documentation
+      </action>
+      <action dev="sgoeschl" type="fix">
         Fixed most of the Eclipse complaints about coding conventions
       </action>        
       <action dev="epugh" type="fix" due-to="Siegfried Goeschl">
@@ -22,35 +41,35 @@
       </action>
     </release>
     <release version="1.0.2" date="2004-10-19">
-      <action dev="goeschsi" type="update">
+      <action dev="sgoeschl" type="update">
         Using LogEnabled.enableLogging() and Configurable.configure() to create a service container
       </action>
-      <action dev="goeschsi" type="fix">
+      <action dev="sgoeschl" type="fix">
         Locating an absolute file should now also work with Windows
       </action>
-      <action dev="goeschsi" type="fix">
+      <action dev="sgoeschl" type="fix">
         Removed log4j dpendency
       </action>
     </release>
     <release version="1.0.1" date="2004-10-11">
-      <action dev="goeschsi" type="update">
+      <action dev="sgoeschl" type="update">
         Refactored the source code to extract ServiceComponent and ServiceContainer interface
       </action>
-      <action dev="goeschsi" type="update">
+      <action dev="sgoeschl" type="update">
         Renamed the classes to org.apache.fulcrum.yaafi
       </action>
-      <action dev="goeschsi" type="add">
+      <action dev="sgoeschl" type="add">
         Added a ServiceManager service to keep track of the service manager singleton
       </action>
-      <action dev="goeschsi" type="add">
+      <action dev="sgoeschl" type="add">
         Added a ServiceManagerFactory to encapsulate the details of initializing YAAFI
       </action>
-      <action dev="goeschsi" type="add">
+      <action dev="sgoeschl" type="add">
         Added a simple SystemPropertyService since it is useful and does not introduce any new dependencies
       </action>
     </release>
     <release version="1.0.0" date="2004-10-04">
-      <action dev="goeschsi" type="fix">
+      <action dev="sgoeschl" type="fix">
         Cleaned up the implementation
       </action>
     </release>

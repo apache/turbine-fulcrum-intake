@@ -2,7 +2,7 @@ package org.apache.fulcrum.yaafi.testcontainer;
 
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -20,6 +20,7 @@ import junit.framework.TestCase;
 
 import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.component.ComponentException;
+import org.apache.avalon.framework.service.ServiceException;
 
 /**
  * Base class for unit tests for components. This version doesn't load the container until the
@@ -91,11 +92,11 @@ public abstract class BaseUnitTest extends TestCase
 	 */
     protected void tearDown() throws Exception
     {
-        if (container != null)
+        if (this.container != null)
         {
-            container.dispose();
+            this.container.dispose();
         }
-        container = null;
+        this.container = null;
     }
     /**
 	 * Gets the configuration file name for the container should use for this test.
@@ -104,7 +105,7 @@ public abstract class BaseUnitTest extends TestCase
 	 */
     protected String getConfigurationFileName()
     {
-        return configurationFileName;
+        return this.configurationFileName;
     }
     /**
 	 * Gets the role file name for the container should use for this test.
@@ -113,7 +114,7 @@ public abstract class BaseUnitTest extends TestCase
 	 */
     protected String getRoleFileName()
     {
-        return roleFileName;
+        return this.roleFileName;
     }
     /**
 	 * Gets the parameter file name for the container should use for this test.
@@ -122,7 +123,7 @@ public abstract class BaseUnitTest extends TestCase
 	 */
     protected String getParameterFileName()
     {
-        return parameterFileName;
+        return this.parameterFileName;
     }    
     /**
 	 * Returns an instance of the named component. Starts the container if it hasn't been started.
@@ -132,12 +133,12 @@ public abstract class BaseUnitTest extends TestCase
 	 */
     protected Object lookup(String roleName) throws ComponentException
     {
-        if (container == null)
+        if (this.container == null)
         {
-            container = new Container();
-            container.startup(getConfigurationFileName(), getRoleFileName(), getParameterFileName());
+            this.container = new Container();
+            this.container.startup(getConfigurationFileName(), getRoleFileName(), getParameterFileName());
         }
-        return container.lookup(roleName);
+        return this.container.lookup(roleName);
     }
     /**
 	 * Releases the component
@@ -146,9 +147,9 @@ public abstract class BaseUnitTest extends TestCase
 	 */
     protected void release(Component component)
     {
-        if (container != null)
+        if (this.container != null)
         {
-            container.release(component);
+            this.container.release(component);
         }
     }
     /**
@@ -158,9 +159,22 @@ public abstract class BaseUnitTest extends TestCase
 	 */
     protected void release(Object component)
     {
-        if (container != null)
+        if (this.container != null)
         {
-            container.release(component);
+            this.container.release(component);
+        }
+    }
+    
+    /**
+     * Decommision the service
+     * @param name the name of the service
+     */
+    protected void decommision( String name )
+    	throws ServiceException, Exception
+    {
+        if (this.container != null)
+        {
+            this.container.decommision( name );
         }
     }
 }
