@@ -66,6 +66,10 @@
     name="org.apache.fulcrum.jsp.JspService"
     shorthand="jsp"
     default-class="org.apache.fulcrum.jsp.TurbineJspService"/>
+  <role
+    name="org.apache.fulcrum.db.HibernateService"
+    shorthand="hibernate"
+    default-class="org.apache.fulcrum.db.HibernateService"/>    
 
 </role-list>
 
