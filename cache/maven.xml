@@ -1,0 +1,7 @@
+<project default="jar:jar" xmlns:maven="jelly:maven" xmlns:j="jelly:core" xmlns:util="jelly:util">
+
+  <preGoal name="site">
+    <attainGoal name="maven-jcoverage-plugin:deregister"/>
+  </preGoal>
+
+</project>
