@@ -84,7 +84,7 @@ public class MemoryPermissionManagerImpl extends AbstractPermissionManager
     /**
      * Retrieves all permissions defined in the system.
      * 
-     * @return the names of all roles defined in the system.
+     * @return the names of all permissions defined in the system.
      * @throws DataBackendException if there was an error accessing the data backend.
      */
     public PermissionSet getAllPermissions() throws DataBackendException
