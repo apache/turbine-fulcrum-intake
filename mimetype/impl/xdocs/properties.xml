@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- 
+/*
+ * Copyright 2001-2004 The Apache Software Foundation.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ -->
+
+<document>
+
+  <properties>
+    <title>Fulcrum Mimetype Properties</title>
+    <author email="epugh@opensourceconnections.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+    <section name="Fulcrum Mimetype Settings">
+      <table>
+        <tr><th>Property</th><th>Optional?</th><th>Description</th></tr>
+        <tr>
+          <td>mimetypes</td>
+          <td>Yes</td>
+          <td>
+             This property specifies a file containing mappings between MIME 
+             content types and the corresponding file name extensions. The
+             service itself contains a hardcoded set of most common mappings. 
+            The file must use the same syntax as the mime.types file of 
+            the Apache Server, i.e. 
+            [mimetype] [ext1] [ext2]...  
+            <p/>
+            For example /WEB-INF/conf/mime.types
+          </td>
+        </tr>
+        <tr>
+          <td>charsets</td>
+          <td>Yes</td>
+          <td>
+            This property specifies a file containing mappings between locales 
+            and the corresponding character encodings. The service itself 
+            contains a hardcoded set of most common mappings. 
+            The file should use the Java property file syntax, i.e. 
+            lang_country_variant=charset
+            <p/>
+            For example /WEB-INF/conf/charset.properties
+          </td>
+        </tr>       
+        
+      </table>
+    </section>
+
+  </body>
+</document>
