@@ -478,7 +478,8 @@ public class TurbineLocalizationService
      */
     public final Locale getLocale(HttpServletRequest req)
     {
-        return getLocale(req.getHeader(ACCEPT_LANGUAGE));
+        Locale l = req.getLocale();
+        return (l != null ? l : getLocale(req.getHeader(ACCEPT_LANGUAGE)));
     }
 
     /**
