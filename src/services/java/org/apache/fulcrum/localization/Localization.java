@@ -93,7 +93,8 @@ public abstract class Localization
      * locale values of what is defined in the
      * TurbineResources.properties file for the
      * locale.default.language and locale.default.country property
-     * values.  If those cannot be found, then en/US is used.
+     * values.  If those cannot be found, then the JVM default is
+     * used.
      *
      * @param str Name of string.
      * @return A localized String.
@@ -109,14 +110,14 @@ public abstract class Localization
      * header is not present, it will fall back to using the locale
      * values of what is defined in the TurbineResources.properties
      * file for the locale.default.language and locale.default.country
-     * property values.  If those cannot be found, then en/US is used.
+     * property values.  If those cannot be found, then the JVM
+     * default is used.
      *
      * @param req HttpServletRequest information.
      * @param str Name of string.
      * @return A localized String.
      */
-    public static String getString ( HttpServletRequest req,
-                                     String str )
+    public static String getString(HttpServletRequest req, String str)
     {
         return getService().getBundle(req).getString(str);
     }
