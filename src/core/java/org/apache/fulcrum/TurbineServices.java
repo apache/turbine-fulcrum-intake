@@ -86,9 +86,9 @@ public class TurbineServices
      *
      * @return The single instance of this class.
      */
-    public static ServiceBroker getInstance()
+    public static ServiceManager getInstance()
     {
-        return (ServiceBroker) instance;
+        return instance;
     }
 
     /**
