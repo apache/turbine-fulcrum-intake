@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+  <!DOCTYPE hibernate-mapping PUBLIC
+     "-//Hibernate/Hibernate Mapping DTD//EN"
+     "http://hibernate.sourceforge.net/hibernate-mapping.dtd">
+
+  <hibernate-mapping>
+    <class name="org.apache.fulcrum.db.Labor" table="LABOR" >
+
+      <id name="id" type="integer" column="LABOR_ID" unsaved-value="null">
+           <generator class="native"/>
+        </id>
+      <property name="activity" column="ACTIVITY" type="string"/>
+      <property name="hours" column="HOURS" type="double"/>     
+      <property name="rate" column="RATE" type="double"/>           
+      <property name="cost" column="COST" type="double"/>                 
+    </class>
+  </hibernate-mapping>

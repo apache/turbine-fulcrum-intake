@@ -1,0 +1,9 @@
+<plexus>
+  <components>
+    <component>
+      <role>org.apache.fulcrum.db.HibernateService</role> 
+      <implementation>org.apache.fulcrum.db.HibernateService</implementation> 
+      <configuration xmlFile="src/test/org/apache/fulcrum/db/Labor.hbm.xml"/> 
+    </component>
+  </components>
+</plexus>
