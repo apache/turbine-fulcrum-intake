@@ -305,9 +305,6 @@ public abstract class BaseServiceBroker implements ServiceBroker
      */
     protected void initMapping()
     {
-        int pref = SERVICE_PREFIX.length();
-        int suff = CLASSNAME_SUFFIX.length();
-
         /*
          * These keys returned in an order that corresponds
          * to the order the services are listed in
@@ -325,11 +322,13 @@ public abstract class BaseServiceBroker implements ServiceBroker
         while(keys.hasNext())
         {
             String key = (String)keys.next();
+            String [] keyParts = StringUtils.split(key, ".");
 
-            if(key.startsWith(SERVICE_PREFIX) && key.endsWith(CLASSNAME_SUFFIX))
+            if ((keyParts.length == 3) 
+                && (keyParts[0] + ".").equals(SERVICE_PREFIX) 
+                && ("." + keyParts[2]).equals(CLASSNAME_SUFFIX))
             {
-                String serviceKey = key.substring(pref, key.length() - suff);
-                notice ("Added Mapping for Service: " + serviceKey);
+                String serviceKey = keyParts[1];
 
                 if (! mapping.containsKey(serviceKey))
                 {
@@ -516,7 +515,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
 
     /**
      * Shuts down all Turbine services, releasing allocated resources and
-     * returning them to their initial (uninitailized) state.
+     * returning them to their initial (uninitialized) state.
      */
     public void shutdownServices()
     {
