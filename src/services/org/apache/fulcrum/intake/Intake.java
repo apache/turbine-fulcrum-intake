@@ -63,7 +63,7 @@ import java.util.Map;
 import org.apache.fulcrum.Log;
 import org.apache.fulcrum.pool.Recyclable;
 import org.apache.torque.om.Retrievable;
-import org.apache.fulcrum.util.parser.ParameterParser;
+import org.apache.fulcrum.util.parser.ValueParser;
 import org.apache.fulcrum.intake.model.Group;
 import org.apache.fulcrum.intake.TurbineIntake;
 
@@ -78,7 +78,7 @@ public class Intake
 {
     public static final String DEFAULT_KEY = "_0";
     private HashMap groups;
-    private ParameterParser pp;
+    private ValueParser pp;
 
     HashMap declaredGroups = new HashMap();
     StringBuffer allGroupsSB = new StringBuffer(256);
@@ -103,7 +103,7 @@ public class Intake
     /**
      * Prepares intake for a single request
      */
-    public void init(ParameterParser pp)
+    public void init(ValueParser pp)
     {
         this.pp = pp;
         String[] groupKeys = pp.getStrings("intake-grp");

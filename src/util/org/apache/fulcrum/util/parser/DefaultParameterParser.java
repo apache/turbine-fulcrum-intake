@@ -221,6 +221,9 @@ public class DefaultParameterParser
         // if they are query string data.
         try
         {
+            // the lines below can be substituted with the method
+            // parse(req.getPathInfo(), '/', true);
+            // if DefaultParameterParser extended StringParser
             StringTokenizer st = new StringTokenizer(req.getPathInfo(), "/");
             boolean isNameTok = true;
             String pathPart = null;

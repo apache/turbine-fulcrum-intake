@@ -93,7 +93,7 @@ public abstract class TurbineIntake
     /**
      * Gets an instance of a named group either from the pool
      * or by calling the Factory Service if the pool is empty and
-     * then initialize it using the ParameterParser looking for
+     * then initialize it using the ValueParser looking for
      * a NEW id.
      *
      * @param groupName the name of the group.
@@ -101,7 +101,7 @@ public abstract class TurbineIntake
      * @return a Group instance.
      * @throws ServiceException if recycling fails.
      * /
-    public static Group getGroup(String groupName, ParameterParser pp)
+    public static Group getGroup(String groupName, ValueParser pp)
         throws Exception
     {
         return getService().getGroup(groupName, pp);
@@ -110,7 +110,7 @@ public abstract class TurbineIntake
     /**
      * Gets an instance of a named group either from the pool
      * or by calling the Factory Service if the pool is empty and
-     * then initialize it using the ParameterParser looking for id.
+     * then initialize it using the ValueParser looking for id.
      *
      * @param groupName the name of the group.
      * @param pp the request parameters that may contain matching keys
@@ -118,7 +118,7 @@ public abstract class TurbineIntake
      * @throws ServiceException if recycling fails.
      * /
     public static Group getGroup(String groupName,
-                                 ParameterParser pp, String id)
+                                 ValueParser pp, String id)
         throws Exception
     {
         return getService().getGroup(groupName, pp, id);

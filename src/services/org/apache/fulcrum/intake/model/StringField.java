@@ -54,7 +54,7 @@ package org.apache.fulcrum.intake.model;
  * <http://www.apache.org/>.
  */
 
-import org.apache.fulcrum.util.parser.ParameterParser;
+import org.apache.fulcrum.util.parser.ValueParser;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 
 /**
@@ -74,7 +74,7 @@ public class StringField extends Field
     /**
      * converts the parameter to the correct Object.
      */
-    protected void doSetValue(ParameterParser pp)
+    protected void doSetValue(ValueParser pp)
     {
         if ( isMultiValued )
         {

@@ -55,7 +55,7 @@ package org.apache.fulcrum.intake.model;
  */
 
 import java.util.Vector;
-import org.apache.fulcrum.util.parser.ParameterParser;
+import org.apache.fulcrum.util.parser.ValueParser;
 import org.apache.torque.om.ComboKey;
 import org.apache.torque.om.ObjectKey;
 import org.apache.fulcrum.intake.xmlmodel.Rule;
@@ -75,7 +75,7 @@ public class ComboKeyField extends Field
     /**
      * converts the parameter to the correct Object.
      */
-    protected void doSetValue(ParameterParser pp)
+    protected void doSetValue(ValueParser pp)
     {
         try
         {

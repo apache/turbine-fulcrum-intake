@@ -58,7 +58,7 @@ import java.math.BigDecimal;
 import java.util.Vector;
 import org.apache.fulcrum.intake.xmlmodel.Rule;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
-import org.apache.fulcrum.util.parser.ParameterParser;
+import org.apache.fulcrum.util.parser.ValueParser;
 
 /**  */
 public class BigDecimalField extends Field
@@ -82,7 +82,7 @@ public class BigDecimalField extends Field
     /**
      * converts the parameter to the correct Object.
      */
-    protected void doSetValue(ParameterParser pp)
+    protected void doSetValue(ValueParser pp)
     {
         if ( isMultiValued  )
         {

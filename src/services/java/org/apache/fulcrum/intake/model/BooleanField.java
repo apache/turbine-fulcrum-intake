@@ -56,7 +56,7 @@ package org.apache.fulcrum.intake.model;
 
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 import org.apache.fulcrum.Log;
-import org.apache.fulcrum.util.parser.ParameterParser;
+import org.apache.fulcrum.util.parser.ValueParser;
 
 /**
  * Base class for Intake generated input processing classes.
@@ -85,7 +85,7 @@ public class BooleanField extends Field
     /**
      * converts the parameter to the correct Object.
      */
-    protected void doSetValue(ParameterParser pp)
+    protected void doSetValue(ValueParser pp)
     {
         setTestValue( pp.getBool(getKey()) );
     }

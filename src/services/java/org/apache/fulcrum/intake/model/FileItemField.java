@@ -57,6 +57,7 @@ package org.apache.fulcrum.intake.model;
 import java.util.Vector;
 import org.apache.fulcrum.intake.xmlmodel.Rule;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
+import org.apache.fulcrum.util.parser.ValueParser;
 import org.apache.fulcrum.util.parser.ParameterParser;
 import org.apache.fulcrum.intake.validator.Validator;
 import org.apache.fulcrum.intake.validator.FileValidator;
@@ -96,10 +97,19 @@ public class FileItemField extends Field
      * @return a <code>Field</code> value
      * @exception ServiceException if an error occurs
      */
-    public Field init(ParameterParser pp)
+    public Field init(ValueParser vp)
         throws ServiceException
     {
-        this.pp = pp;
+        try
+        {
+            this.pp = (ParameterParser)vp;
+        }
+        catch (ClassCastException e)
+        {
+            throw new ServiceException(
+                "FileItemFields can only be used with ParameterParser");
+        }
+
         valid_flag = true;
 
         if ( pp.containsKey(getKey()) )
@@ -115,9 +125,10 @@ public class FileItemField extends Field
     /**
      * Compares request data with constraints and sets the valid flag.
      */
-    protected boolean validate(ParameterParser pp)
+    protected boolean validate(ValueParser vp)
     //    throws ServiceException
     {
+        ParameterParser pp = (ParameterParser)vp;        
         if ( isMultiValued  )
         {
             FileItem[] ss = pp.getFileItems(getKey());
@@ -185,8 +196,9 @@ public class FileItemField extends Field
     /**
      * converts the parameter to the correct Object.
      */
-    protected void doSetValue(ParameterParser pp)
+    protected void doSetValue(ValueParser vp)
     {
+        ParameterParser pp = (ParameterParser)vp;
         if ( isMultiValued  )
         {
             setTestValue(pp.getFileItems(getKey()));

@@ -57,7 +57,7 @@ package org.apache.fulcrum.intake.model;
 import java.util.Map;
 import java.lang.reflect.Method;
 import org.apache.regexp.RE;
-import org.apache.fulcrum.util.parser.ParameterParser;
+import org.apache.fulcrum.util.parser.ValueParser;
 import org.apache.torque.om.Retrievable;
 import org.apache.fulcrum.intake.TurbineIntake;
 import org.apache.fulcrum.intake.xmlmodel.Rule;
@@ -109,7 +109,7 @@ public abstract class Field
     private Object[] valArray; // for reflection
 
     /** The object containing the request data */
-    protected ParameterParser pp;
+    protected ValueParser pp;
 
     /**
      * Constructs a field based on data in the xml specification
@@ -180,11 +180,11 @@ public abstract class Field
      * if a value has been supplied for this field.  if so, the value
      * is validated.
      *
-     * @param pp a <code>ParameterParser</code> value
+     * @param pp a <code>ValueParser</code> value
      * @return a <code>Field</code> value
      * @exception ServiceException if an error occurs
      */
-    public Field init(ParameterParser pp)
+    public Field init(ValueParser pp)
         throws ServiceException
     {
         this.pp = pp;
@@ -404,7 +404,7 @@ public abstract class Field
     /**
      * Compares request data with constraints and sets the valid flag.
      */
-    protected boolean validate(ParameterParser pp)
+    protected boolean validate(ValueParser pp)
     //    throws ServiceException
     {
         if ( isMultiValued  )
@@ -476,7 +476,7 @@ public abstract class Field
      * Compares request data with constraints and sets the valid flag.
      * To be implemented in subclasses
      */
-    protected abstract void doSetValue(ParameterParser pp);
+    protected abstract void doSetValue(ValueParser pp);
 
 
 

@@ -57,7 +57,7 @@ package org.apache.fulcrum.intake;
 import java.lang.reflect.Method;
 import org.apache.fulcrum.ServiceException;
 import org.apache.fulcrum.pool.Recyclable;
-import org.apache.fulcrum.util.parser.ParameterParser;
+import org.apache.fulcrum.util.parser.ValueParser;
 import org.apache.fulcrum.intake.model.Group;
 
 /**
@@ -98,7 +98,7 @@ public interface IntakeService
     /**
      * Gets an instance of a named group either from the pool
      * or by calling the Factory Service if the pool is empty and
-     * then initialize it using the ParameterParser looking for
+     * then initialize it using the ValueParser looking for
      * a NEW id.
      *
      * @param groupName the name of the group.
@@ -106,20 +106,20 @@ public interface IntakeService
      * @return a Group instance.
      * @throws ServiceException if recycling fails.
      * /
-    public Group getGroup(String groupName, ParameterParser pp)
+    public Group getGroup(String groupName, ValueParser pp)
         throws Exception;
 
     /**
      * Gets an instance of a named group either from the pool
      * or by calling the Factory Service if the pool is empty and
-     * then initialize it using the ParameterParser looking for id.
+     * then initialize it using the ValueParser looking for id.
      *
      * @param groupName the name of the group.
      * @param pp the request parameters that may contain matching keys
      * @return a Group instance.
      * @throws ServiceException if recycling fails.
      * /
-    public Group getGroup(String groupName, ParameterParser pp, String id)
+    public Group getGroup(String groupName, ValueParser pp, String id)
         throws Exception;
     */
 

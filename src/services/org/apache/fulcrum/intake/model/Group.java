@@ -64,7 +64,7 @@ import org.apache.torque.om.Retrievable;
 import org.apache.fulcrum.intake.TurbineIntake;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 import org.apache.fulcrum.intake.xmlmodel.XmlGroup;
-import org.apache.fulcrum.util.parser.ParameterParser;
+import org.apache.fulcrum.util.parser.ValueParser;
 import org.apache.fulcrum.ServiceException;
 import org.apache.fulcrum.pool.Recyclable;
 
@@ -119,7 +119,7 @@ public class Group
     /**
      * The object containing the request data
      */
-    protected ParameterParser pp;
+    protected ValueParser pp;
 
     /**
      * A flag to help prevent duplicate hidden fields declaring this group.
@@ -177,10 +177,10 @@ public class Group
     /**
      * Initializes the default Group using parameters.
      *
-     * @param pp a <code>ParameterParser</code> value
+     * @param pp a <code>ValueParser</code> value
      * @return this Group
      */
-    public Group init(ParameterParser pp) throws ServiceException
+    public Group init(ValueParser pp) throws ServiceException
     {
         return init(NEW, pp);
     }
@@ -192,7 +192,7 @@ public class Group
      * @param data a <code>RunData</code> value
      * @return this Group
      */
-    public Group init(String key, ParameterParser pp)
+    public Group init(String key, ValueParser pp)
         throws ServiceException
     {
         this.oid = key;
@@ -306,11 +306,11 @@ public class Group
     /**
      * Describe <code>getObjects</code> method here.
      *
-     * @param pp a <code>ParameterParser</code> value
+     * @param pp a <code>ValueParser</code> value
      * @return an <code>ArrayList</code> value
      * @exception ServiceException if an error occurs
      */
-    public ArrayList getObjects(ParameterParser pp)
+    public ArrayList getObjects(ValueParser pp)
         throws ServiceException
     {
         ArrayList objs = null;
@@ -413,20 +413,23 @@ public class Group
      */
     public void removeFromRequest()
     {
-        String[] groups = pp.getStrings(gid);
-        if ( groups != null )
+        if (pp != null)
         {
-            pp.remove(gid);
-            for (int i=0; i<groups.length; i++)
+            String[] groups = pp.getStrings(gid);
+            if ( groups != null )
             {
-                if ( groups[i] != null && !groups[i].equals(oid) )
+                pp.remove(gid);
+                for (int i=0; i<groups.length; i++)
                 {
-                    pp.add(gid,groups[i]);
+                    if ( groups[i] != null && !groups[i].equals(oid) )
+                    {
+                        pp.add(gid,groups[i]);
+                    }
                 }
-            }
-            for (int i=fieldsArray.length-1; i>=0; i--)
-            {
-                fieldsArray[i].removeFromRequest();
+                for (int i=fieldsArray.length-1; i>=0; i--)
+                {
+                    fieldsArray[i].removeFromRequest();
+                }
             }
         }
     }
