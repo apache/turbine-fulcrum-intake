@@ -69,6 +69,7 @@ import java.util.Stack;
 import org.apache.fulcrum.ServiceException;
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Category;
 import org.apache.log4j.helpers.NullEnumeration;
 
