@@ -3,7 +3,7 @@
   <extend>${basedir}/../project.xml</extend>
   <id>fulcrum-security</id>
   <name>Fulcrum Security Component</name>
-  <currentVersion>1.0-alpha-1</currentVersion>
+  <currentVersion>1.0-alpha-2</currentVersion>
 
   <dependencies>
     <dependency>
