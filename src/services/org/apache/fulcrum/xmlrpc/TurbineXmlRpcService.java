@@ -1,3 +1,4 @@
+
 package org.apache.fulcrum.xmlrpc;
 
 /* ====================================================================
@@ -124,6 +125,11 @@ public class TurbineXmlRpcService
         {
             server = new XmlRpcServer();
 
+            // setup JSSE System properties from secure.server.options
+            Configuration secureServerOptions =
+                getConfiguration().subset("secure.server.option");
+            setSystemPropertiesFromConfiguration(secureServerOptions);
+
             // Set the port for the service
             port = getConfiguration().getInt("port", 0);
 
@@ -131,26 +137,6 @@ public class TurbineXmlRpcService
             {
                 if (getConfiguration().getBoolean("secure.server", false))
                 {
-                    // Get the values for the JSSE system properties
-                    // that we must set for use in the SecureWebServer
-                    // and the URL https connection handler that is
-                    // used in XmlRpcClient.
-
-                    Configuration secureServerOptions =
-                        getConfiguration().subset("secure.server.option");
-
-                    Iterator i = secureServerOptions.getKeys();
-
-                    while (i.hasNext())
-                    {
-                        String option = (String) i.next();
-                        String value = secureServerOptions.getString(option);
-
-                        getCategory().debug("JSSE option: " + option + " => " + value);
-
-                        System.setProperty(option, value);
-                    }
-
                     webserver = new SecureWebServer(port);
                 }
                 else
@@ -233,6 +219,28 @@ public class TurbineXmlRpcService
         }
 
         setInit(true);
+    }
+
+    /**
+     * Create System properties using the key-value pairs in a given
+     * Configuration.  This is used to set system properties and the
+     * URL https connection handler needed by JSSE to enable SSL
+     * between XMLRPC client and server.
+     *
+     * @param configuration the Configuration defining the System
+     * properties to be set
+     */
+    void setSystemPropertiesFromConfiguration(Configuration configuration)
+    {
+        for( Iterator i = configuration.getKeys();i.hasNext();)
+        {
+            String key = (String) i.next();
+            String value = configuration.getString(key);
+            
+            getCategory().debug("JSSE option: " + key + " => " + value);
+
+            System.setProperty(key, value);
+        }
     }
 
     /**
