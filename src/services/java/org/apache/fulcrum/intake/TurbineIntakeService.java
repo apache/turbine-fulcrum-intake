@@ -102,9 +102,6 @@ public class TurbineIntakeService
     /** The cache of group keys. */
     private Map groupKeyMap;
 
-    /** The cache of PropertyDescriptor[]. */
-    private Map beanPropsMap;
-
     /** The cache of property getters. */
     private Map getterMap;
 
@@ -192,7 +189,6 @@ public class TurbineIntakeService
             groupNames = new String[appData.getGroups().size()];
             groupKeyMap = new HashMap();
             groupNameMap = new HashMap();
-            beanPropsMap = new HashMap();
             getterMap = new HashMap();
             setterMap = new HashMap();
             // omTool = new OMTool();
@@ -273,95 +269,6 @@ public class TurbineIntakeService
                 in.close();
             }
         }
-    }
-
-    private Method initializeBeanProp(String className, String propName,
-                                        int getOrSet)
-        throws Exception
-    {
-        // getter or setter method
-        Method method = null;
-        if ( className != null && propName != null )
-        {
-            // Uses bean introspection to set writable properties
-            // of bean from the parameters, where a
-            // (case-insensitive) name match between the bean
-            // property and the parameter is looked for.
-            PropertyDescriptor[] beanProps = 
-                (PropertyDescriptor[])beanPropsMap.get(className);
-            if ( beanProps == null ) 
-            {
-                beanProps = Introspector
-                    .getBeanInfo(Class.forName(className))
-                    .getPropertyDescriptors();
-                beanPropsMap.put(className, beanProps);
-            }
-
-            boolean noMatch = true;
-            for (int j=beanProps.length-1; j>=0; j--)
-            {
-                if (propName.equalsIgnoreCase(beanProps[j].getName()))
-                {
-                    switch ( getOrSet )
-                    {
-                        case GETTER:
-                            method = beanProps[j].getReadMethod();
-                            // it appears that the introspector misses some
-                            // getters
-                            if ( method == null ) 
-                            {
-                                Class cls = Class.forName(className);
-                                try
-                                {
-                                    method = cls
-                                        .getMethod("get" + propName, null);
-                                    // we have to force the setter as well
-                                    Class[] sig = new Class[1];
-                                    sig[0] = method.getReturnType();
-                                    Method setterMethod = null;
-                                    try
-                                    {
-                                        setterMethod = cls
-                                            .getMethod("set" + propName, sig);
-                                    }
-                                    catch(NoSuchMethodException e)
-                                    {
-                                        // ignore, setter was null;
-                                    }
-                                    
-                                    beanProps[j] = new PropertyDescriptor(
-                                        propName, method, setterMethod);
-                                    System.out.println("reset descriptor");
-                                }
-                                catch(NoSuchMethodException e)
-                                {
-                                    // ignore, getter was really null
-                                    // we should check for boolean "is"
-                                    // prefix, though boolean less likely to 
-                                    // override setters to cause problems
-                                }
-                            }
-                            
-                            ((HashMap)getterMap.get(className))
-                                .put(propName, method);
-                            break;
-                        case SETTER:
-                            method = beanProps[j].getWriteMethod();
-                            ((HashMap)setterMap.get(className))
-                                .put(propName, method);
-                    }
-                    noMatch = false;
-                    break;
-                }
-            }
-            if ( noMatch )
-            {
-                getCategory().error("Intake property: '" + propName + 
-                          "' for class: '" +
-                          className + "' could not be found.");
-            }
-        }
-        return method;
     }
 
     /**
@@ -657,15 +564,39 @@ public class TurbineIntakeService
     public Method getFieldSetter(String className, String propName)
     {
         Map settersForClassName = (Map)setterMap.get(className);
-        Method method = (Method)settersForClassName.get(propName);
+        Method setter = (Method)settersForClassName.get(propName);
 
-        if ( method == null )
+        if ( setter == null )
         {
+            PropertyDescriptor pd = null; 
             synchronized(setterMap)
             {
                 try
                 {
-                    method = initializeBeanProp(className, propName, SETTER);
+                    pd = new PropertyDescriptor(propName, 
+                                                Class.forName(className));
+                    setter = pd.getWriteMethod();
+                    ((Map)setterMap.get(className)).put(propName, setter);
+                    if ( setter == null ) 
+                    {
+                        getCategory().error("Intake: setter for '" + propName
+                                            + "' in class '" + className
+                                            + "' could not be found.");
+                    }
+                }
+                catch (Exception e)
+                {
+                    getCategory().error(e);
+                }
+            }
+            // we have already completed the reflection on the getter, so
+            // save it so we do not have to repeat
+            synchronized(getterMap)
+            {
+                try
+                {
+                    Method getter = pd.getReadMethod();
+                    ((Map)getterMap.get(className)).put(propName, getter);
                 }
                 catch (Exception e)
                 {
@@ -673,7 +604,7 @@ public class TurbineIntakeService
                 }
             }
         }
-        return method;
+        return setter;
     }
 
     /**
@@ -686,15 +617,39 @@ public class TurbineIntakeService
     public Method getFieldGetter(String className, String propName)
     {
         Map gettersForClassName = (Map)getterMap.get(className);
-        Method method = (Method)gettersForClassName.get(propName);
+        Method getter = (Method)gettersForClassName.get(propName);
 
-        if ( method == null )
+        if ( getter == null )
         {
+            PropertyDescriptor pd = null; 
             synchronized(getterMap)
             {
                 try
                 {
-                    method = initializeBeanProp(className, propName, GETTER);
+                    pd = new PropertyDescriptor(propName, 
+                                                Class.forName(className));
+                    getter = pd.getReadMethod();
+                    ((Map)getterMap.get(className)).put(propName, getter);
+                    if ( getter == null ) 
+                    {
+                        getCategory().error("Intake: getter for '" + propName
+                                            + "' in class '" + className
+                                            + "' could not be found.");
+                    }
+                }
+                catch (Exception e)
+                {
+                    getCategory().error(e);
+                }
+            }
+            // we have already completed the reflection on the setter, so
+            // save it so we do not have to repeat
+            synchronized(setterMap)
+            {
+                try
+                {
+                    Method setter = pd.getWriteMethod();
+                    ((Map)setterMap.get(className)).put(propName, setter);
                 }
                 catch (Exception e)
                 {
@@ -702,7 +657,7 @@ public class TurbineIntakeService
                 }
             }
         }
-        return method;
+        return getter;
     }
 
 }
