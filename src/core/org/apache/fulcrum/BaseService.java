@@ -98,7 +98,7 @@ public abstract class BaseService implements Service
      * service initialization.
      *
      * @see org.apache.fulcrum.Service#init()
-     * @see org.apache.fulcrum.BaseService#setInit(boolean value)
+     * @see org.apache.fulcrum.BaseService#setInit(boolean)
      */
     public abstract void init() throws InitializationException;
 
