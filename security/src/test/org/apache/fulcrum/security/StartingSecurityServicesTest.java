@@ -52,14 +52,14 @@ package org.apache.fulcrum.security;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-import org.apache.fulcrum.security.impl.memory.MemoryGroupManagerImpl;
-import org.apache.fulcrum.security.impl.memory.MemoryPermissionManagerImpl;
-import org.apache.fulcrum.security.impl.memory.MemoryRoleManagerImpl;
-import org.apache.fulcrum.security.impl.memory.MemoryUserManagerImpl;
-import org.apache.fulcrum.security.impl.torque.TorqueGroupManager;
-import org.apache.fulcrum.security.impl.torque.TorquePermissionManager;
-import org.apache.fulcrum.security.impl.torque.TorqueRoleManager;
-import org.apache.fulcrum.security.impl.torque.TorqueUserManager;
+import org.apache.fulcrum.security.spi.memory.simple.MemoryGroupManagerImpl;
+import org.apache.fulcrum.security.spi.memory.simple.MemoryPermissionManagerImpl;
+import org.apache.fulcrum.security.spi.memory.simple.MemoryRoleManagerImpl;
+import org.apache.fulcrum.security.spi.memory.simple.MemoryUserManagerImpl;
+import org.apache.fulcrum.security.spi.torque.TorqueGroupManager;
+import org.apache.fulcrum.security.spi.torque.TorquePermissionManager;
+import org.apache.fulcrum.security.spi.torque.TorqueRoleManager;
+import org.apache.fulcrum.security.spi.torque.TorqueUserManager;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 public class StartingSecurityServicesTest extends BaseUnitTest
 {

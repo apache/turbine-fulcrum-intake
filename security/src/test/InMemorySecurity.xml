@@ -6,21 +6,21 @@
 
   <component
     role="org.apache.fulcrum.security.UserManager"
-    class="org.apache.fulcrum.security.impl.memory.MemoryUserManagerImpl">   
+    class="org.apache.fulcrum.security.spi.memory.simple.MemoryUserManagerImpl">   
   </component>   
   <component
     role="org.apache.fulcrum.security.GroupManager"
-    class="org.apache.fulcrum.security.impl.memory.MemoryGroupManagerImpl">   
+    class="org.apache.fulcrum.security.spi.memory.simple.MemoryGroupManagerImpl">   
   </component>     
 
   <component
     role="org.apache.fulcrum.security.RoleManager"
-    class="org.apache.fulcrum.security.impl.memory.MemoryRoleManagerImpl">   
+    class="org.apache.fulcrum.security.spi.memory.simple.MemoryRoleManagerImpl">   
   </component>     
 
   <component
     role="org.apache.fulcrum.security.PermissionManager"
-    class="org.apache.fulcrum.security.impl.memory.MemoryPermissionManagerImpl">   
+    class="org.apache.fulcrum.security.spi.memory.simple.MemoryPermissionManagerImpl">   
   </component>     
 
 </my-system>

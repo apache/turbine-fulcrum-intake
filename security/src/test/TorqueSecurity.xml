@@ -5,18 +5,18 @@
   </component>  
   <component
     role="org.apache.fulcrum.security.UserManager"
-    class="org.apache.fulcrum.security.impl.torque.impl.TorqueUserManagerImpl">   
+    class="org.apache.fulcrum.security.spi.torque.impl.TorqueUserManagerImpl">   
   </component>   
   <component
     role="org.apache.fulcrum.security.GroupManager"
-    class="org.apache.fulcrum.security.impl.torque.impl.TorqueGroupManagerImpl">   
+    class="org.apache.fulcrum.security.spi.torque.impl.TorqueGroupManagerImpl">   
   </component>     
   <component
     role="org.apache.fulcrum.security.RoleManager"
-    class="org.apache.fulcrum.security.impl.torque.impl.TorqueRoleManagerImpl">   
+    class="org.apache.fulcrum.security.spi.torque.impl.TorqueRoleManagerImpl">   
   </component>     
   <component
     role="org.apache.fulcrum.security.PermissionManager"
-    class="org.apache.fulcrum.security.impl.torque.impl.TorquePermissionManagerImpl">   
+    class="org.apache.fulcrum.security.spi.torque.impl.TorquePermissionManagerImpl">   
   </component>     
 </my-system>

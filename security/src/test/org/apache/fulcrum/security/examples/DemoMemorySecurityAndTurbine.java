@@ -53,10 +53,10 @@ package org.apache.fulcrum.security.examples;
  * <http://www.apache.org/>.
  */
 import org.apache.fulcrum.security.SecurityService;
-import org.apache.fulcrum.security.impl.torque.TorqueGroupManager;
-import org.apache.fulcrum.security.impl.torque.TorquePermissionManager;
-import org.apache.fulcrum.security.impl.torque.TorqueRoleManager;
-import org.apache.fulcrum.security.impl.torque.TorqueUserManager;
+import org.apache.fulcrum.security.spi.torque.TorqueGroupManager;
+import org.apache.fulcrum.security.spi.torque.TorquePermissionManager;
+import org.apache.fulcrum.security.spi.torque.TorqueRoleManager;
+import org.apache.fulcrum.security.spi.torque.TorqueUserManager;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 public class DemoMemorySecurityAndTurbine extends BaseUnitTest
 {

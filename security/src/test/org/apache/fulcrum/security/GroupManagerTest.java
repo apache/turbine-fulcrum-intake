@@ -7,7 +7,7 @@
 package org.apache.fulcrum.security;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.impl.memory.MemoryGroupManager;
+import org.apache.fulcrum.security.model.simple.manager.SimpleGroupManager;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
@@ -155,27 +155,27 @@ public class GroupManagerTest extends BaseUnitTest
     }
     public void testGrantUserGroup() throws Exception
     {
-        if (groupManager instanceof MemoryGroupManager)
+        if (groupManager instanceof SimpleGroupManager)
         {
             Role role = securityService.getRoleManager().getRoleInstance();
             role.setName("TEST_PERMISSION");
             securityService.getRoleManager().addRole(role);
             group = groupManager.getGroupInstance("TEST_ROLE");
             groupManager.addGroup(group);
-            ((MemoryGroupManager) groupManager).grant(group, role);
+            ((SimpleGroupManager) groupManager).grant(group, role);
         }
     }
     public void testRevokeUserGroup() throws Exception
     {
-        if (groupManager instanceof MemoryGroupManager)
+        if (groupManager instanceof SimpleGroupManager)
         {
             Role role = securityService.getRoleManager().getRoleInstance();
             role.setName("TEST_PERMISSION2");
             securityService.getRoleManager().addRole(role);
             group = groupManager.getGroupInstance("Lima2");
             groupManager.addGroup(group);
-            ((MemoryGroupManager) groupManager).grant(group, role);
-            ((MemoryGroupManager) groupManager).revoke(group, role);
+            ((SimpleGroupManager) groupManager).grant(group, role);
+            ((SimpleGroupManager) groupManager).revoke(group, role);
         }
     }
 }

@@ -8,8 +8,8 @@ package org.apache.fulcrum.security;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.impl.memory.MemoryUserManager;
-import org.apache.fulcrum.security.impl.memory.entity.MemoryUser;
+import org.apache.fulcrum.security.model.simple.entity.SimpleUser;
+import org.apache.fulcrum.security.model.simple.manager.SimpleUserManager;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
@@ -154,7 +154,7 @@ public class UserManagerTest extends BaseUnitTest
     }
     public void testRevokeAll() throws Exception
     {
-        if (userManager instanceof MemoryUserManager)
+        if (userManager instanceof SimpleUserManager)
         {
             Group group = securityService.getGroupManager().getGroupInstance();
             group.setName("TEST_REVOKEALL");
@@ -164,10 +164,10 @@ public class UserManagerTest extends BaseUnitTest
             securityService.getGroupManager().addGroup(group2);
             user = userManager.getUserInstance("Clint2");
             userManager.addUser(user, "clint");
-            ((MemoryUserManager) userManager).grant(user, group);
-            ((MemoryUserManager) userManager).grant(user, group2);
+            ((SimpleUserManager) userManager).grant(user, group);
+            ((SimpleUserManager) userManager).grant(user, group2);
             userManager.revokeAll(user);
-            assertEquals(0, ((MemoryUser) user).getGroups().size());
+            assertEquals(0, ((SimpleUser) user).getGroups().size());
         }
     }
     public void testSaveUser() throws Exception
@@ -181,28 +181,28 @@ public class UserManagerTest extends BaseUnitTest
     }
     public void testGrantUserGroup() throws Exception
     {
-        if (userManager instanceof MemoryUserManager)
+        if (userManager instanceof SimpleUserManager)
         {
             Group group = securityService.getGroupManager().getGroupInstance();
             group.setName("TEST_GROUP");
             securityService.getGroupManager().addGroup(group);
             user = userManager.getUserInstance("Clint");
             userManager.addUser(user, "clint");
-            ((MemoryUserManager) userManager).grant(user, group);
-            assertTrue(((MemoryUser) user).getGroups().contains(group));
+            ((SimpleUserManager) userManager).grant(user, group);
+            assertTrue(((SimpleUser) user).getGroups().contains(group));
         }
     }
     public void testRevokeUserGroup() throws Exception
     {
-        if (userManager instanceof MemoryUserManager)
+        if (userManager instanceof SimpleUserManager)
         {
             Group group = securityService.getGroupManager().getGroupInstance();
             group.setName("TEST_REVOKE");
             securityService.getGroupManager().addGroup(group);
             user = userManager.getUserInstance("Lima");
             userManager.addUser(user, "pet");
-            ((MemoryUserManager) userManager).revoke(user, group);
-            assertFalse(((MemoryUser) user).getGroups().contains(group));
+            ((SimpleUserManager) userManager).revoke(user, group);
+            assertFalse(((SimpleUser) user).getGroups().contains(group));
         }
     }
     /*

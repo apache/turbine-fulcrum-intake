@@ -7,7 +7,7 @@
 package org.apache.fulcrum.security;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.impl.memory.MemoryRoleManager;
+import org.apache.fulcrum.security.model.simple.manager.SimpleRoleManager;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
@@ -124,27 +124,27 @@ public class RoleManagerTest extends BaseUnitTest
     }
     public void testGrantUserGroup() throws Exception
     {
-        if (roleManager instanceof MemoryRoleManager)
+        if (roleManager instanceof SimpleRoleManager)
         {
             Permission permission = securityService.getPermissionManager().getPermissionInstance();
             permission.setName("TEST_PERMISSION");
             securityService.getPermissionManager().addPermission(permission);
             role = roleManager.getRoleInstance("TEST_ROLE");
             roleManager.addRole(role);
-            ((MemoryRoleManager) roleManager).grant(role, permission);
+            ((SimpleRoleManager) roleManager).grant(role, permission);
         }
     }
     public void testRevokeUserGroup() throws Exception
     {
-        if (roleManager instanceof MemoryRoleManager)
+        if (roleManager instanceof SimpleRoleManager)
         {
             Permission permission = securityService.getPermissionManager().getPermissionInstance();
             permission.setName("TEST_PERMISSION2");
             securityService.getPermissionManager().addPermission(permission);
             role = roleManager.getRoleInstance("Lima2");
             roleManager.addRole(role);
-            ((MemoryRoleManager) roleManager).grant(role, permission);
-            ((MemoryRoleManager) roleManager).revoke(role, permission);
+            ((SimpleRoleManager) roleManager).grant(role, permission);
+            ((SimpleRoleManager) roleManager).revoke(role, permission);
         }
     }
     /*

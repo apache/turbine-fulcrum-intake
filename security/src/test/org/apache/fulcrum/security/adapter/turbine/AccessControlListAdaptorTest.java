@@ -55,16 +55,19 @@ package org.apache.fulcrum.security.adapter.turbine;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.fulcrum.security.BaseSecurityService;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.impl.memory.MemoryGroupManager;
-import org.apache.fulcrum.security.impl.memory.MemoryRoleManager;
-import org.apache.fulcrum.security.impl.memory.MemoryUserManager;
-import org.apache.fulcrum.security.impl.memory.entity.MemoryUser;
+import org.apache.fulcrum.security.model.simple.entity.SimpleUser;
+import org.apache.fulcrum.security.model.simple.manager.SimpleRoleManager;
+import org.apache.fulcrum.security.model.simple.manager.SimpleUserManager;
+import org.apache.fulcrum.security.model.simple.manager.SimpleGroupManager;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 import org.apache.turbine.modules.actions.sessionvalidator.DefaultSessionValidator;
 import org.apache.turbine.modules.actions.sessionvalidator.SessionValidator;
@@ -81,6 +84,7 @@ import org.apache.turbine.util.security.AccessControlList;
 import org.apache.turbine.util.security.GroupSet;
 import org.apache.turbine.util.security.PermissionSet;
 import org.apache.turbine.util.security.RoleSet;
+
 import com.mockobjects.servlet.MockHttpServletResponse;
 import com.mockobjects.servlet.MockHttpSession;
 import com.mockobjects.servlet.MockServletConfig;
@@ -114,30 +118,9 @@ public class AccessControlListAdaptorTest extends BaseUnitTest
     {
         TurbineConfig tc = new TurbineConfig(".", "/src/test/AdapterTestTurbineResources.properties");
         tc.initialize();
-        RunDataService rds = (RunDataService) TurbineServices.getInstance().getService(RunDataService.SERVICE_NAME);
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute(User.SESSION_KEY, "");
         session.setupGetAttribute(User.SESSION_KEY, null);
-        //Object o = null;
-        //session.setExpectedAttribute(User.SESSION_KEY,o);
-        BetterMockHttpServletRequest request = new BetterMockHttpServletRequest();
-        request.setupServerName("bob");
-        request.setupGetProtocol("http");
-        request.setupScheme("scheme");
-        request.setupPathInfo("damn");
-        request.setupGetServletPath("damn2");
-        request.setupGetContextPath("wow");
-        request.setupGetContentType("html/text");
-        request.setupAddHeader("Content-type", "html/text");
-        Vector v = new Vector();
-        request.setupGetParameterNames(v.elements());
-        request.setSession(session);
-        HttpServletResponse response = new MockHttpServletResponse();
-        ServletConfig config = new MockServletConfig();
-        RunData rd = rds.getRunData(request, response, config);
-        SessionValidator sessionValidator = new DefaultSessionValidator();
-        sessionValidator.doPerform(rd);
-        User turbineUser = rd.getUser();
+        User turbineUser = getUserFromRunData(session);
         assertNotNull(turbineUser);
         assertTrue(TurbineSecurity.getService().isAnonymousUser(turbineUser));
     }
@@ -162,18 +145,18 @@ public class AccessControlListAdaptorTest extends BaseUnitTest
         securityService.getPermissionManager().addPermission(fulcrumPermission);
         securityService.getPermissionManager().addPermission(fulcrumPermission2);
         securityService.getPermissionManager().addPermission(fulcrumPermission3);
-        ((MemoryRoleManager) securityService.getRoleManager()).grant(fulcrumRole, fulcrumPermission);
-        ((MemoryRoleManager) securityService.getRoleManager()).grant(fulcrumRole2, fulcrumPermission2);
-        ((MemoryRoleManager) securityService.getRoleManager()).grant(fulcrumRole2, fulcrumPermission3);
-        ((MemoryGroupManager) securityService.getGroupManager()).grant(fulcrumGroup, fulcrumRole);
-        ((MemoryGroupManager) securityService.getGroupManager()).grant(fulcrumGroup, fulcrumRole2);
-        ((MemoryGroupManager) securityService.getGroupManager()).grant(fulcrumGroup2, fulcrumRole2);
+        ((SimpleRoleManager) securityService.getRoleManager()).grant(fulcrumRole, fulcrumPermission);
+        ((SimpleRoleManager) securityService.getRoleManager()).grant(fulcrumRole2, fulcrumPermission2);
+        ((SimpleRoleManager) securityService.getRoleManager()).grant(fulcrumRole2, fulcrumPermission3);
+        ((SimpleGroupManager) securityService.getGroupManager()).grant(fulcrumGroup, fulcrumRole);
+        ((SimpleGroupManager) securityService.getGroupManager()).grant(fulcrumGroup, fulcrumRole2);
+        ((SimpleGroupManager) securityService.getGroupManager()).grant(fulcrumGroup2, fulcrumRole2);
         org.apache.fulcrum.security.entity.User fulcrumUser =
             securityService.getUserManager().getUserInstance("Jeannie");
         securityService.getUserManager().addUser(fulcrumUser, "wyatt");
-        ((MemoryUserManager) securityService.getUserManager()).grant(fulcrumUser, fulcrumGroup);
-        ((MemoryUserManager) securityService.getUserManager()).grant(fulcrumUser, fulcrumGroup2);
-        assertEquals(2, ((MemoryUser) fulcrumUser).getGroups().size());
+        ((SimpleUserManager) securityService.getUserManager()).grant(fulcrumUser, fulcrumGroup);
+        ((SimpleUserManager) securityService.getUserManager()).grant(fulcrumUser, fulcrumGroup2);
+        assertEquals(2, ((SimpleUser) fulcrumUser).getGroups().size());
         GroupSet groupSet = TurbineSecurity.getService().getAllGroups();
         assertEquals(2, groupSet.size());
         RoleSet roleSet = TurbineSecurity.getService().getAllRoles();
@@ -183,7 +166,36 @@ public class AccessControlListAdaptorTest extends BaseUnitTest
         User turbineUser = TurbineSecurity.getService().getUser("Jeannie");
         AccessControlList acl = TurbineSecurity.getService().getACL(turbineUser);
         assertNotNull(acl);
-        assertEquals(3,acl.getPermissions().size());
+        assertEquals(3, acl.getPermissions().size());
+        MockHttpSession session = new MockHttpSession();
+        session.setupGetAttribute(User.SESSION_KEY, turbineUser);
+        turbineUser = getUserFromRunData(session);
+        assertNotNull(turbineUser);
+        assertFalse(TurbineSecurity.getService().isAnonymousUser(turbineUser));
+    }
+    private User getUserFromRunData(HttpSession session) throws Exception
+    {
+        RunDataService rds = (RunDataService) TurbineServices.getInstance().getService(RunDataService.SERVICE_NAME);
+        BetterMockHttpServletRequest request = new BetterMockHttpServletRequest();
+        request.setupServerName("bob");
+        request.setupGetProtocol("http");
+        request.setupScheme("scheme");
+        request.setupPathInfo("damn");
+        request.setupGetServletPath("damn2");
+        request.setupGetContextPath("wow");
+        request.setupGetContentType("html/text");
+        request.setupAddHeader("Content-type", "html/text");
+        Vector v = new Vector();
+        request.setupGetParameterNames(v.elements());
+        request.setSession(session);
+        HttpServletResponse response = new MockHttpServletResponse();
+        ServletConfig config = new MockServletConfig();
+        RunData rd = rds.getRunData(request, response, config);
+        SessionValidator sessionValidator = new DefaultSessionValidator();
+        sessionValidator.doPerform(rd);
+        User turbineUser = rd.getUser();
+        assertNotNull(turbineUser);
+        return turbineUser;
     }
     public void tearDown()
     {
