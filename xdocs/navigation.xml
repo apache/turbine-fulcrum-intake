@@ -18,16 +18,21 @@
     <menu name="Components">
       <item name="Test Container"        href="/fulcrum-testcontainer/index.html"/>
       <item name="Cache"                 href="/fulcrum-cache/index.html"/>
-      <item name="Configuration"         href="/fulcrum-configuration/index.html"/>
-      <item name="Crypto"                href="/fulcrum-crypto/index.html"/>
-      <item name="DVSL"                  href="/fulcrum-dvsl/index.html"/>
-      <item name="Factory"               href="/fulcrum-factory/index.html"/>
-      <item name="Intake"	             href="/fulcrum-intake/index.html"/>
-      <item name="Localization"          href="/fulcrum-localization/index.html"/>
-      <item name="Mimetype"              href="/fulcrum-mimetype/index.html"/>
+      <item name="Configuration"         href="/fulcrum-configuration-impl/index.html"/>
+      <item name="Crypto API"            href="/fulcrum-crypto-api/index.html"/>
+      <item name="Crypto Impl"           href="/fulcrum-crypto-impl/index.html"/>      
+      <item name="DVSL API"              href="/fulcrum-dvsl-api/index.html"/>
+      <item name="DVSL Impl"             href="/fulcrum-dvsl-impl/index.html"/>      
+      <item name="Factory API"           href="/fulcrum-factory-api/index.html"/>
+      <item name="Factory Impl"          href="/fulcrum-factory-impl/index.html"/>      
+      <item name="Intake"                href="/fulcrum-intake/index.html"/>
+      <item name="Localization API"      href="/fulcrum-localization-api/index.html"/>
+      <item name="Localization Impl"     href="/fulcrum-localization-impl/index.html"/>      
+      <item name="Mimetype API"          href="/fulcrum-mimetype-api/index.html"/>
+      <item name="Mimetype Impl"         href="/fulcrum-mimetype-impl/index.html"/>
       <item name="Pool"                  href="/fulcrum-pool/index.html"/>
       <item name="Pull"                  href="/fulcrum-pull/index.html"/>
-      <item name="Scheduler"             href="/fulcrum-scheduler/index.html"/>
+      <!--item name="Scheduler"             href="/fulcrum-scheduler/index.html"/-->
       <item name="Security"              href="/fulcrum-security/index.html"/>
       <item name="OSWorkflow"            href="/fulcrum-osworkflow/index.html"/>      
       <item name="OSWorkflow Example"    href="/fulcrum-osworkflow-example/index.html"/>            
