@@ -591,11 +591,24 @@ public class TurbineLocalizationService
     }
 
     /**
-     * @see org.apache.fulcrum.localization.LocalizationService#format(String, Locale, String, Object[])
+     * Looks up the value for <code>key</code> in the
+     * <code>ResourceBundle</code> referenced by
+     * <code>bundleName</code>, then formats that value for the
+     * specified <code>Locale</code> using <code>args</code>.
+     *
+     * @return Localized, formatted text identified by
+     * <code>key</code>.
      */
     public String format(String bundleName, Locale locale,
                          String key, Object[] args)
     {
+        if (locale == null)
+        {
+            // When formatting Date objects and such, MessageFormat
+            // cannot have a null Locale.
+            locale = getLocale((String) null);
+        }
+
         String value = getString(bundleName, locale, key);
         if (args == null)
         {
