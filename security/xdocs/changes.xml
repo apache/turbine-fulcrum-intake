@@ -6,7 +6,10 @@
   </properties>
 
   <body>
-  	<release version="1.0-alpha-3" date="in cvs">		
+  	<release version="1.0-alpha-3" date="in cvs">
+	  <action dev="epugh" type="fix">
+		For a SecurityEntityImpl, if the name is null, don't lowercase it.
+      </action>  				
       <action dev="epugh" type="add">
 		Add ModelManager interface and SimpleModelManager and TurbineModelManager 
 		component that explicitly contains the relationship between the various		

@@ -2,7 +2,7 @@ package org.apache.fulcrum.security.entity.impl;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,72 +53,38 @@ package org.apache.fulcrum.security.entity.impl;
  * <http://www.apache.org/>.
  */
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.fulcrum.security.entity.SecurityEntity;
-
+import org.apache.fulcrum.testcontainer.BaseUnitTest;
 /**
- * Base class for all objects implementing SecurityEnitity.  This
- * class automatically lowercases the name.  So the permission "EDIT"
- * will equal "eDit" and "edit";
+ * Test the SecurityEntityImple
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class SecurityEntityImpl implements SecurityEntity
+public class SecurityEntityImplTest extends BaseUnitTest
 {
-    private String name;
-    private Object id;
+    
     /**
-     * @return
-     */
-    public Object getId()
+    	* Constructor for SecurityEntityImplTest.
+    	* @param arg0
+    	*/
+    public SecurityEntityImplTest(String arg0)
     {
-        return id;
+        super(arg0);
     }
+    
     /**
-     * @param id
+     * Make sure lowercasing logic works properly.
+     * @throws Exception
      */
-    public void setId(Object id)
+    public void testSettingGettingName() throws Exception
     {
-        this.id = id;
-    }
-    /**
-     * @return
-     */
-    public String getName()
-    {
-        return name;
-    }
-    /**
-     * Pass in the name for this entity.  Also lowercases it.
-     * @param name
-     */
-    public void setName(String name)
-    {
-        if (name !=null){
-            name = name.toLowerCase();
-        }
-        this.name = name;
-    }
-    public String toString()
-    {
-        return getClass().getName() + " (id:" + getId() + " name:" + getName()+")";
-    }
-    public boolean equals(Object o)
-    {
-        boolean equals = true;
-        if (o == null)
-        {
-            equals = false;
-        }
-        else
-        {
-            equals = (getId() == ((SecurityEntityImpl) o).getId());
-        }
-        return equals;
-    }
-    public int hashCode(Object o)
-    {
-        return HashCodeBuilder.reflectionHashCode(this);
+        SecurityEntity se = new SecurityEntityImpl();
+        se.setName("hello");
+        assertEquals("hello",se.getName());
+        se.setName("HelLo");
+		assertEquals("hello",se.getName());
+		se.setName(null);
+		assertEquals(null,se.getName());
     }
 }
