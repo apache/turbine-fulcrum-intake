@@ -191,6 +191,7 @@ public class PermissionSet
      */
     public Permission getPermissionByName(String permissionName)
     {
+		permissionName=permissionName.toLowerCase();
         return (StringUtils.isNotEmpty(permissionName))
                 ? (Permission) nameMap.get(permissionName) : null;
     }
@@ -203,10 +204,10 @@ public class PermissionSet
      * @return Permission if argument matched a Permission in this
      * PermissionSet; null if no match.
      */
-    public Permission getPermissionById(int permissionId)
+    public Permission getPermissionById(long permissionId)
     {
         return (permissionId != 0) 
-                ? (Permission) idMap.get(new Integer(permissionId)) : null;
+                ? (Permission) idMap.get(new Long(permissionId)) : null;
     }
 
     /**

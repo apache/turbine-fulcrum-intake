@@ -111,7 +111,7 @@ public class GroupSet
         idMap.put(getIdAsObject(group.getId()), group);
         return res;
     }
-
+		
     /**
      * Adds the Groups in a Collection to this GroupSet.
      *
@@ -189,6 +189,7 @@ public class GroupSet
      */
     public Group getGroupByName(String groupName)
     {
+    	groupName=groupName.toLowerCase();
         return (StringUtils.isNotEmpty(groupName))
                 ? (Group) nameMap.get(groupName) : null;
     }
@@ -201,10 +202,10 @@ public class GroupSet
      * @return Group if argument matched a Group in this
      * GroupSet; null if no match.
      */
-    public Group getGroupById(int groupId)
+    public Group getGroupById(long groupId)
     {
         return (groupId != 0)
-                ? (Group) idMap.get(new Integer(groupId)) : null;
+                ? (Group) idMap.get(new Long(groupId)) : null;
     }
 
     /**
@@ -244,4 +245,6 @@ public class GroupSet
 
         return sb.toString();
     }
+    
+  
 }

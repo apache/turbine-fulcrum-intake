@@ -1,5 +1,4 @@
 package org.apache.fulcrum.security.util;
-
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -54,7 +53,7 @@ package org.apache.fulcrum.security.util;
  * <http://www.apache.org/>.
  */
 import java.io.Serializable;
-
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -62,29 +61,26 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
-
 /**
  * This class represents a set of Security Entities.
  * It makes it easy to build a UI.
  * It wraps a TreeSet object to enforce that only relevant
  * methods are available.
  * TreeSet's contain only unique Objects (no duplicates).
- *
+ 
+ * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
-public abstract class SecuritySet
-        implements Serializable
+public abstract class SecuritySet implements Serializable, Set
 {
     /** Map for "name" -> "security object" */
     protected Map nameMap = null;
-
     /** Map for "id" -> "security object" */
     protected Map idMap = null;
-
     /**
      * Constructs an empty Set
      */
@@ -93,7 +89,6 @@ public abstract class SecuritySet
         nameMap = new TreeMap();
         idMap = new TreeMap();
     }
-
     /**
      * Returns a set of security objects in this object.
      *
@@ -104,7 +99,6 @@ public abstract class SecuritySet
     {
         return new HashSet(nameMap.values());
     }
-
     /**
      * Returns a set of Names in this Object.
      *
@@ -115,7 +109,6 @@ public abstract class SecuritySet
     {
         return nameMap.keySet();
     }
-
     /**
      * Returns a set of Id values in this Object.
      *
@@ -126,7 +119,6 @@ public abstract class SecuritySet
     {
         return idMap.keySet();
     }
-
     /**
      * Removes all Objects from this Set.
      */
@@ -135,9 +127,6 @@ public abstract class SecuritySet
         nameMap.clear();
         idMap.clear();
     }
-
-
-
     /**
      * Searches if an Object with a given name is in the
      * Set
@@ -148,9 +137,9 @@ public abstract class SecuritySet
      */
     public boolean containsName(String name)
     {
+    	name = name.toLowerCase();
         return (StringUtils.isNotEmpty(name)) ? nameMap.containsKey(name) : false;
     }
-
     /**
      * Searches if an Object with a given Id is in the
      * Set
@@ -159,11 +148,10 @@ public abstract class SecuritySet
      * @return True if argument matched an Object in this Set; false
      * if no match.
      */
-    public boolean containsId(int id)
+    public boolean containsId(long id)
     {
-        return (id == 0) ? false:  idMap.containsKey(new Integer(id));
+        return (id == 0) ? false : idMap.containsKey(new Long(id));
     }
-
     /**
      * Returns an Iterator for Objects in this Set.
      *
@@ -173,9 +161,6 @@ public abstract class SecuritySet
     {
         return nameMap.values().iterator();
     }
-
-
-
     /**
      * Returns size (cardinality) of this set.
      *
@@ -185,7 +170,6 @@ public abstract class SecuritySet
     {
         return nameMap.size();
     }
-
     /**
      * list of role names in this set
      *
@@ -194,21 +178,113 @@ public abstract class SecuritySet
     public String toString()
     {
         StringBuffer sbuf = new StringBuffer(12 * size());
-        for(Iterator it = nameMap.keySet().iterator(); it.hasNext(); )
+        for (Iterator it = nameMap.keySet().iterator(); it.hasNext();)
         {
             sbuf.append((String) it.next());
-
-            if(it.hasNext())
+            if (it.hasNext())
             {
                 sbuf.append(", ");
             }
         }
         return sbuf.toString();
     }
-    
-    protected Integer getIdAsObject(int id){
-    	return new Integer(id);
+    protected Long getIdAsObject(long id)
+    {
+        return new Long(id);
     }
-    
+    // methods from Set
+    public boolean addAll(Collection collection)
+    {
+		System.out.println("here we go!");
+		System.err.println("here we go err!");
+        return add(collection);
+    }
+    public boolean isEmpty()
+    {
+        return nameMap.isEmpty();
+    }
+    public boolean containsAll(Collection collection)
+    {
+		System.out.println("here we go!");
+		System.err.println("here we go err!");
+        for (Iterator i = collection.iterator(); i.hasNext();)
+        {
+            Object object = i.next();
+            if (!contains(object))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    public boolean removeAll(Collection collection)
+    {
+		System.out.println("here we go!");
+		System.err.println("here we go err!");
+        boolean changed = false;
+        for (Iterator i = collection.iterator(); i.hasNext();)
+        {
+            Object object = i.next();
+            boolean result = remove(object);
+            if (result)
+            {
+                changed = true;
+            }
+        }
+        return changed;
+    }
+    public boolean retainAll(Collection collection)
+    {
+		System.out.println("here we go!");
+		System.err.println("here we go err!");
+        throw new RuntimeException("not implemented");
+    }
+    /* (non-Javadoc)
+    	* @see java.util.Collection#toArray()
+    	*/
+    public Object[] toArray()
+    {
+		System.out.println("here we go!");
+		System.err.println("here we go err!");
+		throw new RuntimeException("not implemented");
+    }
+    /* (non-Javadoc)
+    	* @see java.util.Collection#add(java.lang.Object)
+    	*/
+    public boolean add(Object o)
+    {
+		System.out.println("here we go!");
+		System.err.println("here we go err!");
+		Collection c = new HashSet();
+		c.add(o);
+		return add(c);
+		
+    }
+    /* (non-Javadoc)
+    	* @see java.util.Collection#contains(java.lang.Object)
+    	*/
+    public boolean contains(Object o)
+    {
+		System.out.println("here we go!");
+		System.err.println("here we go err!");
+		throw new RuntimeException("not implemented");
+    }
+    /* (non-Javadoc)
+    	* @see java.util.Collection#remove(java.lang.Object)
+    	*/
+    public boolean remove(Object o)
+    {
+		System.out.println("here we go!");
+		System.err.println("here we go err!");
+		throw new RuntimeException("not implemented");
+    }
+    /* (non-Javadoc)
+    	* @see java.util.Collection#toArray(java.lang.Object[])
+    	*/
+    public Object[] toArray(Object[] a)
+    {
+		System.out.println("here we go!");
+		System.err.println("here we go err!");
+		throw new RuntimeException("not implemented");
+    }
 }
-

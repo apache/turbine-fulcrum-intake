@@ -188,6 +188,7 @@ public class RoleSet
      */
     public Role getRoleByName(String roleName)
     {
+		roleName=roleName.toLowerCase();
         return (StringUtils.isNotEmpty(roleName))
                 ? (Role) nameMap.get(roleName) : null;
     }
@@ -200,10 +201,10 @@ public class RoleSet
      * @return Role if argument matched a Role in this RoleSet; null
      * if no match.
      */
-    public Role getRoleById(int roleId)
+    public Role getRoleById(long roleId)
     {
         return (roleId != 0) 
-                ? (Role) idMap.get(new Integer(roleId)) : null;
+                ? (Role) idMap.get(new Long(roleId)) : null;
     }
 
     /**
