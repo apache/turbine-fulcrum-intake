@@ -53,7 +53,6 @@
       outputFile="report.turbine.om.generation"
       targetPackage="${securityPackage}"
       xmlFile="${schemaDirectory}/turbine-schema.xml"
-      targetDatabase="${database}"
     />
 
   </target>
@@ -69,7 +68,6 @@
       outputFile="report.turbine.scheduler.generation"
       targetPackage="${schedulerPackage}"
       xmlFile="${schemaDirectory}/scheduler-schema.xml"
-      targetDatabase="${database}"
     />
 
   </target>
