@@ -75,7 +75,7 @@ import org.apache.fulcrum.InitializationException;
  * Locales.</p>
  *
  * <p>Usage example:</p>
- * 
+ *
  * <blockquote><code><pre>
  * LocalizationService ls = (LocalizationService) TurbineServices
  *     .getInstance().getService(LocalizationService.SERVICE_NAME);
@@ -168,7 +168,7 @@ public class TurbineLocalizationService
     /**
      * Initialize list of default bundle names.
      *
-     * @param names Ignored.
+     * @param ignored names Ignored.
      */
     protected void initBundleNames(String[] ignored)
     {
@@ -394,7 +394,7 @@ public class TurbineLocalizationService
                                               Map bundlesByLocale)
     {
         ResourceBundle rb = null;
-        if ( !Strings.isValid(locale.getCountry()) &&
+        if ( !Strings.isNotEmpty(locale.getCountry()) &&
              defaultLanguage.equals(locale.getLanguage()) )
         {
             /*
@@ -410,10 +410,10 @@ public class TurbineLocalizationService
                 rb = getBundleIgnoreException(bundleName, withDefaultCountry);
             }
         }
-        else if ( !Strings.isValid(locale.getLanguage()) &&
+        else if ( !Strings.isNotEmpty(locale.getLanguage()) &&
                   defaultCountry.equals(locale.getCountry()) )
         {
-            Locale withDefaultLanguage = new Locale(defaultLanguage, 
+            Locale withDefaultLanguage = new Locale(defaultLanguage,
                                                     locale.getCountry());
             rb = (ResourceBundle) bundlesByLocale.get(withDefaultLanguage);
             if (rb == null)
@@ -479,7 +479,7 @@ public class TurbineLocalizationService
     public Locale getLocale(HttpServletRequest req)
     {
         return getLocale(req.getHeader(ACCEPT_LANGUAGE));
-// (JSS) Backed out this change because Tomcat seems to be returning 
+// (JSS) Backed out this change because Tomcat seems to be returning
 //       the wrong result and things just are not working.
 //        Locale l = req.getLocale();
 //        return (l != null ? l : getLocale(req.getHeader(ACCEPT_LANGUAGE)));
@@ -580,7 +580,7 @@ public class TurbineLocalizationService
     /**
      * @see org.apache.fulcrum.localization.LocalizationService#format(String, Locale, String, Object)
      */
-    public String format(String bundleName, Locale locale, 
+    public String format(String bundleName, Locale locale,
                          String key, Object arg1)
     {
         return format(bundleName, locale, key, new Object[] { arg1 });
