@@ -1,5 +1,4 @@
 package org.apache.fulcrum.testcontainer;
-
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -53,15 +52,16 @@ package org.apache.fulcrum.testcontainer;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-
 import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.component.ComponentException;
-
 import junit.framework.TestCase;
-
 /**
- * Base class for unit tests for components.
+ * Base class for unit tests for components.  This version doesn't load the
+ * container until the first request for a component.  This allows the 
+ * tester to populate the configurationFileName and roleFileName, possible
+ * one per test. 
  *
+ * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
  */
@@ -69,6 +69,29 @@ public class BaseUnitTest extends TestCase
 {
     /** Container for the components */
     private Container container;
+    /** Setup our default configurationFileName */
+    private String configurationFileName = "src/test/TestComponentConfig.xml";
+    /** Setup our default roleFileName */
+    private String roleFileName = "src/test/TestRoleConfig.xml";
+    /**
+     * Gets the configuration file name for the container should use for this
+     * test.  By default it is src/test/TestComponentConfig.
+     * @param configurationFileName
+     */
+    protected void setConfigurationFileName(String configurationFileName)
+    {
+        this.configurationFileName = configurationFileName;
+    }
+
+    /**
+     * Override the role file name for the container should use for this
+     * test.  By default it is src/test/TestRoleConfig.
+     * @param roleFileName
+     */
+	protected void setRoleFileName(String roleFileName)
+    {
+        this.roleFileName = roleFileName;
+    }
 
     /**
      * Constructor for test.
@@ -79,16 +102,12 @@ public class BaseUnitTest extends TestCase
     {
         super(testName);
     }
-
     /**
      * Performs any initialization that must happen before each test is run.
      */
     protected void setUp()
     {
-        container = new Container();
-        container.startup(getConfigurationFileName(), getRoleFileName());
     }
-
     /**
      * Clean up after each test is run.
      */
@@ -96,7 +115,6 @@ public class BaseUnitTest extends TestCase
     {
         container = null;
     }
-
     /**
      * Gets the configuration file name for the container should use for this
      * test.
@@ -105,9 +123,8 @@ public class BaseUnitTest extends TestCase
      */
     protected String getConfigurationFileName()
     {
-        return "src/test/TestComponentConfig.xml";
+        return configurationFileName;
     }
-
     /**
      * Gets the role file name for the container should use for this
      * test.
@@ -116,21 +133,24 @@ public class BaseUnitTest extends TestCase
      */
     protected String getRoleFileName()
     {
-        return "src/test/TestRoleConfig.xml";
+        return roleFileName;
     }
-
     /**
-     * Returns an instance of the named component
+     * Returns an instance of the named component.  Starts
+     * the container if it hasn't been started.
      *
      * @param roleName Name of the role the component fills.
      * @throws ComponentException generic exception
      */
-    protected Component lookup(String roleName)
-            throws ComponentException
+    protected Component lookup(String roleName) throws ComponentException
     {
+        if (container == null)
+        {
+            container = new Container();
+            container.startup(getConfigurationFileName(), getRoleFileName());
+        }
         return container.lookup(roleName);
     }
-
     /**
      * Releases the component
      *
@@ -138,7 +158,9 @@ public class BaseUnitTest extends TestCase
      */
     protected void release(Component component)
     {
-        container.release(component);
+        if (container != null)
+        {
+            container.release(component);
+        }
     }
-
 }

@@ -54,92 +54,43 @@ package org.apache.fulcrum.testcontainer;
  * <http://www.apache.org/>.
  */
 
-import java.io.File;
-
-import org.apache.avalon.framework.component.ComponentException;
-
-import junit.framework.TestSuite;
+import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.context.Contextualizable;
+import org.apache.avalon.framework.context.Context;
+import org.apache.avalon.framework.context.ContextException;
 
 /**
- * Basic testing of the Container
+ * Interface of the component
  *
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
  */
-public class ContainerTest extends BaseUnitTest
+public class AlternativeComponentImpl
+        extends AbstractLogEnabled
+        implements Initializable, Disposable, SimpleComponent,
+            Contextualizable
 {
+    private String appRoot;
 
-    /**
-     * Constructor for test.
-     *
-     * @param testName name of the test being executed
-     */
-    public ContainerTest(String testName)
+    public void initialize() throws Exception
     {
-        super(testName);
     }
 
-    /**
-     * Factory method for creating a TestSuite for this class.
-     *
-     * @return the test suite
-     */
-    public static TestSuite suite()
+    public void dispose()
     {
-        TestSuite suite = new TestSuite(ContainerTest.class);
-        return suite;
     }
 
-    public void testInitialization()
+    public void test()
     {
-        assertTrue(true);
+        setupLogger(this, "AlternativeSimpleComponent");
+        getLogger().debug("test");
+        getLogger().debug("ComponentAppRoot = "+appRoot);
     }
 
-    public void testComponentUsage()
+    public void contextualize(Context context) throws ContextException
     {
-        SimpleComponent sc = null;
-        try
-        {
-            sc = (SimpleComponent) this.lookup(SimpleComponent.ROLE);
-        }
-        catch (ComponentException e)
-        {
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
-
-        assertNotNull(sc);
-
-        sc.test();
-
-        this.release(sc);
-
+        appRoot = (String) context.get("ComponentAppRoot");
     }
-    
-	public void testAlternativeRoles()
-		{
-			SimpleComponent sc = null;
-			File f = new File("src/test/TestAlternativeRoleConfig.xml");
-			assertTrue(f.exists());
-			this.setRoleFileName("src/test/TestAlternativeRoleConfig.xml");
-			try
-			{
-				sc = (SimpleComponent) this.lookup(SimpleComponent.ROLE);
-			}
-			catch (ComponentException e)
-			{
-				e.printStackTrace();
-				fail(e.getMessage());
-			}
-			
-			assertTrue(sc instanceof AlternativeComponentImpl);
-
-			assertNotNull(sc);
-
-			sc.test();
-
-			this.release(sc);
-
-		}
-
 }
