@@ -139,6 +139,12 @@ public class TemplateEmail
     /** The from email field. */
     private String fromEmail = null;
 
+    /** The cc name field. */
+    private String ccName = null;
+
+    /** The cc email field. */
+    private String ccEmail = null;
+
     /** The subject of the message. */
     private String subject = null;
 
@@ -198,6 +204,21 @@ public class TemplateEmail
     {
         this.fromName = from;
         this.fromEmail = email;
+        return (this);
+    }
+
+    /**
+     * CC: name, email.
+     *
+     * @param from A String with the CC name.
+     * @param email A String with the CC email.
+     * @return A TemplateEmail (self).
+     */
+    public TemplateEmail setCC(String cc,
+                                 String email)
+    {
+        this.ccName = cc;
+        this.ccEmail = email;
         return (this);
     }
 
@@ -287,6 +308,7 @@ public class TemplateEmail
         SimpleEmail se = new SimpleEmail();
         se.setFrom(fromEmail, fromName);
         se.addTo(toEmail, toName);
+        se.addCc(ccEmail, ccName);
         se.setSubject(subject);
         se.setMsg(body);
         se.send();
