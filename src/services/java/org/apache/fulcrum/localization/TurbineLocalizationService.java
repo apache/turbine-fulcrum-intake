@@ -132,16 +132,25 @@ public class TurbineLocalizationService
         setInit(true);
     }
 
+    /**
+     * Retrieves the default language (specified in the config file).
+     */
     public String getDefaultLanguage()
     {
         return defaultLanguage;
     }
 
+    /**
+     * Retrieves the default country (specified in the config file).
+     */
     public String getDefaultCountry()
     {
         return defaultCountry;
     }
 
+    /**
+     * Retrieves the default bundle (specified in the config file).
+     */
     public String getDefaultBundle()
     {
         return defaultBundle;
@@ -157,7 +166,7 @@ public class TurbineLocalizationService
      */
     public ResourceBundle getBundle()
     {
-        return getBundle( defaultBundle );
+        return getBundle(defaultBundle, (Locale) null);
     }
 
     /**
@@ -169,8 +178,7 @@ public class TurbineLocalizationService
      */
     public ResourceBundle getBundle(String bundleName)
     {
-        return getBundle( bundleName, 
-            new Locale(defaultLanguage, defaultCountry) );
+        return getBundle(bundleName, (Locale) null);
     }
 
     /**
@@ -185,8 +193,7 @@ public class TurbineLocalizationService
     public ResourceBundle getBundle(String bundleName,
                                     String languageHeader)
     {
-        return getBundle( bundleName,
-                          getLocale(languageHeader) );
+        return getBundle(bundleName, getLocale(languageHeader));
     }
 
     /**
@@ -199,12 +206,7 @@ public class TurbineLocalizationService
      */
     public ResourceBundle getBundle(HttpServletRequest req)
     {
-        Locale locale = getLocale(req);
-        if (locale == null)
-        {
-            return getBundle();
-        }
-        return getBundle( defaultBundle, locale );
+        return getBundle(defaultBundle, getLocale(req));
     }
 
     /**
@@ -217,32 +219,33 @@ public class TurbineLocalizationService
      * @param req HttpServletRequest.
      * @return A localized ResourceBundle.
      */
-    public ResourceBundle getBundle(String bundleName,
-                                    HttpServletRequest req)
+    public ResourceBundle getBundle(String bundleName, HttpServletRequest req)
     {
-        Locale locale = getLocale(req);
-        if (locale == null)
-        {
-            return getBundle(bundleName);
-        }
-        return getBundle( bundleName, locale );
+        return getBundle(bundleName, getLocale(req));
     }
 
     /**
      * This method returns a ResourceBundle for the given bundle name
      * and the given Locale.
      *
-     * @param bundleName Name of bundle.
-     * @param locale A Locale.
+     * @param bundleName Name of bundle (or <code>null</code> for the
+     * default bundle).
+     * @param locale The locale (or <code>null</code> for the locale
+     * indicated by the default language and country).
      * @return A localized ResourceBundle.
      */
-    public ResourceBundle getBundle(String bundleName,
-                                    Locale locale)
+    public ResourceBundle getBundle(String bundleName, Locale locale)
     {
-        ResourceBundle rb = null;
+        // Assure usable inputs.
         bundleName = (bundleName == null ? defaultBundle : bundleName.trim());
-        HashMap bundlesByLocale = (HashMap) bundles.get(bundleName);
+        if (locale == null)
+        {
+            locale = new Locale(defaultLanguage, defaultCountry);
+        }
 
+        // Find/retrieve/cache bundle.
+        ResourceBundle rb = null;
+        HashMap bundlesByLocale = (HashMap) bundles.get(bundleName);
         if (bundlesByLocale != null)
         {
             rb = (ResourceBundle) bundlesByLocale.get(locale);
