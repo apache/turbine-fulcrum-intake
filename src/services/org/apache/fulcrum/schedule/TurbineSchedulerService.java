@@ -56,6 +56,7 @@ package org.apache.fulcrum.schedule;
 
 import java.util.List;
 import java.util.Vector;
+import java.util.Iterator;
 import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
 import org.apache.torque.om.NumberKey;
@@ -117,6 +118,11 @@ public class TurbineSchedulerService
 
             if ( jobs != null && jobs.size() > 0 )
             {
+                Iterator it = jobs.iterator();
+                while(it.hasNext())
+                {
+                    ((JobEntry)it.next()).calcRunTime();
+                }
                 scheduleQueue.batchLoad(jobs);
                 restart();
             }
@@ -158,7 +164,8 @@ public class TurbineSchedulerService
     }
 
     /**
-     * Add a new job to the queue.
+     * Add a new job to the queue.  Before adding a job, calculate the runtime 
+     * to make sure the entry will be placed at the right order in the queue.
      *
      * @param je A JobEntry with the job to add.
      * @exception Exception, a generic exception.
@@ -168,6 +175,9 @@ public class TurbineSchedulerService
     {
         try
         {
+            // Calculate the runtime to make sure the entry will be placed 
+            // at the right order
+            je.calcRunTime();
             // Save to DB.
             je.save();
         }

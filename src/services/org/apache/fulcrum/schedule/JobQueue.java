@@ -57,6 +57,7 @@ package org.apache.fulcrum.schedule;
 import java.util.List;
 import java.util.Vector;
 import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Queue for the scheduler.
@@ -209,6 +210,16 @@ public class JobQueue
      */
     private void sortQueue()
     {
-        Collections.sort(queue);
+        Comparator aComparator = new Comparator () 
+            {
+                public int compare(Object o1, Object o2) 
+                {
+                    Long time1 = new Long (((JobEntry)o1).getNextRuntime());
+                    Long time2 = new Long (((JobEntry)o2).getNextRuntime());
+                    return (time1.compareTo(time2));
+                }
+            };
+                                               
+        Collections.sort(queue,aComparator);
     }
 }

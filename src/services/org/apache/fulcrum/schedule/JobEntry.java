@@ -224,24 +224,25 @@ public class JobEntry
     {
         Calendar schedrun = Calendar.getInstance();
         Calendar now = Calendar.getInstance();
-
+ 
         switch( evaluateJobType() )
         {
-        case 0:
+        case SECOND:
             // SECOND (every so many seconds...)
             schedrun.add(Calendar.SECOND, getSecond());
             runtime = schedrun.getTime().getTime();
             break;
-        case 1:
+
+        case MINUTE:
             // MINUTE (every so many minutes...)
             schedrun.add(Calendar.SECOND, getSecond());
             schedrun.add(Calendar.MINUTE, getMinute());
             runtime = schedrun.getTime().getTime();
             break;
 
-        case 2:
+        case WEEK_DAY:
             // WEEKDAY (day of the week)
-            schedrun.add(Calendar.SECOND, getSecond());
+            schedrun.set(Calendar.SECOND, getSecond());
             schedrun.set(Calendar.MINUTE, getMinute());
             schedrun.set(Calendar.HOUR_OF_DAY, getHour());
             schedrun.set(Calendar.DAY_OF_WEEK, getWeekDay());
@@ -259,9 +260,9 @@ public class JobEntry
             }
             break;
 
-        case 3:
+        case DAY_OF_MONTH:
             // DAY_OF_MONTH (date of the month)
-            schedrun.add(Calendar.SECOND, getSecond());
+            schedrun.set(Calendar.SECOND, getSecond());
             schedrun.set(Calendar.MINUTE, getMinute());
             schedrun.set(Calendar.HOUR_OF_DAY, getHour());
             schedrun.set(Calendar.DAY_OF_MONTH, getDayOfMonth());
@@ -279,9 +280,9 @@ public class JobEntry
             }
             break;
 
-        case 4:
+        case DAILY:
             // DAILY (certain hour:minutes of the day)
-            schedrun.add(Calendar.SECOND, getSecond());
+            schedrun.set(Calendar.SECOND, getSecond());
             schedrun.set(Calendar.MINUTE, getMinute());
             schedrun.set(Calendar.HOUR_OF_DAY, getHour());
 
