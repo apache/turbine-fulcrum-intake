@@ -4,11 +4,7 @@
     role="org.apache.fulcrum.security.adapter.osuser.BaseFulcrumProvider"
     class="org.apache.fulcrum.security.adapter.osuser.BaseFulcrumProvider">   
   </component>  
-	
-  <component
-    role="org.apache.fulcrum.factory.FactoryService"
-    class="org.apache.fulcrum.factory.DefaultFactoryService">   
-  </component>  
+  
   
   
   <!-- standard components for In Memory -->
