@@ -8,6 +8,12 @@
   <body>
     <release version="1.0-alpha-7" date="in cvs">
       <action dev="mmanner" type="add">
+        Null passwords properly dealt with in TextMatchAuthenticator.
+      </action>    	    	
+      <action dev="mmanner" type="add">
+        Change Basic* entity objects to use Set. 
+      </action>    	
+      <action dev="mmanner" type="add">
         Change Dynamic* entity objects to use Set.  Refactored Hibernate implementation of Security to 
         use more efficient deletion when doing oneshot deletes during revokeAll methods.  Added get[Entity]ById()
         method as well.  Change grants/revokes to be Synchronizied.

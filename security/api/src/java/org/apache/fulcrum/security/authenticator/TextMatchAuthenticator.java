@@ -84,6 +84,12 @@ public class TextMatchAuthenticator extends AbstractLogEnabled implements Authen
      */
     public boolean authenticate(User user, String password) throws  DataBackendException
     {
-        return user.getPassword().equals(password);
+        if( user == null )
+            return false;
+        
+        String referenced = user.getPassword() == null ? "" : user.getPassword().trim();
+        String tested = password == null ? "" : password.trim();
+        
+        return referenced.equals(tested);
     }
 }

@@ -69,13 +69,18 @@ import org.apache.fulcrum.security.util.UserSet;
  */
 public class BasicGroup extends SecurityEntityImpl implements Group
 {
-	private UserSet userSet = new UserSet();
+	private Set userSet = new UserSet();
 	/**
 	 * @return
 	 */
 	public UserSet getUsers()
 	{
-		return userSet;
+	    if( userSet instanceof UserSet )
+	        return (UserSet) userSet;
+	    else {
+	        userSet = new UserSet(userSet);
+	        return (UserSet)userSet;
+	    }
 	}
 
 	/**
@@ -83,15 +88,18 @@ public class BasicGroup extends SecurityEntityImpl implements Group
 	 */
 	public void setUsers(UserSet userSet)
 	{
-		this.userSet = userSet;
+	    if( userSet != null )
+	        this.userSet = userSet;
+	    else
+	        this.userSet = new UserSet();
 	}
     
 	/**
 	 * @return
 	 */
-	public UserSet getUsersAsSet()
+	public Set getUsersAsSet()
 	{
-		return userSet;
+	    return userSet;
 	}
 
 	/**
@@ -99,7 +107,7 @@ public class BasicGroup extends SecurityEntityImpl implements Group
 	 */
 	public void setUsersAsSet(Set users)
 	{
-		getUsers().add(users);
+	    this.userSet = users;
 	}    
 
 	
