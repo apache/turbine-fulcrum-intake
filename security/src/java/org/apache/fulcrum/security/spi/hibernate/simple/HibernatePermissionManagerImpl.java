@@ -170,6 +170,7 @@ public class HibernatePermissionManagerImpl extends BaseHibernateManager impleme
             session = hibernateService.openSession();
             List permissions = session.find("from SimplePermission");
             permissionSet.add(permissions);
+			session.close();
         }
         catch (HibernateException e)
         {
@@ -219,6 +220,7 @@ public class HibernatePermissionManagerImpl extends BaseHibernateManager impleme
             session = hibernateService.openSession();
             permissions =
                 session.find("from SimplePermission sr where sr.name=?", permission.getName(), Hibernate.STRING);
+			session.close();
         }
         catch (HibernateException e)
         {

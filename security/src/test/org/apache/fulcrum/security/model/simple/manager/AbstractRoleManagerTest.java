@@ -8,6 +8,7 @@ package org.apache.fulcrum.security.model.simple.manager;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
@@ -158,6 +159,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         role = roleManager.getRoleInstance("TEST_ROLE");
         roleManager.addRole(role);
         ((SimpleRoleManager) roleManager).grant(role, permission);
+		assertTrue(((SimpleRole) role).getPermissions().contains(permission));
     }
     public void testRevokeUserGroup() throws Exception
     {
@@ -168,6 +170,9 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         roleManager.addRole(role);
         ((SimpleRoleManager) roleManager).grant(role, permission);
         ((SimpleRoleManager) roleManager).revoke(role, permission);
+		
+		assertFalse(((SimpleRole) role).getPermissions().contains(permission));
+		
     }
     public void testAddRole() throws Exception
     {

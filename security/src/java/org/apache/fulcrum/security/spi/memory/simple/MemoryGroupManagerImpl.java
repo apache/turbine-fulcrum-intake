@@ -67,6 +67,7 @@ import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
+import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
 import org.apache.fulcrum.security.model.simple.manager.*;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
@@ -355,7 +356,8 @@ public class MemoryGroupManagerImpl extends AbstractLogEnabled implements Simple
             roleExists = checkExists(role);
             if (groupExists && roleExists)
             {
-                ((SimpleGroup) group).addRole(role);
+				((SimpleGroup) group).addRole(role);
+				((SimpleRole) role).addGroup(group);
                 return;
             }
         }
@@ -391,7 +393,8 @@ public class MemoryGroupManagerImpl extends AbstractLogEnabled implements Simple
             roleExists = checkExists(role);
             if (groupExists && roleExists)
             {
-                ((SimpleGroup) group).removeRole(role);
+				((SimpleGroup) group).removeRole(role);
+				((SimpleRole) role).removeGroup(group);
                 return;
             }
         }

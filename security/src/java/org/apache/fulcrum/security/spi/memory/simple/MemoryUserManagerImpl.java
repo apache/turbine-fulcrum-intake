@@ -382,6 +382,10 @@ public class MemoryUserManagerImpl extends AbstractLogEnabled implements SimpleU
             userExists = checkExists(user);
             if (userExists)
             {
+            	for (Iterator i = ((SimpleUser) user).getGroups().iterator();i.hasNext();){
+					SimpleGroup group = (SimpleGroup)i.next();
+					group.removeUser(user);
+            	}
                 ((SimpleUser) user).setGroups(new GroupSet());
                 return;
             }
@@ -671,7 +675,8 @@ public class MemoryUserManagerImpl extends AbstractLogEnabled implements SimpleU
             userExists = checkExists(user);
             if (groupExists && userExists)
             {
-                ((SimpleUser) user).addGroup(group);
+				((SimpleUser) user).addGroup(group);
+				((SimpleGroup) group).addUser(user);
                 return;
             }
         }
@@ -711,7 +716,8 @@ public class MemoryUserManagerImpl extends AbstractLogEnabled implements SimpleU
             userExists = checkExists(user);
             if (groupExists && userExists)
             {
-                ((SimpleUser) user).removeGroup(group);
+				((SimpleUser) user).removeGroup(group);
+				((SimpleGroup) group).removeUser(user);
                 return;
             }
         }

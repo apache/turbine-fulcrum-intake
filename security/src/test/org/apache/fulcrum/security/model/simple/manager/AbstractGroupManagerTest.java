@@ -9,6 +9,8 @@ import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
+import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
@@ -78,13 +80,12 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
     }
     public void testGetGroupByName() throws Exception
     {
-        
         group = groupManager.getGroupInstance("CLEAN_KENNEL");
         groupManager.addGroup(group);
         Group group2 = groupManager.getGroupByName("CLEAN_KENNEL");
         assertEquals(group.getName(), group2.getName());
-		group2 = groupManager.getGroupByName("Clean_KeNNel");
-		assertEquals(group.getName(), group2.getName());
+        group2 = groupManager.getGroupByName("Clean_KeNNel");
+        assertEquals(group.getName(), group2.getName());
     }
     public void testGetGroupById() throws Exception
     {
@@ -95,17 +96,19 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
     }
     public void testGetAllGroups() throws Exception
     {
-    	int size = groupManager.getAllGroups().size();
+        int size = groupManager.getAllGroups().size();
         group = groupManager.getGroupInstance("CLEAN_KENNEL_J");
         groupManager.addGroup(group);
         GroupSet groupSet = groupManager.getAllGroups();
-        assertEquals(size+1, groupSet.size());
+        assertEquals(size + 1, groupSet.size());
     }
     public void testRemoveGroup() throws Exception
     {
         group = groupManager.getGroupInstance("CLEAN_KENNEL_K");
         groupManager.addGroup(group);
         int size = groupManager.getAllGroups().size();
+		assertEquals(0,((SimpleGroup)group).getUsers().size());
+		assertEquals(0,((SimpleGroup)group).getRoles().size());
         groupManager.removeGroup(group);
         try
         {
@@ -142,7 +145,7 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         groupManager.addGroup(group);
         assertNotNull(groupManager.getGroupById(group.getId()));
     }
-    public void testGrantUserGroup() throws Exception
+    public void testGrantGroupRole() throws Exception
     {
         Role role = securityService.getRoleManager().getRoleInstance();
         role.setName("TEST_PERMISSION");
@@ -150,8 +153,12 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         group = groupManager.getGroupInstance("TEST_ROLE");
         groupManager.addGroup(group);
         ((SimpleGroupManager) groupManager).grant(group, role);
+        group = groupManager.getGroupByName("TEST_ROLE");
+		assertTrue(((SimpleGroup) group).getRoles().contains(role));
+		assertTrue(((SimpleRole) role).getGroups().contains(group));
+		
     }
-    public void testRevokeUserGroup() throws Exception
+    public void testRevokeGroupRole() throws Exception
     {
         Role role = securityService.getRoleManager().getRoleInstance();
         role.setName("TEST_PERMISSION2");
@@ -160,5 +167,8 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         groupManager.addGroup(group);
         ((SimpleGroupManager) groupManager).grant(group, role);
         ((SimpleGroupManager) groupManager).revoke(group, role);
+        group = groupManager.getGroupByName("Lima2");
+		assertFalse(((SimpleGroup) group).getRoles().contains(role));
+		assertFalse(((SimpleRole) role).getGroups().contains(group));
     }
 }

@@ -157,6 +157,7 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
             transaction = session.beginTransaction();
             session.delete(entity);
             transaction.commit();
+			session.close();
         }
         catch (HibernateException he)
         {
@@ -167,7 +168,7 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
             catch (HibernateException hex)
             {
             }
-            throw new DataBackendException("Problem removing entity.", he);
+            throw new DataBackendException("Problem removing entity:" + he.getMessage(), he);
         }
     }
     /**
@@ -186,6 +187,7 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
             transaction = session.beginTransaction();
             session.update(entity);
             transaction.commit();
+            session.close();
         }
         catch (HibernateException he)
         {
@@ -196,7 +198,7 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
             catch (HibernateException hex)
             {
             }
-            throw new DataBackendException("renameRole(s,name)", he);
+            throw new DataBackendException("updateEntity(" + entity+")", he);
         }
         return;
     }
@@ -216,6 +218,7 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
             transaction = session.beginTransaction();
             session.save(entity);
             transaction.commit();
+			session.close();
         }
         catch (HibernateException he)
         {
@@ -246,6 +249,7 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
             transaction = session.beginTransaction();
             session.delete(entity);
             transaction.commit();
+			session.close();
         }
         catch (HibernateException he)
         {

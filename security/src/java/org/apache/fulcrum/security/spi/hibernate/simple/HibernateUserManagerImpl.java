@@ -128,6 +128,7 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
         {
             session = hibernateService.openSession();
             users = session.find("from HibernateSimpleUser su where su.name=?", userName, Hibernate.STRING);
+			session.close();
         }
         catch (HibernateException e)
         {
@@ -158,6 +159,7 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
             session = hibernateService.openSession();
             users =
                 session.find("from HibernateSimpleUser su where su.name=?", userName.toLowerCase(), Hibernate.STRING);
+			session.close();
         }
         catch (HibernateException e)
         {
@@ -519,8 +521,10 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
             userExists = checkExists(user);
             if (groupExists && userExists)
             {
-                ((SimpleUser) user).addGroup(group);
-                updateEntity(user);
+				((SimpleUser) user).addGroup(group);
+				((SimpleGroup) group).addUser(user);
+				updateEntity(user);
+				//updateEntity(group);
                 return;
             }
         }
@@ -560,7 +564,8 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
             userExists = checkExists(user);
             if (groupExists && userExists)
             {
-                ((SimpleUser) user).removeGroup(group);
+				((SimpleUser) user).removeGroup(group);
+
                 updateEntity(user);
                 return;
             }

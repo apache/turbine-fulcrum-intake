@@ -3,7 +3,6 @@
  *
  */
 package org.apache.fulcrum.security.authenticator;
-import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.simple.entity.SimpleUser;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;

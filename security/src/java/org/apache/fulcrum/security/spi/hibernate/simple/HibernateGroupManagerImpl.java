@@ -63,7 +63,10 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.model.simple.manager.SimpleGroupManager;
+import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
+import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
 import org.apache.fulcrum.security.spi.hibernate.simple.entity.HibernateSimpleGroup;
+import org.apache.fulcrum.security.spi.hibernate.simple.entity.HibernateSimpleRole;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.GroupSet;
@@ -186,6 +189,7 @@ public class HibernateGroupManagerImpl extends BaseHibernateManager implements S
             session = hibernateService.openSession();
             List groups = session.find("from HibernateSimpleGroup");
             groupSet.add(groups);
+			session.close();
         }
         catch (HibernateException e)
         {
@@ -245,6 +249,7 @@ public class HibernateGroupManagerImpl extends BaseHibernateManager implements S
         {
             session = hibernateService.openSession();
             groups = session.find("from HibernateSimpleGroup sg where sg.name=?", group.getName(), Hibernate.STRING);
+			session.close();
         }
         catch (HibernateException e)
         {
@@ -302,8 +307,10 @@ public class HibernateGroupManagerImpl extends BaseHibernateManager implements S
             roleExists = checkExists(role);
             if (groupExists && roleExists)
             {
-                ((HibernateSimpleGroup) group).addRole(role);
-                updateEntity(group);
+				((HibernateSimpleGroup) group).addRole(role);
+				((HibernateSimpleRole) role).addGroup(group);
+				updateEntity(group);
+				//updateEntity(role);
                 return;
             }
         }
@@ -339,8 +346,10 @@ public class HibernateGroupManagerImpl extends BaseHibernateManager implements S
             roleExists = checkExists(role);
             if (groupExists && roleExists)
             {
-                ((HibernateSimpleGroup) group).removeRole(role);
-                updateEntity(group);
+				((SimpleGroup) group).removeRole(role);
+				((SimpleRole) role).removeGroup(group);
+				updateEntity(group);
+				//updateEntity(role);
                 return;
             }
         }

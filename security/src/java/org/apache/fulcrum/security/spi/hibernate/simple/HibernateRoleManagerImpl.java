@@ -311,6 +311,7 @@ public class HibernateRoleManagerImpl extends BaseHibernateManager implements Si
         {
             session = hibernateService.openSession();
             roles = session.find("from HibernateSimpleRole sr where sr.name=?", role.getName(), Hibernate.STRING);
+			session.close();
         }
         catch (HibernateException e)
         {
@@ -337,6 +338,7 @@ public class HibernateRoleManagerImpl extends BaseHibernateManager implements Si
             session = hibernateService.openSession();
             List roles = session.find("from HibernateSimpleRole");
             roleSet.add(roles);
+			session.close();
         }
         catch (HibernateException e)
         {

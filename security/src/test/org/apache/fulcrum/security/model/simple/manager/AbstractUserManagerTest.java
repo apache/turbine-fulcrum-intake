@@ -10,6 +10,7 @@ import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
 import org.apache.fulcrum.security.model.simple.entity.SimpleUser;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
@@ -163,7 +164,11 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
         ((SimpleUserManager) userManager).grant(user, group);
         ((SimpleUserManager) userManager).grant(user, group2);
         userManager.revokeAll(user);
-        assertEquals(0, ((SimpleUser) user).getGroups().size());
+		assertEquals(0, ((SimpleUser) user).getGroups().size());
+		group = securityService.getGroupManager().getGroupByName("TEST_REVOKEALL");
+		group2 = securityService.getGroupManager().getGroupByName("TEST_REVOKEALL2");
+		assertFalse(((SimpleGroup) group).getUsers().contains(user));
+		assertFalse(((SimpleGroup) group2).getUsers().contains(user));
     }
     /**
      * Need to figure out if save is something we want..  
@@ -189,6 +194,8 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
         userManager.addUser(user, "clint");
         ((SimpleUserManager) userManager).grant(user, group);
         assertTrue(((SimpleUser) user).getGroups().contains(group));
+		assertTrue(((SimpleGroup)group).getUsers().contains(user));
+        
     }
     public void testRevokeUserGroup() throws Exception
     {
@@ -199,6 +206,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
         userManager.addUser(user, "pet");
         ((SimpleUserManager) userManager).revoke(user, group);
         assertFalse(((SimpleUser) user).getGroups().contains(group));
+		assertFalse(((SimpleGroup)group).getUsers().contains(user));
     }
 
     public void testGetACL() throws Exception
