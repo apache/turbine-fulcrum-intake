@@ -245,9 +245,8 @@ public class TurbineTemplateService
         return tes.handleRequest(context, template);
     }
 
-    public void handleRequest(TemplateContext context,
-                                String template,
-                                OutputStream outputStream)
+    public void handleRequest(TemplateContext context, String template,
+                              OutputStream outputStream)
         throws ServiceException
     {
         TemplateEngineService tes = getTemplateEngineService(template);
