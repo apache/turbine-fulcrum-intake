@@ -52,6 +52,7 @@ public class HibernateUserManagerImpl extends AbstractUserManager
     public boolean checkExists(String userName) throws DataBackendException
     {
         List users = null;
+        userName = userName.toLowerCase();
         try
         {
             users = getPersistenceHelper().retrieveSession().find("from " + User.class.getName() + " su where su.name=?", userName, Hibernate.STRING);
