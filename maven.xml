@@ -2,11 +2,6 @@
   xmlns:j="jelly:core"
   xmlns:m="maven">
 
-  <taskdef name="torque-om"
-    classname="org.apache.torque.task.TorqueDataModelTask">
-    <classpath refid="maven.dependency.classpath"/>
-  </taskdef>
-
   <!-- ================================================================== -->
   <!-- T O R Q U E  G E N E R A T I O N  P R E  G O A L                   --> 
   <!-- ================================================================== -->
@@ -66,7 +61,18 @@
   </goal>
 
   <goal
-    name="security-om">
+    name="init-taskdef">
+
+    <taskdef name="torque-om"
+      classname="org.apache.torque.task.TorqueDataModelTask">
+      <classpath refid="maven.dependency.classpath"/>
+    </taskdef>
+
+  </goal>
+
+  <goal
+    name="security-om"
+    prereqs="init-taskdef">
 
     <filter token="DATABASE_DEFAULT" value="${security.database.name}"/>
     <!-- is there a way to load this from an xml file? -->
@@ -91,7 +97,8 @@
   </goal>
 
   <goal
-    name="scheduler-om">
+    name="scheduler-om"
+    prereqs="init-taskdef">
 
     <filter token="DATABASE_DEFAULT" value="${scheduler.database.name}"/>
     <copy
