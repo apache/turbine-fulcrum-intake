@@ -92,6 +92,7 @@ import org.apache.fulcrum.security.TurbineSecurity;
  */
 public class DBUserManager implements UserManager
 {
+
     /**
      * System.out.println() debugging
      */
@@ -272,10 +273,16 @@ public class DBUserManager implements UserManager
             throw new UnknownEntityException("The account '" +
                 user.getUserName() + "' does not exist");
         }
-        Criteria criteria = TurbineUserPeer.buildCriteria((TurbineUser)user);
+
         try
         {
-            TurbineUserPeer.doUpdate(criteria);
+            // this is to mimic the old behavior of the method, the user 
+            // should be new that is passed to this method.  It would be
+            // better if this was checked, but the original code did not
+            // care about the user's state, so we set it to be appropriate
+            ((TurbineUser)user).setNew(false);
+            ((TurbineUser)user).setModified(true);
+            ((TurbineUser) user).save();
         }
         catch(Exception e)
         {
@@ -404,13 +411,17 @@ public class DBUserManager implements UserManager
         }
         String encrypted = TurbineSecurity.encryptPassword(initialPassword);
         user.setPassword(encrypted);
-        Criteria criteria = TurbineUserPeer.buildCriteria((TurbineUser)user);
         try
         {
-            // we can safely assume that BaseObject derivate is used as User
+            // this is to mimic the old behavior of the method, the user 
+            // should be new that is passed to this method.  It would be
+            // better if this was checked, but the original code did not
+            // care about the user's state, so we set it to be appropriate
+            ((TurbineUser)user).setNew(true);
+            ((TurbineUser)user).setModified(true);
+            // we can safely assume that TurbineUser derivate is used as User
             // implementation with this UserManager
-            ((BaseObject)user).setPrimaryKey(
-                TurbineUserPeer.doInsert(criteria));
+            ((TurbineUser) user).save();
         }
         catch(Exception e)
         {
