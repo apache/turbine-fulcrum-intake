@@ -62,7 +62,6 @@ package org.apache.fulcrum;
  * @author <a href="mailto:burton@apache.org">Kevin Burton</a>
  * @author <a href="mailto:krzewski@e-point.pl">Rafal Krzewski</a>
  * @version $Id$
- * @see org.apache.fulcrum.Initable
  */
 public class InstantiationException
     extends ServiceRuntimeException

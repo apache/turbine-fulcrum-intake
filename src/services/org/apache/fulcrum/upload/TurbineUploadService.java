@@ -73,13 +73,13 @@ import org.apache.fulcrum.ServiceException;
  *
  * <p> Files will be stored in temporary disk storage on in memory,
  * depending on request size, and will be available from the {@link
- * org.apache.fulcrum.parser.ParameterParser} as {@link
+ * org.apache.fulcrum.util.parser.ParameterParser} as {@link
  * org.apache.fulcrum.upload.FileItem}s.
  *
  * <p>This implementation of {@link UploadService} handles multiple
  * files per single html widget, sent using multipar/mixed encoding
  * type, as specified by RFC 1867.  Use {@link
- * org.apache.fulcrum.parser.ParameterParser#getFileItems(String)} to
+ * org.apache.fulcrum.util.parser.ParameterParser#getFileItems(String)} to
  * acquire an array of {@link
  * org.apache.fulcrum.upload.FileItem}s associated with given
  * html widget.

@@ -82,7 +82,8 @@ import org.apache.torque.util.Criteria;
  * <a name="global">
  * <p> Certain Roles that the Users may have in the system may are not related
  * to any specific resource nor entity. They are assigned within a special group
- * named 'global' that can be referenced in the code as {@link org.apache.turbine.om.security.Group#GLOBAL_GROUP_NAME}.
+ * named 'global' that can be referenced in the code as
+ * {@link org.apache.fulcrum.security.entity.Group#GLOBAL_GROUP_NAME}.
  *
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @version $Id$
@@ -681,7 +682,8 @@ public abstract class TurbineSecurity
     }
 
     /**
-     * Stores Permission's attributes. The Permissions is required to exist in the system.
+     * Stores Permission's attributes. The Permissions is required to exist in
+     * the system.
      *
      * @param permission The Permission to be stored.
      * @throws DataBackendException if there was an error accessing the data backend.

@@ -73,13 +73,13 @@ import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.TurbineSecurity;
 
 /**
- * An UserManager performs {@link org.apache.fulcrum.security.entity.User} objects
- * related tasks on behalf of the
+ * An UserManager performs {@link org.apache.fulcrum.security.entity.User}
+ * objects related tasks on behalf of the
  * {@link org.apache.fulcrum.security.BaseSecurityService}.
  *
  * This implementation uses a relational database for storing user data. It
  * expects that the User interface implementation will be castable to
- * {@link org.apache.turbine.om.BaseObject}.
+ * {@link org.apache.torque.om.BaseObject}.
  *
  * @author <a href="mailto:jon@collab.net">Jon S. Stevens</a>
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
@@ -94,7 +94,7 @@ public class DBUserManager implements UserManager
      * System.out.println() debugging
      */
     private static final boolean DEBUG = false;
-    
+
     /**
      * Check whether a specified user's account exists.
      *

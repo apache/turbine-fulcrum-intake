@@ -73,10 +73,10 @@ import org.apache.fulcrum.upload.TurbineUpload;
  * <code>multipart/form-data</code> POST request.
  *
  * <p> After retrieving an instance of this class from the {@link
- * org.apache.fulcrum.parser.ParameterParser ParameterParser} (see
- * {@link org.apache.fulcrum.parser.ParameterParser#getFileItem(String)
+ * org.apache.fulcrum.util.parser.ParameterParser ParameterParser} (see
+ * {@link org.apache.fulcrum.util.parser.ParameterParser#getFileItem(String)
  * ParameterParser.getFileItem(String)} and {@link
- * org.apache.fulcrum.parser.ParameterParser#getFileItems(String)
+ * org.apache.fulcrum.util.parser.ParameterParser#getFileItems(String)
  * ParameterParser.getFileItems(String)}) you can use it to acces the
  * data that was sent by the browser.  You may either request all
  * contents of file at once using {@link #get()} or request an {@link

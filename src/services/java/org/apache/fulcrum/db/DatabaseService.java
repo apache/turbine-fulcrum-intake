@@ -61,7 +61,7 @@ import org.apache.torque.adapter.DB;
 
 /**
  * This service provides database connection pooling and manages
- * {@link org.apache.turbine.util.db.map.DatabaseMap} objects used throughout
+ * {@link org.apache.torque.map.DatabaseMap} objects used throughout
  * a Turbine application.
  * It provides single point of access to a pool of maps, assuring that every
  * client will access the same instance of DatabaseMap object.
@@ -73,7 +73,7 @@ import org.apache.torque.adapter.DB;
  * {@link #registerPool(String,String,String,String,String)} method.
  *
  * <p> You can use {@link #getConnection(String)} to acquire a
- * {@link org.apache.turbine.util.db.pool.DBConnection} object, which in
+ * {@link org.apache.torque.pool.DBConnection} object, which in
  * turn can be used to create <code>java.sql.Statement</code> objects.
  *
  * <p>When you are done using the <code>DBConnection</code> you <strong>must</strong>
