@@ -6,7 +6,10 @@
   </properties>
 
   <body>
-	 <release version="1.0-alpha-4" date="">
+	 <release version="1.0.4" date="">
+      <action dev="epugh" type="update">
+      	Update to use Merlin 3.3.0
+      </action>
       <action dev="epugh" type="update">
       	Merlinized component
       </action>
