@@ -15,41 +15,63 @@
       <item name="Building"              href="/building.html"/>
       <item name="Changes"               href="/changes-report.html"/>
     </menu>
-    <menu name="Components">
-      <item name="Test Container"        href="/fulcrum-testcontainer/index.html"/>
+    
+    <menu name="Componentsd">
+      
+      <item name="BSF"                   href="/fulcrum-bsf/index.html"/>
       <item name="Cache"                 href="/fulcrum-cache/index.html"/>
       <item name="Configuration"         href="/fulcrum-configuration-impl/index.html"/>
-      <item name="Crypto API"            href="/fulcrum-crypto-api/index.html"/>
-      <item name="Crypto Impl"           href="/fulcrum-crypto-impl/index.html"/>      
-      <item name="DVSL API"              href="/fulcrum-dvsl-api/index.html"/>
-      <item name="DVSL Impl"             href="/fulcrum-dvsl-impl/index.html"/>      
-      <item name="Factory API"           href="/fulcrum-factory-api/index.html"/>
-      <item name="Factory Impl"          href="/fulcrum-factory-impl/index.html"/>      
+      <item name="Crypto"                href="/sites/crypto.html" collapse="true">
+        <item name="Crypto API"            href="/fulcrum-crypto-api/index.html"/>
+        <item name="Crypto Impl"           href="/fulcrum-crypto-impl/index.html"/>   
+      </item>
+      <item name="DVSL"                  href="/sites/dvsl.html" collapse="true">   
+        <item name="DVSL API"              href="/fulcrum-dvsl-api/index.html"/>
+        <item name="DVSL Impl"             href="/fulcrum-dvsl-impl/index.html"/>
+      </item>      
+      <item name="Factory"               href="/sites/factory.html" collapse="true">   
+        <item name="Factory API"           href="/fulcrum-factory-api/index.html"/>
+        <item name="Factory Impl"          href="/fulcrum-factory-impl/index.html"/> 
+      </item>
       <item name="Intake"                href="/fulcrum-intake/index.html"/>
-      <item name="Localization API"      href="/fulcrum-localization-api/index.html"/>
-      <item name="Localization Impl"     href="/fulcrum-localization-impl/index.html"/>      
-      <item name="Mimetype API"          href="/fulcrum-mimetype-api/index.html"/>
-      <item name="Mimetype Impl"         href="/fulcrum-mimetype-impl/index.html"/>
-      <item name="Pool"                  href="/fulcrum-pool/index.html"/>
-      <item name="Pull"                  href="/fulcrum-pull/index.html"/>
-      <!--item name="Scheduler"             href="/fulcrum-scheduler/index.html"/-->
-      <item name="Security"              href="/fulcrum-security/index.html"/>
-      <item name="OSWorkflow"            href="/fulcrum-osworkflow/index.html"/>      
-      <item name="OSWorkflow Example"    href="/fulcrum-osworkflow-example/index.html"/>            
+      <item name="Localization"          href="/sites/localization.html" collapse="true">   
+        <item name="Localization API"      href="/fulcrum-localization-api/index.html"/>
+        <item name="Localization Impl"     href="/fulcrum-localization-impl/index.html"/>      
+      </item>
+      <item name="Mimetype"              href="/sites/mimetype.html" collapse="true">         
+        <item name="Mimetype API"          href="/fulcrum-mimetype-api/index.html"/>
+        <item name="Mimetype Impl"         href="/fulcrum-mimetype-impl/index.html"/>
+      </item>
+      <item name="Naming"                href="/fulcrum-naming/index.html"/>
+      <item name="OSWorkflow"            href="/sites/osworkflow.html" collapse="true">               
+        <item name="OSWorkflow"            href="/fulcrum-osworkflow/index.html"/>      
+        <item name="OSWorkflow Example"    href="/fulcrum-osworkflow-example/index.html"/>            
+      </item>
+      <item name="Parser"                href="/fulcrum-parser/index.html"/>
+      <item name="Pool"                  href="/sites/pool.html" collapse="true">               
+        <item name="Pool API"              href="/fulcrum-pool-api/index.html"/>
+        <item name="Pool Impl"             href="/fulcrum-pool-impl/index.html"/>      
+      </item>
+      <item name="Security"              href="/sites/security.html" collapse="true">
+        <item name="Site"                  href="/fulcrum-security-site/index.html"/>      
+        <item name="Security API"          href="/fulcrum-security-api/index.html"/>
+        <item name="Security SPI"          href="/fulcrum-security-spi/index.html"/>
+        <item name="Memory Impl"           href="/fulcrum-security-memory/index.html"/>
+        <item name="Hibernate Impl"        href="/fulcrum-security-hibernate/index.html"/>
+        <item name="NT Impl"               href="/fulcrum-security-nt/index.html"/>
+        <item name="Adapter Turbine"       href="/fulcrum-security-adapter-turbine/index.html"/>
+        <item name="Adapter OpenSymphony"  href="/fulcrum-security-adapter-opensymphony/index.html"/>
+      </item>
+      <item name="Template"              href="/fulcrum-template/index.html"/>      
+      <item name="Test Container"        href="/fulcrum-testcontainer/index.html"/>
+      <item name="Upload"                href="/fulcrum-upload/index.html"/>
       <item name="XMLRPC"                href="/fulcrum-xmlrpc/index.html"/>
+      <item name="XSLT"                  href="/fulcrum-xslt/index.html"/>
     </menu>
     <menu name="Howtos (old)">
-      <item name="Factory Service"        href="/howto/factory-service.html"/>
       <item name="JSP Service"            href="/howto/jsp-service.html"/>
-      <item name="Localization Service"   href="/howto/localization-service.html"/>
-      <item name="Mimetype Service"       href="/howto/mimetype-service.html"/>
-      <item name="Naming Service"         href="/howto/naming-service.html"/>
-      <item name="Pool Service"           href="/howto/pool-service.html"/>
-      <item name="Scheduler Service"      href="/howto/scheduler-service.html"/>
       <item name="Template Service"       href="/howto/template-service.html"/>
-      <item name="Upload Service"         href="/howto/upload-service.html"/>
       <item name="Velocity Service"       href="/howto/velocity-service.html"/>
-      <item name="XSLT Service"           href="/howto/xslt-service.html"/>
     </menu>
 
   </body>

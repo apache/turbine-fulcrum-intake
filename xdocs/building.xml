@@ -50,7 +50,8 @@ $ maven plugin:download -DartifactId=merlin-plugin -DgroupId=merlin -Dversion=3.
       <p>
         To build a local copy of the documentation, use 'maven multiproject:site'.
         This will build a local copy of the web site in the 'target/docs' 
-        directory.
+        directory.  Note, this uses a LOT of memory.  If you can't build all of them, 
+        build them individually.
       </p>      
        <subsection name="Current Build Issues">
         <p>

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Factory Component</title>
+    <author email="epugh@OpensourceConnections.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+
+  <section name="Factory Component">
+    <p>
+      <ul>
+        <li><a href="../fulcrum-factory-api/index.html">API</a></li>
+        <li><a href="../fulcrum-factory-impl/index.html">Implementation</a></li>        
+      </ul>
+    </p>
+  </section>
+
+  </body>
+</document>

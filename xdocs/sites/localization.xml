@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Localization Component</title>
+    <author email="epugh@OpensourceConnections.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+
+  <section name="Localization Component">
+    <p>
+      <ul>
+        <li><a href="../fulcrum-localization-api/index.html">API</a></li>
+        <li><a href="../fulcrum-localization-impl/index.html">Implementation</a></li>        
+      </ul>
+    </p>
+  </section>
+
+  </body>
+</document>

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Mimetype Component</title>
+    <author email="epugh@OpensourceConnections.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+
+  <section name="Mimetype Component">
+    <p>
+      <ul>
+        <li><a href="../fulcrum-mimetype-api/index.html">API</a></li>
+        <li><a href="../fulcrum-mimetype-impl/index.html">Implementation</a></li>        
+      </ul>
+    </p>
+  </section>
+
+  </body>
+</document>

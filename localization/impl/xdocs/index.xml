@@ -1,46 +1,56 @@
 <?xml version="1.0"?>
 
 <document>
- <properties>
-  <title>Fulcrum Services - Localization Service</title>
-  <author email="jvanzyl@apache.org">Jason van Zyl</author>
- </properties>
 
-<body>
+  <properties>
+    <title>Localization Component</title>
+    <author email="epugh@upstate.com">Eric PUgh</author>
+  </properties>
 
-<section name="Localization Service">
+  <body>
 
-<p>
-There is a Turbine service that makes it easy to add localization support
-to your application.
-</p>
-
-</section>
-
+  <section name="Overview">
+    <p>
+      This component wraps provides Localization of strings.  It is written 
+      for use in Turbine but it can be used in any container compatible 
+      with Avalon's ECM container.
+    </p>    
+  </section>
+  
 <section name="Configuration">
 
-<source><![CDATA[
-# -------------------------------------------------------------------
-#
-#  S E R V I C E S
-#
-# -------------------------------------------------------------------
-# Classes for Turbine Services should be defined here.
-# Format: services.[name].classname=[implementing class]
-#
-# To specify properties of a service use the following syntax:
-# service.[name].[property]=[value]
+    <p>
+      First, here is the role configuration.
+    </p>
 
-services.GlobalCacheService.classname=org.apache.fulcrum.cache.TurbineGlobalCacheService
-.
-.
-.
-]]></source>
+<source>
+<![CDATA[
+    <role
+        name="org.apache.fulcrum.localization.LocalizationService"
+        shorthand="localization"
+        default-class="org.apache.fulcrum.localization.DefaultLocalizationService"/>
+]]>
+</source>
 
-</section>
+  <p>
+    Now comes the basic configuration of the component.  Here will will
+    configure the various bundles.
+  </p>
+<source>
 
-<section name="Usage">
+<![CDATA[
+    <localization>
+      <bundles>
+        <bundle>org.apache.fulcrum.localization.BarBundle</bundle>
+        <bundle>org.apache.fulcrum.localization.FooBundle</bundle>
+      </bundles>
+    </localization>
+]]>
+</source>
 
+  </section>
+
+  <section name="Usage">
 
 <source><![CDATA[
 
@@ -86,8 +96,7 @@ see the <em>java.util.ListResourceBundle</em> and
 of this code because that was the first place where this code was originally
 developed.
 </p>
-
-</section>
+  </section>  
 
 </body>
 </document>

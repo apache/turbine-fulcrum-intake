@@ -10,9 +10,12 @@
   <body>
 
   <section name="Overview">
-    <p>
-     This Service functions as a Naming component.
-   </p>
+<p>
+The Naming Service provides access to JNDI contexts. Please note that if
+you are using Tomcat as your servlet engine and you get errors about
+sealing violations, you may need to read <a
+href="../howto/jboss-howto.html">this document</a>.
+</p>
       
     <p>
       It is written 
@@ -31,7 +34,7 @@
     <![CDATA[
         <role
             name="org.apache.fulcrum.naming.NamingService"
-            shorthand="cache"
+            shorthand="naming"
             default-class="org.apache.fulcrum.naming.DefaultNamingService"/>
     ]]>
     </source>
@@ -42,7 +45,7 @@
     <source>
 
     <![CDATA[
-        <cache cacheInitialSize="20" cacheCheckFrequency="5"/>
+        <naming/> (TODO)
     ]]>
     </source>
 
@@ -50,44 +53,35 @@
 
   <section name="Usage">
 
-    <source><![CDATA[
+   
+<source><![CDATA[
+try
+{
+    // Set up the naming provider. This may not always be necessary,
+    // depending on how your Java system is configured.
+    System.setProperty("java.naming.factory.initial",
+      "org.jnp.interfaces.NamingContextFactory");
+    System.setProperty("java.naming.provider.url",
+      "localhost:1099");
+    // Get a naming context
+    InitialContext jndiContext = new InitialContext();
 
-    GlobalCacheService gs = null;
-    try
-    {
-        /*
-         * Look for the item in the cache.
-         * If it doesn't exist or the item is stale,
-         * the cache will throw an exception.
-         */
-        gs = (GlobalCacheService)avalonComponentService.lookup(GlobalCacheService.ROLE)
+    // Get a reference to the Interest Bean
+    Object ref = jndiContext.lookup("interest/Interest");
 
-        CachedObject obj = gs.getObject("cached_object");
+    // Get a reference from this to the Bean's Home interface
+    InterestHome home = (InterestHome)
+        PortableRemoteObject.narrow (ref, InterestHome.class);
 
-        data.setMessage( data.getScreen() + " Got " +
-            obj.getContents().toString() + " from global cache!" );
-    }
-    catch(ObjectExpiredException gone)
-    {
-        /*
-         * Add the item to the cache.
-         */
-        gs.addObject("cached_object",
-            new CachedObject("in_the_cache",5000));
+    // Create an Interest object from the Home interface
+    m_interest = home.create();
+}
+catch(Exception e)
+{
+    out.println("<LI>Context failed: " + e);
+}
+]]></source>
 
-        data.setMessage( data.getScreen() +
-            " Refreshed/or added new item to" +
-            " the cache! Expires in 5 seconds" );
-    }
-
-    ]]></source>
-
-    <p>
-    You can also place an expiration time on your objects so the Service will
-    automatically remove them when they expire. If you don't specify an expiration
-    time, the Service uses 5 seconds. To see an example, look at the 
-    test case <a href="xref-test/org/apache/fulcrum/cache/CacheTest.html">CacheTest</a>
-    </p>
 
   </section> 
 

@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Mimetype Component</title>
+    <author email="epugh@upstate.com">Eric PUgh</author>
+  </properties>
+
+  <body>
+
+  <section name="Overview">
+    <p>
+      The MimeType Service maintains mappings between MIME types and
+      the corresponding file name extensions, and between locales and
+      character encodings. The mappings are typically defined in
+      properties or files located in user's home directory, Java home
+      directory or the current class jar depending on the implementation.
+   </p>
+      
+    <p>
+      It is written 
+      for use in Turbine but it can be used in any container compatible 
+      with Avalon's ECM container.
+    </p>    
+  </section>
+  
+<section name="Configuration">
+
+    <p>
+      First, here is the role configuration.
+    </p>
+
+<source>
+<![CDATA[
+    <role
+        name="org.apache.fulcrum.mimetype.MimeTypeService"
+        shorthand="mimetype"
+        default-class="org.apache.fulcrum.mimetype.DefaultMimeTypeService"/>
+]]>
+</source>
+
+  <p>
+    And here is the configuration:
+  </p>
+<source>
+
+<![CDATA[
+        <mimetype/>
+]]>
+</source>
+
+  </section>
+
+  <section name="Usage">
+
+<p>
+The default RunData implementation uses the MimeType Service internally
+when resolving the character encoding of the servlet response. In addition,
+applications can use it for customized encoding and content type resolving.
+</p>
+
+<p>
+The mappings between locales and the corresponding character encodings
+are specified using the Java property file syntax, where the locale
+specification is the key of the property key and the charset is the value
+of the property. The locale specification consists of three parts:
+</p>
+
+<source><![CDATA[
+<lang>_<country>_<variant>
+]]></source>
+
+<p>
+The variant can be whatever is appropriate for the application, like a
+markup language specification, a browser specification, etc. The service
+looks for charsets using the following search order:
+</p>
+
+<source><![CDATA[
+<lang>_<country>_<variant>=<charset>
+_<country>_<variant>=<charset>
+<lang>__<variant>=<charset>
+__<variant>=<charset>
+<lang>_<country>=<charset>
+_<country>=<charset>
+<lang>=<charset>
+]]></source>
+
+<p>
+The service contains defaults for several language mappings and more specific
+ones can be specified in an optional property file, e.g. __wml=UTF-8. The name
+of the property file can be given with a service property named "charsets".
+The service caches results of the search, which should guarantee good performance.
+</p>
+
+<p>
+The mappings between MIME types and the corresponding file name extensions
+are specified using the same syntax as the mime.types file of the Apache Server,
+i.e.:
+</p>
+
+<source><![CDATA[
+<mimetype> <ext1> <ext2>...
+]]></source>
+
+<p>
+The service contains defaults for most common MIME types, like text/plain,
+text/html, text/x-hdml, text/vnd.wap.wml, image/gif and image/jpeg. More
+specific ones can be specified in an optional MIME types file. The name of
+the MIME types file can be given with a service property named "mime.types".
+</p>
+
+<p>
+The TurbineMimeTypes class is a static accessor for the most common
+MimeType Service methods.
+</p>
+  </section>  
+
+</body>
+</document>

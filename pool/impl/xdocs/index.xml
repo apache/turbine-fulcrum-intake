@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 
 <document>
- <properties>
-  <title>Fulcrum Services - Pool Service</title>
-  <author email="ilkka.priha@simsoft.fi">Ilkka Priha</author>
-  <author email="jvanzyl@apache.org">Jason van Zyl</author>
- </properties>
 
-<body>
+  <properties>
+    <title>Pool Component</title>
+    <author email="epugh@upstate.com">Eric PUgh</author>
+  </properties>
 
-<section name="Pool Service">
+  <body>
+
+  <section name="Overview">
 
 <p>
 The Pool Service extends the functionality of the Factory Service by adding
@@ -41,47 +41,49 @@ An ArrayCtorRecyclable interface extends the Recyclable interface providing
 a more efficient recycle method with less reflection for recycling frequently
 used objects having constuctors with parameters.
 </p>
-
-</section>
-
+  </section>
+  
 <section name="Configuration">
 
-<source><![CDATA[
-# -------------------------------------------------------------------
-#
-#  S E R V I C E S
-#
-# -------------------------------------------------------------------
-# Classes for Turbine Services should be defined here.
-# Format: services.[name].classname=[implementing class]
-#
-# To specify properties of a service use the following syntax:
-# service.[name].[property]=[value]
+    <p>
+      First, here is the role configuration.  This component requires the FactoryService
+      component.
+    </p>
 
-services.PoolService.classname=org.apache.fulcrum.pool.TurbinePoolService
-.
-.
-.
-# -------------------------------------------------------------------
-#
-#  P O O L  S E R V I C E
-#
-# -------------------------------------------------------------------
+<source>
+<![CDATA[
+    <role
+        name="org.apache.fulcrum.pool.PoolService"
+        shorthand="pool"
+        default-class="org.apache.fulcrum.pool.DefaultPoolService"/>
+        
+        
+    <role
+        name="org.apache.fulcrum.factory.FactoryService"
+        shorthand="factory"
+        default-class="org.apache.fulcrum.factory.DefaultFactoryService"/>      
+]]>
+</source>
 
-# Default capacity of pools of the Object pooling service.
-#
-# Default: 128
-services.PoolService.pool.capacity = 128
+  <p>
+    Now comes the basic configuration of the component.  Here will will
+    configure the various bundles.
+  </p>
+<source>
 
-# Class specific capacities used instead of the default if specified.
-#
-#services.PoolService.pool.capacity.org.apache.turbine.services.rundata.DefaultTurbineRunData=512
-]]></source>
+<![CDATA[
+    <pool>
+      <capacity default="256"/>
+    </pool>
+    
+    <factory/>
+]]>
+</source>
 
-</section>
+  </section>
 
-<section name="Usage">
-
+  <section name="Usage">
+ 
 <p>
 The Pool Service can be called instead of the Factory Service, when instantiating
 objects that are needed repeatedly e.g. for processing client requests. Intances
@@ -103,7 +105,7 @@ Document doc = parser.parse(myfile);
 TurbinePool.putInstance(parser);
 ]]></source>
 
-</section>
+  </section>  
 
 </body>
 </document>
