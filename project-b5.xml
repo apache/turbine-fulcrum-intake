@@ -89,55 +89,58 @@
   </developers>
   <dependencies>
     <dependency>
+      <id>activation</id>
+      <version>1.0.2</version>
+      <url>http://java.sun.com/products/javabeans/glasgow/jaf.html</url>
+    </dependency>
+    <dependency>
       <id>bsf</id>
       <version>2.2</version>
     </dependency>
     <dependency>
       <id>commons-collections</id>
       <version>2.0</version>
+      <url>http://jakarta.apache.org/commons/collections.html</url>
     </dependency>
     <dependency>
       <id>commons-codec</id>
       <version>1.0-dev</version>
     </dependency>
     <dependency>
+      <id>commons-configuration</id>
+      <version>1.0-dev</version>
+      <url>http://jakarta.apache.org/commons/</url>
+    </dependency>
+    <dependency>
       <id>commons-email</id>
       <version>0.1-dev</version>
-    </dependency>
-    <dependency>
-      <id>commons-lang</id>
-      <version>1.0-dev</version>
-    </dependency>
-    <dependency>
-      <id>commons-pool</id>
-      <version>1.0</version>
     </dependency>
     <dependency>
       <id>commons-fileupload</id>
       <version>1.0-dev</version>
     </dependency>
     <dependency>
-      <id>cryptix</id>
+      <id>commons-lang</id>
+      <version>1.0-dev-20020716</version>
+      <url>http://jakarta.apache.org/commons/</url>
+    </dependency>
+    <dependency>
+      <id>commons-pool</id>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <id>commons-util</id>
+      <version>1.0-rc3-dev</version>
+    </dependency>
+    <dependency>
+      <id>cryptix32</id>
       <version>3.2.0</version>
-      <jar>cryptix-3.2.0.jar</jar>
+      <jar>cryptix32.jar</jar>
     </dependency>
     <dependency>
       <id>dom4j</id>
       <version>1.3</version>
       <url>http://www.dom4j.org/</url>
-    </dependency>
-    <dependency>
-      <id>activation</id>
-      <version>1.0.1</version>
-    </dependency>
-    <dependency>
-      <id>regexp</id>
-      <version>1.3-dev</version>
-      <url>http://jakarta.apache.org/regexp/</url>
-    </dependency>
-    <dependency>
-      <id>javamail</id>
-      <version>1.2</version>
     </dependency>
     <dependency>
       <id>jdbc</id>
@@ -152,27 +155,33 @@
       <version>1.1.3</version>
     </dependency>
     <dependency>
+      <id>mail</id>
+      <version>1.2</version>
+      <url>http://java.sun.com/products/javamail/</url>
+    </dependency>
+    <dependency>
+      <id>regexp</id>
+      <version>1.3-dev</version>
+      <url>http://jakarta.apache.org/regexp/</url>
+    </dependency>
+    <dependency>
       <id>servletapi</id>
       <version>2.2</version>
     </dependency>
     <dependency>
-      <id>commons-configuration</id>
-      <version>1.0-dev</version>
-    </dependency>
-    <dependency>
       <id>stratum</id>
       <version>1.0-b2-dev</version>
-      <url>http://jakarta.apache.org/turbine/stratum</url>
+      <url>http://jakarta.apache.org/turbine/stratum/</url>
     </dependency>
     <dependency>
       <id>torque</id>
-      <version>SNAPSHOT</version>
-      <url>http://jakarta.apache.org/turbine/torque</url>
+      <version>3.0-b3-dev</version>
+      <url>http://jakarta.apache.org/turbine/torque/</url>
     </dependency>
     <dependency>
       <id>velocity</id>
-      <version>1.3-dev</version>
-      <url>http://jakarta.apache.org/velocity</url>
+      <version>1.3</version>
+      <url>http://jakarta.apache.org/velocity/</url>
     </dependency>
     <dependency>
       <id>velocity-dvsl</id>
@@ -182,28 +191,30 @@
     <dependency>
       <id>village</id>
       <version>1.5.3</version>
+      <url>http://share.whichever.com/index.php?SCREEN=village</url>
     </dependency>
-    
-    <dependency>
-      <id>xerces</id>
-      <version>2.0.0</version>
-    </dependency>
-
-    <dependency>
-      <id>xml-apis</id>
-      <version>2.0.2</version>
-    </dependency>
-    
-    <dependency>
-      <id>xmlrpc</id>
-      <version>1.1</version>
-    </dependency>
-    
     <dependency>
       <id>xalan</id>
       <version>2.1.0</version>
     </dependency>
-  
+    <dependency>
+      <id>xml-xerces</id>
+      <type>required</type>
+      <version>2.0.2</version>
+      <jar>xercesImpl-2.0.2.jar</jar>
+      <url>http://xml.apache.org/xerces2-j/index.html</url>
+    </dependency>
+    <dependency>
+      <id>xml-apis</id>
+      <type>required</type>
+      <version>2.0.2</version>
+      <jar>xmlParserAPIs-2.0.2.jar</jar>
+      <url>http://xml.apache.org/xerces2-j/index.html</url>
+    </dependency>
+    <dependency>
+      <id>xmlrpc</id>
+      <version>1.1</version>
+    </dependency>
   </dependencies>
   <build>
     <nagEmailAddress>turbine-dev@jakarta.apache.org</nagEmailAddress>
