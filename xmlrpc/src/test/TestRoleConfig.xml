@@ -4,4 +4,8 @@
         name="org.apache.fulcrum.xmlrpc.XmlRpcComponent"
         shorthand="XmlRpcComponent"
         default-class="org.apache.fulcrum.xmlrpc.DefaultXmlRpcComponent"/>
+    <role
+        name="org.apache.fulcrum.xmlrpc.TestHandler"
+        shorthand="TestHandler"
+        default-class="org.apache.fulcrum.xmlrpc.TestHandlerImpl"/>
 </role-list>

@@ -38,11 +38,20 @@
       <systemProperty name="java.security.debug"
           value="none" />
       <!-- Handlers configured to process incoming requests -->
-      <handlers/>
+      <handlers>
+        <handler>
+            <name>ComponentHandler</name>
+            <role>org.apache.fulcrum.xmlrpc.TestHandler</role>
+        </handler>
+        <handler>
+            <name>ClassHandler</name>
+            <class>org.apache.fulcrum.xmlrpc.TestHandlerImpl</class>
+        </handler>
+      </handlers>
       <!-- Parnoid mode will allows you to configure specific
            client addresses from which connections will be accepted
            or denied -->
-      <paranoid>true</paranoid>
+      <paranoid>false</paranoid>
       <!-- Clients from which connections will be accepted.  This
            section has no meaning unless operating in paranoid mode -->
       <acceptedClients clientIP="192.168.1.*"/>
@@ -51,4 +60,5 @@
       <deniedClients clientIP="10.1.1.*"/>
       <deniedClients clientIP="10.1.2.*"/>
     </XmlRpcComponent>
+    <TestHandler/>
 </componentConfig>
