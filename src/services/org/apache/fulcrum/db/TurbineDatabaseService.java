@@ -80,11 +80,9 @@ public class TurbineDatabaseService
     public void init()
         throws InitializationException
     {
-        Torque.setConfiguration(getConfiguration());
-
         try
         {
-            Torque.init();
+            Torque.init(getConfiguration());
         }
         catch (Exception e)
         {
