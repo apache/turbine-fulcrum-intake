@@ -193,6 +193,9 @@ public class FileHandler
             service.getConfiguration().getString(targetLocationProperty) +
                 "/" + fileName);
 
+        StringWriter sw = null;
+        BufferedReader reader = null;
+
         try
         {
             /*
@@ -223,6 +226,18 @@ public class FileHandler
                 "of the request file.", ioe);
 
             return null;
+        }
+        finally
+        {
+            try
+            {
+                sw.close();
+                reader.close();
+            }
+            catch (Exception e)
+            {
+ 
+            }
         }
     }
 
