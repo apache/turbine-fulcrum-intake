@@ -3,7 +3,7 @@
 <document>
 
   <properties>
-    <title>Workflow Example Application</title>
+    <title>Fulcrum OSWorkflow Example Application</title>
     <author email="epugh@upstate.com">Eric Pugh</author>
   </properties>
 
@@ -43,7 +43,7 @@
 
     <p>
       To run this example, run 'maven war' from the fulcrum/workflow/example directory.  This will produce the WAR
-      file that you need to deploy to your Tomcat webapp.  Make sure the name of the war file is changed to 'fulcrum-workflow-example'
+      file that you need to deploy to your Tomcat webapp.  Make sure the name of the war file is changed to 'fulcrum-osworkflow-example'
       as the internal links expect that name.
     </p>
 

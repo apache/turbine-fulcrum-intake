@@ -3,14 +3,15 @@
 <project>
   <extend>${basedir}/../project.xml</extend>
   <pomVersion>3</pomVersion>
-  <name>Fulcrum Workflow Example Webapp</name>
-  <id>fulcrum-workflow-example</id>
+  <name>Fulcrum OSWorkflow Example Webapp</name>
+  <id>fulcrum-osworkflow-example</id>
   <currentVersion>1.0-dev</currentVersion>
   <inceptionYear>2003</inceptionYear>
-  <package>org.apache.fulcrum.workflow.example</package>
+  <package>org.apache.fulcrum.osworkflow.example</package>
 
   <shortDescription>An example application implementing workflow.</shortDescription>
-  <description>This is a small example application using the Turbine framework with the Fulcrum Workflow component.</description>
+  <description>This is a small example application using the Turbine framework with the Fulcrum OSWorkflow component.  The engine underneath
+  	is provided by OpenSymphony's OSWorkflow project.</description>
 
 
   <developers>
@@ -33,9 +34,9 @@
     </dependency>  
     <dependency>
       <groupId>fulcrum</groupId>
-      <artifactId>fulcrum-workflow</artifactId>
+      <artifactId>fulcrum-osworkflow</artifactId>
       <version>1.0-alpha-1</version>
-      <url>http://jakarta.apache.org/turbine/fulcrum/workflow</url>
+      <url>http://jakarta.apache.org/turbine/fulcrum/osworkflow</url>
       <properties>        
         <war.bundle>true</war.bundle>
       </properties>      
