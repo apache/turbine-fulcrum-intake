@@ -8,6 +8,14 @@
   <body>
     <release version="1.0-alpha-1" date="in cvs">
       <action dev="epugh" type="add">
+		Added an IntegerConverter so the adapter can be used with fulcrum SPI's
+		that use Long/Integer/String (as a number) as the ID.
+      </action>      
+      <action dev="epugh" type="add">
+		Converted id to Object.  Now the various SPI's cast the Object type
+		to whatever they want to use.
+      </action>       
+      <action dev="epugh" type="add">
 		Pluggable Authenticators done.  Added NT, crypto, and plain text.
       </action>       
       <action dev="epugh" type="add">

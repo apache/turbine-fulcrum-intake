@@ -128,7 +128,7 @@ public interface RoleManager extends Component
     	* @exception DataBackendException if there is a problem accessing the
     	*            storage.
     	*/
-    Role getRoleById(long id) throws DataBackendException, UnknownEntityException;
+    Role getRoleById(Object id) throws DataBackendException, UnknownEntityException;
     /**
      * Retrieves all roles defined in the system.
      *

@@ -210,7 +210,7 @@ public class TorqueGroupManagerImpl extends TorqueManagerComponent implements To
      * @throws DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public Group getGroupById(long id) throws DataBackendException, UnknownEntityException
+    public Group getGroupById(Object id) throws DataBackendException, UnknownEntityException
     {
         Group group = getAllGroups().getGroupById(id);
         if (group == null)

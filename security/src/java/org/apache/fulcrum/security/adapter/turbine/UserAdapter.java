@@ -9,6 +9,7 @@ import java.util.Hashtable;
 
 import javax.servlet.http.HttpSessionBindingEvent;
 
+import org.apache.fulcrum.security.entity.SecurityEntity;
 import org.apache.turbine.om.security.User;
 
 /**
@@ -17,21 +18,12 @@ import org.apache.turbine.om.security.User;
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class UserAdapter implements User
+public class UserAdapter extends BaseAdapter implements User
 {
-	private org.apache.fulcrum.security.entity.User user ;
-    /**
-     * 
-     */
-    public UserAdapter()
-    {
-        super();
-        user = new org.apache.fulcrum.security.model.simple.entity.SimpleUser();
-    }
+
 	public UserAdapter(org.apache.fulcrum.security.entity.User user)
 	   {
-		   super();
-		   this.user = user;
+		   super((SecurityEntity)user);
 	   }
     /* (non-Javadoc)
      * @see org.apache.turbine.om.security.User#getAccessCounter()
@@ -78,7 +70,7 @@ public class UserAdapter implements User
      */
     public String getPassword()
     {
-        return user.getPassword();
+        return ((User)entity).getPassword();
     }
     /* (non-Javadoc)
      * @see org.apache.turbine.om.security.User#getPerm(java.lang.String)
@@ -133,7 +125,7 @@ public class UserAdapter implements User
      */
     public String getUserName()
     {
-        return user.getName();
+        return getName();
     }
     /* (non-Javadoc)
      * @see org.apache.turbine.om.security.User#getFirstName()
@@ -229,7 +221,7 @@ public class UserAdapter implements User
      */
     public void setPassword(String arg0)
     {
-        user.setPassword(arg0);
+		((User)entity).setPassword(arg0);
     }
     /* (non-Javadoc)
      * @see org.apache.turbine.om.security.User#setPerm(java.lang.String, java.lang.Object)
@@ -264,7 +256,7 @@ public class UserAdapter implements User
      */
     public void setUserName(String arg0)
     {
-        user.setName(arg0);
+		setName(arg0);
     }
     /* (non-Javadoc)
      * @see org.apache.turbine.om.security.User#setFirstName(java.lang.String)
@@ -338,39 +330,6 @@ public class UserAdapter implements User
     {
         // TODO Auto-generated method stub
     }
-    /* (non-Javadoc)
-     * @see org.apache.turbine.om.security.SecurityEntity#getName()
-     */
-    public String getName()
-    {
-        return user.getName();
-    }
-    /* (non-Javadoc)
-     * @see org.apache.turbine.om.security.SecurityEntity#setName(java.lang.String)
-     */
-    public void setName(String arg0)
-    {
-        user.setName(arg0);
-    }
-    /* (non-Javadoc)
-     * @see org.apache.turbine.om.security.SecurityEntity#getId()
-     */
-    public int getId()
-    {
-		return new Integer(user.getId()+"").intValue();
-    }
-    /* (non-Javadoc)
-     * @see org.apache.turbine.om.security.SecurityEntity#getIdAsObj()
-     */
-    public Integer getIdAsObj()
-    {
-        return new Integer(user.getId()+"");
-    }
-    /* (non-Javadoc)
-     * @see org.apache.turbine.om.security.SecurityEntity#setId(int)
-     */
-    public void setId(int arg0)
-    {
-        user.setId(arg0);
-    }
+
+   
 }

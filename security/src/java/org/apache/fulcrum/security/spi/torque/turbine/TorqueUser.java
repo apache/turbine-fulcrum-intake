@@ -233,9 +233,9 @@ SessionBindingListener, ClassicTorqueUser
      *
      * @return The Id of the object
      */
-    public long getId()
+    public Object getId()
     {
-        return UserPeerManager.getIdAsObj(getPersistentObj()).intValue();
+        return UserPeerManager.getIdAsObj(getPersistentObj());
     }
 
     /**
@@ -253,7 +253,7 @@ SessionBindingListener, ClassicTorqueUser
      *
      * @param id The new Id
      */
-    public void setId(long id)
+    public void setId(Object id)
     {
         UserPeerManager.setId(getPersistentObj(), new Integer(id+"").intValue());
     }

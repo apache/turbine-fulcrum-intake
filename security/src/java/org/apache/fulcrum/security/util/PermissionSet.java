@@ -109,7 +109,7 @@ public class PermissionSet
     {
         boolean res = contains(permission);
         nameMap.put(permission.getName(), permission);
-        idMap.put(getIdAsObject(permission.getId()), permission);
+        idMap.put(permission.getId(), permission);
         return res;
     }
 
@@ -163,7 +163,7 @@ public class PermissionSet
     {
         boolean res = contains(permission);
         nameMap.remove(permission.getName());
-        idMap.remove(getIdAsObject(permission.getId()));
+        idMap.remove(permission.getId());
         return res;
     }
 
@@ -204,10 +204,10 @@ public class PermissionSet
      * @return Permission if argument matched a Permission in this
      * PermissionSet; null if no match.
      */
-    public Permission getPermissionById(long permissionId)
+    public Permission getPermissionById(Object permissionId)
     {
-        return (permissionId != 0) 
-                ? (Permission) idMap.get(new Long(permissionId)) : null;
+        return (permissionId != null) 
+                ? (Permission) idMap.get(permissionId) : null;
     }
 
     /**

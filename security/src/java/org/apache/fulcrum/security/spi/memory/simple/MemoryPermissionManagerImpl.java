@@ -169,7 +169,7 @@ public class MemoryPermissionManagerImpl extends AbstractLogEnabled implements P
      * @throws DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public Permission getPermissionById(long id) throws DataBackendException, UnknownEntityException
+    public Permission getPermissionById(Object id) throws DataBackendException, UnknownEntityException
     {
         Permission permission = getAllPermissions().getPermissionById(id);
         if (permission == null)
@@ -294,7 +294,7 @@ public class MemoryPermissionManagerImpl extends AbstractLogEnabled implements P
         {
             throw new DataBackendException("Could not create a permission with empty name!");
         }
-        if (permission.getId() > 0)
+        if (permission.getId() != null)
         {
             throw new DataBackendException("Could not create a permission with an id!");
         }
@@ -375,8 +375,8 @@ public class MemoryPermissionManagerImpl extends AbstractLogEnabled implements P
     {
         this.manager = manager;
     }
-    private int getUniqueId()
+    private Integer getUniqueId()
     {
-        return ++uniqueId;
+        return new Integer(++uniqueId);
     }
 }

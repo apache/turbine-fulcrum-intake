@@ -744,8 +744,8 @@ public class MemoryUserManagerImpl extends AbstractLogEnabled implements SimpleU
     {
         this.manager = manager;
     }
-    private int getUniqueId()
+    private Object getUniqueId()
     {
-        return ++uniqueId;
+        return new Integer(++uniqueId);
     }
 }

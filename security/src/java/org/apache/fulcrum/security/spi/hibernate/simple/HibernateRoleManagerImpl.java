@@ -151,7 +151,7 @@ public class HibernateRoleManagerImpl extends BaseHibernateManager implements Si
     	* @throws DataBackendException if there is a problem accessing the
     	*            storage.
     	*/
-    public Role getRoleById(long id) throws DataBackendException, UnknownEntityException
+    public Role getRoleById(Object id) throws DataBackendException, UnknownEntityException
     {
         Role role = getAllRoles().getRoleById(id);
         if (role == null)
@@ -402,7 +402,7 @@ public class HibernateRoleManagerImpl extends BaseHibernateManager implements Si
         {
             throw new DataBackendException("Could not create a role with empty name!");
         }
-        if (role.getId() > 0)
+        if (role.getId()!=null)
         {
             throw new DataBackendException("Could not create a role with an id!");
         }

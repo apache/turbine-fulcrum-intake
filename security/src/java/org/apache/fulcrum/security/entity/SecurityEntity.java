@@ -87,12 +87,12 @@ public interface SecurityEntity
      *
      * @return The Id of the SecurityEntity.
      */
-    long getId();
+    Object getId();
 
     /**
      * Sets the Id of the SecurityEntity.
      *
      * @param id The new Id of the SecurityEntity
      */
-    void setId(long id);
+    void setId(Object id);
 }

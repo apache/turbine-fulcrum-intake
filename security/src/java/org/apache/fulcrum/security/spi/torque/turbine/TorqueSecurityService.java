@@ -632,7 +632,7 @@ public interface TorqueSecurityService
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    Group getGroupById(int id)
+    Group getGroupById(Object id)
             throws DataBackendException,
                    UnknownEntityException;
 
@@ -661,7 +661,7 @@ public interface TorqueSecurityService
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    Role getRoleById(int id)
+    Role getRoleById(Object id)
             throws DataBackendException,
                    UnknownEntityException;
 
@@ -690,7 +690,7 @@ public interface TorqueSecurityService
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    Permission getPermissionById(int id)
+    Permission getPermissionById(Object id)
             throws DataBackendException,
                    UnknownEntityException;
 

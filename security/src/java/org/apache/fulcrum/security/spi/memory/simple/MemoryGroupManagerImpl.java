@@ -185,7 +185,7 @@ public class MemoryGroupManagerImpl extends AbstractLogEnabled implements Simple
      * @throws DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public Group getGroupById(long id) throws DataBackendException, UnknownEntityException
+    public Group getGroupById(Object id) throws DataBackendException, UnknownEntityException
     {
         Group group = getAllGroups().getGroupById(id);
         if (group == null)
@@ -320,7 +320,7 @@ public class MemoryGroupManagerImpl extends AbstractLogEnabled implements Simple
         {
             throw new DataBackendException("Could not create a group with empty name!");
         }
-        if (group.getId() > 0)
+        if (group.getId() != null)
         {
             throw new DataBackendException("Could not create a group with an id!");
         }
@@ -441,8 +441,8 @@ public class MemoryGroupManagerImpl extends AbstractLogEnabled implements Simple
     {
         this.manager = manager;
     }
-    private int getUniqueId()
+    private Integer getUniqueId()
     {
-        return ++uniqueId;
+        return new Integer(++uniqueId);
     }
 }

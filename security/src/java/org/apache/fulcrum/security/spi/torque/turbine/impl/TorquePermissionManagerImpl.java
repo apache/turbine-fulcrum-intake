@@ -176,7 +176,7 @@ public class TorquePermissionManagerImpl extends TorqueManagerComponent implemen
      * @throws DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public Permission getPermissionById(long id) throws DataBackendException, UnknownEntityException
+    public Permission getPermissionById(Object id) throws DataBackendException, UnknownEntityException
     {
         Permission permission = getAllPermissions().getPermissionById(id);
         if (permission == null)

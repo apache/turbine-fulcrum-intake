@@ -103,7 +103,7 @@ public class UserSet
     {
         boolean res = contains(user);
         nameMap.put(user.getName(), user);
-        idMap.put(getIdAsObject(user.getId()), user);
+        idMap.put(user.getId(), user);
         return res;
     }
 
@@ -156,7 +156,7 @@ public class UserSet
     {
         boolean res = contains(user);
         nameMap.remove(user.getName());
-        idMap.remove(getIdAsObject(user.getId()));
+        idMap.remove(user.getId());
         return res;
     }
 
@@ -196,10 +196,10 @@ public class UserSet
      * @return User if argument matched a User in this UserSet; null
      * if no match.
      */
-    public User getUserById(long userId)
+    public User getUserById(Object userId)
     {
-        return (userId != 0) 
-                ? (User) idMap.get(new Long(userId)) : null;
+        return (userId != null) 
+                ? (User) idMap.get(userId) : null;
     }
 
     /**

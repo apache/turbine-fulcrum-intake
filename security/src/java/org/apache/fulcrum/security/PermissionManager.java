@@ -130,7 +130,7 @@ extends Component
     	* @exception DataBackendException if there is a problem accessing the
     	*            storage.
     	*/
-    Permission getPermissionById(long id) throws DataBackendException, UnknownEntityException;
+    Permission getPermissionById(Object id) throws DataBackendException, UnknownEntityException;
     /**
        * Retrieves all permissions defined in the system.
        *

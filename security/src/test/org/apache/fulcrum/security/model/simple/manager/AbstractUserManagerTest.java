@@ -219,10 +219,12 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
     public void testAddUser() throws Exception
     {
         user = userManager.getUserInstance("Joe1");
+		assertNull(user.getId());
         userManager.addUser(user, "mc");
         user = userManager.getUserInstance("Joe2");
+		assertNull(user.getId());
         userManager.addUser(user, "mc");
-        assertTrue(user.getId() > 0);
+        assertNotNull(user.getId());
         assertNotNull(userManager.getUser(user.getName()));
     }
     public void testRetrieveingUsersByGroup() throws Exception

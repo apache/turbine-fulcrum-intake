@@ -146,7 +146,7 @@ public class HibernatePermissionManagerImpl extends BaseHibernateManager impleme
      * @throws DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public Permission getPermissionById(long id) throws DataBackendException, UnknownEntityException
+    public Permission getPermissionById(Object id) throws DataBackendException, UnknownEntityException
     {
         Permission permission = getAllPermissions().getPermissionById(id);
         if (permission == null)
@@ -271,7 +271,7 @@ public class HibernatePermissionManagerImpl extends BaseHibernateManager impleme
         {
             throw new DataBackendException("Could not create a permission with empty name!");
         }
-        if (permission.getId() > 0)
+        if (permission.getId()!=null)
         {
             throw new DataBackendException("Could not create a permission with an id!");
         }

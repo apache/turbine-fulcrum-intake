@@ -125,7 +125,9 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
     public void testAddGroup() throws Exception
     {
         group = groupManager.getGroupInstance("CLEAN_RABBIT_HUTCHES");
+        assertNull(group.getId());
         groupManager.addGroup(group);
+        assertNotNull(group.getId());
         assertNotNull(groupManager.getGroupById(group.getId()));
     }
     public void testGrantGroupRole() throws Exception

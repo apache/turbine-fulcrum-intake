@@ -184,7 +184,7 @@ public class TorqueRoleManagerImpl extends TorqueManagerComponent implements Tor
     	* @throws DataBackendException if there is a problem accessing the
     	*            storage.
     	*/
-    public Role getRoleById(long id) throws DataBackendException, UnknownEntityException
+    public Role getRoleById(Object id) throws DataBackendException, UnknownEntityException
     {
         Role role = getAllRoles().getRoleById(id);
         if (role == null)

@@ -24,6 +24,7 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
     protected PermissionManager permissionManager;
     protected SecurityService securityService;
     
+    
     /**
      * Constructor for PermissionManagerTest.
      * @param arg0
@@ -101,8 +102,9 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
     public void testAddPermission() throws Exception
     {
         permission = permissionManager.getPermissionInstance("CLEAN_BIG_KENNEL");
+		assertNull(permission.getId());
         permissionManager.addPermission(permission);
-        assertTrue(permission.getId() > 0);
+        assertNotNull(permission.getId());
         permission = permissionManager.getPermissionById(permission.getId());
         assertNotNull(permission);
     }

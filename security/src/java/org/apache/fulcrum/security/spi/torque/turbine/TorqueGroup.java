@@ -167,9 +167,9 @@ public class TorqueGroup
      *
      * @return The Id of the object
      */
-    public long getId()
+    public Object getId()
     {
-        return GroupPeerManager.getIdAsObj(getPersistentObj()).intValue();
+        return GroupPeerManager.getIdAsObj(getPersistentObj());
     }
 
     /**
@@ -187,7 +187,7 @@ public class TorqueGroup
      *
      * @param id The new Id
      */
-    public void setId(long id)
+    public void setId(Object id)
     {
         GroupPeerManager.setId(getPersistentObj(), new Integer(id+"").intValue());
     }

@@ -154,9 +154,9 @@ public class TorquePermission
      *
      * @return The Id of the object
      */
-    public long getId()
+    public Object getId()
     {
-        return PermissionPeerManager.getIdAsObj(getPersistentObj()).intValue();
+        return PermissionPeerManager.getIdAsObj(getPersistentObj());
     }
 
     /**
@@ -174,7 +174,7 @@ public class TorquePermission
      *
      * @param id The new Id
      */
-    public void setId(long id)
+    public void setId(Object id)
     {
         PermissionPeerManager.setId(getPersistentObj(),new Integer( id+"").intValue());
     }

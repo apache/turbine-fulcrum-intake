@@ -157,9 +157,9 @@ public class TorqueRole
      *
      * @return The Id of the object
      */
-    public long getId()
+    public Object getId()
     {
-        return RolePeerManager.getIdAsObj(getPersistentObj()).intValue();
+        return RolePeerManager.getIdAsObj(getPersistentObj());
     }
 
     /**
@@ -177,7 +177,7 @@ public class TorqueRole
      *
      * @param id The new Id
      */
-    public void setId(long id)
+    public void setId(Object id)
     {
         RolePeerManager.setId(getPersistentObj(), new Integer(id+"").intValue());
     }

@@ -59,8 +59,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
 import org.apache.commons.lang.StringUtils;
+import org.apache.fulcrum.security.entity.SecurityEntity;
 /**
  * This class represents a set of Security Entities.
  * It makes it easy to build a UI.
@@ -137,7 +137,7 @@ public abstract class SecuritySet implements Serializable, Set
      */
     public boolean containsName(String name)
     {
-    	name = name.toLowerCase();
+        name = name.toLowerCase();
         return (StringUtils.isNotEmpty(name)) ? nameMap.containsKey(name) : false;
     }
     /**
@@ -148,9 +148,9 @@ public abstract class SecuritySet implements Serializable, Set
      * @return True if argument matched an Object in this Set; false
      * if no match.
      */
-    public boolean containsId(long id)
+    public boolean containsId(Object id)
     {
-        return (id == 0) ? false : idMap.containsKey(new Long(id));
+        return (id == null) ? false : idMap.containsKey(id);
     }
     /**
      * Returns an Iterator for Objects in this Set.
@@ -188,16 +188,11 @@ public abstract class SecuritySet implements Serializable, Set
         }
         return sbuf.toString();
     }
-    protected Long getIdAsObject(long id)
-    {
-        return new Long(id);
-    }
     // methods from Set
     public boolean addAll(Collection collection)
     {
-		System.out.println("here we go!");
-		System.err.println("here we go err!");
-        return add(collection);
+        System.out.println("here we go9!");
+        return add((Collection) collection);
     }
     public boolean isEmpty()
     {
@@ -205,8 +200,6 @@ public abstract class SecuritySet implements Serializable, Set
     }
     public boolean containsAll(Collection collection)
     {
-		System.out.println("here we go!");
-		System.err.println("here we go err!");
         for (Iterator i = collection.iterator(); i.hasNext();)
         {
             Object object = i.next();
@@ -219,8 +212,6 @@ public abstract class SecuritySet implements Serializable, Set
     }
     public boolean removeAll(Collection collection)
     {
-		System.out.println("here we go!");
-		System.err.println("here we go err!");
         boolean changed = false;
         for (Iterator i = collection.iterator(); i.hasNext();)
         {
@@ -235,8 +226,6 @@ public abstract class SecuritySet implements Serializable, Set
     }
     public boolean retainAll(Collection collection)
     {
-		System.out.println("here we go!");
-		System.err.println("here we go err!");
         throw new RuntimeException("not implemented");
     }
     /* (non-Javadoc)
@@ -244,47 +233,34 @@ public abstract class SecuritySet implements Serializable, Set
     	*/
     public Object[] toArray()
     {
-		System.out.println("here we go!");
-		System.err.println("here we go err!");
-		throw new RuntimeException("not implemented");
+        return getSet().toArray();
     }
     /* (non-Javadoc)
     	* @see java.util.Collection#add(java.lang.Object)
     	*/
     public boolean add(Object o)
     {
-		System.out.println("here we go!");
-		System.err.println("here we go err!");
-		Collection c = new HashSet();
-		c.add(o);
-		return add(c);
-		
+        throw new RuntimeException("not implemented");
     }
     /* (non-Javadoc)
     	* @see java.util.Collection#contains(java.lang.Object)
     	*/
     public boolean contains(Object o)
     {
-		System.out.println("here we go!");
-		System.err.println("here we go err!");
-		throw new RuntimeException("not implemented");
+        return containsName(((SecurityEntity) o).getName());
     }
     /* (non-Javadoc)
     	* @see java.util.Collection#remove(java.lang.Object)
     	*/
     public boolean remove(Object o)
     {
-		System.out.println("here we go!");
-		System.err.println("here we go err!");
-		throw new RuntimeException("not implemented");
+        throw new RuntimeException("not implemented");
     }
     /* (non-Javadoc)
     	* @see java.util.Collection#toArray(java.lang.Object[])
     	*/
     public Object[] toArray(Object[] a)
     {
-		System.out.println("here we go!");
-		System.err.println("here we go err!");
-		throw new RuntimeException("not implemented");
+        throw new RuntimeException("not implemented");
     }
 }

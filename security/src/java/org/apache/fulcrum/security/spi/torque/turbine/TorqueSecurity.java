@@ -617,7 +617,7 @@ public class TorqueSecurity
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public static Group getGroupById(int groupId) throws DataBackendException, UnknownEntityException
+    public static Group getGroupById(Object groupId) throws DataBackendException, UnknownEntityException
     {
         return getService().getGroupById(groupId);
     }
@@ -693,7 +693,7 @@ public class TorqueSecurity
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public static Role getRoleById(int roleId) throws DataBackendException, UnknownEntityException
+    public static Role getRoleById(Object roleId) throws DataBackendException, UnknownEntityException
     {
         return getService().getRoleById(roleId);
     }
@@ -723,7 +723,7 @@ public class TorqueSecurity
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public static Permission getPermissionById(int permissionId) throws DataBackendException, UnknownEntityException
+    public static Permission getPermissionById(Object permissionId) throws DataBackendException, UnknownEntityException
     {
         return getService().getPermissionById(permissionId);
     }

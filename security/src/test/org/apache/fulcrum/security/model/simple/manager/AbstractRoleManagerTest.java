@@ -159,7 +159,9 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
     public void testAddRole() throws Exception
     {
         role = roleManager.getRoleInstance("DOG_NAPPER");
+        assertNull(role.getId());
         roleManager.addRole(role);
+        assertNotNull(role.getId());
         assertNotNull(roleManager.getRoleById(role.getId()));
     }
     public void testRemoveRole() throws Exception

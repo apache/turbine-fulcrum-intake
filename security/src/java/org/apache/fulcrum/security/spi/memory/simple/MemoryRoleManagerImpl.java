@@ -174,7 +174,7 @@ public class MemoryRoleManagerImpl extends AbstractLogEnabled implements SimpleR
     	* @throws DataBackendException if there is a problem accessing the
     	*            storage.
     	*/
-    public Role getRoleById(long id) throws DataBackendException, UnknownEntityException
+    public Role getRoleById(Object id) throws DataBackendException, UnknownEntityException
     {
         Role role = getAllRoles().getRoleById(id);
         if (role == null)
@@ -422,7 +422,7 @@ public class MemoryRoleManagerImpl extends AbstractLogEnabled implements SimpleR
         {
             throw new DataBackendException("Could not create a role with empty name!");
         }
-        if (role.getId() > 0)
+        if (role.getId() != null)
         {
             throw new DataBackendException("Could not create a role with an id!");
         }
@@ -490,8 +490,8 @@ public class MemoryRoleManagerImpl extends AbstractLogEnabled implements SimpleR
     {
         this.manager = manager;
     }
-    private int getUniqueId()
+    private Object getUniqueId()
     {
-        return ++uniqueId;
+        return new Integer(++uniqueId);
     }
 }

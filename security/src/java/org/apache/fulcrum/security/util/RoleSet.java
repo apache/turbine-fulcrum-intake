@@ -108,7 +108,7 @@ public class RoleSet
     {
         boolean res = contains(role);
         nameMap.put(role.getName(), role);
-        idMap.put(getIdAsObject(role.getId()), role);
+        idMap.put(role.getId(), role);
         return res;
     }
 
@@ -161,7 +161,7 @@ public class RoleSet
     {
         boolean res = contains(role);
         nameMap.remove(role.getName());
-        idMap.remove(getIdAsObject(role.getId()));
+        idMap.remove(role.getId());
         return res;
     }
 
@@ -201,10 +201,10 @@ public class RoleSet
      * @return Role if argument matched a Role in this RoleSet; null
      * if no match.
      */
-    public Role getRoleById(long roleId)
+    public Role getRoleById(Object roleId)
     {
-        return (roleId != 0) 
-                ? (Role) idMap.get(new Long(roleId)) : null;
+        return (roleId != null) 
+                ? (Role) idMap.get(roleId) : null;
     }
 
     /**

@@ -121,7 +121,7 @@ extends Component
 	* @exception DataBackendException if there is a problem accessing the
 	*            storage.
 	*/
-    Group getGroupById(long id) throws DataBackendException, UnknownEntityException;
+    Group getGroupById(Object id) throws DataBackendException, UnknownEntityException;
     
 	 
 			

@@ -177,7 +177,7 @@ public class HibernateGroupManagerImpl extends BaseHibernateManager implements S
      * @throws DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public Group getGroupById(long id) throws DataBackendException, UnknownEntityException
+    public Group getGroupById(Object id) throws DataBackendException, UnknownEntityException
     {
         Group group = getAllGroups().getGroupById(id);
         if (group == null)
@@ -287,7 +287,7 @@ public class HibernateGroupManagerImpl extends BaseHibernateManager implements S
         {
             throw new DataBackendException("Could not create a group with empty name!");
         }
-        if (group.getId() > 0)
+        if (group.getId()!=null)
         {
             throw new DataBackendException("Could not create a group with an id!");
         }

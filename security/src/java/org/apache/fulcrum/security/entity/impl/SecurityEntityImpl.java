@@ -17,18 +17,18 @@ import org.apache.fulcrum.security.entity.SecurityEntity;
 public class SecurityEntityImpl implements SecurityEntity
 {
     private String name;
-    private long id;
+    private Object id;
     /**
      * @return
      */
-    public long getId()
+    public Object getId()
     {
         return id;
     }
     /**
      * @param id
      */
-    public void setId(long id)
+    public void setId(Object id)
     {
         this.id = id;
     }
@@ -48,7 +48,7 @@ public class SecurityEntityImpl implements SecurityEntity
     }
     public String toString()
     {
-        return getClass().getName() + "id " + getId() + " name " + getName();
+        return getClass().getName() + " (id:" + getId() + " name:" + getName()+")";
     }
     public boolean equals(Object o)
     {

@@ -308,8 +308,13 @@ public class NTUserManagerImpl extends AbstractLogEnabled implements SimpleUserM
             String groups[] = ntSystem.getGroupNames(false);
             for (int i = 0; i < groups.length; i++)
             {
+            	// Note how it populates groups?  This
+            	// should maybe delegate a call to the
+            	// group manager to look for groups it
+            	// knows about instead.
                 Group group = new SimpleGroup();
                 group.setName(groups[i]);
+                group.setId(groups[i]);
                 ((SimpleUser) user).addGroup(group);
             }
             users.add(user);

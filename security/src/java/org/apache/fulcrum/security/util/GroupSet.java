@@ -108,7 +108,7 @@ public class GroupSet
     {
         boolean res = contains(group);
         nameMap.put(group.getName(), group);
-        idMap.put(getIdAsObject(group.getId()), group);
+        idMap.put(group.getId(), group);
         return res;
     }
 		
@@ -161,7 +161,7 @@ public class GroupSet
     {
         boolean res = contains(group);
         nameMap.remove(group.getName());
-        idMap.remove(getIdAsObject(group.getId()));
+        idMap.remove(group.getId());
         return res;
     }
 
@@ -202,10 +202,10 @@ public class GroupSet
      * @return Group if argument matched a Group in this
      * GroupSet; null if no match.
      */
-    public Group getGroupById(long groupId)
+    public Group getGroupById(Object groupId)
     {
-        return (groupId != 0)
-                ? (Group) idMap.get(new Long(groupId)) : null;
+        return (groupId != null)
+                ? (Group) idMap.get(groupId) : null;
     }
 
     /**
