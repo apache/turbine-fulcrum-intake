@@ -1,4 +1,6 @@
 package org.apache.fulcrum.schedule;
+import org.apache.fulcrum.factory.FactoryService;
+import org.apache.fulcrum.TurbineServices;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -104,9 +106,12 @@ public class WorkerThread
                 // search through them like the module
                 // loader does. This right here requires the
                 // getTask() method to return a class name.
-                ScheduledJob sc = (ScheduledJob) Class.forName(
-                    je.getTask()).newInstance();
-
+                String className = je.getTask();
+                FactoryService factoryService = (FactoryService)
+                    TurbineServices.getInstance().getService
+                    (FactoryService.SERVICE_NAME);
+                ScheduledJob sc = (ScheduledJob)
+                    factoryService.getInstance(className);
                 sc.execute(je);
             }
         }

@@ -90,6 +90,11 @@ public class TurbineFactoryService
     public static final String OBJECT_FACTORY = "factory.";
 
     /**
+     * The name of the default factory.
+     */
+    protected static final String DEFAULT_FACTORY = "default";
+
+    /**
      * Primitive classes for reflection of constructors.
      */
     private static HashMap primitiveClasses;
@@ -166,6 +171,7 @@ public class TurbineFactoryService
             }
 
             String key,factory;
+
             for (Iterator i = getConfiguration().getKeys(OBJECT_FACTORY); i.hasNext();)
             {
                 key = (String) i.next();
@@ -579,10 +585,12 @@ public class TurbineFactoryService
     }
 
     /**
-     * Gets a customized factory for a named class.
+     * Gets a customized factory for a named class. If no class-specific
+     * factory is specified but a default factory is, will use the default
+     * factory.
      *
      * @param className the name of the class to load.
-     * @return the factory or null if not specified.
+     * @return the factory, or null if not specified and no default.
      * @throws ServiceException if instantiation of the factory fails.
      */
     protected Factory getFactory(String className)
@@ -590,6 +598,13 @@ public class TurbineFactoryService
     {
         HashMap factories = objectFactories;
         Object factory = factories.get(className);
+        if (factory == null)
+        {
+            //No named factory for this; try the default, if one
+            //exists.
+            factory = factories.get(DEFAULT_FACTORY);
+        }
+
         if (factory != null)
         {
             if (factory instanceof String)
