@@ -9,10 +9,10 @@
 <goal name="fulcrum:build" description="Build all Fulcrum components">
     <maven:reactor basedir="${basedir}"
       includes="**/project.xml"
-      excludes="proposals/**,target/**,project.xml"
+      excludes="proposals/**,target/**,project.xml,cache/**,configuration/**"
       goals="jar:install"
       banner="Installing:"
-      ignoreFailures="true" />
+      ignoreFailures="false" />
   </goal>
 
   <goal name="fulcrum:clean" description="Clean all Fulcrum components" prereqs="clean">
