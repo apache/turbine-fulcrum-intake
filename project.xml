@@ -295,7 +295,7 @@
     <report>maven-multiproject-plugin</report>
     <report>maven-faq-plugin</report>    
     <report>maven-pmd-plugin</report>
-    <!-- report>maven-simian-plugin</report -->
+    <report>maven-simian-plugin</report>
     <!-- stripped down list-->
     <report>maven-javadoc-plugin</report>
     <report>maven-jxr-plugin</report>      
