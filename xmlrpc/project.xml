@@ -24,7 +24,8 @@
 
     <!--  Needed only for testing -->
     <dependency>
-      <id>fulcrum-testcontainer</id>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-testcontainer</artifactId>
       <version>1.0-alpha-1</version>
     </dependency>
 

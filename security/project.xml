@@ -21,12 +21,14 @@
       <url>http://jakarta.apache.org/commons/logging.html</url>
     </dependency>
    <dependency>
-      <id>fulcrum-crypto</id>
+      <groupId>fulcrum</groupId>   
+      <artifactId>fulcrum-crypto</artifactId>
       <version>1.0-alpha-3</version>
     </dependency>
     
     <dependency>
-      <id>fulcrum-factory</id>
+      <groupId>fulcrum</groupId>    
+      <artifactId>fulcrum-factory</artifactId>
       <version>1.0-alpha-1</version>
     </dependency>
 
@@ -103,7 +105,8 @@
    
     <!--  Needed only for testing -->
     <dependency>
-      <id>fulcrum-testcontainer</id>
+      <groupId>fulcrum</groupId>    
+      <artifactId>fulcrum-testcontainer</artifactId>
       <version>1.0-alpha-1</version>
     </dependency>
 
