@@ -6,7 +6,7 @@
   </properties>
 
   <body>
-    <release version="1.0.4" date="">
+    <release version="1.0.5-dev" date="">
      <action dev="epugh" type="remove">
         Remove CacheServiceFacade.  It was a code smell.
       </action>         
