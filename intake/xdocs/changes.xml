@@ -7,6 +7,11 @@
 
   <body>
     <release version="Not applicable" date="">
+      <action dev="epugh" type="remove">
+      	Remove Intake Pull Tool.  It should I think be part of Turbine as it is
+      	very Turbine specific right now.  I am trying to remove all Turbine requirements
+      	for Intake.
+      </action>
       <action dev="epugh" type="add">
       	Added the Intake class which is a facade to the underlying IntakeService.
       </action>
