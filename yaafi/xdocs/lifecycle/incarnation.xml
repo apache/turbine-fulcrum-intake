@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Fulcrum YAAFI</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Incarnation">
+    
+      <p>
+        The incarnation of a service covers the creation and configuration of a
+        service
+      </p>
+      
+      <p>
+        The following methods are invoked:    
+        <ul>
+            <li>Constructor()</li>
+            <li>LogEnabled.enableLogging(Logger)</li>
+            <li>Contextualizable.contextualize(Context)</li>
+            <li>Serviceable.service(ServiceManager)</li>
+            <li>Configurable.configure(Configuration)</li>
+            <li>Parameterizable.parameterize(Parameters)</li>
+            <li>Initializable.initialize()</li>
+            <li>Executable.execute()</li>
+            <li>Startable.start()</li>
+        </ul>    
+      </p>
+      
+      <p>
+        The good news are that you don't have to implement all these interfaces
+        if you have a simple service. The bad news are that you might need all of
+        this interfaces in a complex application ... :-)
+      </p>
+      
+      <subsection name="Constructor()">
+          <p>
+            This doesn't come as a surprise
+          </p>
+      </subsection>
+      
+      <subsection name="LogEnabled.enableLogging(Logger)">
+        <p>
+          Here you get the logger for your service implementation. This
+          is again an interface to an implementation of a logger provided
+          by the caller of the service framework.
+        </p>
+      </subsection>
+
+      <subsection name="Contextualizable.contextualize(Context)">
+        <p>
+          The context contains information about your application
+          environment. The following entries are guaranteed to be
+          available since they are supplied by YAAFI
+          
+          <table>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+            <tr>
+              <td>urn:avalon:home</td>
+              <td>File</td>
+              <td>
+                The home directory of the application. This is usually
+                the current working directory or WEB-INF. It is assumed
+                that your application has read access.
+              </td>
+            </tr>
+            <tr>
+              <td>urn:avalon:temp</td>
+              <td>File</td>
+              <td>
+                The temp directory of the application. It is assumed
+                that temporary files will be dumped there and therefore
+                read/write access is required.
+              </td>
+            </tr>
+            <tr>
+              <td>componentAppRoot</td>
+              <td>String</td>
+              <td>
+                The absolute path home directory of the application again. 
+                This is provided for backward compatibility with Fulcrum and
+                might be depracted in the future.
+              </td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
+
+      <subsection name="Serviceable.service(ServiceManager)">
+        <p>
+          At this point you get a reference to the service container. This
+          is the right moment to lookup all dependent services just to make
+          sure that everything is fine.
+        </p>
+      </subsection>
+
+      <subsection name="Configurable.configure(Configuration)">
+        <p>
+          A common task is to access configuration information whereas
+          the Configuration instance is a light-weight XML DOM tree. This
+          means you can use nested XML files for the configuration of your
+          service.
+        </p>
+      </subsection>
+
+      <subsection name="Parameterizable.parameterize(Parameters)">
+        <p>
+          Quite frankly I'm not sure why this method is needed. The only 
+          reason I can think of is a command-line application ...
+        </p>
+      </subsection>
+
+      <subsection name="Initializable.initialize()">
+        <p>
+          This method is used for initializing your service implementation 
+          since you have all your configuration information by now.
+        </p>
+      </subsection>
+
+      <subsection name="Executable.execute()">
+        <p>
+          If the component implements Executable the execute method will be 
+          invoked before the component instance is exposed to any other component.
+        </p>
+      </subsection>
+
+      <subsection name="Startable.start()">
+        <p>
+          The Startable interface is used by any component that is constantly 
+          running for the duration of its life.
+        </p>
+      </subsection>
+
+    </section>
+
+  </body>
+
+</document>

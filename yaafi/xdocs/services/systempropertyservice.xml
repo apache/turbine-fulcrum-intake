@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<document>
+
+    <properties>
+        <title>SystemPropertyService</title>
+        <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+    </properties>
+
+    <body>
+
+        <section name="Overview">
+            <p>
+                This service copies entries from the configuratio.xml into the
+                SystemProperties.
+            </p>
+            <p>
+                Quite useful since you can avoid tinkering with system properties 
+                in start scripts.
+            </p>            
+        </section>
+
+        <section name="Configuration">
+            <subsection name="Role Configuration">
+                <source>
+                    <![CDATA[
+<role
+    name="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyService"
+    shorthand="SystemPropertyService"
+    default-class="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyServiceImpl"
+    early-init="true"
+/>    
+                    ]]>
+                </source>
+            </subsection>
+            <subsection name="Component Configuration">
+                <source>
+                    <![CDATA[
+<SystemPropertyService>
+    <property name="FOO">BAR</property>
+</SystemPropertyService>
+                    ]]>
+                </source>
+            </subsection>
+            </section>
+
+        <section name="Usage">
+            <p>
+                This service does not expose any methods
+            </p>
+        </section>
+        
+    </body>
+    
+</document>

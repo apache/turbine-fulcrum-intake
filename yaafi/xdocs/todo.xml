@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>TODO</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="TODO">
+      
+      <subsection name="Support for encrytped configuration files">
+        <p>
+          Encryption/decryption of role and component configuration file using 
+          BlowfishJ from Markus Hahn (see http://www.lassekolb.info/bfacs.htm). 
+        </p>
+      </subsection>
+      
+    </section>
+
+  </body>
+
+</document>

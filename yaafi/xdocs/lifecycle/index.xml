@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Service Lifecycle</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Service Lifecycle">
+
+      <p>
+        The service lifecycle contains of a bunch of interfaces covering the following aspects of a service
+        
+        <ul>
+            <li><a href="incarnation.html">incarnation</a></li>
+            <li><a href="reconfiguration.html">reconfiguration</a></li>
+            <li><a href="decommission.html">decommissioning</a></li>
+        </ul>
+      </p>
+      
+      <p>
+        These interfaces are the contract between your service implementation 
+        and the service container. And this is the reason why we can deploy
+        a service implementation using different service framework implementations
+        such as  Excalibur or Merlin.
+     </p>
+      
+    </section>
+
+  </body>
+
+</document>

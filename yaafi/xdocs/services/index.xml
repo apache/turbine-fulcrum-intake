@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>YAAFI Services</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="YAAFI Services">
+
+      <p>
+        
+        YAAFI comes already with the following services since they are generally useful and
+        do not add any dependencies
+        
+        <table>
+          <tr>
+            <th>Name</th>
+            <th>Desciption</th>
+          </tr>
+          <tr>
+            <td><a href="servicemanagerservice.html">ServiceManagerService</a></td>
+            <td>
+              Keeps a reference to the YAAFI instance
+            </td>
+          </tr>
+          <tr>
+            <td><a href="systempropertyservice.html">SystemPropertyService</a></td>
+            <td>
+              Copies system properties during startup
+            </td>
+          </tr>
+        </table>
+        
+      </p>
+            
+    </section>
+
+  </body>
+
+</document>

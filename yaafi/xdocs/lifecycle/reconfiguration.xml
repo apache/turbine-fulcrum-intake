@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Fulcrum YAAFI</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Decommision">
+    
+      <p>
+        The reconfiguration of a service covers the following methods
+        <ul>
+            <li>Suspendable.suspend()</li>
+            <li>Reconfigurable.reconfigure(Configuration)</li>
+            <li>Suspendable.resume()</li>
+        </ul>    
+      </p>
+      
+      <subsection name="Suspendable.suspend()">
+        <p>
+          Suspend the service since it is guarenteed that no client
+          will invoke the service.
+        </p>
+      </subsection>
+
+      <subsection name="Reconfigurable.reconfigure(Configuration)">
+        <p>
+          Reconfigure the service with the Configuration instance.
+        </p>
+      </subsection>
+
+      <subsection name="Suspendable.resume()">
+        <p>
+          Resume the service - afterwards clients will invoke the service
+          again.
+        </p>
+      </subsection>
+
+    </section>
+
+  </body>
+
+</document>

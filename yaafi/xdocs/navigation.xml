@@ -10,7 +10,20 @@
     </links>
     
     <menu name="Overview">
-      <item name="Main"   				   href="/index.html"/>
+      <item name="Main"                     href="/index.html"/>
+      <item name="Overview"                 href="/index.html"/>
+      <item name="Lifecycle"                href="/lifecycle/index.html" collapse="true">     
+        <item name="Incarnation"              href="/lifecycle/incarnation.html"/>
+        <item name="Reconfiguration"          href="/lifecycle/reconfiguration.html"/>
+        <item name="Decommision"              href="/lifecycle/decommission.html"/>
+      </item>
+      <item name="Services"                 href="/services/index.html" collapse="true">     
+        <item name="ServiceManagerService"    href="/services/servicemanagerservice.html"/>
+        <item name="SystemPropertyService"    href="/services/systempropertyservice.html"/>
+      </item>
+      <item name="How To"                   href="/howto.html"/>
+      <item name="Todo's"                   href="/todo.html"/>
+
     </menu>
   </body>
 </project>

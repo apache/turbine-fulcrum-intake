@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Fulcrum YAAFI</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Decommision">
+    
+      <p>
+        The decommision of a service covers the shutdown procedure a service
+
+        <ul>
+            <li>Startable.stop()</li>
+            <li>Disposable.dispose()</li>
+            <li>Finalizer</li>
+        </ul>    
+      </p>
+      
+      <subsection name="Startable.stop()">
+        <p>
+          Stop all of the service activities since it is guaranteed that no client 
+          will invoke the service.
+        </p>
+      </subsection>
+
+      <subsection name="Disposable.dispose()">
+        <p>
+          Free all resources hold by the service implementation. 
+        </p>
+      </subsection>
+
+      <subsection name="Finalizer">
+        <p>
+          Well, it might be never called but all resouces have been
+          released before.
+        </p>
+      </subsection>
+
+    </section>
+
+  </body>
+
+</document>

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<document>
+
+    <properties>
+        <title>ServiceManagerService</title>
+        <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+    </properties>
+
+    <body>
+
+        <section name="Overview">
+            <p>
+                This service keeps an YAAFI instance.
+            </p>
+            <p>
+            </p>            
+        </section>
+
+        <section name="Configuration">
+            <subsection name="Role Configuration">
+                <source>
+                    <![CDATA[
+<role
+    default-class="org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerService"
+    early-init="true"
+/>                       ]]>
+                </source>
+            </subsection>
+        </section>
+
+        <section name="Usage">
+            <p>
+                ServiceManagerService.getServiceManager() returns you an instance of
+                ServiceManager which allows to lookup other services.
+            </p>
+            
+            <source>
+FOO foo = (FOO) ServiceManagerService.getServiceManager().lookup("FOO");
+            </source>
+        </section>
+        
+    </body>
+    
+</document>

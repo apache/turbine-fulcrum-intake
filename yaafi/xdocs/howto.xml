@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Fulcrum YAAFI</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="How To">
+
+      <subsection name="How to write my own service?">
+        <ul>
+          <li> 
+            Write your service interface and implementation using the 
+            Avalon Lifecycle interfaces.
+          </li>
+          <li> 
+            Add an entry to the role configuration file. This entry
+            contains the information how YAAFI can instantiate and
+            access the service
+          </li>
+          <li> 
+            Add an entry to the component configuratino file if
+            you need to configure your service.
+          </li>
+        </ul>          
+      </subsection>
+      
+      <subsection name="How can I embed YAAFI in an application?">
+        <p> 
+          The embedding is done by creating a YAAFI instance using the
+          ServiceManagerFactory.create() method.
+        </p>
+
+        <p> 
+          The following example creates a fully initialized and running
+          YAAFI container with the given configuration parameters using
+          a LOG4J logger. 
+        </p>
+        
+        <source>
+ServiceContainer manager = null;
+Logger logger = new Log4JLogger( org.apache.log4j.Logger.getLogger("YAAFI");
+manager = ServiceManagerFactory.create(
+    logger,
+    "roleConfiguration.xml",
+    "componentConfiguration.xml",
+    "parameters.xml"
+    );        
+        </source>
+        
+      <p>
+        At the end of day you have to terminate YAAFI
+      </p>
+
+        <source>
+manager.dispose();
+        </source>
+
+      </subsection>
+
+      <subsection name="How can I embed YAAFI into Turbine?">
+        <p>        
+          In the 'contrib' directory there is a ready-to-use Turbine
+          service which needs the following configuration (for Turbine 2.2)
+        </p>
+        <source>
+services.YaafiComponentService.classname=org.apache.turbine.services.yafficomponent.TurbineYaafiComponentService
+services.YaafiComponentService.componentRoles=./conf/componentRoles.xml
+services.YaafiComponentService.componentConfiguration=./conf/componentConfiguration.xml
+services.YaafiComponentService.parameters=
+        </source>
+        
+      </subsection>
+    
+    </section>
+
+  </body>
+
+</document>
