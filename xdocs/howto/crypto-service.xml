@@ -87,7 +87,7 @@ public class CryptoExample
 {
     public String doMD5Encryption(String input)
     {
-        CryptoAlgorithm ca = TurbineCrypto.getService().getCryptoAlgorithm("default");
+        CryptoAlgorithm ca = TurbineCrypto.getCryptoAlgorithm("default");
 
         ca.setCipher("MD5");
 

@@ -54,6 +54,8 @@ package org.apache.fulcrum.crypto;
  * <http://www.apache.org/>.
  */
 
+import java.security.NoSuchAlgorithmException;
+
 import org.apache.fulcrum.TurbineServices;
 
 /**
@@ -81,5 +83,23 @@ public abstract class TurbineCrypto
     {
         return (CryptoService) TurbineServices.getInstance()
             .getService(CryptoService.SERVICE_NAME);
+    }
+
+
+    /**
+     * Returns a CryptoAlgorithm Object which represents the requested
+     * crypto algorithm.
+     *
+     * @param algo      Name of the requested algorithm
+     *
+     * @return An Object representing the algorithm
+     *
+     * @throws NoSuchAlgorithmException  Requested algorithm is not available
+     *
+     */
+    public static CryptoAlgorithm getCryptoAlgorithm(String algo)
+        throws NoSuchAlgorithmException
+    {
+        return getService().getCryptoAlgorithm(algo);
     }
 }
