@@ -67,14 +67,14 @@ public class PermissionAdapter implements Permission
      */
     public int getId()
     {
-        return permission.getId();
+        return new Integer(permission.getId()+"").intValue();
     }
     /* (non-Javadoc)
      * @see org.apache.turbine.om.security.SecurityEntity#getIdAsObj()
      */
     public Integer getIdAsObj()
     {
-        return new Integer(permission.getId());
+        return new Integer(permission.getId()+"");
     }
     /* (non-Javadoc)
      * @see org.apache.turbine.om.security.SecurityEntity#setId(int)

@@ -121,14 +121,14 @@ public class RoleAdapter implements Role
      */
     public int getId()
     {
-        return role.getId();
+        return new Integer(role.getId()+"").intValue();
     }
     /* (non-Javadoc)
      * @see org.apache.turbine.om.security.SecurityEntity#getIdAsObj()
      */
     public Integer getIdAsObj()
     {
-        return new Integer(role.getId());
+        return new Integer(role.getId()+"");
     }
     /* (non-Javadoc)
      * @see org.apache.turbine.om.security.SecurityEntity#setId(int)

@@ -101,14 +101,14 @@ public class GroupAdapter implements Group
      */
     public int getId()
     {
-        return group.getId();
+		return new Integer(group.getId()+"").intValue();
     }
     /* (non-Javadoc)
      * @see org.apache.turbine.om.security.SecurityEntity#getIdAsObj()
      */
     public Integer getIdAsObj()
     {
-        return new Integer(group.getId());
+        return new Integer(group.getId()+"");
     }
     /* (non-Javadoc)
      * @see org.apache.turbine.om.security.SecurityEntity#setId(int)

@@ -357,14 +357,14 @@ public class UserAdapter implements User
      */
     public int getId()
     {
-        return user.getId();
+		return new Integer(user.getId()+"").intValue();
     }
     /* (non-Javadoc)
      * @see org.apache.turbine.om.security.SecurityEntity#getIdAsObj()
      */
     public Integer getIdAsObj()
     {
-        return new Integer(user.getId());
+        return new Integer(user.getId()+"");
     }
     /* (non-Javadoc)
      * @see org.apache.turbine.om.security.SecurityEntity#setId(int)
