@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="fulcrum" default="maven:jar" basedir=".">
+<project name="Fulcrum" default="maven:jar" basedir=".">
 
   <!-- Give user a chance to override without editing this file
        (and without typing -D each time they invoke a target) -->
