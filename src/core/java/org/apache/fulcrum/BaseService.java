@@ -102,19 +102,15 @@ public abstract class BaseService
     protected String name;
 
     /**
-     * Performs late initializtion.  Called when the service is requested 
-     * for the first time (if not already completely initialized by the 
-     * early initializer).
+     * Implement this method with your own service initiailization
+     * code.  Remember to call <code>setInit(true)</code> on proper
+     * service initialization.
      *
-     * Late intialization of a BaseInitable is alwas successful.
-     *
-     * @exception InitializationException Initialization of this
-     * class was not successful.
+     * @see org.apache.fulcrum.Service#init()
+     * @see org.apache.fulcrum.BaseService#setInit(boolean value)
      */
-    public void init() 
-        throws InitializationException
-    {
-    }
+    public abstract void init()
+        throws InitializationException;
 
     /**
      * Returns an Initable to uninitialized state.
@@ -127,7 +123,6 @@ public abstract class BaseService
         setInit(false);
     }
 
-    
     /**
      * Returns initialization status.
      *
@@ -163,7 +158,7 @@ public abstract class BaseService
      *
      * @param value The new initialization status.
      */
-    protected void setInit( boolean value )
+    protected void setInit(boolean value)
     {
         this.isInitialized = value;
     }
@@ -173,7 +168,7 @@ public abstract class BaseService
      *
      * @param name The name of this Service.
      */
-    public void setName( String name )
+    public void setName(String name)
     {
         this.name = name;
     }
@@ -230,21 +225,33 @@ public abstract class BaseService
         return configuration;
     }
 
+    /**
+     * @see org.apache.fulcrum.ServiceBroker#getServiceObject()
+     */
     public Object getServiceObject(String name)
     {
         return getServiceBroker().getServiceObject(name);
     }        
 
+    /**
+     * @see org.apache.fulcrum.Service#getRealPath()
+     */
     public String getRealPath(String path)
     {
         return getServiceBroker().getRealPath(path);
     }
 
+    /**
+     * @see org.apache.fulcrum.Service#getCategory()
+     */
     public Category getCategory()
     {
         return getServiceBroker().getCategory();
     }        
 
+    /**
+     * @see org.apache.fulcrum.Service#getCategory(String name)
+     */
     public Category getCategory(String name)
     {
         return getServiceBroker().getCategory(name);
