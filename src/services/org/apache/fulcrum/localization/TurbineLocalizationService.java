@@ -413,12 +413,7 @@ public class TurbineLocalizationService
     }
 
     /**
-     * Attempts to pull the "Accept-Language" header out of the
-     * HttpServletRequest object and then parse it.  If the header is
-     * not present, it will return a null Locale.
-     *
-     * @param req HttpServletRequest.
-     * @return A Locale.
+     * @see org.apache.fulcrum.localization.LocalizationService#getLocale(HttpServletRequest)
      */
     public final Locale getLocale(HttpServletRequest req)
     {
@@ -426,14 +421,7 @@ public class TurbineLocalizationService
     }
 
     /**
-     * Parses the <code>Accept-Language</code> header and attempts to
-     * create a <code>Locale</code> from it.
-     *
-     * @param header The language header (i.e. <code>en, es;q=0.8,
-     * zh-TW;q=0.1</code>), or <code>null</code> for the locale
-     * corresponding to the default language and country.
-     * @return The parsed locale, or a locale corresponding to the
-     * language and country defaults.
+     * @see org.apache.fulcrum.localization.LocalizationService#getLocale(String)
      */
     public Locale getLocale(String header)
     {
