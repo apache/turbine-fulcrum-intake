@@ -59,6 +59,7 @@ import java.util.Hashtable;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
+import org.apache.commons.util.StringUtils;
 import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
 
@@ -148,9 +149,10 @@ public class TurbineLocalizationService
     }
 
     /**
-     * This method returns a ResourceBundle given the bundle name
-     * "DEFAULT" and the default Locale information supplied in
-     * TurbineProperties.
+     * This method returns a ResourceBundle given the bundle named by
+     * the value of this service's <code>locale.default.bundle</code>
+     * property (generally <code>"DEFAULT"</code>), and the default
+     * Locale information supplied in TurbineProperties.
      *
      * @return A localized ResourceBundle.
      */
@@ -261,19 +263,19 @@ public class TurbineLocalizationService
         }
         else
         {
-            // Try to create a ResourceBundle for this Locale.
+            // Create a ResourceBundle for requested Locale.
             ResourceBundle rb =
-                ResourceBundle.getBundle(bundleName,locale);
+                ResourceBundle.getBundle(bundleName, locale);
 
             // Cache the ResourceBundle in memory.
-            Hashtable ht = new Hashtable();
-            ht.put( locale, rb );
+            Hashtable bundlesByLocale = new Hashtable();
+            bundlesByLocale.put(locale, rb);
 
             // Can't call getLocale(), because that is jdk2.  This
             // needs to be changed back, since the above approach
             // caches extra Locale and Bundle objects.
-            // ht.put( rb.getLocale(), rb );
-            bundles.put( bundleName, ht );
+            // bundlesByLocale.put( rb.getLocale(), rb );
+            bundles.put(bundleName, bundlesByLocale);
 
             return rb;
         }
@@ -300,9 +302,7 @@ public class TurbineLocalizationService
     public Locale getLocale(HttpServletRequest req)
     {
         String header = req.getHeader(ACCEPT_LANGUAGE);
-        if ( header == null || header.length() == 0 )
-            return null;
-        return getLocale( header );
+        return (StringUtils.isValid(header) ? getLocale(header) : null);
     }
 
     /**
@@ -316,9 +316,7 @@ public class TurbineLocalizationService
     {
         Locale locale = null;
 
-        // return a "default" locale
-        if ( languageHeader == null ||
-             languageHeader.trim().equals("") )
+        if (StringUtils.isEmpty(languageHeader))
         {
             return new Locale(defaultLanguage, defaultCountry);
         }
@@ -346,27 +344,27 @@ public class TurbineLocalizationService
     private static Locale getLocaleForLanguage(String language)
     {
         Locale locale = null;
-        int semi, dash;
+        int index;
 
-        // Cut off any q-value that comes after a semicolon.
-        if ( (semi=language.indexOf(';')) != -1 )
+        // Cut off any q-value that comes after a semi-colon.
+        if ( (index = language.indexOf(';')) != -1 )
         {
-            language = language.substring(0, semi);
+            language = language.substring(0, index);
         }
 
         language = language.trim();
 
         // Create a Locale from the language.  A dash may separate the
         // language from the country.
-        if ( (dash=language.indexOf('-')) == -1 )
+        if ( (index = language.indexOf('-')) == -1 )
         {
             // No dash means no country.
             locale = new Locale(language, "");
         }
         else
         {
-            locale = new Locale(language.substring(0, dash),
-                                language.substring(dash+1));
+            locale = new Locale(language.substring(0, index),
+                                language.substring(index + 1));
         }
 
         return locale;
