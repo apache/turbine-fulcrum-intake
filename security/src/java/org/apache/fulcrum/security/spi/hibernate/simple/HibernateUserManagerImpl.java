@@ -52,16 +52,16 @@ package org.apache.fulcrum.security.spi.hibernate.simple;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 import net.sf.hibernate.avalon.HibernateService;
-
+import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.framework.component.ComponentManager;
 import org.apache.avalon.framework.component.Composable;
@@ -80,7 +80,7 @@ import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
 import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
 import org.apache.fulcrum.security.model.simple.entity.SimpleUser;
-import org.apache.fulcrum.security.model.simple.manager.*;
+import org.apache.fulcrum.security.model.simple.manager.SimpleUserManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.GroupSet;
@@ -94,13 +94,10 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class HibernateUserManagerImpl extends AbstractLogEnabled implements SimpleUserManager, Composable
+public class HibernateUserManagerImpl extends AbstractLogEnabled implements SimpleUserManager, Composable, Disposable
 {
     /** Logging */
     private static Log log = LogFactory.getLog(HibernateUserManagerImpl.class);
-    private static List users = new ArrayList();
-    /** The class of ACL the SecurityService uses */
-    private Class aclClass = DefaultAccessControlList.class;
     /** A factory to construct ACL Objects */
     private FactoryService aclFactoryService = null;
     private ComponentManager manager = null;
@@ -108,12 +105,10 @@ public class HibernateUserManagerImpl extends AbstractLogEnabled implements Simp
     private GroupManager groupManager;
     /** Our roleManager **/
     private RoleManager roleManager;
-    /** Our Unique ID counter */
-    private static int uniqueId = 0;
-	/** Hibernate components */
-	  private HibernateService persistence;
-	  private Session session;
-	  private Transaction transaction;
+    /** Hibernate components */
+    private HibernateService hibernateService;
+    private Session session;
+    private Transaction transaction;
     /**
      * @return
      */
@@ -148,16 +143,7 @@ public class HibernateUserManagerImpl extends AbstractLogEnabled implements Simp
      */
     public boolean checkExists(User user) throws DataBackendException
     {
-        boolean exists = false;
-        for (Iterator i = users.iterator(); i.hasNext();)
-        {
-            User u = (User) i.next();
-            if (u.getName().equalsIgnoreCase(user.getName()) | u.getId() == user.getId())
-            {
-                exists = true;
-            }
-        }
-        return exists;
+        return checkExists(user.getName());
     }
     /**
      * Check whether a specified user's account exists.
@@ -171,20 +157,21 @@ public class HibernateUserManagerImpl extends AbstractLogEnabled implements Simp
      */
     public boolean checkExists(String userName) throws DataBackendException
     {
-        List tempUsers = new ArrayList();
-        for (Iterator i = users.iterator(); i.hasNext();)
+        List users = null;
+        try
         {
-            User user = (User) i.next();
-            if (user.getName().equalsIgnoreCase(userName))
-            {
-                tempUsers.add(user);
-            }
+            session = hibernateService.openSession();
+            users = session.find("from SimpleUser su where su.name=?", userName, Hibernate.STRING);
         }
-        if (tempUsers.size() > 1)
+        catch (HibernateException e)
+        {
+            throw new DataBackendException("Error retriving user information", e);
+        }
+        if (users.size() > 1)
         {
             throw new DataBackendException("Multiple Users with same username '" + userName + "'");
         }
-        return (tempUsers.size() == 1);
+        return (users.size() == 1);
     }
     /**
      * Retrieve a user from persistent storage using username as the
@@ -199,22 +186,23 @@ public class HibernateUserManagerImpl extends AbstractLogEnabled implements Simp
      */
     public User getUser(String userName) throws UnknownEntityException, DataBackendException
     {
-        List tempUsers = new ArrayList();
-        for (Iterator i = users.iterator(); i.hasNext();)
+        List users = null;
+        try
         {
-            User user = (User) i.next();
-            if (user.getName().equalsIgnoreCase(userName))
-            {
-                tempUsers.add(user);
-            }
+            session = hibernateService.openSession();
+            users = session.find("from SimpleUser su where su.name=?", userName, Hibernate.STRING);
         }
-        if (tempUsers.size() > 1)
+        catch (HibernateException e)
+        {
+            throw new DataBackendException("Error retriving user information", e);
+        }
+        if (users.size() > 1)
         {
             throw new DataBackendException("Multiple Users with same username '" + userName + "'");
         }
-        if (tempUsers.size() == 1)
+        if (users.size() == 1)
         {
-            return (User) tempUsers.get(0);
+            return (User) users.get(0);
         }
         throw new UnknownEntityException("Unknown user '" + userName + "'");
     }
@@ -354,12 +342,21 @@ public class HibernateUserManagerImpl extends AbstractLogEnabled implements Simp
         user.setPassword(initialPassword);
         try
         {
-            users.remove(user);
-            user.setId(getUniqueId());
-            users.add(user);
+            session = hibernateService.openSession();
+            transaction = session.beginTransaction();
+            session.save(user);
+            transaction.commit();
         }
-        catch (Exception e)
+        catch (HibernateException e)
         {
+            log.error("Error adding user", e);
+            try
+            {
+                transaction.rollback();
+            }
+            catch (HibernateException he)
+            {
+            }
             throw new DataBackendException("Failed to create account '" + user.getName() + "'", e);
         }
     }
@@ -498,85 +495,44 @@ public class HibernateUserManagerImpl extends AbstractLogEnabled implements Simp
     	* @throws UnknownEntityException if user account, group or role is not
     	*         present.
     	*/
-    /*
-     * 
-     public synchronized void revoke(User user, Group group, Role role)
-        throws DataBackendException, UnknownEntityException
-    {
-        boolean userExists = false;
-        boolean groupExists = false;
-        boolean roleExists = false;
-        try
-        {
-            userExists = checkExists(user);
-            groupExists = checkExists(group);
-            roleExists = checkExists(role);
-            if (userExists && groupExists && roleExists)
-            {
-                ((SimpleUser) user).getGroups().remove(group);
-                ((SimpleUser) user).getRoles().remove(role);
-                return;
-            }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("revoke(User,Role,Group) failed", e);
-        }
-        finally
-        {
-        }
-        if (!userExists)
-        {
-            throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
-        }
-        if (!groupExists)
-        {
-            throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
-        }
-        if (!roleExists)
-        {
-            throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
-        }
-    }
-    */
     /**
-    	* Determines if the <code>Group</code> exists in the security system.
-    	*
-    	* @param group a <code>Group</code> value
-    	* @return true if the group exists in the system, false otherwise
-    	* @throws DataBackendException when more than one Group with
-    	*         the same name exists.
-    	* @throws Exception A generic exception.
-    	*/
+    * Determines if the <code>Group</code> exists in the security system.
+    *
+    * @param group a <code>Group</code> value
+    * @return true if the group exists in the system, false otherwise
+    * @throws DataBackendException when more than one Group with
+    *         the same name exists.
+    * @throws Exception A generic exception.
+    */
     private boolean checkExists(Group group) throws DataBackendException, Exception
     {
         return getGroupManager().checkExists(group);
     }
     /**
-    	* Determines if the <code>Role</code> exists in the security system.
-    	*
-    	* @param role a <code>Role</code> value
-    	* @return true if the role exists in the system, false otherwise
-    	* @throws DataBackendException when more than one Role with
-    	*         the same name exists.
-    	* @throws Exception A generic exception.
-    	*/
+	* Determines if the <code>Role</code> exists in the security system.
+	*
+	* @param role a <code>Role</code> value
+	* @return true if the role exists in the system, false otherwise
+	* @throws DataBackendException when more than one Role with
+	*         the same name exists.
+	* @throws Exception A generic exception.
+	*/
     private boolean checkExists(Role role) throws DataBackendException, Exception
     {
         return getRoleManager().checkExists(role);
     }
     /**
-    	* This method provides client-side encryption of passwords.
-    	*
-    	* If <code>secure.passwords</code> are enabled in TurbineResources,
-    	* the password will be encrypted, if not, it will be returned unchanged.
-    	* The <code>secure.passwords.algorithm</code> property can be used
-    	* to chose which digest algorithm should be used for performing the
-    	* encryption. <code>SHA</code> is used by default.
-    	*
-    	* @param password the password to process
-    	* @return processed password
-    	*/
+	* This method provides client-side encryption of passwords.
+	*
+	* If <code>secure.passwords</code> are enabled in TurbineResources,
+	* the password will be encrypted, if not, it will be returned unchanged.
+	* The <code>secure.passwords.algorithm</code> property can be used
+	* to chose which digest algorithm should be used for performing the
+	* encryption. <code>SHA</code> is used by default.
+	*
+	* @param password the password to process
+	* @return processed password
+	*/
     public String encryptPassword(String password)
     {
         return encryptPassword(password, null);
@@ -618,22 +574,6 @@ public class HibernateUserManagerImpl extends AbstractLogEnabled implements Simp
         return (result == null) ? false : result.equals(encpw);
     }
     /**
-      * Return a Class object representing the system's chosen implementation of
-      * of ACL interface.
-      *
-      * @return systems's chosen implementation of ACL interface.
-      * @throws UnknownEntityException if the implementation of ACL interface
-      *         could not be determined, or does not exist.
-      */
-    public Class getAclClass() throws UnknownEntityException
-    {
-        if (aclClass == null)
-        {
-            throw new UnknownEntityException("Failed to create a Class object for ACL implementation");
-        }
-        return aclClass;
-    }
-    /**
      * Construct a new ACL object.
      *
      * This constructs a new ACL object from the configured class and
@@ -652,13 +592,13 @@ public class HibernateUserManagerImpl extends AbstractLogEnabled implements Simp
         AccessControlList accessControlList;
         try
         {
-        	/*
-        	 * 
-        	 @todo I think this is overkill for now..
+            /*
+             * 
+             @todo I think this is overkill for now..
             accessControlList =
                 (AccessControlList) aclFactoryService.getInstance(aclClass.getName(), objects, signatures);
                 */
-                accessControlList = new DefaultAccessControlList(roles,permissions);
+            accessControlList = new DefaultAccessControlList(roles, permissions);
         }
         catch (Exception e)
         {
@@ -702,7 +642,25 @@ public class HibernateUserManagerImpl extends AbstractLogEnabled implements Simp
     {
         // revoke all roles form the user
         revokeAll(user);
-        users.remove(user);
+        try
+        {
+            session = hibernateService.openSession();
+            transaction = session.beginTransaction();
+            session.delete(user);
+            transaction.commit();
+        }
+        catch (HibernateException e)
+        {
+            log.error("Error deleting user", e);
+            try
+            {
+                transaction.rollback();
+            }
+            catch (HibernateException he)
+            {
+            }
+            throw new DataBackendException("Failed to remove account '" + user.getName() + "'", e);
+        }
     }
     /**
        * Creates new user account with specified attributes.
@@ -732,8 +690,25 @@ public class HibernateUserManagerImpl extends AbstractLogEnabled implements Simp
         userExists = checkExists(user);
         if (userExists)
         {
-            users.remove(user);
-            users.add(user);
+            try
+            {
+                session = hibernateService.openSession();
+                transaction = session.beginTransaction();
+                session.update(user);
+                transaction.commit();
+            }
+            catch (HibernateException e)
+            {
+                log.error("Error adding user", e);
+                try
+                {
+                    transaction.rollback();
+                }
+                catch (HibernateException he)
+                {
+                }
+                throw new DataBackendException("Failed to create account '" + user.getName() + "'", e);
+            }
         }
         else
         {
@@ -826,9 +801,17 @@ public class HibernateUserManagerImpl extends AbstractLogEnabled implements Simp
     public void compose(ComponentManager manager) throws ComponentException
     {
         this.manager = manager;
+        hibernateService = (HibernateService) manager.lookup(HibernateService.ROLE);
     }
-    private int getUniqueId()
+    /**
+    	* DESTRUCTION: step 2
+    	* @see org.apache.avalon.framework.activity.Disposable#dispose()
+    	*/
+    public void dispose()
     {
-        return ++uniqueId;
+        hibernateService = null;
+        manager = null;
+        groupManager = null;
+        roleManager = null;
     }
 }

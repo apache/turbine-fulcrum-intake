@@ -52,10 +52,15 @@ package org.apache.fulcrum.security.spi.hibernate.simple;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
+import net.sf.hibernate.avalon.HibernateService;
+
+import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.framework.component.ComponentManager;
 import org.apache.avalon.framework.component.Composable;
@@ -78,15 +83,18 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class HibernatePermissionManagerImpl extends AbstractLogEnabled implements PermissionManager, Composable
+public class HibernatePermissionManagerImpl
+    extends AbstractLogEnabled
+    implements PermissionManager, Composable, Disposable
 {
     /** Logging */
     private static Log log = LogFactory.getLog(HibernatePermissionManagerImpl.class);
-    private static List permissions = new ArrayList();
-    private ComponentManager manager = null;
     private RoleManager roleManager = null;
-    /** Our Unique ID counter */
-    private static int uniqueId = 0;
+    /** Hibernate components */
+    private HibernateService hibernateService;
+    private Session session;
+    private Transaction transaction;
+    private ComponentManager manager = null;
     /**
     	 * @return
     	 */
@@ -177,25 +185,36 @@ public class HibernatePermissionManagerImpl extends AbstractLogEnabled implement
         return permission;
     }
     /**
-    	* Retrieves all permissions defined in the system.
-    	*
-    	* @return the names of all roles defined in the system.
-    	* @throws DataBackendException if there was an error accessing the
-    	*         data backend.
-    	*/
+    * Retrieves all permissions defined in the system.
+    *
+    * @return the names of all roles defined in the system.
+    * @throws DataBackendException if there was an error accessing the
+    *         data backend.
+    */
     public PermissionSet getAllPermissions() throws DataBackendException
     {
-        return new PermissionSet(permissions);
+        PermissionSet permissionSet = new PermissionSet();
+        try
+        {
+            session = hibernateService.openSession();
+            List permissions = session.find("from SimplePermission");
+            permissionSet.add(permissions);
+        }
+        catch (HibernateException e)
+        {
+            throw new DataBackendException("Error retriving permission information", e);
+        }
+        return permissionSet;
     }
     /**
-	* Renames an existing Permission.
-	*
-	* @param permission The object describing the permission to be renamed.
-	* @param name the new name for the permission.
-	* @throws DataBackendException if there was an error accessing the data
-	*         backend.
-	* @throws UnknownEntityException if the permission does not exist.
-	*/
+    * Renames an existing Permission.
+    *
+    * @param permission The object describing the permission to be renamed.
+    * @param name the new name for the permission.
+    * @throws DataBackendException if there was an error accessing the data
+    *         backend.
+    * @throws UnknownEntityException if the permission does not exist.
+    */
     public synchronized void renamePermission(Permission permission, String name)
         throws DataBackendException, UnknownEntityException
     {
@@ -205,9 +224,8 @@ public class HibernatePermissionManagerImpl extends AbstractLogEnabled implement
             permissionExists = checkExists(permission);
             if (permissionExists)
             {
-                permissions.remove(permission);
                 permission.setName(name);
-                permissions.add(permission);
+                savePermission(permission);
                 return;
             }
         }
@@ -221,36 +239,42 @@ public class HibernatePermissionManagerImpl extends AbstractLogEnabled implement
         throw new UnknownEntityException("Unknown permission '" + permission + "'");
     }
     /**
-   * Determines if the <code>Permission</code> exists in the security system.
-   *
-   * @param permission a <code>Permission</code> value
-   * @return true if the permission exists in the system, false otherwise
-   * @throws DataBackendException when more than one Permission with
-   *         the same name exists.
-   * @throws Exception A generic exception.
-   */
+    * Determines if the <code>Permission</code> exists in the security system.
+    *
+    * @param permission a <code>Permission</code> value
+    * @return true if the permission exists in the system, false otherwise
+    * @throws DataBackendException when more than one Permission with
+    *         the same name exists.
+    * @throws Exception A generic exception.
+    */
     public boolean checkExists(Permission permission) throws DataBackendException
     {
-        boolean exists = false;
-        for (Iterator i = permissions.iterator(); i.hasNext();)
+        List permissions;
+        try
         {
-            Permission p = (Permission) i.next();
-            if (p.getName().equalsIgnoreCase(permission.getName()) | p.getId() == permission.getId())
-            {
-                exists = true;
-            }
+            session = hibernateService.openSession();
+            permissions =
+                session.find("from SimplePermission sr where sr.name=?", permission.getName(), Hibernate.STRING);
         }
-        return exists;
+        catch (HibernateException e)
+        {
+            throw new DataBackendException("Error retriving permission information", e);
+        }
+        if (permissions.size() > 1)
+        {
+            throw new DataBackendException("Multiple permissions with same name '" + permission.getName() + "'");
+        }
+        return (permissions.size() == 1);
     }
     /**
-	* Stores Permission's attributes. The Permissions is required to exist in
-	* the system.
-	*
-	* @param permission The Permission to be stored.
-	* @throws DataBackendException if there was an error accessing the data
-	*         backend.
-	* @throws UnknownEntityException if the permission does not exist.
-	*/
+    * Stores Permission's attributes. The Permissions is required to exist in
+    * the system.
+    *
+    * @param permission The Permission to be stored.
+    * @throws DataBackendException if there was an error accessing the data
+    *         backend.
+    * @throws UnknownEntityException if the permission does not exist.
+    */
     public void savePermission(Permission permission) throws DataBackendException, UnknownEntityException
     {
         boolean permissionExists = false;
@@ -259,8 +283,10 @@ public class HibernatePermissionManagerImpl extends AbstractLogEnabled implement
             permissionExists = checkExists(permission);
             if (permissionExists)
             {
-                permissions.remove(permission);
-                permissions.add(permission);
+                session = hibernateService.openSession();
+                transaction = session.beginTransaction();
+                session.update(permission);
+                transaction.commit();
             }
             else
             {
@@ -289,7 +315,10 @@ public class HibernatePermissionManagerImpl extends AbstractLogEnabled implement
             permissionExists = checkExists(permission);
             if (permissionExists)
             {
-                permissions.remove(permission);
+                session = hibernateService.openSession();
+                transaction = session.beginTransaction();
+                session.delete(permission);
+                transaction.commit();
             }
             else
             {
@@ -298,21 +327,20 @@ public class HibernatePermissionManagerImpl extends AbstractLogEnabled implement
         }
         catch (Exception e)
         {
-            throw new DataBackendException("removePermission(Permission)", e);
-        }
-        finally
-        {
+            log.error("Failed to delete a Permission");
+            log.error(e);
+            throw new DataBackendException("removePermission(Permission) failed", e);
         }
     }
     /**
-	* Creates a new permission with specified attributes.
-	*
-	* @param permission the object describing the permission to be created.
-	* @return a new Permission object that has id set up properly.
-	* @throws DataBackendException if there was an error accessing the data
-	*         backend.
-	* @throws EntityExistsException if the permission already exists.
-	*/
+    * Creates a new permission with specified attributes.
+    *
+    * @param permission the object describing the permission to be created.
+    * @return a new Permission object that has id set up properly.
+    * @throws DataBackendException if there was an error accessing the data
+    *         backend.
+    * @throws EntityExistsException if the permission already exists.
+    */
     public synchronized Permission addPermission(Permission permission)
         throws DataBackendException, EntityExistsException
     {
@@ -325,36 +353,40 @@ public class HibernatePermissionManagerImpl extends AbstractLogEnabled implement
         {
             throw new DataBackendException("Could not create a permission with an id!");
         }
+        if (checkExists(permission))
+        {
+            throw new EntityExistsException("The permission '" + permission.getName() + "' already exists");
+        }
         try
         {
-            permissionExists = checkExists(permission);
-            if (!permissionExists)
+            session = hibernateService.openSession();
+            transaction = session.beginTransaction();
+            session.save(permission);
+            transaction.commit();
+        }
+        catch (HibernateException e)
+        {
+            log.error("Error adding permission", e);
+            try
             {
-                permission.setId(getUniqueId());
-                permissions.add(permission);
-                return permission;
+                transaction.rollback();
             }
+            catch (HibernateException he)
+            {
+            }
+            throw new DataBackendException("Failed to create permission '" + permission.getName() + "'", e);
         }
-        catch (Exception e)
-        {
-            throw new DataBackendException("addPermission(Permission) failed", e);
-        }
-        finally
-        {
-        }
-        // the only way we could get here without return/throw tirggered
-        // is that the permissionExists was true.
-        throw new EntityExistsException("Permission '" + permission + "' already exists");
+        return permission;
     }
     /**
-    	 * Retrieves all permissions associated with a role.
-    	 *
-    	 * @param role the role name, for which the permissions are to be retrieved.
-    	 * @return A Permission set for the Role.
-    	 * @throws DataBackendException if there was an error accessing the data
-    	 *         backend.
-    	 * @throws UnknownEntityException if the role is not present.
-    	 */
+	 * Retrieves all permissions associated with a role.
+	 *
+	 * @param role the role name, for which the permissions are to be retrieved.
+	 * @return A Permission set for the Role.
+	 * @throws DataBackendException if there was an error accessing the data
+	 *         backend.
+	 * @throws UnknownEntityException if the role is not present.
+	 */
     public PermissionSet getPermissions(Role role) throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
@@ -376,14 +408,14 @@ public class HibernatePermissionManagerImpl extends AbstractLogEnabled implement
         throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
     }
     /**
-    	* Determines if the <code>Role</code> exists in the security system.
-    	*
-    	* @param role a <code>Role</code> value
-    	* @return true if the role exists in the system, false otherwise
-    	* @throws DataBackendException when more than one Role with
-    	*         the same name exists.
-    	* @throws Exception A generic exception.
-    	*/
+	* Determines if the <code>Role</code> exists in the security system.
+	*
+	* @param role a <code>Role</code> value
+	* @return true if the role exists in the system, false otherwise
+	* @throws DataBackendException when more than one Role with
+	*         the same name exists.
+	* @throws Exception A generic exception.
+	*/
     public boolean checkExists(Role role) throws DataBackendException
     {
         try
@@ -396,14 +428,17 @@ public class HibernatePermissionManagerImpl extends AbstractLogEnabled implement
         }
     }
     /**
-    	  * Avalon component lifecycle method
-    	  */
+    * Avalon component lifecycle method
+    */
     public void compose(ComponentManager manager) throws ComponentException
     {
         this.manager = manager;
+        hibernateService = (HibernateService) manager.lookup(HibernateService.ROLE);
     }
-    private int getUniqueId()
+    public void dispose()
     {
-        return ++uniqueId;
+        hibernateService = null;
+        manager = null;
+        roleManager = null;
     }
 }

@@ -52,10 +52,15 @@ package org.apache.fulcrum.security.spi.hibernate.simple;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
+import net.sf.hibernate.avalon.HibernateService;
+
+import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.framework.component.ComponentManager;
 import org.apache.avalon.framework.component.Composable;
@@ -67,7 +72,7 @@ import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
-import org.apache.fulcrum.security.model.simple.manager.*;
+import org.apache.fulcrum.security.model.simple.manager.SimpleGroupManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.GroupSet;
@@ -78,13 +83,14 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class HibernateGroupManagerImpl extends AbstractLogEnabled implements SimpleGroupManager, Composable
+public class HibernateGroupManagerImpl extends AbstractLogEnabled implements SimpleGroupManager, Composable, Disposable
 {
     /** Logging */
     private static Log log = LogFactory.getLog(HibernateGroupManagerImpl.class);
-    private static List groups = new ArrayList();
-    /** Our Unique ID counter */
-    private static int uniqueId = 0;
+    /** Hibernate components */
+    private HibernateService hibernateService;
+    private Session session;
+    private Transaction transaction;
     private ComponentManager manager = null;
     /** Our role Manager **/
     private RoleManager roleManager;
@@ -201,7 +207,18 @@ public class HibernateGroupManagerImpl extends AbstractLogEnabled implements Sim
     	 */
     public GroupSet getAllGroups() throws DataBackendException
     {
-        return new GroupSet(groups);
+        GroupSet groupSet = new GroupSet();
+        try
+        {
+            session = hibernateService.openSession();
+            List groups = session.find("from SimpleGroup");
+            groupSet.add(groups);
+        }
+        catch (HibernateException e)
+        {
+            throw new DataBackendException("Error retriving group information", e);
+        }
+        return groupSet;
     }
     /**
     	* Removes a Group from the system.
@@ -219,8 +236,10 @@ public class HibernateGroupManagerImpl extends AbstractLogEnabled implements Sim
             groupExists = checkExists(group);
             if (groupExists)
             {
-                groups.remove(group);
-                return;
+                session = hibernateService.openSession();
+                transaction = session.beginTransaction();
+                session.delete(group);
+                transaction.commit();
             }
             else
             {
@@ -233,9 +252,7 @@ public class HibernateGroupManagerImpl extends AbstractLogEnabled implements Sim
             log.error(e);
             throw new DataBackendException("removeGroup(Group) failed", e);
         }
-        finally
-        {
-        }
+
     }
     /**
     	* Renames an existing Group.
@@ -254,9 +271,8 @@ public class HibernateGroupManagerImpl extends AbstractLogEnabled implements Sim
             groupExists = checkExists(group);
             if (groupExists)
             {
-                groups.remove(group);
                 group.setName(name);
-                groups.add(group);
+                saveGroup(group);
             }
             else
             {
@@ -266,9 +282,6 @@ public class HibernateGroupManagerImpl extends AbstractLogEnabled implements Sim
         catch (Exception e)
         {
             throw new DataBackendException("renameGroup(Group,String)", e);
-        }
-        finally
-        {
         }
     }
     /**
@@ -287,8 +300,10 @@ public class HibernateGroupManagerImpl extends AbstractLogEnabled implements Sim
             groupExists = checkExists(group);
             if (groupExists)
             {
-                groups.remove(group);
-                groups.add(group);
+                session = hibernateService.openSession();
+                transaction = session.beginTransaction();
+                session.update(group);
+                transaction.commit();
             }
             else
             {
@@ -311,34 +326,31 @@ public class HibernateGroupManagerImpl extends AbstractLogEnabled implements Sim
      */
     public boolean checkExists(Group group) throws DataBackendException
     {
+        List groups;
         try
         {
-            boolean exists = false;
-            for (Iterator i = groups.iterator(); i.hasNext();)
-            {
-                Group g = (Group) i.next();
-                if (g.getName().equalsIgnoreCase(group.getName()) | g.getId() == group.getId())
-                {
-                    exists = true;
-                }
-            }
-            return exists;
-            //return groups.contains(group);
+            session = hibernateService.openSession();
+            groups = session.find("from SimpleGroup sg where sg.name=?", group.getName(), Hibernate.STRING);
         }
-        catch (Exception e)
+        catch (HibernateException e)
         {
-            throw new DataBackendException("Problem checking if groups exists", e);
+            throw new DataBackendException("Error retriving user information", e);
         }
+        if (groups.size() > 1)
+        {
+            throw new DataBackendException("Multiple groups with same name '" + group.getName() + "'");
+        }
+        return (groups.size() == 1);
     }
     /**
-    	* Creates a new group with specified attributes.
-    	*
-    	* @param group the object describing the group to be created.
-    	* @return a new Group object that has id set up properly.
-    	* @throws DataBackendException if there was an error accessing the data
-    	*         backend.
-    	* @throws EntityExistsException if the group already exists.
-    	*/
+	* Creates a new group with specified attributes.
+	*
+	* @param group the object describing the group to be created.
+	* @return a new Group object that has id set up properly.
+	* @throws DataBackendException if there was an error accessing the data
+	*         backend.
+	* @throws EntityExistsException if the group already exists.
+	*/
     public synchronized Group addGroup(Group group) throws DataBackendException, EntityExistsException
     {
         boolean groupExists = false;
@@ -350,28 +362,40 @@ public class HibernateGroupManagerImpl extends AbstractLogEnabled implements Sim
         {
             throw new DataBackendException("Could not create a group with an id!");
         }
-        groupExists = checkExists(group);
-        if (!groupExists)
+        if (checkExists(group))
         {
-            group.setId(getUniqueId());
-            groups.add(group);
-            // return the object with correct id
-            return group;
+            throw new EntityExistsException("The group '" + group.getName() + "' already exists");
         }
-        else
+        try
         {
-            throw new EntityExistsException("Group '" + group + "' already exists");
+            session = hibernateService.openSession();
+            transaction = session.beginTransaction();
+            session.save(group);
+            transaction.commit();
         }
+        catch (HibernateException e)
+        {
+            log.error("Error adding group", e);
+            try
+            {
+                transaction.rollback();
+            }
+            catch (HibernateException he)
+            {
+            }
+            throw new DataBackendException("Failed to create group '" + group.getName() + "'", e);
+        }
+        return group;
     }
     /**
-    	  * Grants a Group a Role
-    	  *
-    	  * @param group the Group.
-    	  * @param role the Role.
-    	  * @throws DataBackendException if there was an error accessing the data
-    	  *         backend.
-    	  * @throws UnknownEntityException if group or role is not present.
-    	  */
+	  * Grants a Group a Role
+	  *
+	  * @param group the Group.
+	  * @param role the Role.
+	  * @throws DataBackendException if there was an error accessing the data
+	  *         backend.
+	  * @throws UnknownEntityException if group or role is not present.
+	  */
     public synchronized void grant(Group group, Role role) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
@@ -464,9 +488,16 @@ public class HibernateGroupManagerImpl extends AbstractLogEnabled implements Sim
     public void compose(ComponentManager manager) throws ComponentException
     {
         this.manager = manager;
+        hibernateService = (HibernateService) manager.lookup(HibernateService.ROLE);
     }
-    private int getUniqueId()
+    /**
+    	   * DESTRUCTION: step 2
+    	   * @see org.apache.avalon.framework.activity.Disposable#dispose()
+    	   */
+    public void dispose()
     {
-        return ++uniqueId;
+        hibernateService = null;
+        manager = null;
+        roleManager = null;
     }
 }
