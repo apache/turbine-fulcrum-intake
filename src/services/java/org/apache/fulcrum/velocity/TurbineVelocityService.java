@@ -338,20 +338,11 @@ public class TurbineVelocityService
         {
             try
             {
-<<<<<<< TurbineVelocityService.java
                 writer = new OutputStreamWriter(output, charset);
-=======
-                // Request scoped encoding first supported by Velocity 1.1.
-                Velocity.mergeTemplate(filename, encoding, vc, writer);
->>>>>>> 1.9
             }
             catch (Exception e)
             {
-<<<<<<< TurbineVelocityService.java
                 renderingError(filename, e);
-=======
-                Velocity.mergeTemplate(filename, vc, writer);
->>>>>>> 1.9
             }
             handleRequest(context, filename, writer, encoding);
         }
