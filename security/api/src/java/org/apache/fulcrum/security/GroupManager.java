@@ -179,6 +179,19 @@ extends Component
 		   *         the same name exists.
 		   * @throws Exception A generic exception.
 		   */
-		public boolean checkExists(Group group) throws DataBackendException;		  
+		public boolean checkExists(Group group) throws DataBackendException;	
+		
+		/**
+		 * Determines if a <code>Group</code> exists in the security system
+		 * with the specified name.
+		 * 
+		 * @param groupName the name of a <code>Group</code> to check.
+		 * @return true if the group exists in the system, false otherwise
+		 * @throws DataBackendException
+		 *             when more than one group with the same name exists.
+		 * @throws Exception
+		 *             A generic exception.
+		 */
+		public boolean checkExists(String group) throws DataBackendException;		
 			  
 }

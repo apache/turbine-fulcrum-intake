@@ -168,4 +168,18 @@ public interface RoleManager extends Component
     		   * @throws Exception A generic exception.
     		   */
     boolean checkExists(Role role) throws DataBackendException;
+    
+	/**
+	 * Determines if a <code>Role</code> exists in the security system with
+	 * the specified role name.
+	 * 
+	 * @param roleName
+	 *            the name of a <code>Role</code> to check.
+	 * @return true if the role exists in the system, false otherwise
+	 * @throws DataBackendException
+	 *             when more than one Role with the same name exists.
+	 * @throws Exception
+	 *             A generic exception.
+	 */
+	boolean checkExists(String roleName) throws DataBackendException;    
 }

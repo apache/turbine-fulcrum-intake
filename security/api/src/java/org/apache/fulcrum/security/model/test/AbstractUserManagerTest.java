@@ -57,6 +57,7 @@ import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.UserSet;
@@ -89,6 +90,17 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
         assertFalse(userManager.checkExists("ImaginaryFriend"));
         user = userManager.getUserInstance("ImaginaryFriend");
         assertFalse(userManager.checkExists(user));
+    }
+    
+    public void testCheckExistsWithString() throws Exception
+    {
+        user = userManager.getUserInstance("Philip2");
+        userManager.addUser(user, "bobo");
+        assertTrue(userManager.checkExists("philip2"));
+        assertTrue(userManager.checkExists(user.getName()));
+        assertFalse(userManager.checkExists("ImaginaryFriend2"));
+        user = userManager.getUserInstance("ImaginaryFriend2");
+        assertFalse(userManager.checkExists(user.getName()));
     }
     /*
      * Class to test for User retrieve(String)
@@ -235,5 +247,28 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
         assertNotNull(user.getId());
         assertNotNull(userManager.getUser(user.getName()));
     }
+    
+    /*
+     * Class to test for boolean checkExists(string)
+     */
+    public void testAddUserTwiceFails() throws Exception
+    {
+        user = userManager.getUserInstance("EATLUNCH");
+        userManager.addUser(user,"bob");
+        assertTrue(userManager.checkExists(user.getName()));
+        User user2 = userManager.getUserInstance("EATLUNCH");
+        try {
+            userManager.addUser(user2,"bob");
+        }
+        catch (EntityExistsException uee){
+            //good
+        }
+        try {
+            userManager.addUser(user2,"differentpassword");
+        }
+        catch (EntityExistsException uee){
+            //good
+        }        
+    }         
    
 }

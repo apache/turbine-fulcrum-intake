@@ -170,4 +170,17 @@ extends Component
 		   * @throws Exception A generic exception.
 		   */
 	 boolean checkExists(Permission permission) throws DataBackendException;    
+	 
+		/**
+		 * Determines if a <code>Permission</code> exists in the security
+		 * system with the specified name.
+		 * 
+		 * @param permissionName the name of a <code>Permission</code> to check
+		 * @return true if the permission exists in the system, false otherwise
+		 * @throws DataBackendException
+		 *             when more than one Permission with the same name exists.
+		 * @throws Exception
+		 *             A generic exception.
+		 */
+		boolean checkExists(String permissionName) throws DataBackendException;	 
 }

@@ -56,6 +56,7 @@ package org.apache.fulcrum.security.model.test;
 import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
@@ -167,4 +168,28 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         Role role2 = roleManager.getRoleInstance("WALK_DOGS");
         assertFalse(roleManager.checkExists(role2));
     }
+    public void testCheckExistsWithString() throws Exception
+    {
+        role = roleManager.getRoleInstance("GREET_PEOPLE2");
+        roleManager.addRole(role);
+        assertTrue(roleManager.checkExists(role.getName()));
+        Role role2 = roleManager.getRoleInstance("WALK_DOGS2");
+        assertFalse(roleManager.checkExists(role2.getName()));
+    }
+    /*
+     * Class to test for boolean checkExists(string)
+     */
+    public void testAddRoleTwiceFails() throws Exception
+    {
+        role = roleManager.getRoleInstance("EATLUNCH");
+        roleManager.addRole(role);
+        assertTrue(roleManager.checkExists(role.getName()));
+        Role role2 = roleManager.getRoleInstance("EATLUNCH");
+        try {
+            roleManager.addRole(role2);
+        }
+        catch (EntityExistsException uee){
+            //good
+        }
+    }         
 }

@@ -59,6 +59,7 @@ import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
+import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
@@ -187,4 +188,32 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
         Permission permission2 = permissionManager.getPermissionInstance("CLOSE_OFFICE");
         assertFalse(permissionManager.checkExists(permission2));
     }
+    /*
+     * Class to test for boolean checkExists(string)
+     */
+    public void testCheckExistsPermissionWithString() throws Exception
+    {
+        permission = permissionManager.getPermissionInstance("OPEN_OFFICE2");
+        permissionManager.addPermission(permission);
+        assertTrue(permissionManager.checkExists(permission.getName()));
+        Permission permission2 = permissionManager.getPermissionInstance("CLOSE_OFFICE2");
+        assertFalse(permissionManager.checkExists(permission2.getName()));
+    }
+    
+    /*
+     * Class to test for boolean checkExists(string)
+     */
+    public void testAddPermissionTwiceFails() throws Exception
+    {
+        permission = permissionManager.getPermissionInstance("EATLUNCH");
+        permissionManager.addPermission(permission);
+        assertTrue(permissionManager.checkExists(permission.getName()));
+        Permission permission2 = permissionManager.getPermissionInstance("EATLUNCH");
+        try {
+            permissionManager.addPermission(permission2);
+        }
+        catch (EntityExistsException uee){
+            //good
+        }
+    }    
 }

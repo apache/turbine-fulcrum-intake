@@ -26,12 +26,12 @@ package org.apache.fulcrum.security.model.test;
  *
  * 4. The names "Apache" and "Apache Software Foundation" and
  *    "Apache Turbine" must not be used to endorse or promote products
- *    derived from this software without prior written permission. For
- *    written permission, please contact apache@apache.org.
+ *    derived from this software without prior written group. For
+ *    written group, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
  *    "Apache Turbine", nor may "Apache" appear in their name, without
- *    prior written permission of the Apache Software Foundation.
+ *    prior written group of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
@@ -57,6 +57,7 @@ import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
+import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
@@ -169,6 +170,32 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         Group group2 = groupManager.getGroupInstance("WALK_DOGS");
         assertFalse(groupManager.checkExists(group2));
     }
+    
+    public void testCheckExistsWithString() throws Exception
+    {
+        group = groupManager.getGroupInstance("GREET_PEOPLE2");
+        groupManager.addGroup(group);
+        assertTrue(groupManager.checkExists(group.getName()));
+        Group group2 = groupManager.getGroupInstance("WALK_DOGS2");
+        assertFalse(groupManager.checkExists(group2.getName()));
+    }
+    
+    /*
+     * Class to test for boolean checkExists(string)
+     */
+    public void testAddGroupTwiceFails() throws Exception
+    {
+        group = groupManager.getGroupInstance("EATLUNCH");
+        groupManager.addGroup(group);
+        assertTrue(groupManager.checkExists(group.getName()));
+        Group group2 = groupManager.getGroupInstance("EATLUNCH");
+        try {
+            groupManager.addGroup(group2);
+        }
+        catch (EntityExistsException uee){
+            //good
+        }
+    }     
     public void testAddGroup() throws Exception
     {
         group = groupManager.getGroupInstance("CLEAN_RABBIT_HUTCHES");
