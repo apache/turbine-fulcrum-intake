@@ -23,4 +23,4 @@ plugin. It can be installed by running the plugin:download goal
 like this:
 
 $ maven plugin:download -DartifactId=avalon-meta-plugin -DgroupId=avalon-meta -Dversion=1.2
-$ maven plugin:download -DartifactId=merlin-plugin -DgroupId=merlin -Dversion=1.1-snapshot
+$ maven plugin:download -DartifactId=merlin-plugin -DgroupId=merlin -Dversion=1.1-SNAPSHOT
