@@ -167,10 +167,68 @@
 
   </section>
 
-  <section name="Usage">
-    <p>
-    </p>
-  </section>
+<section name="Usage">
+
+<p>
+  The following example is taken from the class used to test the
+  file transfer features of the XML-RPC service. The <strong>
+  org.apache.fulcrum.xmlrpc.util.FileHandlerTest</strong>
+  can be found in the CVS repository. Here is how the FileHandler
+  might be used:
+</p>
+
+<source><![CDATA[
+
+public class XmlRpcExample
+{
+    /**
+     * We will test the following three operations:
+     *
+     * 1) Send a file to a remove server
+     * 2) Get a file from a remote server
+     * 3) Remove a file to a remove server
+     */
+    public void testOperations() throws Exception
+    {
+        /*
+         * @param serverURL
+         * @param sourceLocationProperty
+         * @param sourceFileName
+         * @param destinationLocationProperty
+         * @param destinationFileName
+         */
+        FileTransfer.send("http://www.far-away.com:9000/RPC2",
+                          "test.location",
+                          "test.txt",
+                          "test.location",
+                          "test.send");
+        /*
+         * @param serverURL
+         * @param sourceLocationProperty
+         * @param sourceFileName
+         * @param destinationLocationProperty
+         * @param destinationFileName
+         */
+        FileTransfer.get("http://www.far-away.com:9000/RPC2",
+                         "test.location",
+                         "test.txt",
+                         "test.location",
+                         "test.get");
+
+        /*
+         * @param serverURL
+         * @param sourceLocationProperty
+         * @param sourceFileName
+         */
+        FileTransfer.remove("http://www.far-away.com:9000/RPC2",
+                            "test.location",
+                            "test.txt");
+    }
+}
+
+]]></source>
+
+</section>
 
 </body>
 </document>
