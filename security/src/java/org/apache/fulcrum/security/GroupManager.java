@@ -121,18 +121,9 @@ extends Component
 	* @exception DataBackendException if there is a problem accessing the
 	*            storage.
 	*/
-    Group getGroupById(int id) throws DataBackendException, UnknownEntityException;
+    Group getGroupById(long id) throws DataBackendException, UnknownEntityException;
     
-	/**
-	 * Stores Group's attributes. The Groups is required to exist in the system.
-	 *
-	 * @param group The Group to be stored.
-	 * @throws DataBackendException if there was an error accessing the data
-	 *         backend.
-	 * @throws UnknownEntityException if the group does not exist.
-	 */
-	void saveGroup(Group group)
-			throws DataBackendException, UnknownEntityException;  
+	 
 			
 	/**
 	 * Renames an existing Group.

@@ -129,7 +129,7 @@ public interface RoleManager extends Component
     	* @exception DataBackendException if there is a problem accessing the
     	*            storage.
     	*/
-    Role getRoleById(int id) throws DataBackendException, UnknownEntityException;
+    Role getRoleById(long id) throws DataBackendException, UnknownEntityException;
     /**
      * Retrieves all roles defined in the system.
      *
@@ -138,15 +138,7 @@ public interface RoleManager extends Component
      *         backend.
      */
     RoleSet getAllRoles() throws DataBackendException;
-    /**
-       * Stores Role's attributes. The Roles is required to exist in the system.
-       *
-       * @param role The Role to be stored.
-       * @throws DataBackendException if there was an error accessing the data
-       *         backend.
-       * @throws UnknownEntityException if the role does not exist.
-       */
-    void saveRole(Role role) throws DataBackendException, UnknownEntityException;
+
     /**
       * Creates a new role with specified attributes.
       *

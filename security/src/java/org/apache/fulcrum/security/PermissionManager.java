@@ -130,7 +130,7 @@ extends Component
     	* @exception DataBackendException if there is a problem accessing the
     	*            storage.
     	*/
-    Permission getPermissionById(int id) throws DataBackendException, UnknownEntityException;
+    Permission getPermissionById(long id) throws DataBackendException, UnknownEntityException;
     /**
        * Retrieves all permissions defined in the system.
        *
@@ -139,16 +139,7 @@ extends Component
        *         backend.
        */
     PermissionSet getAllPermissions() throws DataBackendException;
-    /**
-    	* Stores Permission's attributes. The Permission is required to exist in
-    	* the system.
-    	*
-    	* @param permission The Permission to be stored.
-    	* @throws DataBackendException if there was an error accessing the data
-    	*         backend.
-    	* @throws UnknownEntityException if the permission does not exist.
-    	*/
-    void savePermission(Permission permission) throws DataBackendException, UnknownEntityException;
+    
     /**
     	* Creates a new permission with specified attributes.
     	*
