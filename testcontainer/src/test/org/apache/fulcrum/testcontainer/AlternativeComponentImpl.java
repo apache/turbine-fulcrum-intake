@@ -91,6 +91,6 @@ public class AlternativeComponentImpl
 
     public void contextualize(Context context) throws ContextException
     {
-        appRoot = (String) context.get("ComponentAppRoot");
+        appRoot = (String) context.get("componentAppRoot");
     }
 }

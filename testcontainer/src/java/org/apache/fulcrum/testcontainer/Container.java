@@ -53,10 +53,11 @@ package org.apache.fulcrum.testcontainer;
  * <http://www.apache.org/>.
  */
 import java.io.File;
+
 import org.apache.avalon.excalibur.component.DefaultRoleManager;
 import org.apache.avalon.excalibur.component.ExcaliburComponentManager;
-import org.apache.avalon.excalibur.logger.LoggerManager;
 import org.apache.avalon.excalibur.logger.Log4JLoggerManager;
+import org.apache.avalon.excalibur.logger.LoggerManager;
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.component.Component;
@@ -74,6 +75,9 @@ import org.apache.avalon.framework.logger.AbstractLogEnabled;
  */
 public class Container extends AbstractLogEnabled implements Initializable, Disposable
 {
+	/** Key used in the context for defining the application root */
+	public static String COMPONENT_APP_ROOT = "componentAppRoot";
+	
     /** Component manager */
     private ExcaliburComponentManager manager = new ExcaliburComponentManager();
     /** Configurqation file */
@@ -101,9 +105,9 @@ public class Container extends AbstractLogEnabled implements Initializable, Disp
         getLogger().debug("Starting container...");
         this.configFileName = configFileName;
         this.roleFileName = roleFileName;
-        File configFile = new File(configFileName);
+        File configFile = new File(configFileName);        
         if (!configFile.exists())
-        {
+        {            
             throw new RuntimeException(
                 "Could not initialize the container because the config file could not be found:" + configFile);
         }
@@ -151,7 +155,7 @@ public class Container extends AbstractLogEnabled implements Initializable, Disp
         this.manager.setLoggerManager(lm);
         this.manager.enableLogging(lm.getLoggerForCategory("org.apache.fulcrum"));
         DefaultContext context = new DefaultContext();
-        context.put("ComponentAppRoot", (new File("")).getAbsolutePath());
+        context.put(COMPONENT_APP_ROOT, (new File("")).getAbsolutePath());
         this.manager.contextualize(context);
         
         this.manager.configure(sysConfig);

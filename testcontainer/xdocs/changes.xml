@@ -8,6 +8,11 @@
 
   <body>
     <release version="Not applicable" date="">
+      <action dev="epugh" type="update">
+        Changed the name of the component app root to "componentAppRoot" from
+        "ComponentAppRoot".  This matches what Turbine uses.  Really, this should
+        be a configurable thing, not a hardcoded context value.
+      </action>
       <action dev="epugh" type="add">
         TestContainer can accept either the split role.xml, config.xml
         or just a single combined xml file.  Additionally, by lazy loading
