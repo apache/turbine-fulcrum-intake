@@ -962,7 +962,9 @@ public class BaseValueParser
             Object value = null;
             Object object = parameters.get(convert(name));
             if (object != null)
-                value = ((Object[])object)[0];
+            {
+                value = ((Object[]) object)[0];
+            }
             return value;
         }
         catch ( ClassCastException e )
