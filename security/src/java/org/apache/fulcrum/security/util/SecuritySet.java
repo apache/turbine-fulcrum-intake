@@ -67,7 +67,9 @@ import org.apache.fulcrum.security.entity.SecurityEntity;
  * It wraps a TreeSet object to enforce that only relevant
  * methods are available.
  * TreeSet's contain only unique Objects (no duplicates).
- 
+ * Additionally, they must have both a Name and an ID!  You can
+ * add only one object that has a null of each.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>

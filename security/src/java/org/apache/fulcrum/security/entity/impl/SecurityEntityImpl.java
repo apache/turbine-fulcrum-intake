@@ -53,6 +53,8 @@ package org.apache.fulcrum.security.entity.impl;
  * <http://www.apache.org/>.
  */
 
+import java.security.InvalidParameterException;
+
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.fulcrum.security.entity.SecurityEntity;
 
@@ -95,10 +97,10 @@ public class SecurityEntityImpl implements SecurityEntity
      */
     public void setName(String name)
     {
-        if (name !=null){
-            name = name.toLowerCase();
+        if (name ==null){
+            throw new InvalidParameterException("Must provide a valid name for all SecurityEntities.");
         }
-        this.name = name;
+		this.name = name.toLowerCase();
     }
     public String toString()
     {

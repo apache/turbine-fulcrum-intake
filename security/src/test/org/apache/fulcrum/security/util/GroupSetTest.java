@@ -1,4 +1,4 @@
-package org.apache.fulcrum.security.entity.impl;
+package org.apache.fulcrum.security.util;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -17,7 +17,7 @@ package org.apache.fulcrum.security.entity.impl;
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
- * 3. The end-user documentation included with the redistribution,
+ * 3. The end-group documentation included with the redistribution,
  *    if any, must include the following acknowledgment:
  *       "This product includes software developed by the
  *        Apache Software Foundation (http://www.apache.org/)."
@@ -53,46 +53,55 @@ package org.apache.fulcrum.security.entity.impl;
  * <http://www.apache.org/>.
  */
 
-import java.security.InvalidParameterException;
-
-import org.apache.fulcrum.security.entity.SecurityEntity;
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 /**
- * Test the SecurityEntityImple
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class SecurityEntityImplTest extends BaseUnitTest
+public class GroupSetTest extends BaseUnitTest
 {
-    
+   
     /**
-    	* Constructor for SecurityEntityImplTest.
-    	* @param arg0
-    	*/
-    public SecurityEntityImplTest(String arg0)
-    {
-        super(arg0);
-    }
-    
-    /**
-     * Make sure lowercasing logic works properly.
-     * @throws Exception
+     * Defines the testcase name for JUnit.
+     *
+     * @param name the testcase's name.
      */
-    public void testSettingGettingName() throws Exception
+    public GroupSetTest(String name)
     {
-        SecurityEntity se = new SecurityEntityImpl();
-        se.setName("hello");
-        assertEquals("hello",se.getName());
-        se.setName("HelLo");
-		assertEquals("hello",se.getName());
-		try {
-		    se.setName(null);
-		    fail("Should throw an InvalidParameterException");
-		}
-		catch(InvalidParameterException ipe){
-		    //good
-		}
-		
+        super(name);
     }
+    public static void main(String[] args)
+    {
+        junit.textui.TestRunner.run(GroupSetTest.class);
+    }
+    
+	public void testAddGroups() throws Exception
+	   {
+		Group group = new SimpleGroup();
+		   group.setId(new Integer(1));
+		   group.setName("Eric");
+		   GroupSet groupSet = new GroupSet();
+		   groupSet.add(group);
+		   assertTrue(groupSet.contains(group));
+
+		   Group group2 = new SimpleGroup();
+		   group2.setName("Kate");
+		   group2.setId(new Integer(2));
+		   groupSet.add(group2);
+
+		   Group group3 = new SimpleGroup();
+		   group3.setId(new Integer(1));
+		   group3.setName("Eric");
+		   assertTrue(groupSet.contains(group));
+		   assertTrue(groupSet.contains((Object) group));
+		   assertTrue(groupSet.contains(group2));
+		   assertFalse(groupSet.contains(group3));
+		   assertTrue(groupSet.contains(group));
+
+	   }
+  
+   
 }

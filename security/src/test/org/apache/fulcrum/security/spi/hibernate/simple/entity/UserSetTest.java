@@ -1,4 +1,4 @@
-package org.apache.fulcrum.security.entity.impl;
+package org.apache.fulcrum.security.spi.hibernate.simple.entity;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -53,46 +53,54 @@ package org.apache.fulcrum.security.entity.impl;
  * <http://www.apache.org/>.
  */
 
-import java.security.InvalidParameterException;
-
-import org.apache.fulcrum.security.entity.SecurityEntity;
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.simple.entity.SimpleUser;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 /**
- * Test the SecurityEntityImple
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class SecurityEntityImplTest extends BaseUnitTest
+public class UserSetTest extends BaseUnitTest
 {
-    
+
     /**
-    	* Constructor for SecurityEntityImplTest.
-    	* @param arg0
-    	*/
-    public SecurityEntityImplTest(String arg0)
+	 * Defines the testcase name for JUnit.
+	 * 
+	 * @param name the testcase's name.
+	 */
+    public UserSetTest(String name)
     {
-        super(arg0);
+        super(name);
     }
-    
-    /**
-     * Make sure lowercasing logic works properly.
-     * @throws Exception
-     */
-    public void testSettingGettingName() throws Exception
+    public static void main(String[] args)
     {
-        SecurityEntity se = new SecurityEntityImpl();
-        se.setName("hello");
-        assertEquals("hello",se.getName());
-        se.setName("HelLo");
-		assertEquals("hello",se.getName());
-		try {
-		    se.setName(null);
-		    fail("Should throw an InvalidParameterException");
-		}
-		catch(InvalidParameterException ipe){
-		    //good
-		}
-		
+        junit.textui.TestRunner.run(UserSetTest.class);
     }
+
+    public void testAddUsers() throws Exception
+    {
+        User user = new SimpleUser();
+        user.setId(new Integer(1));
+        user.setName("Eric");
+        UserSet userSet = new UserSet();
+        userSet.add(user);
+        assertTrue(userSet.contains(user));
+
+        User user2 = new SimpleUser();
+        user2.setName("Kate");
+        user2.setId(new Integer(2));
+        userSet.add(user2);
+
+        User user3 = new SimpleUser();
+        user3.setId(new Integer(1));
+        user3.setName("Eric");
+        assertTrue(userSet.contains(user));
+        assertTrue(userSet.contains((Object) user));
+        assertTrue(userSet.contains(user2));
+        assertFalse(userSet.contains(user3));
+		assertTrue(userSet.contains(user));
+
+    }
+
 }

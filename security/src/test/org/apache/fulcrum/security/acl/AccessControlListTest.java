@@ -73,10 +73,12 @@ import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
+
 /**
- * @author Eric Pugh
- *
  * Test that we can generate AccessControlLists from the Factory
+ * 
+ * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
+ * @version $Id$
  */
 public class AccessControlListTest extends BaseUnitTest
 {
