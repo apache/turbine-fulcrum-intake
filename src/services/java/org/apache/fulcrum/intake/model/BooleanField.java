@@ -55,8 +55,8 @@ package org.apache.fulcrum.intake.model;
  */
 
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
-import org.apache.fulcrum.Log;
 import org.apache.fulcrum.util.parser.ValueParser;
+import org.apache.log4j.Category;
 
 /**
  * Base class for Intake generated input processing classes.
@@ -66,6 +66,11 @@ import org.apache.fulcrum.util.parser.ValueParser;
  */
 public class BooleanField extends Field
 {
+    /**
+     * Log4j category
+     */
+    Category category = Category.getInstance(getClass().getName());
+
     public BooleanField(XmlField field, Group group)
         throws Exception
     {
@@ -99,7 +104,7 @@ public class BooleanField extends Field
         }
         catch (Exception e)
         {
-            Log.error(e);
+            category.error(e);
         }
         return result;
     }

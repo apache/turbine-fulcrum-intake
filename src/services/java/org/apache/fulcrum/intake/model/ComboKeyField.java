@@ -60,12 +60,17 @@ import org.apache.torque.om.ComboKey;
 import org.apache.torque.om.ObjectKey;
 import org.apache.fulcrum.intake.xmlmodel.Rule;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
-import org.apache.fulcrum.Log;
 //import org.apache.fulcrum.ServiceException;
+import org.apache.log4j.Category;
 
 /**  */
 public class ComboKeyField extends Field
 {
+    /**
+     * Log4j category
+     */
+    Category category = Category.getInstance(getClass().getName());
+
     public ComboKeyField(XmlField field, Group group)
         throws Exception
     {
@@ -97,7 +102,7 @@ public class ComboKeyField extends Field
         catch (Exception e)
         {
             valid_flag = false;
-            Log.error(e);
+            category.error(e);
         }
     }
 }

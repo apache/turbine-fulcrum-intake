@@ -66,8 +66,8 @@ import org.apache.fulcrum.intake.xmlmodel.XmlGroup;
 import org.apache.fulcrum.intake.validator.Validator;
 import org.apache.fulcrum.intake.validator.InitableByConstraintMap;
 import org.apache.fulcrum.intake.validator.ValidationException;
-import org.apache.fulcrum.Log;
 import org.apache.fulcrum.ServiceException;
+import org.apache.log4j.Category;
 
 /**
  * Base class for Intake generated input processing classes.
@@ -110,6 +110,11 @@ public abstract class Field
 
     /** The object containing the request data */
     protected ValueParser pp;
+
+    /**
+     * Log4j category
+     */
+    Category category = Category.getInstance(getClass().getName());
 
     /**
      * Constructs a field based on data in the xml specification
@@ -552,7 +557,7 @@ public abstract class Field
         }
         catch (Exception e)
         {
-            Log.error(e);
+            category.error(e);
         }
 
         if ( getTestValue() != null )
