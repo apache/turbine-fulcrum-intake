@@ -8,6 +8,10 @@
   <body>
     <release version="1.0-alpha-1" date="in cvs">
       <action dev="epugh" type="add">
+		Added an adapter to OSUser.  This allows OSUser to query Fulcrum Security
+		for users and to authenticate them via Fulcrum Security authenticators.
+      </action>
+      <action dev="epugh" type="add">
 		Added an IntegerConverter so the adapter can be used with fulcrum SPI's
 		that use Long/Integer/String (as a number) as the ID.
       </action>      

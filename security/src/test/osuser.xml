@@ -8,14 +8,8 @@
 	<authenticator class="com.opensymphony.user.authenticator.SmartAuthenticator" />
 
     <!-- Fulcrum providers -->
-    <provider class="org.apache.fulcrum.security.adapter.osuser.FulcrumAccessProvider">
-        <property name="datasource">jdbc/DefaultDS</property>
-        
-    </provider>
-    <provider class="org.apache.fulcrum.security.adapter.osuser.FulcrumCredentialsProvider">
-        <property name="datasource">jdbc/DefaultDS</property>
-    </provider>
-	
+    <provider class="org.apache.fulcrum.security.adapter.osuser.FulcrumAccessProvider"/>       
+    <provider class="org.apache.fulcrum.security.adapter.osuser.FulcrumCredentialsProvider"/>
 	<!-- don't have a propertyset provider, so just return a memory one. -->
     <provider class="com.opensymphony.user.provider.memory.MemoryProfileProvider" />
 </opensymphony-user>

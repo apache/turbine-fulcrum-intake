@@ -66,7 +66,7 @@ import com.opensymphony.user.provider.CredentialsProvider;
 /**
  * Fulcrum provider for OSUser.  Primarily provides support for authenticating
  * a user.  This delegates to whatever authenticator is configured in the
- * SecurityService.
+ * getSecurityService().
  * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
@@ -86,8 +86,8 @@ public class FulcrumCredentialsProvider
 	{
 		try
 		{
-			User user = securityService.getUserManager().getUser(name);
-			securityService.getUserManager().authenticate(user, password);
+			User user = getSecurityService().getUserManager().getUser(name);
+			getSecurityService().getUserManager().authenticate(user, password);
 			return true;
 		}
 		catch (PasswordMismatchException pme)
@@ -145,7 +145,7 @@ public class FulcrumCredentialsProvider
 	{
 		try
 		{
-			User user = securityService.getUserManager().getUser(name);
+			User user = getSecurityService().getUserManager().getUser(name);
 			return true;
 		}
 		catch (UnknownEntityException uee)

@@ -77,14 +77,13 @@ import com.opensymphony.user.provider.UserProvider;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public abstract class BaseFulcrumProvider extends AbstractLogEnabled implements UserProvider,Composable, Disposable,Component
+public abstract class BaseFulcrumProvider implements UserProvider
 {
-	/** Component Manager to query for the SecurityService through */
-	protected ComponentManager manager = null;
+
 	/** Logging */
 	private static Log log = LogFactory.getLog(BaseFulcrumProvider.class);
 	/** Our Fulcrum Security Service to use */
-	private SecurityService securityService;
+	private static SecurityService securityService;
 
 	/*
 	 * Does nothing for now.
@@ -162,7 +161,8 @@ public abstract class BaseFulcrumProvider extends AbstractLogEnabled implements 
 		 {
 			 try
 			 {
-				securityService = (SecurityService) manager.lookup(SecurityService.ROLE);
+			    throw new ComponentException(SecurityService.ROLE,"SecurityService not initialized!");
+	//			securityService = (SecurityService) manager.lookup(SecurityService.ROLE);
 			 }
 			 catch (ComponentException ce)
 			 {
@@ -179,22 +179,10 @@ public abstract class BaseFulcrumProvider extends AbstractLogEnabled implements 
 	 * @param securityService
 	 *            The securityService to set.
 	 */
-	public void setSecurityService(SecurityService securityService)
+	public static void setSecurityService(SecurityService asecurityService)
 	{
-		this.securityService = securityService;
+		securityService = asecurityService;
 	}
 
-	/**
-	  * Avalon component lifecycle method
-	  */
-	public void compose(ComponentManager manager) throws ComponentException
-	{
-		this.manager = manager;
-	}
-	public void dispose()
-	{
-		manager = null;
-		securityService = null;
-		
-	}
+
 }

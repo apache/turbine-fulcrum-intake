@@ -107,9 +107,9 @@ public class FulcrumAccessProvider
 	{
 		try
 		{
-			User user = securityService.getUserManager().getUser(username);
+			User user = getSecurityService().getUserManager().getUser(username);
 			AccessControlList acl =
-				securityService.getUserManager().getACL(user);
+			getSecurityService().getUserManager().getACL(user);
 			return acl.hasRole(acl.getRoles().getRoleByName(groupname));
 		}
 		catch (UnknownEntityException uee)
@@ -135,9 +135,9 @@ public class FulcrumAccessProvider
 		List roles = new ArrayList();
 		try
 		{
-			User user = securityService.getUserManager().getUser(username);
+			User user = getSecurityService().getUserManager().getUser(username);
 			AccessControlList acl =
-				securityService.getUserManager().getACL(user);
+				getSecurityService().getUserManager().getACL(user);
 			roles.addAll(acl.getRoles().getNames());
 			
 		}
@@ -203,7 +203,7 @@ public class FulcrumAccessProvider
 	{
 		try
 		{
-			User user = securityService.getUserManager().getUser(name);
+			User user = getSecurityService().getUserManager().getUser(name);
 			return true;
 		}
 		catch (UnknownEntityException uee)

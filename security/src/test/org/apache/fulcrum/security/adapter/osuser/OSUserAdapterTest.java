@@ -41,9 +41,9 @@ package org.apache.fulcrum.security.adapter.osuser;
  * Apache Software Foundation, please see <http://www.apache.org/> .
  */
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.fulcrum.security.SecurityService;
+import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
@@ -55,6 +55,7 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 import com.opensymphony.user.UserManager;
 import com.opensymphony.user.provider.AccessProvider;
+import com.opensymphony.user.provider.CredentialsProvider;
 
 /**
  * Test that we can load up OSUser backed by Fulcrum Security. The fulcrum
@@ -68,18 +69,18 @@ import com.opensymphony.user.provider.AccessProvider;
 public class OSUserAdapterTest extends BaseUnitTest
 {
 
-	protected UserManager osUserManager;
-	protected org.apache.fulcrum.security.UserManager fulcrumUserManager;
-	protected SecurityService securityService;
-	public OSUserAdapterTest(String name) throws Exception
-	{
-		super(name);
-	}
-	public void setUp()
-	{
-		try
-		{
-			/*
+    protected UserManager osUserManager;
+    
+    protected SecurityService securityService;
+    public OSUserAdapterTest(String name) throws Exception
+    {
+        super(name);
+    }
+    public void setUp()
+    {
+        try
+        {
+            /*
 			 * this.setRoleFileName(null);
 			 * this.setConfigurationFileName("src/test/SimpleMemory.xml");
 			 * securityService = (SecurityService)
@@ -88,105 +89,113 @@ public class OSUserAdapterTest extends BaseUnitTest
 			 * 
 			 * osUserManager = new UserManager("osuser.xml");
 			 */
-		}
-		catch (Exception e)
-		{
-			fail(e.toString());
-		}
-	}
-	public void tearDown()
-	{
+        }
+        catch (Exception e)
+        {
+            fail(e.toString());
+        }
+    }
+    public void tearDown()
+    {
 
-		osUserManager = null;
-		fulcrumUserManager = null;
-		securityService = null;
-	}
-	public void testUsingAvalonComponents() throws Exception
-	{
+        osUserManager = null;
+    
+        securityService = null;
+    }
+    public void testUsingAvalonComponents() throws Exception
+    {
 
-		this.setRoleFileName(null);
-		this.setConfigurationFileName("src/test/SimpleMemory.xml");
-		securityService = (SecurityService) lookup(SecurityService.ROLE);
-		fulcrumUserManager = securityService.getUserManager();
+        this.setRoleFileName(null);
+        this.setConfigurationFileName("src/test/OSUserAvalonConf.xml");
+        securityService = (SecurityService) lookup(SecurityService.ROLE);
+        BaseFulcrumProvider.setSecurityService(securityService);
+       
 
-		osUserManager = new UserManager("osuser.xml");
+        osUserManager = new UserManager("osuser.xml");
 
-		Group fulcrumGroup =
-			securityService.getGroupManager().getGroupInstance(
-				"TEST_REVOKEALL");
-		securityService.getGroupManager().addGroup(fulcrumGroup);
-		Group fulcrumGroup2 =
-			securityService.getGroupManager().getGroupInstance(
-				"TEST_REVOKEALL2");
-		securityService.getGroupManager().addGroup(fulcrumGroup2);
-		Role fulcrumRole =
-			securityService.getRoleManager().getRoleInstance("role1");
-		Role fulcrumRole2 =
-			securityService.getRoleManager().getRoleInstance("role2");
-		securityService.getRoleManager().addRole(fulcrumRole);
-		securityService.getRoleManager().addRole(fulcrumRole2);
-		Permission fulcrumPermission =
-			securityService.getPermissionManager().getPermissionInstance(
-				"perm1");
-		Permission fulcrumPermission2 =
-			securityService.getPermissionManager().getPermissionInstance(
-				"perm2");
-		Permission fulcrumPermission3 =
-			securityService.getPermissionManager().getPermissionInstance(
-				"perm3");
-		securityService.getPermissionManager().addPermission(fulcrumPermission);
-		securityService.getPermissionManager().addPermission(
-			fulcrumPermission2);
-		securityService.getPermissionManager().addPermission(
-			fulcrumPermission3);
-		((SimpleRoleManager) securityService.getRoleManager()).grant(
-			fulcrumRole,
-			fulcrumPermission);
-		((SimpleRoleManager) securityService.getRoleManager()).grant(
-			fulcrumRole2,
-			fulcrumPermission2);
-		((SimpleRoleManager) securityService.getRoleManager()).grant(
-			fulcrumRole2,
-			fulcrumPermission3);
-		((SimpleGroupManager) securityService.getGroupManager()).grant(
-			fulcrumGroup,
-			fulcrumRole);
-		((SimpleGroupManager) securityService.getGroupManager()).grant(
-			fulcrumGroup,
-			fulcrumRole2);
-		((SimpleGroupManager) securityService.getGroupManager()).grant(
-			fulcrumGroup2,
-			fulcrumRole2);
-		org.apache.fulcrum.security.entity.User fulcrumUser =
-			securityService.getUserManager().getUserInstance("Jeannie");
-		securityService.getUserManager().addUser(fulcrumUser, "wyatt");
-		((SimpleUserManager) securityService.getUserManager()).grant(
-			fulcrumUser,
-			fulcrumGroup);
-		((SimpleUserManager) securityService.getUserManager()).grant(
-			fulcrumUser,
-			fulcrumGroup2);
-		assertEquals(2, ((SimpleUser) fulcrumUser).getGroups().size());
+        Group fulcrumGroup =
+            securityService.getGroupManager().getGroupInstance(
+                "TEST_REVOKEALL");
+        securityService.getGroupManager().addGroup(fulcrumGroup);
+        Group fulcrumGroup2 =
+            securityService.getGroupManager().getGroupInstance(
+                "TEST_REVOKEALL2");
+        securityService.getGroupManager().addGroup(fulcrumGroup2);
+        Role fulcrumRole =
+            securityService.getRoleManager().getRoleInstance("role1");
+        Role fulcrumRole2 =
+            securityService.getRoleManager().getRoleInstance("role2");
+        securityService.getRoleManager().addRole(fulcrumRole);
+        securityService.getRoleManager().addRole(fulcrumRole2);
+        Permission fulcrumPermission =
+            securityService.getPermissionManager().getPermissionInstance(
+                "perm1");
+        Permission fulcrumPermission2 =
+            securityService.getPermissionManager().getPermissionInstance(
+                "perm2");
+        Permission fulcrumPermission3 =
+            securityService.getPermissionManager().getPermissionInstance(
+                "perm3");
+        securityService.getPermissionManager().addPermission(fulcrumPermission);
+        securityService.getPermissionManager().addPermission(
+            fulcrumPermission2);
+        securityService.getPermissionManager().addPermission(
+            fulcrumPermission3);
+        ((SimpleRoleManager) securityService.getRoleManager()).grant(
+            fulcrumRole,
+            fulcrumPermission);
+        ((SimpleRoleManager) securityService.getRoleManager()).grant(
+            fulcrumRole2,
+            fulcrumPermission2);
+        ((SimpleRoleManager) securityService.getRoleManager()).grant(
+            fulcrumRole2,
+            fulcrumPermission3);
+        ((SimpleGroupManager) securityService.getGroupManager()).grant(
+            fulcrumGroup,
+            fulcrumRole);
+        ((SimpleGroupManager) securityService.getGroupManager()).grant(
+            fulcrumGroup,
+            fulcrumRole2);
+        ((SimpleGroupManager) securityService.getGroupManager()).grant(
+            fulcrumGroup2,
+            fulcrumRole2);
+        org.apache.fulcrum.security.entity.User fulcrumUser =
+            securityService.getUserManager().getUserInstance("Jeannie");
+        securityService.getUserManager().addUser(fulcrumUser, "wyatt");
+        ((SimpleUserManager) securityService.getUserManager()).grant(
+            fulcrumUser,
+            fulcrumGroup);
+        ((SimpleUserManager) securityService.getUserManager()).grant(
+            fulcrumUser,
+            fulcrumGroup2);
+        assertEquals(2, ((SimpleUser) fulcrumUser).getGroups().size());
+
+        Collection accessProviders = osUserManager.getAccessProviders();
+        assertEquals(1, accessProviders.size());
+        AccessProvider accessProvider =
+            (AccessProvider) accessProviders.toArray()[0];
+        assertTrue(accessProvider.handles("Jeannie"));
+        assertTrue(securityService.getUserManager().checkExists("Jeannie"));
+
+        assertEquals("Both should not handle user Bob",accessProvider.handles("Bob") ,securityService.getUserManager().checkExists("Bob"));
+        
+
+        fulcrumUser = securityService.getUserManager().getUser("Jeannie");
+        AccessControlList acl =
+            securityService.getUserManager().getACL(fulcrumUser);
+        assertEquals("Both should have role1",acl.hasRole("role1"),accessProvider.inGroup("Jeannie", "role1"));
+        
+
+        assertEquals("Neither should have role3",acl.hasRole("role3"),accessProvider.inGroup("Jeannie", "role3"));
+        
+        Collection credentialProviders = osUserManager.getCredentialsProviders();
+        assertEquals(1,credentialProviders.size());
+		CredentialsProvider credentialProvider = (CredentialsProvider)credentialProviders.toArray()[0];
 		
-		Collection accessProviders = osUserManager.getAccessProviders();
-		assertEquals(1,accessProviders.size());
-		AccessProvider accessProvider=(AccessProvider)accessProviders.toArray()[0];
-		assertTrue(accessProvider.handles("Jeannie"));
+	
+		assertTrue(credentialProvider.authenticate("Jeannie","wyatt"));
 		
-		/*
-		 * GroupSet groupSet = TurbineSecurity.getService().getAllGroups();
-		 * assertEquals(2, groupSet.size()); RoleSet roleSet =
-		 * TurbineSecurity.getService().getAllRoles(); assertEquals(2,
-		 * roleSet.size()); PermissionSet permissionSet =
-		 * TurbineSecurity.getService().getAllPermissions(); assertEquals(3,
-		 * permissionSet.size()); User turbineUser =
-		 * TurbineSecurity.getService().getUser("Jeannie"); AccessControlList
-		 * acl = TurbineSecurity.getService().getACL(turbineUser);
-		 * assertNotNull(acl); assertEquals(3, acl.getPermissions().size());
-		 * MockHttpSession session = new MockHttpSession();
-		 * session.setupGetAttribute(User.SESSION_KEY, turbineUser);
-		 */
 
-	}
+    }
 
 }
