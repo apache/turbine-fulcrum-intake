@@ -11,13 +11,14 @@
 
   <section name="Overview">
     <p>
-      The OSWorkflow component allows access to a workflow process based on the OpenSymphony
-      OSWorkflow libary.
+      The OSWorkflow component allows access to a workflow process
+      based on the OpenSymphony OSWorkflow libary.
     </p>
   
     <p>
-      It is written for use in any container compatible with Avalon's ECM container.
-    </p>    
+      It is written for use in any container compatible with Avalon's
+      ECM container.
+    </p>
   </section>
   
 <section name="Configuration">
@@ -36,7 +37,9 @@
 </source>
 
   <p>
-    Configuration is currently not required as we use OSWorkflows defaults for finding everything right now.
+    Configuration is currently not required as we use OSWorkflows
+    defaults for finding everything right now.
+
 <source>
 
 <![CDATA[
@@ -50,7 +53,7 @@
   
 <section name="Usage">
   <p>
-  To use the workflow service, look at the included Example application.
+  To use the workflow service, follow the included Example application.
   </p>
 
   </section>
