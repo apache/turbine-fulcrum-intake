@@ -161,50 +161,29 @@ public class TurbineIntakeService
             if ( serialAppData.exists()
                  && serialAppData.lastModified() > xmlFile.lastModified() )
             {
-                InputStream in = new FileInputStream(serialAppData);
-                ObjectInputStream p = new ObjectInputStream(in);
-                appData = (AppData)p.readObject();
-                in.close();
-            }
-            else
-            {
-                XmlToAppData xmlApp = new XmlToAppData();
-                appData = xmlApp.parseFile(xmlPath);
-                OutputStream out = null;
                 InputStream in = null;
                 try
                 {
-                    // write the appData file out
-                    out = new FileOutputStream(serialAppData);
-                    ObjectOutputStream p = new ObjectOutputStream(out);
-                    p.writeObject(appData);
-                    p.flush();
-
-                    // read the file back in. for some reason on OSX 10.1
-                    // this is necessary.
                     in = new FileInputStream(serialAppData);
-                    ObjectInputStream pin = new ObjectInputStream(in);
-                    appData = (AppData)pin.readObject();
+                    ObjectInputStream p = new ObjectInputStream(in);
+                    appData = (AppData)p.readObject();
                 }
                 catch (Exception e)
                 {
-                    getCategory().info(
-                        "Intake initialization could not be serialized " +
-                        "because writing to " + appDataPath + " was not " +
-                        "allowed.  This will require that the xml file be " +
-                        "parsed when restarting the application.");
+                    // We got a corrupt file for some reason
+                    writeAppData(xmlPath, appDataPath, serialAppData);
                 }
                 finally
                 {
-                    if (out != null)
-                    {
-                        out.close();
-                    }
                     if (in != null)
                     {
                         in.close();
                     }
                 }
+            }
+            else
+            {
+                writeAppData(xmlPath, appDataPath, serialAppData);
             }
 
             groupNames = new String[appData.getGroups().size()];
@@ -243,6 +222,52 @@ public class TurbineIntakeService
         {
             throw new InitializationException(
                 "TurbineIntakeService failed to initialize", e);
+        }
+    }
+
+    /**
+     * This method writes the appData file into Objects and stores
+     * the information into this classes appData property
+     */
+    private void writeAppData(String xmlPath, String appDataPath, File serialAppData)
+        throws Exception
+    {
+        XmlToAppData xmlApp = new XmlToAppData();
+        appData = xmlApp.parseFile(xmlPath);
+        OutputStream out = null;
+        InputStream in = null;
+        try
+        {
+            // write the appData file out
+            out = new FileOutputStream(serialAppData);
+            ObjectOutputStream p = new ObjectOutputStream(out);
+            p.writeObject(appData);
+            p.flush();
+
+            // read the file back in. for some reason on OSX 10.1
+            // this is necessary.
+            in = new FileInputStream(serialAppData);
+            ObjectInputStream pin = new ObjectInputStream(in);
+            appData = (AppData)pin.readObject();
+        }
+        catch (Exception e)
+        {
+            getCategory().info(
+                "Intake initialization could not be serialized " +
+                "because writing to " + appDataPath + " was not " +
+                "allowed.  This will require that the xml file be " +
+                "parsed when restarting the application.");
+        }
+        finally
+        {
+            if (out != null)
+            {
+                out.close();
+            }
+            if (in != null)
+            {
+                in.close();
+            }
         }
     }
 
