@@ -14,13 +14,6 @@ ln -s <fullpath-to-turbine-package>/services services
 SecurityService
 ---------------
 
-User is tied to Servlets by the HttpSessionBindingListener
-which makes the security service useless outside of servlets.
-There's no reason the security service can't be used in
-non servlet applications.
-Some sort of Event/Listner setup can be rigged up to solve this, since
-Fulcrum will be a dependency of Turbine.
-
 BaseSecurityService.java is tied to JavaMail simply for the
 base64 encoding. There are a number of base64 encoding
 classes in Jakarta, take one of those and get rid of
