@@ -95,14 +95,26 @@ public abstract class TurbineVelocity
      * object.
      *
      * @param context A Context.
-     * @param templateFilePath The path for the template files.
-     * @return A String.
+     * @param template The path to the template file.
+     * @return The processed template.
      * @exception Exception, a generic exception.
      */
     public static String handleRequest(Context context, String template)
         throws Exception
     {
         return getService().handleRequest(context, template);
+    }
+
+    /**
+     * @see org.apache.fulcrum.velocity.VelocityService#handleRequest(Context,
+     * String, String, String)
+     */
+    public String handleRequest(Context context, String template,
+                                String charset, String encoding)
+        throws Exception
+    {
+        return getService().handleRequest(context, template, charset,
+                                          encoding);
     }
 
     /**
