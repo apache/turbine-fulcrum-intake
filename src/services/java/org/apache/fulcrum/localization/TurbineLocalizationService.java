@@ -213,7 +213,8 @@ public class TurbineLocalizationService
      * the Locale information supplied in the HTTP "Accept-Language"
      * header which is stored in HttpServletRequest.
      *
-     * @param bundleName Name of bundle.
+     * @param bundleName Name of the bundle to use if the request's
+     * locale cannot be resolved.
      * @param req HttpServletRequest.
      * @return A localized ResourceBundle.
      */
