@@ -40,16 +40,59 @@
   </section>
   
   <section name="Build and Deploy Example">
-	<p>
-	  To run this example, first check the source code out from CVS.  The .war file is not online as it is 10 megabytes, and Maven will
-	  download any of the dependencies that you don't already have!  Also, part of this example is to show a sample project structure
-	  as well.  By downloading/building/ and deploying you get the full lifecycle.
-	</p>
-    <p>
-      To run this example, run 'maven war' from the fulcrum/osworkflow/example directory.  This will produce the WAR
-      file that you need to deploy to your Tomcat webapp.  Make sure the name of the war file is changed to 'fulcrum-osworkflow-example'
-      as the internal links expect that name.
-    </p>
+  <p>
+    To run this example, first check the source code out from CVS.  The .war file is not online as it is 10 megabytes, and Maven will
+    download any of the dependencies that you don't already have!  Also, part of this example is to show a sample project structure
+    as well.  By downloading/building/ and deploying you get the full lifecycle.
+  </p>
+  <p>
+    To run this example, run 'maven war' from the fulcrum/osworkflow/example directory.  This will produce the WAR
+    file that you need to deploy to your Tomcat webapp.  Make sure the name of the war file is changed to 'fulcrum-osworkflow-example'
+    as the internal links expect that name.
+  </p>
+  <p>
+  Please note that a number of dependencies that are defined in
+  project.xml cannot be resolved automatically with maven. Using these
+  pieces of software requires stepping through the process of accepting
+  the licensing agreeement.
+  Maven prints out the links to the sites from where the downloads can
+  be made manually. Once downloaded and unpacked, copy the jars to the
+  appropriate directories:
+  </p>
+  <ol>
+  <li><b>activation.jar</b> ${maven.repo.local}/jaf/jars/activation.jar</li>
+  <li><b>mail.jar</b> (it includes the content of smtp.jar, pop.jar and imap.jar)
+  ${maven.repo.local}/javamail/jars/mail.jar</li>
+  <li><b>jndi.jar</b> ${maven.repo.local}/jndi/jars/jndi.jar</li>
+  </ol>
+  <p>The dependency on jdbc can be commented out of project.xml. It should
+  be part of your recent Java edition.</p>
+
+  <p>Change the project.properties in the example directory to override the
+  stated dependencies as explained in the user documentation of maven.
+  </p>
+  <source>
+  <![CDATA[
+
+  maven.repo.remote=http://www.ibiblio.org/maven/,http://jakarta.apache.org/turbine/repo
+
+  maven.jar.override=on
+  maven.jar.activation = ${maven.repo.local}/jaf/jars/activation.jar
+  maven.jar.javamail = ${maven.repo.local}/javamail/jars/mail.jar
+  maven.jar.jndi = ${maven.repo.local}/jndi/jars/jndi.jar
+
+  maven.checkstyle.format = turbine
+
+  # display the date on the site
+  maven.xdoc.date = left
+  # Display the version the web site is documenting
+  maven.xdoc.version = ${pom.currentVersion}
+
+  maven.multiproject.type=war
+
+  ]]>
+  </source>
+
 
   </section>
 
