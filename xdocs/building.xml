@@ -26,8 +26,10 @@
         use Maven.
       </p>      
       <p>
-      	You will need to install the Avalon Meta plugin and Merlin plugin's
-      	for Maven.  You can do this by:
+        By default, the build will attempt to install the Avalon Meta and Merlin 
+        plugins for Maven.  Depending on your version of Maven, your milage
+        may vary.  If it doesn't work the you will need to install the Avalon Meta plugin
+        and Merlin plugin's for Maven by hand.  You can do this by:
 <source><![CDATA[
 
 $ maven plugin:download -DartifactId=avalon-meta-plugin -DgroupId=avalon-meta -Dversion=1.3.2
