@@ -1,4 +1,4 @@
-package org.apache.fulcrum.workflow.example.modules.actions;
+package org.apache.fulcrum.osworkflow.example.modules.actions;
 
 import org.apache.turbine.modules.actions.VelocityAction;
 import org.apache.turbine.util.RunData;

@@ -1,4 +1,4 @@
-package org.apache.fulcrum.workflow.example.tools;
+package org.apache.fulcrum.osworkflow.example.tools;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -60,8 +60,8 @@ import java.util.List;
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.fulcrum.workflow.WorkflowInstance;
-import org.apache.fulcrum.workflow.WorkflowService;
+import org.apache.fulcrum.osworkflow.WorkflowInstance;
+import org.apache.fulcrum.osworkflow.WorkflowService;
 import org.apache.turbine.om.security.User;
 import org.apache.turbine.services.InstantiationException;
 import org.apache.turbine.services.TurbineServices;

@@ -1,11 +1,11 @@
-package org.apache.fulcrum.workflow.example.modules.actions;
+package org.apache.fulcrum.osworkflow.example.modules.actions;
 import java.util.Collections;
 
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.fulcrum.workflow.WorkflowInstance;
-import org.apache.fulcrum.workflow.WorkflowService;
+import org.apache.fulcrum.osworkflow.WorkflowInstance;
+import org.apache.fulcrum.osworkflow.WorkflowService;
 import org.apache.turbine.modules.actions.VelocityAction;
 import org.apache.turbine.services.InstantiationException;
 import org.apache.turbine.services.TurbineServices;
