@@ -85,19 +85,11 @@ public class NonPersistentSchedulerServiceTest extends BaseUnitTest
     {
         return new TestSuite(NonPersistentSchedulerServiceTest.class);
     }
-	public void setUp()
+	public void setUp() throws Exception
 	  {
-		  super.setUp();
-		  try
-		  {
-			  scheduler = (ScheduleService) this.lookup(ScheduleService.ROLE);
-		  }
-		  catch (ComponentException e)
-		  {
-			  e.printStackTrace();
-			  fail(e.getMessage());
-		  }
-		  //        this.release(sc);
+		  super.setUp();		  
+		  scheduler = (ScheduleService) this.lookup(ScheduleService.ROLE);
+		  
 	  }
     /**
      * Tests the ability to enable and disable the service.
