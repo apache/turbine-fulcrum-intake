@@ -57,8 +57,6 @@ import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
 import org.apache.commons.configuration.Configuration;
 
-import junit.framework.TestSuite;
-
 /**
  * Basic testing of the Container
  *
@@ -79,22 +77,13 @@ public class ConfigTest extends AbstractMerlinTestCase
     {
         super( name );
     }
-    /**
-     * Factory method for creating a TestSuite for this class.
-     *
-     * @return the test suite
-     */
-    public static TestSuite suite()
-    {
-        TestSuite suite = new TestSuite(ConfigTest.class);
-        return suite;
-    }
+
     public void setUp() throws Exception
     {
         super.setUp();
         try
         {
-            config = (Configuration) this.resolve( "/config/conf" );
+            config = (Configuration) this.resolve( "test/conf" );
 
         }
         catch (ComponentException e)

@@ -1,5 +1,5 @@
 
-<container name="conf">
+<container name="test">
 
    <classloader>
      <classpath>
