@@ -6,6 +6,11 @@
   </properties>
 
   <body>
+    <release version="1.0.3" date="">
+      <action dev="epugh" type="update">
+      	Clean up dependencies.  Use TestContainer.
+      </action>           
+    </release>     
 	 <release version="1.0.2" date="">
       <action dev="epugh" type="update">
       	Update to use Merlin 3.3.0

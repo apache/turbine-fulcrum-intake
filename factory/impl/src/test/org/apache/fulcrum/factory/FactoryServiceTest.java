@@ -1,7 +1,7 @@
 package org.apache.fulcrum.factory;
 import java.util.ArrayList;
 
-import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
+import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
  * @author Eric Pugh
@@ -10,7 +10,7 @@ import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class FactoryServiceTest extends AbstractMerlinTestCase
+public class FactoryServiceTest extends BaseUnitTest
 {
     private FactoryService factoryService = null;
     /**
@@ -29,14 +29,8 @@ public class FactoryServiceTest extends AbstractMerlinTestCase
     public void setUp() throws Exception
     {
         super.setUp();
-        try
-        {
-            factoryService = (FactoryService) this.resolve( "/test/factory" );
-        }
-        catch (Throwable e)
-        {
-            fail(e.getMessage());
-        }
+        factoryService = (FactoryService) this.resolve( FactoryService.class.getName() );
+        
     }
     /*
      * Class to test for Object getInstance(String)
