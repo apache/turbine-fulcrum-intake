@@ -1,4 +1,4 @@
-package org.apache.fulcrum.security.spi.torque.turbine.impl;
+package org.apache.fulcrum.security.model.turbine;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -55,39 +55,35 @@ package org.apache.fulcrum.security.spi.torque.turbine.impl;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.model.turbine.TurbineAccessControlList;
-import org.apache.fulcrum.security.spi.torque.turbine.TorqueSecurity;
-import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.RoleSet;
 /**
  * This is a control class that makes it easy to find out if a
  * particular User has a given Permission.  It also determines if a
- * User has a a particular Role.  
- * 
- * DEP: I think this calss can be deleted, and the extra functionality moved to
- * the TurbineAccessControlList.
+ * User has a a particular Role.
  *
- * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
- * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
- * @author <a href="mailto:greg@shwoop.com">Greg Ritter</a>
- * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
- * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
- * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
+ * @todo Need to rethink the two maps..  Why not just a single list of groups?  That would
+ * then cascade down to all the other roles and so on..
+ * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class TorqueAccessControlList implements TurbineAccessControlList
+public class TurbineAccessControlListImpl extends AbstractLogEnabled implements TurbineAccessControlList
 {
     /** The sets of roles that the user has in different groups */
     private Map roleSets;
     /** The sets of permissions that the user has in different groups */
     private Map permissionSets;
-    /** The name of this ACL. Needed for the SecurityEntity Interface */
-    private String name;
+    /** The distinct list of groups that this user is part of */
+    private GroupSet groupSet = new GroupSet();
+    /** The distinct list of roles that this user is part of */
+    private RoleSet roleSet = new RoleSet();
+    /** the distinct list of permissions that this user has */
+    private PermissionSet permissionSet = new PermissionSet();
     /**
      * Constructs a new AccessControlList.
      *
@@ -101,32 +97,26 @@ public class TorqueAccessControlList implements TurbineAccessControlList
      * of role/permission sets keyed with group objects. <br>
      *
      * @param roleSets a hashtable containing RoleSet objects keyed with Group objects
-     * @param permissionSets a hashtable containing PermissionSet objects keyed with Group objects
+     * @param permissionSets a hashtable containing PermissionSet objects keyed with Roles objects
      */
-    public TorqueAccessControlList(Map roleSets, Map permissionSets)
+    public TurbineAccessControlListImpl(Map roleSets, Map permissionSets)
     {
         this.roleSets = roleSets;
         this.permissionSets = permissionSets;
-    }
-    /**
-     * Returns the name of this ACL.
-     *
-     * @return The ACL Name
-     *
-     */
-    public String getName()
-    {
-        return this.name;
-    }
-    /**
-     * Sets the name of this ACL.
-     *
-     * @param name The new ACL name.
-     *
-     */
-    public void setName(String name)
-    {
-        this.name = name;
+        for (Iterator i = roleSets.keySet().iterator(); i.hasNext();)
+        {
+            Group group = (Group) i.next();
+            groupSet.add(group);
+            RoleSet rs = (RoleSet) roleSets.get(group);
+            roleSet.add(rs);
+        }
+        for (Iterator i = permissionSets.keySet().iterator(); i.hasNext();)
+        {
+            Role role = (Role) i.next();
+            roleSet.add(role);
+            PermissionSet ps = (PermissionSet) permissionSets.get(role);
+            permissionSet.add(ps);
+        }
     }
     /**
      * Retrieves a set of Roles an user is assigned in a Group.
@@ -149,14 +139,7 @@ public class TorqueAccessControlList implements TurbineAccessControlList
      */
     public RoleSet getRoles()
     {
-        try
-        {
-            return getRoles(TorqueSecurity.getGlobalGroup());
-        }
-        catch (DataBackendException dbe)
-        {
-            throw new RuntimeException(dbe.getMessage(), dbe);
-        }
+        return roleSet;
     }
     /**
      * Retrieves a set of Permissions an user is assigned in a Group.
@@ -166,27 +149,29 @@ public class TorqueAccessControlList implements TurbineAccessControlList
      */
     public PermissionSet getPermissions(Group group)
     {
-        if (group == null)
+        PermissionSet permissionSet = new PermissionSet();
+        if (roleSets.containsKey(group))
         {
-            return null;
+            RoleSet rs = (RoleSet) roleSets.get(group);
+            for (Iterator i = rs.iterator(); i.hasNext();)
+            {
+                Role role = (Role) i.next();
+                if (permissionSets.containsKey(role))
+                {
+                    permissionSet.add((PermissionSet) permissionSets.get(role));
+                }
+            }
         }
-        return (PermissionSet) permissionSets.get(group);
+        return permissionSet;
     }
     /**
      * Retrieves a set of Permissions an user is assigned in the global Group.
      *
      * @return the set of Permissions this user has within the global Group.
      */
-    public PermissionSet getPermissions()
+    public PermissionSet getPermissions() 
     {
-        try
-        {
-            return getPermissions(TorqueSecurity.getGlobalGroup());
-        }
-        catch (DataBackendException dbe)
-        {
-            throw new RuntimeException(dbe.getMessage(), dbe);
-        }
+        return permissionSet;
     }
     /**
      * Checks if the user is assigned a specific Role in the Group.
@@ -242,14 +227,24 @@ public class TorqueAccessControlList implements TurbineAccessControlList
      */
     public boolean hasRole(String role, String group)
     {
+        boolean roleFound = false;
         try
         {
-            return hasRole(TorqueSecurity.getRoleByName(role), TorqueSecurity.getGroupByName(group));
+            for (Iterator i = roleSets.keySet().iterator(); i.hasNext();)
+            {
+                Group g = (Group) i.next();
+                if (g.getName().equalsIgnoreCase(group))
+                {
+                    RoleSet rs = (RoleSet) roleSets.get(g);
+                    roleFound = rs.containsName(role);
+                }
+            }
         }
         catch (Exception e)
         {
-            return false;
+            roleFound = false;
         }
+        return roleFound;
     }
     /**
      * Checks if the user is assigned a specifie Role in any of the given
@@ -265,7 +260,7 @@ public class TorqueAccessControlList implements TurbineAccessControlList
         Role role;
         try
         {
-            role = TorqueSecurity.getRoleByName(rolename);
+            role = roleSet.getRoleByName(rolename);
         }
         catch (Exception e)
         {
@@ -290,33 +285,26 @@ public class TorqueAccessControlList implements TurbineAccessControlList
         return false;
     }
     /**
-     * Checks if the user is assigned a specific Role in the global Group.
+     * Checks if the user is assigned a specific Role
      *
      * @param role the Role
      * @return <code>true</code> if the user is assigned the Role in the global Group.
      */
     public boolean hasRole(Role role)
     {
-        try
-        {
-            return hasRole(role, TorqueSecurity.getGlobalGroup());
-        }
-        catch (DataBackendException dbe)
-        {
-            throw new RuntimeException(dbe.getMessage(), dbe);
-        }
+        return roleSet.contains(role);
     }
     /**
-     * Checks if the user is assigned a specific Role in the global Group.
+     * Checks if the user is assigned a specific Role .
      *
      * @param role the Role
-     * @return <code>true</code> if the user is assigned the Role in the global Group.
+     * @return <code>true</code> if the user is assigned the Role .
      */
     public boolean hasRole(String role)
     {
         try
         {
-            return hasRole(TorqueSecurity.getRoleByName(role));
+            return roleSet.containsName(role);
         }
         catch (Exception e)
         {
@@ -379,7 +367,7 @@ public class TorqueAccessControlList implements TurbineAccessControlList
     {
         try
         {
-            return hasPermission(TorqueSecurity.getPermissionByName(permission), TorqueSecurity.getGroupByName(group));
+            return hasPermission(permissionSet.getPermissionByName(permission), groupSet.getGroupByName(group));
         }
         catch (Exception e)
         {
@@ -397,7 +385,7 @@ public class TorqueAccessControlList implements TurbineAccessControlList
     {
         try
         {
-            return hasPermission(TorqueSecurity.getPermissionByName(permission), group);
+            return hasPermission(permissionSet.getPermissionByName(permission), group);
         }
         catch (Exception e)
         {
@@ -418,7 +406,7 @@ public class TorqueAccessControlList implements TurbineAccessControlList
         Permission permission;
         try
         {
-            permission = TorqueSecurity.getPermissionByName(permissionName);
+            permission = permissionSet.getPermissionByName(permissionName);
         }
         catch (Exception e)
         {
@@ -443,21 +431,14 @@ public class TorqueAccessControlList implements TurbineAccessControlList
         return false;
     }
     /**
-     * Checks if the user is assigned a specific Permission in the global Group.
+     * Checks if the user is assigned a specific Permission.
      *
      * @param permission the Permission
-     * @return <code>true</code> if the user is assigned the Permission in the global Group.
+     * @return <code>true</code> if the user is assigned the Permission .
      */
     public boolean hasPermission(Permission permission)
     {
-        try
-        {
-            return hasPermission(permission, TorqueSecurity.getGlobalGroup());
-        }
-        catch (DataBackendException dbe)
-        {
-            throw new RuntimeException(dbe.getMessage(), dbe);
-        }
+        return permissionSet.contains(permission);
     }
     /**
      * Checks if the user is assigned a specific Permission in the global Group.
@@ -469,32 +450,11 @@ public class TorqueAccessControlList implements TurbineAccessControlList
     {
         try
         {
-            return hasPermission(TorqueSecurity.getPermissionByName(permission));
+            return permissionSet.containsName(permission);
         }
         catch (Exception e)
         {
             return false;
-        }
-    }
-    /**
-     * Returns all groups definded in the system.
-     *
-     * This is useful for debugging, when you want to display all roles
-     * and permissions an user is assingned. This method is needed
-     * because you can't call static methods of TorqueSecurity class
-     * from within WebMacro/Velocity template
-     *
-     * @return A Group [] of all groups in the system.
-     */
-    public Group[] getAllGroups()
-    {
-        try
-        {
-            return TorqueSecurity.getAllGroups().getGroupsArray();
-        }
-        catch (Exception e)
-        {
-            return new Group[0];
         }
     }
 }

@@ -1,4 +1,4 @@
-package org.apache.fulcrum.security.spi.memory.simple;
+package org.apache.fulcrum.security.spi.memory.turbine;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -68,16 +68,16 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.factory.FactoryService;
 import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.RoleManager;
-import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.authenticator.Authenticator;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.model.simple.SimpleAccessControlListImpl;
 import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
 import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
 import org.apache.fulcrum.security.model.simple.entity.SimpleUser;
+import org.apache.fulcrum.security.model.turbine.TurbineAccessControlListImpl;
+import org.apache.fulcrum.security.model.turbine.manager.TurbineUserManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
@@ -92,7 +92,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class MemoryUserManagerImpl extends AbstractLogEnabled implements UserManager, Composable
+public class MemoryUserManagerImpl extends AbstractLogEnabled implements TurbineUserManager, Composable
 {
     /** Logging */
     private static Log log = LogFactory.getLog(MemoryUserManagerImpl.class);
@@ -516,7 +516,7 @@ public class MemoryUserManagerImpl extends AbstractLogEnabled implements UserMan
             accessControlList =
                 (AccessControlList) aclFactoryService.getInstance(aclClass.getName(), objects, signatures);
                 */
-            accessControlList = new SimpleAccessControlListImpl(roles, permissions);
+            accessControlList = new TurbineAccessControlListImpl(roles, permissions);
         }
         catch (Exception e)
         {
@@ -614,6 +614,42 @@ public class MemoryUserManagerImpl extends AbstractLogEnabled implements UserMan
             throw new UnknownEntityException("Unknown user '" + user + "'");
         }
     }
+	/**
+		   * Constructs an User object to represent an anonymous user of the
+		   * application.
+		   *
+		   * @return An anonymous Turbine User.
+		   * @throws UnknownEntityException if the implementation of User interface
+		   *         could not be determined, or does not exist.
+		   */
+		  public User getAnonymousUser()
+				  throws UnknownEntityException
+		  {
+			  User user;
+			  try {
+			   user = getUserInstance();
+			  }
+			  catch (DataBackendException dbe){
+				  throw new UnknownEntityException("Coudl not create an anonymous user.",dbe);
+			  }
+			  user.setName("");
+			  return user;
+		  }
+
+		  /**
+		   * Checks whether a passed user object matches the anonymous user pattern
+		   * according to the configured user manager
+		   *
+		   * @param user An user object
+		   *
+		   * @return True if this is an anonymous user
+		   *
+		   */
+		  public boolean isAnonymousUser(User user)
+		  {
+			  // Either just null, the name is null or the name is the empty string
+			  return (user == null) || StringUtils.isEmpty(user.getName());
+		  }    
   
     /**
     	  * Avalon component lifecycle method

@@ -54,6 +54,7 @@ package org.apache.fulcrum.security.spi.torque.turbine;
  */
 import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.model.turbine.TurbineGroupManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
@@ -69,12 +70,9 @@ import org.apache.torque.util.Criteria;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public interface TorqueGroupManager extends GroupManager
+public interface TorqueGroupManager extends TurbineGroupManager
 {
-    /**
-     * The name of the <a href="#global">global group</a>
-     */
-    String GLOBAL_GROUP_NAME = "global";
+   
     /**
 	 * Stores Group's attributes. The Groups is required to exist in the system.
 	 *
@@ -84,29 +82,14 @@ public interface TorqueGroupManager extends GroupManager
 	 * @throws UnknownEntityException if the group does not exist.
 	 */
     void saveGroup(Group group) throws DataBackendException, UnknownEntityException;
+    
     /**
-     * Provides a reference to the Group object that represents the
-     * <a href="#global">global group</a>.
-     *
-     * @return A Group object that represents the global group.
-     */
-    Group getGlobalGroup() throws DataBackendException;
-    /**
-    	 * Retrieve a set of Groups that meet the specified Criteria.
-    	 *
-    	 * @param criteria a Criteria of Group selection.
-    	 * @return a set of Groups that meet the specified Criteria.
-    	 * @throws DataBackendException if there was an error accessing the data
-    	 *         backend.
-    	 */
+	 * Retrieve a set of Groups that meet the specified Criteria.
+	 *
+	 * @param criteria a Criteria of Group selection.
+	 * @return a set of Groups that meet the specified Criteria.
+	 * @throws DataBackendException if there was an error accessing the data
+	 *         backend.
+	 */
     GroupSet getGroups(Criteria criteria) throws DataBackendException;
-    /**
-     * Returns the Class object for the implementation of Group interface
-     * used by the system.
-     *
-     * @return the implementation of Group interface used by the system.
-     * @throws UnknownEntityException if the system's implementation of Group
-     *         interface could not be determined.
-     */
-    Class getGroupClass() throws UnknownEntityException;
 }

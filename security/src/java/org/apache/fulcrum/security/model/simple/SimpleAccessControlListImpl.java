@@ -1,4 +1,4 @@
-package org.apache.fulcrum.security.acl;
+package org.apache.fulcrum.security.model.simple;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -54,11 +54,11 @@ package org.apache.fulcrum.security.acl;
  */
 import java.util.Iterator;
 import java.util.Map;
+
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
-
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.RoleSet;
@@ -70,15 +70,9 @@ import org.apache.fulcrum.security.util.RoleSet;
  * @todo Need to rethink the two maps..  Why not just a single list of groups?  That would
  * then cascade down to all the other roles and so on..
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
- * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
- * @author <a href="mailto:greg@shwoop.com">Greg Ritter</a>
- * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
- * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
- * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @version $Id$
  */
-public class DefaultAccessControlList extends AbstractLogEnabled implements AccessControlList
+public class SimpleAccessControlListImpl extends AbstractLogEnabled implements SimpleAccessControlList
 {
     /** The sets of roles that the user has in different groups */
     private Map roleSets;
@@ -105,7 +99,7 @@ public class DefaultAccessControlList extends AbstractLogEnabled implements Acce
      * @param roleSets a hashtable containing RoleSet objects keyed with Group objects
      * @param permissionSets a hashtable containing PermissionSet objects keyed with Roles objects
      */
-    public DefaultAccessControlList(Map roleSets, Map permissionSets)
+    public SimpleAccessControlListImpl(Map roleSets, Map permissionSets)
     {
         this.roleSets = roleSets;
         this.permissionSets = permissionSets;

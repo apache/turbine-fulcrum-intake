@@ -1,9 +1,8 @@
-package org.apache.fulcrum.security.acl;
-
+package org.apache.fulcrum.security.model.turbine;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -18,7 +17,7 @@ package org.apache.fulcrum.security.acl;
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
- * 3. The end-user documentation included with the redistribution,
+ * 3. The end-group documentation included with the redistribution,
  *    if any, must include the following acknowledgment:
  *       "This product includes software developed by the
  *        Apache Software Foundation (http://www.apache.org/)."
@@ -53,22 +52,43 @@ package org.apache.fulcrum.security.acl;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-
-import java.io.Serializable;
-
-
+import org.apache.fulcrum.security.GroupManager;
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
- * This interface is a marker interface for AccessControlList.  Basically
- * allows us at somepoint to swap different ACL's under the covers with 
- * Avalon.  Actual ACL's are dependent on their model being used.
+ * An GroupManager performs {@link org.apache.fulcrum.security.entity.Group} objects
+ * related tasks on behalf of the {@link org.apache.fulcrum.security.BaseSecurityService}.
+ *
+ * The responsibilities of this class include loading data of an group from the
+ * storage and putting them into the {@link org.apache.fulcrum.security.entity.Group} objects,
+ * saving those data to the permanent storage.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public interface AccessControlList
-  extends Serializable
+public interface TurbineGroupManager extends GroupManager
 {
+    /**
+     * The name of the <a href="#global">global group</a>
+     */
+    String GLOBAL_GROUP_NAME = "global";
 
-   
-   
+    /**
+     * Provides a reference to the Group object that represents the
+     * <a href="#global">global group</a>.
+     *
+     * @return A Group object that represents the global group.
+     */
+    Group getGlobalGroup() throws DataBackendException;
+    
+    /**
+     * Returns the Class object for the implementation of Group interface
+     * used by the system.
+     *
+     * @return the implementation of Group interface used by the system.
+     * @throws UnknownEntityException if the system's implementation of Group
+     *         interface could not be determined.
+     */
+    Class getGroupClass() throws UnknownEntityException;
 }

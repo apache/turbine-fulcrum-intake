@@ -1,9 +1,8 @@
-package org.apache.fulcrum.security.acl;
-
+package org.apache.fulcrum.security.spi.hibernate.simple;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,21 +53,53 @@ package org.apache.fulcrum.security.acl;
  * <http://www.apache.org/>.
  */
 
-import java.io.Serializable;
+import net.sf.hibernate.avalon.HibernateService;
 
-
+import org.apache.fulcrum.security.SecurityService;
+import org.apache.fulcrum.security.model.simple.manager.AbstractGroupManagerTest;
+import org.apache.fulcrum.security.spi.hibernate.HibernateHelper;
 /**
- * This interface is a marker interface for AccessControlList.  Basically
- * allows us at somepoint to swap different ACL's under the covers with 
- * Avalon.  Actual ACL's are dependent on their model being used.
- *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public interface AccessControlList
-  extends Serializable
+public class HibernateExtendedUserGroupManagerTest extends AbstractGroupManagerTest
 {
-
-   
-   
+    public void setUp()
+    {
+        try
+        {
+            this.setRoleFileName(null);
+            this.setConfigurationFileName("src/test/ExtendedUserHibernate.xml");
+            HibernateService hibernateService = (HibernateService) lookup(HibernateService.ROLE);
+            HibernateHelper.exportSchema(hibernateService.getConfiguration());
+            securityService = (SecurityService) lookup(SecurityService.ROLE);
+            groupManager = securityService.getGroupManager();
+        }
+        catch (Exception e)
+        {
+            fail(e.toString());
+        }
+    }
+    public void tearDown()
+    {
+		try
+		  {
+			  //((BaseHibernateManager) groupManager).getHibernateSession().close();
+		  }
+		  catch (Exception e)
+		  {
+			  fail(e.getMessage());
+		  }
+        group = null;
+        groupManager = null;
+        securityService = null;
+    }
+    /**
+    	   * Constructor for HibernatePermissionManagerTest.
+    	   * @param arg0
+    	   */
+    public HibernateExtendedUserGroupManagerTest(String arg0)
+    {
+        super(arg0);
+    }
 }

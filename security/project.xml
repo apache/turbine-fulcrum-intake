@@ -60,7 +60,7 @@
      </dependency>          
      <dependency>
        <id>hibernate:hibernate-avalon</id>
-       <version>0.2</version>       
+       <version>0.3-dev</version>       
      </dependency>                
      <dependency>
        <id>odmg</id>      

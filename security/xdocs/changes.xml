@@ -7,6 +7,11 @@
 
   <body>
   	<release version="1.0-alpha-3" date="in cvs">
+	  <action dev="epugh" type="add">
+		Realized the one size fits all ACL doesn't work.. ACL's are tied to models.  Now, there is
+		an AccessControlList interface, but it is just a marker.  Each model implements the ACL.
+		Added a Memory implementaiton of the Turbine model.
+      </action>   		
 	  <action dev="epugh" type="fix">
 		All the various SecuritySet implementations base their logic off their Name, not the ID, or
 		Object type.  Fixes problems with comparisons when you have various subclasses.

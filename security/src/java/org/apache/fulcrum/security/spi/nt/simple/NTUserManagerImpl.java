@@ -58,10 +58,10 @@ import org.apache.fulcrum.security.PermissionManager;
 import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
-import org.apache.fulcrum.security.acl.DefaultAccessControlList;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.simple.SimpleAccessControlListImpl;
 import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
 import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
 import org.apache.fulcrum.security.model.simple.entity.SimpleUser;
@@ -432,7 +432,7 @@ public class NTUserManagerImpl
 			 * signatures);
 			 */
             accessControlList =
-                new DefaultAccessControlList(roles, permissions);
+                new SimpleAccessControlListImpl(roles, permissions);
         }
         catch (Exception e)
         {

@@ -37,13 +37,12 @@ package org.apache.fulcrum.security.adapter.osuser;
 import java.util.Collection;
 
 import org.apache.fulcrum.security.SecurityService;
-import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.model.simple.SimpleAccessControlList;
 import org.apache.fulcrum.security.model.simple.SimpleModelManager;
 import org.apache.fulcrum.security.model.simple.entity.SimpleUser;
-
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 import com.opensymphony.user.User;
@@ -139,7 +138,7 @@ public class OSUserAdapterTest extends BaseUnitTest
             securityService.getUserManager().checkExists("Bob"));
 
         fulcrumUser = securityService.getUserManager().getUser("Jeannie");
-        AccessControlList acl = securityService.getUserManager().getACL(fulcrumUser);
+        SimpleAccessControlList acl = (SimpleAccessControlList)securityService.getUserManager().getACL(fulcrumUser);
         assertEquals(
             "Both should have role1",
             acl.hasRole("role1"),

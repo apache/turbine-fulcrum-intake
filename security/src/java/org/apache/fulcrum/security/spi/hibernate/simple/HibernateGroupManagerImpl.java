@@ -184,12 +184,12 @@ public class HibernateGroupManagerImpl extends BaseHibernateManager implements G
         return group;
     }
     /**
-    	 * Retrieves all groups defined in the system.
-    	 *
-    	 * @return the names of all groups defined in the system.
-    	 * @throws DataBackendException if there was an error accessing the
-    	 *         data backend.
-    	 */
+	 * Retrieves all groups defined in the system.
+	 *
+	 * @return the names of all groups defined in the system.
+	 * @throws DataBackendException if there was an error accessing the
+	 *         data backend.
+	 */
     public GroupSet getAllGroups() throws DataBackendException
     {
         GroupSet groupSet = new GroupSet();

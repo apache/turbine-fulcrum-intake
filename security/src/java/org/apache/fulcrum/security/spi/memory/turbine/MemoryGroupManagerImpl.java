@@ -1,4 +1,4 @@
-package org.apache.fulcrum.security.spi.memory.simple;
+package org.apache.fulcrum.security.spi.memory.turbine;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -63,11 +63,14 @@ import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
-import org.apache.fulcrum.security.spi.memory.*;
+import org.apache.fulcrum.security.model.turbine.TurbineGroupManager;
+import org.apache.fulcrum.security.spi.memory.BaseMemoryManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+
+import sun.security.acl.GroupImpl;
 
 /**
  * This implementation keeps all objects in memory.  This is mostly meant to help
@@ -76,15 +79,58 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class MemoryGroupManagerImpl extends BaseMemoryManager implements GroupManager
+public class MemoryGroupManagerImpl
+    extends BaseMemoryManager
+    implements TurbineGroupManager
 {
     /** Logging */
     private static Log log = LogFactory.getLog(MemoryGroupManagerImpl.class);
     private static List groups = new ArrayList();
     /** Our Unique ID counter */
     private static int uniqueId = 0;
-    
-    
+
+    /**
+      * Provides a reference to the Group object that represents the
+      * <a href="#global">global group</a>.
+      *
+      * @return A Group object that represents the global group.
+      */
+    public Group getGlobalGroup() throws DataBackendException
+    {
+        Group g = null;
+        try
+        {
+            getGroup(GLOBAL_GROUP_NAME);
+        }
+        catch (UnknownEntityException uee)
+        {
+            g = getGroupInstance(GLOBAL_GROUP_NAME);
+            try
+            {
+                addGroup(g);
+            }
+            catch (EntityExistsException eee)
+            {
+                throw new DataBackendException(eee.getMessage(), eee);
+            }
+
+        }
+        return g;
+    }
+
+    /**
+     * Returns the Class object for the implementation of Group interface
+     * used by the system.
+     *
+     * @return the implementation of Group interface used by the system.
+     * @throws UnknownEntityException if the system's implementation of Group
+     *         interface could not be determined.
+     */
+    public Class getGroupClass() throws UnknownEntityException
+    {
+        return GroupImpl.class;
+    }
+
     /**
     	* Construct a blank Group object.
     	*
@@ -98,7 +144,7 @@ public class MemoryGroupManagerImpl extends BaseMemoryManager implements GroupMa
     {
         Group group;
         group = (Group) new SimpleGroup();
-       
+
         return group;
     }
     /**
@@ -129,7 +175,8 @@ public class MemoryGroupManagerImpl extends BaseMemoryManager implements GroupMa
     	 * @throws UnknownEntityException if the group does not exist.
     	 * @deprecated Use <a href="#getGroupByName">getGroupByName</a> instead.
     	 */
-    public Group getGroup(String name) throws DataBackendException, UnknownEntityException
+    public Group getGroup(String name)
+        throws DataBackendException, UnknownEntityException
     {
         return getGroupByName(name);
     }
@@ -142,7 +189,8 @@ public class MemoryGroupManagerImpl extends BaseMemoryManager implements GroupMa
      *         data backend.
      * @throws UnknownEntityException if the group does not exist.
      */
-    public Group getGroupByName(String name) throws DataBackendException, UnknownEntityException
+    public Group getGroupByName(String name)
+        throws DataBackendException, UnknownEntityException
     {
         Group group = getAllGroups().getGroupByName(name);
         if (group == null)
@@ -163,7 +211,8 @@ public class MemoryGroupManagerImpl extends BaseMemoryManager implements GroupMa
      * @throws DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public Group getGroupById(Object id) throws DataBackendException, UnknownEntityException
+    public Group getGroupById(Object id)
+        throws DataBackendException, UnknownEntityException
     {
         Group group = getAllGroups().getGroupById(id);
         if (group == null)
@@ -191,7 +240,8 @@ public class MemoryGroupManagerImpl extends BaseMemoryManager implements GroupMa
     	*         backend.
     	* @throws UnknownEntityException if the group does not exist.
     	*/
-    public synchronized void removeGroup(Group group) throws DataBackendException, UnknownEntityException
+    public synchronized void removeGroup(Group group)
+        throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
         try
@@ -204,7 +254,8 @@ public class MemoryGroupManagerImpl extends BaseMemoryManager implements GroupMa
             }
             else
             {
-                throw new UnknownEntityException("Unknown group '" + group + "'");
+                throw new UnknownEntityException(
+                    "Unknown group '" + group + "'");
             }
         }
         catch (Exception e)
@@ -226,7 +277,8 @@ public class MemoryGroupManagerImpl extends BaseMemoryManager implements GroupMa
     	*         backend.
     	* @throws UnknownEntityException if the group does not exist.
     	*/
-    public synchronized void renameGroup(Group group, String name) throws DataBackendException, UnknownEntityException
+    public synchronized void renameGroup(Group group, String name)
+        throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
         try
@@ -240,7 +292,8 @@ public class MemoryGroupManagerImpl extends BaseMemoryManager implements GroupMa
             }
             else
             {
-                throw new UnknownEntityException("Unknown group '" + group + "'");
+                throw new UnknownEntityException(
+                    "Unknown group '" + group + "'");
             }
         }
         catch (Exception e)
@@ -251,7 +304,7 @@ public class MemoryGroupManagerImpl extends BaseMemoryManager implements GroupMa
         {
         }
     }
-  
+
     /**
      * Determines if the <code>Group</code> exists in the security system.
      *
@@ -269,7 +322,8 @@ public class MemoryGroupManagerImpl extends BaseMemoryManager implements GroupMa
             for (Iterator i = groups.iterator(); i.hasNext();)
             {
                 Group g = (Group) i.next();
-                if (g.getName().equalsIgnoreCase(group.getName()) | g.getId() == group.getId())
+                if (g.getName().equalsIgnoreCase(group.getName()) | g.getId()
+                    == group.getId())
                 {
                     exists = true;
                 }
@@ -279,7 +333,9 @@ public class MemoryGroupManagerImpl extends BaseMemoryManager implements GroupMa
         }
         catch (Exception e)
         {
-            throw new DataBackendException("Problem checking if groups exists", e);
+            throw new DataBackendException(
+                "Problem checking if groups exists",
+                e);
         }
     }
     /**
@@ -291,7 +347,8 @@ public class MemoryGroupManagerImpl extends BaseMemoryManager implements GroupMa
     	*         backend.
     	* @throws EntityExistsException if the group already exists.
     	*/
-    public synchronized Group addGroup(Group group) throws DataBackendException, EntityExistsException
+    public synchronized Group addGroup(Group group)
+        throws DataBackendException, EntityExistsException
     {
         boolean groupExists = false;
         if (StringUtils.isEmpty(group.getName()))
@@ -312,10 +369,11 @@ public class MemoryGroupManagerImpl extends BaseMemoryManager implements GroupMa
         }
         else
         {
-            throw new EntityExistsException("Group '" + group + "' already exists");
+            throw new EntityExistsException(
+                "Group '" + group + "' already exists");
         }
     }
-   
+
     /**
      * Determines if the <code>Permission</code> exists in the security system.
      *
@@ -328,9 +386,9 @@ public class MemoryGroupManagerImpl extends BaseMemoryManager implements GroupMa
     public boolean checkExists(Role role) throws DataBackendException
     {
         return getRoleManager().checkExists(role);
-       
+
     }
-   
+
     private Integer getUniqueId()
     {
         return new Integer(++uniqueId);

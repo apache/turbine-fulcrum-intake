@@ -58,6 +58,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.fulcrum.security.model.turbine.TurbineAccessControlList;
 import org.apache.turbine.om.security.Group;
 import org.apache.turbine.om.security.Permission;
 import org.apache.turbine.om.security.Role;
@@ -76,7 +77,7 @@ import org.apache.turbine.util.security.RoleSet;
 public class AccessControlListAdapter implements AccessControlList
 {
     private static Log log = LogFactory.getLog(AccessControlListAdapter.class);
-    private org.apache.fulcrum.security.acl.AccessControlList acl;
+    private TurbineAccessControlList acl;
     /**
      *
      */
@@ -84,7 +85,7 @@ public class AccessControlListAdapter implements AccessControlList
     {
         super();
     }
-    public AccessControlListAdapter(org.apache.fulcrum.security.acl.AccessControlList acl)
+    public AccessControlListAdapter(TurbineAccessControlList acl)
     {
         super();
         this.acl = acl;

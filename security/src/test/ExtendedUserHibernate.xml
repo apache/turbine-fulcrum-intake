@@ -30,7 +30,7 @@
   <component 
     role="net.sf.hibernate.avalon.HibernateService"
     class="net.sf.hibernate.avalon.HibernateServiceImpl">   
-    <parameter name="default.configuration" value="false"/>    
+    <parameter name="default.configuration" value="false"/>
  	<session-factory >
         <property name="show_sql">true</property>
         <property name="use_outer_join">true</property>
@@ -46,7 +46,7 @@
         <!-- mapping files -->
     </session-factory>    
     <mappings>
-    	<resource>SimpleHibernate.hbm.xml</resource>
+    	<resource>ExtendedUserHibernate.hbm.xml</resource>
 	</mappings>    
   </component>
 

@@ -67,11 +67,11 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.factory.FactoryService;
 import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
-import org.apache.fulcrum.security.acl.DefaultAccessControlList;
 import org.apache.fulcrum.security.authenticator.Authenticator;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.simple.SimpleAccessControlListImpl;
 import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
 import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
 import org.apache.fulcrum.security.model.simple.entity.SimpleUser;
@@ -373,7 +373,7 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Us
             accessControlList =
                 (AccessControlList) aclFactoryService.getInstance(aclClass.getName(), objects, signatures);
                 */
-            accessControlList = new DefaultAccessControlList(roles, permissions);
+            accessControlList = new SimpleAccessControlListImpl(roles, permissions);
         }
         catch (Exception e)
         {

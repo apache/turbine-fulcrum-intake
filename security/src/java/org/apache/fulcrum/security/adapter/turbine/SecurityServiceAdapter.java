@@ -58,7 +58,7 @@ import org.apache.avalon.framework.component.ComponentException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.SecurityService;
-import org.apache.fulcrum.security.acl.AccessControlList;
+import org.apache.fulcrum.security.model.turbine.TurbineAccessControlList;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
@@ -138,7 +138,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
         try
         {
         	org.apache.fulcrum.security.entity.User fulcrumUser = securityService.getUserManager().getUser(user.getName());
-            AccessControlList acl = securityService.getUserManager().getACL(fulcrumUser);
+            TurbineAccessControlList acl = (TurbineAccessControlList)securityService.getUserManager().getACL(fulcrumUser);
             
             AccessControlListAdapter aclAdaptor = new AccessControlListAdapter(acl);
             return aclAdaptor;

@@ -8,23 +8,23 @@ classes for Turbine. -->
           
     <role name="org.apache.fulcrum.security.UserManager"
           shorthand="userManager"
-          default-class="org.apache.fulcrum.security.spi.memory.simple.MemoryUserManagerImpl" />
+          default-class="org.apache.fulcrum.security.spi.memory.turbine.MemoryUserManagerImpl" />
           
     <role name="org.apache.fulcrum.security.GroupManager"
           shorthand="groupManager"
-          default-class="org.apache.fulcrum.security.spi.memory.simple.MemoryGroupManagerImpl" />
+          default-class="org.apache.fulcrum.security.spi.memory.turbine.MemoryGroupManagerImpl" />
           
     <role name="org.apache.fulcrum.security.RoleManager"
           shorthand="roleManager"
-          default-class="org.apache.fulcrum.security.spi.memory.simple.MemoryRoleManagerImpl" />                              
+          default-class="org.apache.fulcrum.security.spi.memory.turbine.MemoryRoleManagerImpl" />                              
 
     <role name="org.apache.fulcrum.security.PermissionManager"
           shorthand="permissionManager"
-          default-class="org.apache.fulcrum.security.spi.memory.simple.MemoryPermissionManagerImpl" />                              
+          default-class="org.apache.fulcrum.security.spi.memory.turbine.MemoryPermissionManagerImpl" />                              
 
     <role name="org.apache.fulcrum.security.ModelManager"
           shorthand="modelManager"
-          default-class="org.apache.fulcrum.security.spi.memory.simple.MemoryModelManagerImpl" />                              
+          default-class="org.apache.fulcrum.security.spi.memory.turbine.MemoryModelManagerImpl" />                              
           
 </role-list> 
  

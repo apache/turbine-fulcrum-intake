@@ -58,9 +58,9 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.simple.SimpleAccessControlList;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
@@ -109,8 +109,8 @@ public class FulcrumAccessProvider
 		try
 		{
 			User user = getSecurityService().getUserManager().getUser(username);
-			AccessControlList acl =
-			getSecurityService().getUserManager().getACL(user);
+			SimpleAccessControlList acl =
+			(SimpleAccessControlList)getSecurityService().getUserManager().getACL(user);
 			Role role = acl.getRoles().getRoleByName(groupname);
 			boolean result =acl.hasRole(role); 
 			return result;
@@ -139,8 +139,8 @@ public class FulcrumAccessProvider
 		try
 		{
 			User user = getSecurityService().getUserManager().getUser(username);
-			AccessControlList acl =
-				getSecurityService().getUserManager().getACL(user);
+			SimpleAccessControlList acl =
+				(SimpleAccessControlList)getSecurityService().getUserManager().getACL(user);
 			roles.addAll(acl.getRoles().getNames());
 			
 		}

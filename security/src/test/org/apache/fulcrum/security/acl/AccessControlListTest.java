@@ -66,9 +66,12 @@ import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.simple.SimpleAccessControlListImpl;
 import org.apache.fulcrum.security.model.simple.SimpleModelManager;
 import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
 import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
+import org.apache.fulcrum.security.model.turbine.TurbineAccessControlList;
+import org.apache.fulcrum.security.model.turbine.TurbineAccessControlListImpl;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.RoleSet;
@@ -88,7 +91,7 @@ public class AccessControlListTest extends BaseUnitTest
 	private RoleManager roleManager;
 	private SimpleModelManager modelManager;
     private PermissionManager permissionManager;
-    private AccessControlList acl;
+    private TurbineAccessControlList acl;
     private static int counter = 1;
     private User user;
     /**
@@ -158,8 +161,8 @@ public class AccessControlListTest extends BaseUnitTest
         signature[0] = "java.util.Map";
         signature[1] = "java.util.Map";
         Object object =
-            factoryService.getInstance("org.apache.fulcrum.security.acl.DefaultAccessControlList", params, signature);
-        assertTrue(object instanceof DefaultAccessControlList);
+            factoryService.getInstance("org.apache.fulcrum.security.model.simple.SimpleAccessControlListImpl", params, signature);
+        assertTrue(object instanceof SimpleAccessControlListImpl);
     }
     public void testGetRolesGroup() throws Exception
     {
@@ -172,7 +175,7 @@ public class AccessControlListTest extends BaseUnitTest
         Map roleSets = new HashMap();
         Map permissionSets = new HashMap();
         roleSets.put(group, ((SimpleGroup) group).getRoles());
-        acl = new DefaultAccessControlList(roleSets, permissionSets);
+        acl = new TurbineAccessControlListImpl(roleSets, permissionSets);
         RoleSet resultRoleSet = acl.getRoles(group);
         assertTrue(resultRoleSet.contains(role));
         assertTrue(resultRoleSet.contains(role2));
@@ -196,7 +199,7 @@ public class AccessControlListTest extends BaseUnitTest
         Map permissionSets = new HashMap();
         roleSets.put(group, ((SimpleGroup) group).getRoles());
         roleSets.put(group2, ((SimpleGroup) group2).getRoles());
-        acl = new DefaultAccessControlList(roleSets, permissionSets);
+        acl = new TurbineAccessControlListImpl(roleSets, permissionSets);
         RoleSet resultRoleSet = acl.getRoles();
         assertTrue(resultRoleSet.contains(role));
         assertTrue(resultRoleSet.contains(role2));
@@ -228,7 +231,7 @@ public class AccessControlListTest extends BaseUnitTest
         Map permissionSets = new HashMap();
         roleSets.put(group, ((SimpleGroup) group).getRoles());
         permissionSets.put(role, ((SimpleRole) role).getPermissions());
-        acl = new DefaultAccessControlList(roleSets, permissionSets);
+        acl = new TurbineAccessControlListImpl(roleSets, permissionSets);
         PermissionSet resultPermissionSet = acl.getPermissions(group);
         assertEquals(3, resultPermissionSet.size());
         assertTrue(resultPermissionSet.contains(permission));
@@ -265,7 +268,7 @@ public class AccessControlListTest extends BaseUnitTest
         permissionSets.put(role, ((SimpleRole) role).getPermissions());
         permissionSets.put(role2, ((SimpleRole) role2).getPermissions());
         permissionSets.put(role3, ((SimpleRole) role3).getPermissions());
-        acl = new DefaultAccessControlList(roleSets, permissionSets);
+        acl = new TurbineAccessControlListImpl(roleSets, permissionSets);
         PermissionSet resultPermissionSet = acl.getPermissions();
         assertEquals(3, resultPermissionSet.size());
     }
@@ -287,7 +290,7 @@ public class AccessControlListTest extends BaseUnitTest
         Map permissionSets = new HashMap();
         roleSets.put(group, ((SimpleGroup) group).getRoles());
         roleSets.put(group2, ((SimpleGroup) group2).getRoles());
-        acl = new DefaultAccessControlList(roleSets, permissionSets);
+        acl = new TurbineAccessControlListImpl(roleSets, permissionSets);
         assertTrue(acl.hasRole(role, group));
         assertTrue(acl.hasRole(role, group2));
         assertTrue(acl.hasRole(role2, group));
@@ -314,7 +317,7 @@ public class AccessControlListTest extends BaseUnitTest
         Map permissionSets = new HashMap();
         roleSets.put(group, ((SimpleGroup) group).getRoles());
         roleSets.put(group2, ((SimpleGroup) group2).getRoles());
-        acl = new DefaultAccessControlList(roleSets, permissionSets);
+        acl = new TurbineAccessControlListImpl(roleSets, permissionSets);
         GroupSet groupSet = new GroupSet();
         groupSet.add(group);
         assertTrue(acl.hasRole(role, groupSet));
@@ -344,7 +347,7 @@ public class AccessControlListTest extends BaseUnitTest
         Map permissionSets = new HashMap();
         roleSets.put(group, ((SimpleGroup) group).getRoles());
         roleSets.put(group2, ((SimpleGroup) group2).getRoles());
-        acl = new DefaultAccessControlList(roleSets, permissionSets);
+        acl = new TurbineAccessControlListImpl(roleSets, permissionSets);
         assertTrue(acl.hasRole(role.getName(), group.getName()));
         assertTrue(acl.hasRole(role.getName(), group2.getName()));
         assertTrue(acl.hasRole(role2.getName(), group.getName()));
@@ -383,7 +386,7 @@ public class AccessControlListTest extends BaseUnitTest
         permissionSets.put(role, ((SimpleRole) role).getPermissions());
         permissionSets.put(role2, ((SimpleRole) role2).getPermissions());
         permissionSets.put(role3, ((SimpleRole) role3).getPermissions());
-        acl = new DefaultAccessControlList(roleSets, permissionSets);
+        acl = new TurbineAccessControlListImpl(roleSets, permissionSets);
         assertTrue(acl.hasPermission(permission, group));
         assertTrue(acl.hasPermission(permission2, group));
         assertTrue(acl.hasPermission(permission3, group));
@@ -428,7 +431,7 @@ public class AccessControlListTest extends BaseUnitTest
         permissionSets.put(role2, ((SimpleRole) role2).getPermissions());
         permissionSets.put(role3, ((SimpleRole) role3).getPermissions());
         permissionSets.put(role4, ((SimpleRole) role4).getPermissions());
-        acl = new DefaultAccessControlList(roleSets, permissionSets);
+        acl = new TurbineAccessControlListImpl(roleSets, permissionSets);
         GroupSet groupSet = new GroupSet();
         groupSet.add(group);
         groupSet.add(group2);
@@ -474,7 +477,7 @@ public class AccessControlListTest extends BaseUnitTest
         permissionSets.put(role2, ((SimpleRole) role2).getPermissions());
         permissionSets.put(role3, ((SimpleRole) role3).getPermissions());
         permissionSets.put(role4, ((SimpleRole) role4).getPermissions());
-        acl = new DefaultAccessControlList(roleSets, permissionSets);
+        acl = new TurbineAccessControlListImpl(roleSets, permissionSets);
         assertTrue(acl.hasPermission(permission));
         assertTrue(acl.hasPermission(permission2));
         assertTrue(acl.hasPermission(permission3));

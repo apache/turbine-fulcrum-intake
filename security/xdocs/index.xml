@@ -30,7 +30,7 @@
         <tr>
           <th/><th>User</th><th>Group</th><th>Role</th><th>Permission</th><th>User</th><th>Group</th><th>Role</th><th>Permission</th>
         </tr>
-        <tr><th>Memory</th><td>X</td><td>X</td><td>X</td><td>X</td><td></td><td></td><td></td><td></td></tr>
+        <tr><th>Memory</th><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td></tr>
         <tr><th>Hibernate</th><td>X</td><td>X</td><td>X</td><td>X</td><td></td><td></td><td></td><td></td></tr>
         <tr><th>Torque</th><td></td><td></td><td></td><td></td><td>X</td><td>X</td><td>X</td><td>X</td></tr>
         <tr><th>Passive</th><td></td><td></td><td></td><td></td><td>X</td><td></td><td></td><td></td></tr>

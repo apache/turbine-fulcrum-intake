@@ -1,4 +1,4 @@
-package org.apache.fulcrum.security.spi.memory.simple;
+package org.apache.fulcrum.security.spi.memory.turbine;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -66,7 +66,7 @@ import org.apache.fulcrum.security.model.simple.SimpleModelManager;
 import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
 import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
 import org.apache.fulcrum.security.model.simple.entity.SimpleUser;
-import org.apache.fulcrum.security.spi.memory.*;
+import org.apache.fulcrum.security.spi.memory.BaseMemoryManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PermissionSet;
