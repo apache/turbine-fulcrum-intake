@@ -59,13 +59,14 @@ import java.util.Iterator;
 import java.util.Map;
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Initializable;
-import org.apache.avalon.framework.component.ComponentManager;
-import org.apache.avalon.framework.component.Composable;
+import org.apache.avalon.framework.service.ServiceManager;
+import org.apache.avalon.framework.service.Serviceable;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.fulcrum.factory.FactoryException;
 import org.apache.fulcrum.factory.FactoryService;
+
 /**
  * The Pool Service extends the Factory Service by adding support
  * for pooling instantiated objects. When a new instance is
@@ -73,14 +74,18 @@ import org.apache.fulcrum.factory.FactoryService;
  * If the the pool is empty, a new instance will be requested
  * from the FactoryService.
  *
- * <p>For objects implementing the Recyclable interface, a recycle
+ * For objects implementing the Recyclable interface, a recycle
  * method will be called, when they taken from the pool, and
  * a dispose method, when they are returned to the pool.
  *
  * @author <a href="mailto:ilkka.priha@simsoft.fi">Ilkka Priha</a>
+ * @author <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>
  * @version $Id$
+ *
+ * @avalon.component name="pool" lifestyle="transient"
+ * @avalon.service type="org.apache.fulcrum.pool.PoolService"
  */
-public class DefaultPoolService extends AbstractLogEnabled implements PoolService, Composable, Disposable, Initializable, Configurable
+public class DefaultPoolService extends AbstractLogEnabled implements PoolService, Serviceable, Disposable, Initializable, Configurable
 {
     /**
      * The property specifying the pool capacity.
@@ -313,7 +318,7 @@ public class DefaultPoolService extends AbstractLogEnabled implements PoolServic
     private HashMap poolRepository = new HashMap();
     private Map capacityMap;
     private FactoryService factoryService;
-    private ComponentManager manager;
+    private ServiceManager manager;
     private boolean disposed;
     /**
      * Constructs a Pool Service.
@@ -637,13 +642,16 @@ public class DefaultPoolService extends AbstractLogEnabled implements PoolServic
             }
         }
     }
+
     /**
      * Avalon component lifecycle method
+     * @avalon.dependency type="org.apache.fulcrum.factory.FactoryService"
      */
-    public void compose(ComponentManager manager)
+    public void service(ServiceManager manager)
     {
         this.manager = manager;
     }
+
     /**
      * Avalon component lifecycle method
      * Initializes the service by loading default class loaders
@@ -656,13 +664,14 @@ public class DefaultPoolService extends AbstractLogEnabled implements PoolServic
         try
         {
             factoryService = (FactoryService) manager.lookup(FactoryService.ROLE);
-            
         }
         catch (Exception e)
         {
-            throw new Exception("TurbineCryptoService.init: Failed to get a Factory object", e);
+            throw new Exception(
+               "TurbineCryptoService.init: Failed to get a Factory object", e);
         }
     }
+
     /**
      * Avalon component lifecycle method
      */
@@ -676,5 +685,4 @@ public class DefaultPoolService extends AbstractLogEnabled implements PoolServic
         manager = null;
         disposed = true;
     }
-   
 }

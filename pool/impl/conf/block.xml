@@ -1,0 +1,24 @@
+
+<container name="test">
+
+   <classloader>
+     <classpath>
+       <repository>
+         <resource id="fulcrum:fulcrum-factory-api" version="1.0-alpha-2"/>
+         <resource id="fulcrum:fulcrum-factory-impl" version="1.0-alpha-2"/>
+         <resource id="fulcrum:fulcrum-pool-api" version="1.0-alpha-2"/>
+       </repository>
+     </classpath>
+   </classloader>
+
+   <component name="factory" 
+     class="org.apache.fulcrum.factory.DefaultFactoryService"/>
+
+   <component name="pool" 
+     class="org.apache.fulcrum.pool.DefaultPoolService">
+     <configuration>
+       <capacity default="256"/>
+     </configuration>
+   </component>
+
+</container>

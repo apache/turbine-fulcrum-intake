@@ -54,7 +54,6 @@ package org.apache.fulcrum.pool;
  * <http://www.apache.org/>.
  */
 
-import org.apache.avalon.framework.component.Component;
 
 /**
  * The Pool Service extends the Factory Service by adding support
@@ -69,10 +68,10 @@ import org.apache.avalon.framework.component.Component;
  * a dispose method, when they are returned to the pool.
  *
  * @author <a href="mailto:ilkka.priha@simsoft.fi">Ilkka Priha</a>
+ * @author <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>
  * @version $Id$
  */
 public interface PoolService 
-extends Component
 {
     /** Avalon role - used to id the component within the manager */
     String ROLE = PoolService.class.getName();

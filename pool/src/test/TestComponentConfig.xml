@@ -1,7 +1,0 @@
-<componentConfig>
-    <pool>
-      <capacity default="256"/>
-    </pool>
-    
-    <factory/>
-</componentConfig>
