@@ -56,10 +56,9 @@ package org.apache.fulcrum;
 
 import java.util.Properties;
 import java.util.List;
+
+import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
-//!! this must go away we want to use a configuration
-// interface.
-import org.apache.velocity.runtime.configuration.Configuration;
 
 /**
  * This class is a generic implementation of <code>Service</code>.
@@ -94,7 +93,7 @@ public abstract class BaseService
     /**
      * Configuration for this service.
      */
-    protected Configuration configuration;
+    protected ExtendedProperties configuration;
 
     /**
      * The name of this Service.
@@ -214,7 +213,7 @@ public abstract class BaseService
      *
      * @return The Configuration of this Service.
      */
-    public Configuration getConfiguration()
+    public ExtendedProperties getConfiguration()
     {
         if (name == null)
         {

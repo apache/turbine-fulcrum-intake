@@ -56,8 +56,9 @@ package org.apache.fulcrum;
 
 import java.util.List;
 import java.util.Hashtable;
+
+import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
-import org.apache.velocity.runtime.configuration.Configuration;
 
 /**
  * Classes that implement this interface can act as a broker for
@@ -168,7 +169,7 @@ public interface ServiceBroker
      * @param name The name of the service.
      * @return Configuration of the requested service.
      */
-    public Configuration getConfiguration( String name );
+    public ExtendedProperties getConfiguration( String name );
 
     /**
      * Set an object for use in the services.

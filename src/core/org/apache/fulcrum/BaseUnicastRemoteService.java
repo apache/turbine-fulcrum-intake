@@ -56,8 +56,8 @@ package org.apache.fulcrum;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
-import org.apache.velocity.runtime.configuration.Configuration;
 
 /**
  * A base implementation of an {@link java.rmi.server.UnicastRemoteObject}
@@ -69,7 +69,7 @@ public class BaseUnicastRemoteService
     extends UnicastRemoteObject
     implements Service
 {
-    protected Configuration configuration;
+    protected ExtendedProperties configuration;
     private boolean isInitialized;
     private String name;
     private ServiceBroker serviceBroker;
@@ -87,7 +87,7 @@ public class BaseUnicastRemoteService
      *
      * @return The configuration of this service.
      */
-    public Configuration getConfiguration()
+    public ExtendedProperties getConfiguration()
     {
         if (name == null)
         {

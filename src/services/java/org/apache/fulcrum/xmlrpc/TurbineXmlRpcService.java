@@ -61,6 +61,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Vector;
+
 import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
 import org.apache.fulcrum.ServiceBroker;
@@ -74,7 +75,7 @@ import org.apache.xmlrpc.XmlRpcServer;
 import org.apache.xmlrpc.secure.SecureWebServer;
 import org.apache.xmlrpc.secure.SecurityTool;
 
-import org.apache.velocity.runtime.configuration.Configuration;
+import org.apache.commons.collections.ExtendedProperties;
 
 /**
  * This is a service which will make an xml-rpc call to a remote
@@ -133,7 +134,7 @@ public class TurbineXmlRpcService
                     // and the URL https connection handler that is
                     // used in XmlRpcClient.
 
-                    Configuration secureServerOptions =
+                    ExtendedProperties secureServerOptions =
                         getConfiguration().subset("secure.server.option");
 
                     Iterator i = secureServerOptions.getKeys();
@@ -173,7 +174,8 @@ public class TurbineXmlRpcService
             }
 
             // Turn on paranoia for the webserver if requested.
-            boolean stateOfParanoia = getConfiguration().getBoolean("paranoid", false);
+            boolean stateOfParanoia =
+                getConfiguration().getBoolean("paranoid", false);
 
             if (stateOfParanoia)
             {
@@ -188,7 +190,8 @@ public class TurbineXmlRpcService
                 // Set the list of clients that can connect
                 // to the xmlrpc server. The accepted client list
                 // will only be consulted if we are paranoid.
-                Vector acceptedClients = getConfiguration().getVector("acceptClient");
+                Vector acceptedClients =
+                    getConfiguration().getVector("acceptClient");
 
                 for (int i = 0; i < acceptedClients.size(); i++)
                 {
@@ -205,7 +208,8 @@ public class TurbineXmlRpcService
                 // Set the list of clients that can connect
                 // to the xmlrpc server. The denied client list
                 // will only be consulted if we are paranoid.
-                Vector deniedClients = getConfiguration().getVector("denyClient");
+                Vector deniedClients =
+                    getConfiguration().getVector("denyClient");
 
                 for (int i = 0; i < deniedClients.size(); i++)
                 {

@@ -383,7 +383,8 @@ public class TurbineVelocityService
                     }
                     else if (path.startsWith("absolute:"))
                     {
-                        path = path.substring ("absolute:".length(), path.length());
+                        path = path.substring ("absolute:".length(),
+                                               path.length());
                     }
                     else if (!path.startsWith("jar:"))
                     {
@@ -398,7 +399,7 @@ public class TurbineVelocityService
 
         try
         {
-            Velocity.setConfiguration(getConfiguration());
+            Velocity.setExtendedProperties(getConfiguration());
             Velocity.init();
         }
         catch(Exception e)

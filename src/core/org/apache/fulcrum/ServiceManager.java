@@ -54,8 +54,8 @@ package org.apache.fulcrum;
  * <http://www.apache.org/>.
  */
 
+import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
-import org.apache.velocity.runtime.configuration.Configuration;
 
 /**
  * Classes that implement this interface can act as a mamager for
@@ -80,9 +80,9 @@ public interface ServiceManager
     /**
      * Get the configuration for this service manager.
      *
-     * @return Configuration
+     * @return Manager configuration.
      */
-    public Configuration getConfiguration();
+    public ExtendedProperties getConfiguration();
 
     /**
      * Set the configuration object for the services broker.
@@ -90,9 +90,9 @@ public interface ServiceManager
      * about all services in the care of this service
      * manager.
      *
-     * @param Configuration
+     * @param configuration Manager configuration.
      */
-    public void setConfiguration(Configuration configuration);
+    public void setConfiguration(ExtendedProperties configuration);
 
     /**
      * Set the application root.

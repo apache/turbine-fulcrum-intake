@@ -65,10 +65,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Stack;
 import org.apache.fulcrum.ServiceException;
+import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
-//!! this has to go away. we want to use a Configuration
-// interface.
-import org.apache.velocity.runtime.configuration.Configuration;
 
 // NOTE:
 // initClass is taking the name of the service now not
@@ -85,8 +83,8 @@ import org.apache.velocity.runtime.configuration.Configuration;
  * <li>Maintaining service name to class name mapping, allowing
  * plugable service implementations.</li>
  *
- * <li>Providing <code>Services</code> with a <code>Configuration</code>
- * based on system wide configuration mechanism.</li>
+ * <li>Providing <code>Services</code> with a configuration based on
+ * system wide configuration mechanism.</li>
  *
  * </ul>
  *
@@ -101,7 +99,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
     /**
      * Mapping of Service names to class names.
      */
-    protected Configuration mapping = new Configuration();
+    protected ExtendedProperties mapping = new ExtendedProperties();
 
     /**
      * A repository of Service instances.
@@ -113,7 +111,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
      * The configuration should be set by the application
      * in which the services framework is running.
      */
-    protected Configuration configuration;
+    protected ExtendedProperties configuration;
 
     /**
      * A prefix for <code>Service</code> properties in
@@ -176,9 +174,9 @@ public abstract class BaseServiceBroker implements ServiceBroker
      * about all services in the care of this service
      * manager.
      *
-     * @param Configuration
+     * @param configuration Broker configuration.
      */
-    public void setConfiguration(Configuration configuration)
+    public void setConfiguration(ExtendedProperties configuration)
     {
         this.configuration = configuration;
     }
@@ -186,9 +184,9 @@ public abstract class BaseServiceBroker implements ServiceBroker
     /**
      * Get the configuration for this service manager.
      *
-     * @return Configuration
+     * @return Broker configuration.
      */
-    public Configuration getConfiguration()
+    public ExtendedProperties getConfiguration()
     {
         return configuration;
     }
@@ -744,11 +742,11 @@ public abstract class BaseServiceBroker implements ServiceBroker
     }
 
     /**
-     * Returns the Configuration for the specified service.
+     * Returns the configuration for the specified service.
      *
      * @param name The name of the service.
      */
-    public Configuration getConfiguration( String name )
+    public ExtendedProperties getConfiguration( String name )
     {
         return configuration.subset(SERVICE_PREFIX + name);
     }

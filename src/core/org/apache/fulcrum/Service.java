@@ -54,8 +54,8 @@ package org.apache.fulcrum;
  * <http://www.apache.org/>.
  */
 
+import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
-import org.apache.velocity.runtime.configuration.Configuration;
 
 /**
  * <code>Services</code> are <code>Initables</code> that have a name,
@@ -156,7 +156,7 @@ public interface Service
      *
      * @return The Configuration of this Service.
      */
-    public Configuration getConfiguration();
+    public ExtendedProperties getConfiguration();
 
     /**
      * Given a relative paths, gets the real path.
