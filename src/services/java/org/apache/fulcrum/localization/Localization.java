@@ -83,6 +83,7 @@ import org.apache.fulcrum.TurbineServices;
  * Localization.getString(str)
  *
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
+ * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$
  */
 public abstract class Localization
@@ -121,9 +122,10 @@ public abstract class Localization
     }
 
     /**
-     * Convenience method that pulls a localized string off the LocalizationService
-     * using the default ResourceBundle name defined in the TurbineResources.properties
-     * file and the specified language name in ISO format.
+     * Convenience method that pulls a localized string off the
+     * LocalizationService using the default ResourceBundle name
+     * defined in the TurbineResources.properties file and the
+     * specified language name in ISO format.
      *
      * @param str Name of string.
      * @param lang Desired language for the localized string.
@@ -131,9 +133,8 @@ public abstract class Localization
      */
     public static String getString (String str, String lang)
     {
-        String defaultBundle = getService().getDefaultBundle();
-        return Localization
-            .getBundle(defaultBundle, new Locale (lang, "")).getString (str);
+        return Localization.getBundle(getDefaultBundle(), new Locale(lang, ""))
+            .getString(str);
     }
 
     /**
@@ -202,7 +203,7 @@ public abstract class Localization
     }
 
     /**
-     * This method sets the name of the defaultBundle.
+     * This method sets the name of the default bundle.
      *
      * @param defaultBundle Name of default bundle.
      */
@@ -234,6 +235,14 @@ public abstract class Localization
     public static Locale getLocale(String languageHeader)
     {
         return getService().getLocale(languageHeader);
+    }
+
+    /**
+     * @see org.apache.fulcrum.localization.LocalizationService#getDefaultBundle()
+     */
+    public static String getDefaultBundle()
+    {
+        return getService().getDefaultBundle();
     }
 
     /**
