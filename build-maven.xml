@@ -60,7 +60,8 @@
   </target>
         
   <target 
-    name="maven:dist">
+    name="maven:dist"
+    depends="maven:compile">
     <ant antfile="${maven.home}/build-maven.xml" target="dist"/>
   </target>
         
