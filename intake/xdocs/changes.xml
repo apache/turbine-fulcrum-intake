@@ -3,6 +3,7 @@
   <properties>
     <title>Fulcrum Intake</title>
     <author email="epugh@upstate.com">Eric Pugh</author>
+    <author email="seade@backstagetech.com.au">Scott Eade</author>
   </properties>
 
   <body>
@@ -20,6 +21,15 @@
        rules no longer attempt to execute the remaining rules when no
        input is provided.  A minLength > 0 rule is no longer synonymous
        with required=true.  Patch originally supplied by Colin Chalmers
+      </action>
+      <action dev="seade" type="fix">
+       Intake was fixed so that DateString will use the "formatn" (where n 
+       &gt;= 1) rules to parse the input and then the "format" rule to format 
+       it (the "format" rule is also used to parse the date if there are no
+       "formatn" rules or they are not able to parse it).  In order to 
+       retrieve the correctly formatted DateString value you need to use
+       <em>$group.foo.StringValue</em> rather than <em>$group.foo.Value</em> 
+       (you can do this for all values, not just DateString).
       </action>
      
     </release>
