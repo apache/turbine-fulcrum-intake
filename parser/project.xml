@@ -3,7 +3,7 @@
   <extend>${basedir}/../project.xml</extend>
   <id>fulcrum-parser</id>
   <name>Fulcrum Parser Component</name>
-  <currentVersion>1.0.1</currentVersion>
+  <currentVersion>1.0.2-dev</currentVersion>
 
   <dependencies>
     <dependency>
@@ -53,20 +53,6 @@
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
       <version>1.0.3</version>
-    </dependency>
-
-    <dependency>
-      <groupId>xercesImpl</groupId>
-      <artifactId>xercesImpl</artifactId>
-      <version>2.0.2</version>
-      <url>http://xml.apache.org/xerces2-j/</url>
-    </dependency>
-
-    <dependency>
-      <groupId>xml-apis</groupId>
-      <artifactId>xml-apis</artifactId>
-      <version>2.0.2</version>
-      <url>http://xml.apache.org/xerces2-j/</url>
     </dependency>
 
   </dependencies>

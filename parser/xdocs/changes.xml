@@ -6,7 +6,10 @@
   </properties>
 
   <body>
-    <release version="1.0-alpha-2" date="in CVS">
+    <release version="1.0.2-dev" date="in CVS">
+     <action dev="epugh" type="add">
+        Make gump friendly.
+      </action>          
      <action dev="epugh" type="add">
         Initial conversion to Avalon component.
       </action>      
