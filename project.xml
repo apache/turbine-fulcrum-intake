@@ -3,6 +3,7 @@
 <project>
   <pomVersion>3</pomVersion>
   <name>jakarta-turbine-fulcrum</name>
+  <groupId>fulcrum</groupId>
   <id>fulcrum</id>
   <currentVersion>1.0-alpha-3</currentVersion>
   <organization>
@@ -470,6 +471,11 @@
 
     <sourceDirectory>${basedir}/src/java/</sourceDirectory>
     <unitTestSourceDirectory>${basedir}/src/test/</unitTestSourceDirectory>
+    <unitTest>
+          <includes>
+            <include>**/*Test.java</include>
+      </includes>
+    </unitTest>
  
   </build>
  
