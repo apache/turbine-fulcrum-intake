@@ -9,7 +9,7 @@
     <dependency>
       <groupId>avalon-framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
-      <version>4.1.5</version>
+      <version>4.2.0</version>
     </dependency>  
     <dependency>
       <groupId>turbine</groupId>    
@@ -19,13 +19,13 @@
     <dependency>
       <groupId>fulcrum</groupId>    
       <artifactId>fulcrum-localization-api</artifactId>
-      <version>1.0.4</version>
+      <version>1.0.5-dev</version>
     </dependency>   
     
     <dependency>
       <groupId>fulcrum</groupId>    
       <artifactId>fulcrum-factory-api</artifactId>
-      <version>1.0.2</version>
+      <version>1.0.3-dev</version>
     </dependency>  
     
     <dependency>

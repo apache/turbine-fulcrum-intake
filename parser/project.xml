@@ -21,7 +21,7 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-pool-api</artifactId>
-      <version>1.0.2</version>
+      <version>1.0.3-dev</version>
     </dependency>
     
     <dependency>
@@ -32,7 +32,7 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-factory-api</artifactId>
-      <version>1.0.2</version>
+      <version>1.0.3-dev</version>
     </dependency>
     
     <dependency>
