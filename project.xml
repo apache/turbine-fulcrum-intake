@@ -179,15 +179,15 @@
     <dependency>
       <name>jakarta-turbine-stratum</name>
       <type>required</type>
-      <version>0.1</version>
-      <jar>stratum-0.1-dev.jar</jar>
+      <version>1.0-b2-dev</version>
+      <jar>stratum-1.0-b2-dev.jar</jar>
     </dependency>
 
     <dependency>
       <name>jakarta-turbine-torque</name>
       <type>required</type>
-      <version>3.0-dev</version>
-      <jar>torque-3.0-dev.jar</jar>
+      <version>3.0-b2-dev</version>
+      <jar>torque-3.0-b2-dev.jar</jar>
     </dependency>
 
     <dependency>
@@ -201,7 +201,7 @@
       <name>jakarta-velocity-dvsl</name>
       <type>documentation</type>
       <version>0.40</version>
-      <jar>velocity-dvsl-0.40.jar</jar>
+      <jar>velocity-dvsl-0.43.jar</jar>
     </dependency>
 
     <dependency>
