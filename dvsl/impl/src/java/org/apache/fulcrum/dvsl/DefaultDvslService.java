@@ -1,8 +1,9 @@
 package org.apache.fulcrum.dvsl;
+
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,50 +53,87 @@ package org.apache.fulcrum.dvsl;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.Reader;
+import java.io.Writer;
 
-import org.apache.avalon.framework.component.ComponentException;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 
-public class DvslBasicTest extends BaseUnitTest
+
+import org.apache.tools.dvsl.DVSL;
+
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.logger.AbstractLogEnabled;
+
+/**
+ *  Implementation of the Fulcrum Dvsl Service. It transforms xml with a given
+ *  dvsl file.
+ *
+ * @author <a href="mailto:geirm@apache.org">Geir Magnusson Jr.</a>
+ * @author <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>
+ * @avalon.component name="dvsl" lifestyle="singleton"
+ * @avalon.service type="org.apache.fulcrum.dvsl.DvslService"
+ */
+public class DefaultDvslService
+    extends AbstractLogEnabled
+    implements DvslService, Initializable
 {
-    private String dvsl = "#match(\"element\")Hello from element! $node.value()#end";
-    private String input = "<?xml version=\"1.0\"?><document><element>Foo</element></document>";
+    protected Map servicePool = new HashMap();
 
-  private DvslService dvslService = null;
-    public DvslBasicTest(String name)
+    /**
+     *  register a stylesheet
+     */
+    public void register( String styleName,  Reader stylesheet, Properties toolbox )
+        throws Exception
     {
-        super(name);
+        DVSL dvsl = new DVSL();
+
+        if ( stylesheet != null)
+        {
+            dvsl.setStylesheet( stylesheet );
+        }
+        else
+        {
+            throw new Exception("Null stylesheet Reader");
+        }
+
+        if( toolbox != null)
+        {
+            dvsl.setToolbox( toolbox );
+        }
+
+        servicePool.put( styleName, dvsl );
     }
-  public void setUp() throws Exception
-   {
-     super.setUp();
-     try
-     {
-      dvslService = (DvslService) this.lookup(DvslService.ROLE);
-     }
-     catch (ComponentException e)
-     {
-       e.printStackTrace();
-       fail(e.getMessage());
-     }
-     //        this.release(sc);
-   }
-    public void testSelection() throws Exception
+
+    /**
+     *  unregister a stylesheet and release resources
+     */
+    public void unregister( String styleName )
     {
-
-        /*
-         *  register the stylesheet
-         */
-        dvslService.register("style", new StringReader(dvsl), null);
-        /*
-         *  render the document
-         */
-        StringWriter sw = new StringWriter();
-    dvslService.transform("style", new StringReader(input), sw);
-    assertEquals("Hello from element! Foo",sw.toString());
-
+        servicePool.remove( styleName );
     }
+    
+    /**
+     * Execute an DVSLT
+     */
+    public void transform ( String styleName, Reader in, Writer out)
+        throws Exception
+    {
+        DVSL dvsl = (DVSL) servicePool.get( styleName );
+
+        dvsl.transform( in, out );
+    }
+
+    // ---------------- Avalon Lifecycle Methods ---------------------
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void initialize()
+    {
+        
+    }
+
 }

@@ -59,17 +59,15 @@ import java.io.Writer;
 
 import java.util.Properties;
 
-import org.apache.avalon.framework.component.Component;
-
 /**
  * The Fulcrum DVSL Service is used to transform XML with a DVSL stylesheet.
  * The service makes use of the DVSL engine available from the 
  * Jakarta Velocity project.
  *
  * @author <a href="mailto:geirm@apache.org">Geir Magnusson Jr.</a>
+ * @author <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>
  */
 public interface DvslService
-    extends Component
 {
     /** Avalon role - used to id the component within the manager */
     String ROLE = DvslService.class.getName();

@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+
+<project>
+
+  <id>fulcrum-crypto-impl</id>
+  <extend>${basedir}/../../merlin-project.xml</extend>
+  <name>Fulcrum DVSL Implementation</name>
+  <currentVersion>1.0-alpha-4</currentVersion>
+  <package>org.apache.fulcrum.dvsl</package>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-dvsl-api</artifactId>
+      <version>1.0-alpha-4</version>
+    </dependency>
+    <dependency>
+      <groupId>avalon-framework</groupId>
+      <artifactId>avalon-framework-api</artifactId>
+      <version>4.1.5</version>
+    </dependency>  
+    <dependency>
+      <id>velocity-dvsl</id>
+      <version>0.45</version>
+    </dependency>
+    <dependency>
+      <id>dom4j</id>
+      <version>1.4</version>
+    </dependency>
+    <dependency>
+      <groupId>velocity</groupId>
+      <artifactId>velocity</artifactId>
+      <version>1.4-dev</version>
+    </dependency>
+    <dependency>
+      <id>commons-collections</id>
+      <version>2.1</version>
+      <url>http://jakarta.apache.org/commons/collections.html</url>
+    </dependency>
+    <dependency>
+      <id>logkit</id>
+      <version>1.0.1</version>
+      <url>http://avalon.apache.org/logkit/</url>
+    </dependency>
+
+    <!-- testing -->
+
+    <dependency>
+      <groupId>merlin</groupId>
+      <artifactId>merlin-unit</artifactId>
+      <version>3.2.2-dev</version>
+    </dependency>
+
+  </dependencies>
+
+</project>
+
