@@ -55,6 +55,7 @@ package org.apache.fulcrum.security.impl.db.entity;
  */
 
 import java.util.Vector;
+import org.apache.torque.TorqueException;
 import org.apache.torque.util.BasePeer;
 import org.apache.torque.pool.DBConnection;
 import org.apache.torque.util.Criteria;
@@ -90,7 +91,7 @@ public class TurbineUserPeer
      * the DBSecurityService???
      */
     public static Class getOMClass()
-        throws Exception
+        throws TorqueException
     {
         if ( userClass == null )
         {
@@ -98,7 +99,14 @@ public class TurbineUserPeer
                 .getConfiguration().getString("user.class",
                     "org.apache.turbine.om.security.TurbineUser");
 
-            userClass = Class.forName(className);
+            try
+            {
+                userClass = Class.forName(className);
+            }
+            catch (Exception e)
+            {
+                throw new TorqueException(e);
+            }
         }
 
         return userClass;
