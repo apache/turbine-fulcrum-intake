@@ -18,9 +18,9 @@
 
     <attainGoal name="check-om"/>
 
-    omGenerated: ${omGenerated}
+    <j:if test="${omGenerated != 'true'}">
 
-    <j:if test="${omGenerated == 'true'}">
+    <echo>Generating sources ...</echo>
 
     <!--
     We could create a fileset in the project to manage this
@@ -51,8 +51,9 @@
       value="${maven.prepareSourceDirectory}/report.turbine.om.generation"
     />
 
-    omStatusFile:  ${omStatusFile}
-
+    <mkdir dir="target/src"/>
+    <j:set var="omGenerated" value="false"/>
+    
     <uptodate
       property="omGenerated"
       targetfile="${omStatusFile}">
@@ -61,8 +62,6 @@
         includes="turbine-schema.xml"
       />
     </uptodate>
-    
-    omGenerated: ${omGenerated}
     
   </goal>
 
