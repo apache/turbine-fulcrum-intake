@@ -33,6 +33,12 @@
               Copies system properties during startup
             </td>
           </tr>
+          <tr>
+            <td><a href="reconfigurationservice.html">ReconfigurationService</a></td>
+            <td>
+              Automatic reconfiguration after changes of the configuration file
+            </td>
+          </tr>
         </table>
         
       </p>

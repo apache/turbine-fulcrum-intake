@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>ReconfigurationSerice</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Overview">
+      <p>
+        This service uses a background thread to monitor the Component Configuration 
+        File. If a change is detected the Avalon container is reconfigured.
+      </p>
+      <p>
+        This service allows reconfiguration support without using client/server
+        communication.
+      </p>            
+    </section>
+    
+    <section name="Configuration">
+
+      <subsection name="Role Configuration">
+        <source>
+          <![CDATA[
+  <role
+    name="org.apache.fulcrum.yaafi.service.reconfiguration.ReconfigurationService"
+    shorthand="ReconfigurationService"
+    default-class="org.apache.fulcrum.yaafi.service.reconfiguration.ReconfigurationServiceImpl"
+    early-init="true"
+    description="Monitors the componentConfiguration.xml to reconfigure YAAFI"
+  />   
+          ]]>
+        </source>
+      </subsection>
+
+      <subsection name="Component Configuration">
+        <source>
+          <![CDATA[
+  <ReconfigurationService interval="5000">
+    <location>./src/test/TestComponentConfig.xml</location>
+  </ReconfigurationService>
+          ]]>
+        </source>
+      </subsection>
+    </section>
+        
+  </body>
+    
+</document>

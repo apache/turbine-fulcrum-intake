@@ -20,20 +20,37 @@
         Avalon service lifecycle interfaces. There are a few other implementations
         out there such as Excalibur, Fortress and most notably Merlin but
         YAAFI gives you a lot of bells and whistles with minimal baggage.
+        The goal of the implementation to implement light-weight Avalon container
+        to be embedded into existing applications and/or other containers.
       </p>
      
-      <p>
-        What we left out to
-       
-        <ul>
-          <li>logger manager implementation</li>
-          <li>run-time instrumentation to monitor application health</li>
-          <li>service implementation versioning</li>
-          <li>service initialization in a background thread</li>
-          <li>support for singleton lifestyle only</li>
-        </ul>
-      </p>  
-     
+      <subsection name="What we left out">
+        <p>
+          <ul>
+            <li>logger manager implementation</li>
+            <li>run-time instrumentation to monitor application health</li>
+            <li>service implementation versioning</li>
+            <li>service initialization in a background thread</li>
+            <li>support for singleton lifestyle only</li>
+            <li>classloader hierarchies for components</li>
+            <li>service selector implementation</li>
+          </ul>
+        </p>  
+      </subsection>
+
+      <subsection name="What we actually implemented">
+        <p>
+          <ul>
+            <li>a light-weight Avalon container only depending an the Avalone Framwork libraries</li>
+            <li>a container following the Avalon Framework contract</li>
+            <li>ability to run components written for other Avalon containers</li>
+            <li>support for automatic reconfiguration</li>
+            <li>support for early or on-demand initialization</li>
+            <li>support for decryption of configuration files</li>
+          </ul>
+        </p>  
+      </subsection>
+           
     </section>
 
   </body>

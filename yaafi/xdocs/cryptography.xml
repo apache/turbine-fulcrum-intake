@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Fulcrum YAAFI</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Cryptography Support">
+
+      <p>
+        The YAAFI container supports decryption of configuration files using
+        Sun's JCA (Java Crypto Architecture) and JCE (Java Crypto Extension).
+      </p>
+
+      <subsection name="JDK 1.3.x">
+        <p>
+          For JDK 1.3.x the <a href="http://java.sun.com/products/jce/index-122.html">
+          Java Cryptography Extension (JCE) 1.2.2</a> needs to be installed. 
+          Furthermore you need to add the jce1_2_2.jar to your Maven repository
+          and project.xml
+        </p>
+      </subsection>
+      
+      <subsection name="JDK 1.4.2">
+        <p>
+          The current JDK's have the JCA built-in therefore no extra configuration
+          is required. In the case of an older JDK you need to upgrade.
+        </p>
+      </subsection>
+      
+      <subsection name="Availabe Algorithms">
+        <table>
+          <tr>
+            <th>Provider Version</th>
+            <th>Algorithms</th>
+          </tr>
+          <tr>
+            <td>SunJCE 1.22</td>
+            <td>PBEWithMD5AndDES</td>
+          </tr>
+          <tr>
+            <td>SunJCE 1.42</td>
+            <td>
+              PBEWithMD5AndDES<br/>PBEWithMD5AndTripleDES
+            </td>
+          </tr>
+        </table>      
+      </subsection>
+      
+    </section>
+
+  </body>
+
+</document>

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Fulcrum YAAFI</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+  <body>
+    <section name="Configuration">
+      <p>
+        
+      </p>
+      <subsection name="Component Configuration">
+        <p>
+          This example shows the component configuration if YAAFI is embedded in another
+          Avalon Container.
+        </p>
+        <source>        
+          <![CDATA[
+<fulcrum-yaafi>
+  <containerType>merlin<containerType>
+  <containerClazzName>org.apache.fulcrum.yaafi.framework.container.ServiceContainerImpl</containerClazzName>
+  <componentRoles>
+    <location>../conf/componentRoles.xml</location>
+    <decryption>false</decryption>
+  </componentRoles>
+  <componentConfiguration>
+    <location>../conf/componentRoles.xml</location>
+    <decryption>false</decryption>
+  </componentConfiguration>
+  <parameters>
+    <location>../conf/parameters.properties</location>    
+    <decryption>false</decryption>
+  </parameters>
+</fulcrum-yaafi>              
+          ]]>
+        </source>
+      </subsection>
+    </section>
+  </body>
+</document>

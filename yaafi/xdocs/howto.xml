@@ -23,7 +23,7 @@
             access the service
           </li>
           <li> 
-            Add an entry to the component configuratino file if
+            Add an entry to the component configurating file if
             you need to configure your service.
           </li>
         </ul>          
@@ -32,7 +32,12 @@
       <subsection name="How can I embed YAAFI in an application?">
         <p> 
           The embedding is done by creating a YAAFI instance using the
-          ServiceManagerFactory.create() method.
+          ServiceContainerFactory.create() method. Technically there
+          are two ways to create a YAAFI container
+          <ul>
+            <li>Provide all paramters by the caller</li>
+            <li>Use a containerConfiguration.xml</li>
+          </ul>
         </p>
 
         <p> 
@@ -42,14 +47,26 @@
         </p>
         
         <source>
-ServiceContainer manager = null;
 Logger logger = new Log4JLogger( org.apache.log4j.Logger.getLogger("YAAFI");
-manager = ServiceManagerFactory.create(
-    logger,
-    "roleConfiguration.xml",
-    "componentConfiguration.xml",
-    "parameters.xml"
-    );        
+ServiceContainer container = null;
+ServiceContainerConfiguration config = new ServiceContainerConfiguration();        
+config.setLogger( logger );
+config.setComponentRolesLocation( "./src/test/TestRoleConfig.xml" );
+config.setComponentConfigurationLocation( "./src/test/TestComponentConfig.xml" );
+config.setParametersLocation( "./src/test/TestParameters.properties" );                               
+container = ServiceContainerFactory.create( config );
+        </source>
+
+        <p> 
+          The following example uses a XML file to initialize the YAAFI 
+          container
+        </p>
+        
+        <source>
+ServiceContainer container = null;
+ServiceContainerConfiguration config = new ServiceContainerConfiguration();                
+config.setContainerConfiguration( "./src/test/TestContainerConfig.xml", false );        
+container = ServiceContainerFactory.create( config );
         </source>
         
       <p>

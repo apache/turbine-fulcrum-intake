@@ -5,25 +5,32 @@
 
   <body>
     <links>
-      <item name="Turbine"			       href="http://jakarta.apache.org/turbine/"/>
-      <item name="Fulcrum"			       href="http://jakarta.apache.org/turbine/fulcrum/"/>
+      <item name="Turbine"                    href="http://jakarta.apache.org/turbine/"/>
+      <item name="Fulcrum"                    href="http://jakarta.apache.org/turbine/fulcrum/"/>
     </links>
     
     <menu name="Overview">
-      <item name="Main"                     href="/index.html"/>
-      <item name="Overview"                 href="/index.html"/>
-      <item name="Lifecycle"                href="/lifecycle/index.html" collapse="true">     
-        <item name="Incarnation"              href="/lifecycle/incarnation.html"/>
-        <item name="Reconfiguration"          href="/lifecycle/reconfiguration.html"/>
-        <item name="Decommision"              href="/lifecycle/decommission.html"/>
+      <item name="Main"                       href="/index.html"/> 
+      <item name="How To"                     href="/howto.html"/>
+      <item name="Cryptography"               href="/cryptography.html"/>
+      <item name="Lifecycle"                  href="/lifecycle/index.html" collapse="true">     
+        <item name="Incarnation"                href="/lifecycle/incarnation.html"/>
+        <item name="Reconfiguration"            href="/lifecycle/reconfiguration.html"/>
+        <item name="Decommision"                href="/lifecycle/decommission.html"/>
       </item>
-      <item name="Services"                 href="/services/index.html" collapse="true">     
-        <item name="ServiceManagerService"    href="/services/servicemanagerservice.html"/>
-        <item name="SystemPropertyService"    href="/services/systempropertyservice.html"/>
+      <item name="Services"                   href="/services/index.html" collapse="true">     
+        <item name="ServiceManagerService"      href="/services/servicemanagerservice.html"/>
+        <item name="SystemPropertyService"      href="/services/systempropertyservice.html"/>
+        <item name="ReconfigurationService"     href="/services/reconfigurationservice.html"/>
       </item>
-      <item name="How To"                   href="/howto.html"/>
-      <item name="Todo's"                   href="/todo.html"/>
-
+      <item name="Specification"              href="/specification/index.html" collapse="true">     
+        <item name="Container Configuration"    href="/specification/container.html"/>
+        <item name="Role Configuration"         href="/specification/role.html"/>
+        <item name="Component Configuration"    href="/specification/component.html"/>
+        <item name="Avalon Context"             href="/specification/context.html"/>
+      </item>
+      <item name="Todo's"                     href="/todo.html"/>
     </menu>
+    
   </body>
 </project>

@@ -47,56 +47,25 @@
         <p>
           Here you get the logger for your service implementation. This
           is again an interface to an implementation of a logger provided
-          by the caller of the service framework.
+          by the caller of the service framework. You can skip this interface
+          if you use org.apache.avalon.framework.logger.AbstractLogEnabled
+          as base class for your service.
         </p>
       </subsection>
 
       <subsection name="Contextualizable.contextualize(Context)">
         <p>
           The context contains information about your application
-          environment. The following entries are guaranteed to be
-          available since they are supplied by YAAFI
-          
-          <table>
-            <tr>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Description</th>
-            </tr>
-            <tr>
-              <td>urn:avalon:home</td>
-              <td>File</td>
-              <td>
-                The home directory of the application. This is usually
-                the current working directory or WEB-INF. It is assumed
-                that your application has read access.
-              </td>
-            </tr>
-            <tr>
-              <td>urn:avalon:temp</td>
-              <td>File</td>
-              <td>
-                The temp directory of the application. It is assumed
-                that temporary files will be dumped there and therefore
-                read/write access is required.
-              </td>
-            </tr>
-            <tr>
-              <td>componentAppRoot</td>
-              <td>String</td>
-              <td>
-                The absolute path home directory of the application again. 
-                This is provided for backward compatibility with Fulcrum and
-                might be depracted in the future.
-              </td>
-            </tr>
-          </table>
+          environment including the current working directory and
+          the temporary directory. YAAFI provides you with different
+          context entries depending on the component type, e.g.
+          "phoenix" or "fortress".
         </p>
       </subsection>
 
       <subsection name="Serviceable.service(ServiceManager)">
         <p>
-          At this point you get a reference to the service container. This
+          At this point you get a reference to the ServiceManager. This
           is the right moment to lookup all dependent services just to make
           sure that everything is fine.
         </p>
@@ -121,7 +90,7 @@
       <subsection name="Initializable.initialize()">
         <p>
           This method is used for initializing your service implementation 
-          since you have all your configuration information by now.
+          since you have all your configuration information by now,
         </p>
       </subsection>
 
@@ -135,7 +104,8 @@
       <subsection name="Startable.start()">
         <p>
           The Startable interface is used by any component that is constantly 
-          running for the duration of its life.
+          running for the duration of its life. This is the method to go if
+          you wnat to start a worker thread in the background.
         </p>
       </subsection>
 

@@ -6,9 +6,36 @@
   </properties>
 
   <body>
-    <release version="1.0.4" date="as in CVS">
+    <release version="1.0.4-dev" date="as in CVS">
+      <action dev="sgoeschl" type="add">
+        Transparent decryption of configuration files
+      </action>
+      <action dev="sgoeschl" type="add">
+        Added reconfiuration service ro reconfigure YAAFI if the component
+        configuration file has changed
+      </action>
+      <action dev="sgoeschl" type="add">
+        Provide context mapping in the case that YAAFI is embedded in another 
+        Avalon container (experimental)
+      </action>
+      <action dev="sgoeschl" type="add">
+        Improved bootstrapping of YAAFI using containerConfiguration.xml
+      </action>
+      <action dev="sgoeschl" type="add">
+        Decryption of configuration files
+      </action>
+      <action dev="sgoeschl" type="add">
+        Added cryptography support based on JCE/JCA
+      </action>
+      <action dev="sgoeschl" type="add">
+        Using ServiceManagerConfig to capture the configuration
+        data for YAAFI
+      </action>
       <action dev="sgoeschl" type="add">
         Refactored some code into AvalonContextHelper and InputStreamLocator
+      </action>
+      <action dev="sgoeschl" type="add">
+        Parsing a "component-type" element for the future 
       </action>
       <action dev="sgoeschl" type="add">
         Parsing a "description" element of the role configuration file
