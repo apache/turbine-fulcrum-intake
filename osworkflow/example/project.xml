@@ -22,6 +22,12 @@
       <organization/>
     </developer>
   </developers>
+  <contributors>
+    <contributor>
+      <name>Youngho Cho</name>
+      <email>youngho@nannet.co.kr</email>
+    </contributor>  
+  </contributors>
 
   <dependencies>
     <dependency>

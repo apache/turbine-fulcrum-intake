@@ -7,6 +7,9 @@
 
   <body>
     <release version="Not applicable" date="">
+     <action dev="epugh" type="add">
+        Added extra helper methods to WorkflowTool provided by Youngho Cho.
+      </action>    	
       <action dev="epugh" type="update">
 		Changed project name and package structure to be fulcrum-osworkflow-example from the old
 		fulcrum-workflow-example.  Better reflects the use of OSWorkflow engine.

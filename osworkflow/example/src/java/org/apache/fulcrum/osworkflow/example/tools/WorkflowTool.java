@@ -83,8 +83,12 @@ public class WorkflowTool implements ApplicationTool
     private static Log log = LogFactory.getLog(WorkflowTool.class);
     /** Fulcrum Localization component */
     private WorkflowService workflowService;
-    private User user;
-
+   
+    /** Turbine rundata object */
+	private RunData data;
+	
+	/** Turbine User object */
+	private User user;	
 
     /**
      * Lazy load the WorkflowService.
@@ -115,30 +119,46 @@ public class WorkflowTool implements ApplicationTool
    
   
     /**
-     * Sets the request to get the <code>Accept-Language</code> header
-     * from (reset on each request).
+     * Initialize the tool with the RunData object.
      */
-    public final void init(Object data)
+    public final void init(Object obj)
     {
-        if (data instanceof RunData)
-        {
-            // Pull necessary information out of RunData while we have
-            // a reference to it.
-            user = ((RunData)data).getUser();
-          
-        }
+		data = (RunData) obj;
     }
     /**
-     * No-op.
+     * Remove the Turbine RunData object.
      */
     public void refresh()
     {
-        user = null;
+        data = null;
     }
+   
+   /**
+    * Sets the Turbine User object
+    * @param user  The User object to set
+    */ 
+	public void setUser(User user)
+    {
+       this.user = user;
+    }
+
+   	/**
+   	 * Retrieve the Turbine User object
+   	 * @return Turbine User
+   	 */
+    public User getUser()
+    {
+       if(user ==null)
+       {
+           user = data.getUser();
+       }
+       return user;
+   }
+    
     
     public List retrieveWorkflows(String status) throws WorkflowException{
         List workflows = new ArrayList();
-        String caller = user.getName();
+		String caller = getUser().getName();
         long workflowIds []= getWorkflowService().retrieveWorkflows(caller,status);
         Workflow workflow = getWorkflowService().retrieveWorkflow(caller);
         for (int i =0;i<workflowIds.length;i++) {
@@ -148,5 +168,29 @@ public class WorkflowTool implements ApplicationTool
         return workflows;
     }
     
-    
+	/**
+     * Retrieve Workflow 
+     *
+     * @return Workflow object
+     * @throws WorkflowException 
+     */
+    public Workflow retrieveWorkflow()
+           throws WorkflowException
+    {
+       return retrieveWorkflow(getUser());
+    }
+   
+    /**
+     * Retrieve Workflow of given User
+     * 
+     * @param User
+     * @return Workflow 
+     * @throws WorkflowException 
+     */
+    public Workflow retrieveWorkflow(User user)
+           throws WorkflowException
+    {
+       return getWorkflowService().retrieveWorkflow(user.getName());
+    }    
+
 }
