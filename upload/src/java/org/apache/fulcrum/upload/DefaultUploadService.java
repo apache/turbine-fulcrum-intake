@@ -67,8 +67,6 @@ import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
-import org.apache.avalon.framework.service.ServiceManager;
-import org.apache.avalon.framework.service.Serviceable;
 import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileUploadException;
 
@@ -95,7 +93,7 @@ import org.apache.commons.fileupload.FileUploadException;
  */
 public class DefaultUploadService
     extends AbstractLogEnabled
-    implements UploadService, Initializable,Configurable, Contextualizable, Serviceable
+    implements UploadService, Initializable,Configurable, Contextualizable
 {
     protected DiskFileUpload fileUpload;
 
@@ -265,15 +263,6 @@ public class DefaultUploadService
 
     public void contextualize(Context context) throws ContextException {
         this.applicationRoot = context.get( "urn:avalon:home" ).toString();
-    }
-
-    /**
-     * Avalon component lifecycle method
-     */
-    public void service( ServiceManager manager) {
-
-        UploadServiceFacade.setUploadService(this);
-
     }
 
 
