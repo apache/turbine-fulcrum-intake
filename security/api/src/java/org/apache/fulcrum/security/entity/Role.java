@@ -1,6 +1,6 @@
 package org.apache.fulcrum.security.entity;
 
-/* ====================================================================
+/*
  * The Apache Software License, Version 1.1
  *
  * Copyright (c) 2001 The Apache Software Foundation.  All rights
