@@ -58,15 +58,19 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Category;
+
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.thread.ThreadSafe;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * <p>This class is the single point of access to all localization
  * resources.  It caches different ResourceBundles for different
@@ -101,6 +105,8 @@ public class DefaultLocalizationService
     extends AbstractLogEnabled
     implements LocalizationService, Configurable, Initializable, ThreadSafe
 {
+    /** The log. */
+    private static Log log = LogFactory.getLog(DefaultLocalizationService.class);
     /** Key Prefix for our bundles */
     private static final String BUNDLES = "bundles";
     /**
@@ -130,10 +136,7 @@ public class DefaultLocalizationService
     private String defaultLanguage;
     /** The name of the default country to use. */
     private String defaultCountry = null;
-    /**
-     * Log4J logging category.
-     */
-    private Category category = Category.getInstance(getClass().getName());
+ 
     /**
      * Creates a new instance.
      */
@@ -145,10 +148,22 @@ public class DefaultLocalizationService
     {
         Locale jvmDefault = Locale.getDefault();
         System.out.println("Using parameters");
-        defaultLanguage = conf.getAttribute("locale-default-language", jvmDefault.getLanguage()).trim();
-        defaultCountry = conf.getAttribute("locale-default-country", jvmDefault.getCountry()).trim();
+        defaultLanguage =
+            conf
+                .getAttribute(
+                    "locale-default-language",
+                    jvmDefault.getLanguage())
+                .trim();
+        defaultCountry =
+            conf
+                .getAttribute("locale-default-country", jvmDefault.getCountry())
+                .trim();
         // FIXME! need to add bundle names
-        getLogger().info("initialized lang=" + defaultLanguage + " country=" + defaultCountry);
+        getLogger().info(
+            "initialized lang="
+                + defaultLanguage
+                + " country="
+                + defaultCountry);
         final Configuration bundles = conf.getChild(BUNDLES, false);
         if (bundles != null)
         {
@@ -159,7 +174,7 @@ public class DefaultLocalizationService
                 String key = nameVal[i].getName();
                 String val = nameVal[i].getValue();
                 getLogger().debug("Registered bundle " + val);
-				bundleName[i] = val;
+                bundleName[i] = val;
             }
             initBundleNames(bundleName);
         }
@@ -169,8 +184,13 @@ public class DefaultLocalizationService
      */
     public void initialize() throws Exception
     {
-       // initBundleNames(null);
+        // initBundleNames(null);
         defaultLocale = new Locale(defaultLanguage, defaultCountry);
+        Localization.setLocalizationService(this);
+        if (log.isInfoEnabled())
+        {
+            log.info("OSWorkflow Service is Initialized now..");
+        }
     }
     /**
      * Initialize list of default bundle names.
@@ -192,7 +212,12 @@ public class DefaultLocalizationService
                 // Prepend "default" bundle name.
                 String[] array = new String[intBundleNames.length + 1];
                 array[0] = defaultBundleName;
-                System.arraycopy(intBundleNames, 0, array, 1, intBundleNames.length);
+                System.arraycopy(
+                    intBundleNames,
+                    0,
+                    array,
+                    1,
+                    intBundleNames.length);
                 bundleNames = array;
             }
         }
@@ -296,7 +321,8 @@ public class DefaultLocalizationService
     public ResourceBundle getBundle(String bundleName, Locale locale)
     {
         // Assure usable inputs.
-        bundleName = (bundleName == null ? getDefaultBundleName() : bundleName.trim());
+        bundleName =
+            (bundleName == null ? getDefaultBundleName() : bundleName.trim());
         if (locale == null)
         {
             locale = getLocale((String) null);
@@ -328,13 +354,22 @@ public class DefaultLocalizationService
      *
      * @exception MissingResourceException Bundle not found.
      */
-    private synchronized ResourceBundle cacheBundle(String bundleName, Locale locale) throws MissingResourceException
+    private synchronized ResourceBundle cacheBundle(
+        String bundleName,
+        Locale locale)
+        throws MissingResourceException
     {
         HashMap bundlesByLocale = (HashMap) bundles.get(bundleName);
-        ResourceBundle rb = (bundlesByLocale == null ? null : (ResourceBundle) bundlesByLocale.get(locale));
+        ResourceBundle rb =
+            (bundlesByLocale == null
+                ? null
+                : (ResourceBundle) bundlesByLocale.get(locale));
         if (rb == null)
         {
-            bundlesByLocale = (bundlesByLocale == null ? new HashMap(3) : new HashMap(bundlesByLocale));
+            bundlesByLocale =
+                (bundlesByLocale == null
+                    ? new HashMap(3)
+                    : new HashMap(bundlesByLocale));
             try
             {
                 rb = ResourceBundle.getBundle(bundleName, locale);
@@ -373,26 +408,34 @@ public class DefaultLocalizationService
      * <p>Since we're really just guessing at possible bundles to use,
      * we don't ever throw <code>MissingResourceException</code>.</p>
      */
-    private ResourceBundle findBundleByLocale(String bundleName, Locale locale, Map bundlesByLocale)
+    private ResourceBundle findBundleByLocale(
+        String bundleName,
+        Locale locale,
+        Map bundlesByLocale)
     {
         ResourceBundle rb = null;
-        if (!StringUtils.isNotEmpty(locale.getCountry()) && defaultLanguage.equals(locale.getLanguage()))
+        if (!StringUtils.isNotEmpty(locale.getCountry())
+            && defaultLanguage.equals(locale.getLanguage()))
         {
             /*
             category.debug("Requested language '" + locale.getLanguage() +
                            "' matches default: Attempting to guess bundle " +
                            "using default country '" + defaultCountry + '\'');
             */
-            Locale withDefaultCountry = new Locale(locale.getLanguage(), defaultCountry);
+            Locale withDefaultCountry =
+                new Locale(locale.getLanguage(), defaultCountry);
             rb = (ResourceBundle) bundlesByLocale.get(withDefaultCountry);
             if (rb == null)
             {
                 rb = getBundleIgnoreException(bundleName, withDefaultCountry);
             }
         }
-        else if (!StringUtils.isNotEmpty(locale.getLanguage()) && defaultCountry.equals(locale.getCountry()))
+        else if (
+            !StringUtils.isNotEmpty(locale.getLanguage())
+                && defaultCountry.equals(locale.getCountry()))
         {
-            Locale withDefaultLanguage = new Locale(defaultLanguage, locale.getCountry());
+            Locale withDefaultLanguage =
+                new Locale(defaultLanguage, locale.getCountry());
             rb = (ResourceBundle) bundlesByLocale.get(withDefaultLanguage);
             if (rb == null)
             {
@@ -411,7 +454,9 @@ public class DefaultLocalizationService
      * returning <code>null</code> instead of throwing
      * <code>MissingResourceException</code>.
      */
-    private final ResourceBundle getBundleIgnoreException(String bundleName, Locale locale)
+    private final ResourceBundle getBundleIgnoreException(
+        String bundleName,
+        Locale locale)
     {
         try
         {
@@ -519,7 +564,7 @@ public class DefaultLocalizationService
                     + loc
                     + ", key="
                     + key;
-            category.debug(mesg);
+            log.debug(mesg);
             // Text not found in requested or default bundles.
             throw new MissingResourceException(mesg, bundleName, key);
         }
@@ -547,14 +592,23 @@ public class DefaultLocalizationService
     /**
      * @see org.apache.fulcrum.localization.LocalizationService#format(String, Locale, String, Object)
      */
-    public String format(String bundleName, Locale locale, String key, Object arg1)
+    public String format(
+        String bundleName,
+        Locale locale,
+        String key,
+        Object arg1)
     {
         return format(bundleName, locale, key, new Object[] { arg1 });
     }
     /**
      * @see org.apache.fulcrum.localization.LocalizationService#format(String, Locale, String, Object, Object)
      */
-    public String format(String bundleName, Locale locale, String key, Object arg1, Object arg2)
+    public String format(
+        String bundleName,
+        Locale locale,
+        String key,
+        Object arg1,
+        Object arg2)
     {
         return format(bundleName, locale, key, new Object[] { arg1, arg2 });
     }
@@ -567,7 +621,11 @@ public class DefaultLocalizationService
      * @return Localized, formatted text identified by
      * <code>key</code>.
      */
-    public String format(String bundleName, Locale locale, String key, Object[] args)
+    public String format(
+        String bundleName,
+        Locale locale,
+        String key,
+        Object[] args)
     {
         if (locale == null)
         {
