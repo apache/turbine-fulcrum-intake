@@ -1,8 +1,0 @@
-
-<targets>
-
-  <target path="/test/security">
-    <categories priority="INFO"/>
-  </target>
-
-</targets>
