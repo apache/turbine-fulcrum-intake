@@ -109,6 +109,16 @@ public class TurbineVelocityService
     private static final String DEFAULT_CHAR_SET = "ISO-8859-1";
 
     /**
+     * The prefix used for URIs which are of type <code>jar</code>.
+     */
+    private static final String JAR_PREFIX = "jar:";
+
+    /**
+     * The prefix used for URIs which are of type <code>absolute</code>.
+     */
+    private static final String ABSOLUTE_PREFIX = "absolute:";
+
+    /**
      * Performs early initialization of this Turbine service.
      */
     public void init()
@@ -364,7 +374,7 @@ public class TurbineVelocityService
                 for (Iterator j = paths.iterator(); j.hasNext();)
                 {
                     path = (String) j.next();
-                    if (path.startsWith("jar:file"))
+                    if (path.startsWith(JAR_PREFIX + "file"))
                     {
                         // A local jar resource URL path is a bit more
                         // complicated, but we can translate it as well.
@@ -379,14 +389,15 @@ public class TurbineVelocityService
                             entry = "!/";
                             path = path.substring(9);
                         }
-                        path = "jar:file:" + getRealPath(path) + entry;
+                        path = JAR_PREFIX + "file:" + getRealPath(path) +
+                            entry;
                     }
-                    else if (path.startsWith("absolute:"))
+                    else if (path.startsWith(ABSOLUTE_PREFIX))
                     {
-                        path = path.substring ("absolute:".length(),
+                        path = path.substring (ABSOLUTE_PREFIX.length(),
                                                path.length());
                     }
-                    else if (!path.startsWith("jar:"))
+                    else if (!path.startsWith(JAR_PREFIX))
                     {
                         // But we don't translate remote jar URLs.
                         path = getRealPath(path);
