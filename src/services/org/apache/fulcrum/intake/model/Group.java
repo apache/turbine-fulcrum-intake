@@ -382,6 +382,37 @@ public class Group
             cls = cls.getSuperclass();
         }
     }
+    /**
+     * Calls a setter methods on obj, for fields which pass validity tests.
+     * In most cases one should call Intake.isAllValid() and then if that
+     * test passes call setProperties.  Use this method when some data is 
+     * known to be invalid, but you still want to set the object properties
+     * that are valid.
+     */
+    public void setValidProperties(Object obj)
+    {
+        Class cls = obj.getClass();
+        while ( cls != null )
+        {
+            Field[] flds = (Field[])mapToObjectFields.get(cls.getName());
+            if ( flds != null )
+            {
+                for (int i=flds.length-1; i>=0; i--)
+                {
+                    try
+                    {
+                        flds[i].setProperty(obj);
+                    }
+                    catch(ServiceException e)
+                    {
+                        // just move on to next field
+                    }
+                }
+            }
+
+            cls = cls.getSuperclass();
+        }
+    }
 
     /**
      * Calls getter methods on objects that are known to Intake
