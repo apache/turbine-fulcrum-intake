@@ -487,6 +487,20 @@ public abstract class TurbineSecurity
     }
 
     /**
+     * Creates a new Role in the system. This is a convenience
+     * method.
+     *
+     * @param name The name of the Role.
+     * @return An object representing the new Role.
+     * @throws TurbineSecurityException if the Role could not be created.
+     */
+    public static Role createRole( String name )
+        throws TurbineSecurityException
+    {
+        return getService().addRole(getNewRole(name));
+    }
+
+    /**
      * Retrieves a named Group.
      *
      * @param groupName The name of the Group to be retrieved.
