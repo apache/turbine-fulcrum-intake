@@ -45,6 +45,12 @@
   </mailingLists>
   <developers>
     <developer>
+      <name>Scott Eade</name>
+      <id>seade</id>
+      <email>seade@backstagetech.com.au</email>
+      <organization>Backstage Technologies Pty. Ltd.</organization>
+    </developer>
+    <developer>
       <name>Geir Magnusson Jr.</name>
       <id>geirm</id>
       <email>geirm@optonline.net</email>
