@@ -24,7 +24,7 @@
       classname="org.apache.torque.task.TorqueObjectModelTask">
       <classpath>
         <pathelement location="${velocity.jar}"/>
-        <pathelement location="${logkit.jar}"/>
+        <pathelement location="${log4j.jar}"/>
         <pathelement location="${torque.jar}"/>
         <pathelement location="${xerces.jar}"/>
         <pathelement location="${commons-collections.jar}"/>
