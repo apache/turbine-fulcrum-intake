@@ -55,6 +55,7 @@ package org.apache.fulcrum;
  */
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,6 +65,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Stack;
+
 import org.apache.fulcrum.ServiceException;
 import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
@@ -791,6 +793,6 @@ public abstract class BaseServiceBroker
 
     public String getRealPath(String path)
     {
-        return getApplicationRoot() + '/' + path;
+        return getApplicationRoot() + File.separator + path;
     }
 }
