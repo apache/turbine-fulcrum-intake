@@ -240,8 +240,7 @@ public class TurbineLocalizationService
                                     Locale locale)
     {
         ResourceBundle rb = null;
-        bundleName = (bundleName == null ?
-                      defaultBundleName : bundleName.trim());
+        bundleName = (bundleName == null ? defaultBundle : bundleName.trim());
         HashMap bundlesByLocale = (HashMap) bundles.get(bundleName);
 
         if (bundlesByLocale != null)
