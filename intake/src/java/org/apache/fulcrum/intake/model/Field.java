@@ -625,7 +625,6 @@ public abstract class Field
                 }
             }
 
-
             if (validator != null)
             {
                 // set the test value as a String[] which might be replaced by
@@ -889,38 +888,38 @@ public abstract class Field
         if (isSet())
         {
             valArray[0] = getTestValue();
-
             if (isDebugEnabled)
             {
                 log.debug(name + ": Property is set, value is " + valArray[0]);
             }
-
-            try
-            {
-                setter.invoke(obj, valArray);
-            }
-            catch (IllegalAccessException e)
-            {
-                throwSetGetException("setter", obj, this.getDisplayName(),
-                        this.group.getIntakeGroupName(), e);
-            }
-            catch (IllegalArgumentException e)
-            {
-                throwSetGetException("setter", obj, this.getDisplayName(),
-                        this.group.getIntakeGroupName(), e);
-            }
-            catch (InvocationTargetException e)
-            {
-                throwSetGetException("setter", obj, this.getDisplayName(),
-                        this.group.getIntakeGroupName(), e);
-            }
         }
         else
         {
+            valArray[0] = getSafeEmptyValue();
             if (isDebugEnabled)
             {
-                log.debug(name+ ": Property is not set, skipping");
+                log.debug(name + ": Property is not set, using emptyValue " + valArray[0]);
             }
+        }
+
+        try
+        {
+            setter.invoke(obj, valArray);
+        }
+        catch (IllegalAccessException e)
+        {
+            throwSetGetException("setter", obj, this.getDisplayName(),
+                    this.group.getIntakeGroupName(), e);
+        }
+        catch (IllegalArgumentException e)
+        {
+            throwSetGetException("setter", obj, this.getDisplayName(),
+                    this.group.getIntakeGroupName(), e);
+        }
+        catch (InvocationTargetException e)
+        {
+            throwSetGetException("setter", obj, this.getDisplayName(),
+                    this.group.getIntakeGroupName(), e);
         }
     }
 
@@ -963,6 +962,21 @@ public abstract class Field
     public Object getEmptyValue()
     {
         return emptyValue;
+    }
+
+    /**
+     * Provides access to emptyValue such that the value returned will be 
+     * acceptable as an argument parameter to Method.invoke.  Subclasses
+     * that deal with primitive types should ensure that they return an 
+     * appropriate value wrapped in the object wrapper class for the 
+     * primitive type.
+     *   
+     * @return the value to use when the field is empty or an Object that
+     * wraps the empty value for primitive types.
+     */
+    protected Object getSafeEmptyValue()
+    {
+        return getEmptyValue();
     }
 
     /**
