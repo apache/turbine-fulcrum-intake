@@ -114,8 +114,8 @@
     <dependency>
       <name>commons-pool</name>
       <type>required</type>
-      <version>0.1</version>
-      <jar>commons-pool.jar</jar>
+      <version>0.1-20020501</version>
+      <jar>commons-pool-20020501.jar</jar>
     </dependency>
     <dependency>
       <name>commons-fileupload</name>
@@ -186,8 +186,8 @@
     <dependency>
       <name>jakarta-turbine-torque</name>
       <type>required</type>
-      <version>3.0-b2-dev</version>
-      <jar>torque-3.0-b2-dev.jar</jar>
+      <version>3.0-20020504</version>
+      <jar>torque-3.0-20020504.jar</jar>
     </dependency>
     <dependency>
       <name>jakarta-velocity</name>
