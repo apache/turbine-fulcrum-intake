@@ -240,7 +240,7 @@ public class TurbineLocalizationService
         bundleName = (bundleName == null ? defaultBundle : bundleName.trim());
         if (locale == null)
         {
-            locale = new Locale(defaultLanguage, defaultCountry);
+            locale = getLocale((String) null);
         }
 
         // Find/retrieve/cache bundle.
@@ -311,17 +311,18 @@ public class TurbineLocalizationService
      * @param req HttpServletRequest.
      * @return A Locale.
      */
-    public Locale getLocale(HttpServletRequest req)
+    public final Locale getLocale(HttpServletRequest req)
     {
-        String header = req.getHeader(ACCEPT_LANGUAGE);
-        return (StringUtils.isValid(header) ? getLocale(header) : null);
+        return getLocale(req.getHeader(ACCEPT_LANGUAGE));
     }
 
     /**
      * This method parses the Accept-Language header and attempts to
      * create a Locale out of it.
      *
-     * @param languageHeader A String with the language header.
+     * @param languageHeader The language header (i.e. <code>"en,
+     * es;q=0.8, zh-TW;q=0.1"</code>), or <code>null</code> for the
+     * locale corresponding to the default language and country.
      * @return A Locale.
      */
     public Locale getLocale(String languageHeader)
