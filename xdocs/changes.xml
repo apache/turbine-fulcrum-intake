@@ -1,32 +1,20 @@
 <?xml version="1.0"?>
-
 <document>
-
   <properties>
     <title>Fulcrum</title>
-    <author email="jvanzyl@apache.com">Jason van Zyl</author>
-    <author email="mpoeschl@marmot.at">Martin Poeschl</author>
+    <author email="epugh@upstate.com">Eric Pugh</author>
   </properties>
 
   <body>
+    <release version="3.0-b2-dev" date="">
 
-    <section name="Changes">
-      <p>
-        <ul>
+	 <action dev="epugh" type="add">
+		Added new HibernateService that uses Hibernate 2.0.  This is a fully Avalonized
+		service, and thus can be loaded by both Plexus and ECM.  ECM is used in Turbine, 
+		Plexus is used in the testcase.
+      </action> 
+    </release>
 
-          <!-- template
-          <li>
-            <strong></strong>
-            <ul>
-              <li>
-                <a href="">Reference</a>.
-              </li>
-            </ul>
-          </li>
-          -->
-
-        </ul>
-      </p>
-    </section>
   </body>
 </document>
+
