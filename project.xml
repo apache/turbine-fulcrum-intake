@@ -8,9 +8,12 @@
   <organization>
     <name>Apache Software Foundation</name>
     <url>http://jakarta.apache.org/</url>
+    <logo>/images/jakarta-logo-blue.gif</logo>
   </organization>
   <inceptionYear>2000</inceptionYear>
   <package>org.apache.fulcrum</package>
+  <logo>/images/blue-logo.gif</logo>
+
   <gumpRepositoryId>jakarta</gumpRepositoryId>
   <shortDescription>Services Framework</shortDescription>
   <description>Fulcrum is a services framework.</description>
@@ -228,7 +231,7 @@
     <sourceDirectory>target/src</sourceDirectory>
     <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
     <aspectSourceDirectories/>
-    
+
     <unitTest>
       <includes>
         <include>**/*Test*.java</include>

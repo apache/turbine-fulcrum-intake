@@ -1,7 +1,5 @@
 <?xml version="1.0"?>
-
 <document>
-
  <properties>
   <title>Fulcrum</title>
   <author email="jvanzyl@apache.org">Jason van Zyl</author>
@@ -16,10 +14,10 @@
    <p>
      Fulcrum was developed as part of the Turbine Framework. It is now
      decoupled and can be used by itself. Starting with version 2.2 Turbine
-     will use the decoupled Fulcrum.
+     will be able to use the decoupled Fulcrum to replace some of the services
+     that are currently coupled to Turbine.
    </p>
-
-</section>
+ </section>
 
  </body>
- </document>
+</document>
