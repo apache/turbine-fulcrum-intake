@@ -22,11 +22,13 @@
     <pathelement location="${log4j.jar}"/>
     <pathelement location="${regexp.jar}"/>
     <pathelement location="${servlet.jar}"/>
+    <pathelement location="${stratum.jar}"/>
     <pathelement location="${torque.jar}"/>
     <pathelement location="${velocity.jar}"/>
     <pathelement location="${village.jar}"/>
     <pathelement location="${xalan.jar}"/>
     <pathelement location="${xerces.jar}"/>
+    <pathelement location="${xmlParserAPIs.jar}"/>
     <pathelement location="${xmlrpc.jar}"/>
     <pathelement location="${dvsl.jar}"/>
     <pathelement location="${junit.jar}"/>
@@ -40,33 +42,33 @@
 
   <target
     name="update-jars">
-    
-    <taskdef 
-      name="httpget" 
+
+    <taskdef
+      name="httpget"
       className="org.apache.tdk.task.Get">
       <classpath refid="classpath"/>
     </taskdef>
-    
+
     <!-- If you need proxy support you'll have to manually add:
-    
+
          proxyHost="x"
          proxyPort="y"
-       
+
          We'll clean this up but it worked for a user behind a proxy.
     -->
-    
+
     <httpget
       baseUrl="http://jakarta.apache.org/turbine/jars/"
       dest="${lib.repo}"
       dependencyFile="deps.list"
     />
 
-  </target>    
+  </target>
 
   <!-- ================================================================== -->
   <!-- E N V I R O N M E N T                                             -->
   <!-- ================================================================== -->
-  
+
   <target name="env">
     <echo message="java.home = ${java.home}"/>
     <echo message="user.home = ${user.home}"/>
@@ -96,7 +98,7 @@
   <!-- ================================================================== -->
   <!-- U S A G E                                                          -->
   <!-- ================================================================== -->
-  
+
   <target name="usage">
     <echo message="use -projecthelp to see the available targets"/>
   </target>
@@ -106,104 +108,104 @@
   <!-- ================================================================== -->
 
   <target name="init">
-    <available 
+    <available
       classname="org.apache.velocity.anakia.AnakiaTask"
       property="AnakiaTask.present"
       classpathref="classpath"
     />
-    
-    <available 
+
+    <available
       classname="org.apache.velocity.runtime.Runtime"
       property="velocity.present"
       classpathref="classpath"
     />
-    
-    <available 
+
+    <available
       classname="org.apache.xerces.parsers.SAXParser"
       property="xerces.present"
       classpathref="classpath"
     />
 
-    <available 
+    <available
       classname="org.apache.xalan.processor.XSLTSchema"
       property="xalan.present"
       classpathref="classpath"
     />
 
-    <available 
+    <available
       classname="com.workingdogs.village.Column"
       property="village.present"
       classpathref="classpath"
     />
 
     <available
-      classname="org.apache.log4j.Category" 
+      classname="org.apache.log4j.Category"
       property="log4j.present"
       classpathref="classpath"
     />
 
     <available
-      classname="javax.sql.ConnectionPoolDataSource" 
+      classname="javax.sql.ConnectionPoolDataSource"
       property="jdbc.present"
       classpathref="classpath"
     />
 
     <available
-      classname="org.apache.torque.Torque" 
+      classname="org.apache.torque.Torque"
       property="torque.present"
       classpathref="classpath"
     />
 
     <available
-      classname="com.ibm.bsf.BSFManager" 
+      classname="com.ibm.bsf.BSFManager"
       property="bsf.present"
       classpathref="classpath"
     />
 
     <available
-      classname="javax.servlet.http.HttpServletRequest" 
+      classname="javax.servlet.http.HttpServletRequest"
       property="servlet.present"
       classpathref="classpath"
     />
 
     <available
-      classname="javax.mail.internet.MimeUtility" 
+      classname="javax.mail.internet.MimeUtility"
       property="javamail.present"
       classpathref="classpath"
     />
 
     <available
-      classname="javax.activation.DataSource" 
+      classname="javax.activation.DataSource"
       property="jaf.present"
       classpathref="classpath"
     />
 
     <available
-      classname="org.apache.xmlrpc.XmlRpcException" 
+      classname="org.apache.xmlrpc.XmlRpcException"
       property="xmlrpc.present"
       classpathref="classpath"
     />
 
     <available
-      classname="org.apache.commons.collections.ExtendedProperties" 
+      classname="org.apache.commons.collections.ExtendedProperties"
       property="commons-collections.present"
       classpathref="classpath"
     />
 
     <available
-      classname="org.apache.commons.util.exception.NestableException" 
+      classname="org.apache.commons.util.exception.NestableException"
       property="commons-util.present"
       classpathref="classpath"
     />
 
     <available
-      classname="org.apache.commons.mail.SimpleEmail" 
+      classname="org.apache.commons.mail.SimpleEmail"
       property="commons-email.present"
       classpathref="classpath"
     />
 
     <available
-      classname="org.apache.regexp.RE" 
+      classname="org.apache.regexp.RE"
       property="regexp.present"
       classpathref="classpath"
     />
@@ -332,11 +334,11 @@
   </target>
 
 <!--
-  This is commented out because the inclusion of the .jar file is 
+  This is commented out because the inclusion of the .jar file is
   conditional depending on whether or not it is in your path. This
   is kept here in the event that this conditional requirement is
   removed in the future.
-  
+
   <target name="check.commons-email" unless="commons-email.present">
     <antcall target="property-warning">
       <param name="name" value="commons-email.jar"/>
@@ -357,7 +359,7 @@
       |                                                                |
       | You can set this property in the provided build.properties     |
       | file, or you may set this property in your                     |
-      | ${user.home}/build.properties file.                            
+      | ${user.home}/build.properties file.
       +----------------------------------------------------------------+
     </echo>
     <fail message="Failed Requirement"/>
@@ -366,7 +368,7 @@
   <!-- ================================================================== -->
   <!-- P R E P A R E                                                      -->
   <!-- ================================================================== -->
-  
+
   <target name="create-dirs">
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}/classes"/>
@@ -376,21 +378,21 @@
   <target name="include-email" if="commons-email.present">
     <copy todir="${build.dir}/src/org" overwrite="no">
       <fileset dir="${src.dir}/util/java/org"/>
-    </copy>  
+    </copy>
 
     <copy todir="${build.dir}/src/org" overwrite="yes">
       <fileset dir="${src.dir}/util/java/org"/>
-    </copy>  
+    </copy>
   </target>
-  
-  <target name="prepare" 
+
+  <target name="prepare"
     depends="init,env,create-dirs,
         check.velocity,check.log4j,check.torque,check.bsf,
         check.servlet,check.javamail,check.jaf,check.xerces,check.xalan,
         check.xmlrpc,check.commons-collections,check.commons-util,
         check.regexp,check.dvsl,check.dom4j,
         include-email,om">
-    
+
     <!-- We have some static files that should overwrite
          The torque generated files so overwrite must be
          set to 'yes'. -->
@@ -403,12 +405,12 @@
   <!-- ================================================================== -->
   <!-- C O M P I L E                                                      -->
   <!-- ================================================================== -->
-  
-  <target 
-    name="compile" 
+
+  <target
+    name="compile"
     depends="prepare"
     description="--> compiles the source code">
-    
+
     <javac srcdir="${build.dir}/src"
       destdir="${build.dir}/classes"
       excludes="**/package.html"
@@ -439,15 +441,15 @@
   <!-- ================================================================== -->
   <!-- J A R                                                              -->
   <!-- ================================================================== -->
-  
+
   <target name="jar" depends="compile" description="--> generates the fulcrum.jar">
-    
+
     <!-- copy intake.dtd to the right place -->
-    <copy 
+    <copy
       file="intake.dtd"
       todir="${build.dir}/classes/org/apache/fulcrum/intake/transform"
     />
-    
+
     <jar jarfile="${build.dir}/${final.name}.jar"
          basedir="${build.dir}/classes"
          excludes="**/package.html"/>
@@ -456,12 +458,12 @@
   <!-- ================================================================== -->
   <!-- J A V A D O C S                                                    -->
   <!-- ================================================================== -->
-  
+
   <target name="javadocs"
             depends="prepare"
             description="--> generates the API documentation">
     <mkdir dir="${docs.dest}/api"/>
-    
+
     <javadoc
       sourcepath="${build.src}"
       packagenames="${package}.*"
@@ -481,7 +483,7 @@
   <!-- ================================================================== -->
   <!-- C L E A N                                                          -->
   <!-- ================================================================== -->
-  
+
   <target name="clean" description="--> cleans up the build directory">
     <delete dir="${build.dir}"/>
     <delete file="velocity.log"/>
@@ -490,9 +492,9 @@
   <!-- ================================================================== -->
   <!-- A N A K I A  D O C U M E N T A T I O N                             -->
   <!-- ================================================================== -->
-  
+
   <target name="check_for_jdom">
-    <available 
+    <available
       property="jdom.present"
       classname="org.jdom.JDOMException">
       <classpath>
@@ -502,7 +504,7 @@
       </classpath>
     </available>
   </target>
-  
+
   <target depends="check_for_jdom" name="docs-prepare-error"
           unless="jdom.present">
     <echo>
@@ -527,8 +529,8 @@
        </classpath>
      </taskdef>
 
-     <anakia 
-       basedir="${docs.src}" 
+     <anakia
+       basedir="${docs.src}"
        destdir="${docs.dest}/"
        extension=".html" style="./site.vsl"
        projectFile="stylesheets/project.xml"
@@ -545,7 +547,7 @@
          <include name="**/*.jpg"/>
        </fileset>
      </copy>
-     
+
      <!-- In case we have CSS someday
      <copy todir="${docs.dest}" filtering="no">
        <fileset dir="${docs.src}">
@@ -559,7 +561,7 @@
   <!-- D I S T R I B U T I O N S                                          -->
   <!-- ================================================================== -->
 
-  <target 
+  <target
     name="dist"
     depends="jar,javadocs,docs">
 
@@ -572,7 +574,7 @@
       | C R E A T I N G  B I N A R Y  D I S T R I B U T I O N |
       +-------------------------------------------------------+
     </echo>
-    
+
     <mkdir dir="${distDir}"/>
 
     <!-- Copy README and LICENSE -->
@@ -599,10 +601,10 @@
         <include name="${final.name}/**"/>
       </tarfileset>
     </tar>
-    
+
     <gzip zipfile="${final.name}.tar.gz" src="${final.name}.tar"/>
     <delete file="${final.name}.tar"/>
-    
+
     <!-- Create a zip file -->
     <zip zipfile="${final.name}.zip">
       <zipfileset dir="${build.dir}">
@@ -623,7 +625,7 @@
         <include name="**/*.jar"/>
       </fileset>
     </delete>
-    
+
     <copy todir="${distDir}" file="default.properties"/>
     <copy todir="${distDir}" file="build.xml"/>
 
@@ -640,10 +642,10 @@
         <include name="${final.name}/**"/>
       </tarfileset>
     </tar>
-    
+
     <gzip zipfile="${final.name}-src.tar.gz" src="${final.name}-src.tar"/>
     <delete file="${final.name}-src.tar"/>
-    
+
     <!-- Create a zip file -->
     <zip zipfile="${final.name}-src.zip">
       <zipfileset dir="${build.dir}">
@@ -657,7 +659,7 @@
   <!-- I N S T A L L  J A R                                               -->
   <!-- ================================================================== -->
 
-  <target name="install-jar" depends="jar" 
+  <target name="install-jar" depends="jar"
           description="--> Installs .jar file in ${lib.repo}">
     <copy todir="${lib.repo}" filtering="no">
       <fileset dir="${build.dir}">
@@ -673,18 +675,18 @@
   <!-- this will soon be moved into the security services build. -->
 
   <target name="check-om">
-    <uptodate 
+    <uptodate
       property="omGenerated"
       targetfile="${omStatusFile}">
       <srcfiles dir="${schemaDirectory}" includes="turbine-schema.xml"/>
     </uptodate>
   </target>
 
-  <target name="om" 
-          depends="check-om" 
+  <target name="om"
+          depends="check-om"
           unless="omGenerated"
           description="--> generates the Turbine OM/Peer classes">
-        
+
     <ant antfile="build-om.xml" dir="${basedir}"/>
   </target>
 
