@@ -102,6 +102,9 @@ public class TurbineIntakeService
     /** The cache of group keys. */
     private Map groupKeyMap;
 
+    /** The cache of PropertyDescriptor[]. */
+    private Map beanPropsMap;
+
     /** The cache of property getters. */
     private Map getterMap;
 
@@ -189,6 +192,7 @@ public class TurbineIntakeService
             groupNames = new String[appData.getGroups().size()];
             groupKeyMap = new HashMap();
             groupNameMap = new HashMap();
+            beanPropsMap = new HashMap();
             getterMap = new HashMap();
             setterMap = new HashMap();
             // omTool = new OMTool();
@@ -283,9 +287,15 @@ public class TurbineIntakeService
             // of bean from the parameters, where a
             // (case-insensitive) name match between the bean
             // property and the parameter is looked for.
-            PropertyDescriptor[] beanProps = Introspector
-                .getBeanInfo(Class.forName(className))
-                .getPropertyDescriptors();
+            PropertyDescriptor[] beanProps = 
+                (PropertyDescriptor[])beanPropsMap.get(className);
+            if ( beanProps == null ) 
+            {
+                beanProps = Introspector
+                    .getBeanInfo(Class.forName(className))
+                    .getPropertyDescriptors();
+                beanPropsMap.put(className, beanProps);
+            }
 
             boolean noMatch = true;
             for (int j=beanProps.length-1; j>=0; j--)
@@ -296,6 +306,42 @@ public class TurbineIntakeService
                     {
                         case GETTER:
                             method = beanProps[j].getReadMethod();
+                            // it appears that the introspector misses some
+                            // getters
+                            if ( method == null ) 
+                            {
+                                Class cls = Class.forName(className);
+                                try
+                                {
+                                    method = cls
+                                        .getMethod("get" + propName, null);
+                                    // we have to force the setter as well
+                                    Class[] sig = new Class[1];
+                                    sig[0] = method.getReturnType();
+                                    Method setterMethod = null;
+                                    try
+                                    {
+                                        setterMethod = cls
+                                            .getMethod("set" + propName, sig);
+                                    }
+                                    catch(NoSuchMethodException e)
+                                    {
+                                        // ignore, setter was null;
+                                    }
+                                    
+                                    beanProps[j] = new PropertyDescriptor(
+                                        propName, method, setterMethod);
+                                    System.out.println("reset descriptor");
+                                }
+                                catch(NoSuchMethodException e)
+                                {
+                                    // ignore, getter was really null
+                                    // we should check for boolean "is"
+                                    // prefix, though boolean less likely to 
+                                    // override setters to cause problems
+                                }
+                            }
+                            
                             ((HashMap)getterMap.get(className))
                                 .put(propName, method);
                             break;
