@@ -12,11 +12,12 @@
       tofile="target/classes/org/apache/fulcrum/avalon-roles.xml"/>
 
     <!-- Setup where Torque generates the files to. -->
-    <copy todir="target/src" overwrite="yes">
+    <copy todir="target/src">
       <fileset dir="src/java"/>
     </copy>
 
     <!-- Now generate the security service. -->
+    <j:set var="torque.project" value="security"/>
     <j:set var="torque.schema.om.includes" value="turbine-schema.xml"/>
     <j:set var="torque.targetPackage" value="${security.package}"/>
     <filter token="DATABASE_DEFAULT" value="${security.database.name}"/>
@@ -24,23 +25,29 @@
     <copy
       file="turbine-schema.xml"
       tofile="${torque.schema.dir}/turbine-schema.xml"
-      filtering="yes"
-      overwrite="yes"/>
+      filtering="yes"/>
     <attainGoal name="torque:om"/>
 
+    <!-- Reset the Torque uptodate check flag. -->
+    <j:set var="torque.internal.om.uptodate" value="${null}"/>
+
     <!-- Now generate the scheduler service. -->
+    <j:set var="torque.project" value="scheduler"/>
     <j:set var="torque.schema.om.includes" value="scheduler-schema.xml"/>
     <j:set var="torque.targetPackage" value="${scheduler.package}"/>
     <filter token="DATABASE_DEFAULT" value="${scheduler.database.name}"/>
+    <filter token="EXTRA_USER_COLUMNS" value="${scheduler.extra.user.columns}"/>
     <copy
       file="scheduler-schema.xml"
       tofile="${torque.schema.dir}/scheduler-schema.xml"
-      filtering="yes"
-      overwrite="yes"/>
+      filtering="yes"/>
     <attainGoal name="torque:om"/>
 
-    <j:set var="sourcesPresent" value="true"/>
-    <path id="maven.compile.src.set" location="target/src"/>
+    <!-- Hack for Maven bug when compiling with a clean target. -->
+    <j:if test="${sourcesPresent != 'true'}">
+      <j:set var="sourcesPresent" value="true"/>
+      <path id="maven.compile.src.set" location="target/src"/>
+    </j:if>
   </preGoal>
 
 </project>
