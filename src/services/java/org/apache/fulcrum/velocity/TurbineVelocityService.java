@@ -128,7 +128,7 @@ public class TurbineVelocityService
     /**
      * The EventCartridge that is used against all contexts
      */
-    private static EventCartridge eventCartridge;
+    private EventCartridge eventCartridge;
     
     /**
      * Performs early initialization of this Turbine service.
