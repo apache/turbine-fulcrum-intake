@@ -84,24 +84,12 @@ public class JavaCryptTest
         CryptoService.SERVICE_NAME + '.';
 
     private String input   = "Oeltanks";
-    private String md5result   = "XSop0mncK19Ii2r2CUe2";
-    private String sha1result  = "uVDiJHaavRYX8oWt5ctkaa7j";
+    private String md5result   = "XSop0mncK19Ii2r2CUe29w==";
+    private String sha1result  = "uVDiJHaavRYX8oWt5ctkaa7j1cw=";
 
     public JavaCryptTest( String name )
     {
         super(name);
-    }
-
-    public void setUp()
-    {
-    }
-
-    public void tearDown()
-    {
-    }
-
-    public void testConstruction()
-    {
     }
 
     public void testSelection()

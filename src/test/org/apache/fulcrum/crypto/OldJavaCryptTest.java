@@ -68,24 +68,26 @@ import org.apache.commons.configuration.Configuration;
 /**
  * Testcase for the CryptoService.
  *
- * Objective: Checks, whether the supplied "default" crypto
- * provider is the JavaCrypt Provider. 
+ * Objective: Checks, whether the supplied "java" crypto
+ * provider can be selected and offers MD5 and SHA1
+ * algorithms.
  *
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  *
  */
 
-public class DefaultCryptTest
+public class OldJavaCryptTest
     extends TestCase
 {
     private static final String PREFIX = "services." +
         CryptoService.SERVICE_NAME + '.';
 
     private String input   = "Oeltanks";
-    private String md5result   = "XSop0mncK19Ii2r2CUe29w==";
+    private String md5result   = "XSop0mncK19Ii2r2CUe2";
+    private String sha1result  = "uVDiJHaavRYX8oWt5ctkaa7j";
 
-    public DefaultCryptTest( String name )
+    public OldJavaCryptTest( String name )
     {
         super(name);
     }
@@ -111,6 +113,14 @@ public class DefaultCryptTest
         Configuration cfg = new BaseConfiguration();
         cfg.setProperty(PREFIX + "classname",
                         TurbineCryptoService.class.getName());
+        cfg.setProperty(PREFIX + "algorithm.unix",
+                        "org.apache.fulcrum.crypto.provider.UnixCrypt");
+        cfg.setProperty(PREFIX + "algorithm.clear",
+                        "org.apache.fulcrum.crypto.provider.ClearCrypt");
+        cfg.setProperty(PREFIX + "algorithm.java",
+                        "org.apache.fulcrum.crypto.provider.JavaCrypt");
+        cfg.setProperty(PREFIX + "algorithm.oldjava",
+                        "org.apache.fulcrum.crypto.provider.OldJavaCrypt");
 
         /* Ugh */
 
@@ -121,7 +131,7 @@ public class DefaultCryptTest
 
         serviceManager.init();
 
-        CryptoAlgorithm ca = TurbineCrypto.getService().getCryptoAlgorithm("default");
+        CryptoAlgorithm ca = TurbineCrypto.getService().getCryptoAlgorithm("oldjava");
 
         ca.setCipher("MD5");
 
@@ -132,5 +142,13 @@ public class DefaultCryptTest
             fail("MD5 Encryption failed, expected "+md5result+", got "+output);
         }
 
+        ca.setCipher("SHA1");
+
+        output = ca.encrypt(input);
+
+        if(!output.equals(sha1result))
+        {
+            fail("SHA1 Encryption failed, expected "+sha1result+", got "+output);
+        }
     }
 }
