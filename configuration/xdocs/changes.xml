@@ -6,6 +6,10 @@
   </properties>
 
   <body>
+  	<release version="1.0-alpha-2" date="">
+	  <action dev="epugh" type="fix">
+        Added ThreadSafe marker interface so we have a singleton under ECM.
+      </action>   
     <release version="1.0-alpha-1" date="">
 	  <action dev="epugh" type="update">
         Integrated Stephen McConnell's refactoring.  Removed

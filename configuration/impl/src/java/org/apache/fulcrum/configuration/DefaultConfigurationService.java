@@ -65,6 +65,7 @@ import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.framework.thread.ThreadSafe;
 import org.apache.commons.configuration.ConfigurationFactory;
 
 /**
@@ -79,7 +80,7 @@ import org.apache.commons.configuration.ConfigurationFactory;
  */
 public class DefaultConfigurationService
     extends AbstractLogEnabled
-    implements org.apache.commons.configuration.Configuration, Configurable, Contextualizable
+    implements org.apache.commons.configuration.Configuration, Configurable, Contextualizable, ThreadSafe
 {
     /**
 	 * The property specifying the location where to read in the configuration
