@@ -475,6 +475,9 @@ public abstract class Field
 
             if ( validator != null )
             {
+                // set the test value as a String[] which might be replaced by
+                // the correct type if the input is valid.
+                setTestValue(pp.getStrings(getKey()));
                 for (int i=0; i<stringValues.length; i++)
                 {
                     try
@@ -502,7 +505,11 @@ public abstract class Field
             }
 
             if ( validator != null )
-            {
+            {            
+                // set the test value as a String which might be replaced by
+                // the correct type if the input is valid.
+                setTestValue(pp.getString(getKey()));
+
                 try
                 {
                     validator.assertValidity(stringValue);
