@@ -73,15 +73,15 @@ import org.apache.fulcrum.ServiceException;
  *
  * <p> Files will be stored in temporary disk storage on in memory,
  * depending on request size, and will be available from the {@link
- * org.apache.turbine.util.ParameterParser} as {@link
- * org.apache.turbine.util.upload.FileItem}s.
+ * org.apache.fulcrum.parser.ParameterParser} as {@link
+ * org.apache.fulcrum.upload.FileItem}s.
  *
  * <p>This implementation of {@link UploadService} handles multiple
  * files per single html widget, sent using multipar/mixed encoding
  * type, as specified by RFC 1867.  Use {@link
- * org.apache.turbine.util.ParameterParser#getFileItems(String)} to
+ * org.apache.fulcrum.parser.ParameterParser#getFileItems(String)} to
  * acquire an array of {@link
- * org.apache.turbine.util.upload.FileItem}s associated with given
+ * org.apache.fulcrum.upload.FileItem}s associated with given
  * html widget.
  *
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
@@ -291,7 +291,7 @@ public class TurbineUploadService
 
     /**
      * <p> Creates a new instance of {@link
-     * org.apache.turbine.util.upload.FileItem}.
+     * org.apache.fulcrum.upload.FileItem}.
      *
      * @param path The path for the FileItem.
      * @param headers The HTTP request headers.
