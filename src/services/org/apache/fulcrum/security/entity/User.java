@@ -59,6 +59,8 @@ import java.util.Hashtable;
 import java.io.Serializable;
 import javax.servlet.http.HttpSessionBindingListener;
 
+import org.apache.fulcrum.session.SessionBindingListener;
+
 /**
  * This interface represents functionality that all users of the
  * Turbine system require.
@@ -70,7 +72,7 @@ import javax.servlet.http.HttpSessionBindingListener;
  * @version $Id$
  */
 public interface User
-    extends HttpSessionBindingListener, Serializable, SecurityEntity
+    extends SessionBindingListener, Serializable, SecurityEntity
 {
     /** The 'perm storage' key name for the first name. */
     public static final String FIRST_NAME = "FIRST_NAME";

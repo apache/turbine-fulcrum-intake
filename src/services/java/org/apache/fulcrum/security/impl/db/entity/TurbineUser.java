@@ -61,6 +61,7 @@ import java.util.Hashtable;
 import javax.servlet.http.HttpSessionBindingEvent;
 import org.apache.fulcrum.security.TurbineSecurity;
 import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.session.SessionBindingEvent;
 
 /**
  * A generic implementation of User interface.
@@ -420,9 +421,9 @@ public class TurbineUser
      * Implement this method if you wish to be notified when the User
      * has been Bound to the session.
      *
-     * @param hsbe The HttpSessionBindingEvent.
+     * @param event Inidication of value/session binding.
      */
-    public void valueBound(HttpSessionBindingEvent hsbe)
+    public void valueBound(SessionBindingEvent event)
     {
         // Currently we have no need for this method.
     }
@@ -431,9 +432,9 @@ public class TurbineUser
      * Implement this method if you wish to be notified when the User
      * has been Unbound from the session.
      *
-     * @param hsbe The HttpSessionBindingEvent.
+     * @param event Inidication of value/session unbinding.
      */
-    public void valueUnbound(HttpSessionBindingEvent hsbe)
+    public void valueUnbound(SessionBindingEvent event)
     {
         try
         {
