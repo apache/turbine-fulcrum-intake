@@ -59,9 +59,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import junit.awtui.TestRunner;
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 /**
