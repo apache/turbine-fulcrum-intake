@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+
+ "http://hibernate.sourceforge.net/hibernate-configuration-2.0.dtd">
+
+
+<hibernate-configuration>
+
+    <!-- a SessionFactory instance listed as /jndi/name -->
+    <session-factory >
+        <property name="show_sql">true</property>
+        <property name="use_outer_join">true</property>
+
+        <!-- properties for this SessionFactory only -->
+        <property name="connection.driver_class">com.mckoi.JDBCDriver</property>
+        <property name="connection.username">test</property>
+        <property name="connection.password">test</property>
+        <property name="connection.url">jdbc:mckoi:local://./src/test/mcKoi.conf?create=true</property>
+        <property name="dialect">net.sf.hibernate.dialect.MckoiDialect</property>
+        
+        <property name="cglib.use_reflection_optimizer">true</property>
+        <!-- mapping files -->
+        <mapping resource="SimpleHibernate.hbm.xml"/>
+    </session-factory>
+</hibernate-configuration>

@@ -1,0 +1,31 @@
+<my-system>
+  <component
+    role="org.apache.fulcrum.security.SecurityService"
+    class="org.apache.fulcrum.security.BaseSecurityService">   
+  </component>  
+
+  <component
+    role="org.apache.fulcrum.security.UserManager"
+    class="org.apache.fulcrum.security.spi.hibernate.simple.HibernateUserManagerImpl">   
+  </component>   
+  <component
+    role="org.apache.fulcrum.security.GroupManager"
+    class="org.apache.fulcrum.security.spi.hibernate.simple.HibernateGroupManagerImpl">   
+  </component>     
+
+  <component
+    role="org.apache.fulcrum.security.RoleManager"
+    class="org.apache.fulcrum.security.spi.hibernate.simple.HibernateRoleManagerImpl">   
+  </component>     
+
+  <component
+    role="org.apache.fulcrum.security.PermissionManager"
+    class="org.apache.fulcrum.security.spi.hibernate.simple.HibernatePermissionManagerImpl">   
+  </component>     
+  
+  <component 
+    role="net.sf.hibernate.avalon.HibernateService"
+    class="net.sf.hibernate.avalon.HibernateServiceImpl">   
+  </component>
+
+</my-system>
