@@ -69,9 +69,15 @@ import org.apache.commons.util.StringUtils;
  * <p>Example Usage (This all needs to be on one line in your
  * template):
  *
+ * <p>Setup your imports:
+ *
+ * <p>import org.apache.fulcrum.template.TemplateEmail;
+ * <p>import org.apache.turbine.modules.ContextAdapter;
+ *
  * <p>Setup your context:
  *
  * <p>context.put ("TemplateEmail", new TemplateEmail() );
+ * <p>context.put ("contextAdapter", new ContextAdapter(context) );
  *
  * <p>Then, in your template (Velocity Example):
  *
@@ -79,7 +85,7 @@ import org.apache.commons.util.StringUtils;
  * $TemplateEmail.setTo("Jon Stevens", "jon@latchkey.com")
  *     .setFrom("Mom", "mom@mom.com").setSubject("Eat dinner")
  *     .setTemplate("email/momEmail.vm")
- *     .setContext($context)
+ *     .setContext($contextAdapter)
  * </pre>
  *
  * The email/momEmail.vm template will then be parsed with the
@@ -88,11 +94,14 @@ import org.apache.commons.util.StringUtils;
  * <p>If you want to use this class from within your Java code all you
  * have to do is something like this:
  *
+ * <p>import org.apache.fulcrum.template.TemplateEmail;
+ * <p>import org.apache.turbine.modules.ContextAdapter;
+ *
  * <pre>
  * TemplateEmail ve = new TemplateEmail();
  * ve.setTo("Jon Stevens", "jon@latchkey.com");
  * ve.setFrom("Mom", "mom@mom.com").setSubject("Eat dinner");
- * ve.setContext(context);
+ * ve.setContext(new ContextAdapter(context));
  * ve.setTemplate("email/momEmail.vm")
  * ve.send();
  * </pre>
