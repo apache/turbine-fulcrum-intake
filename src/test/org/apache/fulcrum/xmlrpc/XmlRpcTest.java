@@ -127,8 +127,7 @@ public class XmlRpcTest
             }
             catch (InstantiationException ie)
             {
-                System.out.println("couldn't instantiate " + XmlRpcService.SERVICE_NAME);
-                //fail("could not get the service: " + XmlRpcService.SERVICE_NAME);
+                fail("could not get the service: " + XmlRpcService.SERVICE_NAME);
             }
             shutdownFulcrum();
         }
