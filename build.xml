@@ -315,6 +315,7 @@
   
   <target name="clean" description="--> cleans up the build directory">
     <delete dir="${build.dir}"/>
+    <delete file="velocity.log"/>
   </target>
 
   <!-- ================================================================== -->
