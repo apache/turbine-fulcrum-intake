@@ -57,6 +57,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.framework.component.ComponentManager;
 import org.apache.avalon.framework.component.Composable;
@@ -67,6 +68,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.factory.FactoryService;
 import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.RoleManager;
+import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.acl.DefaultAccessControlList;
 import org.apache.fulcrum.security.authenticator.Authenticator;
@@ -76,10 +78,8 @@ import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
 import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
 import org.apache.fulcrum.security.model.simple.entity.SimpleUser;
-import org.apache.fulcrum.security.model.simple.manager.*;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
-import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
@@ -92,7 +92,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class MemoryUserManagerImpl extends AbstractLogEnabled implements SimpleUserManager, Composable
+public class MemoryUserManagerImpl extends AbstractLogEnabled implements UserManager, Composable
 {
     /** Logging */
     private static Log log = LogFactory.getLog(MemoryUserManagerImpl.class);
@@ -359,41 +359,7 @@ public class MemoryUserManagerImpl extends AbstractLogEnabled implements SimpleU
         user.setName(userName);
         return user;
     }
-    /**
-    	 * Revokes all groups from a user
-    	 *
-    	 * This method is used when deleting an account.
-    	 *
-    	 * @param user the User.
-    	 * @throws DataBackendException if there was an error accessing the data
-    	 *         backend.
-    	 * @throws UnknownEntityException if the account is not present.
-    	 */
-    public synchronized void revokeAll(User user) throws DataBackendException, UnknownEntityException
-    {
-        boolean userExists = false;
-        try
-        {
-            userExists = checkExists(user);
-            if (userExists)
-            {
-            	for (Iterator i = ((SimpleUser) user).getGroups().iterator();i.hasNext();){
-					SimpleGroup group = (SimpleGroup)i.next();
-					group.removeUser(user);
-            	}
-                ((SimpleUser) user).setGroups(new GroupSet());
-                return;
-            }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("revokeAll(User) failed", e);
-        }
-        finally
-        {
-        }
-        throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
-    }
+    
     /*-----------------------------------------------------------------------
     	 Security management
     	 -----------------------------------------------------------------------*/
@@ -592,8 +558,6 @@ public class MemoryUserManagerImpl extends AbstractLogEnabled implements SimpleU
     	*/
     public void removeUser(User user) throws DataBackendException, UnknownEntityException
     {
-        // revoke all roles form the user
-        revokeAll(user);
         users.remove(user);
     }
     /**
@@ -650,88 +614,7 @@ public class MemoryUserManagerImpl extends AbstractLogEnabled implements SimpleU
             throw new UnknownEntityException("Unknown user '" + user + "'");
         }
     }
-    /**
-     * Puts a user in a group.
-     *
-     * This method is used when adding a user to a group
-     *
-     * @param user the User.
-     * @throws DataBackendException if there was an error accessing the data
-     *         backend.
-     * @throws UnknownEntityException if the account is not present.
-     */
-    public void grant(User user, Group group) throws DataBackendException, UnknownEntityException
-    {
-        boolean groupExists = false;
-        boolean userExists = false;
-        try
-        {
-            groupExists = checkExists(group);
-            userExists = checkExists(user);
-            if (groupExists && userExists)
-            {
-				((SimpleUser) user).addGroup(group);
-				((SimpleGroup) group).addUser(user);
-                return;
-            }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("grant(Role,Permission) failed", e);
-        }
-        finally
-        {
-        }
-        if (!groupExists)
-        {
-            throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
-        }
-        if (!userExists)
-        {
-            throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
-        }
-    }
-    /**
-    * Removes a user in a group.
-    *
-    * This method is used when removing a user to a group
-    *
-    * @param user the User.
-    * @throws DataBackendException if there was an error accessing the data
-    *         backend.
-    * @throws UnknownEntityException if the user or group is not present.
-    */
-    public void revoke(User user, Group group) throws DataBackendException, UnknownEntityException
-    {
-        boolean groupExists = false;
-        boolean userExists = false;
-        try
-        {
-            groupExists = checkExists(group);
-            userExists = checkExists(user);
-            if (groupExists && userExists)
-            {
-				((SimpleUser) user).removeGroup(group);
-				((SimpleGroup) group).removeUser(user);
-                return;
-            }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("grant(Role,Permission) failed", e);
-        }
-        finally
-        {
-        }
-        if (!groupExists)
-        {
-            throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
-        }
-        if (!userExists)
-        {
-            throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
-        }
-    }
+  
     /**
     	  * Avalon component lifecycle method
     	  */

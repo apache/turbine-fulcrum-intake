@@ -52,6 +52,8 @@ package org.apache.fulcrum.security;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+import org.apache.fulcrum.security.model.simple.SimpleModelManager;
+import org.apache.fulcrum.security.model.turbine.TurbineModelManager;
 import org.apache.fulcrum.security.spi.hibernate.simple.HibernateGroupManagerImpl;
 import org.apache.fulcrum.security.spi.hibernate.simple.HibernatePermissionManagerImpl;
 import org.apache.fulcrum.security.spi.hibernate.simple.HibernateRoleManagerImpl;
@@ -87,42 +89,33 @@ public class StartingSecurityServicesTest extends BaseUnitTest
     {
         this.setRoleFileName(null);
         this.setConfigurationFileName("src/test/TorqueSecurity.xml");
-        securityService = (SecurityService) lookup(SecurityService.ROLE);
-        assertNotNull(securityService.getUserManager());
-        assertNotNull(securityService.getRoleManager());
-        assertNotNull(securityService.getPermissionManager());
-        assertNotNull(securityService.getGroupManager());
+        securityService = (SecurityService) lookup(SecurityService.ROLE);       
         assertTrue(securityService.getUserManager() instanceof TorqueUserManager);
         assertTrue(securityService.getRoleManager() instanceof TorqueRoleManager);
         assertTrue(securityService.getPermissionManager() instanceof TorquePermissionManager);
         assertTrue(securityService.getGroupManager() instanceof TorqueGroupManager);
+		assertTrue(securityService.getModelManager() instanceof TurbineModelManager);
     }
     public void testStartingInMemorySecurity() throws Exception
     {
         this.setRoleFileName(null);
         this.setConfigurationFileName("src/test/SimpleMemory.xml");
-        securityService = (SecurityService) lookup(SecurityService.ROLE);
-        assertNotNull(securityService.getUserManager());
-        assertNotNull(securityService.getRoleManager());
-        assertNotNull(securityService.getPermissionManager());
-        assertNotNull(securityService.getGroupManager());
+        securityService = (SecurityService) lookup(SecurityService.ROLE);       
         assertTrue(securityService.getUserManager() instanceof MemoryUserManagerImpl);
         assertTrue(securityService.getRoleManager() instanceof MemoryRoleManagerImpl);
         assertTrue(securityService.getPermissionManager() instanceof MemoryPermissionManagerImpl);
         assertTrue(securityService.getGroupManager() instanceof MemoryGroupManagerImpl);
+		assertTrue(securityService.getModelManager() instanceof SimpleModelManager);
     }
     public void testStartingHibernateSecurity() throws Exception
     {
         this.setRoleFileName(null);
         this.setConfigurationFileName("src/test/SimpleHibernate.xml");
         securityService = (SecurityService) lookup(SecurityService.ROLE);
-        assertNotNull(securityService.getUserManager());
-        assertNotNull(securityService.getRoleManager());
-        assertNotNull(securityService.getPermissionManager());
-        assertNotNull(securityService.getGroupManager());
         assertTrue(securityService.getUserManager() instanceof HibernateUserManagerImpl);
         assertTrue(securityService.getRoleManager() instanceof HibernateRoleManagerImpl);
         assertTrue(securityService.getPermissionManager() instanceof HibernatePermissionManagerImpl);
         assertTrue(securityService.getGroupManager() instanceof HibernateGroupManagerImpl);
+		assertTrue(securityService.getModelManager() instanceof SimpleModelManager);
     }
 }

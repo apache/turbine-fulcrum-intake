@@ -6,7 +6,14 @@
   </properties>
 
   <body>
-  	<release version="1.0-alpha-2" date="in cvs">
+  	<release version="1.0-alpha-3" date="in cvs">		
+      <action dev="epugh" type="add">
+		Add ModelManager interface and SimpleModelManager and TurbineModelManager 
+		component that explicitly contains the relationship between the various		
+		entities.
+      </action>
+    </release>
+  	<release version="1.0-alpha-2" date="10-29-2003">
 	  <action dev="epugh" type="update">
 		Change all get(Role/Group/User/Permssion)Instance from throwing an UnknownEntityException to
 		throwing a DataBackendException.  There is no entity id when creating a new one yet!

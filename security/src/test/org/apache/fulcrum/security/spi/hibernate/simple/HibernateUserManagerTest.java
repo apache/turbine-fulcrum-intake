@@ -88,7 +88,7 @@ public class HibernateUserManagerTest extends AbstractUserManagerTest
     {
         try
         {
-            ((BaseHibernateManager) userManager).getHibernateSession().close();
+//            ((BaseHibernateManager) userManager).getHibernateSession().close();
         }
         catch (Exception e)
         {

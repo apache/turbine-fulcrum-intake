@@ -64,10 +64,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.PermissionManager;
+import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
-import org.apache.fulcrum.security.model.simple.manager.*;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PermissionSet;
@@ -82,7 +82,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class MemoryRoleManagerImpl extends AbstractLogEnabled implements SimpleRoleManager, Composable
+public class MemoryRoleManagerImpl extends AbstractLogEnabled implements RoleManager, Composable
 {
     boolean composed = false;
     /** Logging */
@@ -178,115 +178,7 @@ public class MemoryRoleManagerImpl extends AbstractLogEnabled implements SimpleR
         }     
         return role;
     }
-    /**
-    	* Grants a Role a Permission
-    	*
-    	* @param role the Role.
-    	* @param permission the Permission.
-    	* @throws DataBackendException if there was an error accessing the data
-    	*         backend.
-    	* @throws UnknownEntityException if role or permission is not present.
-    	*/
-    public synchronized void grant(Role role, Permission permission)
-        throws DataBackendException, UnknownEntityException
-    {
-        boolean roleExists = false;
-        boolean permissionExists = false;
-        try
-        {
-            roleExists = checkExists(role);
-            permissionExists = checkExists(permission);
-            if (roleExists && permissionExists)
-            {
-                ((SimpleRole) role).addPermission(permission);
-                return;
-            }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("grant(Role,Permission) failed", e);
-        }
-       
-        if (!roleExists)
-        {
-            throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
-        }
-        if (!permissionExists)
-        {
-            throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
-        }
-    }
-    /**
-    	* Revokes a Permission from a Role.
-    	*
-    	* @param role the Role.
-    	* @param permission the Permission.
-    	* @throws DataBackendException if there was an error accessing the data
-    	*         backend.
-    	* @throws UnknownEntityException if role or permission is not present.
-    	*/
-    public synchronized void revoke(Role role, Permission permission)
-        throws DataBackendException, UnknownEntityException
-    {
-        boolean roleExists = false;
-        boolean permissionExists = false;
-        try
-        {
-            roleExists = checkExists(role);
-            permissionExists = checkExists(permission);
-            if (roleExists && permissionExists)
-            {
-                ((SimpleRole) role).removePermission(permission);
-                return;
-            }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("revoke(Role,Permission) failed", e);
-        }
-        finally
-        {
-        }
-        if (!roleExists)
-        {
-            throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
-        }
-        if (!permissionExists)
-        {
-            throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
-        }
-    }
-    /**
-    	* Revokes all permissions from a Role.
-    	*
-    	* This method is user when deleting a Role.
-    	*
-    	* @param role the Role
-    	* @throws DataBackendException if there was an error accessing the data
-    	*         backend.
-    	* @throws UnknownEntityException if the Role is not present.
-    	*/
-    public synchronized void revokeAll(Role role) throws DataBackendException, UnknownEntityException
-    {
-        boolean roleExists = false;
-        try
-        {
-            roleExists = checkExists(role);
-            if (roleExists)
-            {
-				((SimpleRole)role).setPermissions(new PermissionSet());
-                return;
-            }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("revokeAll(Role) failed", e);
-        }
-        finally
-        {
-        }
-        throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
-    }
+    
     /**
     	* Renames an existing Role.
     	*
@@ -462,8 +354,6 @@ public class MemoryRoleManagerImpl extends AbstractLogEnabled implements SimpleR
             roleExists = checkExists(role);
             if (roleExists)
             {
-                // revoke all permissions from the role to be deleted
-                revokeAll(role);
                 roles.remove(role);
                 getAllRoles().remove(role);
                 return;

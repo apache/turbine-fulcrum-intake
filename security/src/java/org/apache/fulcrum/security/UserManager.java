@@ -223,17 +223,7 @@ public interface UserManager extends Component
      *            storage.
      */
     void forcePassword(User user, String password) throws UnknownEntityException, DataBackendException;
-    /**
-     * Revokes all roles from an User.
-     *
-     * This method is used when deleting an account.
-     *
-     * @param user the User.
-     * @throws DataBackendException if there was an error accessing the data
-     *         backend.
-     * @throws UnknownEntityException if the account is not present.
-     */
-    void revokeAll(User user) throws DataBackendException, UnknownEntityException;
+    
     /**
        * Return a Class object representing the system's chosen implementation of
        * of ACL interface.

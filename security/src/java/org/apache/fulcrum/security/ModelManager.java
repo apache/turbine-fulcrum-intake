@@ -1,4 +1,7 @@
-package org.apache.fulcrum.security.model.turbine.manager;
+package org.apache.fulcrum.security;
+
+import org.apache.avalon.framework.component.Component;
+
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -53,42 +56,19 @@ package org.apache.fulcrum.security.model.turbine.manager;
  * <http://www.apache.org/>.
  */
 
-import org.apache.fulcrum.security.RoleManager;
-import org.apache.fulcrum.security.entity.Permission;
-import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.util.DataBackendException;
-import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
- * This interface describes the methods that glue the "turbine"
- * model together.
+ * Right now is just a marker interface, and provides the Role name.
+ * 
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public interface TurbineRoleManager extends RoleManager
+public interface ModelManager extends Component
 {
-    /**
-     * Puts a permission in a role
-     *
-     * This method is used when adding a permission to a role
-     *
-     * @param user the User.
-     * @throws DataBackendException if there was an error accessing the data
-     *         backend.
-     * @throws UnknownEntityException if the account is not present.
-     */
-    void grant(Role role, Permission permission) throws DataBackendException, UnknownEntityException;
-    /**
-	 * Removes a permission from a role
-	 *
-	 *
-	 * @param role the Role.
-	 * @throws DataBackendException if there was an error accessing the data
-	 *         backend.
-	 * @throws UnknownEntityException if the user or group is not present.
-	 */
-    void revoke(Role role, Permission permission) throws DataBackendException, UnknownEntityException;
-
+	/** Avalon role - used to id the component within the manager */
+	   String ROLE = ModelManager.class.getName();
+	   
+	
 
 }

@@ -63,8 +63,8 @@ import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.simple.SimpleModelManager;
 import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
-import org.apache.fulcrum.security.model.simple.entity.SimpleUser;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
@@ -79,6 +79,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
     protected User user;
     protected UserManager userManager;
     protected SecurityService securityService;
+    
     /**
      * Constructor for AbstractUserManagerTest.
      * @param arg0
@@ -183,26 +184,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
         user = userManager.getUserInstance("Philip");
         assertEquals("philip", user.getName());
     }
-    public void testRevokeAll() throws Exception
-    {
-        Group group = securityService.getGroupManager().getGroupInstance();
-        group.setName("TEST_REVOKEALL");
-        securityService.getGroupManager().addGroup(group);
-        Group group2 = securityService.getGroupManager().getGroupInstance();
-        group2.setName("TEST_REVOKEALL2");
-        securityService.getGroupManager().addGroup(group2);
-        user = userManager.getUserInstance("Clint2");
-        userManager.addUser(user, "clint");
-        ((SimpleUserManager) userManager).grant(user, group);
-        ((SimpleUserManager) userManager).grant(user, group2);
-
-        userManager.revokeAll(user);
-        assertEquals(0, ((SimpleUser) user).getGroups().size());
-        group = securityService.getGroupManager().getGroupByName("TEST_REVOKEALL");
-        group2 = securityService.getGroupManager().getGroupByName("TEST_REVOKEALL2");
-        assertFalse(((SimpleGroup) group).getUsers().contains(user));
-        assertFalse(((SimpleGroup) group2).getUsers().contains(user));
-    }
+    
     /**
      * Need to figure out if save is something we want..
      * right now it just bloes up if you actually cahnge anything.
@@ -218,30 +200,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
         userManager.saveUser(user);
         assertEquals("kate", userManager.getUser(user.getName()).getName());
     }
-    public void testGrantUserGroup() throws Exception
-    {
-        Group group = securityService.getGroupManager().getGroupInstance();
-        group.setName("TEST_GROUP");
-        securityService.getGroupManager().addGroup(group);
-        user = userManager.getUserInstance("Clint");
-        userManager.addUser(user, "clint");
-        ((SimpleUserManager) userManager).grant(user, group);
-        assertTrue(((SimpleUser) user).getGroups().contains(group));
-        assertTrue(((SimpleGroup) group).getUsers().contains(user));
-    }
-    public void testRevokeUserGroup() throws Exception
-    {
-        Group group = securityService.getGroupManager().getGroupInstance();
-        group.setName("TEST_REVOKE");
-        securityService.getGroupManager().addGroup(group);
-        user = userManager.getUserInstance("Lima");
-        userManager.addUser(user, "pet");
-        ((SimpleUserManager) userManager).revoke(user, group);
-        assertFalse(((SimpleUser) user).getGroups().contains(group));
-        assertFalse(((SimpleGroup) group).getUsers().contains(user));
-        user = userManager.getUser("Lima");
-        assertFalse(((SimpleUser) user).getGroups().contains(group));
-    }
+   
     public void testGetACL() throws Exception
     {
         user = userManager.getUserInstance("Tony");
@@ -295,7 +254,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
         User user = null;
         UserManager userManager = securityService.getUserManager();
         user = userManager.getUser("joe3");
-        ((SimpleUserManager) userManager).grant(user, group);
+        ((SimpleModelManager)securityService.getModelManager()).grant(user, group);
         assertTrue(((SimpleGroup) group).getUsers().contains(user));
         group = groupManager.getGroupByName(GROUP_NAME);
         Set users = ((SimpleGroup) group).getUsers();

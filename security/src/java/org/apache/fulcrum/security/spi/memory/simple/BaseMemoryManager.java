@@ -1,4 +1,4 @@
-package org.apache.fulcrum.security.spi.hibernate.simple;
+package org.apache.fulcrum.security.spi.memory.simple;
 /*
  * ==================================================================== The Apache Software
  * License, Version 1.1
@@ -34,11 +34,6 @@ package org.apache.fulcrum.security.spi.hibernate.simple;
  * Apache Software Foundation. For more information on the Apache Software Foundation, please see
  * <http://www.apache.org/> .
  */
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-import net.sf.hibernate.avalon.HibernateService;
-
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.framework.component.ComponentManager;
@@ -50,9 +45,7 @@ import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.PermissionManager;
 import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.UserManager;
-import org.apache.fulcrum.security.entity.SecurityEntity;
 import org.apache.fulcrum.security.util.DataBackendException;
-import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
  * 
  * This base implementation persists to a database via Hibernate. it provides methods shared by all
@@ -61,33 +54,19 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class BaseHibernateManager extends AbstractLogEnabled implements Composable, Disposable
+public class BaseMemoryManager extends AbstractLogEnabled implements Composable, Disposable
 {
     boolean composed = false;
     /** Logging */
-    private static Log log = LogFactory.getLog(BaseHibernateManager.class);
-    protected HibernateService hibernateService;
-    private Session session;
-    protected Transaction transaction;
-    protected ComponentManager manager = null;
+    private static Log log = LogFactory.getLog(BaseMemoryManager.class);
+    
+    
+    private ComponentManager manager = null;
     protected PermissionManager permissionManager;
     protected RoleManager roleManager;
     protected GroupManager groupManager;
     protected UserManager userManager;
-    /**
-	 * @return
-	 */
-    public Session getHibernateSession()
-    {
-        return session;
-    }
-    /**
-	 * @param session
-	 */
-    public void setHibernateSession(Session session)
-    {
-        this.session = session;
-    }
+    
     /**
 	 * @return
 	 */
@@ -105,12 +84,8 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
         {
             try
             {
-                userManager = (UserManager) manager.lookup(UserManager.ROLE);
-                ((BaseHibernateManager) userManager).setHibernateSession(retrieveSession());
-            }
-            catch (HibernateException he)
-            {
-                throw new DataBackendException(he.getMessage(), he);
+				userManager = (UserManager) manager.lookup(UserManager.ROLE);
+  
             }
             catch (ComponentException ce)
             {
@@ -129,11 +104,7 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
             try
             {
                 permissionManager = (PermissionManager) manager.lookup(PermissionManager.ROLE);
-                ((BaseHibernateManager) permissionManager).setHibernateSession(retrieveSession());
-            }
-            catch (HibernateException he)
-            {
-                throw new DataBackendException(he.getMessage(), he);
+  
             }
             catch (ComponentException ce)
             {
@@ -152,11 +123,7 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
             try
             {
                 roleManager = (RoleManager) manager.lookup(RoleManager.ROLE);
-                ((BaseHibernateManager) roleManager).setHibernateSession(retrieveSession());
-            }
-            catch (HibernateException he)
-            {
-                throw new DataBackendException(he.getMessage(), he);
+  
             }
             catch (ComponentException ce)
             {
@@ -175,11 +142,7 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
             try
             {
                 groupManager = (GroupManager) manager.lookup(GroupManager.ROLE);
-                ((BaseHibernateManager) groupManager).setHibernateSession(retrieveSession());
-            }
-            catch (HibernateException he)
-            {
-                throw new DataBackendException(he.getMessage(), he);
+  
             }
             catch (ComponentException ce)
             {
@@ -188,148 +151,17 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
         }
         return groupManager;
     }
-    void removeEntity(SecurityEntity entity) throws DataBackendException, UnknownEntityException
-    {
-        try
-        {
-            session = retrieveSession();
-            transaction = session.beginTransaction();
-            session.delete(entity);
-            transaction.commit();
-        }
-        catch (HibernateException he)
-        {
-            try
-            {
-                transaction.rollback();
-            }
-            catch (HibernateException hex)
-            {
-            }
-            throw new DataBackendException("Problem removing entity:" + he.getMessage(), he);
-        }
-    }
-    /**
-	 * Stores changes made to an object
-	 * 
-	 * @param role The object to be saved
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the role does not exist.
-	 */
-    void updateEntity(SecurityEntity entity) throws DataBackendException
-    {
-        try
-        {
-            
-            session = retrieveSession();    
-            
-            transaction = session.beginTransaction();
-            session.update(entity);
-            transaction.commit();
-
-        }
-        catch (HibernateException he)
-        {
-            try
-            {
-                if (transaction != null)
-                {
-                    transaction.rollback();
-                }
-                if(he.getMessage().indexOf("Another object was associated with this id")>-1){
-                    session.close();
-                    updateEntity(entity);
-                }
-                else {
-					throw new DataBackendException("updateEntity(" + entity + ")", he);
-                }
-            }
-            catch (HibernateException hex)
-            {
-            }
-           
-        }
-        return;
-    }
-    /**
-	 * adds an entity
-	 * 
-	 * @param role The object to be saved
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the role does not exist.
-	 */
-    void addEntity(SecurityEntity entity) throws DataBackendException
-    {
-        try
-        {
-            session = retrieveSession();
-            transaction = session.beginTransaction();
-            session.save(entity);
-            transaction.commit();
-            //session.close();
-        }
-        catch (HibernateException he)
-        {
-            try
-            {
-                transaction.rollback();
-            }
-            catch (HibernateException hex)
-            {
-            }
-            throw new DataBackendException("addEntity(s,name)", he);
-        }
-        return;
-    }
-    /**
-	 * Deletes an entity object
-	 * 
-	 * @param role The object to be saved
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the role does not exist.
-	 */
-    void deleteEntity(SecurityEntity entity) throws DataBackendException
-    {
-        try
-        {
-            //session = hibernateService.openSession();
-            transaction = session.beginTransaction();
-            session.delete(entity);
-            transaction.commit();
-            session = retrieveSession();
-        }
-        catch (HibernateException he)
-        {
-            try
-            {
-                transaction.rollback();
-            }
-            catch (HibernateException hex)
-            {
-            }
-            throw new DataBackendException("delete()", he);
-        }
-        return;
-    }
-    protected Session retrieveSession() throws HibernateException
-    {
-        if (session == null || (!session.isConnected() && !session.isOpen()))
-        {
-            session = hibernateService.openSession();
-        }
-        return session;
-    }
-    /**
+      /**
 	 * Avalon component lifecycle method
 	 */
     public void compose(ComponentManager manager) throws ComponentException
     {
         this.manager = manager;
-        hibernateService = (HibernateService) manager.lookup(HibernateService.ROLE);
+  
     }
     public void dispose()
     {
-        hibernateService = null;
+  
         manager = null;
         permissionManager = null;
         roleManager = null;

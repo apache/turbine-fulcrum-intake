@@ -56,14 +56,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
+
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.factory.FactoryService;
+import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.acl.DefaultAccessControlList;
 import org.apache.fulcrum.security.authenticator.Authenticator;
@@ -73,8 +75,6 @@ import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
 import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
 import org.apache.fulcrum.security.model.simple.entity.SimpleUser;
-import org.apache.fulcrum.security.model.simple.manager.SimpleUserManager;
-import org.apache.fulcrum.security.spi.hibernate.simple.entity.HibernateSimpleGroup;
 import org.apache.fulcrum.security.spi.hibernate.simple.entity.HibernateSimpleUser;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
@@ -87,7 +87,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class HibernateUserManagerImpl extends BaseHibernateManager implements SimpleUserManager
+public class HibernateUserManagerImpl extends BaseHibernateManager implements UserManager
 {
     /** Logging */
     private static Log log = LogFactory.getLog(HibernateUserManagerImpl.class);
@@ -321,37 +321,7 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
         user.setName(userName);
         return user;
     }
-    /**
-    	 * Revokes all groups from a user
-    	 *
-    	 * This method is used when deleting an account.
-    	 *
-    	 * @param user the User.
-    	 * @throws DataBackendException if there was an error accessing the data
-    	 *         backend.
-    	 * @throws UnknownEntityException if the account is not present.
-    	 */
-    public synchronized void revokeAll(User user) throws DataBackendException, UnknownEntityException
-    {
-        boolean userExists = false;
-        userExists = checkExists(user);
-        if (userExists)
-        {
-            Object groups[] = ((SimpleUser) user).getGroups().toArray();
-           
-            for (int i = 0; i < groups.length; i++)
-            {
-                Group group = (Group) groups[i];
-                revoke(user, group);
-            }
-           
-            return;
-        }
-        else
-        {
-            throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
-        }
-    }
+    
     /**
     * Determines if the <code>Group</code> exists in the security system.
     *
@@ -436,17 +406,15 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
         }
     }
     /**
-    	* Removes an user account from the system.
-    	*
-    	* @param user the object describing the account to be removed.
-    	* @throws DataBackendException if there was an error accessing the data
-    	*         backend.
-    	* @throws UnknownEntityException if the user account is not present.
-    	*/
+	* Removes an user account from the system.
+	*
+	* @param user the object describing the account to be removed.
+	* @throws DataBackendException if there was an error accessing the data
+	*         backend.
+	* @throws UnknownEntityException if the user account is not present.
+	*/
     public void removeUser(User user) throws DataBackendException, UnknownEntityException
-    {
-        // revoke all roles form the user
-        revokeAll(user);
+    {    
         removeEntity(user);
     }
     /**
@@ -493,98 +461,5 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
             throw new UnknownEntityException("Unknown user '" + user + "'");
         }
     }
-    /**
-     * Puts a user in a group.
-     *
-     * This method is used when adding a user to a group
-     *
-     * @param user the User.
-     * @throws DataBackendException if there was an error accessing the data
-     *         backend.
-     * @throws UnknownEntityException if the account is not present.
-     */
-    public void grant(User user, Group group) throws DataBackendException, UnknownEntityException
-    {
-        boolean groupExists = false;
-        boolean userExists = false;
-        try
-        {
-            groupExists = checkExists(group);
-            userExists = checkExists(user);
-            if (groupExists && userExists)
-            {
-                ((HibernateSimpleUser) user).addGroup(group);
-                ((HibernateSimpleGroup) group).addUser(user);
-                Session session = hibernateService.openSession(); //retrieveSession();
-                transaction = session.beginTransaction();
-                session.update(user);
-                session.update(group);
-                transaction.commit();
-                session.close();
-                return;
-            }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("grant(Role,Permission) failed", e);
-        }
-        finally
-        {
-        }
-        if (!groupExists)
-        {
-            throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
-        }
-        if (!userExists)
-        {
-            throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
-        }
-    }
-    /**
-    * Removes a user in a group.
-    *
-    * This method is used when removing a user to a group
-    *
-    * @param user the User.
-    * @throws DataBackendException if there was an error accessing the data
-    *         backend.
-    * @throws UnknownEntityException if the user or group is not present.
-    */
-    public void revoke(User user, Group group) throws DataBackendException, UnknownEntityException
-    {
-        boolean groupExists = false;
-        boolean userExists = false;
-        try
-        {
-            groupExists = checkExists(group);
-            userExists = checkExists(user);
-            if (groupExists && userExists)
-            {
-                ((HibernateSimpleUser) user).removeGroup(group);
-                ((HibernateSimpleGroup) group).removeUser(user);
-                Session session = hibernateService.openSession(); //retrieveSession();
-                transaction = session.beginTransaction();
-                session.update(user);
-                session.update(group);
-                transaction.commit();
-                session.close();
-                return;
-            }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("grant(Role,Permission) failed", e);
-        }
-        finally
-        {
-        }
-        if (!groupExists)
-        {
-            throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
-        }
-        if (!userExists)
-        {
-            throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
-        }
-    }
+    
 }

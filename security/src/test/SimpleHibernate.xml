@@ -23,6 +23,10 @@
     class="org.apache.fulcrum.security.spi.hibernate.simple.HibernatePermissionManagerImpl">   
   </component>     
   
+  <component
+    role="org.apache.fulcrum.security.ModelManager"
+    class="org.apache.fulcrum.security.spi.hibernate.simple.HibernateModelManagerImpl">   
+  </component>   
   <component 
     role="net.sf.hibernate.avalon.HibernateService"
     class="net.sf.hibernate.avalon.HibernateServiceImpl">   

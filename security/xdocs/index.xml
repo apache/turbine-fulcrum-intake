@@ -15,7 +15,8 @@
       for use in Turbine but it has been expanded and can be used in any container compatible 
       with Avalon's ECM container.
 	  <ul>
-	  	<li>Allow pluggability via Avalon components of various backend providers</li>
+	  	<li>Allow pluggability via Avalon components of various entities.</li>
+	  	<li>Explicit Model interface allows entities to be glued together.</li>
 	  	<li>Provide adapters to various other security systems</li>
 	  	<li>Solve most common problems in dealing with security</li>
 	  	<li>Not enforce assumptions about how a security framework should be setup.</li>
@@ -131,6 +132,10 @@
     class="org.apache.fulcrum.security.spi.memory.simple.MemoryPermissionManagerImpl">   
   </component>     
 
+  <component
+    role="org.apache.fulcrum.security.ModelManager"
+    class="org.apache.fulcrum.security.spi.memory.simple.MemoryModelManagerImpl">   
+  </component>
 </my-system>
 ]]>
 </source>

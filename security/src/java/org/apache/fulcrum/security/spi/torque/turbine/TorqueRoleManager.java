@@ -53,8 +53,9 @@ package org.apache.fulcrum.security.spi.torque.turbine;
  * <http://www.apache.org/>.
  */
 
+import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.model.turbine.manager.TurbineRoleManager;
+
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
@@ -70,7 +71,7 @@ import org.apache.torque.util.Criteria;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public interface TorqueRoleManager extends TurbineRoleManager
+public interface TorqueRoleManager extends RoleManager
 {
    
 	/**

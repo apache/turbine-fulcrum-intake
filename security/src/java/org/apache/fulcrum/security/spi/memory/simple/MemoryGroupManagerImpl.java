@@ -56,19 +56,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.avalon.framework.component.ComponentException;
-import org.apache.avalon.framework.component.ComponentManager;
-import org.apache.avalon.framework.component.Composable;
-import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.fulcrum.security.RoleManager;
+import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
-import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
-import org.apache.fulcrum.security.model.simple.manager.*;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.GroupSet;
@@ -81,27 +75,15 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class MemoryGroupManagerImpl extends AbstractLogEnabled implements SimpleGroupManager, Composable
+public class MemoryGroupManagerImpl extends BaseMemoryManager implements GroupManager
 {
     /** Logging */
     private static Log log = LogFactory.getLog(MemoryGroupManagerImpl.class);
     private static List groups = new ArrayList();
     /** Our Unique ID counter */
     private static int uniqueId = 0;
-    private ComponentManager manager = null;
-    /** Our role Manager **/
-    private RoleManager roleManager;
-    /**
-    	* @return
-    	*/
-    RoleManager getRoleManager() throws ComponentException
-    {
-        if (roleManager == null)
-        {
-            roleManager = (RoleManager) manager.lookup(RoleManager.ROLE);
-        }
-        return roleManager;
-    }
+    
+    
     /**
     	* Construct a blank Group object.
     	*
@@ -332,83 +314,7 @@ public class MemoryGroupManagerImpl extends AbstractLogEnabled implements Simple
             throw new EntityExistsException("Group '" + group + "' already exists");
         }
     }
-    /**
-    	  * Grants a Group a Role
-    	  *
-    	  * @param group the Group.
-    	  * @param role the Role.
-    	  * @throws DataBackendException if there was an error accessing the data
-    	  *         backend.
-    	  * @throws UnknownEntityException if group or role is not present.
-    	  */
-    public synchronized void grant(Group group, Role role) throws DataBackendException, UnknownEntityException
-    {
-        boolean groupExists = false;
-        boolean roleExists = false;
-        try
-        {
-            groupExists = checkExists(group);
-            roleExists = checkExists(role);
-            if (groupExists && roleExists)
-            {
-				((SimpleGroup) group).addRole(role);
-				((SimpleRole) role).addGroup(group);
-                return;
-            }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("grant(Group,Role) failed", e);
-        }
-        if (!groupExists)
-        {
-            throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
-        }
-        if (!roleExists)
-        {
-            throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
-        }
-    }
-    /**
-    	  * Revokes a Role from a Group.
-    	  *
-    	  * @param group the Group.
-    	  * @param role the Role.
-    	  * @throws DataBackendException if there was an error accessing the data
-    	  *         backend.
-    	  * @throws UnknownEntityException if group or role is not present.
-    	  */
-    public synchronized void revoke(Group group, Role role) throws DataBackendException, UnknownEntityException
-    {
-        boolean groupExists = false;
-        boolean roleExists = false;
-        try
-        {
-            groupExists = checkExists(group);
-            roleExists = checkExists(role);
-            if (groupExists && roleExists)
-            {
-				((SimpleGroup) group).removeRole(role);
-				((SimpleRole) role).removeGroup(group);
-                return;
-            }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("revoke(Group,Role) failed", e);
-        }
-        finally
-        {
-        }
-        if (!groupExists)
-        {
-            throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
-        }
-        if (!roleExists)
-        {
-            throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
-        }
-    }
+   
     /**
      * Determines if the <code>Permission</code> exists in the security system.
      *
@@ -420,22 +326,10 @@ public class MemoryGroupManagerImpl extends AbstractLogEnabled implements Simple
      */
     public boolean checkExists(Role role) throws DataBackendException
     {
-        try
-        {
-            return getRoleManager().checkExists(role);
-        }
-        catch (ComponentException ce)
-        {
-            throw new DataBackendException("Problem getting role manager", ce);
-        }
+        return getRoleManager().checkExists(role);
+       
     }
-    /**
-      * Avalon component lifecycle method
-      */
-    public void compose(ComponentManager manager) throws ComponentException
-    {
-        this.manager = manager;
-    }
+   
     private Integer getUniqueId()
     {
         return new Integer(++uniqueId);

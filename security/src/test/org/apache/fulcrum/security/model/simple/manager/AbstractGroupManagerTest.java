@@ -56,9 +56,7 @@ package org.apache.fulcrum.security.model.simple.manager;
 import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.entity.Group;
-import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
-import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
@@ -178,32 +176,7 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         assertNotNull(group.getId());
         assertNotNull(groupManager.getGroupById(group.getId()));
     }
-    public void testGrantGroupRole() throws Exception
-    {
-        Role role = securityService.getRoleManager().getRoleInstance();
-        role.setName("TEST_PERMISSION");
-        securityService.getRoleManager().addRole(role);
-        group = groupManager.getGroupInstance("TEST_GROUP");
-        groupManager.addGroup(group);
-        ((SimpleGroupManager) groupManager).grant(group, role);
-        group = groupManager.getGroupByName("TEST_GROUP");
-		assertTrue(((SimpleGroup) group).getRoles().contains(role));
-		assertTrue(((SimpleRole) role).getGroups().contains(group));
-
-    }
-    public void testRevokeGroupRole() throws Exception
-    {
-        Role role = securityService.getRoleManager().getRoleInstance();
-        role.setName("TEST_PERMISSION2");
-        securityService.getRoleManager().addRole(role);
-        group = groupManager.getGroupInstance("Lima2");
-        groupManager.addGroup(group);
-        ((SimpleGroupManager) groupManager).grant(group, role);
-        ((SimpleGroupManager) groupManager).revoke(group, role);
-        group = groupManager.getGroupByName("Lima2");
-		assertFalse(((SimpleGroup) group).getRoles().contains(role));
-		assertFalse(((SimpleRole) role).getGroups().contains(group));
-    }
+   
 
 
 }

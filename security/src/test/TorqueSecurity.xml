@@ -19,4 +19,9 @@
     role="org.apache.fulcrum.security.PermissionManager"
     class="org.apache.fulcrum.security.spi.torque.turbine.impl.TorquePermissionManagerImpl">   
   </component>     
+  
+  <component
+    role="org.apache.fulcrum.security.ModelManager"
+    class="org.apache.fulcrum.security.spi.torque.turbine.impl.TurbineModelManagerImpl">   
+  </component> 
 </my-system>

@@ -47,7 +47,8 @@ import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.model.turbine.manager.TurbineRoleManager;
+import org.apache.fulcrum.security.model.turbine.TurbineModelManager;
+
 import org.apache.fulcrum.security.spi.torque.turbine.TorqueGroupManager;
 import org.apache.fulcrum.security.spi.torque.turbine.TorquePermissionManager;
 import org.apache.fulcrum.security.spi.torque.turbine.TorqueRoleManager;
@@ -563,7 +564,7 @@ public class TorqueSecurityServiceImpl
     public void grant(User user, Group group, Role role)
         throws DataBackendException, UnknownEntityException
     {
-        ((TorqueUserManager) getUserManager()).grant(user, group, role);
+        ((TurbineModelManager) getModelManager()).grant(user, group, role);
     }
     /**
 	 * Revoke a Role in a Group from an User.
@@ -579,7 +580,7 @@ public class TorqueSecurityServiceImpl
     public void revoke(User user, Group group, Role role)
         throws DataBackendException, UnknownEntityException
     {
-        ((TorqueUserManager) getUserManager()).revoke(user, group, role);
+		((TurbineModelManager) getModelManager()).revoke(user, group, role);
     }
     /**
 	 * Revokes all roles from an User.
@@ -594,7 +595,7 @@ public class TorqueSecurityServiceImpl
     public void revokeAll(User user)
         throws DataBackendException, UnknownEntityException
     {
-        getUserManager().revokeAll(user);
+		((TurbineModelManager) getModelManager()).revokeAll(user);
     }
     /**
 	 * Grants a Role a Permission
@@ -608,7 +609,7 @@ public class TorqueSecurityServiceImpl
     public void grant(Role role, Permission permission)
         throws DataBackendException, UnknownEntityException
     {
-        ((TurbineRoleManager) getRoleManager()).grant(role, permission);
+		((TurbineModelManager) getModelManager()).grant(role, permission);
     }
     /**
 	 * Revokes a Permission from a Role.
@@ -622,7 +623,7 @@ public class TorqueSecurityServiceImpl
     public void revoke(Role role, Permission permission)
         throws DataBackendException, UnknownEntityException
     {
-        ((TurbineRoleManager) getRoleManager()).revoke(role, permission);
+		((TurbineModelManager) getModelManager()).revoke(role, permission);
     }
     /**
 	 * Revokes all permissions from a Role.
@@ -637,7 +638,7 @@ public class TorqueSecurityServiceImpl
     public void revokeAll(Role role)
         throws DataBackendException, UnknownEntityException
     {
-        getRoleManager().revokeAll(role);
+		((TurbineModelManager) getModelManager()).revokeAll(role);
     }
     /*
 	 * -----------------------------------------------------------------------

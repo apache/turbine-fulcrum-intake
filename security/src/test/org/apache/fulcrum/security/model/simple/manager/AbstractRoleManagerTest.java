@@ -53,11 +53,9 @@ package org.apache.fulcrum.security.model.simple.manager;
  * <http://www.apache.org/>.
  */
 
+import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.SecurityService;
-import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
-import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
@@ -70,7 +68,7 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
 public abstract class AbstractRoleManagerTest extends BaseUnitTest
 {
     protected Role role;
-    protected SimpleRoleManager roleManager;
+    protected RoleManager roleManager;
     protected SecurityService securityService;
 
     /**
@@ -114,54 +112,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         Role role2 = roleManager.getRoleById(role.getId());
         assertEquals(role.getName(), role2.getName());
     }
-    public void testGrant() throws Exception
-    {
-        Permission permission = securityService.getPermissionManager().getPermissionInstance();
-        permission.setName("ANSWER_PHONE");
-        securityService.getPermissionManager().addPermission(permission);
-        role = roleManager.getRoleInstance("RECEPTIONIST");
-        roleManager.addRole(role);
-		((SimpleRoleManager)roleManager).grant(role, permission);
-        role = roleManager.getRoleById(role.getId());
-        PermissionSet permissions = securityService.getPermissionManager().getPermissions(role);
-        assertEquals(1, permissions.size());
-    }
-    public void testRevoke() throws Exception
-    {
-        Permission permission = securityService.getPermissionManager().getPermissionInstance();
-        permission.setName("ANSWER_FAX");
-        securityService.getPermissionManager().addPermission(permission);
-        role = roleManager.getRoleInstance("SECRETARY");
-        roleManager.addRole(role);
-        roleManager.grant(role, permission);
-        role = roleManager.getRoleById(role.getId());
-        PermissionSet permissions = securityService.getPermissionManager().getPermissions(role);
-        assertEquals(1, permissions.size());
-        roleManager.revoke(role, permission);
-        role = roleManager.getRoleById(role.getId());
-        permissions = securityService.getPermissionManager().getPermissions(role);
-        assertEquals(0, permissions.size());
-    }
-    public void testRevokeAll() throws Exception
-    {
-        Permission permission = securityService.getPermissionManager().getPermissionInstance();
-        Permission permission2 = securityService.getPermissionManager().getPermissionInstance();
-        permission.setName("SEND_SPAM");
-        permission2.setName("ANSWER_EMAIL");
-        securityService.getPermissionManager().addPermission(permission);
-        securityService.getPermissionManager().addPermission(permission2);
-        role = roleManager.getRoleInstance("HELPER");
-        roleManager.addRole(role);
-        roleManager.grant(role, permission);
-        roleManager.grant(role, permission2);
-        role = roleManager.getRoleById(role.getId());
-        PermissionSet permissions = securityService.getPermissionManager().getPermissions(role);
-        assertEquals(2, permissions.size());
-        roleManager.revokeAll(role);
-        role = roleManager.getRoleById(role.getId());
-        permissions = securityService.getPermissionManager().getPermissions(role);
-        assertEquals(0, permissions.size());
-    }
+   
     public void testRenameRole() throws Exception
     {
         role = roleManager.getRoleInstance("CLEAN_KENNEL_X");
@@ -181,29 +132,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         assertEquals(size + 1, roleSet.size());
     }
 
-    public void testGrantUserGroup() throws Exception
-    {
-        Permission permission = securityService.getPermissionManager().getPermissionInstance();
-        permission.setName("TEST_PERMISSION");
-        securityService.getPermissionManager().addPermission(permission);
-        role = roleManager.getRoleInstance("TEST_ROLE");
-        roleManager.addRole(role);
-        ((SimpleRoleManager) roleManager).grant(role, permission);
-		assertTrue(((SimpleRole) role).getPermissions().contains(permission));
-    }
-    public void testRevokeUserGroup() throws Exception
-    {
-        Permission permission = securityService.getPermissionManager().getPermissionInstance();
-        permission.setName("TEST_PERMISSION2");
-        securityService.getPermissionManager().addPermission(permission);
-        role = roleManager.getRoleInstance("Lima2");
-        roleManager.addRole(role);
-        ((SimpleRoleManager) roleManager).grant(role, permission);
-        ((SimpleRoleManager) roleManager).revoke(role, permission);
-
-		assertFalse(((SimpleRole) role).getPermissions().contains(permission));
-
-    }
+    
     public void testAddRole() throws Exception
     {
         role = roleManager.getRoleInstance("DOG_NAPPER");

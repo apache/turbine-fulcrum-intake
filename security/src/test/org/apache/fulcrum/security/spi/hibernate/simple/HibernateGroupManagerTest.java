@@ -87,7 +87,7 @@ public class HibernateGroupManagerTest extends AbstractGroupManagerTest
     {
 		try
 		  {
-			  ((BaseHibernateManager) groupManager).getHibernateSession().close();
+			  //((BaseHibernateManager) groupManager).getHibernateSession().close();
 		  }
 		  catch (Exception e)
 		  {

@@ -37,6 +37,11 @@
   </component>       
 
   <component
+    role="org.apache.fulcrum.security.ModelManager"
+    class="org.apache.fulcrum.security.spi.memory.simple.MemoryModelManagerImpl">   
+  </component> 
+  
+  <component
     role="org.apache.fulcrum.security.authenticator.Authenticator"
     class="org.apache.fulcrum.security.authenticator.TextMatchAuthenticator">   
   </component>   

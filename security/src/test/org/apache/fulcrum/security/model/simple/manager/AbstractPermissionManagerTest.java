@@ -57,6 +57,7 @@ import org.apache.fulcrum.security.PermissionManager;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.model.simple.SimpleModelManager;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
@@ -167,7 +168,7 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
         permissionManager.addPermission(permission2);
         Role role = securityService.getRoleManager().getRoleInstance("VET_TECH");
         securityService.getRoleManager().addRole(role);
-        ((SimpleRoleManager) securityService.getRoleManager()).grant(role, permission);
+        ((SimpleModelManager) securityService.getModelManager()).grant(role, permission);
         PermissionSet permissionSet = permissionManager.getPermissions(role);
         assertEquals(1, permissionSet.size());
         assertTrue(permissionSet.contains(permission));

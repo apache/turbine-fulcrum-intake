@@ -53,10 +53,7 @@ package org.apache.fulcrum.security.model.turbine.manager;
  * <http://www.apache.org/>.
  */
 import org.apache.fulcrum.security.UserManager;
-import org.apache.fulcrum.security.entity.Group;
-import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
@@ -87,28 +84,5 @@ public interface TurbineUserManager extends UserManager
 	*
 	*/
     boolean isAnonymousUser(User u);
-    /**
-	  * Grant an User a Role in a Group.
-	  *
-	  * @param user the user.
-	  * @param group the group.
-	  * @param role the role.
-	  * @throws DataBackendException if there was an error accessing the data
-	  *         backend.
-	  * @throws UnknownEntityException if user account, group or role is not
-	  *         present.
-	  */
-    void grant(User user, Group group, Role role) throws DataBackendException, UnknownEntityException;
-    /**
-     * Revoke a Role in a Group from an User.
-     *
-     * @param user the user.
-     * @param group the group.
-     * @param role the role.
-     * @throws DataBackendException if there was an error accessing the data
-     *         backend.
-     * @throws UnknownEntityException if user account, group or role is not
-     *         present.
-     */
-    void revoke(User user, Group group, Role role) throws DataBackendException, UnknownEntityException;
+  
 }

@@ -54,9 +54,10 @@ package org.apache.fulcrum.security.spi.hibernate.simple;
  */
 
 import net.sf.hibernate.avalon.HibernateService;
+
+import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.simple.manager.AbstractRoleManagerTest;
-import org.apache.fulcrum.security.model.simple.manager.SimpleRoleManager;
 import org.apache.fulcrum.security.spi.hibernate.HibernateHelper;
 /**
  * @author Eric Pugh
@@ -75,7 +76,7 @@ public class HibernateRoleManagerTest extends AbstractRoleManagerTest
             HibernateService hibernateService = (HibernateService) lookup(HibernateService.ROLE);
             HibernateHelper.exportSchema(hibernateService.getConfiguration());
             securityService = (SecurityService) lookup(SecurityService.ROLE);
-            roleManager = (SimpleRoleManager) securityService.getRoleManager();
+            roleManager = (RoleManager) securityService.getRoleManager();
 			((BaseHibernateManager) roleManager).setHibernateSession(hibernateService.openSession());
         }
         catch (Exception e)
@@ -87,7 +88,7 @@ public class HibernateRoleManagerTest extends AbstractRoleManagerTest
     {
         try
         {
-            ((BaseHibernateManager) roleManager).getHibernateSession().close();
+           // ((BaseHibernateManager) roleManager).getHibernateSession().close();
         }
         catch (Exception e)
         {

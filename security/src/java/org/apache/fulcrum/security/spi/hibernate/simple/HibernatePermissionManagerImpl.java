@@ -53,8 +53,10 @@ package org.apache.fulcrum.security.spi.hibernate.simple;
  * <http://www.apache.org/>.
  */
 import java.util.List;
+
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

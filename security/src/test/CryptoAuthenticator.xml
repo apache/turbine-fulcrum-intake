@@ -1,7 +1,7 @@
 <my-system>
   
   
-   <component
+  <component
     role="org.apache.fulcrum.security.authenticator.Authenticator"
     class="org.apache.fulcrum.security.authenticator.CryptoAuthenticator">   
       <algorithm>java</algorithm>

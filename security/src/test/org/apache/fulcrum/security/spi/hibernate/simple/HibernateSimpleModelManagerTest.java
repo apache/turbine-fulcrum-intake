@@ -1,9 +1,9 @@
-package org.apache.fulcrum.security;
+package org.apache.fulcrum.security.spi.hibernate.simple;
 /*
  * ==================================================================== The Apache Software
  * License, Version 1.1
  * 
- * Copyright (c) 2001-2003 The Apache Software Foundation. All rights reserved.
+ * Copyright (c) 2001-2002 The Apache Software Foundation. All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
@@ -37,55 +37,57 @@ package org.apache.fulcrum.security;
  * Apache Software Foundation. For more information on the Apache Software Foundation, please see
  * <http://www.apache.org/> .
  */
-import org.apache.avalon.framework.component.Component;
+
+import net.sf.hibernate.avalon.HibernateService;
+import org.apache.fulcrum.security.SecurityService;
+import org.apache.fulcrum.security.model.simple.manager.AbstractSimpleModelManagerTest;
+import org.apache.fulcrum.security.spi.hibernate.HibernateHelper;
 /**
- * The Security Service manages Users, Groups Roles and Permissions in the system.
+ * @author Eric Pugh
  * 
- * The task performed by the security service include providing access to the various types of
- * managers.
- * 
- * <p>
- * Because of pluggable nature of the Services, it is possible to create multiple implementations
- * of SecurityService, for example employing database and directory server as the data backend.
- * <br>
- * 
- * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id$
+ * To change the template for this generated type comment go to Window>Preferences>Java>Code
+ * Generation>Code and Comments
  */
-public interface SecurityService extends Component
+public class HibernateSimpleModelManagerTest extends AbstractSimpleModelManagerTest
 {
-    String ROLE = SecurityService.class.getName();
+    public void setUp()
+    {
+        try
+        {
+            this.setRoleFileName(null);
+            this.setConfigurationFileName("src/test/SimpleHibernate.xml");
+            HibernateService hibernateService = (HibernateService) lookup(HibernateService.ROLE);
+            HibernateHelper.exportSchema(hibernateService.getConfiguration());
+            securityService = (SecurityService) lookup(SecurityService.ROLE);
+            super.setUp();
+            //((BaseHibernateManager)
+			// permissionManager).setHibernateSession(hibernateService.openSession());
+        }
+        catch (Exception e)
+        {
+            fail(e.toString());
+        }
+    }
+    public void tearDown()
+    {
+        try
+        {
+            //((BaseHibernateManager) permissionManager).getHibernateSession().close();
+        }
+        catch (Exception e)
+        {
+            fail(e.getMessage());
+        }
 
+        securityService = null;
+    }
     /**
-	 * Returns the configured UserManager.
+	 * Constructor for HibernatePermissionManagerTest.
 	 * 
-	 * @return An UserManager object
+	 * @param arg0
 	 */
-    UserManager getUserManager();
-    /**
-	 * Returns the configured GroupManager.
-	 * 
-	 * @return An UserManager object
-	 */
-    GroupManager getGroupManager();
-    /**
-	 * Returns the configured RoleManager.
-	 * 
-	 * @return An RoleManager object
-	 */
-    RoleManager getRoleManager();
-    /**
-	 * Returns the configured PermissionManager.
-	 * 
-	 * @return An PermissionManager object
-	 */
-    PermissionManager getPermissionManager();
-	/**
-	 * Returns the configured ModelManager object that can then
-	 * be casted to the specific model.
-	 * 
-	 * @return An ModelManager object
-	 */
-	ModelManager getModelManager();    
-
+    public HibernateSimpleModelManagerTest(String arg0)
+    {
+        super(arg0);
+    }
 }

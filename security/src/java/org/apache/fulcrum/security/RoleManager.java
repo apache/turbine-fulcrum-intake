@@ -95,17 +95,7 @@ public interface RoleManager extends Component
     * @throws DataBackendException if the object could not be instantiated.
     */
     Role getRoleInstance(String roleName) throws DataBackendException;
-    /**
-	 * Revokes all permissions from a Role.
-	 *
-	 * This method is user when deleting a Role.
-	 *
-	 * @param role the Role
-	 * @throws DataBackendException if there was an error accessing the data
-	 *         backend.
-	 * @throws  UnknownEntityException if the Role is not present.
-	 */
-    void revokeAll(Role role) throws DataBackendException, UnknownEntityException;
+    
     /**
 	 * Retrieve a Role object with specified name.
 	 *

@@ -53,9 +53,9 @@ package org.apache.fulcrum.security.spi.memory.simple;
  * <http://www.apache.org/>.
  */
 
+import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.simple.manager.AbstractRoleManagerTest;
-import org.apache.fulcrum.security.model.simple.manager.SimpleRoleManager;
 /**
  * @author Eric Pugh
  *
@@ -74,7 +74,7 @@ public class MemoryRoleManagerTest extends AbstractRoleManagerTest
             this.setRoleFileName(null);
             this.setConfigurationFileName("src/test/SimpleMemory.xml");
             securityService = (SecurityService) lookup(SecurityService.ROLE);
-            roleManager = (SimpleRoleManager) securityService.getRoleManager();
+            roleManager = (RoleManager) securityService.getRoleManager();
         }
         catch (Exception e)
         {

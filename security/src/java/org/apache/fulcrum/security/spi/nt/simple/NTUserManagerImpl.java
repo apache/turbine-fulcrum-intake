@@ -56,6 +56,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.PermissionManager;
 import org.apache.fulcrum.security.RoleManager;
+import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.acl.DefaultAccessControlList;
 import org.apache.fulcrum.security.entity.Group;
@@ -64,7 +65,7 @@ import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
 import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
 import org.apache.fulcrum.security.model.simple.entity.SimpleUser;
-import org.apache.fulcrum.security.model.simple.manager.SimpleUserManager;
+
 import org.apache.fulcrum.security.spi.nt.ParseUtils;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
@@ -81,7 +82,7 @@ import com.tagish.auth.win32.NTSystem;
  */
 public class NTUserManagerImpl
     extends AbstractLogEnabled
-    implements SimpleUserManager, Composable, Disposable
+    implements UserManager, Composable, Disposable
 {
     /** Logging */
     private static Log log = LogFactory.getLog(NTUserManagerImpl.class);

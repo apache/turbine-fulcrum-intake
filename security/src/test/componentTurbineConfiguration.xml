@@ -5,6 +5,7 @@ classes for Turbine. -->
     <userManager/>    
     <groupManager/>    
     <roleManager/>    
-    <permissionManager/>                
+    <permissionManager/> 
+    <modelManager/>                
 
 </componentConfig>

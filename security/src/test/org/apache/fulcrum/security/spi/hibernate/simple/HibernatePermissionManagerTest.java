@@ -75,7 +75,7 @@ public class HibernatePermissionManagerTest extends AbstractPermissionManagerTes
             HibernateHelper.exportSchema(hibernateService.getConfiguration());
             securityService = (SecurityService) lookup(SecurityService.ROLE);
             permissionManager = securityService.getPermissionManager();
-			((BaseHibernateManager) permissionManager).setHibernateSession(hibernateService.openSession());
+			//((BaseHibernateManager) permissionManager).setHibernateSession(hibernateService.openSession());
         }
         catch (Exception e)
         {
@@ -86,7 +86,7 @@ public class HibernatePermissionManagerTest extends AbstractPermissionManagerTes
     {
 		try
 		  {
-			  ((BaseHibernateManager) permissionManager).getHibernateSession().close();
+			 // ((BaseHibernateManager) permissionManager).getHibernateSession().close();
 		  }
 		  catch (Exception e)
 		  {
