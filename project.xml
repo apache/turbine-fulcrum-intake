@@ -150,7 +150,7 @@
     
     <dependency>
       <id>avalon-framework</id>
-      <version>4.0</version>
+      <version>4.1.4</version>
     </dependency>
 
     <!-- omit this one for now
@@ -181,6 +181,42 @@
     <dependency>
       <id>log4j</id>
       <version>1.2.6</version>
+    </dependency>
+
+    <dependency>
+      <id>commons-collections</id>
+      <version>2.1</version>
+      <url>http://jakarta.apache.org/commons/collections.html</url>
+    </dependency>
+
+    <dependency>
+      <id>excalibur-component</id>
+      <version>1.1</version>
+      <url>http://avalon.apache.org/</url>
+    </dependency>
+
+    <dependency>
+      <id>excalibur-instrument</id>
+      <version>1.0</version>
+      <url>http://avalon.apache.org/</url>
+    </dependency>
+
+    <dependency>
+      <id>excalibur-logger</id>
+      <version>1.0.1</version>
+      <url>http://avalon.apache.org/</url>
+    </dependency>
+
+    <dependency>
+      <id>excalibur-pool</id>
+      <version>1.2</version>
+      <url>http://avalon.apache.org/</url>
+    </dependency>
+
+    <dependency>
+      <id>logkit</id>
+      <version>1.0.1</version>
+      <url>http://jakarta.apache.org/avalon/logkit/</url>
     </dependency>
 
     <!--
@@ -322,13 +358,6 @@
       <version>1.2.1</version>
       <url>http://java.sun.com/products/jndi/</url>
     </dependency>
-    <!--
-    <dependency>
-      <id>junit</id>
-      <version>3.8.1</version>
-      <url>http://www.junit.org/</url>
-    </dependency>
-    -->
     <dependency>
       <id>log4j</id>
       <version>1.2.7</version>
@@ -470,6 +499,7 @@
     
 
   </build>
+  
   <reports>
   <!--
     <report>maven-jdepend-plugin</report>
