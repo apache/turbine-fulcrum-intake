@@ -1,0 +1,8 @@
+
+<targets>
+
+  <target path="/test/intake">
+    <categories priority="INFO"/>
+  </target>
+
+</targets>

@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <project>
-  <extend>${basedir}/../project.xml</extend>
+  <extend>${basedir}/../merlin-project.xml</extend>
   <id>fulcrum-intake</id>
   <name>Fulcrum Intake Component</name>
-  <currentVersion>1.0-alpha-1</currentVersion>
+  <currentVersion>1.0-alpha-2</currentVersion>
 
   <dependencies>
     <dependency>
@@ -14,12 +14,12 @@
   	
     <dependency>
       <groupId>fulcrum</groupId>    
-      <artifactId>fulcrum-localization</artifactId>
-      <version>1.0-alpha-3</version>
+      <artifactId>fulcrum-localization-api</artifactId>
+      <version>1.0-alpha-4</version>
     </dependency>   	
     <dependency>
       <groupId>fulcrum</groupId>    
-      <artifactId>fulcrum-factory</artifactId>
+      <artifactId>fulcrum-factory-api</artifactId>
       <version>1.0-alpha-1</version>
     </dependency>  
     
@@ -43,25 +43,19 @@
       <artifactId>oro</artifactId>
       <version>2.0.7</version>
     </dependency>    
+    <dependency>
+      <id>commons-lang</id>
+      <version>2.0</version>
+    </dependency> 
 
     <!--  Needed only for testing -->
-    <dependency>
-      <groupId>fulcrum</groupId>    
-      <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0-alpha-1</version>
-    </dependency>
 
     <dependency>
-      <id>xerces:xercesImpl</id>
-      <version>2.0.2</version>
-      <url>http://xml.apache.org/xerces2-j/</url>
+      <groupId>merlin</groupId>
+      <artifactId>merlin-unit</artifactId>
+      <version>3.2.2-dev</version>
     </dependency>
 
-    <dependency>
-      <id>xerces:xmlParserAPIs</id>
-      <version>2.0.2</version>
-      <url>http://xml.apache.org/xerces2-j/</url>
-    </dependency>
     <!-- Needed for compilation -->
     <dependency>
       <id>servletapi</id>
@@ -70,17 +64,30 @@
 
   </dependencies>
 
-<build>
+  <build>
     <resources>
+    	<resource>
+          <directory>src/dtd</directory>
+          <includes>
+            <include>intake.dtd</include>
+          </includes>
+        </resource>
       <resource>
-        <directory>src/dtd</directory>
-        <targetPath>/</targetPath>
+        <directory>${basedir}/conf</directory>
+        <targetPath>BLOCK-INF</targetPath>
         <includes>
-          <include>intake.dtd</include>
+          <include>block.xml</include>
         </includes>
-      </resource>    
+      </resource>
+      <resource>
+        <directory>${basedir}/src/java</directory>
+        <includes>
+          <include>**/*.x*</include>
+        </includes>
+      </resource>
     </resources>
-    <jars></jars>
   </build>
+
+
 </project>
 

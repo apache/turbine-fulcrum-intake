@@ -7,7 +7,12 @@
   </properties>
 
   <body>
-    <release version="Not applicable" date="">
+	 <release version="1.0-alpha-2" date="">
+      <action dev="epugh" type="update">
+      	Merlinized component
+      </action>
+    </release>
+    <release version="1.0-alpha-1" date="11-15-2003">
       <action dev="epugh" type="remove">
       	Remove Intake Pull Tool.  It should I think be part of Turbine as it is
       	very Turbine specific right now.  I am trying to remove all Turbine requirements

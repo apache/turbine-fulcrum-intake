@@ -59,14 +59,14 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.apache.fulcrum.intake.model.Group;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
 /**
  * Test the facade class for the service
  *
  * @author <a href="epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class IntakeTest extends BaseUnitTest
+public class IntakeTest extends AbstractMerlinTestCase
 {
     /**
      * Defines the testcase name for JUnit.
@@ -114,7 +114,7 @@ public class IntakeTest extends BaseUnitTest
     public void testFacadeConfigured() throws Exception
     {
         // this.lookup causes the workflow service to be configured.
-        this.lookup(IntakeService.ROLE);
+        this.resolve( "intake" );
         assertTrue(Intake.isInitialized());
 		Group group = Intake.getGroup("LoginGroup");
 		assertNotNull(group);
