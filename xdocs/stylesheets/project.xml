@@ -7,6 +7,7 @@
   <body>
     <menu name="Fulcrum">
       <item name="Overview"              href="/index.html"/>
+      <item name="Building"              href="/building.html"/>
       <item name="Changes"               href="/changes.html"/>
     </menu>
 
