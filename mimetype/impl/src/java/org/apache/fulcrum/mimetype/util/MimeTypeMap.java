@@ -69,6 +69,7 @@ import java.io.IOException;
  * and constructors support application specific mappings.
  *
  * @author <a href="mailto:ilkka.priha@simsoft.fi">Ilkka Priha</a>
+ * @author Daniel Rall
  * @version $Id$
  */
 public class MimeTypeMap
@@ -275,8 +276,8 @@ public class MimeTypeMap
     /**
      * Gets the MIME content type for a file as a string.
      *
-     * @param file the file.
-     * @return the MIME type string.
+     * @param file The file to look up a MIME type mapping for.
+     * @return The MIME type, or {@link #DEFAULT_TYPE} if unmapped.
      */
     public String getContentType(File file)
     {
@@ -286,55 +287,61 @@ public class MimeTypeMap
     /**
      * Gets the MIME content type for a named file as a string.
      *
-     * @param name the name of the file.
-     * @return the MIME type string.
+     * @param fileName The name of the file to look up a MIME type
+     * mapping for.
+     * @return The MIME type, or {@link #DEFAULT_TYPE} if unmapped.
      */
     public String getContentType(String name)
     {
-        int i = name.lastIndexOf('.');
-        if (i >= 0)
-        {
-            String ext = name.substring(i + 1);
-            return ext.length() > 0 ?
-                getContentType(ext,DEFAULT_TYPE) : DEFAULT_TYPE;
-        }
-        else
-        {
-            return DEFAULT_TYPE;
-        }
+        String ext = parseFileExtension(name);
+        return ext != null ? getContentType(ext, DEFAULT_TYPE) : DEFAULT_TYPE;
     }
 
     /**
      * Gets the MIME content type for a file name extension as a string.
      *
-     * @param ext the file name extension.
-     * @param def the default type if none is found.
-     * @return the MIME type string.
+     * @param ext The file name extension.
+     * @param def The default content type to use, if no mapping exists.
+     * @return The MIME type, or <code>def</code> if unmapped.
      */
-    public String getContentType(String ext,
-                                 String def)
+    public String getContentType(String ext, String def)
     {
-        int i = ext.lastIndexOf('.');
-        if (i >= 0)
+        // ### Why do this when we should already have the file
+        // ### extension?
+        String e = parseFileExtension(ext);
+        if (e != null)
         {
-            ext = ext.substring(i + 1);
+            ext = e;
         }
 
-        String mime;
+        String mimeType;
         MimeTypeMapper mapper;
-        for (i = 0; i < mappers.length; i++)
+        for (int i = 0; i < mappers.length; i++)
         {
             mapper = mappers[i];
             if (mapper != null)
             {
-                mime = mapper.getContentType(ext);
-                if (mime != null)
+                mimeType = mapper.getContentType(ext);
+                if (mimeType != null)
                 {
-                    return mime;
+                    return mimeType;
                 }
             }
         }
         return def;
+    }
+
+    /**
+     * @param fileName The name of the file to parse the extension
+     * from.  Must be non-<code>null</code>.
+     * @return The file extension parsed from <code>fileName</code>
+     * (if present), or <code>null</code> if not found.
+     */
+    private static String parseFileExtension(String fileName)
+    {
+        int i = fileName.lastIndexOf('.');
+        return (i >= 0 && i + 2 < fileName.length() ?
+                fileName.substring(i + 1) : null);
     }
 
     /**

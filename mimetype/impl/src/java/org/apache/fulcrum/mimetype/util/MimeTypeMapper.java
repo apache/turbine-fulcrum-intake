@@ -72,6 +72,7 @@ import java.util.StringTokenizer;
  * by a whitespace.
  *
  * @author <a href="mailto:ilkka.priha@simsoft.fi">Ilkka Priha</a>
+ * @author Daniel Rall
  * @version $Id$
  */
 public class MimeTypeMapper
@@ -157,14 +158,27 @@ public class MimeTypeMapper
     }
 
     /**
-     * Gets a MIME content type corresponding to a specified file name extension.
+     * Gets a MIME content type corresponding to a specified file name
+     * extension.  If a mapping is initially not found, tries a second
+     * lookup using the provided extension in lower case.
      *
-     * @param ext a file name extension.
-     * @return the corresponding MIME type as a string or null.
+     * @param ext The file name extension to resolve.
+     * @return The MIME type, or <code>null</code> if not found.
      */
     public String getContentType(String ext)
     {
-        return (String) mimeTypeExtensions.get(ext);
+        String mimeType = (String) mimeTypeExtensions.get(ext);
+        if (mimeType == null && ext != null)
+        {
+            String lcExt = ext.toLowerCase();
+            if (!ext.equals(lcExt))
+            {
+                // Original file extension didn't resolve, but was
+                // mixed case.  Try it again with lower case chars.
+                mimeType = (String) mimeTypeExtensions.get(lcExt);
+            }
+        }
+        return mimeType;
     }
 
     /**

@@ -52,26 +52,27 @@
  * <http://www.apache.org/>.
  */
 package org.apache.fulcrum.mimetype;
-// Cactus and Junit imports
+
 import java.io.File;
 import java.util.Locale;
 
 import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
 import org.apache.fulcrum.mimetype.util.MimeType;
+import org.apache.fulcrum.mimetype.util.MimeTypeMapperTest;
 
 /**
- * CacheTest
+ * Tests for {@link TurbineMimeTypeService}.
  *
  * @author <a href="paulsp@apache.org">Paul Spencer</a>
  * @author <a href="epugh@upstate.com">Eric Pugh</a> 
  * @author <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>
+ * @author Daniel Rall
  * @version $Id$
  */
 public class MimetypeTest extends AbstractMerlinTestCase
 {
     private MimeTypeService mimeTypeService = null;
-    private static final String mimeType = "text/crazy";
-    private static final String fileExtensions = "crazy crzy czy";
+
     /**
      * Defines the testcase name for JUnit.
      *
@@ -82,41 +83,47 @@ public class MimetypeTest extends AbstractMerlinTestCase
         super(name);
     }
 
-    public  void setUp() throws Exception
+    public void setUp() throws Exception
     {
         super.setUp();
         try
         {
-            mimeTypeService = (MimeTypeService) this.resolve( "/test/mimetype" );
+            mimeTypeService = (MimeTypeService) resolve("/test/mimetype");
         }
         catch (Throwable e)
         {
             fail(e.getMessage());
         }
+        mimeTypeService.setContentType(MimeTypeMapperTest.MIME_TYPE + ' ' +
+                                       MimeTypeMapperTest.KNOWN_EXTENSIONS);
     }
+
     public void testGetCharSet() throws Exception
     {
         Locale locale = new Locale("en", "US");
         String s = mimeTypeService.getCharSet(locale);
         assertEquals("ISO-8859-1", s);
     }
+
     public void testSetGetContentType() throws Exception
     {
-        mimeTypeService.setContentType(mimeType + " " + fileExtensions);
-        File files[] = new File[3];
-        files[0] = new File("test.crazy");
-        files[1] = new File("test.crzy");
-        files[2] = new File("test.czy");
-        assertEquals(mimeType, mimeTypeService.getContentType(files[0]));
-        assertEquals(mimeType, mimeTypeService.getContentType(files[1]));
-        assertEquals(mimeType, mimeTypeService.getContentType(files[2]));
+        File f;
+        for (int i = 0; i < MimeTypeMapperTest.INPUT_EXTENSIONS.length; i++)
+        {
+            // Construct a File object with a name based on the
+            // extensions used in our MimeTypeMapperTest test.
+            f = new File("test." + MimeTypeMapperTest.INPUT_EXTENSIONS[i]);
+            assertEquals(MimeTypeMapperTest.MIME_TYPE,
+                         mimeTypeService.getContentType(f));
+        }
     }
+
     public void testGetDefaultExtension() throws Exception
     {
-        mimeTypeService.setContentType(mimeType + " " + fileExtensions);
-        String result = mimeTypeService.getDefaultExtension(mimeType);
+        String result =
+            mimeTypeService.getDefaultExtension(MimeTypeMapperTest.MIME_TYPE);
         assertEquals("crazy", result);
-        MimeType mt = new MimeType(mimeType);
+        MimeType mt = new MimeType(MimeTypeMapperTest.MIME_TYPE);
         result = mimeTypeService.getDefaultExtension(mt);
         assertEquals("crazy", result);
     }
