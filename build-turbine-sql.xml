@@ -1,5 +1,17 @@
 <project name="Turbine SQL" default="main" basedir=".">
 
+  <!-- Allow any user specific values to override the defaults -->
+  <property file="${user.home}/build.properties" />
+  <!-- Set default values for the build -->
+  <property file="build.properties" />
+
+  <path id="classpath">
+    <pathelement location="${velocity.jar}"/>
+    <pathelement location="${torque.jar}"/>
+    <pathelement location="${xerces.jar}"/>
+    <pathelement location="${commons-util.jar}"/>
+  </path>
+
   <!-- ================================================================ -->
   <!-- I N I T  T A R G E T                                             -->
   <!-- ================================================================ -->
@@ -12,25 +24,19 @@
   <!-- ================================================================ -->
 
   <target name="init">
+    <mkdir dir="${outputDirectory}"/>
 
-    <taskdef name="torque-sql" classname="org.apache.turbine.torque.TorqueSQLTask">
+    <taskdef name="torque-sql" classname="org.apache.torque.task.TorqueSQLTask">
       <classpath>
-        <pathelement location="${build.dest}"/>
-        <fileset dir="${turbine.jars}">
-          <include name="*.jar"/>
-        </fileset>
+        <path refid="classpath"/>
       </classpath>
     </taskdef>
-
-    <property name="outputDirectory" value="${basedir}/../src/sql"/>
-
   </target>
-
 
   <!-- ================================================================ -->
   <!-- M A I N  T A R G E T                                             -->
   <!-- ================================================================ -->
-  <!-- Generate Turbine SQL schema for supported DBs                    -->
+  <!-- Generate Turbine SQL schema for all of the supported DBs         -->
   <!-- ================================================================ -->
 
   <target name="main" depends="init">
@@ -208,7 +214,7 @@
   <!-- project should be specified in project-schema.xml.               -->
   <!-- ================================================================ -->
 
-  <target name="turbine-sql">
+  <target name="turbine-sql" depends="init">
 
     <echo message="+----------------------------------------------+"/>
     <echo message="| Generating Turbine SQL schema for ${database} "/>
@@ -229,7 +235,7 @@
   <!-- G E N E R A T E   S C H E D U L E R   S Q L                      -->
   <!-- ================================================================ -->
 
-  <target name="scheduler-sql">
+  <target name="scheduler-sql" depends="init">
 
     <echo message="+------------------------------------------------+"/>
     <echo message="| Generating Scheduler SQL schema for ${database} "/>
@@ -254,7 +260,7 @@
   <!-- project should be specified in project-schema.xml.               -->
   <!-- ================================================================ -->
 
-  <target name="turbine-id-table-sql">
+  <target name="turbine-id-table-sql" depends="init">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
@@ -278,7 +284,7 @@
   <!-- G E N E R A T E  T U R B I N E  I D  B R O K E R  I N I T  S Q L -->
   <!-- ================================================================ -->
 
-  <target name="turbine-id-table-init-sql">
+  <target name="turbine-id-table-init-sql" depends="init">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
@@ -303,7 +309,7 @@
   <!-- GENERATE SCHEDULER ID BROKER INIT SQL                            -->
   <!-- ================================================================ -->
 
-  <target name="scheduler-id-table-init-sql">
+  <target name="scheduler-id-table-init-sql" depends="init">
 
     <echo message="+--------------------------------------------+"/>
     <echo message="|                                            |"/>
@@ -328,7 +334,7 @@
   <!-- T U R B I N E  S E C U R I T Y  S Y S T E M  S Q L               -->
   <!-- ================================================================ -->
 
-  <target name="turbine-security-sql">
+  <target name="turbine-security-sql" depends="init">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
