@@ -10,6 +10,33 @@
   <body>
 
     <section name="TODO">
+
+      <subsection name="Long-term Compatibilty with Fortress">            
+        <p>
+          Since Fortress is the only other remaining Avalon container
+          within Jakarta we try to achieve compatibility with Fortress
+          regarding configuration files. The problem is that there is no
+          specification available how the Fortress configuration files
+          look loke ... :-(
+        </p>
+      </subsection>
+
+      <subsection name="Testing the cross-container portabilty">            
+        <p>
+          YAAFI actually maps the Avalon context depending on the container
+          flavour of the service component. We still need to test this
+          functionality with Fortress services.
+        </p>
+      </subsection>
+
+      <subsection name="Use URLConnection for InputStreamLocator">            
+        <p>
+          Using a URLConnection enables downloading the configuration
+          files from a HTTP server therefore allowing to run a set
+          of application distributed over multiple boxes from a single
+          configuration file.
+        </p>
+      </subsection>
             
     </section>
 

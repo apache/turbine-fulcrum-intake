@@ -9,7 +9,7 @@
 
   <body>
 
-    <section name="YAAFI Avalon Context">
+    <section name="Avalon Context">
 
       <p>
         The components are initialized with an Avalon Context if the implementation

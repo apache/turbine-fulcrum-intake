@@ -9,7 +9,7 @@
 
   <body>
 
-    <section name="Container Configuration File">
+    <section name="Container Configuration">
 
       <p>
         The Container Configuration File is used to bootstrap the
@@ -21,13 +21,13 @@
           <tr>
             <th>Item</th>
             <th>Datatype</th>
-            <th>Optional</th>
+            <th>Cardinality</th>
             <th>Description</th>
           </tr>
           <tr>
             <td>containerType</td>
             <td>String</td>
-            <td>Y</td>
+            <td>[0|1]</td>
             <td>
               The type of Avalon container where YAAFI is instantiated, 
               either "phoenix", "fortress" or "merlin". If no value is 
@@ -37,7 +37,7 @@
           <tr>
             <td>containerClazzName</td>
             <td>String</td>
-            <td>Y</td>
+            <td>[0|1]</td>
             <td>
               The class name of the YAAFI container to be instantiated. This
               feature allows to use inheritance for customizing the container
@@ -45,40 +45,67 @@
             </td>
           </tr>
           <tr>
+            <td>componentRoles</td>
+            <td>Tree</td>
+            <td>[0|1]</td>
+            <td>Information about the role configuration file</td>
+          </tr>
+          <tr>
             <td>componentRoles/location</td>
             <td>String</td>
-            <td>Y</td>
+            <td>[0|1]</td>
             <td>The location of the component role file</td>
           </tr>
           <tr>
             <td>componentRoles/isEncrypted</td>
-            <td>Boolean</td>
-            <td>Y</td>
-            <td>Is the component role file encrypted?</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              Is the component role file encrypted? The possible
+              values are ["true"|"false"|"auto"]
+            </td>
+          </tr>
+          <tr>
+            <td>componentConfiguration</td>
+            <td>Tree</td>
+            <td>[0|1]</td>
+            <td>Information about the component configuration file</td>
           </tr>
           <tr>
             <td>componentConfiguration/location</td>
             <td>String</td>
-            <td>Y</td>
+            <td>[0|1]</td>
             <td>The location of the component configuration file</td>
           </tr>
           <tr>
             <td>componentConfiguration/isEncrypted</td>
-            <td>Boolean</td>
-            <td>Y</td>
-            <td>Is the component configuration file encrypted?</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              Is the component configuration file encrypted? The possible
+              values are ["true"|"false"|"auto"]
+            </td>
+          </tr>
+          <tr>
+            <td>parameters</td>
+            <td>Tree</td>
+            <td>[0|1]</td>
+            <td>Information about the parameters file</td>
           </tr>
           <tr>
             <td>parameters/location</td>
             <td>String</td>
-            <td>Y</td>
+            <td>[0|1]</td>
             <td>The location of the parameters file</td>
           </tr>
           <tr>
             <td>parameters/isEncrypted</td>
-            <td>Boolean</td>
-            <td>Y</td>
-            <td>Is the parameters file encrypted?</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              Is the parameters file encrypted? The possible
+              values are ["true"|"false"|"auto"]
+            </td>
           </tr>
         </table>
       </subsection>

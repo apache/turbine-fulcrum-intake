@@ -42,12 +42,11 @@
         <p>
           <ul>
             <li>a light-weight Avalon container only depending an the Avalone Framwork libraries</li>
-            <li>a container following the Merlin Avalon Framework contract</li>
-            <li>ability to be embedded in other Avalon containers</li>
-            <li>ability to run components written for other Avalon containers</li>
+            <li>a container which can run components written for ECM, Fortress, Phoenix and Merlin</li>
+            <li>ability to be embedded in other Avalon containers such as Phoenix</li>
             <li>support for automatic reconfiguration for the whole container or individual services</li>
             <li>support for early or on-demand initialization</li>
-            <li>support for decryption of configuration files</li>
+            <li>support for encrypted configuration files</li>
           </ul>
         </p>  
       </subsection>

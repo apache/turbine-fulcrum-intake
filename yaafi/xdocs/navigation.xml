@@ -28,7 +28,7 @@
         <item name="Role Configuration"         href="/specification/role.html"/>
         <item name="Component Configuration"    href="/specification/component.html"/>
         <item name="Avalon Context"             href="/specification/context.html"/>
-        <item name="YAAFI Lifecycle Contract"   href="/specification/lifecycle.html"/>
+        <item name="Lifecycle Contract"         href="/specification/lifecycle.html"/>
       </item>
       <item name="Todo's"                     href="/todo.html"/>
     </menu>

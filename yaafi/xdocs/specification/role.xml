@@ -9,7 +9,7 @@
 
   <body>
 
-    <section name="Role Configuration File">
+    <section name="Role Configuration">
 
       <p>
         The Role Configuration File is used to map the services to
@@ -21,13 +21,21 @@
           <tr>
             <th>Item</th>
             <th>Datatype</th>
-            <th>Optional</th>
+            <th>Cardinality</th>
             <th>Description</th>
+          </tr>
+          <tr>
+            <td>role</td>
+            <td>Tree</td>
+            <td>[0..n]</td>
+            <td>
+              Metadata about a service component to be instantiated
+            </td>
           </tr>
           <tr>
             <td>role@name</td>
             <td>String</td>
-            <td>Y</td>
+            <td>[0|1]</td>
             <td>
               The name of the service being used for the lookup. If
               no value is defined then <b>role@default-class</b> will
@@ -37,7 +45,7 @@
           <tr>
             <td>role@shorthand</td>
             <td>String</td>
-            <td>Y</td>
+            <td>[0|1]</td>
             <td>
               The shorthand for referencing the section in the Component
               Configuration File. If no value is defined then 
@@ -47,7 +55,7 @@
           <tr>
             <td>role@default-class</td>
             <td>String</td>
-            <td>N</td>
+            <td>1</td>
             <td>
               The implementation class of the service.
             </td>
@@ -55,7 +63,7 @@
           <tr>
             <td>role@early-init</td>
             <td>Boolean</td>
-            <td>Y</td>
+            <td>[0|1]</td>
             <td>
               Shall the service implementation class be instantiated
               during startup of the container or on demand? If no 
@@ -65,7 +73,7 @@
           <tr>
             <td>role@componentType</td>
             <td>String</td>
-            <td>Y</td>
+            <td>[0|1]</td>
             <td>
               The type of component whereas we currently support "avalon" only
             </td>
@@ -73,7 +81,7 @@
           <tr>
             <td>role@componentFlavour</td>
             <td>String</td>
-            <td>Y</td>
+            <td>[0|1]</td>
             <td>
               The flavour for the given component type either "phoenix", "fortress",
               "merlin", "yaafi". If no value is defined then <b>yaffi</b> will be used.
@@ -82,15 +90,31 @@
           <tr>
             <td>role@description</td>
             <td>String</td>
-            <td>Y</td>
+            <td>[0|1]</td>
             <td>
-              A description what the service is actually doing.
+              A description what the service is actually doing. 
             </td>
           </tr>
         </table>
       </subsection>
 
-      <subsection name="Example">
+      <subsection name="Example 1">
+        <source>
+          <![CDATA[
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<role-list>
+  <role
+    name="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyService"
+    shorthand="SystemPropertyService"
+    default-class="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyServiceImpl"
+  />   
+</role-list>          
+          ]]>
+        </source>
+      </subsection>
+
+      <subsection name="Example 2">
         <source>
           <![CDATA[
 <?xml version="1.0" encoding="ISO-8859-1"?>

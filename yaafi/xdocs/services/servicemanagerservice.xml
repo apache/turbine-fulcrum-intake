@@ -30,12 +30,13 @@
 
         <section name="Usage">
             <p>
-                ServiceManagerService.getServiceManager() returns you an instance of
+                ServiceManagerServiceImpl.getInstance() returns you an instance of
                 ServiceManager which allows to lookup other services.
             </p>
             
             <source>
-FOO foo = (FOO) ServiceManagerService.getServiceManager().lookup("FOO");
+ServiceManagerServiceImpl.getInstance().hasService("FOO");
+FOO foo = (FOO) ServiceManagerServiceImpl.getInstance().lookup("FOO");
             </source>
         </section>
         

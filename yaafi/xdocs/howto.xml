@@ -74,7 +74,7 @@ container = ServiceContainerFactory.create( config );
       </p>
 
         <source>
-container.dispose();
+ServiceContainerFactory.dispose(container);
         </source>
 
       </subsection>
