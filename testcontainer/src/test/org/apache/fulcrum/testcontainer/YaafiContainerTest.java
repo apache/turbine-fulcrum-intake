@@ -19,17 +19,17 @@ import java.io.File;
 import org.apache.avalon.framework.component.ComponentException;
 /**
  * Basic testing of the Container
- * 
+ *
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
  */
 public class YaafiContainerTest extends BaseUnitTest
 {
     /**
-	 * Constructor for test.
-	 * 
-	 * @param testName name of the test being executed
-	 */
+     * Constructor for test.
+     *
+     * @param testName name of the test being executed
+     */
     public YaafiContainerTest(String testName)
     {
         super(testName);
@@ -88,12 +88,13 @@ public class YaafiContainerTest extends BaseUnitTest
         try
         {
             sc = (SimpleComponent) this.lookup(SimpleComponent.ROLE);
+            fail("We should fail");
         }
-        catch (ComponentException e)
+        catch (Exception e)
         {
             //good  We expect to fail
         }
-       
+
     }
 
 }
