@@ -20,6 +20,12 @@
       <version>1.0.4-dev</version>
     </dependency>
 
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-pbe</artifactId>
+      <version>1.0.0</version>
+    </dependency> 
+
   </dependencies>
 
 </project>

@@ -58,7 +58,7 @@ public interface PBEService
         throws Exception;
 
     /**
-     * Creates an decrypting input stream.
+     * Creates a decrypting input stream.
      *
      * @param is the input stream to be wrapped
      * @param password the password to be used
@@ -67,6 +67,18 @@ public interface PBEService
      * @exception IOException an IOException occured during processing
      */
     InputStream getInputStream( InputStream is, char[] password )
+        throws GeneralSecurityException, IOException;
+
+    /**
+     * Creates a smart decrypting input stream. 
+     *
+     * @param is the input stream to be wrapped
+     * @param password the password to be used
+     * @return an decrypting input stream
+     * @exception GeneralSecurityException accessing the JCE failed
+     * @exception IOException an IOException occured during processing
+     */
+    InputStream getSmartInputStream( InputStream is, char[] password )
         throws GeneralSecurityException, IOException;
 
     /**

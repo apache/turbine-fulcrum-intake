@@ -171,7 +171,19 @@ public class PBEServiceImpl
             password
             );
     }
-
+    
+    /**
+     * @see org.apache.fulcrum.pbe.PBEService#getSmartInputStream(java.io.InputStream, char[])
+     */
+    public InputStream getSmartInputStream(InputStream is, char [] password)
+        throws GeneralSecurityException, IOException
+    {
+        return this.getCryptoStreamFactory().getSmartInputStream(
+            is,
+            password
+            );
+    }
+    
     /**
      * @see org.apache.fulcrum.pbe.PBEService#getOutputStream(java.io.OutputStream, char[])
      */
