@@ -3,17 +3,34 @@
 <project>
 
   <id>fulcrum-configuration-impl</id>
-  <extend>${basedir}/../../merlin-project.xml</extend>
+  <extend>${basedir}/../../project.xml</extend>
   <name>Fulcrum Configuration Impl</name>
   <currentVersion>1.0.3-dev</currentVersion>
   <package>org.apache.fulcrum.configuration</package>
 
   <dependencies>
-    <dependency>
+  <dependency>
       <groupId>avalon-framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
-      <version>4.1.5</version>
+      <version>4.2.0</version>
+      <url>http://avalon.apache.org/framework/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+        <ear.bundle>true</ear.bundle>
+      </properties>
     </dependency>
+
+    <dependency>
+      <groupId>commons-beanutils</groupId>      
+      <artifactId>commons-beanutils-core</artifactId>      
+      <version>1.7.0</version>         
+    </dependency>
+    <dependency>
+      <groupId>commons-collections</groupId>      
+      <artifactId>commons-collections</artifactId>      
+      <version>3.1</version>
+      <url>http://jakarta.apache.org/commons/collections.html</url>
+    </dependency>     
     <dependency>
       <groupId>commons-configuration</groupId>
       <artifactId>commons-configuration</artifactId>      
@@ -24,34 +41,30 @@
       <groupId>commons-digester</groupId>      
       <artifactId>commons-digester</artifactId>      
       <version>1.5</version>   
+    </dependency>    
+    <dependency>
+      <groupId>commons-lang</groupId>      
+      <artifactId>commons-lang</artifactId>      
+      <version>2.0</version>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>      
       <artifactId>commons-logging</artifactId>      
       <version>1.0.3</version>
       <url>http://jakarta.apache.org/commons/logging.html</url>
-    </dependency>
-    <dependency>
-      <groupId>commons-collections</groupId>      
-      <artifactId>commons-collections</artifactId>      
-      <version>3.1</version>
-      <url>http://jakarta.apache.org/commons/collections.html</url>
-    </dependency>
-    <dependency>
-      <groupId>commons-lang</groupId>      
-      <artifactId>commons-lang</artifactId>      
-      <version>2.0</version>
-    </dependency> 
+    </dependency>     
     <dependency>
       <groupId>dom4j</groupId>      
       <artifactId>dom4j</artifactId>      
       <version>1.4</version> 
     </dependency>
+     
+    <!--  Needed only for testing -->
     <dependency>
-      <groupId>commons-beanutils</groupId>      
-      <artifactId>commons-beanutils</artifactId>      
-      <version>1.7.0</version>         
-    </dependency>       
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-testcontainer</artifactId>
+      <version>1.0.4-dev</version>
+    </dependency>     
 
   </dependencies>
 

@@ -16,7 +16,7 @@ package org.apache.fulcrum.configuration;
  */ 
 
 import org.apache.avalon.framework.component.ComponentException;
-import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
+import org.apache.fulcrum.testcontainer.BaseUnitTest;
 import org.apache.commons.configuration.Configuration;
 
 /**
@@ -26,7 +26,7 @@ import org.apache.commons.configuration.Configuration;
  * @author <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>
  * @version $Id$
  */
-public class ConfigTest extends AbstractMerlinTestCase
+public class ConfigTest extends BaseUnitTest
 {
     private Configuration config = null;
     
@@ -45,7 +45,7 @@ public class ConfigTest extends AbstractMerlinTestCase
         super.setUp();
         try
         {
-            config = (Configuration) this.resolve( "/test/config" );
+            config = (Configuration) this.resolve( Configuration.class.getName() );
 
         }
         catch (ComponentException e)
