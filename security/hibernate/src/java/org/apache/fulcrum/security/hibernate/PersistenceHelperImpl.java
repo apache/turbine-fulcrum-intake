@@ -231,5 +231,10 @@ public class PersistenceHelperImpl
         }
         return hibernateService;
     }
+    
+    public void dispose(){
+        release(hibernateService);
+        super.dispose();
+    }
 
 }
