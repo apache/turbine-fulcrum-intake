@@ -235,9 +235,7 @@
   <build>
     <nagEmailAddress>turbine-dev@jakarta.apache.org</nagEmailAddress>
     <sourceDirectories>
-      <sourceDirectory>src/core</sourceDirectory>
-      <sourceDirectory>src/services</sourceDirectory>
-      <sourceDirectory>src/util</sourceDirectory>
+      <sourceDirectory>src/java</sourceDirectory>
     </sourceDirectories>
     <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
     <aspectSourceDirectories></aspectSourceDirectories>
