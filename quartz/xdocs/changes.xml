@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Fulcrum Quartz</title>
+    <author email="epugh@opensourceconnections.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+    <release version="1.0.0" date="">
+     <action dev="epugh" type="add">
+        If you provide a jobName and jobGroup for a trigger it will autoschedule
+        that component.
+      </action>          
+     <action dev="epugh" type="update">
+        Removed the component Factory for loading jobdetails and triggers
+        in favor of xstream
+      </action>          
+     <action dev="epugh" type="update">
+        Initial import
+      </action>      
+    </release>    
+  </body>
+</document>
+

@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Quartz Scheduler Component</title>
+    <author email="epugh@opensourceconnections.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+
+  <section name="Overview">
+    <p>
+     This Service functions as a wrapper around the Quartz Scheduler
+   </p>
+      
+    <p>
+      It is written for use in any Avalon compatible container.
+    </p>    
+  </section>
+  
+<section name="Configuration">
+
+    <p>
+      First, here is the role configuration.
+    </p>
+
+    <source>
+    <![CDATA[
+        <role
+            name="org.apache.fulcrum.quartz.QuartzService"
+            shorthand="quartz"
+            default-class="org.apache.fulcrum.quartz.DefaultQuartzService"/>
+    ]]>
+    </source>
+
+      <p>
+        And here is the configuration:
+      </p>
+    <source>
+
+    <![CDATA[
+ <quartz>   
+        <globalJobListener className="org.apache.fulcrum.quartz.listener.FooListener" />
+	    <jobDetails>
+            <list>
+              <org.quartz.JobDetail>
+                <name>simpleJob</name>
+                <group>DEFAULT_GROUP</group>
+                <jobClass>org.apache.fulcrum.quartz.test.SimpleJob</jobClass>
+                <volatility>false</volatility>
+                <durability>false</durability>
+                <shouldRecover>false</shouldRecover>
+                <jobListeners/>
+              </org.quartz.JobDetail>
+              <org.quartz.JobDetail>
+                <name>notSoSimpleJob</name>
+                <group>DEFAULT_GROUP</group>
+                <jobClass>org.apache.fulcrum.quartz.test.NotSoSimpleJob</jobClass>
+                <volatility>false</volatility>
+                <durability>false</durability>
+                <shouldRecover>false</shouldRecover>
+                <jobListeners/>
+              </org.quartz.JobDetail>
+            </list>            
+        </jobDetails>
+        <triggers>
+            <list>
+              <org.quartz.SimpleTrigger>               
+                <name>simpleTrigger</name>
+                <group>DEFAULT_GROUP</group>
+              </org.quartz.SimpleTrigger>
+              <org.quartz.CronTrigger>                
+                <name>cron</name>
+                <group>OTHER_GROUP</group>
+              </org.quartz.CronTrigger>
+            </list>  
+        </triggers>        
+    </quartz>
+    ]]>
+    </source>
+
+  </section>
+
+  <section name="Usage">
+
+    
+    <p>
+    Please look at the unit tests.
+    </p>
+
+  </section> 
+
+</body>
+</document>

@@ -1,0 +1,47 @@
+<componentConfig>
+
+    <quartz>   
+        <globalJobListener className="org.apache.fulcrum.quartz.listener.FooListener" />
+        <scheduled jobName="simpleJob" jobGroup="DEFAULT_GROUP" triggerName="cron" triggerGroup="OTHER_GROUP"/>
+	    <jobDetails>
+            <list>
+              <org.quartz.JobDetail>
+                <name>simpleJob</name>
+                <group>DEFAULT_GROUP</group>
+                <jobClass>org.apache.fulcrum.quartz.test.SimpleJob</jobClass>
+                <volatility>false</volatility>
+                <durability>false</durability>
+                <shouldRecover>false</shouldRecover>
+                <jobListeners/>
+              </org.quartz.JobDetail>
+              <org.quartz.JobDetail>
+                <name>notSoSimpleJob</name>
+                <group>DEFAULT_GROUP</group>
+                <jobClass>org.apache.fulcrum.quartz.test.NotSoSimpleJob</jobClass>
+                <volatility>false</volatility>
+                <durability>false</durability>
+                <shouldRecover>false</shouldRecover>
+                <jobListeners/>
+              </org.quartz.JobDetail>
+            </list>            
+        </jobDetails>
+        <triggers>
+            <list>
+              <org.quartz.CronTrigger>                
+                <name>cron</name>
+                <group>OTHER_GROUP</group>
+                <cronExpression>0 0 12 * * ?</cronExpression>
+                <description>test</description>
+                <jobName>notSoSimpleJob</jobName>
+                <jobGroup>DEFAULT_GROUP</jobGroup>                
+              </org.quartz.CronTrigger>
+              <org.quartz.SimpleTrigger>                
+                <name>simpleTrigger</name>
+                <group>DEFAULT_GROUP</group>
+                <description>test</description>
+           
+              </org.quartz.SimpleTrigger>              
+            </list>  
+        </triggers>        
+    </quartz>
+</componentConfig>
