@@ -114,7 +114,7 @@ public class IntakeTest extends AbstractMerlinTestCase
     public void testFacadeConfigured() throws Exception
     {
         // this.lookup causes the workflow service to be configured.
-        this.resolve( "intake" );
+        this.resolve( "/test/intake" );
         assertTrue(Intake.isInitialized());
 		Group group = Intake.getGroup("LoginGroup");
 		assertNotNull(group);
