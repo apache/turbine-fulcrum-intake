@@ -117,6 +117,12 @@
       <email>jason@zenplex.com</email>
       <organization>Zenplex</organization>
     </developer>
+    <developer>
+      <name>Siegfried Goeschl</name>
+      <id>sgoeschl</id>
+      <email>siegfried.goeschl@it20one.at</email>
+      <organization>IT20one</organization>
+    </developer>    
   </developers>
   <contributors>
     <contributor>
