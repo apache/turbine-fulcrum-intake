@@ -370,7 +370,7 @@ public class CacheTest extends BaseUnitTest
     {
         String skipTestsProperty = System.getProperty(SKIP_TESTS_KEY,"false");
         LOG.info("What is the value of the skipTestsProperty:" + skipTestsProperty);
-        if(Boolean.getBoolean(skipTestsProperty)==true){
+        if(Boolean.valueOf(skipTestsProperty).booleanValue()){
             LOG.warn("Skipping testRefreshableTimeToLive test due to property " + SKIP_TESTS_KEY + " being true.");
             return;
         }
