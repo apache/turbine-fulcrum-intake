@@ -30,7 +30,7 @@
       <email>youngho@nannet.co.kr</email>
     </contributor>  
     <contributor>
-      <name>Tim M�ller-Seydlitz</name>
+      <name>Tim M?ller-Seydlitz</name>
       <id>tmuller</id>
       <email>tms@nagler-company.com</email>
     </contributor> 
@@ -276,8 +276,8 @@
     </dependency>
     <dependency>
       <groupId>fulcrum</groupId>
-      <artifactId>fulcrum-localization-api</artifactId>
-      <version>1.0.5-dev</version>
+      <artifactId>fulcrum-localization</artifactId>
+      <version>1.0.6-dev</version>
       <url>http://jakarta.apache.org/turbine/fulcrum/</url>
       <properties>
         <war.bundle>true</war.bundle>
