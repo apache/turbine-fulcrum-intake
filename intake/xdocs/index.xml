@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Intake Component</title>
+    <author email="epugh@upstate.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+
+  <section name="Overview">
+    <p>
+  This service provides access to input processing objects based on an XML specification.
+    </p>    
+  </section>
+  
+<section name="Configuration">
+
+    <p>
+      First, here is the role configuration.  
+    </p>
+
+<source>
+<![CDATA[
+    <role
+        name="org.apache.fulcrum.intake.IntakeService"
+        shorthand="intake"
+        default-class="org.apache.fulcrum.intake.IntakeServiceImpl"/>
+   
+]]>
+</source>
+
+  <p>
+    Now comes the basic configuration of the component.  Here will will
+    configure the various bundles.
+  </p>
+<source>
+
+<![CDATA[
+   <intake>
+      <serialDataPath>./target/appData.ser</serialDataPath>
+      <xmlPaths>
+      	<xmlPath>src/test/xmlConf.xml</xmlPath>
+      	<xmlPath>src/test/xmlConf2.xml</xmlPath>
+      </xmlPaths>
+    </intake>
+]]>
+</source>
+
+  </section>
+
+  <section name="Usage">
+    <p>
+    </p>
+  </section>  
+
+</body>
+</document>
