@@ -357,7 +357,12 @@ public class TurbineVelocityService
         eventCartridge = new EventCartridge();
 
         Vector ecconfig = getConfiguration()
-            .getVector("eventCartridge.classes");
+            .getVector("eventCartridge.classes", null);
+        if (ecconfig == null)
+        {
+            return;
+        }
+
         Object obj = null;
         String className = null;
         for (Enumeration e = ecconfig.elements() ; e.hasMoreElements() ;)
