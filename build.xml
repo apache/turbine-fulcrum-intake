@@ -344,7 +344,8 @@
   <!-- C O M P I L E                                                      -->
   <!-- ================================================================== -->
   
-  <target name="compile" depends="prepare" description="--> compiles the source code">
+  <target name="compile" depends="prepare"
+          description="--> compiles the source code">
     <javac srcdir="${build.dir}/src"
       destdir="${build.dir}/classes"
       excludes="**/package.html"
@@ -352,6 +353,23 @@
       deprecation="${deprecation}"
       optimize="${optimize}">
       <classpath refid="classpath"/>
+    </javac>
+  </target>
+
+  <target name="compile-test" depends="compile"
+          description="--> compiles the test source code">
+    <mkdir dir="${build.dir}/test"/>
+
+    <javac srcdir="${src.dir}/test"
+      destdir="${build.dir}/test"
+      excludes="**/package.html"
+      debug="${debug}"
+      deprecation="${deprecation}"
+      optimize="${optimize}">
+      <classpath refid="classpath"/>
+      <classpath>
+          <pathelement path="${build.dir}/classes"/>
+      </classpath>
     </javac>
   </target>
 
