@@ -213,19 +213,6 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
 	}
 	
 	/**
-	 * Determines if the <code>Role</code> exists in the security system.
-	 *
-	 * @param role a <code>Role</code> value
-	 * @return true if the role exists in the system, false otherwise
-	 * @throws DataBackendException when more than one Role with
-	 *         the same name exists.
-	 */
-	public boolean checkExists(Role role) throws DataBackendException
-	{
-		return checkExists(role.getName());
-	}
-	
-	/**
 	 * Retrieve a Role object with specified id.
 	 * 
 	 * @param id

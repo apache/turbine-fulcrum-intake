@@ -179,18 +179,7 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager
             throw new UnknownEntityException("Unknown group '" + group + "'");
         }
     }
-    /**
-     * Determines if the <code>Group</code> exists in the security system.
-     *
-     * @param group a <code>Group</code> value
-     * @return true if the group exists in the system, false otherwise
-     * @throws DataBackendException when more than one Group with
-     *         the same name exists.
-     */
-    public boolean checkExists(Group group) throws DataBackendException
-    {
-    	return checkExists(group.getName());
-    }
+
     /**
      * Determines if the <code>Group</code> exists in the security system.
      *

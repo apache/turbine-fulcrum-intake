@@ -202,18 +202,6 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager
 		}
 		return persistenceHelper;
 	}
-	/**
-	 * Determines if the <code>Permission</code> exists in the security system.
-	 *
-	 * @param permission a <code>Permission</code> value
-	 * @return true if the permission exists in the system, false otherwise
-	 * @throws DataBackendException when more than one Permission with
-	 *         the same name exists.
-	 */
-	public boolean checkExists(Permission permission) throws DataBackendException
-	{
-		return checkExists(permission.getName());
-	}
 	
 	/**
 	 * Retrieve a Permission object with specified id.
