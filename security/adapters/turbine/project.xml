@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<project>
+  <extend>${basedir}/../../../project.xml</extend>
+  <id>fulcrum-security-adapter-turbine</id>
+  <name>Fulcrum Security Turbine Adapter</name>
+  <currentVersion>1.0-alpha-4</currentVersion>
+  <package>org.apache.fulcrum.security</package>
+
+  <dependencies>
+    <dependency>
+      <groupId>fulcrum</groupId>   
+      <artifactId>fulcrum-security-api</artifactId>
+      <version>1.0-alpha-4</version>
+    </dependency>   
+    <dependency>
+      <groupId>fulcrum</groupId>   
+      <artifactId>fulcrum-security-spi</artifactId>
+      <version>1.0-alpha-4</version>
+    </dependency>      
+    <dependency>
+      <groupId>fulcrum</groupId>   
+      <artifactId>fulcrum-crypto</artifactId>
+      <version>1.0-alpha-3</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>fulcrum</groupId>    
+      <artifactId>fulcrum-factory</artifactId>
+      <version>1.0-alpha-1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>avalon-framework</groupId>
+      <artifactId>avalon-framework-api</artifactId>
+      <version>4.1.5</version>
+    </dependency> 
+    
+    <dependency>
+      <id>commons-logging</id>
+      <version>1.0.3</version>
+    </dependency>      
+    <dependency>
+      <id>commons-lang</id>
+      <version>2.0</version>
+    </dependency>  
+    <dependency>
+      <id>cryptix</id>
+      <version>3.2.0</version>
+      <url>http://www.cryptix.org/</url>
+    </dependency>    
+     <dependency>
+       <id>commons-beanutils</id>
+       <version>1.6.1</version>
+     </dependency>    
+
+    
+    <!-- Needed only for the Turbine Adapter -->
+    <dependency>
+      <id>turbine</id>
+      <version>2.3</version>
+    </dependency>    
+    <dependency>
+      <id>servletapi</id>
+      <version>2.3</version>
+      <url>http://java.sun.com/products/servlet/</url>
+    </dependency>   
+    <dependency>
+      <id>torque</id>
+      <version>3.1</version>
+      <url>http://db.apache.org/torque/</url>
+    </dependency>    
+
+    <!-- testing -->
+    <dependency>
+      <groupId>fulcrum</groupId>    
+      <artifactId>fulcrum-security-memory</artifactId>
+      <version>1.0-alpha-4</version>
+    </dependency>      
+    <dependency>
+      <groupId>fulcrum</groupId>    
+      <artifactId>fulcrum-testcontainer</artifactId>
+      <version>1.0-alpha-1</version>
+    </dependency>        
+    <!--dependency>
+      <groupId>merlin</groupId>
+      <artifactId>merlin-unit</artifactId>
+      <version>3.2.3-dev</version>
+    </dependency-->
+
+ <!-- Needed only for testing the Turbine Adaptor -->
+
+    <dependency>
+      <groupId>mockobjects</groupId>
+      <artifactId>mockobjects-jdk1.4-j2ee1.3</artifactId>
+      <version>0.09</version>
+    </dependency> 
+    <dependency>
+      <groupId>mockobjects</groupId>
+      <artifactId>mockobjects-core</artifactId>
+      <version>0.09</version>
+    </dependency>          
+    <dependency>
+      <id>commons-codec</id>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <id>cryptix</id>
+      <version>3.2.0</version>
+      <url>http://www.cryptix.org/</url>
+    </dependency>
+    <dependency>
+      <id>ecs</id>
+      <version>1.4.2</version>
+      <url>http://jakarta.apache.org/ecs/</url>
+    </dependency>
+    <dependency>
+      <id>xml-apis</id>
+      <version>1.0.b2</version>
+      <url>http://xml.apache.org/commons/</url>
+    </dependency> 
+  </dependencies>
+
+
+</project>
+

@@ -1,0 +1,20 @@
+<!-- This configuration file for Avalon components is used for testing the adapter
+classes for Dynamic. -->
+<componentConfig>
+    <securityService/>
+    <userManager>    
+   	    <className>org.apache.fulcrum.security.model.dynamic.entity.DynamicUser</className>     
+   	</userManager>
+    <groupManager>    
+ 	    <className>org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup</className>   
+   	</groupManager>
+    <roleManager> 
+    	<className>org.apache.fulcrum.security.model.dynamic.entity.DynamicRole</className>   
+    </roleManager>
+    <permissionManager> 
+        <className>org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission</className>     
+    </permissionManager>
+    <modelManager/> 
+    <aclFactory/>                
+
+</componentConfig>
