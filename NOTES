@@ -2,15 +2,6 @@
 C O U P L I N G  I S S U E S
 --------------------------------------------------------------------------
 
-While the coupling issues are being sorted out, the service sources
-are still in the jakarta-turbine repository. I'm just using a symlink
-right now so that everything works in Turbine but I can test the
-services in isolation. If you want to see the coupling for yourself:
-
-mkdir -p src/java/org/apache/turbine
-cd src/java/org/apache/turbine
-ln -s <fullpath-to-turbine-package>/services services
-
 TemplateService
 ---------------
 
