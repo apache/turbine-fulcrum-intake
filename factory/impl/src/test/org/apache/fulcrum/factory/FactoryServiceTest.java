@@ -22,10 +22,7 @@ public class FactoryServiceTest extends BaseUnitTest
     {
         super(name);
     }
-    public static void main(String[] args)
-    {
-        junit.textui.TestRunner.run(FactoryServiceTest.class);
-    }
+
     public void setUp() throws Exception
     {
         super.setUp();
