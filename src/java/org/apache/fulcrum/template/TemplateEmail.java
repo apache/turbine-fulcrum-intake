@@ -61,7 +61,7 @@ import java.io.StringWriter;
 import javax.mail.internet.InternetAddress;
 import org.apache.commons.mail.SimpleEmail;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.util.WordWrapper;
+import org.apache.fulcrum.util.WordWrapUtils;
 
 /**
  * This is a simple class for sending email from within the TemplateService.
@@ -460,7 +460,7 @@ public class TemplateEmail
         // If the caller desires word-wrapping, do it here
         if (wordWrap > 0)
         {
-            body = WordWrapper.wrapText (body,
+            body = WordWrapUtils.wrapText (body,
                                      System.getProperty("line.separator"),
                                      wordWrap);
         }
