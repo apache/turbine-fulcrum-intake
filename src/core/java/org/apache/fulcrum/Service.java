@@ -66,6 +66,7 @@ import org.apache.velocity.runtime.configuration.Configuration;
  * @author <a href="mailto:burton@apache.org">Kevin Burton</a>
  * @author <a href="mailto:krzewski@e-point.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
+ * @author <a href="mailto:leonardr@collab.net">Leonard Richardson</a>
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @version $Id$
  */
@@ -169,4 +170,12 @@ public interface Service
      * @param name The name of the logger.
      */
     public Category getCategory(String name);
+
+    /**
+     * Returns text describing the status of this Service instance.
+     *
+     * @return Text describing service status.
+     */
+    public String getStatus()
+        throws ServiceException;
 }
