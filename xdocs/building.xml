@@ -44,6 +44,15 @@
         This will build a local copy of the web site in the 'target/docs' 
         directory.
       </p>
+      
+      <subsection name="Maven Repositories">
+        <p>
+          If you are willing to build with an "unofficial" repository, you can uncomment
+          the <code>maven.repo</code> property in the project.properties file.  This will
+          allow Maven to download from a Turbine repository the various jars that are not
+          currently in the main Maven repository.
+        </p>
+      </subsection>
     </section>
   </body>
 </document>

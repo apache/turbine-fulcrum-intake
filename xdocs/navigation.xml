@@ -6,8 +6,8 @@
 
   <body>
     <links>
-      <item name="Turbine Home"            href="http://jakarta.apache.org/turbine/"/>
-      <item name="Fulcrum"                 href="http://jakarta.apache.org/turbine/fulcrum/"/>
+      <item name="Turbine Home"          href="http://jakarta.apache.org/turbine/"/>
+      <item name="Fulcrum"               href="http://jakarta.apache.org/turbine/fulcrum/"/>
     </links>
 
     <menu name="Fulcrum">
@@ -16,18 +16,18 @@
       <item name="Changes"               href="/changes.html"/>
     </menu>
     <menu name="Components">
-      <item name="Test Container" href="/multiproject/fulcrum-testcontainer/index.html"/>
-      <item name="Cache" href="/multiproject/fulcrum-cache/index.html"/>
-      <item name="Crypto" href="/multiproject/fulcrum-crypto/index.html"/>
-      <item name="DVSL" href="/multiproject/fulcrum-dvsl/index.html"/>
-      <item name="Factory" href="/multiproject/fulcrum-factory/index.html"/>
-      <item name="Localization" href="/multiproject/fulcrum-localization/index.html"/>
-      <item name="Mimetype" href="/multiproject/fulcrum-mimetype/index.html"/>
-      <item name="Pool" href="/multiproject/fulcrum-pool/index.html"/>
-      <item name="Pull" href="/multiproject/fulcrum-pull/index.html"/>
-      <item name="Scheduler" href="/multiproject/fulcrum-scheduler/index.html"/>
-      <item name="Security" href="/multiproject/fulcrum-security/index.html"/>
-      <item name="XMLRPC" href="/multiproject/fulcrum-xmlrpc/index.html"/>
+      <item name="Test Container"        href="/multiproject/fulcrum-testcontainer/index.html"/>
+      <item name="Cache"                 href="/multiproject/fulcrum-cache/index.html"/>
+      <item name="Crypto"                href="/multiproject/fulcrum-crypto/index.html"/>
+      <item name="DVSL"                  href="/multiproject/fulcrum-dvsl/index.html"/>
+      <item name="Factory"               href="/multiproject/fulcrum-factory/index.html"/>
+      <item name="Localization"          href="/multiproject/fulcrum-localization/index.html"/>
+      <item name="Mimetype"              href="/multiproject/fulcrum-mimetype/index.html"/>
+      <item name="Pool"                  href="/multiproject/fulcrum-pool/index.html"/>
+      <item name="Pull"                  href="/multiproject/fulcrum-pull/index.html"/>
+      <item name="Scheduler"             href="/multiproject/fulcrum-scheduler/index.html"/>
+      <item name="Security"              href="/multiproject/fulcrum-security/index.html"/>
+      <item name="XMLRPC"                href="/multiproject/fulcrum-xmlrpc/index.html"/>
     </menu>
     <menu name="Howtos (old)">
       <item name="Factory Service"        href="/howto/factory-service.html"/>
