@@ -15,7 +15,7 @@ servlet-2.2.jar
 stratum-0.1-dev.jar
 torque-3.0-dev.jar
 velocity-1.3-dev.jar
-velocity-dvsl-0.31.jar
+velocity-dvsl-0.40.jar
 village-1.5.3-dev.jar
 xalan-2.1.0.jar
 xercesImpl-2.0.0.jar
