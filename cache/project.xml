@@ -5,15 +5,7 @@
   <name>Fulcrum Cache Component</name>
   <currentVersion>1.0.4</currentVersion>
 
-  <dependencies>
-        
-    <!--  Needed only for testing -->
-    <dependency>
-      <groupId>fulcrum</groupId>
-      <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0.3</version>
-    </dependency>
-
+  <dependencies>        
 
   </dependencies>
 

@@ -160,37 +160,47 @@
     <dependency>
       <groupId>avalon-framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
-      <version>4.1.5</version>
+      <version>4.2.0</version>
     </dependency>
     
     <dependency>
       <groupId>avalon-framework</groupId>
       <artifactId>avalon-framework-impl</artifactId>
-      <version>4.1.5</version>
+      <version>4.2.0</version>
     </dependency>
-    
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.0</version>
-    </dependency> 
     
     <!--
      |
      | Common test-time dependencies for all the components.
      |
      -->
+    
     <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>20030203.000550</version>
+      <groupId>excalibur-component</groupId>
+      <artifactId>excalibur-component</artifactId>
+      <version>1.1</version>
+      <url>http://excalibur.apache.org/</url>
     </dependency>
     
     <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-      <version>1.0.3</version>
-      <url>http://jakarta.apache.org/commons/logging.html</url>
+      <groupId>excalibur-instrument</groupId>
+      <artifactId>excalibur-instrument</artifactId>
+      <version>1.0</version>
+      <url>http://excalibur.apache.org/</url>
+    </dependency>    
+    
+    <dependency>
+      <groupId>excalibur-logger</groupId>
+      <artifactId>excalibur-logger</artifactId>
+      <version>1.1</version>
+      <url>http://excalibur.apache.org/</url>
+    </dependency>    
+    
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.0</version>
+      <url>http://jakarta.apache.org/commons/collections.html</url>
     </dependency>
     
     <dependency>
@@ -198,56 +208,21 @@
       <artifactId>log4j</artifactId>
       <version>1.2.8</version>
       <url>http://jakarta.apache.org/log4j/</url>
-    </dependency>
-
-    <dependency>
-      <groupId>commons-collections</groupId>
-      <artifactId>commons-collections</artifactId>
-      <version>2.1</version>
-      <url>http://jakarta.apache.org/commons/collections.html</url>
-    </dependency>
+    </dependency>      
     
-    <dependency>
-      <groupId>commons-configuration</groupId>
-      <artifactId>commons-configuration</artifactId>
-      <version>20030706.202021</version>
-      <url>http://jakarta.apache.org/commons/sandbox/configuration</url>
-    </dependency>    
-
-    <dependency>
-      <groupId>excalibur-component</groupId>
-      <artifactId>excalibur-component</artifactId>
-      <version>1.1</version>
-      <url>http://excalibur.apache.org/</url>
-    </dependency>
-
-    <dependency>
-      <groupId>excalibur-instrument</groupId>
-      <artifactId>excalibur-instrument</artifactId>
-      <version>1.0</version>
-      <url>http://excalibur.apache.org/</url>
-    </dependency>
-
-    <dependency>
-      <groupId>excalibur-logger</groupId>
-      <artifactId>excalibur-logger</artifactId>
-      <version>1.1</version>
-      <url>http://excalibur.apache.org/</url>
-    </dependency>
-
     <dependency>
       <groupId>excalibur-pool</groupId>
       <artifactId>excalibur-pool-api</artifactId>
       <version>2.0.0</version>
       <url>http://excalibur.apache.org/</url>
     </dependency>
-
+    
     <dependency>
       <groupId>avalon-logkit</groupId>
       <artifactId>avalon-logkit</artifactId>
       <version>2.0.0</version>
       <url>http://avalon.apache.org</url>
-    </dependency>
+    </dependency>               
 
   </dependencies>
   

@@ -65,9 +65,9 @@ import org.apache.turbine.modules.actions.VelocityAction;
 import org.apache.turbine.util.RunData;
 import org.apache.velocity.context.Context;
 
-import com.opensymphony.module.user.Group;
-import com.opensymphony.module.user.User;
-import com.opensymphony.module.user.UserManager;
+//import com.opensymphony.module.user.Group;
+//import com.opensymphony.module.user.User;
+//import com.opensymphony.module.user.UserManager;
 import com.opensymphony.workflow.Workflow;
 /**
  * This action contains all the manipulations of a workflow.  Look at the various
@@ -130,7 +130,7 @@ public class WorkflowAction extends VelocityAction
     {
         log.debug("doSetupuser action event called");
         data.setScreenTemplate("Index.vm");
-        UserManager um = UserManager.getInstance();
+       /* UserManager um = UserManager.getInstance();
         User test = um.createUser("test");
         test.setPassword("test");
         Group foos = um.createGroup("foos");
@@ -144,6 +144,11 @@ public class WorkflowAction extends VelocityAction
             "",
             "INFO",
             "User test/test is setup in system.  Don't forget to login!");
+            */
+        data.getMessages().setMessage(
+                "",
+                "INFO",
+                "Please uncomment the code in WorkflowAction.doSetupuser and add OSUser!");
     }
 
     /**

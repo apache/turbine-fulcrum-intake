@@ -84,7 +84,7 @@
         <war.bundle>true</war.bundle>
       </properties>      
     </dependency>  
-    <dependency>
+    <!--dependency>
       <groupId>opensymphony</groupId>
       <artifactId>osuser</artifactId>
       <version>1.0-dev</version>
@@ -92,7 +92,7 @@
       <properties>        
         <war.bundle>true</war.bundle>
       </properties>            
-    </dependency>    
+    </dependency-->    
 
     <dependency>
       <groupId>taglibs</groupId>
