@@ -8,6 +8,9 @@
 
   <body>
     <release version="Not applicable" date="">
+      <action dev="epugh" type="update">
+        Bump to newer version of xmlrpc liberary, 1.2-b2.
+      </action>          
       <action dev="ronald" type="add">
         creates a list of dependencies (all optional), called handler.0 through
 		handler.9, instead of just handler. 
