@@ -76,12 +76,11 @@ import org.apache.fulcrum.template.BaseTemplateEngineService;
  * Turbine Screen.  Here's an example of how you might use it from a
  * screen:<br>
  *
- * <code>
- * Context context = TurbineVelocity.getContext(data);<br>
- * context.put("message", "Hello from Turbine!");<br>
- * String results = TurbineVelocity.handleRequest(context,"helloWorld.vm");<br>
- * data.getPage().getBody().addElement(results);<br>
- * </code>
+ * <code><pre>
+ * Context context = new VelocityContext();
+ * context.put("message", "Hello from Turbine!");
+ * String results = TurbineVelocity.handleRequest(context,"HelloWorld.vm");
+ * </pre></code>
  *
  * Character sets map codes to glyphs, while encodings map between
  * chars/bytes and codes.
