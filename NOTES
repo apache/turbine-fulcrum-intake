@@ -9,7 +9,7 @@ services in isolation. If you want to see the coupling for yourself:
 
 mkdir -p src/org/apache/turbine
 cd src/org/apache/turbine
-ln -s services <fullpath-to-turbine-package>/services
+ln -s <fullpath-to-turbine-package>/services services
 
 SecurityService
 ---------------
