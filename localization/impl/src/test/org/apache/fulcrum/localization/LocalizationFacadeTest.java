@@ -126,7 +126,7 @@ public class LocalizationFacadeTest extends AbstractMerlinTestCase
     {
         getLogger().info( "testFacadeConfigured " + Localization.isInitialized() );
         // this.lookup causes the service to be configured.
-        this.resolve( "localizer" );
+        this.resolve( "localization" );
         assertTrue(Localization.isInitialized());
         String s = Localization.getString(null, new Locale("ko", "KR"), "key4");
         assertEquals(

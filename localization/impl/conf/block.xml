@@ -9,7 +9,7 @@
      </classpath>
    </classloader>
 
-   <component name="localizer" 
+   <component name="localization" 
      class="org.apache.fulcrum.localization.DefaultLocalizationService" 
      activation="false"/>
 

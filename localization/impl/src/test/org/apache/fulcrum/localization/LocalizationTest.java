@@ -91,7 +91,7 @@ public class LocalizationTest extends AbstractMerlinTestCase
         super.setUp();
         try
         {
-            ls = (LocalizationService) this.resolve( "localizer" );
+            ls = (LocalizationService) this.resolve( "localization" );
         }
         catch (Throwable e)
         {
