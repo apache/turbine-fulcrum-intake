@@ -223,18 +223,7 @@ public class TurbineXSLTService
     protected void transform (String xslName, Source xmlin, Result xmlout)
         throws Exception
     {
-        Templates sr = getTemplates(xslName);
-        Transformer transformer;
-
-        // If there is no stylesheet we just echo the xml
-        if (sr == null)
-        {
-            transformer = tfactory.newTransformer();
-        }
-        else
-        {
-            transformer = sr.newTransformer();
-        }
+        Transformer transformer = getTransformer( xslName );
 
         transformer.transform(xmlin, xmlout);
     }
@@ -282,6 +271,30 @@ public class TurbineXSLTService
         StringWriter sw = new StringWriter();
         transform (xslName,in,sw);
         return sw.toString();
+    }
+
+    /**
+     * Retrieve a transformer for the given stylesheet name. If no stylesheet
+     * is available for the provided name, an identity transformer will be
+     * returned. This allows clients of this service to perform more complex
+     * transformations (for example, where parameters must be set). When
+     * possible prefer using one of the forms of {@link #transform}.
+     *
+     * @param xslName Identifies stylesheet to get transformer for
+     * @return A transformer for that stylesheet
+     */
+    public Transformer getTransformer(String xslName) throws Exception
+    {
+        Templates sr = getTemplates(xslName);
+
+        if (sr == null)
+        {
+            return tfactory.newTransformer();
+        }
+        else
+        {
+            return sr.newTransformer();
+        }
     }
 
 }
