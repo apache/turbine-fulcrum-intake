@@ -6,7 +6,7 @@ commons-lang-0.1-dev.jar
 commons-codec.jar
 commons-pool.jar
 commons-fileupload-1.0-dev.jar
-dom4j-1.1.jar
+dom4j-1.3.jar
 jakarta-regexp-1.3-dev.jar
 jdbc2_0-stdext.jar
 jndi-1.2.1.jar
@@ -22,4 +22,4 @@ village-1.5.3-dev.jar
 xalan-2.1.0.jar
 xercesImpl-2.0.0.jar
 xmlParserAPIs-2.0.0.jar
-xmlrpc.jar
+xmlrpc-1.1.jar
