@@ -67,7 +67,6 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 
-import org.apache.fulcrum.Log;
 import org.apache.torque.util.Criteria;
 
 import org.apache.fulcrum.security.UserManager;
@@ -91,6 +90,11 @@ import org.apache.fulcrum.security.TurbineSecurity;
  */
 public class DBUserManager implements UserManager
 {
+    /**
+     * System.out.println() debugging
+     */
+    private static final boolean DEBUG = false;
+    
     /**
      * Check whether a specified user's account exists.
      *
@@ -301,6 +305,13 @@ public class DBUserManager implements UserManager
                 user.getUserName() + "' does not exist");
         }
         String encrypted = TurbineSecurity.encryptPassword(password);
+
+        if (DEBUG)
+        {
+            System.out.println ("Supplied Pass: " + password);
+            System.out.println ("User Pass: " + user.getPassword());
+            System.out.println ("Encrypted Pass: " + encrypted );
+        }
         if(!user.getPassword().equals(encrypted))
         {
             throw new PasswordMismatchException("The passwords do not match");
