@@ -121,6 +121,15 @@
        </roles>
     </contributor>
     <contributor>
+      <name>Mike Manner</name>
+      <id>mmanner</id>
+      <email>test0001@oreka.com</email>
+      <organization></organization>
+      <roles>
+        <role>Security</role>
+      </roles>
+    </contributor>    
+    <contributor>
       <name>Kasper Nielsen</name>
       <id>kasper</id>
       <email>apache@kav.dk</email>
