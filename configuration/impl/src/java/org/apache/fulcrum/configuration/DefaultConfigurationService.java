@@ -15,7 +15,10 @@ package org.apache.fulcrum.configuration;
  * limitations under the License.
  */ 
 import java.io.File;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -397,6 +400,51 @@ public class DefaultConfigurationService
         return configuration.subset(arg0);
     }
 
+    /**
+     * @param arg0
+     * @return
+     */
+    public BigDecimal getBigDecimal(String arg0) {
+        return configuration.getBigDecimal(arg0);
+    }
+    /**
+     * @param arg0
+     * @param arg1
+     * @return
+     */
+    public BigDecimal getBigDecimal(String arg0, BigDecimal arg1) {
+        return configuration.getBigDecimal(arg0, arg1);
+    }
+    /**
+     * @param arg0
+     * @return
+     */
+    public BigInteger getBigInteger(String arg0) {
+        return configuration.getBigInteger(arg0);
+    }
+    /**
+     * @param arg0
+     * @param arg1
+     * @return
+     */
+    public BigInteger getBigInteger(String arg0, BigInteger arg1) {
+        return configuration.getBigInteger(arg0, arg1);
+    }
+    /**
+     * @param arg0
+     * @return
+     */
+    public List getList(String arg0) {
+        return configuration.getList(arg0);
+    }
+    /**
+     * @param arg0
+     * @param arg1
+     * @return
+     */
+    public List getList(String arg0, List arg1) {
+        return configuration.getList(arg0, arg1);
+    }
     /*
 	 * (non-Javadoc)
 	 * 
