@@ -15,7 +15,7 @@
 
     <menu name="Overview">
       <item name="Main"                 href="/index.html"/>
-      <item name="Example Application"  href="http://jakarta.apache.org/turbine/fulcrum/multiproject/fulcrum-osworkflow-example/index.html"/>
+      <item name="Example Application"  href="http://jakarta.apache.org/turbine/fulcrum/fulcrum-osworkflow-example/index.html"/>
     </menu>
   </body>
 </project>
