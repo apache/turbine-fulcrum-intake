@@ -57,13 +57,10 @@ package org.apache.fulcrum.osworkflow.example.tools;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.avalon.framework.component.ComponentException;
 import org.apache.fulcrum.osworkflow.WorkflowInstance;
 import org.apache.fulcrum.osworkflow.WorkflowService;
+import org.apache.fulcrum.osworkflow.WorkflowServiceFacade;
 import org.apache.turbine.om.security.User;
-import org.apache.turbine.services.InstantiationException;
-import org.apache.turbine.services.TurbineServices;
-import org.apache.turbine.services.avaloncomponent.AvalonComponentService;
 import org.apache.turbine.services.pull.ApplicationTool;
 import org.apache.turbine.util.RunData;
 
@@ -87,35 +84,7 @@ public class WorkflowTool implements ApplicationTool
     /** Turbine User object */
     private User user;
 
-    /**
-     * Returns  the WorkflowService.  Lazy loads the WorkflowService if it
-     * hasn't been loaded from Avalon yet.
-     *
-     * @return a fulcrum WorkflowService
-     */
-    public WorkflowService getWorkflowService()
-    {
-        if (workflowService == null)
-        {
-            AvalonComponentService acs =
-                (AvalonComponentService) TurbineServices
-                    .getInstance()
-                    .getService(
-                    AvalonComponentService.SERVICE_NAME);
-            try
-            {
-                workflowService =
-                    (WorkflowService) acs.lookup(WorkflowService.ROLE);
-            }
-            catch (ComponentException ce)
-            {
-                throw new InstantiationException(
-                    "Problem looking up Localization Service:"
-                        + ce.getMessage());
-            }
-        }
-        return workflowService;
-    }
+  
     /**
      * Creates a new instance.  Used by <code>PullService</code>.
      */
@@ -174,8 +143,8 @@ public class WorkflowTool implements ApplicationTool
         List workflows = new ArrayList();
         String caller = getUser().getName();
         long workflowIds[] =
-            getWorkflowService().retrieveWorkflows(caller, status);
-        Workflow workflow = getWorkflowService().retrieveWorkflow(caller);
+            WorkflowServiceFacade.retrieveWorkflows(caller, status);
+        Workflow workflow = WorkflowServiceFacade.retrieveWorkflow(caller);
         for (int i = 0; i < workflowIds.length; i++)
         {
             WorkflowInstance workflowInstance =
@@ -205,7 +174,7 @@ public class WorkflowTool implements ApplicationTool
      */
     public Workflow retrieveWorkflow(User user) throws WorkflowException
     {
-        return getWorkflowService().retrieveWorkflow(user.getName());
+        return WorkflowServiceFacade.retrieveWorkflow(user.getName());
     }
 
 }

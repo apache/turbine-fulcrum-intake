@@ -25,6 +25,7 @@
   <contributors>
     <contributor>
       <name>Youngho Cho</name>
+      <id>ycho</id>
       <email>youngho@nannet.co.kr</email>
     </contributor>  
   </contributors>
@@ -248,7 +249,8 @@
       </properties>      
     </dependency>
     <dependency>
-      <id>fulcrum-localization</id>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-localization</artifactId>
       <version>1.0-alpha-3</version>
       <url>http://jakarta.apache.org/turbine/fulcrum/</url>
       <properties>

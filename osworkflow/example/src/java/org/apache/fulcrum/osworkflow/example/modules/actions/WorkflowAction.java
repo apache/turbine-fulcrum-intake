@@ -55,17 +55,16 @@ package org.apache.fulcrum.osworkflow.example.modules.actions;
  */
 
 import java.util.Collections;
-import org.apache.avalon.framework.component.ComponentException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.osworkflow.WorkflowInstance;
 import org.apache.fulcrum.osworkflow.WorkflowService;
+import org.apache.fulcrum.osworkflow.WorkflowServiceFacade;
 import org.apache.turbine.modules.actions.VelocityAction;
-import org.apache.turbine.services.InstantiationException;
-import org.apache.turbine.services.TurbineServices;
-import org.apache.turbine.services.avaloncomponent.AvalonComponentService;
 import org.apache.turbine.util.RunData;
 import org.apache.velocity.context.Context;
+
 import com.opensymphony.module.user.Group;
 import com.opensymphony.module.user.User;
 import com.opensymphony.module.user.UserManager;
@@ -161,7 +160,7 @@ public class WorkflowAction extends VelocityAction
         try
         {
             Workflow wf =
-                getWorkflowService().retrieveWorkflow(data.getUser().getName());
+			WorkflowServiceFacade.retrieveWorkflow(data.getUser().getName());
             long id = wf.initialize("example", 1, null);
             data.getMessages().setMessage(
                 "",
@@ -195,32 +194,7 @@ public class WorkflowAction extends VelocityAction
             data.getMessages().setMessage("", "ERROR", e.getMessage());
         }
     }
-    /**
-    * Lazy load the WorkflowService.
-    * @return a fulcrum WorkflowService
-    */
-    public WorkflowService getWorkflowService()
-    {
-        if (workflowService == null)
-        {
-            AvalonComponentService acs =
-                (AvalonComponentService) TurbineServices
-                    .getInstance()
-                    .getService(
-                    AvalonComponentService.SERVICE_NAME);
-            try
-            {
-                workflowService =
-                    (WorkflowService) acs.lookup(WorkflowService.ROLE);
-            }
-            catch (ComponentException ce)
-            {
-                throw new InstantiationException(
-                    "Problem looking up Workflow Service:" + ce.getMessage());
-            }
-        }
-        return workflowService;
-    }
+  
     /**
     *  Perform an action for a workflow that moves it from one state
     * to the next.
@@ -261,7 +235,7 @@ public class WorkflowAction extends VelocityAction
     {
         long workflowId = data.getParameters().getLong("id");
         Workflow workflow =
-            getWorkflowService().retrieveWorkflow(data.getUser().getName());
+            WorkflowServiceFacade.retrieveWorkflow(data.getUser().getName());
         WorkflowInstance wf = new WorkflowInstance(workflow, workflowId);
         return wf;
     }
