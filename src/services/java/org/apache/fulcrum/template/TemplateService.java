@@ -74,12 +74,14 @@ import org.apache.fulcrum.ServiceException;
 public interface TemplateService
     extends Service
 {
-
     /**
      * The key under which this service is stored in TurbineServices.
      */
     public static final String SERVICE_NAME = "TemplateService";
 
+    /**
+     * The key to the template context.
+     */
     public static final String CONTEXT = "TEMPLATE_CONTEXT";
 
     /**
