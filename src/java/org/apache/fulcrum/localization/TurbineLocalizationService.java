@@ -68,6 +68,15 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Category;
 import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
+import org.apache.fulcrum.BaseFulcrumComponent;
+
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.component.Component;
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.thread.ThreadSafe;
+
 
 /**
  * <p>This class is the single point of access to all localization
@@ -99,9 +108,10 @@ import org.apache.fulcrum.InitializationException;
  * @author <a href="mailto:leonardr@collab.net">Leonard Richardson</a>
  * @version $Id$
  */
+
 public class TurbineLocalizationService
-    extends BaseService
-    implements LocalizationService
+    extends BaseFulcrumComponent
+    implements LocalizationService, Configurable, Initializable, ThreadSafe
 {
     /**
      * The value to pass to <code>MessageFormat</code> if a
@@ -119,6 +129,11 @@ public class TurbineLocalizationService
      * The list of default bundles to search.
      */
     private String[] bundleNames = null;
+
+    /**
+     * The default bundle name to use if not specified.
+     */
+    private String defaultBundleName = null;
 
     /**
      * The name of the default locale to use (includes language and
@@ -145,23 +160,48 @@ public class TurbineLocalizationService
         bundles = new HashMap();
     }
 
+
+    public void configure(Configuration conf)
+        throws ConfigurationException
+    {
+        Locale jvmDefault = Locale.getDefault();
+        if (useOldConfiguration(conf))
+        {
+            System.out.println("Using old conf");
+             defaultLanguage = getConfiguration().getString(
+                 "locale.default.language",
+                 jvmDefault.getLanguage()).trim();
+
+             defaultCountry = getConfiguration().getString(
+                 "locale.default.country",
+                 jvmDefault.getCountry()).trim();
+
+             bundleNames =
+                 getConfiguration().getStringArray("locale.default.bundles");
+             defaultBundleName = 
+                 getConfiguration().getString("locale.default.bundle");
+        }
+        else
+        {
+            System.out.println("Using parameters");
+            defaultLanguage = conf.getAttribute(
+                "locale-default-language", jvmDefault.getLanguage()).trim();
+            defaultCountry = conf.getAttribute(
+                "locale-default-country", jvmDefault.getCountry()).trim();
+            // FIXME! need to add bundle names
+        }
+        System.out.println("initialized lang="
+                           + defaultLanguage + " country=" + defaultCountry);
+    }
+
     /**
      * Called the first time the Service is used.
      */
-    public void init()
+    public void initialize()
         throws InitializationException
     {
         initBundleNames(null);
-
-        Locale jvmDefault = Locale.getDefault();
-        defaultLanguage = getConfiguration()
-            .getString("locale.default.language",
-                       jvmDefault.getLanguage()).trim();
-        defaultCountry = getConfiguration()
-            .getString("locale.default.country",
-                       jvmDefault.getCountry()).trim();
         defaultLocale = new Locale(defaultLanguage, defaultCountry);
-
         setInit(true);
     }
 
@@ -173,21 +213,18 @@ public class TurbineLocalizationService
     protected void initBundleNames(String[] ignored)
     {
         //System.err.println("cfg=" + getConfiguration());
-        bundleNames =
-            getConfiguration().getStringArray("locale.default.bundles");
-        String name = getConfiguration().getString("locale.default.bundle");
-        if (name != null && name.length() > 0)
+        if (defaultBundleName != null && defaultBundleName.length() > 0)
         {
             // Using old-style single bundle name property.
             if (bundleNames == null || bundleNames.length <= 0)
             {
-                bundleNames = new String[] { name };
+                bundleNames = new String[] { defaultBundleName };
             }
             else
             {
                 // Prepend "default" bundle name.
                 String[] array = new String[bundleNames.length + 1];
-                array[0] = name;
+                array[0] = defaultBundleName;
                 System.arraycopy(bundleNames, 0, array, 1, bundleNames.length);
                 bundleNames = array;
             }
@@ -629,5 +666,14 @@ public class TurbineLocalizationService
         messageFormat.applyPattern(value);
 
         return messageFormat.format(args);
+    }
+
+    /** 
+     * The name used to specify this component in TurbineResources.properties 
+     * @deprecated part of the pre-avalon compatibility layer
+     */
+    protected String getName()
+    {
+        return "LocalizationService";
     }
 }

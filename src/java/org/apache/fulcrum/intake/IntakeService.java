@@ -55,6 +55,7 @@ package org.apache.fulcrum.intake;
  */
 
 import java.lang.reflect.Method;
+import org.apache.avalon.framework.component.Component;
 import org.apache.fulcrum.ServiceException;
 import org.apache.fulcrum.pool.Recyclable;
 import org.apache.fulcrum.util.parser.ValueParser;
@@ -75,17 +76,21 @@ import org.apache.fulcrum.intake.model.Group;
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
  * @version $Id$
  */
-public interface IntakeService
+public interface IntakeService extends Component
 {
-    /**
-     * The key under which this service is stored in TurbineServices.
+    /** Avalon role - used to id the component within the manager */
+    String ROLE = IntakeService.class.getName();
+
+    /** 
+     * Old style TurbineServices role, now equal to ROLE.
+     * @deprecated TurbineServices is deprecated in favor of avalon. 
      */
-    public static final String SERVICE_NAME = "IntakeService";
+    String SERVICE_NAME = ROLE;
 
     /**
      * The property specifying the location of the xml specification.
      */
-    public static final String XML_PATH = "xml.path";
+    public static final String XML_PATH = "xml-path";
 
     /**
      * The default location of the xml specification.
@@ -96,7 +101,7 @@ public interface IntakeService
      * The property specifying the location where a serialized version of 
      * the xml specification can be written for faster restarts..
      */
-    public static final String SERIAL_XML = "serialize.path";
+    public static final String SERIAL_XML = "serialize-path";
 
     /**
      * The default location where a serialized version of 
@@ -119,34 +124,6 @@ public interface IntakeService
      */
     public Group getGroup(String groupName)
         throws ServiceException;
-
-    /**
-     * Gets an instance of a named group either from the pool
-     * or by calling the Factory Service if the pool is empty and
-     * then initialize it using the ValueParser looking for
-     * a NEW id.
-     *
-     * @param groupName the name of the group.
-     * @param pp the request parameters that may contain matching keys
-     * @return a Group instance.
-     * @throws ServiceException if recycling fails.
-     * /
-    public Group getGroup(String groupName, ValueParser pp)
-        throws Exception;
-
-    /**
-     * Gets an instance of a named group either from the pool
-     * or by calling the Factory Service if the pool is empty and
-     * then initialize it using the ValueParser looking for id.
-     *
-     * @param groupName the name of the group.
-     * @param pp the request parameters that may contain matching keys
-     * @return a Group instance.
-     * @throws ServiceException if recycling fails.
-     * /
-    public Group getGroup(String groupName, ValueParser pp, String id)
-        throws Exception;
-    */
 
     /**
      * Puts a group back to the pool.

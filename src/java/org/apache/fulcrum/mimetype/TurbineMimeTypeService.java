@@ -63,6 +63,13 @@ import org.apache.fulcrum.InitializationException;
 import org.apache.fulcrum.mimetype.util.MimeType;
 import org.apache.fulcrum.mimetype.util.MimeTypeMap;
 import org.apache.fulcrum.mimetype.util.CharSetMap;
+import org.apache.fulcrum.HasApplicationRoot;
+
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.thread.ThreadSafe;
 
 /**
  * The MimeType Service maintains mappings between MIME types and
@@ -85,18 +92,23 @@ import org.apache.fulcrum.mimetype.util.CharSetMap;
  * @version $Id$
  */
 public class TurbineMimeTypeService
-    extends BaseService
-    implements MimeTypeService
+    extends HasApplicationRoot
+    implements MimeTypeService, Configurable, Initializable, ThreadSafe
 {
     /**
      * The MIME type file property.
      */
-    public static final String MIME_TYPES = "mime.types";
+    public static final String MIME_TYPES = "mimetypes";
 
     /**
      * The charset file property.
      */
     public static final String CHARSETS = "charsets";
+
+    // path to a mimetypes-file_extension mapping file
+    private String mimetypePath;
+    // path to a charset-language mapping file
+    private String charsetPath;
 
     /**
      * The MIME type map used by the service.
@@ -113,66 +125,6 @@ public class TurbineMimeTypeService
      */
     public TurbineMimeTypeService()
     {
-    }
-
-    /**
-     * Initializes the service.
-     *
-     * @throws InitializationException if initialization fails.
-     */
-    public void init()
-        throws InitializationException
-    {
-        String path = null;
-
-        if (getConfiguration() != null)
-        {
-            path = getConfiguration().getString(MIME_TYPES);
-            if (path != null)
-            {
-                path = getRealPath(path);
-            }
-        }
-        if (path != null)
-        {
-            try
-            {
-                mimeTypeMap = new MimeTypeMap(path);
-            }
-            catch (IOException x)
-            {
-                throw new InitializationException(path,x);
-            }
-        }
-        else
-        {
-            mimeTypeMap = new MimeTypeMap();
-        }
-
-        if (getConfiguration() != null)
-        {
-            path = getConfiguration().getString(CHARSETS);
-            if (path != null)
-            {
-                path = getRealPath(path);
-            }
-        }
-        if (path != null)
-        {
-            try
-            {
-                charSetMap = new CharSetMap(path);
-            }
-            catch (IOException x)
-            {
-                throw new InitializationException(path,x);
-            }
-        }
-        else
-        {
-            charSetMap = new CharSetMap();
-        }
-        setInit(true);
     }
 
     /**
@@ -350,5 +302,86 @@ public class TurbineMimeTypeService
                              String def)
     {
         return charSetMap.getCharSet(key,def);
+    }
+
+    // ---------------- Avalon Lifecycle Methods ---------------------
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void configure(Configuration conf)
+        throws ConfigurationException
+    {
+        if (useOldConfiguration(conf))
+        {
+            mimetypePath = getConfiguration().getString("mime.types");
+            charsetPath = getConfiguration().getString(CHARSETS);
+        }
+        else
+        {
+            mimetypePath = conf.getAttribute(MIME_TYPES, null);
+            charsetPath = conf.getAttribute(CHARSETS, null);
+        }
+
+        if (mimetypePath != null)
+        {
+            mimetypePath = getRealPath(mimetypePath);
+        }
+
+        if (charsetPath != null)
+        {
+            charsetPath = getRealPath(charsetPath);
+        }
+    }
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void initialize()
+        throws InitializationException
+    {
+        if (mimetypePath != null)
+        {
+            try
+            {
+                mimeTypeMap = new MimeTypeMap(mimetypePath);
+            }
+            catch (IOException x)
+            {
+                throw new InitializationException(mimetypePath,x);
+            }
+        }
+        else
+        {
+            mimeTypeMap = new MimeTypeMap();
+        }
+
+        if (charsetPath != null)
+        {
+            try
+            {
+                charSetMap = new CharSetMap(charsetPath);
+            }
+            catch (IOException x)
+            {
+                throw new InitializationException(charsetPath,x);
+            }
+        }
+        else
+        {
+            charSetMap = new CharSetMap();
+        }
+
+        setInit(true);
+    }
+
+
+    /**
+     * The name used to specify this component in TurbineResources.properties 
+     * @deprecated part of the pre-avalon compatibility layer
+     */
+    protected String getName()
+    {
+        return "MimeTypeService";
     }
 }

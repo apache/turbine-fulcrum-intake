@@ -60,11 +60,13 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Stack;
+import java.lang.reflect.Field;
 
 import org.apache.fulcrum.ServiceException;
 import org.apache.commons.configuration.BaseConfiguration;
@@ -72,6 +74,9 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Category;
 import org.apache.log4j.helpers.NullEnumeration;
+
+import org.apache.avalon.framework.component.ComponentManager;
+import org.apache.avalon.framework.component.Component;
 
 /**
  * A generic implementation of a <code>ServiceBroker</code> which
@@ -102,6 +107,13 @@ public abstract class BaseServiceBroker implements ServiceBroker
      * A repository of Service instances.
      */
     protected Hashtable services = new Hashtable();
+
+    /**
+     * A repository of avalon components.
+     */
+    private Map avalonComponents = new Hashtable();
+
+    private ComponentManager avalonManager;
 
     /**
      * Configuration for the services broker.
@@ -236,6 +248,11 @@ public abstract class BaseServiceBroker implements ServiceBroker
     public Category getCategory()
     {
         return category;
+    }
+
+    public void setAvalonManager(ComponentManager manager)
+    {
+        avalonManager = manager;
     }
 
     /**
@@ -523,6 +540,14 @@ public abstract class BaseServiceBroker implements ServiceBroker
     {
         notice("Shutting down all services!");
 
+        // release the avalon components
+        Iterator components = avalonComponents.values().iterator();
+        while (components.hasNext()) 
+        {
+            avalonManager.release((Component)components.next());
+        }
+        
+
         Iterator serviceNames = getServiceNames();
         String serviceName = null;
 
@@ -559,10 +584,44 @@ public abstract class BaseServiceBroker implements ServiceBroker
      * @exception InstantiationException, if the service is unknown or
      * can't be initialized.
      */
-    public Service getService(String name) throws InstantiationException
+    public synchronized Object getService(String name) 
+        throws InstantiationException
+    {
+        // check if the name is an actual service
+        Object obj = services.get(name);
+        if (obj == null && avalonManager != null) 
+        {
+            // check if it is an avalon component
+            obj = avalonComponents.get(name);
+            if (obj == null) 
+            {
+                try
+                {
+                    Class componentClass = Class.forName(name);
+                    Field roleField = componentClass.getField("ROLE");
+                    String role = (String)roleField.get(null);
+                    obj = avalonManager.lookup(role);
+                    avalonComponents.put(name, obj);
+                }
+                catch (Exception e)
+                {
+                    obj = getOldService(name);                
+                }
+            }            
+        }
+        else 
+        {
+            obj = getOldService(name);
+        }
+            
+        return obj;
+    }
+
+    private Service getOldService(String name)
+        throws InstantiationException
     {
         Service service;
-        try
+        try 
         {
             service = getServiceInstance(name);
             if (!service.isInitialized())
@@ -588,6 +647,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
                 throw new InitializationException(
                     "init() failed to initialize service " + name);
             }
+        
             return service;
         }
         catch (InitializationException e)
@@ -795,5 +855,10 @@ public abstract class BaseServiceBroker implements ServiceBroker
     public String getRealPath(String path)
     {
         return new File(getApplicationRoot(), path).getAbsolutePath();
+    }
+
+    public ComponentManager getAvalonComponentManager()
+    {
+        return avalonManager;
     }
 }

@@ -58,52 +58,30 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.commons.configuration.BaseConfiguration;
-import org.apache.commons.configuration.Configuration;
-
-import org.apache.fulcrum.ServiceManager;
-import org.apache.fulcrum.TurbineServices;
-
 import org.apache.fulcrum.factory.FactoryService; 
 import org.apache.fulcrum.factory.TurbineFactoryService; 
+
+import org.apache.fulcrum.FulcrumContainer;
+import org.apache.avalon.framework.context.DefaultContext;
 
 public class CryptoDefaultTest
     extends TestCase
 {
-    private static final String PREFIX = "services." +
-        CryptoService.SERVICE_NAME + '.';
-
     private static final String preDefinedInput = "Oeltanks";
 
     public CryptoDefaultTest( String name )
+        throws Exception
     {
         super(name);
 
-        ServiceManager serviceManager = TurbineServices.getInstance();
-        serviceManager.setApplicationRoot(".");
-        
-        Configuration cfg = new BaseConfiguration();
-        cfg.setProperty(PREFIX + "classname",
-                        TurbineCryptoService.class.getName());
+        FulcrumContainer fulcrum = new FulcrumContainer();
+        DefaultContext ctx = new DefaultContext();
+        ctx.put(fulcrum.APP_ROOT, ".");
+        ctx.put(fulcrum.CONF_XML, 
+            "<fulcrum-services><crypto/><factory/></fulcrum-services>");
 
-        /* No providers configured. Should be "java" then */
-
-        /* Ugh */
-
-        cfg.setProperty("services." + FactoryService.SERVICE_NAME + ".classname",
-                        TurbineFactoryService.class.getName());
-
-        serviceManager.setConfiguration(cfg);
-
-        try
-        {
-            serviceManager.init();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            fail();
-        }
+        fulcrum.contextualize(ctx);
+        fulcrum.initialize();
     }
 
     public static Test suite()

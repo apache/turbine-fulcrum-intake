@@ -64,8 +64,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import org.apache.fulcrum.ServiceException;
 import org.apache.fulcrum.pool.ObjectInputStreamForContext;
-import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
+import org.apache.fulcrum.BaseFulcrumComponent;
+
+import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.component.Component;
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.framework.thread.ThreadSafe;
+//import org.apache.avalon.framework.;
 
 /**
  * The Factory Service instantiates objects using specified
@@ -76,18 +86,22 @@ import org.apache.fulcrum.InitializationException;
  * @version $Id$
  */
 public class TurbineFactoryService
-    extends BaseService
-    implements FactoryService
-{
+    extends BaseFulcrumComponent
+    implements FactoryService, Configurable, Initializable, 
+               Component, ThreadSafe 
+{ 
+    protected boolean initialized = false; 
+    //private boolean disposed = false; 
+
     /**
      * The property specifying a set of additional class loaders.
      */
-    public static final String CLASS_LOADERS = "class.loaders";
+    private static final String CLASS_LOADER = "classloader";
 
     /**
      * The property prefix specifying additional object factories.
      */
-    public static final String OBJECT_FACTORY = "factory.";
+    private static final String OBJECT_FACTORY = "object-factory";
 
     /**
      * The name of the default factory.
@@ -110,6 +124,11 @@ public class TurbineFactoryService
         primitiveClasses.put(Float.TYPE.toString(),Float.TYPE);
         primitiveClasses.put(Double.TYPE.toString(),Double.TYPE);
     }
+
+    /**
+     * temporary storage of class names between configure and initialize
+     */
+    private String[] loaderNames;
 
     /**
      * Additional class loaders.
@@ -138,56 +157,6 @@ public class TurbineFactoryService
     public TurbineFactoryService()
     {
     }
-
-    /**
-     * Initializes the service by loading default class loaders
-     * and customized object factories.
-     *
-     * @throws InitializationException if initialization fails.
-     */
-    public void init()
-        throws InitializationException
-    {
-        if (getConfiguration() != null)
-        {
-            Vector loaders = getConfiguration().getVector(CLASS_LOADERS);
-            if (loaders != null)
-            {
-                for (int i = 0; i < loaders.size(); i++)
-                {
-                    try
-                    {
-                        classLoaders.add(
-                            loadClass((String) loaders.get(i)).newInstance());
-                    }
-                    catch (Exception x)
-                    {
-                        throw new InitializationException(
-                            "No such class loader '" +
-                                (String) loaders.get(i) +
-                                    "' for TurbinbeFactoryService",x);
-                    }
-                }
-            }
-
-            String key,factory;
-
-            for (Iterator i = getConfiguration().getKeys(OBJECT_FACTORY); i.hasNext();)
-            {
-                key = (String) i.next();
-                factory = getConfiguration().getString(key);
-
-                /*
-                 * Store the factory to the table as a string and
-                 * instantiate it by using the service when needed.
-                 */
-                objectFactories.put(
-                    key.substring(OBJECT_FACTORY.length()),factory);
-            }
-        }
-        setInit(true);
-    }
-
     /**
      * Gets an instance of a named class.
      *
@@ -635,5 +604,111 @@ public class TurbineFactoryService
         {
             return null;
         }
+    }
+
+
+    // ---------------- Avalon Lifecycle Methods ---------------------
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void configure(Configuration conf)
+        throws ConfigurationException
+    {
+        if (useOldConfiguration(conf))
+        {
+            Vector loaders = getConfiguration().getVector("class.loaders");
+            if (loaders != null)
+            {
+                loaderNames = new String[loaders.size()];
+                for (int i = 0; i < loaders.size(); i++)
+                {
+                    loaderNames[i] = (String)loaders.get(i);
+                }
+            }
+
+            String key,factory;
+            for (Iterator i = getConfiguration().getKeys("factory."); 
+                 i.hasNext();)
+            {
+                key = (String) i.next();
+                factory = getConfiguration().getString(key);
+
+                /*
+                 * Store the factory to the table as a string and
+                 * instantiate it by using the service when needed.
+                 */
+                objectFactories.put(key.substring(8),factory);
+            }
+        }
+        else
+        {
+            final Configuration[] loaders = conf.getChildren(CLASS_LOADER);
+            if (loaders != null)
+            {
+                loaderNames = new String[loaders.length];
+                for (int i = 0; i < loaders.length; i++)
+                {
+                    loaderNames[i] = loaders[i].getValue();
+                }
+            }
+
+            final Configuration factories = 
+                conf.getChild(OBJECT_FACTORY, false);
+            if (factories != null)
+            {
+                Configuration[] nameVal = factories.getChildren();
+                for (int i=0; i < nameVal.length; i++)
+                {
+                    String key = nameVal[i].getName();
+                    String factory = nameVal[i].getValue();
+                    
+                    // Store the factory to the table as a string and
+                    // instantiate it by using the service when needed.
+                    objectFactories.put(key,factory);
+                }
+            }
+        }
+    }
+
+    /**
+     * Avalon component lifecycle method
+     * Initializes the service by loading default class loaders
+     * and customized object factories.
+     *
+     * @throws InitializationException if initialization fails.
+     */
+    public void initialize()
+        throws InitializationException
+    {
+        if (loaderNames != null)
+        {
+            for (int i = 0; i < loaderNames.length; i++)
+            {
+                try
+                {
+                    classLoaders.add(
+                        loadClass(loaderNames[i]).newInstance());
+                }
+                catch (Exception x)
+                {
+                    throw new InitializationException(
+                        "No such class loader '" + loaderNames[i] +
+                        "' for TurbineFactoryService",x);
+                }
+            }
+            loaderNames = null;
+        }
+
+        setInit(true);
+    }
+
+    /**
+     * The name used to specify this component in TurbineResources.properties 
+     * @deprecated part of the pre-avalon compatibility layer
+     */
+    protected String getName()
+    {
+        return "FactoryService";
     }
 }

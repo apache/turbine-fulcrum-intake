@@ -55,7 +55,7 @@ package org.apache.fulcrum.cache;
  */
 
 import java.io.IOException;
-import org.apache.fulcrum.Service;
+import org.apache.avalon.framework.component.Component;
 
 /**
  * GlobalCacheService interface.
@@ -64,9 +64,16 @@ import org.apache.fulcrum.Service;
  * @version $Id$
  */
 public interface GlobalCacheService
-    extends Service
+    extends Component
 {
-    public static final String SERVICE_NAME = "GlobalCacheService";
+    /** Avalon role - used to id the component within the manager */
+    String ROLE = GlobalCacheService.class.getName();
+
+    /** 
+     * Old style TurbineServices role, now equal to ROLE.
+     * @deprecated TurbineServices is deprecated in favor of avalon. 
+     */
+    String SERVICE_NAME = ROLE;
 
     /**
      * Gets a cached object given its id (a String).

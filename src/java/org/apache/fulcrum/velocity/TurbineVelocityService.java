@@ -57,6 +57,10 @@ package org.apache.fulcrum.velocity;
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
@@ -76,6 +80,9 @@ import org.apache.fulcrum.InitializationException;
 import org.apache.fulcrum.template.TemplateContext;
 import org.apache.fulcrum.template.BaseTemplateEngineService;
 import org.apache.commons.configuration.ConfigurationConverter;
+
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
 
 /**
  * This is a Service that can process Velocity templates from within a
@@ -138,33 +145,14 @@ public class TurbineVelocityService
      */
     private boolean eventCartridgeEnabled = true;
 
+
+    // put conf into object to pass to the velocity engine
+    org.apache.commons.configuration.Configuration velocityConf;
+
     /**
      * The VelocityEngine used by the service to merge templates
      */
-    private VelocityEngine velocityEngine = new VelocityEngine();
-
-    /**
-     * Performs early initialization of this Turbine service.
-     */
-    public void init()
-        throws InitializationException
-    {
-        try
-        {
-            initVelocity();
-            initEventCartridges();
-
-            // Register with the template service.
-            registerConfiguration("vm");
-            setInit(true);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            throw new InitializationException(
-                "Failed to initialize TurbineVelocityService", e);
-        }
-    }
+    private VelocityEngine velocityEngine;
 
     /**
      * @see org.apache.fulcrum.velocity.VelocityService
@@ -412,7 +400,7 @@ public class TurbineVelocityService
         throws ServiceException
     {
         String err = "Error rendering Velocity template: " + filename;
-        getCategory().error(err + ": " + e.getMessage());
+        getLogger().error(err + ": " + e.getMessage());
         // if the Exception is a MethodInvocationException, the underlying
         // Exception is likely to be more informative, so rewrap that one.
         if (e instanceof MethodInvocationException)
@@ -424,6 +412,136 @@ public class TurbineVelocityService
     }
 
     /**
+     * Find out if a given template exists. Velocity
+     * will do its own searching to determine whether
+     * a template exists or not.
+     *
+     * @param String template to search for
+     * @return boolean
+     */
+    public boolean templateExists(String template)
+    {
+        return velocityEngine.templateExists(template);
+    }
+
+    // ---------------- Avalon Lifecycle Methods ---------------------
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void configure(Configuration conf)
+        throws ConfigurationException
+    {
+        // put conf into object to pass to the velocity engine
+        velocityConf = 
+            new org.apache.commons.configuration.BaseConfiguration();
+        List ecconfig = null;
+        String logPath = null;
+        List templatePathKeys = new ArrayList();
+        List templatePaths = new ArrayList();
+
+        if (useOldConfiguration(conf))
+        {
+            org.apache.commons.configuration.Configuration oldConf =
+                getConfiguration();
+
+            ecconfig = oldConf
+                .getVector("eventCartridge.classes", new Vector(0));
+            if (ecconfig.size() == 0)
+            {
+                getLogger().info("No Velocity EventCartridges configured.");
+            }
+            
+            // Now we have to perform a couple of path translations
+            // for our log file and template paths.
+            logPath = 
+                oldConf.getString(VelocityEngine.RUNTIME_LOG, null);
+            if (logPath == null || logPath.length() == 0)
+            {
+                String msg = VelocityService.SERVICE_NAME+" runtime log file "+
+                    "is misconfigured: '" + logPath + "' is not a valid log file";
+                throw new Error(msg);
+            }
+
+            // Get all the template paths where the velocity
+            // runtime should search for templates and
+            // collect them into a separate vector
+            // to avoid concurrent modification exceptions.
+            for (Iterator i = oldConf.getKeys(); i.hasNext();)
+            {
+                String key = (String) i.next();
+                if (key.endsWith(RESOURCE_LOADER_PATH))
+                {
+                    templatePathKeys.add(key);
+                    templatePaths.add(oldConf.getVector(key));
+                }
+            }
+
+        }
+        else
+        {
+            // trick compiler
+            if (true) 
+            {
+                throw new ConfigurationException(
+                    "Use of avalon-style configuration not completed yet");   
+            }
+            
+            final Configuration eventCartridgeConfs = 
+                conf.getChild("event-cartriges", false);
+            if (eventCartridgeConfs == null)
+            {
+                ecconfig = Collections.EMPTY_LIST; 
+            }
+            else
+            {
+                Configuration[] classNameConfs = 
+                    eventCartridgeConfs.getChildren("classname");
+                if (classNameConfs == null)
+                {
+                    ecconfig = Collections.EMPTY_LIST; 
+                }
+                else 
+                {
+                    ecconfig = new ArrayList(classNameConfs.length);
+                    for (int i=0; i < classNameConfs.length; i++)
+                    {
+                        ecconfig.add(classNameConfs[i].getValue());
+                    }
+                }
+            }
+
+            /*
+            final Configuration pathConfs = 
+                conf.getChild("event-cartriges", false);
+            if (pathConfs != null)
+            {
+                Configuration[] nameVal = ecConfs.getChildren();
+                for (int i=0; i < nameVal.length; i++)
+                {
+                    String key = nameVal[i].getName();
+                    String val = nameVal[i].getValue();
+                }
+            }
+            */
+        }
+
+        initEventCartridges(ecconfig);
+
+        // check if path to logfile needs translation to webapp root 
+        if ( !(new File(logPath).isAbsolute()) ) 
+        {
+            logPath = getRealPath(logPath);
+        }
+        velocityConf.setProperty(VelocityEngine.RUNTIME_LOG, logPath);
+
+        configureTemplatePaths(templatePathKeys, templatePaths);
+
+        // Register with the template service.
+        registerConfiguration(conf, "vm");
+    }
+
+    /**
      * This method is responsible for initializing the various Velocity
      * EventCartridges. You just add a configuration like this:
      * <code>
@@ -432,24 +550,15 @@ public class TurbineVelocityService
      * and list out (comma separated) the list of EC's that you want to
      * initialize.
      */
-    private void initEventCartridges()
-        throws InitializationException
+    private void initEventCartridges(List ecconfig)
+        throws ConfigurationException
     {
         eventCartridge = new EventCartridge();
-
-        Vector ecconfig = getConfiguration()
-            .getVector("eventCartridge.classes", null);
-        if (ecconfig == null)
-        {
-            getCategory().info("No Velocity EventCartridges configured.");
-            return;
-        }
-
         Object obj = null;
         String className = null;
-        for (Enumeration e = ecconfig.elements() ; e.hasMoreElements() ;)
+        for (Iterator i = ecconfig.iterator() ; i.hasNext() ;)
         {
-            className = (String) e.nextElement();
+            className = (String)i.next();
             try
             {
                 boolean result = false;
@@ -471,13 +580,13 @@ public class TurbineVelocityService
                     result = getEventCartridge()
                         .addEventHandler((MethodExceptionEventHandler)obj);
                 }
-                getCategory().info("Added EventCartridge: " +
+                getLogger().info("Added EventCartridge: " +
                     obj.getClass().getName() + " : " + result);
             }
             catch (Exception h)
             {
-                throw new InitializationException(
-                    "Could not initialize EventCartridge: " +
+                throw new ConfigurationException(
+                    "Could not configure EventCartridge: " +
                     className, h);
             }
         }
@@ -487,65 +596,28 @@ public class TurbineVelocityService
      * Setup the velocity runtime by using a subset of the
      * Turbine configuration which relates to velocity.
      *
-     * @exception InitializationException For any errors during initialization.
+     * @exception ConfigurationException For any errors during initialization.
      */
-    private void initVelocity()
-        throws InitializationException
+    private void configureTemplatePaths(
+        List templatePathKeys, List templatePaths)
     {
-        // Now we have to perform a couple of path translations
-        // for our log file and template paths.
-        String path = getRealPath(
-            getConfiguration().getString(VelocityEngine.RUNTIME_LOG, null));
-
-        if (path != null && path.length() > 0)
-        {
-            getConfiguration().setProperty(VelocityEngine.RUNTIME_LOG, path);
-        }
-        else
-        {
-            String msg = VelocityService.SERVICE_NAME + " runtime log file " +
-                "is misconfigured: '" + path + "' is not a valid log file";
-
-            throw new Error(msg);
-        }
-
-        // Get all the template paths where the velocity
-        // runtime should search for templates and
-        // collect them into a separate vector
-        // to avoid concurrent modification exceptions.
-        String key;
-        Vector keys = new Vector();
-        for (Iterator i = getConfiguration().getKeys(); i.hasNext();)
-        {
-            key = (String) i.next();
-            if (key.endsWith(RESOURCE_LOADER_PATH))
-            {
-                keys.add(key);
-            }
-        }
-
         // Loop through all template paths, clear the corresponding
         // velocity properties and translate them all to the webapp space.
-        int ind;
-        Vector paths;
-        String entry;
-        for (Iterator i = keys.iterator(); i.hasNext();)
+        for (int i=0; i<templatePathKeys.size(); i++)
         {
-            key = (String) i.next();
-            paths = getConfiguration().getVector(key,null);
+            String key = (String) templatePathKeys.get(i);
+            Vector paths = (Vector) templatePaths.get(i);
             if (paths != null)
             {
-                velocityEngine.clearProperty(key);
-                getConfiguration().clearProperty(key);
-
+                String entry;
                 for (Iterator j = paths.iterator(); j.hasNext();)
                 {
-                    path = (String) j.next();
+                    String path = (String) j.next();
                     if (path.startsWith(JAR_PREFIX + "file"))
                     {
                         // A local jar resource URL path is a bit more
                         // complicated, but we can translate it as well.
-                        ind = path.indexOf("!/");
+                        int ind = path.indexOf("!/");
                         if (ind >= 0)
                         {
                             entry = path.substring(ind);
@@ -570,38 +642,50 @@ public class TurbineVelocityService
                         path = getRealPath(path);
                     }
                     // Put the translated paths back to the configuration.
-                    getConfiguration().addProperty(key,path);
+                    velocityConf.addProperty(key,path);
                 }
             }
-        }
-
-        try
-        {
-            velocityEngine.setExtendedProperties(ConfigurationConverter
-                    .getExtendedProperties(getConfiguration()));
-
-            velocityEngine.init();
-        }
-        catch(Exception e)
-        {
-            // This will be caught and rethrown by the init() method.
-            // Oh well, that will protect us from RuntimeException folk showing
-            // up somewhere above this try/catch
-            throw new InitializationException(
-                "Failed to set up TurbineVelocityService", e);
         }
     }
 
     /**
-     * Find out if a given template exists. Velocity
-     * will do its own searching to determine whether
-     * a template exists or not.
-     *
-     * @param String template to search for
-     * @return boolean
+     * Avalon component lifecycle method
      */
-    public boolean templateExists(String template)
+    public void initialize()
+        throws InitializationException
     {
-        return velocityEngine.templateExists(template);
+        try
+        {
+            velocityEngine = new VelocityEngine();
+            
+            // clear the property to prepare for new value, 
+            //is this needed?
+            Iterator i = velocityConf.getKeys();
+            while (i.hasNext()) 
+            {            
+                velocityEngine.clearProperty((String)i.next());
+            }
+
+            velocityEngine.setExtendedProperties(ConfigurationConverter
+                    .getExtendedProperties(velocityConf));
+            velocityEngine.init();
+            velocityConf = null;
+            setInit(true);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new InitializationException(
+                "Failed to initialize TurbineVelocityService", e);
+        }
+    }
+
+    /** 
+     * The name used to specify this component in TurbineResources.properties 
+     * @deprecated part of the pre-avalon compatibility layer
+     */
+    protected String getName()
+    {
+        return "VelocityService";
     }
 }

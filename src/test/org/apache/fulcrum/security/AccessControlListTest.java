@@ -77,6 +77,9 @@ import org.apache.fulcrum.security.impl.TurbineAccessControlList;
 
 import org.apache.fulcrum.security.impl.db.DBSecurityService;
 
+import org.apache.fulcrum.FulcrumContainer;
+import org.apache.avalon.framework.context.DefaultContext;
+
 public class AccessControlListTest
     extends TestCase
 {
@@ -103,28 +106,25 @@ public class AccessControlListTest
     public void doit()
         throws Exception
     {
-        ServiceManager serviceManager = TurbineServices.getInstance();
-        serviceManager.setApplicationRoot(".");
-
         Configuration cfg = new BaseConfiguration();
-
-        cfg.setProperty(PREFIX + "classname", 
-                        DBSecurityService.class.getName());
-
         cfg.setProperty(PREFIX + "acl.class", 
                         TurbineAccessControlList.class.getName());
 
         // We must run init! 
         cfg.setProperty(PREFIX+"earlyInit", "true");
 
-        /* Ugh */
-
-        cfg.setProperty("services." + FactoryService.SERVICE_NAME + ".classname",
-                        TurbineFactoryService.class.getName());
-
+        ServiceManager serviceManager = TurbineServices.getInstance();
+        serviceManager.setApplicationRoot(".");
         serviceManager.setConfiguration(cfg);
-
         serviceManager.init();
+
+        FulcrumContainer fulcrum = new FulcrumContainer();
+        DefaultContext ctx = new DefaultContext();
+        ctx.put(fulcrum.APP_ROOT, ".");
+        ctx.put(fulcrum.CONF_XML, 
+            "<fulcrum-services><factory/><security class=\"org.apache.fulcrum.security.impl.db.DBSecurityService\"/></fulcrum-services>");
+        fulcrum.contextualize(ctx);
+        fulcrum.initialize();
 
         Class aclClass = TurbineSecurity.getService().getAclClass();
 

@@ -78,7 +78,7 @@ public interface TemplateEngineService
      * Return the configuration of the template engine in
      * the form of a Hashtable.
      */
-    public Hashtable getTemplateEngineServiceConfiguration();
+    //public Hashtable getTemplateEngineServiceConfiguration();
 
     /**
      * Initializes file extension associations and registers with the
@@ -87,7 +87,7 @@ public interface TemplateEngineService
      * @param defaultExt The default file extension association to use
      *                   in case of properties file misconfiguration.
      */
-    public void registerConfiguration(String defaultExt);
+    //public void registerConfiguration(String defaultExt);
 
     /**
      * Supplies the file extension to key this engine in {@link

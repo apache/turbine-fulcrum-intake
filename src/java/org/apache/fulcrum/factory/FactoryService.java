@@ -55,7 +55,7 @@ package org.apache.fulcrum.factory;
  */
 
 import org.apache.fulcrum.ServiceException;
-import org.apache.fulcrum.Service;
+import org.apache.avalon.framework.component.Component;
 
 /**
  * The Factory Service instantiates objects using either default
@@ -66,12 +66,18 @@ import org.apache.fulcrum.Service;
  * @author <a href="mailto:ilkka.priha@simsoft.fi">Ilkka Priha</a>
  * @version $Id$
  */
-public interface FactoryService extends Service
+public interface FactoryService
+    extends Component
 {
     /**
-     * The key under which this service is stored in TurbineServices.
+     * The key under which this component is known by an avalon container.
      */
-    public static final String SERVICE_NAME = "FactoryService";
+    String ROLE = FactoryService.class.getName();
+
+    /**
+     * The key under which this component is stored in TurbineServices.
+     */
+    public static final String SERVICE_NAME = ROLE;
 
     /**
      * Gets an instance of a named class.

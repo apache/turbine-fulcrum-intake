@@ -152,6 +152,7 @@ public class DBSecurityService
     public AccessControlList getACL( User user )
         throws DataBackendException, UnknownEntityException
     {
+System.out.println("getting ACL for " + user.getUserName());
         if (!TurbineSecurity.accountExists(user))
         {
             throw new UnknownEntityException("The account '" +
@@ -167,6 +168,7 @@ public class DBSecurityService
 
             // construct the snapshot:
 
+System.out.println("Total groups= " + getAllGroups().size());
             // foreach group in the system
             Iterator groupsIterator = getAllGroups().elements();
             while(groupsIterator.hasNext())
@@ -191,6 +193,9 @@ public class DBSecurityService
                 // put the Set into permissions(group)
                 permissions.put(group, groupPermissions);
             }
+
+System.out.println("permissions: " + permissions.size());
+
             return getAclInstance(roles, permissions);
         }
         catch(Exception e)

@@ -60,9 +60,12 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Hashtable;
 import org.apache.fulcrum.ServiceException;
-import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
 import org.apache.fulcrum.template.TemplateContext;
+import org.apache.fulcrum.HasApplicationRoot;
+
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.thread.ThreadSafe;
 
 /**
  * This service provides a method for mapping templates to their
@@ -105,8 +108,8 @@ import org.apache.fulcrum.template.TemplateContext;
  * @version $Id$
  */
 public class TurbineTemplateService
-    extends BaseService
-    implements TemplateService
+    extends HasApplicationRoot
+    implements TemplateService, Initializable, ThreadSafe
 {
     /**
      * The default file extension used as a registry key when a
@@ -131,17 +134,6 @@ public class TurbineTemplateService
 
     public TurbineTemplateService()
     {
-    }
-
-    /**
-     * Called the first time the Service is used.
-     *
-     * @exception InitializationException.
-     */
-    public void init()
-        throws InitializationException
-    {
-        setInit(true);
     }
 
     /**
@@ -278,5 +270,25 @@ public class TurbineTemplateService
     public TemplateContext getTemplateContext()
     {
         return new DefaultTemplateContext();
+    }
+
+    // ---------------- Avalon Lifecycle Methods ---------------------
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void initialize()
+        throws InitializationException
+    {
+        setInit(true);
+    }
+
+    /** 
+     * The name used to specify this component in TurbineResources.properties 
+     * @deprecated part of the pre-avalon compatibility layer
+     */
+    protected String getName()
+    {
+        return "TemplateService";
     }
 }

@@ -58,7 +58,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.fulcrum.Service;
+import org.apache.avalon.framework.component.Component;
 
 /**
  * <p>Provides localization functionality using the interface provided
@@ -77,36 +77,34 @@ import org.apache.fulcrum.Service;
  * @version $Id$
  */
 public interface LocalizationService
-    extends Service
+    extends Component
 {
-    /**
-     * The name of this service.
-     */
-    public static final String SERVICE_NAME = "LocalizationService";
+    String ROLE = LocalizationService.class.getName();
+    String SERVICE_NAME = ROLE;
 
     /**
      * A constant for the HTTP <code>Accept-Language</code> header.
      */
-    public static final String ACCEPT_LANGUAGE = "Accept-Language";
+    String ACCEPT_LANGUAGE = "Accept-Language";
 
     /**
      * Retrieves the default language (as specified in the config
      * file).
      */
-    public String getDefaultLanguage();
+    String getDefaultLanguage();
 
     /**
      * Retrieves the default country (as specified in the config
      * file).
      */
-    public String getDefaultCountry();
+    String getDefaultCountry();
 
     /**
      * Retrieves the name of the default bundle (as specified in the
      * config file), or the first in the list if there are more than
      * one.
      */
-    public String getDefaultBundleName();
+    String getDefaultBundleName();
 
     /**
      * Retrieves the list of names of bundles to search by default for
@@ -115,14 +113,14 @@ public interface LocalizationService
      *
      * @return The list of configured bundle names.
      */
-    public String[] getBundleNames();
+    String[] getBundleNames();
 
     /**
      * Convenience method to get the default <code>ResourceBundle</code>.
      *
      * @return A localized <code>ResourceBundle</code>.
      */
-    public ResourceBundle getBundle();
+    ResourceBundle getBundle();
 
     /**
      * Returns a ResourceBundle given the bundle name and the default
@@ -131,7 +129,7 @@ public interface LocalizationService
      * @param bundleName Name of bundle.
      * @return A localized ResourceBundle.
      */
-    public ResourceBundle getBundle(String bundleName);
+    ResourceBundle getBundle(String bundleName);
 
     /**
      * Convenience method to get a ResourceBundle based on name and
@@ -141,7 +139,7 @@ public interface LocalizationService
      * @param languageHeader A String with the language header.
      * @return A localized ResourceBundle.
      */
-    public ResourceBundle getBundle(String bundleName, String languageHeader);
+    ResourceBundle getBundle(String bundleName, String languageHeader);
 
     /**
      * Convenience method to get a ResourceBundle based on HTTP
@@ -151,7 +149,7 @@ public interface LocalizationService
      * <code>Accept-Language</code> of.
      * @return A localized ResourceBundle.
      */
-    public ResourceBundle getBundle(HttpServletRequest req);
+    ResourceBundle getBundle(HttpServletRequest req);
 
     /**
      * Convenience method to get a <code>ResourceBundle</code> based
@@ -163,7 +161,7 @@ public interface LocalizationService
      * <code>Accept-Language</code> of.
      * @return A localized ResourceBundle.
      */
-    public ResourceBundle getBundle(String bundleName, HttpServletRequest req);
+    ResourceBundle getBundle(String bundleName, HttpServletRequest req);
 
     /**
      * Convenience method to get a ResourceBundle based on name and
@@ -173,7 +171,7 @@ public interface LocalizationService
      * @param locale A Locale.
      * @return A localized ResourceBundle.
      */
-    public ResourceBundle getBundle(String bundleName, Locale locale);
+    ResourceBundle getBundle(String bundleName, Locale locale);
 
     /**
      * Attempts to pull the <code>Accept-Language</code> header out of
@@ -185,7 +183,7 @@ public interface LocalizationService
      * <code>Accept-Language</code> of.
      * @return The parsed locale.
      */
-    public Locale getLocale(HttpServletRequest req);
+    Locale getLocale(HttpServletRequest req);
 
     /**
      * Parses the <code>Accept-Language</code> header and attempts to
@@ -197,7 +195,7 @@ public interface LocalizationService
      * @return The parsed locale, or a locale corresponding to the
      * language and country defaults.
      */
-    public Locale getLocale(String languageHeader);
+    Locale getLocale(String languageHeader);
 
     /**
      * Tries very hard to return a value, looking first in the
@@ -209,14 +207,14 @@ public interface LocalizationService
      * @param key Name of the text to retrieve.
      * @return Localized text.
      */
-    public String getString(String bundleName, Locale locale, String key);
+    String getString(String bundleName, Locale locale, String key);
 
     /**
      * This method sets the name of the defaultBundle.
      *
      * @param defaultBundle Name of default bundle.
      */
-    public void setBundle(String defaultBundle);
+    void setBundle(String defaultBundle);
 
     /**
      * Formats a localized value using the provided object.
@@ -228,7 +226,7 @@ public interface LocalizationService
      * @return Formatted localized text.
      * @see #format(String, Locale, String, Object[])
      */
-    public String format(String bundleName, Locale locale,
+    String format(String bundleName, Locale locale,
                          String key, Object arg1);
 
     /**
@@ -242,7 +240,7 @@ public interface LocalizationService
      * @return Formatted localized text.
      * @see #format(String, Locale, String, Object[])
      */
-    public String format(String bundleName, Locale locale,
+    String format(String bundleName, Locale locale,
                          String key, Object arg1, Object arg2);
 
     /**
@@ -255,6 +253,6 @@ public interface LocalizationService
      *             formatting the localized text.
      * @return Formatted localized text.
      */
-    public String format(String bundleName, Locale locale,
+    String format(String bundleName, Locale locale,
                          String key, Object[] args);
 }

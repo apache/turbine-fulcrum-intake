@@ -54,9 +54,8 @@ package org.apache.fulcrum.jsp;
  * <http://www.apache.org/>.
  */
 
-import org.apache.fulcrum.Service;
-//import org.apache.turbine.RunData;
 import org.apache.fulcrum.ServiceException;
+import org.apache.avalon.framework.component.Component;
 
 /**
  * Implementations of the JspService interface.
@@ -64,10 +63,11 @@ import org.apache.fulcrum.ServiceException;
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  */
 public interface JspService
-    extends Service
+    extends Component
 {
-    /** The name used to specify this service in TurbineResources.properties */
-    public static final String SERVICE_NAME = "JspService";
+    String ROLE = JspService.class.getName();
+    String SERVICE_NAME = ROLE;
+
     /** The key used to store an instance of RunData in the request */
     public static final String RUNDATA = "rundata";
     /** The key used to store an instance of JspLink in the request */

@@ -81,33 +81,20 @@ public class TurbineUserPeer
 
     public static Class userClass = null;
 
+    public static void setUserClass(Class userClz)
+    {
+        userClass = userClz;
+    }
+
     /**
      * The class that the Peer will make instances of.
      * If the BO is abstract then you must implement this method
      * in the BO.
      *
-     * !! This is duplicated. This method is available in
-     * the DBSecurityService???
      */
     public static Class getOMClass()
         throws TorqueException
     {
-        if ( userClass == null )
-        {
-            String className = TurbineSecurity.getService()
-                .getConfiguration().getString("user.class",
-                    "org.apache.fulcrum.security.impl.db.entity.TurbineUser");
-
-            try
-            {
-                userClass = Class.forName(className);
-            }
-            catch (Exception e)
-            {
-                throw new TorqueException(e);
-            }
-        }
-
         return userClass;
     }
 

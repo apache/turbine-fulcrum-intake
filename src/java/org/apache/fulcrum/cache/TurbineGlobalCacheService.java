@@ -61,7 +61,14 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 import org.apache.fulcrum.InitializationException;
-import org.apache.fulcrum.BaseService;
+import org.apache.fulcrum.BaseFulcrumComponent;
+
+import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.thread.ThreadSafe;
 
 /**
  * This Service functions as a Global Cache.  A global cache is a good
@@ -79,59 +86,31 @@ import org.apache.fulcrum.BaseService;
  * @version $Id$
  */
 public class TurbineGlobalCacheService
-    extends BaseService
-    implements GlobalCacheService,
-               Runnable
+    extends BaseFulcrumComponent
+    implements GlobalCacheService, Runnable, Configurable, Initializable, 
+               Disposable, ThreadSafe 
 {
-    /** The cache. **/
-    protected Hashtable cache = null;
-
     /**
      * Default cacheCheckFrequency value.
      */
     private final static long DEFAULT_CACHE_CHECK_FREQUENCY = 5000;
+
+    /** The cache. **/
+    protected Hashtable cache = null;
 
     /**
      * cacheCheckFrequency (default - 5 seconds)
      */
     private long cacheCheckFrequency;
 
-    /**
-     * Constructor.
-     */
+    /** thread for removing stale items from the cache */
+    private Thread housekeeping;
+    /** flag to stop the housekeeping thread when the component is disposed. */
+    private boolean continueThread;
+    private boolean disposed;
+
     public TurbineGlobalCacheService()
     {
-    }
-
-    /**
-     * Called the first time the Service is used.
-     */
-    public void init()
-        throws InitializationException
-    {
-        cacheCheckFrequency = getConfiguration().getLong(
-            "cacheCheckFrequency", DEFAULT_CACHE_CHECK_FREQUENCY);
-
-        try
-        {
-            cache = new Hashtable(20);
-
-            // Start housekeeping thread.
-            Thread housekeeping = new Thread(this);
-            // Indicate that this is a system thread. JVM will quit only when there
-            // are no more active user threads. Settings threads spawned internally
-            // by Turbine as daemons allows commandline applications using Turbine
-            // to terminate in an orderly manner.
-            housekeeping.setDaemon(true);
-            housekeeping.start();
-
-            setInit(true);
-        }
-        catch (Exception e)
-        {
-            throw new InitializationException(
-                "TurbineGlobalCacheService failed to initialize", e);
-        }
     }
 
     /**
@@ -206,19 +185,18 @@ public class TurbineGlobalCacheService
      */
     public void run()
     {
-        while(true)
+        while(continueThread)
         {
             // Sleep for amount of time set in cacheCheckFrequency -
             // default = 5 seconds.
             try
             {
+                clearCache();
                 Thread.sleep(cacheCheckFrequency);
             }
             catch(InterruptedException exc)
             {
             }
-
-            clearCache();
         }
     }
 
@@ -291,5 +269,71 @@ public class TurbineGlobalCacheService
         //
         int objectsize = baos.toByteArray().length - 4;
         return objectsize;
+    }
+
+
+    // ---------------- Avalon Lifecycle Methods ---------------------
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void configure(Configuration conf)
+        throws ConfigurationException
+    {
+        if (useOldConfiguration(conf))
+        {
+            cacheCheckFrequency = getConfiguration().getLong(
+                "cacheCheckFrequency", DEFAULT_CACHE_CHECK_FREQUENCY);
+        }
+        else
+        {
+            cacheCheckFrequency = conf.getAttributeAsLong(
+                "cacheCheckFrequency", DEFAULT_CACHE_CHECK_FREQUENCY);
+        }
+    }
+
+    public void initialize()
+        throws InitializationException
+    {
+        try
+        {
+            cache = new Hashtable(20);
+
+            // Start housekeeping thread.
+            continueThread = true;
+            housekeeping = new Thread(this);
+            // Indicate that this is a system thread. JVM will quit only when 
+            // there are no more active user threads. Settings threads spawned
+            // internally by Turbine as daemons allows commandline applications
+            // using Turbine to terminate in an orderly manner.
+            housekeeping.setDaemon(true);
+            housekeeping.start();
+
+            setInit(true);
+        }
+        catch (Exception e)
+        {
+            throw new InitializationException(
+                "TurbineGlobalCacheService failed to initialize", e);
+        }
+    }
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void dispose()
+    {
+        continueThread = false;
+        housekeeping.interrupt();
+        disposed = true;
+    }
+
+    /**
+     * The name used to specify this component in TurbineResources.properties 
+     * @deprecated part of the pre-avalon compatibility layer
+     */
+    protected String getName()
+    {
+        return "GlobalCacheService";
     }
 }

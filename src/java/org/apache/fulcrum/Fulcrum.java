@@ -106,7 +106,7 @@ public class Fulcrum
      *
      * @param name The name of the service to retrieve.
      */
-    public static Service getService(String name)
+    public static Object getService(String name)
     {
         return ts.getService(name);
     }

@@ -58,6 +58,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.util.List;
+import java.util.ArrayList;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.RequestDispatcher;
@@ -69,6 +71,9 @@ import org.apache.fulcrum.InitializationException;
 import org.apache.fulcrum.template.BaseTemplateEngineService;
 import org.apache.fulcrum.template.TurbineTemplate;
 import org.apache.fulcrum.template.TemplateContext;
+
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
 
 /**
  * This is a Service that can process JSP templates from within a Turbine
@@ -82,6 +87,9 @@ public class TurbineJspService
     extends BaseTemplateEngineService
     implements JspService
 {
+    /** paths as given in the configuration file */
+    private String[] rawPaths;
+
     /** The base path[s] prepended to filenames given in arguments */
     private String[] templatePaths;
 
@@ -90,25 +98,6 @@ public class TurbineJspService
 
     /** The buffer size for the output stream. */
     private int bufferSize;
-
-    /**
-     * Performs early initialization of this Turbine service.
-     */
-    public void init()
-        throws InitializationException
-    {
-        try
-        {
-            initJsp();
-            registerConfiguration("jsp");
-            setInit(true);
-        }
-        catch (Exception e)
-        {
-            throw new InitializationException(
-                "TurbineJspService failed to initialize", e);
-        }
-    }
 
     /**
      * Adds some convenience objects to the request.  For example an instance
@@ -247,42 +236,6 @@ public class TurbineJspService
         // TODO: Implement me!
     }
 
-    /**
-     * This method sets up the template cache.
-     */
-    private void initJsp() throws Exception
-    {
-        /*
-         * Use the turbine template service to translate
-         * the template paths.
-         */
-        templatePaths = TurbineTemplate.translateTemplatePaths(
-        getConfiguration().getStringArray("templates"));
-
-        /*
-         * Set relative paths from config.
-         * Needed for javax.servlet.RequestDispatcher
-         */
-        relativeTemplatePaths = getConfiguration().getStringArray("templates");
-
-        /*
-         * Make sure that the relative paths begin with /
-         */
-        for (int i = 0; i < relativeTemplatePaths.length; i++)
-        {
-            if (!relativeTemplatePaths[i].startsWith("/"))
-            {
-                relativeTemplatePaths[i] = "/" + relativeTemplatePaths[i];
-            }
-        }
-
-        bufferSize = getConfiguration().getInt("buffer.size", 8192);
-
-        /*
-         * Register with the template service.
-         */
-        registerConfiguration("jsp");
-    }
 
     /**
      * Determine whether a given template exists. This service
@@ -357,4 +310,70 @@ public class TurbineJspService
         // do nothing
     }
     */
+
+    // ---------------- Avalon Lifecycle Methods ---------------------
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void configure(Configuration conf)
+        throws ConfigurationException
+    {
+        if (conf.getAttributeAsBoolean(USE_PROPERTY_FILE, false)) 
+        {
+            rawPaths = getConfiguration().getStringArray("templates");
+            bufferSize = getConfiguration().getInt("buffer.size", 8192);
+        }
+        else
+        {
+            List pathList = new ArrayList();
+            final Configuration[] paths = conf.getChildren("template-path");
+            if (paths != null)
+            {
+                for (int i=0; i < paths.length; i++)
+                {
+                    pathList.add(paths[i].getValue());
+                }
+            }
+            rawPaths = (String[])pathList.toArray(new String[pathList.size()]);
+
+            bufferSize = conf.getAttributeAsInteger("buffer-size", 8192); 
+        }        
+
+        // Register with the template service.
+        registerConfiguration(conf, "jsp");
+
+        // Use the turbine template service to translate the template paths.
+        templatePaths = TurbineTemplate.translateTemplatePaths(rawPaths);
+        
+        // Set relative paths from config.
+        // Needed for javax.servlet.RequestDispatcher
+        relativeTemplatePaths = rawPaths;
+        // Make sure that the relative paths begin with /
+        for (int i = 0; i < relativeTemplatePaths.length; i++)
+        {
+            if (!relativeTemplatePaths[i].startsWith("/"))
+            {
+                relativeTemplatePaths[i] = "/" + relativeTemplatePaths[i];
+            }
+        }
+    }
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void initialize()
+        throws InitializationException
+    {
+        setInit(true);
+    }
+
+    /** 
+     * The name used to specify this component in TurbineResources.properties 
+     * @deprecated part of the pre-avalon compatibility layer
+     */
+    protected String getName()
+    {
+        return "JspService";
+    }
 }

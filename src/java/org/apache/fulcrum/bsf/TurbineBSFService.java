@@ -61,17 +61,35 @@ import java.io.FileInputStream;
 import java.io.StringWriter;
 import com.ibm.bsf.BSFManager;
 import com.ibm.bsf.BSFException;
-import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
+import org.apache.fulcrum.HasApplicationRoot;
+
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.thread.ThreadSafe;
 
 /**
  *
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  */
 public class TurbineBSFService
-    extends BaseService
-    implements BSFService
+    extends HasApplicationRoot
+    implements BSFService, Configurable, Initializable, ThreadSafe
 {
+    /**
+     * Tag for scripts directory in the service
+     * configuration.
+     */
+    protected static final String SCRIPTS_DIRECTORY = "scriptsDirectory";
+
+    /**
+     * Tag for default extension in the service
+     * configuration.
+     */
+    protected static final String DEFAULT_EXTENSION = "defaultExtension";
+
     /**
      * BSF manager that is responsible for executing scripts.
      * This may eventually be a pool of managers and
@@ -85,46 +103,14 @@ public class TurbineBSFService
     protected String scriptsDirectory;
 
     /**
-     * Tag for scripts directory in the service
-     * configuration.
-     */
-    protected static final String SCRIPTS_DIRECTORY = "scriptsDirectory";
-
-    /**
      * Default extension for scripts if an extension is not
      * provided.
      */
     protected String defaultExtension;
 
-    /**
-     * Tag for default extension in the service
-     * configuration.
-     */
-    protected static final String DEFAULT_EXTENSION = "defaultExtension";
 
-    /**
-     * Initialize the TurbineBSF Service.
-     */
-    public void init()
-        throws InitializationException
+    public TurbineBSFService()
     {
-        scriptsDirectory = getConfiguration().getString(SCRIPTS_DIRECTORY);
-
-        if (scriptsDirectory == null)
-        {
-            throw new InitializationException(
-                "You must provide a scripts directory in " +
-                    "order to executes scripts!");
-        }
-
-        defaultExtension = getConfiguration().getString(DEFAULT_EXTENSION);
-        initBSFManagers();
-        setInit(true);
-    }
-
-    private void initBSFManagers()
-    {
-        manager = new BSFManager();
     }
 
     /**
@@ -142,7 +128,7 @@ public class TurbineBSFService
 
         script = getRealPath(scriptsDirectory + "/" + script);
 
-        getCategory().debug("[BSFService] Script to execute: " + script);
+        getLogger().debug("[BSFService] Script to execute: " + script);
 
         try
         {
@@ -188,5 +174,59 @@ public class TurbineBSFService
         }
 
         return sw.toString();
+    }
+
+    // ---------------- Avalon Lifecycle Methods ---------------------
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void configure(Configuration conf)
+        throws ConfigurationException
+    {
+        if (useOldConfiguration(conf))
+        {
+            scriptsDirectory = getConfiguration().getString(SCRIPTS_DIRECTORY);
+
+            if (scriptsDirectory == null)
+            {
+                throw new ConfigurationException(
+                    "You must provide a scripts directory in " +
+                    "order to executes scripts!");
+            }
+            
+            defaultExtension = getConfiguration().getString(DEFAULT_EXTENSION);
+        }
+        else
+        {
+            scriptsDirectory = conf.getAttribute(SCRIPTS_DIRECTORY, null);
+            if (scriptsDirectory == null)
+            {
+                throw new ConfigurationException(
+                    "You must provide a scripts directory in " +
+                    "order to executes scripts!");
+            }
+
+            defaultExtension = conf.getAttribute(DEFAULT_EXTENSION, "bsf");
+        }
+    }
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void initialize()
+    {
+        manager = new BSFManager();
+        setInit(true);
+    }
+
+
+    /**
+     * The name used to specify this component in TurbineResources.properties 
+     * @deprecated part of the pre-avalon compatibility layer
+     */
+    protected String getName()
+    {
+        return "BSFService";
     }
 }

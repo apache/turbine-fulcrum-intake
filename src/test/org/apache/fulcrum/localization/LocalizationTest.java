@@ -68,6 +68,9 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.apache.fulcrum.FulcrumContainer;
+import org.apache.avalon.framework.context.DefaultContext;
+
 /**
  * Tests the API of the
  * {@link org.apache.fulcrum.localization.LocalizationService}.
@@ -79,8 +82,7 @@ import junit.framework.TestSuite;
 public class LocalizationTest
     extends TestCase
 {
-    private static final String PREFIX = "services." +
-        LocalizationService.SERVICE_NAME + '.';
+    private static final String PREFIX = "services.LocalizationService.";
 
     public LocalizationTest(String name)
     {
@@ -96,20 +98,27 @@ public class LocalizationTest
     {
         try
         {
-            ServiceManager serviceManager = TurbineServices.getInstance();
-            serviceManager.setApplicationRoot(".");
-
             Configuration cfg = new BaseConfiguration();
-            cfg.setProperty(PREFIX + "classname",
-                            TurbineLocalizationService.class.getName());
+            //cfg.setProperty(PREFIX + "classname",
+            //                TurbineLocalizationService.class.getName());
             cfg.setProperty(PREFIX + "locale.default.bundles",
                             "org.apache.fulcrum.localization.FooBundle,org.apache.fulcrum.localization.MissingBundle,org.apache.fulcrum.localization.BarBundle");
             cfg.setProperty(PREFIX + "locale.default.language", "en");
             cfg.setProperty(PREFIX + "locale.default.country", "US");
 
+            ServiceManager serviceManager = TurbineServices.getInstance();
+            serviceManager.setApplicationRoot(".");
             serviceManager.setConfiguration(cfg);
-
             serviceManager.init();
+
+            FulcrumContainer fulcrum = new FulcrumContainer();
+            DefaultContext ctx = new DefaultContext();
+            ctx.put(fulcrum.APP_ROOT, ".");
+            ctx.put(fulcrum.CONF_XML, 
+                    "<fulcrum-services><localization use-property-file=\"true\"/></fulcrum-services>");
+            ctx.put(fulcrum.PROP_CONF, cfg);
+            fulcrum.contextualize(ctx);
+            fulcrum.initialize();
 
             // Test retrieval of text using multiple default bundles
             String s = Localization.getString(null, null, "key1");

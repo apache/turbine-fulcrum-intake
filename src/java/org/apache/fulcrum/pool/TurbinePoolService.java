@@ -55,15 +55,27 @@ package org.apache.fulcrum.pool;
  */
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.lang.reflect.Method;
 import org.apache.fulcrum.ServiceException;
-import org.apache.fulcrum.TurbineServices;
-import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
 import org.apache.fulcrum.factory.FactoryService;
 import org.apache.fulcrum.factory.TurbineFactoryService;
+
+import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.component.ComponentManager;
+import org.apache.avalon.framework.component.Component;
+import org.apache.avalon.framework.component.Composable;
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+//import org.apache.avalon.framework.logger.AbstractLogEnabled;
+//import org.apache.avalon.framework.thread.ThreadSafe;
+//import org.apache.avalon.framework.;
+
 
 /**
  * The Pool Service extends the Factory Service by adding support
@@ -81,12 +93,12 @@ import org.apache.fulcrum.factory.TurbineFactoryService;
  */
 public class TurbinePoolService
     extends TurbineFactoryService
-    implements PoolService
+    implements PoolService, Composable, Disposable
 {
     /**
      * The property specifying the pool capacity.
      */
-    public static final String POOL_CAPACITY = "pool.capacity";
+    public static final String POOL_CAPACITY = "capacity";
 
     /**
      * An inner class for class specific pools.
@@ -337,42 +349,16 @@ public class TurbinePoolService
      */
     private HashMap poolRepository = new HashMap();
 
+    private Map capacityMap;
+    private FactoryService factoryService;
+    private ComponentManager manager;
+    private boolean disposed;
+
     /**
      * Constructs a Pool Service.
      */
     public TurbinePoolService()
     {
-    }
-
-    /**
-     * Initializes the service by setting the pool capacity.
-     *
-     * @param config initialization configuration.
-     * @throws InitializationException if initialization fails.
-     */
-    public void init()
-        throws InitializationException
-    {
-        if (getConfiguration() != null)
-        {
-            try
-            {
-                int capacity =
-                    getConfiguration().getInt(POOL_CAPACITY,DEFAULT_POOL_CAPACITY);
-
-                if (capacity <= 0)
-                {
-                    throw new IllegalArgumentException("Capacity must be >0");
-                }
-                poolCapacity = capacity;
-            }
-            catch (Exception x)
-            {
-                throw new InitializationException(
-                    "Failed to initialize TurbinePoolService",x);
-            }
-        }
-        setInit(true);
     }
 
     /**
@@ -556,19 +542,12 @@ public class TurbinePoolService
             /* Check class specific capacity. */
             int capacity = poolCapacity;
 
-            if (getConfiguration() != null)
+            if (capacityMap != null)
             {
-                try
+                Integer cap = (Integer)capacityMap.get(className);
+                if (cap != null) 
                 {
-                    capacity = getConfiguration().getInt(
-                        POOL_CAPACITY + '.' + className,poolCapacity);
-                    if (capacity <= 0)
-                    {
-                        capacity = poolCapacity;
-                    }
-                }
-                catch (Exception x)
-                {
+                    capacity = cap.intValue();
                 }
             }
             return capacity;
@@ -656,7 +635,121 @@ public class TurbinePoolService
      */
     private FactoryService getFactory()
     {
-        return (FactoryService) TurbineServices.
-            getInstance().getService(FactoryService.SERVICE_NAME);
+        return factoryService;
+    }
+
+
+    // ---------------- Avalon Lifecycle Methods ---------------------
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void configure(Configuration conf)
+    {
+        if (useOldConfiguration(conf))
+        {
+            int capacity = getConfiguration()
+                .getInt("pool.capacity", DEFAULT_POOL_CAPACITY);
+            if (capacity <= 0)
+            {
+                throw new IllegalArgumentException("Capacity must be >0");
+            }
+            poolCapacity = capacity;
+
+            // FIXME! class specific capacities need to be reimplemented.
+            //capacity = getConfiguration().getInt(
+            //    "pool.capacity." + className, poolCapacity);
+        }
+        else
+        {
+            final Configuration capacities = 
+                conf.getChild(POOL_CAPACITY, false);
+            if (capacities != null)
+            {
+                Configuration defaultConf = capacities.getChild("default"); 
+                int capacity =
+                    defaultConf.getValueAsInteger(DEFAULT_POOL_CAPACITY);
+                
+                if (capacity <= 0)
+                {
+                    throw new IllegalArgumentException("Capacity must be >0");
+                }
+                poolCapacity = capacity;
+                
+                Configuration[] nameVal = capacities.getChildren();
+                for (int i=0; i < nameVal.length; i++)
+                {
+                    String key = nameVal[i].getName();
+                    if (!"default".equals(key)) 
+                    {
+                        capacity= nameVal[i].getValueAsInteger(poolCapacity);
+                        if (capacity < 0) 
+                        {
+                            capacity = poolCapacity;
+                        }
+                        
+                        if (capacityMap == null) 
+                        {
+                            capacityMap = new HashMap();
+                        }
+                        capacityMap.put(key, new Integer(capacity));
+                    }                
+                }
+            }
+        }
+    }
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void compose(ComponentManager manager)
+    {
+        this.manager = manager;
+    }
+
+    /**
+     * Avalon component lifecycle method
+     * Initializes the service by loading default class loaders
+     * and customized object factories.
+     *
+     * @throws InitializationException if initialization fails.
+     */
+    public void initialize()
+        throws InitializationException
+    {
+        try 
+        {
+            factoryService = 
+                (FactoryService)manager.lookup(FactoryService.ROLE);
+            setInit(true);
+        }
+        catch (Exception e)
+        {
+            throw new InitializationException(
+                "TurbineCryptoService.init: Failed to get a Factory object",e);
+        }
+    }
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void dispose()
+    {
+        if (factoryService != null) 
+        { 
+            manager.release(factoryService); 
+        } 
+        factoryService = null;
+        manager = null;
+        disposed = true;
+    }
+
+    /**
+     * The name used to specify this component in TurbineResources.properties
+     * @deprecated part of the pre-avalon compatibility layer
+     */
+    protected String getName()
+    {
+        return "PoolService";
     }
 }

@@ -54,16 +54,23 @@ package org.apache.fulcrum.bsf;
  * <http://www.apache.org/>.
  */
 
-import org.apache.fulcrum.Service;
+import org.apache.avalon.framework.component.Component;
 
 /**
  *
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  */
 public interface BSFService
-    extends Service
+    extends Component
 {
-    public static final String SERVICE_NAME = "BSFService";
+    /** Avalon role - used to id the component within the manager */
+    String ROLE = BSFService.class.getName();
+
+    /** 
+     * Old style TurbineServices role, now equal to ROLE.
+     * @deprecated TurbineServices is deprecated in favor of avalon. 
+     */
+    String SERVICE_NAME = ROLE;
 
     /**
      * Execute a script supported by the BSF.

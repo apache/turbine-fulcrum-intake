@@ -1,9 +1,9 @@
-package org.apache.fulcrum.template;
+package org.apache.fulcrum;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,76 +54,49 @@ package org.apache.fulcrum.template;
  * <http://www.apache.org/>.
  */
 
-import java.io.OutputStream;
-import java.io.Writer;
-import org.apache.fulcrum.ServiceException;
+import java.io.File;
 
-import org.apache.avalon.framework.component.Component;
+import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.framework.context.Contextualizable;
+import org.apache.avalon.framework.context.Context;
+import org.apache.avalon.framework.context.ContextException;
 
 /**
- * This service provides a method for mapping templates to their
- * appropriate Screens or Navigations.  It also allows templates to
- * define a layout/navigations/screen modularization within the
- * template structure.  It also performs caching if turned on in the
- * properties file.
+ * This class is a generic implementation of <code>Service</code>.
  *
- * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
- * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
- * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
- * @author <a href="mailto:ilkka.priha@simsoft.fi">Ilkka Priha</a>
+ * @author <a href="mailto:jmcnally@apache.org">John McNally</a>
  * @version $Id$
  */
-public interface TemplateService
-    extends Component
+public abstract class HasApplicationRoot
+    extends BaseFulcrumComponent 
 {
-    String ROLE = TemplateService.class.getName();
-    String SERVICE_NAME = ROLE;
+    private String applicationRoot;
+
+    public void contextualize(Context context)
+        throws ContextException
+    {
+        super.contextualize(context);
+        if (context != null) 
+        {
+            applicationRoot = (String) context.get(FulcrumContainer.APP_ROOT);
+        }
+    }
 
     /**
-     * The key to the template context.
+     * @see org.apache.fulcrum.ServiceBroker#getRealPath(String)
      */
-    public static final String CONTEXT = "TEMPLATE_CONTEXT";
-
-    /**
-     * Translates the supplied template paths into their Turbine-canonical
-     * equivalent (probably absolute paths).
-     *
-     * @param templatePaths An array of template paths.
-     * @return An array of translated template paths.
-     */
-    public String[] translateTemplatePaths(String[] templatePaths);
-
-    /**
-     * Delegates to the appropriate {@link
-     * org.apache.fulcrum.template.TemplateEngineService} to
-     * check the existance of the specified template.
-     *
-     * @param template      The template to check for the existance of.
-     * @param templatePaths The paths to check for the template.
-     */
-    public boolean templateExists(String template,
-                                  String[] templatePaths);
-
-    /**
-     * Registers the provided template engine for use by the
-     * <code>TemplateService</code>.
-     *
-     * @param service The <code>TemplateEngineService</code> to register.
-     */
-    public void registerTemplateEngineService(TemplateEngineService service);
-
-    public String handleRequest(TemplateContext context, String template)
-        throws ServiceException;
-
-    public void handleRequest(TemplateContext context, String template,
-                              OutputStream outputStream)
-        throws ServiceException;
-
-    public void handleRequest(TemplateContext context, String template,
-                              Writer writer)
-        throws ServiceException;
-
-    public TemplateContext getTemplateContext();
-
-    public boolean templateExists(String template);
+    public String getRealPath(String path)
+    {
+        String absolutePath = null;
+        if (applicationRoot == null) 
+        {
+            absolutePath = new File(path).getAbsolutePath();
+        }
+        else 
+        {
+            absolutePath = new File(applicationRoot, path).getAbsolutePath();
+        }
+        
+        return absolutePath;
+    }
 }

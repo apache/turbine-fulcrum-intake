@@ -57,7 +57,7 @@ package org.apache.fulcrum.mimetype;
 import java.io.File;
 import java.util.Locale;
 
-import org.apache.fulcrum.Service;
+import org.apache.avalon.framework.component.Component;
 import org.apache.fulcrum.mimetype.util.MimeType;
 
 /**
@@ -70,12 +70,17 @@ import org.apache.fulcrum.mimetype.util.MimeType;
  * @author <a href="mailto:ilkka.priha@simsoft.fi">Ilkka Priha</a>
  * @version $Id$
  */
-public interface MimeTypeService extends Service
+public interface MimeTypeService 
+    extends Component
 {
-    /**
-     * The name of the service.
+    /** Avalon role - used to id the component within the manager */
+    String ROLE = MimeTypeService.class.getName();
+
+    /** 
+     * Old style TurbineServices role, now equal to ROLE.
+     * @deprecated TurbineServices is deprecated in favor of avalon. 
      */
-    public static final String SERVICE_NAME = "MimeTypeService";
+    String SERVICE_NAME = ROLE;
 
     /**
      * Sets a MIME content type mapping to extensions to the map.

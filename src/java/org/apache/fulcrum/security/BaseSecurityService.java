@@ -56,9 +56,9 @@ package org.apache.fulcrum.security;
 
 import java.util.Map;
 
-import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
 import org.apache.fulcrum.TurbineServices;
+import org.apache.fulcrum.BaseFulcrumComponent;
 
 import org.apache.fulcrum.factory.FactoryService;
 
@@ -76,12 +76,23 @@ import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
+import org.apache.fulcrum.security.impl.db.entity.TurbineUserPeer;
+
 import org.apache.torque.util.Criteria;
 
 // Classes needed for password encryption
 import java.security.MessageDigest;
 
 import org.apache.commons.codec.base64.Base64;
+
+import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.component.Composable;
+import org.apache.avalon.framework.component.ComponentManager;
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.thread.ThreadSafe;
 
 /**
  * This is a common subset of SecurityService implementation.
@@ -103,10 +114,16 @@ import org.apache.commons.codec.base64.Base64;
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @version $Id$
  */
+
+
 public abstract class BaseSecurityService
-    extends BaseService
-    implements SecurityService
+    extends BaseFulcrumComponent
+    implements SecurityService, Configurable, Initializable, Composable, 
+               ThreadSafe
 {
+    private boolean disposed = false; 
+    private ComponentManager manager = null; 
+
     // management of Groups/Role/Permissions
 
     /** Holds a list of all groups in the systems, for speeding up the access */
@@ -120,6 +137,14 @@ public abstract class BaseSecurityService
 
     /** The number of threads concurrently reading security information */
     private int readerCount = 0;
+
+    // temporary storage of the classnames prior to initialization
+    String userManagerClassName;
+    String userClassName;
+    String groupClassName;
+    String permissionClassName;
+    String roleClassName;
+    String aclClassName;
 
     /** The instance of UserManager the SecurityService uses */
     protected UserManager userManager = null;
@@ -190,8 +215,8 @@ public abstract class BaseSecurityService
             }
             catch (Exception e)
             {
-                getCategory().error("Unable to encrypt password");
-                getCategory().error(e);
+                getLogger().error("Unable to encrypt password");
+                getLogger().error("", e);
 
                 return null;
             }
@@ -200,101 +225,6 @@ public abstract class BaseSecurityService
         {
             return password;
         }
-    }
-
-    /**
-     * Initializes the SecurityService, locating the apropriate UserManager
-     *
-     * @throws InitializationException A Problem occured while initializing the User Manager.
-     */
-    public void init()
-        throws InitializationException
-    {
-        String userManagerClassName = getConfiguration().getString(
-            SecurityService.USER_MANAGER_KEY,
-            SecurityService.USER_MANAGER_DEFAULT);
-
-        String userClassName = getConfiguration().getString(
-            SecurityService.USER_CLASS_KEY,
-            SecurityService.USER_CLASS_DEFAULT);
-
-        String groupClassName = getConfiguration().getString(
-            SecurityService.GROUP_CLASS_KEY, 
-            SecurityService.GROUP_CLASS_DEFAULT);
-
-        String permissionClassName = getConfiguration().getString(
-            SecurityService.PERMISSION_CLASS_KEY, 
-            SecurityService.PERMISSION_CLASS_DEFAULT);
-
-        String roleClassName = getConfiguration().getString(
-            SecurityService.ROLE_CLASS_KEY, 
-            SecurityService.ROLE_CLASS_DEFAULT);
-
-        String aclClassName = getConfiguration().getString(
-            SecurityService.ACL_CLASS_KEY, 
-            SecurityService.ACL_CLASS_DEFAULT);
-
-        try
-        {
-            userClass = Class.forName(userClassName);
-            groupClass      = Class.forName(groupClassName);
-            permissionClass = Class.forName(permissionClassName);
-            roleClass       = Class.forName(roleClassName);
-            aclClass        = Class.forName(aclClassName);
-        }
-        catch (Exception e)
-        {
-            if (userClass == null)
-            {
-                throw new InitializationException(
-                      "Failed to create a Class object for User implementation", e);
-            }
-            if (groupClass == null)
-            {
-                throw new InitializationException(
-                      "Failed to create a Class object for Group implementation", e);
-            }
-            if (permissionClass == null)
-            {
-                throw new InitializationException(
-                      "Failed to create a Class object for Permission implementation", e);
-            }
-            if (roleClass == null)
-            {
-            throw new InitializationException(
-                      "Failed to create a Class object for Role implementation", e);
-            }
-            if (aclClass == null)
-            {
-                throw new InitializationException(
-                      "Failed to create a Class object for ACL implementation", e);
-            }
-        }
-
-        try
-        {
-            userManager =  (UserManager) Class.
-                forName(userManagerClassName).newInstance();
-        }
-        catch (Exception e)
-        {
-            throw new InitializationException(
-                "BaseSecurityService.init: Failed to instantiate UserManager", e);
-        }
-
-        try 
-        {
-            aclFactoryService = (FactoryService) TurbineServices.getInstance().
-                getService(FactoryService.SERVICE_NAME);
-        }
-        catch (Exception e)
-        {
-            throw new InitializationException(
-                "BaseSecurityService.init: Failed to get the Factory Service object", e);
-        }
-
-
-        setInit(true);
     }
 
     /**
@@ -872,8 +802,8 @@ public abstract class BaseSecurityService
                     }
                     catch (DataBackendException e)
                     {
-                        getCategory().error("Failed to retrieve global group object");
-                        getCategory().error(e);
+                        getLogger().error("Failed to retrieve global group object");
+                        getLogger().error("", e);
                     }
                 }
             }
@@ -994,5 +924,218 @@ public abstract class BaseSecurityService
         throws DataBackendException
     {
         return getPermissions(new Criteria());
+    }
+
+    // ---------------- Avalon Lifecycle Methods ---------------------
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void configure(Configuration conf)
+        throws ConfigurationException
+    {
+        if (useOldConfiguration(conf))
+        {
+            userManagerClassName = getConfiguration().getString(
+                SecurityService.USER_MANAGER_KEY,
+                SecurityService.USER_MANAGER_DEFAULT);
+
+            userClassName = getConfiguration().getString(
+                SecurityService.USER_CLASS_KEY,
+                SecurityService.USER_CLASS_DEFAULT);
+
+            groupClassName = getConfiguration().getString(
+                SecurityService.GROUP_CLASS_KEY, 
+                SecurityService.GROUP_CLASS_DEFAULT);
+
+            permissionClassName = getConfiguration().getString(
+                SecurityService.PERMISSION_CLASS_KEY, 
+                SecurityService.PERMISSION_CLASS_DEFAULT);
+
+            roleClassName = getConfiguration().getString(
+                SecurityService.ROLE_CLASS_KEY, 
+                SecurityService.ROLE_CLASS_DEFAULT);
+
+            aclClassName = getConfiguration().getString(
+                SecurityService.ACL_CLASS_KEY, 
+                SecurityService.ACL_CLASS_DEFAULT);
+        }
+        else
+        {
+            userManagerClassName = conf.getAttribute(
+                SecurityService.USER_MANAGER_KEY,
+                SecurityService.USER_MANAGER_DEFAULT);
+
+            userClassName = conf.getAttribute(
+                SecurityService.USER_CLASS_KEY,
+                SecurityService.USER_CLASS_DEFAULT);
+
+            groupClassName = conf.getAttribute(
+                SecurityService.GROUP_CLASS_KEY, 
+                SecurityService.GROUP_CLASS_DEFAULT);
+
+            permissionClassName = conf.getAttribute(
+                SecurityService.PERMISSION_CLASS_KEY, 
+                SecurityService.PERMISSION_CLASS_DEFAULT);
+
+            roleClassName = conf.getAttribute(
+                SecurityService.ROLE_CLASS_KEY, 
+                SecurityService.ROLE_CLASS_DEFAULT);
+
+            aclClassName = conf.getAttribute(
+                SecurityService.ACL_CLASS_KEY, 
+                SecurityService.ACL_CLASS_DEFAULT);
+        }
+    }
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void compose(ComponentManager manager)
+    {
+        this.manager = manager;
+    }
+
+    /**
+     * Avalon component lifecycle method
+     * Initializes the SecurityService, locating the apropriate UserManager
+     *
+     * @throws InitializationException A Problem occured while initializing 
+     * the User Manager.
+     */
+    public void initialize()
+        throws InitializationException
+    {        
+        if (getConfiguration() != null && userManagerClassName == null) 
+        {
+            userManagerClassName = getConfiguration().getString(
+                SecurityService.USER_MANAGER_KEY,
+                SecurityService.USER_MANAGER_DEFAULT);
+        }
+        if (getConfiguration() != null && userClassName == null) 
+        {
+            userClassName = getConfiguration().getString(
+                SecurityService.USER_CLASS_KEY,
+                SecurityService.USER_CLASS_DEFAULT);
+        }
+        if (getConfiguration() != null && groupClassName == null) 
+        {
+            groupClassName = getConfiguration().getString(
+                SecurityService.GROUP_CLASS_KEY, 
+                SecurityService.GROUP_CLASS_DEFAULT);
+        }
+        if (getConfiguration() != null && permissionClassName == null) 
+        {
+            permissionClassName = getConfiguration().getString(
+                SecurityService.PERMISSION_CLASS_KEY, 
+                SecurityService.PERMISSION_CLASS_DEFAULT);
+        }
+        if (getConfiguration() != null && roleClassName == null) 
+        {
+            roleClassName = getConfiguration().getString(
+                SecurityService.ROLE_CLASS_KEY, 
+                SecurityService.ROLE_CLASS_DEFAULT);
+        }
+        if (getConfiguration() != null && aclClassName == null) 
+        {
+            aclClassName = getConfiguration().getString(
+                SecurityService.ACL_CLASS_KEY, 
+                SecurityService.ACL_CLASS_DEFAULT);
+        }
+
+        try
+        {
+            userClass = Class.forName(userClassName);
+            groupClass      = Class.forName(groupClassName);
+            permissionClass = Class.forName(permissionClassName);
+            roleClass       = Class.forName(roleClassName);
+            aclClass        = Class.forName(aclClassName);
+        }
+        catch (Exception e)
+        {
+            if (userClass == null)
+            {
+                throw new InitializationException(
+                      "Failed to create a Class object for User implementation", e);
+            }
+            if (groupClass == null)
+            {
+                throw new InitializationException(
+                      "Failed to create a Class object for Group implementation", e);
+            }
+            if (permissionClass == null)
+            {
+                throw new InitializationException(
+                      "Failed to create a Class object for Permission implementation", e);
+            }
+            if (roleClass == null)
+            {
+            throw new InitializationException(
+                      "Failed to create a Class object for Role implementation", e);
+            }
+            if (aclClass == null)
+            {
+                throw new InitializationException(
+                      "Failed to create a Class object for ACL implementation", e);
+            }
+        }
+
+        // Let the peer know which class to create.  Why only user?
+        TurbineUserPeer.setUserClass(userClass);
+
+        try
+        {
+            userManager =  (UserManager) Class.
+                forName(userManagerClassName).newInstance();
+        }
+        catch (Exception e)
+        {
+            throw new InitializationException(
+                "BaseSecurityService.init: Failed to instantiate UserManager", e);
+        }
+
+        try 
+        {
+            aclFactoryService = 
+                (FactoryService)manager.lookup(FactoryService.ROLE);
+        }
+        catch (Exception e)
+        {
+            throw new InitializationException(
+                "BaseSecurityService.init: Failed to get the Factory Service object", e);
+        }
+
+        userManagerClassName = null;
+        userClassName = null;
+        groupClassName = null;
+        permissionClassName = null;
+        roleClassName = null;
+        aclClassName = null;
+
+        setInit(true);
+    }
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void dispose()
+
+    {
+        if (aclFactoryService != null) 
+        { 
+            manager.release(aclFactoryService); 
+        } 
+        aclFactoryService = null;
+        manager = null;
+        setInit(false);
+    }
+
+    /**
+     * The name used to specify this component in TurbineResources.properties 
+     * @deprecated part of the pre-avalon compatibility layer
+     */
+    protected String getName()
+    {
+        return "SecurityService";
     }
 }

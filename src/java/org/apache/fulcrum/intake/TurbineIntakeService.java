@@ -82,8 +82,15 @@ import org.apache.fulcrum.intake.xmlmodel.XmlGroup;
 import org.apache.fulcrum.ServiceException;
 import org.apache.fulcrum.pool.BoundedBuffer;
 import org.apache.fulcrum.pool.Recyclable;
-import org.apache.fulcrum.BaseService;
+import org.apache.fulcrum.HasApplicationRoot;
 import org.apache.fulcrum.InitializationException;
+
+import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.thread.ThreadSafe;
 
 /**
  * This service provides access to input processing objects based
@@ -93,9 +100,12 @@ import org.apache.fulcrum.InitializationException;
  * @version $Id$
  */
 public class TurbineIntakeService
-    extends BaseService
-    implements IntakeService
-{
+    extends HasApplicationRoot
+    implements IntakeService, Configurable, Initializable, 
+               Disposable, ThreadSafe 
+{ 
+    private boolean disposed = false; 
+
     /** Array of group names. */
     private String[] groupNames;
 
@@ -120,42 +130,262 @@ public class TurbineIntakeService
     /** pools Group objects */
     KeyedObjectPool keyedPool;
 
+    /** the location of the xml descriptor */
+    private String xmlPath;
+
+    /** location to store a serialized version of the xml descriptor */
+    private String appDataPath;
+
     // a couple integers for a switch statement
     private static final int GETTER = 0;
     private static final int SETTER = 1;
 
-    /**
-     * Constructor.
+    /** 
+     * Constructor. All Components need a public no argument constructor 
+     * to be a legal Component. 
      */
     public TurbineIntakeService()
     {
     }
 
     /**
-     * Called the first time the Service is used.
+     * Gets an instance of a named group either from the pool
+     * or by calling the Factory Service if the pool is empty.
      *
-     * @param config A ServletConfig.
+     * @param groupName the name of the group.
+     * @return a Group instance.
+     * @throws ServiceException if recycling fails.
      */
-    public void init()
+    public Group getGroup(String groupName)
+            throws ServiceException
+    {
+        Group group = null;
+        if (groupName == null)
+        {
+            throw new ServiceException (
+                "Intake TurbineIntakeService.getGroup(groupName) is null");
+        }
+        try
+        {
+            group = (Group)keyedPool.borrowObject(groupName);
+        }
+        catch (Exception e)
+        {
+            new ServiceException(e);
+        }
+        return group;
+    }
+
+
+    /**
+     * Puts a Group back to the pool.
+     *
+     * @param instance the object instance to recycle.
+     * @return true if the instance was accepted.
+     */
+    public void releaseGroup(Group instance)
+    {
+        if (instance != null)
+        {
+            String name = instance.getIntakeGroupName();
+            try
+            {
+                keyedPool.returnObject(name, instance);
+            }
+            catch (Exception e)
+            {
+                new ServiceException(e);
+            }
+        }
+    }
+
+    /**
+     * Gets the current size of the pool for a group.
+     *
+     * @param name the name of the group.
+     */
+    public int getSize(String name)
+    {
+        return keyedPool.getNumActive(name) + keyedPool.getNumIdle(name);
+    }
+
+    /**
+     * Names of all the defined groups.
+     *
+     * @return array of names.
+     */
+    public String[] getGroupNames()
+    {
+        return groupNames;
+    }
+
+    /**
+     * Gets the key (usually a short identifier) for a group.
+     *
+     * @param groupName the name of the group.
+     * @return the the key.
+     */
+    public String getGroupKey(String groupName)
+    {
+        return (String)groupKeyMap.get(groupName);
+    }
+
+    /**
+     * Gets the group name given its key.
+     *
+     * @param the the key.
+     * @return groupName the name of the group.
+     */
+    public String getGroupName(String groupKey)
+    {
+        return (String)groupNameMap.get(groupKey);
+    }
+
+    /**
+     * Gets the Method that can be used to set a property.
+     *
+     * @param className the name of the object.
+     * @param propName the name of the property.
+     * @return the setter.
+     */
+    public Method getFieldSetter(String className, String propName)
+    {
+        Map settersForClassName = (Map)setterMap.get(className);
+        Method setter = (Method)settersForClassName.get(propName);
+
+        if ( setter == null )
+        {
+            PropertyDescriptor pd = null; 
+            synchronized(setterMap)
+            {
+                try
+                {
+                    // !FIXME! will throw an exception if the getter is not
+                    // available.  Need to make this more robust
+                    pd = new PropertyDescriptor(propName, 
+                                                Class.forName(className));
+                    setter = pd.getWriteMethod();
+                    ((Map)setterMap.get(className)).put(propName, setter);
+                    if ( setter == null ) 
+                    {
+                        getLogger().error("Intake: setter for '" + propName
+                                            + "' in class '" + className
+                                            + "' could not be found.");
+                    }
+                }
+                catch (Exception e)
+                {
+                    getLogger().error("", e);
+                }
+            }
+            // we have already completed the reflection on the getter, so
+            // save it so we do not have to repeat
+            synchronized(getterMap)
+            {
+                try
+                {
+                    Method getter = pd.getReadMethod();
+                    ((Map)getterMap.get(className)).put(propName, getter);
+                }
+                catch (Exception e)
+                {
+                    // ignore, the getter may not be needed
+                }
+            }
+        }
+        return setter;
+    }
+
+    /**
+     * Gets the Method that can be used to get a property value.
+     *
+     * @param className the name of the object.
+     * @param propName the name of the property.
+     * @return the getter.
+     */
+    public Method getFieldGetter(String className, String propName)
+    {
+        Map gettersForClassName = (Map)getterMap.get(className);
+        Method getter = (Method)gettersForClassName.get(propName);
+
+        if ( getter == null )
+        {
+            PropertyDescriptor pd = null;
+            synchronized(getterMap)
+            {
+                try
+                {
+                    // !FIXME! will throw an exception if the setter is not
+                    // available.  Need to make this more robust
+                    pd = new PropertyDescriptor(propName, 
+                                                Class.forName(className));
+                    getter = pd.getReadMethod();
+                    ((Map)getterMap.get(className)).put(propName, getter);
+                    if ( getter == null ) 
+                    {
+                        getLogger().error("Intake: getter for '" + propName
+                                            + "' in class '" + className
+                                            + "' could not be found.");
+                    }
+                }
+                catch (Exception e)
+                {
+                    getLogger().error("", e);
+                }
+            }
+            // we have already completed the reflection on the setter, so
+            // save it so we do not have to repeat
+            synchronized(setterMap)
+            {
+                try
+                {
+                    Method setter = pd.getWriteMethod();
+                    ((Map)setterMap.get(className)).put(propName, setter);
+                }
+                catch (Exception e)
+                {
+                    // ignore, the setter may not be needed
+                }
+            }
+        }
+        return getter;
+    }
+
+
+    // ---------------- Avalon Lifecycle Methods ---------------------
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void configure(Configuration conf)
+        throws ConfigurationException
+    {
+        if (useOldConfiguration(conf))
+        {
+            xmlPath = getConfiguration()
+                .getString(XML_PATH, XML_PATH_DEFAULT);
+            appDataPath = getConfiguration()
+                .getString(SERIAL_XML, SERIAL_XML_DEFAULT);
+        }
+        else
+        {
+            xmlPath = conf.getAttribute(XML_PATH, XML_PATH_DEFAULT);
+            appDataPath = conf.getAttribute(SERIAL_XML, SERIAL_XML_DEFAULT);
+        }
+    }
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void initialize()
         throws InitializationException
     {
-        String xmlPath = getConfiguration()
-            .getString(XML_PATH, XML_PATH_DEFAULT);
-        String appDataPath = getConfiguration()
-            .getString(SERIAL_XML, SERIAL_XML_DEFAULT);
-        
-        String SERIALIZED_ERROR_MSG = 
-            "Intake initialization could not be serialized " +
-            "because writing to " + appDataPath + " was not " +
-            "allowed.  This will require that the xml file be " +
-            "parsed when restarting the application.";
-
         if ( xmlPath == null )
         {
             String pathError =
                 "Path to intake.xml was not specified.  Check that the" +
                 " property exists in TR.props and was loaded.";
-            getCategory().error(pathError);
+            getLogger().error(pathError);
             throw new InitializationException(pathError);
         }
 
@@ -172,7 +402,7 @@ public class TurbineIntakeService
                 String pathError =
                     "Could not read input file.  Even tried relative to"
                     + " webapp root.";
-                getCategory().error(pathError);
+                getLogger().error(pathError);
                 throw new InitializationException(pathError);
             }
         }
@@ -195,7 +425,13 @@ public class TurbineIntakeService
             }
             catch (Exception ee)
             {
-                getCategory().info(SERIALIZED_ERROR_MSG);
+                String SERIALIZED_ERROR_MSG = 
+                    "Intake initialization could not be serialized " +
+                    "because writing to " + appDataPath + " was not " +
+                    "allowed.  This will require that the xml file be " +
+                    "parsed when restarting the application.";
+
+                getLogger().info(SERIALIZED_ERROR_MSG);
             }
         }
 
@@ -302,7 +538,7 @@ public class TurbineIntakeService
         }
         catch (Exception e)
         {
-            getCategory().info(
+            getLogger().info(
                 "Intake initialization could not be serialized " +
                 "because writing to " + appDataPath + " was not " +
                 "allowed.  This will require that the xml file be " +
@@ -322,211 +558,26 @@ public class TurbineIntakeService
     }
 
     /**
-     * Gets an instance of a named group either from the pool
-     * or by calling the Factory Service if the pool is empty.
-     *
-     * @param groupName the name of the group.
-     * @return a Group instance.
-     * @throws ServiceException if recycling fails.
+     * Avalon component lifecycle method
      */
-    public Group getGroup(String groupName)
-            throws ServiceException
+    public void dispose()
     {
-        Group group = null;
-        if (groupName == null)
-        {
-            throw new ServiceException (
-                "Intake TurbineIntakeService.getGroup(groupName) is null");
-        }
-        try
-        {
-            group = (Group)keyedPool.borrowObject(groupName);
-        }
-        catch (Exception e)
-        {
-            new ServiceException(e);
-        }
-        return group;
-    }
-
-
-    /**
-     * Puts a Group back to the pool.
-     *
-     * @param instance the object instance to recycle.
-     * @return true if the instance was accepted.
-     */
-    public void releaseGroup(Group instance)
-    {
-        if (instance != null)
-        {
-            String name = instance.getIntakeGroupName();
-            try
-            {
-                keyedPool.returnObject(name, instance);
-            }
-            catch (Exception e)
-            {
-                new ServiceException(e);
-            }
-            //return true;
-        }
-        else
-        {
-            //return false;
-        }
+        groupNames = null;
+        groupNameMap = null;
+        groupKeyMap = null;
+        getterMap = null;
+        setterMap = null;
+        appData = null;
+        keyedPool = null;
+        disposed = true;
     }
 
     /**
-     * Gets the current size of the pool for a group.
-     *
-     * @param name the name of the group.
+     * The name used to specify this component in TurbineResources.properties 
+     * @deprecated part of the pre-avalon compatibility layer
      */
-    public int getSize(String name)
+    protected String getName()
     {
-        return keyedPool.getNumActive(name) + keyedPool.getNumIdle(name);
+        return "IntakeService";
     }
-
-    /**
-     * Names of all the defined groups.
-     *
-     * @return array of names.
-     */
-    public String[] getGroupNames()
-    {
-        return groupNames;
-    }
-
-    /**
-     * Gets the key (usually a short identifier) for a group.
-     *
-     * @param groupName the name of the group.
-     * @return the the key.
-     */
-    public String getGroupKey(String groupName)
-    {
-        return (String)groupKeyMap.get(groupName);
-    }
-
-    /**
-     * Gets the group name given its key.
-     *
-     * @param the the key.
-     * @return groupName the name of the group.
-     */
-    public String getGroupName(String groupKey)
-    {
-        return (String)groupNameMap.get(groupKey);
-    }
-
-    /**
-     * Gets the Method that can be used to set a property.
-     *
-     * @param className the name of the object.
-     * @param propName the name of the property.
-     * @return the setter.
-     */
-    public Method getFieldSetter(String className, String propName)
-    {
-        Map settersForClassName = (Map)setterMap.get(className);
-        Method setter = (Method)settersForClassName.get(propName);
-
-        if ( setter == null )
-        {
-            PropertyDescriptor pd = null; 
-            synchronized(setterMap)
-            {
-                try
-                {
-                    // !FIXME! will throw an exception if the getter is not
-                    // available.  Need to make this more robust
-                    pd = new PropertyDescriptor(propName, 
-                                                Class.forName(className));
-                    setter = pd.getWriteMethod();
-                    ((Map)setterMap.get(className)).put(propName, setter);
-                    if ( setter == null ) 
-                    {
-                        getCategory().error("Intake: setter for '" + propName
-                                            + "' in class '" + className
-                                            + "' could not be found.");
-                    }
-                }
-                catch (Exception e)
-                {
-                    getCategory().error(e);
-                }
-            }
-            // we have already completed the reflection on the getter, so
-            // save it so we do not have to repeat
-            synchronized(getterMap)
-            {
-                try
-                {
-                    Method getter = pd.getReadMethod();
-                    ((Map)getterMap.get(className)).put(propName, getter);
-                }
-                catch (Exception e)
-                {
-                    // ignore, the getter may not be needed
-                }
-            }
-        }
-        return setter;
-    }
-
-    /**
-     * Gets the Method that can be used to get a property value.
-     *
-     * @param className the name of the object.
-     * @param propName the name of the property.
-     * @return the getter.
-     */
-    public Method getFieldGetter(String className, String propName)
-    {
-        Map gettersForClassName = (Map)getterMap.get(className);
-        Method getter = (Method)gettersForClassName.get(propName);
-
-        if ( getter == null )
-        {
-            PropertyDescriptor pd = null;
-            synchronized(getterMap)
-            {
-                try
-                {
-                    // !FIXME! will throw an exception if the setter is not
-                    // available.  Need to make this more robust
-                    pd = new PropertyDescriptor(propName, 
-                                                Class.forName(className));
-                    getter = pd.getReadMethod();
-                    ((Map)getterMap.get(className)).put(propName, getter);
-                    if ( getter == null ) 
-                    {
-                        getCategory().error("Intake: getter for '" + propName
-                                            + "' in class '" + className
-                                            + "' could not be found.");
-                    }
-                }
-                catch (Exception e)
-                {
-                    getCategory().error(e);
-                }
-            }
-            // we have already completed the reflection on the setter, so
-            // save it so we do not have to repeat
-            synchronized(setterMap)
-            {
-                try
-                {
-                    Method setter = pd.getWriteMethod();
-                    ((Map)setterMap.get(className)).put(propName, setter);
-                }
-                catch (Exception e)
-                {
-                    // ignore, the setter may not be needed
-                }
-            }
-        }
-        return getter;
-    }
-
 }

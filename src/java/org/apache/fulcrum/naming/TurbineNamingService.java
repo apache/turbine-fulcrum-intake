@@ -60,8 +60,15 @@ import java.util.Iterator;
 import java.util.Properties;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
+import org.apache.fulcrum.BaseFulcrumComponent;
+
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.parameters.Parameters;
+import org.apache.avalon.framework.thread.ThreadSafe;
 
 /**
  * This class is the default implementation of NamingService, which
@@ -72,8 +79,8 @@ import org.apache.fulcrum.InitializationException;
  * @version $Id$
  */
 public class TurbineNamingService
-    extends BaseService
-    implements NamingService
+    extends BaseFulcrumComponent
+    implements NamingService, Configurable, Initializable, ThreadSafe
 {
     /**
      * A global HashTable of Property objects which are initialised using
@@ -82,69 +89,6 @@ public class TurbineNamingService
     private static Hashtable contextPropsList = null;
 
     private Hashtable initialContexts = new Hashtable();
-
-    /**
-     * Called the first time the Service is used.<br>
-     *
-     */
-    public void init()
-        throws InitializationException
-    {
-        // Context properties are specified in lines in the properties
-        // file that begin with "context.contextname.", allowing
-        // multiple named contexts to be used.  Everything after the
-        // "contextname."  is the name of the property that will be
-        // used by the InitialContext class to create a new context
-        // instance.
-        try
-        {
-            //!! "context" should be a constant.
-            Iterator contextKeys = getConfiguration().getKeys("context");
-            contextPropsList = new Hashtable();
-
-            while (contextKeys.hasNext())
-            {
-                String key = (String) contextKeys.next();
-                int start = key.indexOf(".") + 1;
-                int end = key.indexOf(".", start);
-                String contextName = key.substring(start, end);
-                Properties contextProps = null;
-
-                if (contextPropsList.containsKey(contextName))
-                {
-                    contextProps = (Properties)
-                        contextPropsList.get(contextName);
-                }
-                else
-                {
-                    contextProps = new Properties();
-                }
-
-                contextProps.put(
-                    key.substring(end + 1), getConfiguration().getString(key));
-
-                contextPropsList.put(contextName, contextProps);
-            }
-
-            Enumeration contextPropsKeys = contextPropsList.keys();
-            while (contextPropsKeys.hasMoreElements())
-            {
-                String key = (String) contextPropsKeys.nextElement();
-                Properties contextProps = (Properties) contextPropsList.get(key);
-                InitialContext context = new InitialContext(contextProps);
-                initialContexts.put(key, context);
-            }
-
-            setInit(true);
-        }
-        catch (Exception e)
-        {
-            getCategory().error("Failed to initialize JDNI contexts!", e);
-
-            throw new InitializationException(
-                "Failed to initialize JDNI contexts!");
-        }
-    }
 
     /**
       * Return the Context with the specified name.  The Context is
@@ -180,5 +124,136 @@ public class TurbineNamingService
         {
             return null;
         }
+    }
+
+    // ---------------- Avalon Lifecycle Methods ---------------------
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void configure(Configuration conf)
+        throws ConfigurationException
+    {
+        if (useOldConfiguration(conf))
+        {
+            // Context properties are specified in lines in the properties
+            // file that begin with "context.contextname.", allowing
+            // multiple named contexts to be used.  Everything after the
+            // "contextname."  is the name of the property that will be
+            // used by the InitialContext class to create a new context
+            // instance.
+            try
+            {
+                //!! "context" should be a constant.
+                Iterator contextKeys = getConfiguration().getKeys("context");
+                contextPropsList = new Hashtable();
+                
+                while (contextKeys.hasNext())
+                {
+                    String key = (String) contextKeys.next();
+                    int start = key.indexOf(".") + 1;
+                    int end = key.indexOf(".", start);
+                    String contextName = key.substring(start, end);
+                    Properties contextProps = null;
+                    
+                    if (contextPropsList.containsKey(contextName))
+                    {
+                        contextProps = (Properties)
+                            contextPropsList.get(contextName);
+                    }
+                    else
+                    {
+                        contextProps = new Properties();
+                    }
+                    
+                    contextProps.put(key.substring(end + 1), 
+                                     getConfiguration().getString(key));
+                    contextPropsList.put(contextName, contextProps);
+                }
+            }
+            catch (Exception e)
+            {
+                getLogger().error("Failed to configure JDNI contexts!", e);
+                throw new ConfigurationException(
+                    "Failed to configure JDNI contexts!");
+            }
+        }
+        else
+        {
+            Configuration[] keys = conf.getChildren();
+            if (keys != null) 
+            {
+                for (int i=0; i<keys.length; i++) 
+                {
+                    String contextName = keys[i].getName();
+                    Properties contextProps = toProperties( 
+                        Parameters.fromConfiguration(keys[i]) );
+
+                    contextPropsList.put(contextName, contextProps);
+                }
+            }
+        }
+    }
+
+    /**
+     * Note: this is copied from avalon's Parameter class, which does not
+     * appear to have the method in the version I'm compiling against.
+     * Creates a <code>java.util.Properties</code> object from an Avalon
+     * Parameters object.
+     *
+     * @param params a <code>Parameters</code> instance
+     * @return a <code>Properties</code> instance
+     */
+    private static Properties toProperties( final Parameters params )
+    {
+        final Properties properties = new Properties();
+        final String[] names = params.getNames();
+
+        for ( int i = 0; i < names.length; ++i )
+        {
+            // "" is the default value, since getNames() proves it will exist
+            properties.setProperty( names[i], params.getParameter( names[i], "" ) );
+        }
+
+        return properties;
+    }
+
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void initialize()
+        throws InitializationException
+    {
+        try 
+        {
+            Enumeration contextPropsKeys = contextPropsList.keys();
+            while (contextPropsKeys.hasMoreElements())
+            {
+                String key = (String) contextPropsKeys.nextElement();
+                Properties contextProps = 
+                    (Properties)contextPropsList.get(key);
+                InitialContext context = new InitialContext(contextProps);
+                initialContexts.put(key, context);
+            }
+
+            setInit(true);
+        }
+        catch (Exception e)
+        {
+            getLogger().error("Failed to initialize JDNI contexts!", e);
+
+            throw new InitializationException(
+                "Failed to initialize JDNI contexts!");
+        }
+    }
+
+    /**
+     * The name used to specify this component in TurbineResources.properties 
+     * @deprecated part of the pre-avalon compatibility layer
+     */
+    protected String getName()
+    {
+        return "NamingService";
     }
 }

@@ -61,10 +61,16 @@ import java.security.NoSuchAlgorithmException;
 
 import org.apache.fulcrum.InitializationException;
 import org.apache.fulcrum.factory.FactoryService;
-import org.apache.fulcrum.BaseService;
-import org.apache.fulcrum.TurbineServices;
+import org.apache.fulcrum.BaseFulcrumComponent;
 
-import org.apache.commons.configuration.Configuration;
+import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.component.ComponentManager;
+import org.apache.avalon.framework.component.Composable;
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.thread.ThreadSafe;
 
 /**
  * An implementation of CryptoService that uses either supplied crypto
@@ -77,9 +83,10 @@ import org.apache.commons.configuration.Configuration;
  */
 
 public class TurbineCryptoService 
-    extends BaseService
-    implements CryptoService
-{
+    extends BaseFulcrumComponent
+    implements CryptoService, Configurable, Initializable, 
+               Disposable, Composable, ThreadSafe 
+{ 
     /** Key Prefix for our algorithms */
     private static final String ALGORITHM = "algorithm"; 
 
@@ -90,62 +97,14 @@ public class TurbineCryptoService
     private static final String DEFAULT_CLASS = 
         "org.apache.fulcrum.crypto.provider.JavaCrypt";
 
+    private boolean disposed = false; 
+    private ComponentManager manager = null; 
+
     /** Names of the registered algorithms and the wanted classes */
     private Hashtable algos = null;
 
     /** A factory to construct CryptoAlgorithm objects  */
     private FactoryService factoryService = null;
-
-
-    /**
-     * There is not much to initialize here. This runs
-     * as early init method.
-     *
-     * @throws InitializationException Something went wrong in the init
-     *         stage
-     */ 
-
-    public void init()
-        throws InitializationException
-    {
-        this.algos = new Hashtable();
-
-        /*
-         * Set up default (Can be overridden by default key
-         * from the properties
-         */
-
-        algos.put(DEFAULT_KEY, DEFAULT_CLASS);
-
-        /* get the parts of the configuration relevant to us. */
-
-        Configuration conf = getConfiguration().subset(ALGORITHM);
-
-        if (conf != null)
-        {
-            for (Iterator it = conf.getKeys() ;it.hasNext(); )
-            {
-                String key = (String) it.next();
-                String val = conf.getString(key);
-                // Log.debug("Registered " + val 
-                //            + " for Crypto Algorithm " + key);
-                algos.put(key, val);
-            }
-        }
-
-        try 
-        {
-            factoryService = (FactoryService) TurbineServices.getInstance().
-                getService(FactoryService.SERVICE_NAME);
-        }
-        catch (Exception e)
-        {
-            throw new InitializationException(
-                                              "TurbineCryptoService.init: Failed to get a Factory object", e);
-        }
-
-        setInit(true);
-    }
 
     /**
      * Returns a CryptoAlgorithm Object which represents the requested
@@ -158,7 +117,6 @@ public class TurbineCryptoService
      * @throws NoSuchAlgorithmException  Requested algorithm is not available
      *
      */
-
     public CryptoAlgorithm getCryptoAlgorithm(String algo)
         throws NoSuchAlgorithmException
     {
@@ -191,5 +149,107 @@ public class TurbineCryptoService
         ca.setCipher(algo);
 
         return ca;
+    }
+
+    // ---------------- Avalon Lifecycle Methods ---------------------
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void configure(Configuration conf)
+        throws ConfigurationException
+    {
+        this.algos = new Hashtable();
+        // Set up default (Can be overridden by default key
+        // from the properties
+        algos.put(DEFAULT_KEY, DEFAULT_CLASS);
+                    
+        if (useOldConfiguration(conf))
+        {
+            // get the parts of the configuration relevant to us.
+            org.apache.commons.configuration.Configuration algoConf = 
+                getConfiguration().subset(ALGORITHM);
+            if (algoConf != null)
+            {
+                for (Iterator it = algoConf.getKeys() ;it.hasNext(); )
+                {
+                    String key = (String) it.next();
+                    String val = algoConf.getString(key);
+                    // Log.debug("Registered " + val 
+                    //            + " for Crypto Algorithm " + key);
+                    algos.put(key, val);
+                }
+            }
+        }
+        else
+        {
+            final Configuration algorithms = conf.getChild(ALGORITHM, false);
+            if (algorithms != null)
+            {
+                Configuration[] nameVal = algorithms.getChildren();
+                for (int i=0; i < nameVal.length; i++)
+                {
+                    String key = nameVal[i].getName();
+                    String val = nameVal[i].getValue();
+                    // getLogger.debug("Registered " + val 
+                    //            + " for Crypto Algorithm " + key);
+                    algos.put(key, val);
+                }
+            }
+        }
+    }
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void compose(ComponentManager manager)
+    {
+        this.manager = manager;
+    }
+
+    /**
+     * Avalon component lifecycle method
+     * Get the factory service from the manager here
+     *
+     * @throws InitializationException Something went wrong in the init
+     *         stage
+     */ 
+    public void initialize()
+        throws InitializationException
+    {
+        try 
+        {
+            factoryService = 
+                (FactoryService)manager.lookup(FactoryService.ROLE);
+            setInit(true);
+        }
+        catch (Exception e)
+        {
+            throw new InitializationException(
+                "TurbineCryptoService.init: Failed to get a Factory object",e);
+        }
+    }
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void dispose()
+    {
+        if (factoryService != null) 
+        { 
+            manager.release(factoryService); 
+        } 
+        factoryService = null;
+        manager = null;
+        disposed = true;
+    }
+
+    /**
+     * The name used to specify this component in TurbineResources.properties 
+     * @deprecated part of the pre-avalon compatibility layer
+     */
+    protected String getName()
+    {
+        return "CryptoService";
     }
 }

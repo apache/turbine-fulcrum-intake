@@ -62,6 +62,8 @@ import org.apache.velocity.Template;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.app.event.EventCartridge;
 
+import org.apache.avalon.framework.component.Component;
+
 /**
  * The Turbine service interface to
  * <a href="http://jakarta.apache.org/velocity/">Velocity</a>.
@@ -72,9 +74,11 @@ import org.apache.velocity.app.event.EventCartridge;
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$
  */
-public interface VelocityService extends Service
+public interface VelocityService 
+    extends Component
 {
-    public static final String SERVICE_NAME = "VelocityService";
+    String ROLE = VelocityService.class.getName();
+    String SERVICE_NAME = ROLE;
 
     /**
      * Process the request and fill in the template using the values

@@ -55,7 +55,7 @@ package org.apache.fulcrum.naming;
  */
 
 import javax.naming.Context;
-import org.apache.fulcrum.Service;
+import org.apache.avalon.framework.component.Component;
 
 /**
  * Implementations of the NamingService interface provide JNDI naming
@@ -65,9 +65,16 @@ import org.apache.fulcrum.Service;
  * @version $Id$
  */
 public interface NamingService
-    extends Service
+    extends Component
 {
-    public static final String SERVICE_NAME = "NamingService";
+    /** Avalon role - used to id the component within the manager */
+    String ROLE = NamingService.class.getName();
+
+    /** 
+     * Old style TurbineServices role, now equal to ROLE.
+     * @deprecated TurbineServices is deprecated in favor of avalon. 
+     */
+    String SERVICE_NAME = ROLE;
 
     /**
      * Return the Context with the specified name.

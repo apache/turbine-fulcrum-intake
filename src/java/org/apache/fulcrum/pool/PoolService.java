@@ -56,6 +56,9 @@ package org.apache.fulcrum.pool;
 
 import org.apache.fulcrum.ServiceException;
 import org.apache.fulcrum.factory.FactoryService;
+import org.apache.avalon.framework.component.Component;
+
+
 
 /**
  * The Pool Service extends the Factory Service by adding support
@@ -72,12 +75,17 @@ import org.apache.fulcrum.factory.FactoryService;
  * @author <a href="mailto:ilkka.priha@simsoft.fi">Ilkka Priha</a>
  * @version $Id$
  */
-public interface PoolService extends FactoryService
+public interface PoolService 
+    extends FactoryService
 {
-    /**
-     * The key under which this service is stored in TurbineServices.
+    /** Avalon role - used to id the component within the manager */
+    String ROLE = PoolService.class.getName();
+
+    /** 
+     * Old style TurbineServices role, now equal to ROLE.
+     * @deprecated TurbineServices is deprecated in favor of avalon. 
      */
-    public static final String SERVICE_NAME = "PoolService";
+    String SERVICE_NAME = ROLE;
 
     /**
      * The default pool capacity.

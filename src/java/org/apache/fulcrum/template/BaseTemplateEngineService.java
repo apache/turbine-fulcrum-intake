@@ -58,8 +58,22 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.util.Iterator;
 import java.util.Hashtable;
-import org.apache.fulcrum.BaseService;
+import java.util.List;
+import java.util.ArrayList;
 import org.apache.fulcrum.ServiceException;
+import org.apache.fulcrum.ServiceRuntimeException;
+import org.apache.fulcrum.HasApplicationRoot;
+
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.thread.ThreadSafe;
+import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.component.ComponentManager;
+import org.apache.avalon.framework.component.ComponentException;
+import org.apache.avalon.framework.component.Composable;
+
 
 /**
  * The base implementation of Turbine {@link
@@ -70,9 +84,13 @@ import org.apache.fulcrum.ServiceException;
  * @version $Id$
  */
 public abstract class BaseTemplateEngineService
-    extends BaseService
-    implements TemplateEngineService
+    extends HasApplicationRoot
+    implements TemplateEngineService, Configurable, Initializable, ThreadSafe,
+               Disposable, Composable
 {
+    private boolean disposed = false; 
+    private ComponentManager manager = null; 
+
     /**
      * A Map containing the configuration for the template
      * engine service. The configuration contains:
@@ -85,15 +103,6 @@ public abstract class BaseTemplateEngineService
      * 6) default error screen
      */
     private Hashtable configuration = new Hashtable();
-
-    /**
-     * @see org.apache.fulcrum.template.TemplateEngineService#registerConfiguration
-     */
-    public void registerConfiguration(String defaultExt)
-    {
-        initConfiguration(defaultExt);
-        TurbineTemplate.registerTemplateEngineService(this);
-    }
 
     /**
      * @see org.apache.fulcrum.template.TemplateEngineService#getTemplateEngineServiceConfiguration
@@ -109,44 +118,6 @@ public abstract class BaseTemplateEngineService
     public String[] getAssociatedFileExtensions()
     {
         return (String []) configuration.get(TEMPLATE_EXTENSIONS);
-    }
-
-    /**
-     * Note engine file extension associations.  First attempts to
-     * pull a list of custom extensions from the property file value
-     * keyed by <code>template.extension</code>.  If none are defined,
-     * uses the value keyed by
-     * <code>template.default.extension</code>, defaulting to the
-     * emergency value supplied by <code>defaultExt</code>.
-     *
-     * @param defaultExt The default used when the default defined in the
-     *                   properties file is missing or misconfigured.
-     */
-    protected void initConfiguration(String defaultExt)
-    {
-        /*
-         * Should modify the configuration class to take defaults
-         * here, should have to do this.
-         */
-        String[] fileExtensionAssociations =
-            getConfiguration().getStringArray(TEMPLATE_EXTENSIONS);
-
-        if (fileExtensionAssociations == null ||
-            fileExtensionAssociations.length == 0)
-        {
-            fileExtensionAssociations = new String[1];
-            fileExtensionAssociations[0] = getConfiguration().getString(
-                DEFAULT_TEMPLATE_EXTENSION, defaultExt);
-        }
-
-        configuration.put(TEMPLATE_EXTENSIONS, fileExtensionAssociations);
-
-        configuration.put(DEFAULT_PAGE_TEMPLATE,
-            getConfiguration().getString(DEFAULT_PAGE_TEMPLATE));
-
-        configuration.put(DEFAULT_LAYOUT_TEMPLATE,
-            getConfiguration().getString(DEFAULT_LAYOUT_TEMPLATE));
-
     }
 
     /**
@@ -168,4 +139,126 @@ public abstract class BaseTemplateEngineService
     public abstract void handleRequest(TemplateContext context, 
                                        String template, Writer writer)
         throws ServiceException;
+
+    // ---------------- Avalon Lifecycle Methods ---------------------
+
+    /**
+     * Used by subclasses in their configure method
+     */
+    protected void registerConfiguration(Configuration conf, String defaultExt)
+        throws ConfigurationException
+    {
+        initConfiguration(conf, defaultExt);
+        
+        TemplateService component = null;
+        try 
+        { 
+            component = (TemplateService)manager
+                .lookup(TemplateService.ROLE); 
+            component.registerTemplateEngineService(this);
+        } 
+        catch (ComponentException ce) 
+        { 
+            throw new ServiceRuntimeException(ce.getMessage()); 
+        } 
+        finally 
+        { 
+            if (component != null) 
+            { 
+                manager.release(component); 
+            } 
+        } 
+    }
+
+    /**
+     * Note engine file extension associations.  First attempts to
+     * pull a list of custom extensions from the property file value
+     * keyed by <code>template.extension</code>.  If none are defined,
+     * uses the value keyed by
+     * <code>template.default.extension</code>, defaulting to the
+     * emergency value supplied by <code>defaultExt</code>.
+     *
+     * @param defaultExt The default used when the default defined in the
+     *                   properties file is missing or misconfigured.
+     */
+    private void initConfiguration(Configuration conf, String defaultExt)
+        throws ConfigurationException
+    {
+        if (conf.getAttributeAsBoolean(USE_PROPERTY_FILE, false)) 
+        {
+            /*
+             * Should modify the configuration class to take defaults
+             * here, should have to do this.
+             */
+            String[] fileExtensionAssociations =
+                getConfiguration().getStringArray(TEMPLATE_EXTENSIONS);
+
+            if (fileExtensionAssociations == null ||
+                fileExtensionAssociations.length == 0)
+            {
+                fileExtensionAssociations = new String[1];
+                fileExtensionAssociations[0] = getConfiguration().getString(
+                    DEFAULT_TEMPLATE_EXTENSION, defaultExt);
+            }
+
+            configuration.put(TEMPLATE_EXTENSIONS, fileExtensionAssociations);
+            
+            configuration.put(DEFAULT_PAGE_TEMPLATE,
+                getConfiguration().getString(DEFAULT_PAGE_TEMPLATE));
+
+            configuration.put(DEFAULT_LAYOUT_TEMPLATE,
+                getConfiguration().getString(DEFAULT_LAYOUT_TEMPLATE));
+        }        
+        else 
+        {
+            List extensionList = new ArrayList();
+            final Configuration[] extensions = 
+                conf.getChildren("template-extension");
+            if (extensions != null)
+            {
+                for (int i=0; i < extensions.length; i++)
+                {
+                    extensionList.add(extensions[i].getValue());
+                }
+            }
+
+            String[] fileExtensionAssociations = (String[])
+                extensionList.toArray(new String[extensionList.size()]);
+
+            if (fileExtensionAssociations == null ||
+                fileExtensionAssociations.length == 0)
+            {
+                Configuration defaultConf = 
+                    conf.getChild("default-template-extension", true);
+                fileExtensionAssociations = new String[1];
+                fileExtensionAssociations[0] = 
+                    defaultConf.getValue(defaultExt);                    
+            }
+
+            configuration.put(TEMPLATE_EXTENSIONS, fileExtensionAssociations);
+            
+            configuration.put(DEFAULT_PAGE_TEMPLATE,
+                conf.getChild("default-page-template", true).getValue());
+
+            configuration.put(DEFAULT_LAYOUT_TEMPLATE,
+                conf.getChild("default-layout-template", true).getValue());
+        }
+    }
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void compose(ComponentManager manager)
+    {
+        this.manager = manager;
+    }
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void dispose()
+    {
+        manager = null;
+        disposed = true;
+    }
 }

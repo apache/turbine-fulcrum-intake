@@ -132,7 +132,7 @@ public interface ServiceBroker
      * @exception InstantiationException, if the service is unknown or
      * can't be initialized.
      */
-    public Service getService( String name )
+    public Object getService( String name )
         throws InstantiationException;
 
     /**

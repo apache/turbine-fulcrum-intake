@@ -56,8 +56,6 @@ package org.apache.fulcrum.security;
 
 import java.util.Map;
 
-import org.apache.fulcrum.Service;
-
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
@@ -73,6 +71,8 @@ import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 import org.apache.torque.util.Criteria;
+
+import org.apache.avalon.framework.component.Component;
 
 /**
  * The Security Service manages Users, Groups Roles and Permissions in the
@@ -93,10 +93,11 @@ import org.apache.torque.util.Criteria;
  * @version $Id$
  */
 public interface SecurityService
-    extends Service
+    extends Component
 {
+    String ROLE = SecurityService.class.getName();
     /** The name of the service */
-    public static final String SERVICE_NAME = "SecurityService";
+    public static final String SERVICE_NAME = ROLE;
 
     /** the key within services's properties for user implementation classname (user.class) */
     public static final String USER_CLASS_KEY = "user.class";

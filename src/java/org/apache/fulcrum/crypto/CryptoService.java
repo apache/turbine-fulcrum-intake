@@ -55,7 +55,7 @@ package org.apache.fulcrum.crypto;
  */
 
 import java.security.NoSuchAlgorithmException;
-import org.apache.fulcrum.Service;
+import org.apache.avalon.framework.component.Component;
 
 /**
  * The Crypto Service manages the availability of various crypto 
@@ -70,12 +70,17 @@ import org.apache.fulcrum.Service;
  * @version $Id$
  *
  */
-
 public interface CryptoService 
-    extends Service
+    extends Component
 {
-    /** The name of the service */
-    public static final String SERVICE_NAME = "CryptoService";
+    /** Avalon role - used to id the component within the manager */
+    String ROLE = CryptoService.class.getName();
+
+    /** 
+     * Old style TurbineServices role, now equal to ROLE.
+     * @deprecated TurbineServices is deprecated in favor of avalon. 
+     */
+    String SERVICE_NAME = ROLE;
 
     /**
      * Returns a CryptoAlgorithm Object which represents the requested
@@ -88,7 +93,6 @@ public interface CryptoService
      * @throws NoSuchAlgorithmException  Requested algorithm is not available
      *
      */
-
     CryptoAlgorithm getCryptoAlgorithm(String algorithm)
         throws NoSuchAlgorithmException;
 }

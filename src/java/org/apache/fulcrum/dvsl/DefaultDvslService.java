@@ -60,10 +60,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.fulcrum.BaseService;
-import org.apache.fulcrum.InitializationException;
+import org.apache.fulcrum.BaseFulcrumComponent;
 
 import org.apache.tools.dvsl.DVSL;
+
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.thread.ThreadSafe;
 
 /**
  *  Implementation of the Fulcrum Dvsl Service. It transforms xml with a given
@@ -72,19 +74,10 @@ import org.apache.tools.dvsl.DVSL;
  * @author <a href="mailto:geirm@apache.org">Geir Magnusson Jr.</a>
  */
 public class DefaultDvslService
-    extends BaseService
-    implements DvslService
-
+    extends BaseFulcrumComponent
+    implements DvslService, Initializable, ThreadSafe
 {
     protected Map servicePool = new HashMap();
-
-    /**
-     * Initialize the DVSL Service.
-     */
-    public void init()
-        throws InitializationException
-    {
-    }
 
     /**
      *  register a stylesheet
@@ -128,5 +121,24 @@ public class DefaultDvslService
         DVSL dvsl = (DVSL) servicePool.get( styleName );
 
         dvsl.transform( in, out );
+    }
+
+    // ---------------- Avalon Lifecycle Methods ---------------------
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void initialize()
+    {
+        setInit(true);
+    }
+
+    /**
+     * The name used to specify this component in TurbineResources.properties 
+     * @deprecated part of the pre-avalon compatibility layer
+     */
+    protected String getName()
+    {
+        return "DVSLService";
     }
 }

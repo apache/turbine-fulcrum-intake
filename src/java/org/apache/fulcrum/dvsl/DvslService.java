@@ -59,7 +59,7 @@ import java.io.Writer;
 
 import java.util.Properties;
 
-import org.apache.fulcrum.Service;
+import org.apache.avalon.framework.component.Component;
 
 /**
  * The Fulcrum DVSL Service is used to transform XML with a DVSL stylesheet.
@@ -69,9 +69,16 @@ import org.apache.fulcrum.Service;
  * @author <a href="mailto:geirm@apache.org">Geir Magnusson Jr.</a>
  */
 public interface DvslService
-    extends Service
+    extends Component
 {
-    public static final String SERVICE_NAME = "DVSLService";
+    /** Avalon role - used to id the component within the manager */
+    String ROLE = DvslService.class.getName();
+
+    /** 
+     * Old style TurbineServices role, now equal to ROLE.
+     * @deprecated TurbineServices is deprecated in favor of avalon. 
+     */
+    String SERVICE_NAME = ROLE;
 
     /**
      *  Registers a stylesheet by name
