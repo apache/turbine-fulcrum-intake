@@ -114,7 +114,7 @@
     />
 
     <available
-      classname="javax.servlet.http.HttpSessionBindingListener" 
+      classname="javax.servlet.http.HttpServletRequest" 
       property="servlet.present"
       classpathref="classpath"
     />
