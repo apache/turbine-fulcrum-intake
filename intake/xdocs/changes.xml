@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Fulcrum Intake</title>
+    <author email="epugh@upstate.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+    <release version="Not applicable" date="">
+      <action dev="epugh" type="fix">
+       The intake validators were fixed so that fields with required=false 
+       rules no longer attempt to execute the remaining rules when no
+       input is provided.  A minLength > 0 rule is no longer synonymous
+       with required=true.  Patch originally supplied by Colin Chalmers
+      </action>
+     
+    </release>
+
+  </body>
+</document>
+
