@@ -8,6 +8,9 @@
   <body>
     <release version="1.0.4" date="">
      <action dev="epugh" type="update">
+        Make long running tests optional.  They often fail for random reasons.
+      </action>            
+     <action dev="epugh" type="update">
         Remove extra dependencies.
       </action>        
       <action dev="epugh" type="add">

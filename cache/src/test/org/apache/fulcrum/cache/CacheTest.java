@@ -60,6 +60,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.avalon.framework.component.ComponentException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 /**
  * CacheTest
@@ -76,6 +78,7 @@ public class CacheTest extends BaseUnitTest
     private static final String cacheKey = "CacheKey";
     private static final String cacheKey_2 = "CacheKey_2";
     public static final String SKIP_TESTS_KEY = "fulcrum.cache.skip.long.tests";
+    private static final Log LOG = LogFactory.getLog(CacheTest.class);
     
 
     /**
@@ -401,6 +404,13 @@ public class CacheTest extends BaseUnitTest
      */
     public void testRefreshableTimeToLive() throws Exception
     {
+        String skipTestsProperty = System.getProperty(SKIP_TESTS_KEY,"false");
+        LOG.info("What is the skipTestsProperty:" + skipTestsProperty);
+        if(Boolean.getBoolean(skipTestsProperty)==true){
+            LOG.warn("Skipping testRefreshableTimeToLive tests due to property " + SKIP_TESTS_KEY + " being true.");
+            return;
+        }
+
         String testString = new String("This is a test");
         Object retrievedObject = null;
         RefreshableCachedObject cacheObject = null;
@@ -564,16 +574,8 @@ public class CacheTest extends BaseUnitTest
      * @return the refresh requency in milliseconds
      */
     private long getCacheRefresh()
-    {
-        String skipTestsProperty = System.getProperty(SKIP_TESTS_KEY,"false");
-        System.out.println("What is the skipTestsProperty:" + skipTestsProperty);
-        if(Boolean.getBoolean(skipTestsProperty)==true){
-            return 0;
-        }
-        else {
-            return ((DefaultGlobalCacheService) globalCache).getCacheCheckFrequency()*1000;
-        }
-        
+    {        
+        return ((DefaultGlobalCacheService) globalCache).getCacheCheckFrequency()*1000;       
     }
     
     /** 
