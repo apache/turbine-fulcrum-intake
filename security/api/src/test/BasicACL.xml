@@ -1,6 +1,0 @@
-<my-system>
-  <component
-    role="org.apache.fulcrum.security.model.ACLFactory"
-    class="org.apache.fulcrum.security.model.basic.BasicACLFactory">   
-  </component> 
-</my-system>
