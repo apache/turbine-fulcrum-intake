@@ -60,6 +60,7 @@ import org.apache.fulcrum.Service;
 import org.apache.fulcrum.ServiceException;
 import org.apache.velocity.Template;
 import org.apache.velocity.context.Context;
+import org.apache.velocity.app.event.EventCartridge;
 
 /**
  * The Turbine service interface to
@@ -172,4 +173,16 @@ public interface VelocityService extends Service
     public void handleRequest(Context context, String filename,
                               Writer writer, String encoding)
         throws ServiceException;
+
+    /**
+     * Returns the populated event cartridge or null if it has not been populated
+     */
+    public EventCartridge getEventCartridge();
+
+    /**
+     * By default, this is true if there is configured event cartridges.
+     * You can disable EC processing if you first disable it and then call
+     * handleRequest.
+     */
+    public void setEventCartridgeEnabled(boolean value);
 }

@@ -133,6 +133,12 @@ public class TurbineVelocityService
     private EventCartridge eventCartridge;
 
     /**
+     * Whether or not to use the eventCartridge. Defaults to true. 
+     * Can be used to turn off EC processing.
+     */
+    private boolean eventCartridgeEnabled = true;
+
+    /**
      * Performs early initialization of this Turbine service.
      */
     public void init()
@@ -279,7 +285,11 @@ public class TurbineVelocityService
             VelocityContext velocityContext = new VelocityContext(context);
 
             // Attach the EC to the context
-            getEventCartridge().attachToContext(velocityContext);
+            EventCartridge ec = getEventCartridge();
+            if (ec != null && eventCartridgeEnabled)
+            {
+                ec.attachToContext(velocityContext);
+            }
 
             if (encoding != null)
             {
@@ -299,7 +309,17 @@ public class TurbineVelocityService
     }
 
     /**
-     * Returns the populated event cartridge
+     * By default, this is true if there is configured event cartridges.
+     * You can disable EC processing if you first disable it and then call
+     * handleRequest.
+     */
+    public void setEventCartridgeEnabled(boolean value)
+    {
+        this.eventCartridgeEnabled = value;
+    }
+
+    /**
+     * @return EventCartridge the event cartridge
      */
     public EventCartridge getEventCartridge()
     {
