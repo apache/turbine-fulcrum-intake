@@ -64,7 +64,6 @@ import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.service.ServiceManager;
-import org.apache.avalon.framework.service.Serviceable;
 import org.apache.fulcrum.mimetype.util.CharSetMap;
 import org.apache.fulcrum.mimetype.util.MimeType;
 import org.apache.fulcrum.mimetype.util.MimeTypeMap;
@@ -94,7 +93,7 @@ import org.apache.fulcrum.mimetype.util.MimeTypeMap;
  */
 public class DefaultMimeTypeService
     extends AbstractLogEnabled
-    implements MimeTypeService, Configurable, Initializable, Contextualizable, Serviceable
+    implements MimeTypeService, Configurable, Initializable, Contextualizable
 {
     private String applicationRoot;
     /**
@@ -363,12 +362,4 @@ public class DefaultMimeTypeService
         this.applicationRoot = context.get( "urn:avalon:home" ).toString();
     }
     
-    /**
-     * Avalon component lifecycle method
-     */
-    public void service( ServiceManager manager) {
-
-        MimeTypeServiceFacade.setMimeTypeService(this);
-
-    }    
 }
