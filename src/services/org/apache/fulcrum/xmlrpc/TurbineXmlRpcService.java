@@ -634,9 +634,12 @@ public class TurbineXmlRpcService
             Socket interrupt = new Socket(InetAddress.getLocalHost(), port);
             interrupt.close();
         }
-        catch (Exception ignored)
+        catch (Exception notShutdown)
         {
             // Remotely possible we're leaving an open listener socket around.
+            getCategory().warn(XmlRpcService.SERVICE_NAME +
+                "It's possible the xmlrpc server was not shutdown: " + 
+                notShutdown.getMessage());
         }
 
         setInit(false);
