@@ -476,10 +476,13 @@ public class TurbineLocalizationService
     /**
      * @see org.apache.fulcrum.localization.LocalizationService#getLocale(HttpServletRequest)
      */
-    public final Locale getLocale(HttpServletRequest req)
+    public Locale getLocale(HttpServletRequest req)
     {
-        Locale l = req.getLocale();
-        return (l != null ? l : getLocale(req.getHeader(ACCEPT_LANGUAGE)));
+        return getLocale(req.getHeader(ACCEPT_LANGUAGE));
+// (JSS) Backed out this change because Tomcat seems to be returning 
+//       the wrong result and things just are not working.
+//        Locale l = req.getLocale();
+//        return (l != null ? l : getLocale(req.getHeader(ACCEPT_LANGUAGE)));
     }
 
     /**
