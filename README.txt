@@ -29,7 +29,7 @@ xalan.jar
 xerces.jar
 servlet.jar
 javamail.jar (http://java.sun.com/products/javamail/index.html)
-jaf.jar (http://java.sun.com/products/javamail/index.html)
+jaf.jar (http://java.sun.com/products/javabeans/glasgow/jaf.html)
 
 Alternately, you can set the property lib.repo to the directory acting
 as a repository holding the JARs named by default.properties.
