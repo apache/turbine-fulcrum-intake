@@ -13,23 +13,23 @@
     <menu name="Fulcrum">
       <item name="Overview"              href="/index.html"/>
       <item name="Building"              href="/building.html"/>
-      <item name="Changes"               href="/changes.html"/>
+      <item name="Changes"               href="/changes-report.html"/>
     </menu>
     <menu name="Components">
-      <item name="Test Container"        href="/multiproject/fulcrum-testcontainer/index.html"/>
-      <item name="Cache"                 href="/multiproject/fulcrum-cache/index.html"/>
-      <item name="Crypto"                href="/multiproject/fulcrum-crypto/index.html"/>
-      <item name="DVSL"                  href="/multiproject/fulcrum-dvsl/index.html"/>
-      <item name="Factory"               href="/multiproject/fulcrum-factory/index.html"/>
-      <item name="Localization"          href="/multiproject/fulcrum-localization/index.html"/>
-      <item name="Mimetype"              href="/multiproject/fulcrum-mimetype/index.html"/>
-      <item name="Pool"                  href="/multiproject/fulcrum-pool/index.html"/>
-      <item name="Pull"                  href="/multiproject/fulcrum-pull/index.html"/>
-      <item name="Scheduler"             href="/multiproject/fulcrum-scheduler/index.html"/>
-      <item name="Security"              href="/multiproject/fulcrum-security/index.html"/>
-      <item name="Workflow"              href="/multiproject/fulcrum-workflow/index.html"/>      
-      <item name="Workflow Example"      href="/multiproject/fulcrum-workflow-example/index.html"/>            
-      <item name="XMLRPC"                href="/multiproject/fulcrum-xmlrpc/index.html"/>
+      <item name="Test Container"        href="/fulcrum-testcontainer/index.html"/>
+      <item name="Cache"                 href="/fulcrum-cache/index.html"/>
+      <item name="Crypto"                href="/fulcrum-crypto/index.html"/>
+      <item name="DVSL"                  href="/fulcrum-dvsl/index.html"/>
+      <item name="Factory"               href="/fulcrum-factory/index.html"/>
+      <item name="Localization"          href="/fulcrum-localization/index.html"/>
+      <item name="Mimetype"              href="/fulcrum-mimetype/index.html"/>
+      <item name="Pool"                  href="/fulcrum-pool/index.html"/>
+      <item name="Pull"                  href="/fulcrum-pull/index.html"/>
+      <item name="Scheduler"             href="/fulcrum-scheduler/index.html"/>
+      <item name="Security"              href="/fulcrum-security/index.html"/>
+      <item name="OSWorkflow"            href="/fulcrum-osworkflow/index.html"/>      
+      <item name="OSWorkflow Example"    href="/fulcrum-osworkflow-example/index.html"/>            
+      <item name="XMLRPC"                href="/fulcrum-xmlrpc/index.html"/>
     </menu>
     <menu name="Howtos (old)">
       <item name="Factory Service"        href="/howto/factory-service.html"/>

@@ -8,12 +8,21 @@
 
   <body>
     <release version="Not applicable" date="">
+     <action dev="epugh" type="add">
+        Changed multiproject site build so that instead of having a
+        /docs/multiproject/fulcrum-XXX url, it is /docs/fulcrum-XXX
+        url for all the components.  Allows us to leverage the multiproject
+        plugin better.  Updated docs on building the site.  Easier to update 
+        individual component site documentation this way.
+      </action>     	
+      <action dev="epugh" type="add">
+        Intake Component Added
+      </action>    	
       <action dev="epugh" type="add">
         Build process updated to use 'multiproject' plugin.  Additionally,
         significantly more components have been converted to being seperate
         Avalon components.
       </action>
-
       <action dev="quintonm" type="add">
         The build process for Fulcrum has been changed.  Now, when you 
         build Fulcrum, it uses Maven's reactor to build the components

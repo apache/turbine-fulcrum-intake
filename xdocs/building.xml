@@ -24,14 +24,7 @@
         href="http://maven.apache.org/getting-started.html">Getting
         Started</a> document for instructions on how to install and
         use Maven.
-      </p>
-      <p>
-        <strong>Important!</strong>  Currently when you attempt to do a 
-        build, the code in 'src/java' is compiled as well as the individual
-        components.  Make sure to rename 'src' to 'src-OFF' to prevent 
-        this.  This is only until all the code in 'src/java' either is 
-        converted to Avalon components, or discarded.
-      </p>
+      </p>      
       <p>
         From the root directory of the fulcrum project (where you checked
         out the code to or unpacked a source distribution), simply type 
@@ -43,8 +36,23 @@
         To build a local copy of the documentation, use 'maven multiproject'.
         This will build a local copy of the web site in the 'target/docs' 
         directory.
-      </p>
-      
+      </p>      
+       <subsection name="Current Build Issues">
+        <p>
+          <strong>Important!</strong>  Currently when you attempt to do a 
+          build, the code in 'src/java' is compiled as well as the individual
+          components.  Make sure to rename 'src' to 'src-OFF' to prevent 
+          this.  This is only until all the code in 'src/java' either is 
+          converted to Avalon components, or discarded.
+        </p>
+        <p>
+          Depending on your version of Maven, you may have various problems with
+          the reports being generate, or you may run out of memory when you do a
+          complete build.  One approach to take is to turn of running unit tests
+          and excluding various components:<br/> 'maven multiproject:site -Dmaven.test.skip=true 
+          -Dmaven.multiproject.excludes=security/*.*,cache/*.*,scheduler/*.*'
+        </p>        
+      </subsection>     
       <subsection name="Maven Repositories">
         <p>
           If you are willing to build with an "unofficial" repository, you can uncomment
