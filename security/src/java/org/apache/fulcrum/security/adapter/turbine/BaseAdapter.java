@@ -6,6 +6,7 @@ package org.apache.fulcrum.security.adapter.turbine;
 import org.apache.commons.beanutils.Converter;
 import org.apache.commons.beanutils.converters.IntegerConverter;
 import org.apache.fulcrum.security.entity.SecurityEntity;
+import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
 import org.apache.turbine.util.security.TurbineSecurityException;
 /**
  * @author Eric Pugh
@@ -20,6 +21,8 @@ public class BaseAdapter
     public BaseAdapter()
     {
         super();
+        entity = new SecurityEntityImpl();
+        entity.setName("");
     }
     public BaseAdapter(org.apache.fulcrum.security.entity.SecurityEntity entity)
     {

@@ -52,4 +52,13 @@ public class BaseAdapterTest extends TestCase
         assertEquals(new Integer(56), ba.getIdAsObj());
   
     }
+    
+	public void testGettingNameForNullentity()
+	  {
+		 
+		  BaseAdapter ba = new BaseAdapter();
+		  assertEquals("",ba.getName());
+		 
+  
+	  }    
 }
