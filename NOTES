@@ -2,27 +2,31 @@
 C O U P L I N G  I S S U E S
 --------------------------------------------------------------------------
 
-TemplateService
----------------
-
-Remove RunData
-
-IntakeService
--------------
-
-I think Intake is pretty much bound to Turbine and doesn't
-look like it can be a general validation service. With the
-separate service builds this won't be a problem.
-
+RunDataService
 PullService
------------
+JSPService
 
-RunData can be removed from this service as well.
+These are the only services left in Turbine. The first two will
+probably remain in turbine as they are fundamental to what turbine
+is and the JSP service can become a fulcrum service with a little
+work.
 
----
+Logging
+-------
 
-Overall even if there are a some coupling issues most of the
-services are only going to be used in Turbine at first. The
-separate build for each service will isolate the coupling
-to a service. A service can state it's deps and have properties
-set to satisfy any requirements.
+These are the files that make reference to the Log wrapper.
+These need to use the log4j category and than we can get
+rid of all the set/getCategory crap in the service framework.
+
+/src/org/apache/fulcrum/util/parser/DataStreamParser.java
+/src/org/apache/fulcrum/util/parser/DefaultParameterParser.java
+/src/org/apache/fulcrum/util/parser/DefaultCookieParser.java
+/src/org/apache/fulcrum/security/impl/db/DBSecurityService.java
+/src/org/apache/fulcrum/intake/model/Field.java
+/src/org/apache/fulcrum/intake/model/BooleanField.java
+/src/org/apache/fulcrum/intake/model/ComboKeyField.java
+/src/org/apache/fulcrum/intake/validator/NumberValidator.java
+/src/org/apache/fulcrum/intake/validator/NumberKeyValidator.java
+/src/org/apache/fulcrum/intake/validator/IntegerValidator.java
+/src/org/apache/fulcrum/intake/Intake.java
+/src/org/apache/fulcrum/xmlrpc/util/FileTransfer.java
