@@ -119,7 +119,7 @@ public class UserAdapter extends BaseAdapter implements User
      */
     public String getPassword()
     {
-        return ((User)entity).getPassword();
+        return ((org.apache.fulcrum.security.entity.User)entity).getPassword();
     }
     /* (non-Javadoc)
      * @see org.apache.turbine.om.security.User#getPerm(java.lang.String)
@@ -270,7 +270,7 @@ public class UserAdapter extends BaseAdapter implements User
      */
     public void setPassword(String arg0)
     {
-		((User)entity).setPassword(arg0);
+		((org.apache.fulcrum.security.entity.User)entity).setPassword(arg0);
     }
     /* (non-Javadoc)
      * @see org.apache.turbine.om.security.User#setPerm(java.lang.String, java.lang.Object)
