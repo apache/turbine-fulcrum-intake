@@ -36,6 +36,7 @@ import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.apache.fulcrum.security.util.UserSet;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 /**
  * @author Eric Pugh
@@ -134,27 +135,54 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
         permissions = ((DynamicRole) role).getPermissions();
         assertEquals(0, permissions.size());
     }
+    public void testRevokeAllGroup() throws Exception
+    {
+        Permission permission =
+            securityService.getPermissionManager().getPermissionInstance();
+        Permission permission2 =
+            securityService.getPermissionManager().getPermissionInstance();
+        permission.setName("SEND_SPAM2");
+        permission2.setName("ANSWER_EMAIL2");
+        securityService.getPermissionManager().addPermission(permission);
+        securityService.getPermissionManager().addPermission(permission2);
+        role = roleManager.getRoleInstance("HELPER2");
+        roleManager.addRole(role);
+        modelManager.grant(role, permission);
+        modelManager.grant(role, permission2);
+        role = roleManager.getRoleById(role.getId());
+        PermissionSet permissions = ((DynamicRole) role).getPermissions();
+        assertEquals(2, permissions.size());
+        modelManager.revokeAll(role);
+        role = roleManager.getRoleById(role.getId());
+        permissions = ((DynamicRole) role).getPermissions();
+        assertEquals(0, permissions.size());
+    }    
     public void testRevokeAllUser() throws Exception
     {
         Group group = securityService.getGroupManager().getGroupInstance();
-        group.setName("TEST_REVOKEALL");
+        group.setName("TEST_REVOKEALLUSER_GROUP");
         securityService.getGroupManager().addGroup(group);
-        Group group2 = securityService.getGroupManager().getGroupInstance();
-        group2.setName("TEST_REVOKEALL2");
-        securityService.getGroupManager().addGroup(group2);
-        User user = userManager.getUserInstance("Clint2");
-        userManager.addUser(user, "clint");
+        Role role = securityService.getRoleManager().getRoleInstance();
+        role.setName("TEST_REVOKEALLUSER_ROLE");
+        securityService.getRoleManager().addRole(role);
+        User user = userManager.getUserInstance("calvin");
+        userManager.addUser(user, "calvin");
         modelManager.grant(user, group);
-        modelManager.grant(user, group2);
+        modelManager.grant(group,role);
+        group = groupManager.getGroupById(group.getId());
+        RoleSet roles = ((DynamicGroup) group).getRoles();
+        assertEquals(1,roles.size());
+        UserSet users = ((DynamicGroup) group).getUsers();
+        assertEquals(1,users.size());
+        
 
-        modelManager.revokeAll(user);
-        assertEquals(0, ((DynamicUser) user).getGroups().size());
-        group =
-            securityService.getGroupManager().getGroupByName("TEST_REVOKEALL");
-        group2 =
-            securityService.getGroupManager().getGroupByName("TEST_REVOKEALL2");
-        assertFalse(((DynamicGroup) group).getUsers().contains(user));
-        assertFalse(((DynamicGroup) group2).getUsers().contains(user));
+        modelManager.revokeAll(group);
+        assertEquals(0, ((DynamicGroup) group).getUsers().size());
+        role =
+            securityService.getRoleManager().getRoleByName("TEST_REVOKEALLUSER_ROLE");
+        
+        assertFalse(((DynamicRole) role).getGroups().contains(group));
+        
     }
     
     public void testRevokeAllPermission() throws Exception

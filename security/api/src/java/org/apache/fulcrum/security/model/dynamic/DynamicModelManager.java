@@ -77,16 +77,6 @@ public interface DynamicModelManager extends ModelManager
         throws DataBackendException, UnknownEntityException;
 
     /**
-	 * Revokes all permissions from a Role.
-	 * 
-	 * This method is user when deleting a Role.
-	 * 
-	 * @param role the Role
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the Role is not present.
-	 */
-    void revokeAll(Role role) throws DataBackendException, UnknownEntityException;
-    /**
 	 * Puts a user in a group.
 	 * 
 	 * This method is used when adding a user to a group
@@ -107,7 +97,7 @@ public interface DynamicModelManager extends ModelManager
     /**
 	 * Revokes all roles from an User.
 	 * 
-	 * This method is used when deleting an account.
+	 * This method is typically used when deleting an account.
 	 * 
 	 * @param user the User.
 	 * @throws DataBackendException if there was an error accessing the data backend.
@@ -117,11 +107,31 @@ public interface DynamicModelManager extends ModelManager
     /**
 	 * Revoke from a permission all roles
 	 * 
-	 * This method is used when deleting an account.
+	 * This method is typically used when deleting a Permission
 	 * 
-	 * @param user the User.
+	 * @param permission the Permission.
 	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the account is not present.
+	 * @throws UnknownEntityException if the permission is not present.
 	 */
-    void revokeAll(Permission permission) throws DataBackendException, UnknownEntityException;    
+    void revokeAll(Permission permission) throws DataBackendException, UnknownEntityException;
+    /**
+	 * Revokes all permissions from a Role.
+	 * 
+	 * This method is typically used when deleting a Role.
+	 * 
+	 * @param role the Role
+	 * @throws DataBackendException if there was an error accessing the data backend.
+	 * @throws UnknownEntityException if the Role is not present.
+	 */
+    void revokeAll(Role role) throws DataBackendException, UnknownEntityException;
+    /**
+	 * Revokes all roles and users from a Group
+	 * 
+	 * This method is typically used when deleting a Group.
+	 * 
+	 * @param group the Group
+	 * @throws DataBackendException if there was an error accessing the data backend.
+	 * @throws UnknownEntityException if the Group is not present.
+	 */
+    void revokeAll(Group group) throws DataBackendException, UnknownEntityException;    
 }
