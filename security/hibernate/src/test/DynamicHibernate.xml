@@ -41,8 +41,8 @@
     class="net.sf.hibernate.avalon.HibernateServiceImpl">   
     <parameter name="default.configuration" value="false"/>    
   <session-factory >
-        <property name="show_sql">true</property>
-        <property name="use_outer_join">true</property>
+        <property name="show_sql">false</property>
+        <property name="use_outer_join">auto</property>
 
         <!-- properties for this SessionFactory only -->
         <property name="hibernate.cglib.use_reflection_optimizer">false</property>
