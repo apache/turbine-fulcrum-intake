@@ -8,15 +8,21 @@
       <id name="id" type="long" column="PERMISSION_ID" unsaved-value="0">
            <generator class="native"/>
         </id>
-      <property name="name" column="NAME" type="string"/>          
+      <property name="name" column="NAME" type="string"/>     
+      
+      <set name="rolesAsSet" lazy="true" table="ROLE_PERMISSION" inverse="true" cascade="none">
+        <key column="PERMISSION_ID"/>
+        <many-to-many class="org.apache.fulcrum.security.model.dynamic.entity.DynamicRole" column="ROLE_ID"/> 
+      </set>           
     </class>
+    
     <class name="org.apache.fulcrum.security.model.dynamic.entity.DynamicRole" table="ROLE" >
       <id name="id" type="long" column="ROLE_ID" unsaved-value="0">
            <generator class="native"/>
         </id>
       <property name="name" column="NAME" type="string"/>      
       
-    <set name="permissionsAsSet" lazy="true" table="ROLE_PERMISSION">
+    <set name="permissionsAsSet" lazy="true" table="ROLE_PERMISSION" cascade="none">
         <key column="ROLE_ID"/>
         <many-to-many class="org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission" column="PERMISSION_ID"/> 
       </set>
@@ -56,6 +62,5 @@
         <many-to-many class="org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup" column="GROUP_ID"/> 
       </set>
     </class>    
-
     
   </hibernate-mapping>

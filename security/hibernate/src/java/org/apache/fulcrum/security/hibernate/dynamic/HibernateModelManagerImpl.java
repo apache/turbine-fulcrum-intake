@@ -64,6 +64,7 @@ import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.hibernate.AbstractHibernateModelManager;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -143,7 +144,12 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
             if (roleExists && permissionExists)
             {
                 ((DynamicRole) role).addPermission(permission);
-				getPersistenceHelper().updateEntity(role);
+                ((DynamicPermission) permission).addRole(role);
+                Session session = getPersistenceHelper().retrieveSession();
+                Transaction transaction = session.beginTransaction();
+                session.update(role);
+                session.update(permission);
+                transaction.commit();
                 return;
             }
         }
@@ -446,4 +452,37 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
     		throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
     	}
     }
+    
+    /**
+     * Revokes all roles from a permission
+     * 
+     * This method is used when deleting a permission.
+     * 
+     * @param permission the permission.
+     * @throws DataBackendException if there was an error accessing the data backend.
+     * @throws UnknownEntityException if the account is not present.
+     */
+    public synchronized void revokeAll(Permission permission)
+	throws DataBackendException, UnknownEntityException
+	{
+    	boolean permissionExists = false;
+    	permissionExists = getPermissionManager().checkExists(permission);
+    	if (permissionExists)
+    	{
+    		Object roles[] = ((DynamicPermission) permission).getRoles().toArray();
+   		
+    		for (int i = 0; i < roles.length; i++)
+    		{
+    		    Role role = (Role) roles[i];
+    			revoke(role, permission);
+    		}
+
+    		
+    		return;
+    	}
+    	else
+    	{
+    		throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
+    	}
+    }    
 }
