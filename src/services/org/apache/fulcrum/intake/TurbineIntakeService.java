@@ -262,8 +262,8 @@ public class TurbineIntakeService
                 }
             }
 
-            KeyedPoolableObjectFactory factory = null;
-            factory = new Group.GroupFactory(appData);
+            KeyedPoolableObjectFactory factory = 
+                new Group.GroupFactory(appData);
             keyedPool = new StackKeyedObjectPool(factory, maxPooledGroups);
 
             setInit(true);
