@@ -85,10 +85,6 @@ public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConst
 	private UserManager userManager;
 	private User user;
 
-    public static void main(String[] args)
-    {
-        junit.textui.TestRunner.run(NTDynamicModelManagerTest.class);
-    }
     public void setUp() throws Exception
     {
         this.setRoleFileName(null);
@@ -128,6 +124,10 @@ public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConst
         {
             assertTrue(re.getMessage().indexOf("Unknown user") > -1);
         }
+        catch (UnsatisfiedLinkError ule)
+        {
+            log.info("Unit test not being run due to missing NT DLL");
+        }
     }
 
     public void testGrantUserGroup() throws Exception
@@ -146,6 +146,10 @@ public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConst
         {
             assertTrue(re.getMessage().indexOf("Unknown user") > -1);
         }
+        catch (UnsatisfiedLinkError ule)
+        {
+            log.info("Unit test not being run due to missing NT DLL");
+        }
     }
     public void testRevokeUserGroup() throws Exception
     {
@@ -162,6 +166,10 @@ public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConst
         catch (UnknownEntityException re)
         {
             assertTrue(re.getMessage().indexOf("Unknown user") > -1);
+        }
+        catch (UnsatisfiedLinkError ule)
+        {
+            log.info("Unit test not being run due to missing NT DLL");
         }
     }
   

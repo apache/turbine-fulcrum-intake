@@ -86,10 +86,6 @@ public class NTBasicACLTest extends BaseUnitTest implements TestConstants
 	private UserManager userManager;
 	private User user;
 
-    public static void main(String[] args)
-    {
-        junit.textui.TestRunner.run(NTBasicACLTest.class);
-    }
     public void setUp() throws Exception
     {
         this.setRoleFileName(null);
@@ -133,6 +129,10 @@ public class NTBasicACLTest extends BaseUnitTest implements TestConstants
         catch (UnknownEntityException re)
         {
             assertTrue(re.getMessage().indexOf("Unknown user") > -1);
+        }
+        catch (UnsatisfiedLinkError ule)
+        {
+            log.info("Unit test not being run due to missing NT DLL");
         }
     }
 

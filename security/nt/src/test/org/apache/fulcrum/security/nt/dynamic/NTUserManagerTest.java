@@ -79,18 +79,13 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     private static final String PASSWORD = "";
 	private static final String GUESTUSER = DOMAIN + "/" + "Guest";
 	private static final String TESTUSER = DOMAIN + "/" + USERNAME;
-    //private DynamicModelManager modelManager;
-    public static void main(String[] args)
-    {
-        junit.textui.TestRunner.run(NTUserManagerTest.class);
-    }
+
     public void setUp() throws Exception
     {
         this.setRoleFileName(null);
         this.setConfigurationFileName("src/test/DynamicNT.xml");
         securityService = (SecurityService) lookup(SecurityService.ROLE);
         userManager = securityService.getUserManager();
-        //modelManager = (DynamicModelManager) securityService.getModelManager();
     }
     public void tearDown()
     {
@@ -284,6 +279,10 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             userManager.changePassword(user, "", "newPassword");
             fail("Should throw runtime exception");
         }
+        catch (NoClassDefFoundError ule)
+        {
+            log.info("Unit test not being run due to missing NT DLL");
+        }
         catch (RuntimeException re)
         {
             assertTrue(re.getMessage().equals(ERROR_MSG));
@@ -297,6 +296,10 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         {
             userManager.forcePassword(user, "JC_SUBSET");
             fail("Should throw runtime exception");
+        }
+        catch (NoClassDefFoundError ule)
+        {
+            log.info("Unit test not being run due to missing NT DLL");
         }
         catch (RuntimeException re)
         {
