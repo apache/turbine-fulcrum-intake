@@ -404,7 +404,7 @@ public class TemplateEmail
     public void sendMultiple()
         throws Exception
     {
-        if (toList.isEmpty())
+        if (toList == null || toList.isEmpty())
         {
             throw new Exception ("Must set a To:");
         }
