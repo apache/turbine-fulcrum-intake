@@ -119,7 +119,29 @@
       <version>3.2.3-dev</version>
     </dependency-->
   </dependencies>
+  <build>
+    <nagEmailAddress>turbine-dev@jakarta.apache.org</nagEmailAddress>
 
+    <sourceDirectory>${basedir}/src/java/</sourceDirectory>
+    <unitTestSourceDirectory>${basedir}/src/test/</unitTestSourceDirectory>
+    <unitTest>
+      <includes>
+        <include>**/*Test.*</include>
+        <include>**/*TestCase.*</include>
+      </includes>
+      <excludes>
+        <include>**/Abstract*.*</include>
+      </excludes>
+      <resources>
+        <resource>
+          <directory>${basedir}/src/test</directory>
+          <includes>
+            <include>**/*.*</include>
+          </includes>
+        </resource>
+      </resources>      
+    </unitTest>   
+  </build>
 
 </project>
 
