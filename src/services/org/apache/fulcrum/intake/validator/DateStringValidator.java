@@ -108,8 +108,10 @@ public class DateStringValidator
         super();
     }
 
-    protected void doInit(Map paramMap)
+    public void init(Map paramMap)
+        throws ServiceException
     {
+        super.init(paramMap);
         dateFormats = new ArrayList(5);
 
         Constraint constraint = (Constraint)paramMap.get("format");
