@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<project>
+
+  <extend>${basedir}/../../project.xml</extend>
+  <id>fulcrum-localization-api</id>
+  <name>Fulcrum Localization API</name>
+  <currentVersion>1.0-alpha-4</currentVersion>
+  <package>org.apache.fulcrum.localization</package>
+ 
+  <dependencies>
+
+    <dependency>
+      <id>servletapi</id>
+      <version>2.3</version>
+    </dependency>
+
+  </dependencies>
+
+</project>
+
