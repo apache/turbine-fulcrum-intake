@@ -54,11 +54,11 @@ package org.apache.fulcrum.db;
  * <http://www.apache.org/>.
  */
 
+import java.sql.Connection;
 import org.apache.fulcrum.ServiceException;
 import org.apache.fulcrum.TurbineServices;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.map.DatabaseMap;
-import org.apache.torque.pool.DBConnection;
 
 /**
  * This class provides a common front end to the DatabaseService in Turbine.
@@ -69,7 +69,7 @@ import org.apache.torque.pool.DBConnection;
  * sample code below demonstrates the right way to get and release a database
  * connection (exception handling is application dependent):
  * <blockquote><code><pre>
- * DBConnection dbConn = null;
+ * Connection dbConn = null;
  * try
  * {
  *     dbConn = TurbineDB.getConnection();
@@ -169,20 +169,20 @@ public abstract class TurbineDB
     }
 
     /**
-     * This method returns a DBConnection from the default pool.
+     * This method returns a Connection from the default pool.
      *
      * @return The requested connection.
      * @throws ServiceException Any exceptions caught during processing will be
      *         rethrown wrapped into a ServiceException.
      */
-    public static DBConnection getConnection()
+    public static Connection getConnection()
         throws Exception
     {
         return getService().getConnection();
     }
 
     /**
-     * This method returns a DBConnection from the pool with the
+     * This method returns a Connection from the pool with the
      * specified name.  The pool must either have been registered
      * with the {@link #registerPool(String,String,String,String,String)}
      * method, or be specified in the property file using the
@@ -200,36 +200,12 @@ public abstract class TurbineDB
      * @throws ServiceException Any exceptions caught during processing will be
      *         rethrown wrapped into a ServiceException.
      */
-    public static DBConnection getConnection(String name)
+    public static Connection getConnection(String name)
         throws Exception
     {
         return getService().getConnection(name);
     }
 
-
-    /**
-     * This method returns a DBConnecton using the given parameters.
-     *
-     * @param driver The fully-qualified name of the JDBC driver to use.
-     * @param url The URL of the database from which the connection is
-     * desired.
-     * @param username The name of the database user.
-     * @param password The password of the database user.
-     * @return A DBConnection.
-     * @throws ServiceException Any exceptions caught during processing will be
-     *         rethrown wrapped into a ServiceException.
-     *
-     * @deprecated Database parameters should not be specified each
-     * time a DBConnection is fetched from the service.
-     */
-    public static DBConnection getConnection(String driver,
-                                      String url,
-                                      String username,
-                                      String password)
-        throws Exception
-    {
-        return getService().getConnection(driver, url, username, password);
-    }
 
     /**
      * Release a connection back to the database pool.
@@ -238,32 +214,10 @@ public abstract class TurbineDB
      *         rethrown wrapped into a ServiceException.
      * @exception Exception A generic exception.
      */
-    public static void releaseConnection(DBConnection dbconn)
+    public static void releaseConnection(Connection dbconn)
         throws Exception
     {
         getService().releaseConnection(dbconn);
-    }
-
-    /**
-     * This method registers a new pool using the given parameters.
-     *
-     * @param name The name of the pool to register.
-     * @param driver The fully-qualified name of the JDBC driver to use.
-     * @param url The URL of the database to use.
-     * @param username The name of the database user.
-     * @param password The password of the database user.
-     *
-     * @throws ServiceException Any exceptions caught during processing will be
-     *         rethrown wrapped into a ServiceException.
-     */
-    public static void registerPool( String name,
-                              String driver,
-                              String url,
-                              String username,
-                              String password )
-        throws Exception
-    {
-        getService().registerPool(name, driver, url, username, password);
     }
 
     ///////////////////////////////////////////////////////////////////////////

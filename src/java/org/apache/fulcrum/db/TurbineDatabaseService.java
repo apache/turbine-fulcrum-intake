@@ -54,6 +54,7 @@ package org.apache.fulcrum.db;
  * <http://www.apache.org/>.
  */
 
+import java.sql.Connection;
 import org.apache.log4j.Category;
 import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
@@ -62,7 +63,7 @@ import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.map.DatabaseMap;
-import org.apache.torque.pool.DBConnection;
+import org.apache.torque.util.BasePeer;
 
 /**
  * Turbine's default implementation of {@link DatabaseService}.
@@ -145,20 +146,20 @@ public class TurbineDatabaseService
     }
 
     /**
-     * This method returns a DBConnection from the default pool.
+     * This method returns a Connection from the default pool.
      *
      * @return The requested connection.
      * @throws ServiceException Any exceptions caught during processing will be
      *         rethrown wrapped into a ServiceException.
      */
-    public DBConnection getConnection()
+    public Connection getConnection()
         throws Exception
     {
         return Torque.getConnection();
     }
 
     /**
-     * This method returns a DBConnection from the pool with the
+     * This method returns a Connection from the pool with the
      * specified name.  The pool must either have been registered
      * with the {@link #registerPool(String,String,String,String,String)}
      * method, or be specified in the property file using the
@@ -176,35 +177,11 @@ public class TurbineDatabaseService
      * @throws ServiceException Any exceptions caught during processing will be
      *         rethrown wrapped into a ServiceException.
      */
-    public DBConnection getConnection(String name)
+    public Connection getConnection(String name)
         throws Exception
     {
         // The getPool method ensures the validity of the returned pool.
         return Torque.getConnection(name);
-    }
-
-    /**
-     * This method returns a DBConnecton using the given parameters.
-     *
-     * @param driver The fully-qualified name of the JDBC driver to use.
-     * @param url The URL of the database from which the connection is
-     * desired.
-     * @param username The name of the database user.
-     * @param password The password of the database user.
-     * @return A DBConnection.
-     * @throws ServiceException Any exceptions caught during processing will be
-     *         rethrown wrapped into a ServiceException.
-     *
-     * @deprecated Database parameters should not be specified each
-     * time a DBConnection is fetched from the service.
-     */
-    public DBConnection getConnection(String driver,
-                                      String url,
-                                      String username,
-                                      String password)
-        throws Exception
-    {
-        return Torque.getConnection(driver, url, username, password);
     }
 
     /**
@@ -215,58 +192,12 @@ public class TurbineDatabaseService
      *         rethrown wrapped into a ServiceException.
      * @exception Exception A generic exception.
      */
-    public void releaseConnection(DBConnection dbconn)
+    public void releaseConnection(Connection dbconn)
         throws Exception
     {
-        Torque.releaseConnection(dbconn);
+        BasePeer.closeConnection(dbconn);
     }
 
-    /**
-     * This method registers a new pool using the given parameters.
-     *
-     * @param name The name of the pool to register.
-     * @param driver The fully-qualified name of the JDBC driver to use.
-     * @param url The URL of the database to use.
-     * @param username The name of the database user.
-     * @param password The password of the database user.
-     *
-     * @throws Exception Any exceptions caught during processing will be
-     *         rethrown wrapped into a ServiceException.
-     */
-    public void registerPool( String name,
-                              String driver,
-                              String url,
-                              String username,
-                              String password )
-        throws Exception
-    {
-        Torque.registerPool(name,driver,url,username,password);
-    }
-
-    /**
-     * This thread-safe method registers a new pool using the given parameters.
-     *
-     * @param name The name of the pool to register.
-     * @param driver The fully-qualified name of the JDBC driver to use.
-     * @param url The URL of the database to use.
-     * @param username The name of the database user.
-     * @param password The password of the database user.
-     * @exception Exception A generic exception.
-     */
-    public void registerPool( String name,
-                              String driver,
-                              String url,
-                              String username,
-                              String password,
-                              int maxCons,
-                              long expiryTime,
-                              long maxConnectionAttempts,
-                              long connectionWaitTimeout)
-        throws Exception
-    {
-        Torque.registerPool(name,driver,url,username,password,maxCons,expiryTime,
-            maxConnectionAttempts, connectionWaitTimeout);
-    }
 
     /**
      * Returns the database adapter for the default connection pool.
@@ -278,7 +209,7 @@ public class TurbineDatabaseService
     public DB getDB()
         throws Exception
     {
-        return Torque.getDB();
+        return Torque.getDB(getDefaultDB());
     }
 
     /**

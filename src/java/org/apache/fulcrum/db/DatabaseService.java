@@ -54,9 +54,9 @@ package org.apache.fulcrum.db;
  * <http://www.apache.org/>.
  */
 
+import java.sql.Connection;
 import org.apache.fulcrum.Service;
 import org.apache.torque.map.DatabaseMap;
-import org.apache.torque.pool.DBConnection;
 import org.apache.torque.adapter.DB;
 
 /**
@@ -73,11 +73,11 @@ import org.apache.torque.adapter.DB;
  * {@link #registerPool(String,String,String,String,String)} method.
  *
  * <p> You can use {@link #getConnection(String)} to acquire a
- * {@link org.apache.torque.pool.DBConnection} object, which in
+ * {@link java.sql.Connection} object, which in
  * turn can be used to create <code>java.sql.Statement</code> objects.
  *
- * <p>When you are done using the <code>DBConnection</code> you <strong>must</strong>
- * return it to the pool using {@link #releaseConnection(DBConnection)} method.
+ * <p>When you are done using the <code>Connection</code> you <strong>must</strong>
+ * return it to the pool using {@link #releaseConnection(Connection)} method.
  * This method call is often placed in <code>finally</code> clause of a <code>try /
  * catch</code> statement, to ensure that the connection is always returned
  * to the pool.<br>
@@ -114,17 +114,17 @@ public interface DatabaseService extends Service
         throws Exception;
 
     /**
-     * This method returns a DBConnection from the default pool.
+     * This method returns a Connection from the default pool.
      *
      * @return The requested connection.
      * @throws Exception Any exceptions caught during processing will be
      *         rethrown wrapped into a Exception.
      */
-    public DBConnection getConnection()
+    public Connection getConnection()
         throws Exception;
 
     /**
-     * This method returns a DBConnection from the pool with the
+     * This method returns a Connection from the pool with the
      * specified name.  The pool must either have been registered
      * with the {@link #registerPool(String,String,String,String,String)}
      * method, or be specified in the property file using the
@@ -142,29 +142,7 @@ public interface DatabaseService extends Service
      * @throws Exception Any exceptions caught during processing will be
      *         rethrown wrapped into a Exception.
      */
-    public DBConnection getConnection(String name)
-        throws Exception;
-
-
-    /**
-     * This method returns a DBConnecton using the given parameters.
-     *
-     * @param driver The fully-qualified name of the JDBC driver to use.
-     * @param url The URL of the database from which the connection is
-     * desired.
-     * @param username The name of the database user.
-     * @param password The password of the database user.
-     * @return A DBConnection.
-     * @throws Exception Any exceptions caught during processing will be
-     *         rethrown wrapped into a Exception.
-     *
-     * @deprecated Database parameters should not be specified each
-     * time a DBConnection is fetched from the service.
-     */
-    public DBConnection getConnection(String driver,
-                                      String url,
-                                      String username,
-                                      String password)
+    public Connection getConnection(String name)
         throws Exception;
 
     /**
@@ -174,26 +152,7 @@ public interface DatabaseService extends Service
      *         rethrown wrapped into a Exception.
      * @exception Exception A generic exception.
      */
-    public void releaseConnection(DBConnection dbconn)
-        throws Exception;
-
-    /**
-     * This method registers a new pool using the given parameters.
-     *
-     * @param name The name of the pool to register.
-     * @param driver The fully-qualified name of the JDBC driver to use.
-     * @param url The URL of the database to use.
-     * @param username The name of the database user.
-     * @param password The password of the database user.
-     *
-     * @throws Exception Any exceptions caught during processing will be
-     *         rethrown wrapped into a Exception.
-     */
-    public void registerPool( String name,
-                              String driver,
-                              String url,
-                              String username,
-                              String password )
+    public void releaseConnection(Connection dbconn)
         throws Exception;
 
 

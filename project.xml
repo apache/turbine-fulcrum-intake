@@ -81,7 +81,6 @@
       <organization>Zenplex</organization>
     </developer>
   </developers>
-
   <dependencies>
     <dependency>
       <id>bsf</id>
@@ -156,7 +155,7 @@
     </dependency>
     <dependency>
       <id>torque</id>
-      <version>3.0-b2</version>
+      <version>3.0-b3-dev</version>
       <url>http://jakarta.apache.org/turbine/torque</url>
     </dependency>
     <dependency>
@@ -192,7 +191,6 @@
       <version>2.1.0</version>
     </dependency>
   </dependencies>
-
   <build>
     <nagEmailAddress>turbine-dev@jakarta.apache.org</nagEmailAddress>
     <sourceDirectory>src/java</sourceDirectory>

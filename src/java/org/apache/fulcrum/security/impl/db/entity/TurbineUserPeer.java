@@ -57,7 +57,6 @@ package org.apache.fulcrum.security.impl.db.entity;
 import java.util.List;
 import org.apache.torque.TorqueException;
 import org.apache.torque.util.BasePeer;
-import org.apache.torque.pool.DBConnection;
 import org.apache.torque.util.Criteria;
 import org.apache.fulcrum.security.TurbineSecurity;
 import org.apache.fulcrum.security.entity.User;

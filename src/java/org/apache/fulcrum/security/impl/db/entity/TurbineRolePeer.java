@@ -59,7 +59,6 @@ import org.apache.fulcrum.security.impl.db.entity.map.TurbineRoleMapBuilder;
 import org.apache.fulcrum.security.impl.db.entity.UserPeer;
 import org.apache.torque.om.Persistent;
 import org.apache.torque.util.BasePeer;
-import org.apache.torque.pool.DBConnection;
 import org.apache.torque.util.Criteria;
 import org.apache.fulcrum.security.TurbineSecurity;
 import org.apache.fulcrum.security.entity.Group;
