@@ -7,6 +7,10 @@
 
   <body>
     <release version="1.0.4" date="in cvs">
+      <action dev="epugh" type="remove">
+      	Remove MimeTypeServiceFacadeTest, is should have never been in the
+        impl package anyway, and now MimeTypeServiceFacade is gone.
+      </action>
       <action dev="epugh" type="update">
       	Reimplement test based on TestContainer
       </action>         
