@@ -30,9 +30,11 @@ import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 import org.apache.fulcrum.security.util.PermissionSet;
+import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 /**
@@ -154,6 +156,29 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
         assertFalse(((DynamicGroup) group).getUsers().contains(user));
         assertFalse(((DynamicGroup) group2).getUsers().contains(user));
     }
+    
+    public void testRevokeAllPermission() throws Exception
+    {
+        Role role =
+            securityService.getRoleManager().getRoleInstance();
+        Role role2 =
+            securityService.getRoleManager().getRoleInstance();
+        role.setName("SEND_SPAM");
+        role2.setName("ANSWER_EMAIL");
+        securityService.getRoleManager().addRole(role);
+        securityService.getRoleManager().addRole(role2);
+        Permission permission = permissionManager.getPermissionInstance("HELPER");
+        permissionManager.addPermission(permission);
+        modelManager.grant(role, permission);
+        modelManager.grant(role2, permission);
+        permission = permissionManager.getPermissionById(permission.getId());
+        RoleSet roles = ((DynamicPermission) permission).getRoles();
+        assertEquals(2, roles.size());
+        modelManager.revokeAll(permission);
+        permission = permissionManager.getPermissionById(permission.getId());
+        roles = ((DynamicPermission) permission).getRoles();
+        assertEquals(0, roles.size());
+    }    
     public void testGrantUserGroup() throws Exception
     {
         Group group = securityService.getGroupManager().getGroupInstance();

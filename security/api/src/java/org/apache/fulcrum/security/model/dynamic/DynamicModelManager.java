@@ -114,4 +114,14 @@ public interface DynamicModelManager extends ModelManager
 	 * @throws UnknownEntityException if the account is not present.
 	 */
     void revokeAll(User user) throws DataBackendException, UnknownEntityException;
+    /**
+	 * Revoke from a permission all roles
+	 * 
+	 * This method is used when deleting an account.
+	 * 
+	 * @param user the User.
+	 * @throws DataBackendException if there was an error accessing the data backend.
+	 * @throws UnknownEntityException if the account is not present.
+	 */
+    void revokeAll(Permission permission) throws DataBackendException, UnknownEntityException;    
 }

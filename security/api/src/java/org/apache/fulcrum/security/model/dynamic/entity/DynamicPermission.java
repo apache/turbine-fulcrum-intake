@@ -15,8 +15,12 @@ package org.apache.fulcrum.security.model.dynamic.entity;
  *  limitations under the License.
  */
 
+import java.util.Set;
+
 import org.apache.fulcrum.security.entity.Permission;
+import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
+import org.apache.fulcrum.security.util.RoleSet;
 
 /**
  * Represents the "simple" model where permissions are related to roles,
@@ -28,5 +32,62 @@ import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
  */
 public class DynamicPermission extends SecurityEntityImpl implements Permission
 {
+
+    private Set roleSet = new RoleSet();
+
+
+    /**
+     * @return
+     */
+    public RoleSet getRoles() {
+        if (roleSet instanceof RoleSet)
+            return (RoleSet) roleSet;
+        else {
+            roleSet = new RoleSet(roleSet);
+            return (RoleSet) roleSet;
+        }
+    }
+
+    /**
+     * @param roleSet
+     */
+    public void setRoles(RoleSet roleSet) {
+        if (roleSet != null)
+            this.roleSet = roleSet;
+        else
+            this.roleSet = new RoleSet();
+    }
+
+    /**
+     * Add a role to the RoleSet
+     * @param role the role to add
+     */
+    public void addRole(Role role) {
+        getRoles().add(role);
+    }
+
+    /**
+     * Remove a role from the RoleSet
+     * @param role the role to remove
+     */
+    public void removeRole(Role role) {
+        getRoles().remove(role);
+    }
+
+    /**
+     * 
+     * @param roles
+     */
+    public void setRolesAsSet(Set roles) {
+        this.roleSet = roles;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public Set getRolesAsSet() {
+        return roleSet;
+    }
 
 }
