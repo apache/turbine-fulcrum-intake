@@ -3,3 +3,4 @@ target
 .tomcatplugin
 .classpath
 .project
+index*.xml
