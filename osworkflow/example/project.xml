@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <project>
-  <extend>${basedir}/../project.xml</extend>
+  <extend>${basedir}/../../project.xml</extend>
   <pomVersion>3</pomVersion>
   <name>Fulcrum OSWorkflow Example Webapp</name>
   <id>fulcrum-osworkflow-example</id>

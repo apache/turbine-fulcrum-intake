@@ -19,14 +19,24 @@
     </dependency>      
     <dependency>
       <groupId>fulcrum</groupId>   
-      <artifactId>fulcrum-crypto</artifactId>
-      <version>1.0-alpha-3</version>
+      <artifactId>fulcrum-crypto-api</artifactId>
+      <version>1.0-alpha-4</version>
     </dependency>
+    <dependency>
+      <groupId>fulcrum</groupId>   
+      <artifactId>fulcrum-crypto-impl</artifactId>
+      <version>1.0-alpha-4</version>
+    </dependency>  
     
     <dependency>
       <groupId>fulcrum</groupId>    
-      <artifactId>fulcrum-factory</artifactId>
-      <version>1.0-alpha-1</version>
+      <artifactId>fulcrum-factory-api</artifactId>
+      <version>1.0-alpha-2</version>
+    </dependency>
+    <dependency>
+      <groupId>fulcrum</groupId>    
+      <artifactId>fulcrum-factory-impl</artifactId>
+      <version>1.0-alpha-2</version>
     </dependency>
 
     <dependency>
@@ -70,12 +80,14 @@
     <dependency>
       <groupId>hibernate</groupId>
       <artifactId>hibernate-avalon-api</artifactId>
-      <version>0.4-dev</version>           
+      <version>0.4-dev</version> 
+      <url>http://hibernate.org/101.html</url>          
     </dependency> 
     <dependency>
       <groupId>hibernate</groupId>
       <artifactId>hibernate-avalon-impl</artifactId>
-      <version>0.4-dev</version>          
+      <version>0.4-dev</version>    
+      <url>http://hibernate.org/101.html</url>        
     </dependency>                 
      <dependency>
        <id>odmg</id>      
