@@ -55,7 +55,7 @@ package org.apache.fulcrum.localization;
  */
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
@@ -89,6 +89,7 @@ import org.apache.fulcrum.InitializationException;
  * @author <a href="mailto:jm@mediaphil.de">Jonas Maurus</a>
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
  * @author <a href="mailto:novalidemail@foo.com">Frank Y. Kim</a>
+ * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$
  */
 public class TurbineLocalizationService
@@ -96,11 +97,10 @@ public class TurbineLocalizationService
     implements LocalizationService
 {
     /**
-     * The ResourceBundles in this service.
-     * Key=bundle name
-     * Value=Hashtable containing ResourceBundles keyed by Locale.
+     * Bundle name keys a HashMap of the ResourceBundles in this
+     * service (which is in turn keyed by Locale).
      */
-    private static Hashtable bundles = null;
+    private static HashMap bundles = null;
 
     /** The name of the default bundle to use. */
     private static String defaultBundle = null;
@@ -124,7 +124,7 @@ public class TurbineLocalizationService
     public void init()
         throws InitializationException
     {
-        bundles = new Hashtable();
+        bundles = new HashMap();
         defaultBundle = getConfiguration().getString("locale.default.bundle");
         defaultLanguage = getConfiguration()
             .getString("locale.default.language", "en").trim();
@@ -240,46 +240,55 @@ public class TurbineLocalizationService
     public ResourceBundle getBundle(String bundleName,
                                     Locale locale)
     {
+        ResourceBundle rb = null;
         bundleName = bundleName.trim();
+        HashMap bundlesByLocale = (HashMap) bundles.get(bundleName);
 
-        if ( bundles.containsKey(bundleName) )
+        if (bundlesByLocale != null)
         {
-            Hashtable locales = (Hashtable)bundles.get(bundleName);
+            rb = (ResourceBundle) bundlesByLocale.get(locale);
 
-            if ( locales.containsKey(locale) )
+            if (rb == null)
             {
-                return (ResourceBundle)locales.get(locale);
-            }
-            else
-            {
-                // Try to create a ResourceBundle for this Locale.
-                ResourceBundle rb =
-                    ResourceBundle.getBundle(bundleName, locale);
-
-                // Cache the ResourceBundle in memory.
-                locales.put( rb.getLocale(), rb );
-
-                return rb;
+                rb = cacheBundle(bundleName, locale);
             }
         }
         else
         {
-            // Create a ResourceBundle for requested Locale.
-            ResourceBundle rb =
-                ResourceBundle.getBundle(bundleName, locale);
+            rb = cacheBundle(bundleName, locale);
+        }
+        return rb;
+    }
 
-            // Cache the ResourceBundle in memory.
-            Hashtable bundlesByLocale = new Hashtable();
-            bundlesByLocale.put(locale, rb);
+    /**
+     * Caches the named bundle for fast lookups.  This operation is
+     * relatively expesive in terms of memory use, but is optimized
+     * for run-time speed.
+     */
+    private synchronized ResourceBundle cacheBundle(String bundleName,
+                                                    Locale locale)
+    {
+        HashMap bundlesByLocale = (HashMap) bundles.get(bundleName);
+        ResourceBundle rb = (bundlesByLocale == null ? null :
+                             (ResourceBundle) bundlesByLocale.get(bundleName));
+
+        if (rb == null)
+        {
+            HashMap bundlesByName = new HashMap(bundles);
+            bundlesByLocale = (bundlesByLocale == null ? new HashMap(3) :
+                               new HashMap(bundlesByLocale));
+            rb = ResourceBundle.getBundle(bundleName, locale);
 
             // Can't call getLocale(), because that is jdk2.  This
             // needs to be changed back, since the above approach
             // caches extra Locale and Bundle objects.
             // bundlesByLocale.put( rb.getLocale(), rb );
-            bundles.put(bundleName, bundlesByLocale);
+            bundlesByLocale.put(locale, rb);
 
-            return rb;
+            bundlesByName.put(bundleName, bundlesByLocale);
+            this.bundles = bundlesByName;
         }
+        return rb;
     }
 
     /**
