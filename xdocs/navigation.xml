@@ -21,6 +21,7 @@
       <item name="Crypto"                href="/fulcrum-crypto/index.html"/>
       <item name="DVSL"                  href="/fulcrum-dvsl/index.html"/>
       <item name="Factory"               href="/fulcrum-factory/index.html"/>
+      <item name="Intake"	             href="/fulcrum-intake/index.html"/>
       <item name="Localization"          href="/fulcrum-localization/index.html"/>
       <item name="Mimetype"              href="/fulcrum-mimetype/index.html"/>
       <item name="Pool"                  href="/fulcrum-pool/index.html"/>
@@ -33,7 +34,6 @@
     </menu>
     <menu name="Howtos (old)">
       <item name="Factory Service"        href="/howto/factory-service.html"/>
-      <item name="Intake Service"         href="/howto/intake-service.html"/>
       <item name="JSP Service"            href="/howto/jsp-service.html"/>
       <item name="Localization Service"   href="/howto/localization-service.html"/>
       <item name="Mimetype Service"       href="/howto/mimetype-service.html"/>
