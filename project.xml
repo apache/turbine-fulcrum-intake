@@ -79,7 +79,7 @@
     <developer>
       <name>Daniel Rall</name>
       <id>dlr</id>
-      <email>dlr@finemaltcoding.com</email>
+      <email></email>
       <organization>CollabNet, Inc.</organization>
     </developer>
     <developer>
@@ -92,7 +92,7 @@
       <name>Jon Scott Stevens</name>
       <id>jon</id>
       <email>jon@latchkey.com</email>
-      <organization>CollabNet, Inc.</organization>
+      <organization></organization>
     </developer>
     <developer>
       <name>Jason van Zyl</name>
