@@ -1,15 +1,19 @@
-<!-- This configuration file for Avalon components is used for testing the TestComponent -->
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
 <role-list>
-    <role
-        name="org.apache.fulcrum.xmlrpc.XmlRpcClientComponent"
-        shorthand="XmlRpcClientComponent"
-        default-class="org.apache.fulcrum.xmlrpc.DefaultXmlRpcClientComponent"/>
-    <role
-        name="org.apache.fulcrum.xmlrpc.XmlRpcServerComponent"
-        shorthand="XmlRpcServerComponent"
-        default-class="org.apache.fulcrum.xmlrpc.DefaultXmlRpcServerComponent"/>
     <role
         name="org.apache.fulcrum.xmlrpc.TestHandler"
         shorthand="TestHandler"
-        default-class="org.apache.fulcrum.xmlrpc.TestHandlerImpl"/>
+        default-class="org.apache.fulcrum.xmlrpc.TestHandlerImpl"
+    />
+    <role
+        name="org.apache.fulcrum.xmlrpc.XmlRpcClientComponent"
+        shorthand="XmlRpcClientComponent"
+        default-class="org.apache.fulcrum.xmlrpc.DefaultXmlRpcClientComponent"
+     />
+    <role
+        name="org.apache.fulcrum.xmlrpc.XmlRpcServerComponent"
+        shorthand="XmlRpcServerComponent"
+        default-class="org.apache.fulcrum.xmlrpc.DefaultXmlRpcServerComponent"
+    />
 </role-list>
