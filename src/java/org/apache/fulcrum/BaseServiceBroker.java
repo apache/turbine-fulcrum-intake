@@ -382,7 +382,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
      * <code>SERVICE_NAME</code> constant of the service's interface
      * definition).
      * @param data An object to use for initialization activities.
-     * @exception InitializationException Initilaization of this
+     * @exception InitializationException Initialization of this
      * service was not successful.
      * @see org.apache.fulcrum.Service#init()
      */
@@ -422,7 +422,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
     }
 
     /**
-     * Performs early initiailzation of all services. You can decide
+     * Performs early initialization of all services. You can decide
      * to handle failed initizalizations if you wish, but then
      * after one service fails, the other will not have the chance
      * to initialize.
