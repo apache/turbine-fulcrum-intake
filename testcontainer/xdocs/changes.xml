@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Fulcrum</title>
+    <author email="epugh@upstate.com">Eric Pugh</author>
+    <author email="quintonm@bellsouth.net">Quinton McCombs</author>
+  </properties>
+
+  <body>
+    <release version="Not applicable" date="">
+      <action dev="epugh" type="add">
+        TestContainer can accept either the split role.xml, config.xml
+        or just a single combined xml file.  Additionally, by lazy loading
+        the container, you can swap between container configurations in
+        the various unit tests.
+      </action>
+      <action dev="quintonm" type="add">
+        TestContainer component was added.  This is to be used for 
+        testing of the components so that we do not have a dependancy
+        on Plexus.  The test container is based on ECM, which is what
+        Turbine is using.  A base class for unit tests is also included.
+      </action>
+     
+    </release>
+
+  </body>
+</document>
+
