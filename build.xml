@@ -14,6 +14,7 @@
     <pathelement location="${bsf.jar}"/>
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-email.jar}"/>
+    <pathelement location="${commons-lang.jar}"/>
     <pathelement location="${commons-util.jar}"/>
     <pathelement location="${jaf.jar}"/>
     <pathelement location="${javamail.jar}"/>
@@ -76,6 +77,7 @@
 
     <echo message="bsf.jar = ${bsf.jar}"/>
     <echo message="commons-collections.jar = ${commons-collections.jar}"/>
+    <echo message="commons-lang.jar = ${commons-lang.jar}"/>
     <echo message="commons-util.jar = ${commons-util.jar}"/>
     <echo message="dom4j.jar = ${dom4j.jar}"/>
     <echo message="dvsl.jar = ${dvsl.jar}"/>

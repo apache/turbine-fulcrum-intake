@@ -28,6 +28,7 @@
         <pathelement location="${torque.jar}"/>
         <pathelement location="${xerces.jar}"/>
         <pathelement location="${commons-collections.jar}"/>
+        <pathelement location="${commons-lang.jar}"/>
         <pathelement location="${commons-util.jar}"/>
         <pathelement location="${stratum.jar}"/>
       </classpath>
@@ -51,10 +52,10 @@
     <filter token="DATABASE_DEFAULT" value="${security.database.name}"/>
     <!-- is there a way to load this from an xml file? -->
     <filter token="EXTRA_USER_COLUMNS" value="${security.extra.user.columns}"/>
-    <copy 
+    <copy
       todir="${build.src}"
       file="${schemaDirectory}/turbine-schema.xml"
-      filtering="yes" 
+      filtering="yes"
     />
 
     <torque-om
@@ -74,10 +75,10 @@
   <target name="scheduler-om" depends="init">
 
     <filter token="DATABASE_DEFAULT" value="${scheduler.database.name}"/>
-    <copy 
+    <copy
       todir="${build.src}"
       file="${schemaDirectory}/scheduler-schema.xml"
-      filtering="yes" 
+      filtering="yes"
     />
 
     <torque-om
