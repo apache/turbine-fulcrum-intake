@@ -9,11 +9,13 @@
             href="http://jakarta.apache.org/turbine/"/>
       <item name="Fulcrum"
             href="http://jakarta.apache.org/turbine/fulcrum/"/>
+      <item name="OpenSymphony Workflow"
+            href="http://www.opensymphony.com/osworkflow/"/>
     </links>
 
     <menu name="Overview">
       <item name="Main"                 href="/index.html"/>
-      <item name="Example Application"  href="http://jakarta.apache.org/turbine/fulcrum/multiproject/fulcrum-workflow-example/index.html"/>
+      <item name="Example Application"  href="http://jakarta.apache.org/turbine/fulcrum/multiproject/fulcrum-osworkflow-example/index.html"/>
     </menu>
   </body>
 </project>
