@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!-- 
+/*
+ * Copyright 2001-2004 The Apache Software Foundation.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ -->
+ 
 <project>
   <pomVersion>3</pomVersion>
   <name>jakarta-turbine-fulcrum</name>
@@ -266,19 +283,19 @@
     <report>maven-developer-activity-plugin</report>
     <report>maven-file-activity-plugin</report>
   
-    <report>maven-junit-report-plugin</report>
+
 
     <report>maven-multiproject-plugin</report>
     <report>maven-faq-plugin</report>    
     <report>maven-pmd-plugin</report>
     <report>maven-simian-plugin</report>
-    <!-- stripped down list
+    <!-- stripped down list-->
     <report>maven-javadoc-plugin</report>
     <report>maven-jxr-plugin</report>      
-    
+    <report>maven-junit-report-plugin</report>
     <report>maven-jcoverage-plugin</report>
     
-    -->
+    
   </reports> 
 
 </project>
