@@ -72,6 +72,7 @@ import org.apache.velocity.context.Context;
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
  * @author <a href="mailto:jvanzyl@periapt.com.com">Jason van Zyl</a>
+ * @author <a href="mailto:stack@collab.net">Michael Stack</a>
  * @version $Id$
  */
 public abstract class TurbineVelocity
@@ -97,7 +98,7 @@ public abstract class TurbineVelocity
      * @param context A Context.
      * @param template The path to the template file.
      * @return The processed template.
-     * @exception Exception, a generic exception.
+     * @exception Exception Error processing template.
      */
     public static String handleRequest(Context context, String template)
         throws Exception
@@ -125,13 +126,40 @@ public abstract class TurbineVelocity
      * @param filename A String with the filename of the template.
      * @param out A OutputStream where we will write the process template as
      * a String.
-     * @exception Exception, a generic exception.
+     *
+     * @exception Exception Error processing template.
+     *
+     * @see org.apache.fulcrum.velocity.VelocityService#handleRequest(Context,
+     * String, OutputStream)
      */
-    public static void handleRequest(Context context,
-                              String template,
-                              OutputStream out)
+    public static void handleRequest(Context context, String template,
+                                     OutputStream out)
         throws Exception
     {
         getService().handleRequest(context, template, out);
+    }
+
+    /**
+     * Process the request and fill in the template with the values
+     * you set in the Context.
+     *
+     * @param context A Context.
+     * @param template The path to the template file.
+     * @param out A OutputStream where we will write the process template as
+     * a String.
+     * @param charset The character set to use when writing the result.
+     * @param encoding The encoding to use when merging context and template.
+     *
+     * @exception Exception Error processing template.
+     *
+     * @see org.apache.fulcrum.velocity.VelocityService#handleRequest(Context,
+     * String, OutputStream)
+     */
+    public static void handleRequest(Context context, String template,
+                                     OutputStream out, String charset,
+                                     String encoding)
+        throws Exception
+    {
+        getService().handleRequest(context, template, out, charset, encoding);
     }
 }
