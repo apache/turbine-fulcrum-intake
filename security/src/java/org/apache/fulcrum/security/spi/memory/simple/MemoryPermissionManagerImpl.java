@@ -68,6 +68,7 @@ import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.model.simple.entity.SimplePermission;
+import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PermissionSet;
@@ -168,7 +169,7 @@ public class MemoryPermissionManagerImpl extends AbstractLogEnabled implements P
      * @throws DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public Permission getPermissionById(int id) throws DataBackendException, UnknownEntityException
+    public Permission getPermissionById(long id) throws DataBackendException, UnknownEntityException
     {
         Permission permission = getAllPermissions().getPermissionById(id);
         if (permission == null)
@@ -243,36 +244,7 @@ public class MemoryPermissionManagerImpl extends AbstractLogEnabled implements P
         }
         return exists;
     }
-    /**
-	* Stores Permission's attributes. The Permissions is required to exist in
-	* the system.
-	*
-	* @param permission The Permission to be stored.
-	* @throws DataBackendException if there was an error accessing the data
-	*         backend.
-	* @throws UnknownEntityException if the permission does not exist.
-	*/
-    public void savePermission(Permission permission) throws DataBackendException, UnknownEntityException
-    {
-        boolean permissionExists = false;
-        try
-        {
-            permissionExists = checkExists(permission);
-            if (permissionExists)
-            {
-                permissions.remove(permission);
-                permissions.add(permission);
-            }
-            else
-            {
-                throw new UnknownEntityException("Unknown permission '" + permission + "'");
-            }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("savePermission(Permission) failed", e);
-        }
-    }
+  
     /**
      * Removes a Permission from the system.
      *
@@ -364,7 +336,7 @@ public class MemoryPermissionManagerImpl extends AbstractLogEnabled implements P
             roleExists = checkExists(role);
             if (roleExists)
             {
-                return role.getPermissions();
+                return ((SimpleRole)role).getPermissions();
             }
         }
         catch (Exception e)

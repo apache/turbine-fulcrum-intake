@@ -160,7 +160,6 @@ public class MemoryRoleManagerImpl extends AbstractLogEnabled implements SimpleR
         {
             throw new UnknownEntityException("The specified role does not exist");
         }
-        role.setPermissions(getPermissions(role));
         return role;
     }
     /**
@@ -175,14 +174,13 @@ public class MemoryRoleManagerImpl extends AbstractLogEnabled implements SimpleR
     	* @throws DataBackendException if there is a problem accessing the
     	*            storage.
     	*/
-    public Role getRoleById(int id) throws DataBackendException, UnknownEntityException
+    public Role getRoleById(long id) throws DataBackendException, UnknownEntityException
     {
         Role role = getAllRoles().getRoleById(id);
         if (role == null)
         {
             throw new UnknownEntityException("The specified role does not exist");
-        }
-        role.setPermissions(getPermissions(role));
+        }     
         return role;
     }
     /**
@@ -281,7 +279,7 @@ public class MemoryRoleManagerImpl extends AbstractLogEnabled implements SimpleR
             roleExists = checkExists(role);
             if (roleExists)
             {
-                role.setPermissions(new PermissionSet());
+				((SimpleRole)role).setPermissions(new PermissionSet());
                 return;
             }
         }
@@ -452,35 +450,15 @@ public class MemoryRoleManagerImpl extends AbstractLogEnabled implements SimpleR
         // is that the roleExists was true.
         throw new EntityExistsException("Role '" + role + "' already exists");
     }
+  
     /**
-       * Stores Role's attributes. The Roles is required to exist in the system.
-       *
-       * @param role The Role to be stored.
-       * @throws DataBackendException if there was an error accessing the data
-       *         backend.
-       * @throws UnknownEntityException if the role does not exist.
-       */
-    public void saveRole(Role role) throws DataBackendException, UnknownEntityException
-    {
-        boolean roleExists = false;
-        roleExists = checkExists(role);
-        if (roleExists)
-        {
-            roles.add(role);
-        }
-        else
-        {
-            throw new UnknownEntityException("Unknown role '" + role + "'");
-        }
-    }
-    /**
-    	* Removes a Role from the system.
-    	*
-    	* @param role The object describing the role to be removed.
-    	* @throws DataBackendException if there was an error accessing the data
-    	*         backend.
-    	* @throws UnknownEntityException if the role does not exist.
-    	*/
+	* Removes a Role from the system.
+	*
+	* @param role The object describing the role to be removed.
+	* @throws DataBackendException if there was an error accessing the data
+	*         backend.
+	* @throws UnknownEntityException if the role does not exist.
+	*/
     public synchronized void removeRole(Role role) throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;

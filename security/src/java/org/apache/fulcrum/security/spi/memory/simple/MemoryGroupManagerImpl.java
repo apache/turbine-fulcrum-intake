@@ -184,7 +184,7 @@ public class MemoryGroupManagerImpl extends AbstractLogEnabled implements Simple
      * @throws DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public Group getGroupById(int id) throws DataBackendException, UnknownEntityException
+    public Group getGroupById(long id) throws DataBackendException, UnknownEntityException
     {
         Group group = getAllGroups().getGroupById(id);
         if (group == null)
@@ -272,35 +272,7 @@ public class MemoryGroupManagerImpl extends AbstractLogEnabled implements Simple
         {
         }
     }
-    /**
-    	* Stores Group's attributes. The Groups is required to exist in the system.
-    	*
-    	* @param group The Group to be stored.
-    	* @throws DataBackendException if there was an error accessing the data
-    	*         backend.
-    	* @throws UnknownEntityException if the group does not exist.
-    	*/
-    public void saveGroup(Group group) throws DataBackendException, UnknownEntityException
-    {
-        boolean groupExists = false;
-        try
-        {
-            groupExists = checkExists(group);
-            if (groupExists)
-            {
-                groups.remove(group);
-                groups.add(group);
-            }
-            else
-            {
-                throw new UnknownEntityException("Unknown group '" + group + "'");
-            }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("saveGroup(Group) failed", e);
-        }
-    }
+  
     /**
      * Determines if the <code>Group</code> exists in the security system.
      *
