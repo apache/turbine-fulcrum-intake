@@ -83,6 +83,7 @@ import org.apache.avalon.framework.thread.ThreadSafe;
  * @author <a href="mailto:john@zenplex.com">John Thorhauer</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
+ * @author <a href="mailto:peter@courcoux.biz">Peter Courcoux</a>
  * * @version $Id$
  */
 public class DefaultGlobalCacheService
@@ -207,6 +208,60 @@ public class DefaultGlobalCacheService
     {
         cache.remove(id);
     }
+    
+    /**
+     * Returns a copy of keys to objects in the cache as a list.
+     * 
+     * Note that keys to expired objects are not returned.
+     * 
+     * @return A List of <code>String</code>'s representing the keys to objects
+     * in the cache.
+     */
+    public List getKeys() {
+        ArrayList keys = new ArrayList(cache.size());
+        synchronized (this) {
+            for (Iterator itr = cache.keySet().iterator(); itr.hasNext();) 
+            {
+                String key = (String) itr.next();
+                try {
+                    CachedObject obj = getObject(key);
+                } catch (ObjectExpiredException oee) {
+                    // this is OK we just do not want this key 
+                    continue;
+                }
+                keys.add(new String(key));
+            }
+        }
+        return (List)keys;
+    }
+    
+    /**
+     * Returns a copy of the non-expired CachedObjects 
+     * in the cache as a list.
+     * 
+     * @return A List of <code>CachedObject</code> objects 
+     * held in the cache
+     */
+    public List getCachedObjects() {
+        ArrayList objects = new ArrayList(cache.size());
+        synchronized (this) {
+            for (Iterator itr = cache.keySet().iterator(); itr.hasNext();) 
+            {
+                String key = (String) itr.next();
+                CachedObject obj = null;
+                try {
+                    obj = getObject(key);
+                } catch (ObjectExpiredException oee) {
+                    // this is OK we just do not want this object 
+                    continue;
+                }
+                objects.add(obj);
+            }
+        }
+        return (List)objects;
+    }
+    
+    
     /**
      * Circle through the cache and remove stale objects.  Frequency
      * is determined by the cacheCheckFrequency property.

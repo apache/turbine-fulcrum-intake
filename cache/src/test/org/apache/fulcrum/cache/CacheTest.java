@@ -53,6 +53,12 @@
  */
 package org.apache.fulcrum.cache;
 // Cactus and Junit imports
+
+import java.util.ConcurrentModificationException;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
 import junit.awtui.TestRunner;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -63,10 +69,12 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  *
  * @author <a href="paulsp@apache.org">Paul Spencer</a>
  * @author <a href="epugh@upstate.com">Eric Pugh</a> 
+ * @author <a href="mailto:peter@courcoux.biz">Peter Courcoux</a>
  * @version $Id$
  */
 public class CacheTest extends BaseUnitTest
 {
+    
     private GlobalCacheService globalCache = null;
     private static final String cacheKey = new String("CacheKey");
     private static final String cacheKey_2 = new String("CacheKey_2");
@@ -496,6 +504,81 @@ public class CacheTest extends BaseUnitTest
             throw e;
         }
     }
+    /**
+     * Test that we can get a list of the keys in the cache
+     * 
+     * @return
+     */
+    public void testCacheGetKeyList() {
+        globalCache.flushCache();
+        globalCache.addObject("date1", new CachedObject(new Date()));
+        globalCache.addObject("date2", new CachedObject(new Date()));
+        globalCache.addObject("date3", new CachedObject(new Date()));
+        assertTrue("Did not get key list back.", (globalCache.getKeys() != null));
+        List keys = globalCache.getKeys();
+        for (Iterator itr = keys.iterator(); itr.hasNext();) {
+            Object key = itr.next();
+            assertTrue("Key was not an instance of String.", (key instanceof String));
+        }
+        
+    }
+    
+    /**
+     * Test that we can get a list of the keys in the cache
+     * 
+     * @return
+     */
+    public void testCacheGetCachedObjects() {
+        globalCache.flushCache();
+        globalCache.addObject("date1", new CachedObject(new Date()));
+        globalCache.addObject("date2", new CachedObject(new Date()));
+        globalCache.addObject("date3", new CachedObject(new Date()));
+        assertTrue("Did not get object list back.", (globalCache.getCachedObjects() != null));
+        List objects = globalCache.getCachedObjects();
+        for (Iterator itr = objects.iterator(); itr.hasNext();) {
+            Object obj = itr.next();
+            assertNotNull("Object was null.", obj);
+            assertTrue("Object was not an instance of CachedObject", (obj instanceof CachedObject));
+        }
+        
+    }
+    
+    /**
+     * Test that the retrieved list is safe from 
+     * ConcurrentModificationException's being thrown if the cache
+     * is updated while we are iterating over the List.
+     * 
+     * @return
+     */
+    public void testCacheModification() {
+        globalCache.flushCache();
+        globalCache.addObject("date1", new CachedObject(new Date()));
+        globalCache.addObject("date2", new CachedObject(new Date()));
+        globalCache.addObject("date3", new CachedObject(new Date()));
+        assertTrue("Did not get key list back.", (globalCache.getKeys() != null));
+        List keys = globalCache.getKeys();
+        try {
+	        for (Iterator itr = keys.iterator(); itr.hasNext();) {
+	            Object key = itr.next();
+	            globalCache.addObject("date4", new CachedObject(new Date()));           
+	        }
+        } catch (ConcurrentModificationException cme)
+        {
+            fail("Caught ConcurrentModificationException adding to cache.");
+        }
+        List objects = globalCache.getCachedObjects();
+        try {
+	        for (Iterator itr = objects.iterator(); itr.hasNext();) {
+	            Object obj = itr.next();
+	            globalCache.addObject("date4", new CachedObject(new Date()));           
+	        }
+        } catch (ConcurrentModificationException cme)
+        {
+            fail("Caught ConcurrentModificationException adding to cache.");
+        }
+    }
+    
+    
     /**
      * Down cast the interface to the concreate object in order to grab the 
      * cache check frequency.

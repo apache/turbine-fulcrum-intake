@@ -55,12 +55,15 @@ package org.apache.fulcrum.cache;
  */
 
 import java.io.IOException;
+import java.util.List;
+
 import org.apache.avalon.framework.component.Component;
 
 /**
  * GlobalCacheService interface.
  *
  * @author <a href="mailto:mbryson@mont.mindspring.com">Dave Bryson</a>
+ * @author <a href="mailto:peter@courcoux.biz">Peter Courcoux</a>
  * @version $Id$
  */
 public interface GlobalCacheService
@@ -95,6 +98,27 @@ public interface GlobalCacheService
      * @param id The String id for the object.
      */
     void removeObject(String id);
+    
+    /**
+     * Returns a copy of keys to objects in the cache as a list.
+     * 
+     * Note that keys to expired objects are not returned.
+     * 
+     * @return A List of <code>String</code>'s representing the keys to objects
+     * in the cache.
+     */
+    public List getKeys();
+
+        
+    /**
+     * Returns a copy of the non-expired CachedObjects 
+     * in the cache as a list.
+     * 
+     * @return A List of <code>CachedObject</code> objects 
+     * held in the cache
+     */
+    public List getCachedObjects();
+
 
     /**
      * Returns the current size of the cache.
