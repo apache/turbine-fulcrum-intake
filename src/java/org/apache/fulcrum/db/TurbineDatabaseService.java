@@ -195,7 +195,7 @@ public class TurbineDatabaseService
     public void releaseConnection(Connection dbconn)
         throws Exception
     {
-        BasePeer.closeConnection(dbconn);
+        Torque.closeConnection(dbconn);
     }
 
 

@@ -175,7 +175,7 @@
     </dependency>
     <dependency>
       <id>torque</id>
-      <version>3.0-b4-dev</version>
+      <version>3.0-b4-dev-20020730</version>
       <url>http://jakarta.apache.org/turbine/torque/</url>
     </dependency>
     <dependency>
