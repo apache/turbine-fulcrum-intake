@@ -101,7 +101,7 @@ public class CacheTest extends BaseUnitTest
         // All methods starting with "test" will be executed in the test suite.
         return new TestSuite(CacheTest.class);
     }
-    protected void setUp()
+    protected void setUp() throws Exception
     {
         super.setUp();
         try
