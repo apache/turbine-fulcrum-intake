@@ -60,8 +60,11 @@ import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
 
 /**
- * A base implementation of an {@link java.rmi.server.UnicastRemoteObject}
- * as a Turbine {@link org.apache.fulcrum.Service}.
+ * A base implementation of an {@link
+ * java.rmi.server.UnicastRemoteObject} as a Turbine {@link
+ * org.apache.fulcrum.Service}.  Use this as you would use {@link
+ * org.apache.fulcrum.BaseService}, but when your Service
+ * implementation is a RMI server object.
  *
  * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
  */
