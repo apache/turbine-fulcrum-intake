@@ -1,4 +1,5 @@
 package org.apache.fulcrum.osworkflow;
+
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -65,25 +66,44 @@ import com.opensymphony.workflow.Workflow;
 import com.opensymphony.workflow.WorkflowException;
 import com.opensymphony.workflow.basic.BasicWorkflow;
 import com.opensymphony.workflow.query.WorkflowQuery;
+
 /**
- * This service provides a link into the OSWorkflow engine.
+ * This service provides a simple interface to the
+ * OSWorkflow Engine.  You can also directly access
+ * the OSWorkflow engine.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * * @version $Id$
+ * @version $Id$
  */
 public class DefaultWorkflowService
     extends AbstractLogEnabled
     implements WorkflowService, Configurable, Initializable, Disposable, ThreadSafe
 {
-    /** For a specific caller and status, return all the workflows. */
-    public long[] retrieveWorkflows(String caller, String status) throws WorkflowException
+    /**
+     * For a specific caller and status, return all the workflows.
+     *
+     * @param caller The name of the caller.
+     * @param status The status of the workflows to retreive.  Definied by the workflow.xml file
+     * @return An array of long's for the workflow ID's.
+     */
+    public long[] retrieveWorkflows(String caller, String status)
+        throws WorkflowException
     {
         Workflow wf = retrieveWorkflow(caller);
         WorkflowQuery queryLeft =
-            new WorkflowQuery(WorkflowQuery.OWNER, WorkflowQuery.CURRENT, WorkflowQuery.EQUALS, caller);
+            new WorkflowQuery(
+                WorkflowQuery.OWNER,
+                WorkflowQuery.CURRENT,
+                WorkflowQuery.EQUALS,
+                caller);
         WorkflowQuery queryRight =
-            new WorkflowQuery(WorkflowQuery.STATUS, WorkflowQuery.CURRENT, WorkflowQuery.EQUALS, status);
-        WorkflowQuery query = new WorkflowQuery(queryLeft, WorkflowQuery.AND, queryRight);
+            new WorkflowQuery(
+                WorkflowQuery.STATUS,
+                WorkflowQuery.CURRENT,
+                WorkflowQuery.EQUALS,
+                status);
+        WorkflowQuery query =
+            new WorkflowQuery(queryLeft, WorkflowQuery.AND, queryRight);
         List workflows = wf.query(query);
         long workflowIds[] = new long[workflows.size()];
         int counter = 0;
@@ -94,25 +114,32 @@ public class DefaultWorkflowService
         }
         return workflowIds;
     }
-    /** Retrives a workflow based on the caller */
+    /**
+     * Retrives a workflow based on the caller
+     *
+     * @param caller The workflow for this caller.
+     */
     public Workflow retrieveWorkflow(String caller)
     {
         return new BasicWorkflow(caller);
     }
-    
-   
+
     // ---------------- Avalon Lifecycle Methods ---------------------
     /**
-     * Avalon component lifecycle method
+     * Avalon component configure lifecycle method
      */
     public void configure(Configuration conf) throws ConfigurationException
     {
     }
+    /**
+     * Avalon component initialize lifecycle method
+     */
     public void initialize() throws Exception
     {
     }
+
     /**
-     * Avalon component lifecycle method
+     * Avalon component disposelifecycle method
      */
     public void dispose()
     {

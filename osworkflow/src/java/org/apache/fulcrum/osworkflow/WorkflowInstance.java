@@ -1,4 +1,5 @@
 package org.apache.fulcrum.osworkflow;
+
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -72,65 +73,86 @@ import com.opensymphony.workflow.query.WorkflowQuery;
  */
 public class WorkflowInstance
 {
+    /** The workflow that this instance is a type of */
     private Workflow workflow;
+
+    /** The id of this workflow */
     private long id;
+
     /**
-     * @return
+     * @return long id of this workflow
      */
     public long getId()
     {
         return id;
     }
+    /**
+     * Make sure that the user can't construct a workflow instance directly.
+     * Must use the service instead.
+     *
+     */
     private WorkflowInstance()
     {
         // can't use this version
     }
+
+    /**
+     * Simple constructor to create a workflow instance with the workflow, and the id of an
+     * instance of the workflow.
+     * @param workflow The workflow this instance belongs to
+     * @param id The id of this workflow instance
+     */
     public WorkflowInstance(Workflow workflow, long id)
     {
         this.workflow = workflow;
         this.id = id;
     }
     /**
-     * @param arg0
-     * @param arg1
-     * @return
-     * @throws com.opensymphony.workflow.WorkflowException
+     * @param String workflowName The name of the workflow to be checked
+     * @param int initialStep  The initial step I want to check
+     * @return boolean whether we can initialize at this step or not
+     * @throws com.opensymphony.workflow.WorkflowException If there is a problem
      */
-    public boolean canInitialize(String arg0, int arg1) throws WorkflowException
+    public boolean canInitialize(String workflowName, int initialStep)
+        throws WorkflowException
     {
-        return workflow.canInitialize(arg0, arg1);
+        return workflow.canInitialize(workflowName, initialStep);
     }
     /**
-     * @param arg0
-     * @param arg1
-     * @return
-     * @throws com.opensymphony.workflow.WorkflowException
+     * Whether you can modify the entry state of this workflow instance
+     *
+     * @param int step The step to check
+     * @return Whether we can modify the entry state
+     * @throws com.opensymphony.workflow.WorkflowException If there is a problem
      */
-    public boolean canModifyEntryState(int arg1) throws WorkflowException
+    public boolean canModifyEntryState(int step) throws WorkflowException
     {
-        return workflow.canModifyEntryState(getId(), arg1);
+        return workflow.canModifyEntryState(getId(), step);
     }
     /**
-     * @param arg0
-     * @param arg1
-     * @throws com.opensymphony.workflow.WorkflowException
+     * Modify the state of the specified workflow instance.
+     * @param entryState the new state to change the workflow instance to.
+     * @throws com.opensymphony.workflow.WorkflowException If a problem occurs
      */
-    public void changeEntryState(int arg1) throws WorkflowException
+    public void changeEntryState(int entryState) throws WorkflowException
     {
-        workflow.changeEntryState(getId(), arg1);
+        workflow.changeEntryState(getId(), entryState);
     }
     /**
-     * @param arg0
-     * @param arg1
-     * @param arg2
-     * @throws com.opensymphony.workflow.InvalidInputException
-     * @throws com.opensymphony.workflow.WorkflowException
+     * Perform an action on the the workflow instance.
+     * @param actionId The action id to perform (action id's are listed in the workflow descriptor).
+     * @param inputs The inputs to the workflow instance.
+     * @throws InvalidInputException if a validator is specified and an input is invalid.
+     * @throws com.opensymphony.workflow.WorkflowException If a problem occurs
      */
-    public void doAction(int arg1, Map arg2) throws InvalidInputException, WorkflowException
+    public void doAction(int actionId, Map inputs)
+        throws InvalidInputException, WorkflowException
     {
-        workflow.doAction(getId(), arg1, arg2);
+        workflow.doAction(getId(), actionId, inputs);
     }
-    /* (non-Javadoc)
+    /**
+     * Returns whether another workflow equals this workflow.  Doesn't compare
+     * the id's.
      * @see java.lang.Object#equals(java.lang.Object)
      */
     public boolean equals(Object obj)
@@ -138,88 +160,93 @@ public class WorkflowInstance
         return workflow.equals(obj);
     }
     /**
-     * @param arg0
-     * @param arg1
-     * @throws com.opensymphony.workflow.WorkflowException
+     * Executes a special trigger-function using the context of the workflow instance.
+     *
+     * @param triggerId The id of the special trigger-function
+     * @throws com.opensymphony.workflow.WorkflowException If there is a problem 
      */
-    public void executeTriggerFunction(int arg1) throws WorkflowException
+    public void executeTriggerFunction(int triggerId) throws WorkflowException
     {
-        workflow.executeTriggerFunction(getId(), arg1);
+        workflow.executeTriggerFunction(getId(), triggerId);
     }
     /**
-     * @param arg0
-     * @param arg1
-     * @return
-     * @throws com.opensymphony.workflow.WorkflowException
+     * Get the available actions for the workflow instance.
+     * @param inputs The inputs map to pass on to conditions
+     * @return An array of action id's that can be performed on the specified entry
+     * @throws IllegalArgumentException if the specified id does not exist, or if its workflow
+     * descriptor is no longer available or has become invalid.
+     * @throws com.opensymphony.workflow.WorkflowException If there is a problem
      */
-    public int[] getAvailableActions(Map arg1) throws WorkflowException
+    public int[] getAvailableActions(Map inputs) throws WorkflowException
     {
-        return workflow.getAvailableActions(getId(), arg1);
+        return workflow.getAvailableActions(getId(), inputs);
     }
     /**
-     * @param arg0
-     * @return
-     * @throws com.opensymphony.workflow.WorkflowException
+     * Returns a Collection of Step objects that are the current steps of the workflow instance.
+     *
+     * @return The steps that the workflow instance is currently in.
+     * @throws com.opensymphony.workflow.WorkflowException If there is a problem
      */
     public List getCurrentSteps() throws WorkflowException
     {
         return workflow.getCurrentSteps(getId());
     }
     /**
-     * @param arg0
-     * @return
-     * @throws com.opensymphony.workflow.WorkflowException
+     * Return the state of the workflow instance.
+     * @return int The state id of the specified workflow
+     * @throws com.opensymphony.workflow.WorkflowException If there is a problem
      */
     public int getEntryState() throws WorkflowException
     {
         return workflow.getEntryState(getId());
     }
     /**
-     * @param arg0
-     * @return
-     * @throws com.opensymphony.workflow.WorkflowException
+     * Returns a list of all steps that are completed for the workflow instance.
+     *
+     * @return a List of Steps
+     * @see com.opensymphony.workflow.spi.Step
+     * @throws com.opensymphony.workflow.WorkflowException If there is a problem
      */
     public List getHistorySteps() throws WorkflowException
     {
         return workflow.getHistorySteps(getId());
     }
     /**
-     * @param arg0
-     * @return
-     * @throws com.opensymphony.workflow.WorkflowException
+     * Get the PropertySet for the workflow instance.
+     * @throws com.opensymphony.workflow.WorkflowException If there is a problem
      */
     public PropertySet getPropertySet() throws WorkflowException
     {
         return workflow.getPropertySet(getId());
     }
     /**
-     * @param arg0
-     * @return
-     * @throws com.opensymphony.workflow.WorkflowException
+     * Get a collection (Strings) of currently defined permissions for the workflow instance.
+     * @return A List of permissions specified currently (a permission is a string name).
+     * @throws com.opensymphony.workflow.WorkflowException If there is a problem
      */
     public List getSecurityPermissions() throws WorkflowException
     {
         return workflow.getSecurityPermissions(getId());
     }
     /**
-     * @param arg0
-     * @return
-     * @throws com.opensymphony.workflow.WorkflowException
+     * Get the workflow descriptor for the workflow instance.
+     * 
+     * @throws com.opensymphony.workflow.WorkflowException If there is a problem
      */
     public WorkflowDescriptor getWorkflowDescriptor() throws WorkflowException
     {
         return workflow.getWorkflowDescriptor(getWorkflowName());
     }
     /**
-     * @param arg0
-     * @return
-     * @throws com.opensymphony.workflow.WorkflowException
+     * Get the name of the specified workflow instance.
+     * @return The name
+     * @throws com.opensymphony.workflow.WorkflowException If there is a problem
      */
     public String getWorkflowName() throws WorkflowException
     {
         return workflow.getWorkflowName(getId());
     }
-    /* (non-Javadoc)
+    /**
      * @see java.lang.Object#hashCode()
      */
     public int hashCode()
@@ -227,15 +254,16 @@ public class WorkflowInstance
         return workflow.hashCode();
     }
     /**
-     * @param arg0
-     * @return
-     * @throws com.opensymphony.workflow.WorkflowException
+     * Execute a workflow query and returns the list of workflows
+     * @param query The workflow query
+     * @return a List of workflows
+     * @throws com.opensymphony.workflow.WorkflowException If there is a problem
      */
-    public List query(WorkflowQuery arg0) throws WorkflowException
+    public List query(WorkflowQuery query) throws WorkflowException
     {
-        return workflow.query(arg0);
+        return workflow.query(query);
     }
-    /* (non-Javadoc)
+    /**
      * @see java.lang.Object#toString()
      */
     public String toString()
@@ -243,17 +271,21 @@ public class WorkflowInstance
         return workflow.toString();
     }
     /**
-    * @param arg0
-    * @return
-    * @throws com.opensymphony.workflow.WorkflowException
-    */
+     * Get the available actions for the workflow instance.
+     * @return An list of actions that can be performed on the specified entry
+     * @throws IllegalArgumentException if the specified id does not exist, or if its workflow
+     * descriptor is no longer available or has become invalid.
+     * @throws com.opensymphony.workflow.WorkflowException If there is a problem
+     */
     public List getAllAvailableActions() throws WorkflowException
     {
         List actions = new ArrayList();
-        int actionIds[] = workflow.getAvailableActions(getId(), Collections.EMPTY_MAP);
+        int actionIds[] =
+            workflow.getAvailableActions(getId(), Collections.EMPTY_MAP);
         for (int i = 0; i < actionIds.length; i++)
         {
-            ActionDescriptor action = getWorkflowDescriptor().getAction(actionIds[i]);
+            ActionDescriptor action =
+                getWorkflowDescriptor().getAction(actionIds[i]);
             actions.add(action);
         }
         return actions;
