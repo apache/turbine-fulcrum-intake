@@ -11,26 +11,24 @@
 
   <!-- Construct compile classpath -->
   <path id="classpath">
-    <pathelement location="${velocity.jar}"/>
+    <pathelement location="${bsf.jar}"/>
+    <pathelement location="${commons-collections.jar}"/>
+    <pathelement location="${commons-email.jar}"/>
+    <pathelement location="${commons-util.jar}"/>
+    <pathelement location="${jaf.jar}"/>
+    <pathelement location="${javamail.jar}"/>
+    <pathelement location="${jdbc.jar}"/>
+    <pathelement location="${jndi.jar}"/>
     <pathelement location="${log4j.jar}"/>
     <pathelement location="${logkit.jar}"/>
-    <pathelement location="${xerces.jar}"/>
-    <pathelement location="${bsf.jar}"/>
-    <pathelement location="${torque.jar}"/>
+    <pathelement location="${regexp.jar}"/>
     <pathelement location="${servlet.jar}"/>
-    <pathelement location="${jndi.jar}"/>
+    <pathelement location="${torque.jar}"/>
+    <pathelement location="${velocity.jar}"/>
+    <pathelement location="${village.jar}"/>
     <pathelement location="${xalan.jar}"/>
     <pathelement location="${xerces.jar}"/>
     <pathelement location="${xmlrpc.jar}"/>
-    <pathelement location="${torque.jar}"/>
-    <pathelement location="${village.jar}"/>
-    <pathelement location="${jdbc.jar}"/>
-    <pathelement location="${javamail.jar}"/>
-    <pathelement location="${jaf.jar}"/>
-    <pathelement location="${commons-collections.jar}"/>
-    <pathelement location="${commons-util.jar}"/>
-    <pathelement location="${commons-email.jar}"/>
-    <pathelement location="${regexp.jar}"/>
   </path>
 
   <!-- ================================================================== -->
@@ -42,24 +40,23 @@
     <echo message="user.home = ${user.home}"/>
     <echo message="lib.repo = ${lib.repo}"/>
 
-    <echo message="velocity.jar = ${velocity.jar}"/>
-    <echo message="logkit.jar = ${logkit.jar}"/>
-    <echo message="log4j.jar = ${log4j.jar}"/>
-    <echo message="xerces.jar = ${xerces.jar}"/>
     <echo message="bsf.jar = ${bsf.jar}"/>
-    <echo message="torque.jar = ${torque.jar}"/>
-    <echo message="servlet.jar = ${servlet.jar}"/>
-    <echo message="jndi.jar = ${jndi.jar}"/>
-    <echo message="xalan.jar = ${xalan.jar}"/>
-    <echo message="xmlrpc.jar = ${xmlrpc.jar}"/>
-    <echo message="torque.jar = ${torque.jar}"/>
-    <echo message="village.jar = ${village.jar}"/>
-    <echo message="jdbc.jar = ${jdbc.jar}"/>
-    <echo message="javamail.jar = ${javamail.jar}"/>
-    <echo message="jaf.jar = ${jaf.jar}"/>
     <echo message="commons-collections.jar = ${commons-collections.jar}"/>
     <echo message="commons-util.jar = ${commons-util.jar}"/>
+    <echo message="jaf.jar = ${jaf.jar}"/>
+    <echo message="javamail.jar = ${javamail.jar}"/>
+    <echo message="jdbc.jar = ${jdbc.jar}"/>
+    <echo message="jndi.jar = ${jndi.jar}"/>
+    <echo message="log4j.jar = ${log4j.jar}"/>
+    <echo message="logkit.jar = ${logkit.jar}"/>
     <echo message="regexp.jar = ${regexp.jar}"/>
+    <echo message="servlet.jar = ${servlet.jar}"/>
+    <echo message="torque.jar = ${torque.jar}"/>
+    <echo message="velocity.jar = ${velocity.jar}"/>
+    <echo message="village.jar = ${village.jar}"/>
+    <echo message="xalan.jar = ${xalan.jar}"/>
+    <echo message="xerces.jar = ${xerces.jar}"/>
+    <echo message="xmlrpc.jar = ${xmlrpc.jar}"/>
     <echo message="[optional] commons-email.jar = ${commons-email.jar}"/>
   </target>
 
