@@ -54,6 +54,7 @@ package org.apache.fulcrum.security.impl.db;
  * <http://www.apache.org/>.
  */
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -344,11 +345,11 @@ public class DBSecurityService
                 // criteria.add(UserGroupRolePeer.USER_ID,
                 //           ((BaseObject)user).getPrimaryKey());
                 // UserGroupRolePeer.doDelete(criteria);
-                int id = ((BaseObject)user).getPrimaryKeyAsInt();
+                ObjectKey key = ((BaseObject) user).getPrimaryKey();
                 TurbineUserGroupRolePeer.deleteAll(
                     TurbineUserGroupRolePeer.TABLE_NAME,
                     TurbineUserGroupRolePeer.USER_ID,
-                    id);
+                    ((BigDecimal) key.getValue()).intValue());
                 return;
             }
         }
@@ -361,7 +362,7 @@ public class DBSecurityService
             unlockExclusive();
         }
         throw new UnknownEntityException("Unknown user '" +
-                user.getUserName() + "'");
+                user.getUserName() + '\'');
     }
 
     /**
