@@ -81,7 +81,7 @@ public interface VelocityService extends Service
      * @param context A context to use when evaluating the specified
      * template.
      * @param filename The file name of the template.
-     * @return The process template as a String.
+     * @return The processed template.
      * @exception Exception, a generic exception.
      */
     public String handleRequest(Context context, String filename)
@@ -97,7 +97,7 @@ public interface VelocityService extends Service
      * @param charset The character set to use when writing the result.
      * @param encoding The encoding to use when merging context and
      * template.
-     * @return The process template as a String.
+     * @return The processed template.
      * @exception Exception, a generic exception.
      */
     public String handleRequest(Context context, String template,
