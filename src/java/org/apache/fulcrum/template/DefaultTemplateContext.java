@@ -83,8 +83,6 @@ import java.util.Iterator;
 public class DefaultTemplateContext
     implements TemplateContext
 {
-    TemplateContext innerContext;
-
     /**
      *  storage for key/value pairs
      */
