@@ -329,30 +329,34 @@
         <exclude>**/XmlRpcTest.java</exclude>
       </excludes>
 	  <resources>
+	  	<!-- Used by HibernateServiceTest -->
         <resource>
           <directory>src/test/org/apache/fulcrum/db/</directory> 
           <targetPath>org/apache/fulcrum/db/</targetPath> 
           <includes>
-            <include>**/*.*</include> 
+            <include>Labor.*</include> 
+            <include>*.xml</include> 
+          </includes>
+        </resource>
+	  	<!-- Used by HibernateServiceTest -->        
+        <resource>
+          <directory>src/test</directory> 
+          <targetPath></targetPath> 
+          <includes>
+            <include>hibernate.properties</include> 
           </includes>
         </resource>
       </resources>
+      
     </unitTest>
 
     <resources>
       <includes>
         <include>**/avalon-roles.xml</include>
       </includes>
-      <includes>
-        <include>**/hibernate.properties</include>
-      </includes>
-      <resource>
-        <directory>src/test</directory>
-        <targetPath>/</targetPath>
-        <includes>
-          <include>**/hibernate.properties</include>
-        </includes>
-      </resource>  
+      <excludes>
+        <exclude>**/hibernate.properties</exclude>
+      </excludes>
     </resources>
 
 
