@@ -58,7 +58,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.util.Date;
 import java.util.Hashtable;
-import javax.servlet.http.HttpSessionBindingEvent;
 import org.apache.fulcrum.security.TurbineSecurity;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.session.SessionBindingEvent;
