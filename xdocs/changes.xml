@@ -3,15 +3,37 @@
   <properties>
     <title>Fulcrum</title>
     <author email="epugh@upstate.com">Eric Pugh</author>
+    <author email="quintonm@bellsouth.net">Quinton McCombs</author>
   </properties>
 
   <body>
-    <release version="3.0-b2-dev" date="">
+    <release version="Not applicable" date="">
 
-	 <action dev="epugh" type="add">
-		Added new HibernateService that uses Hibernate 2.0.  This is a fully Avalonized
-		service, and thus can be loaded by both Plexus and ECM.  ECM is used in Turbine, 
-		Plexus is used in the testcase.
+      <action dev="quintonm" type="add">
+        TestContainer component was added.  This is to be used for 
+        testing of the components so that we do not have a dependancy
+        on Plexus.  The test container is based on ECM, which is what
+        Turbine is using.  A base class for unit tests is also included.
+      </action>
+
+      <action dev="quintonm" type="add">
+        XML-RPC component was added.
+      </action>
+
+      <action dev="quintonm" type="add">
+        The build process for Fulcrum has been changed.  Now, when you 
+        build Fulcrum, it uses Maven's reactor to build the components
+        individually.  This means that Fulcrum itself no longer has a 
+        version number.  The individual components are versioned 
+        seperately.  For changes to individual components, see the docs 
+        for each component.
+      </action>
+      
+      <action dev="epugh" type="add">
+	Added new HibernateService that uses Hibernate 2.0.  This is 
+	a fully Avalonized service, and thus can be loaded by both 
+	Plexus and ECM.  ECM is used in Turbine, Plexus is used in the 
+	testcase.
       </action> 
     </release>
 
