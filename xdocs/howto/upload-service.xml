@@ -2,7 +2,7 @@
 
 <document>
  <properties>
-  <title>Turbine Services - Upload Service</title>
+  <title>Fulcrum Services - Upload Service</title>
   <author email="jvanzyl@apache.org">Jason van Zyl</author>
  </properties>
 
@@ -22,7 +22,7 @@ specified location on the file system.
 
 <source><![CDATA[
 # -------------------------------------------------------------------
-# 
+#
 #  S E R V I C E S
 #
 # -------------------------------------------------------------------
@@ -32,7 +32,7 @@ specified location on the file system.
 # To specify properties of a service use the following syntax:
 # service.[name].[property]=[value]
 
-services.UploadService.classname=org.apache.turbine.services.upload.TurbineUploadService
+services.UploadService.classname=org.apache.fulcrum.upload.TurbineUploadService
 .
 .
 .

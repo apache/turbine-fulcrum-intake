@@ -2,7 +2,7 @@
 
 <document>
  <properties>
-  <title>Turbine Services - XSLT Service</title>
+  <title>Fulcrum Services - XSLT Service</title>
   <author email="jvanzyl@apache.org">Jason van Zyl</author>
  </properties>
 
@@ -25,7 +25,7 @@
 
 <source><![CDATA[
 # -------------------------------------------------------------------
-# 
+#
 #  S E R V I C E S
 #
 # -------------------------------------------------------------------
@@ -35,12 +35,12 @@
 # To specify properties of a service use the following syntax:
 # service.[name].[property]=[value]
 
-services.XSLTService.classname=org.apache.turbine.services.xslt.TurbineXSLTService
+services.XSLTService.classname=org.apache.fulcrum.xslt.TurbineXSLTService
 .
 .
 .
 # -------------------------------------------------------------------
-# 
+#
 #  X S L T  S E R V I C E
 #
 # -------------------------------------------------------------------
@@ -56,7 +56,7 @@ services.XSLTService.cache = false
 <p>
   Please look at the <strong>org.apache.turbine.modules.layouts.VelocityXslLayout</strong>
   for an example usage pattern.
-</p>  
+</p>
 
 </section>
 

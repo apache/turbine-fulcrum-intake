@@ -2,7 +2,7 @@
 
 <document>
  <properties>
-  <title>Turbine Services - Localization Service</title>
+  <title>Fulcrum Services - Localization Service</title>
   <author email="jvanzyl@apache.org">Jason van Zyl</author>
  </properties>
 
@@ -21,7 +21,7 @@ to your application.
 
 <source><![CDATA[
 # -------------------------------------------------------------------
-# 
+#
 #  S E R V I C E S
 #
 # -------------------------------------------------------------------
@@ -31,7 +31,7 @@ to your application.
 # To specify properties of a service use the following syntax:
 # service.[name].[property]=[value]
 
-services.GlobalCacheService.classname=org.apache.turbine.services.cache.TurbineGlobalCacheService
+services.GlobalCacheService.classname=org.apache.fulcrum.cache.TurbineGlobalCacheService
 .
 .
 .

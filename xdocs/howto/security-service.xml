@@ -2,7 +2,7 @@
 
 <document>
  <properties>
-  <title>Turbine Services - Security Service</title>
+  <title>Fulcrum Services - Security Service</title>
   <author email="jvanzyl@apache.org">Jason van Zyl</author>
  </properties>
 
@@ -19,7 +19,7 @@
 
 <source><![CDATA[
 # -------------------------------------------------------------------
-# 
+#
 #  S E R V I C E S
 #
 # -------------------------------------------------------------------
@@ -29,20 +29,20 @@
 # To specify properties of a service use the following syntax:
 # service.[name].[property]=[value]
 
-services.SecurityService.classname=org.apache.turbine.services.cache.<type>SecurityService
+services.SecurityService.classname=org.apache.fulcrum.security.SecurityService
 .
 .
 .
 # -------------------------------------------------------------------
-# 
+#
 #  S E C U R I T Y  S E R V I C E
 #
 # -------------------------------------------------------------------
 
 #
 # This is the class that implements the User interface.
-# You want to override this setting only if you want your User 
-# implementation to provide application specific addtional 
+# You want to override this setting only if you want your User
+# implementation to provide application specific addtional
 # functionality.
 #
 # Default: org.apache.turbine.om.security.TurbineUser
@@ -52,7 +52,7 @@ services.SecurityService.user.class=org.apache.turbine.om.security.TurbineUser
 
 #
 # This setting is DBSecurityService specific - this class is consulted for the names
-# of the columns in the users' tables for the purpose of creating join queries. 
+# of the columns in the users' tables for the purpose of creating join queries.
 # If you use your own User implementation in conjunction with DBSecurityService,
 # it's peer class must implement org.apache.turbine.om.security.peer.UserPeer interface,
 # and you need to specify the name of the peer class here.

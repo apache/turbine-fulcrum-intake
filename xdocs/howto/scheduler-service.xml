@@ -2,7 +2,7 @@
 
 <document>
  <properties>
-  <title>Turbine Services - Scheduler Service</title>
+  <title>Fulcrum Services - Scheduler Service</title>
   <author email="jvanzyl@apache.org">Jason van Zyl</author>
  </properties>
 
@@ -29,7 +29,7 @@
 
   <source><![CDATA[
   # -------------------------------------------------------------------
-  # 
+  #
   #  S E R V I C E S
   #
   # -------------------------------------------------------------------
@@ -39,7 +39,7 @@
   # To specify properties of a service use the following syntax:
   # service.[name].[property]=[value]
 
-  services.SchedulerService.classname=org.apache.turbine.services.schedule.TurbineSchedulerService
+  services.SchedulerService.classname=org.apache.fulcrum.schedule.TurbineSchedulerService
   .
   .
   .
@@ -103,7 +103,7 @@
               "task: " + job.getTask() + " ran @: " +
                   new Date(System.currentTimeMillis()).toString() +
                       " taskcount " + taskcount);
-          
+
           //iterate the task counter
           taskcount++;
       }
@@ -263,7 +263,7 @@
   </section>
 
   <section name="Properties Based Scheduler">
-  
+
   <p>
     Service for a cron like scheduler that uses the
     TurbineResources.properties file instead of the database.

@@ -2,7 +2,7 @@
 
 <document>
  <properties>
-  <title>Turbine Services - Velocity Service</title>
+  <title>Fulcrum Services - Velocity Service</title>
   <author email="jvanzyl@apache.org">Jason van Zyl</author>
  </properties>
 
@@ -19,7 +19,7 @@
 
 <source><![CDATA[
 # -------------------------------------------------------------------
-# 
+#
 #  S E R V I C E S
 #
 # -------------------------------------------------------------------
@@ -29,19 +29,19 @@
 # To specify properties of a service use the following syntax:
 # service.[name].[property]=[value]
 
-services.VelocityService.classname=org.apache.turbine.services.cache.TurbineVelocityService
+services.VelocityService.classname=org.apache.fulcrum.velocity.TurbineVelocityService
 .
 .
 .
 # -------------------------------------------------------------------
-# 
+#
 #  V E L O C I T Y  S E R V I C E
 #
 # -------------------------------------------------------------------
 
 # The location of Velocity configuration file, relative to webapp root
 # These properties will override the default properties set by Velocity.
-# You should specify the path to the templates directories as well as 
+# You should specify the path to the templates directories as well as
 # the path to the log file and they should also be relative to webapp root
 
 services.VelocityService.template.extension=vm

@@ -2,7 +2,7 @@
 
 <document>
  <properties>
-  <title>Turbine Services - Template Service</title>
+  <title>Fulcrum Services - Template Service</title>
   <author email="jvanzyl@apache.org">Jason van Zyl</author>
  </properties>
 
@@ -19,7 +19,7 @@
 
 <source><![CDATA[
 # -------------------------------------------------------------------
-# 
+#
 #  S E R V I C E S
 #
 # -------------------------------------------------------------------
@@ -29,12 +29,12 @@
 # To specify properties of a service use the following syntax:
 # service.[name].[property]=[value]
 
-services.TemplateService.classname=org.apache.turbine.services.template.TurbineTemplateService
+services.TemplateService.classname=org.apache.fulcrum.template.TurbineTemplateService
 .
 .
 .
 # -------------------------------------------------------------------
-# 
+#
 #  T E M P L A T E  S E R V I C E
 #
 # -------------------------------------------------------------------

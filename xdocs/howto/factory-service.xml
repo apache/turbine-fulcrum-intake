@@ -2,7 +2,7 @@
 
 <document>
  <properties>
-  <title>Turbine Services - Factory Service</title>
+  <title>Fulcrum Services - Factory Service</title>
   <author email="ilkka.priha@simsoft.fi">Ilkka Priha</author>
   <author email="jvanzyl@apache.org">Jason van Zyl</author>
  </properties>
@@ -34,7 +34,7 @@ The service provides the following benefits compared to Class.forName():
 
 <source><![CDATA[
 # -------------------------------------------------------------------
-# 
+#
 #  S E R V I C E S
 #
 # -------------------------------------------------------------------
@@ -44,12 +44,12 @@ The service provides the following benefits compared to Class.forName():
 # To specify properties of a service use the following syntax:
 # service.[name].[property]=[value]
 
-services.FactoryService.classname=org.apache.turbine.services.factory.TurbineFactoryService
+services.FactoryService.classname=org.apache.fulcrum.factory.TurbineFactoryService
 .
 .
 .
 # -------------------------------------------------------------------
-# 
+#
 #  F A C T O R Y  S E R V I C E
 #
 # -------------------------------------------------------------------
@@ -83,7 +83,7 @@ services.FactoryService.classname=org.apache.turbine.services.factory.TurbineFac
 <p>
 In Turbine, the Factory Service is currently only used internally by the Pool Service.
 Applications can also use the service instead of Class.forName() and for unifying
-initialization, configuration and access to vendor specific object factories. 
+initialization, configuration and access to vendor specific object factories.
 The following is a simplified example of a customized DOM parser factory:
 </p>
 
@@ -98,7 +98,7 @@ import org.apache.turbine.util.TurbineException;
 import org.apache.turbine.services.factory.Factory;
 
 /**
- * A factory for instantiating DOM parsers. 
+ * A factory for instantiating DOM parsers.
  */
 public class DomBuilderFactory implements Factory
 {
@@ -189,11 +189,11 @@ A DOM parser can now be instantiated with the following code fragment:
 
 <source><![CDATA[
 // Access the service singleton.
-FactoryService service = (FactoryService) 
+FactoryService service = (FactoryService)
     TurbineServices.getInstance().getService(FactoryService.SERVICE_NAME);
-    
-// Create a new DOM parser. 
-DocumentBuilder parser = 
+
+// Create a new DOM parser.
+DocumentBuilder parser =
     service.getInstance("javax.xml.parsers.DocumentBuilder");
 ]]></source>
 

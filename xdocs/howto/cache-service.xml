@@ -2,7 +2,7 @@
 
 <document>
  <properties>
-  <title>Turbine Services - Global Cache Service</title>
+  <title>Fulcrum Services - Global Cache Service</title>
   <author email="jvanzyl@apache.org">Jason van Zyl</author>
  </properties>
 
@@ -26,7 +26,7 @@ against the database.
 
 <source><![CDATA[
 # -------------------------------------------------------------------
-# 
+#
 #  S E R V I C E S
 #
 # -------------------------------------------------------------------
@@ -36,8 +36,7 @@ against the database.
 # To specify properties of a service use the following syntax:
 # service.[name].[property]=[value]
 
-services.GlobalCacheService.classname=org.apache.turbine.services.cache.TurbineGlobalCacheService
-.
+services.GlobalCacheService.classname=org.apache.fulcrum.cache.TurbineGlobalCacheService.
 .
 .
 
@@ -95,7 +94,7 @@ catch(ObjectExpiredException gone)
 You can also place an expiration time on your objects so the Service will
 automatically remove them when they expire. If you don't specify an expiration
 time, the Service uses the default time set by the property
-<em>cache.check.frequency</em> in the TurbineResources.properties
+<em>cache.check.frequency</em> in the Fulcrum.properties
 file. To see an example, look at the file <strong>TestGlobalCache.java</strong>
 located in the actions folder.
 </p>

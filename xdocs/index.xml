@@ -10,10 +10,14 @@
  <body>
 
  <section name="What is Fulcrum?">
-
- <p>
-    Fulcrum is a services framework.
- </p>
+   <p>
+     Fulcrum is a services framework.
+   </p>
+   <p>
+     Fulcrum was developed as part of the Turbine Framework. It is now
+     decoupled and can be used by itself. Starting with version 2.2 Turbine
+     will use the decoupled Fulcrum.
+   </p>
 
 </section>
 

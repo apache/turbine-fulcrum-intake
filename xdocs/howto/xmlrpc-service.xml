@@ -2,7 +2,7 @@
 
 <document>
  <properties>
-  <title>Turbine Services - XML-RPC Service</title>
+  <title>Fulcrum Services - XML-RPC Service</title>
   <author email="jvanzyl@apache.org">Jason van Zyl</author>
  </properties>
 
@@ -27,7 +27,7 @@
   org.apache.turbine.services.xmlrpc.util.FileHandler</strong>
   class that will perform these operations for you. Please refer
   to the usage section below for more details.
-</p>  
+</p>
 
 </section>
 
@@ -35,7 +35,7 @@
 
 <source><![CDATA[
 # -------------------------------------------------------------------
-# 
+#
 #  S E R V I C E S
 #
 # -------------------------------------------------------------------
@@ -45,12 +45,12 @@
 # To specify properties of a service use the following syntax:
 # service.[name].[property]=[value]
 
-services.XmlRpcService.classname=org.apache.turbine.services.xmlrpc.TurbineXmlRpcService
+services.XmlRpcService.classname=org.apache.fulcrum.xmlrpc.TurbineXmlRpcService
 .
 .
 .
 # -------------------------------------------------------------------
-# 
+#
 #  X M L R P C  S E R V I C E
 #
 # -------------------------------------------------------------------
@@ -68,8 +68,8 @@ services.XmlRpcService.parser=org.apache.xerces.parsers.SAXParser
 
 services.XmlRpcService.port=12345
 
-# If any classes are specified here, the Service will create an 
-# instance of them here and start up a listener on the specified 
+# If any classes are specified here, the Service will create an
+# instance of them here and start up a listener on the specified
 # port.
 #
 # Note that the handlers demonstrated are not very useful.  You
@@ -95,7 +95,7 @@ services.XmlRpcService.port=12345
 services.XmlRpcService.handler.file = org.apache.turbine.services.xmlrpc.util.FileHandler
 services.XmlRpcService.paranoid = false
 services.XmlRpcService.acceptClient = 192.168.1.*
-services.XmlRpcService.denyClient = 
+services.XmlRpcService.denyClient =
 
 ]]></source>
 
@@ -117,7 +117,7 @@ public class XmlRpcExample
 {
     /**
      * We will test the following three operations:
-     * 
+     *
      * 1) Send a file to a remove server
      * 2) Get a file from a remote server
      * 3) Remove a file to a remove server

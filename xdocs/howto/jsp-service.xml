@@ -2,7 +2,7 @@
 
 <document>
  <properties>
-  <title>Turbine Services - JSP Service</title>
+  <title>Fulcrum Services - JSP Service</title>
   <author email="jvanzyl@apache.org">Jason van Zyl</author>
  </properties>
 
@@ -30,7 +30,7 @@ href="http://jakarta.apache.org/velocity/">Velocity</a>.
 
 <source><![CDATA[
 # -------------------------------------------------------------------
-# 
+#
 #  S E R V I C E S
 #
 # -------------------------------------------------------------------
@@ -40,12 +40,12 @@ href="http://jakarta.apache.org/velocity/">Velocity</a>.
 # To specify properties of a service use the following syntax:
 # service.[name].[property]=[value]
 
-services.JspService.classname=org.apache.turbine.services.jsp.TurbineJspService
+services.JspService.classname=org.apache.fulcrum.jsp.TurbineJspService
 .
 .
 .
 # -------------------------------------------------------------------
-# 
+#
 #  J S P  S E R V I C E
 #
 # -------------------------------------------------------------------
