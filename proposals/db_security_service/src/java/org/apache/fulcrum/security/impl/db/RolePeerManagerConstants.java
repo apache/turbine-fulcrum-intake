@@ -79,7 +79,7 @@ package org.apache.fulcrum.security.impl.db;
 
 public interface RolePeerManagerConstants
 {
-    /** The key within the security service properties for the role peer class implementation */
+    /** The key within the security service properties for the role class implementation */
     public static final String ROLE_CLASS_KEY = 
         "db.role.class";
 
@@ -90,7 +90,6 @@ public interface RolePeerManagerConstants
     /** Role peer default class */
     public static final String ROLE_PEER_CLASS_DEFAULT =
         "org.apache.fulcrum.security.impl.db.entity.TurbineRolePeer";
-
 
     /** The column name for the login name field. */
     public static final String ROLE_NAME_COLUMN_KEY =

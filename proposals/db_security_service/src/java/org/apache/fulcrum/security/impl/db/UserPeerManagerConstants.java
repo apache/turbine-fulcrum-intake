@@ -54,6 +54,8 @@ package org.apache.fulcrum.security.impl.db;
  * <http://www.apache.org/>.
  */
 
+import java.io.Serializable;
+
 /**
  * Constants for configuring the various columns and bean properties
  * for the used peer.
@@ -94,8 +96,9 @@ package org.apache.fulcrum.security.impl.db;
  */
 
 public interface UserPeerManagerConstants
+    extends Serializable
 {
-    /** The key within the security service properties for the user peer class implementation */
+    /** The key within the security service properties for the user class implementation */
     public static final String USER_CLASS_KEY = 
         "db.user.class";
 
@@ -106,7 +109,6 @@ public interface UserPeerManagerConstants
     /** User peer default class */
     public static final String USER_PEER_CLASS_DEFAULT =
         "org.apache.fulcrum.security.impl.db.entity.TurbineUserPeer";
-
 
     /** The column name for the login name field. */
     public static final String USER_NAME_COLUMN_KEY =

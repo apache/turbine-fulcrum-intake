@@ -54,6 +54,7 @@ package org.apache.fulcrum.security;
  * <http://www.apache.org/>.
  */
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.fulcrum.BaseService;
@@ -65,8 +66,6 @@ import org.apache.fulcrum.crypto.CryptoService;
 import org.apache.fulcrum.crypto.CryptoAlgorithm;
 
 import org.apache.fulcrum.factory.FactoryService;
-
-import org.apache.fulcrum.security.UserManager;
 
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
@@ -80,7 +79,6 @@ import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.RoleSet;
-import org.apache.fulcrum.security.util.TurbineSecurityException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 import org.apache.torque.util.Criteria;
@@ -124,7 +122,7 @@ public abstract class BaseSecurityService
     private int readerCount = 0;
 
     /** The instance of UserManager the SecurityService uses */
-    private UserManager userManager = null;
+    protected UserManager userManager = null;
 
     /** The class of User the SecurityService uses */
     private Class userClass = null;
@@ -161,7 +159,7 @@ public abstract class BaseSecurityService
      * @param password the password to process
      * @return processed password
      */
-    public String encryptPassword( String password )
+    public String encryptPassword(String password)
     {
         return encryptPassword(password, null);
     }
@@ -185,9 +183,9 @@ public abstract class BaseSecurityService
     * @return processed password
     */
 
-   public String encryptPassword( String password, String salt )
+   public String encryptPassword(String password, String salt)
    {
-        if(password == null)
+        if (password == null)
         {
             return null;
         }
@@ -200,20 +198,20 @@ public abstract class BaseSecurityService
             SecurityService.SECURE_PASSWORDS_ALGORITHM_KEY,
             SecurityService.SECURE_PASSWORDS_ALGORITHM_DEFAULT);
 
-	CryptoService cs = TurbineCrypto.getService();
+        CryptoService cs = TurbineCrypto.getService();
 
         if (secure.equals("true") || secure.equals("yes") && cs != null)
         {
             try
             {
-		CryptoAlgorithm ca = cs.getCryptoAlgorithm(algorithm);
+              CryptoAlgorithm ca = cs.getCryptoAlgorithm(algorithm);
 
-		ca.setSeed(salt);
+              ca.setSeed(salt);
 
-		String result = ca.encrypt(password);
+              String result = ca.encrypt(password);
 
-		return result;
-	    }
+              return result;
+            }
             catch (Exception e)
             {
                 getCategory().error("Unable to encrypt password");
@@ -248,6 +246,8 @@ public abstract class BaseSecurityService
 
     /**
      * Initializes the SecurityService, locating the apropriate UserManager
+     *
+     * @throws InitializationException A Problem occured while initializing the User Manager.
      */
     public void init()
         throws InitializationException
@@ -284,29 +284,29 @@ public abstract class BaseSecurityService
             roleClass       = Class.forName(roleClassName);
             aclClass        = Class.forName(aclClassName);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            if(userClass == null)
+            if (userClass == null)
             {
                 throw new InitializationException(
                       "Failed to create a Class object for User implementation", e);
             }
-            if(groupClass == null)
+            if (groupClass == null)
             {
                 throw new InitializationException(
                       "Failed to create a Class object for Group implementation", e);
             }
-            if(permissionClass == null)
+            if (permissionClass == null)
             {
                 throw new InitializationException(
                       "Failed to create a Class object for Permission implementation", e);
             }
-            if(roleClass == null)
+            if (roleClass == null)
             {
                 throw new InitializationException(
                       "Failed to create a Class object for Role implementation", e);
             }
-            if(aclClass == null)
+            if (aclClass == null)
             {
                 throw new InitializationException(
                       "Failed to create a Class object for ACL implementation", e);
@@ -315,21 +315,21 @@ public abstract class BaseSecurityService
 
         try
         {
-            userManager =  (UserManager)Class.
+            userManager =  (UserManager) Class.
                 forName(userManagerClassName).newInstance();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new InitializationException(
-                "BaseSecurityService.init: Failed to instantiate UserManager" ,e);
+                "BaseSecurityService.init: Failed to instantiate UserManager", e);
         }
 
         try 
         {
-            aclFactoryService = (FactoryService)TurbineServices.getInstance().
+            aclFactoryService = (FactoryService) TurbineServices.getInstance().
                 getService(FactoryService.SERVICE_NAME);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new InitializationException(
                 "BaseSecurityService.init: Failed to get the Factory Service object", e);
@@ -350,7 +350,7 @@ public abstract class BaseSecurityService
     public Class getUserClass()
         throws UnknownEntityException
     {
-        if ( userClass == null )
+        if (userClass == null)
         {
             throw new UnknownEntityException(
                 "Failed to create a Class object for User implementation");
@@ -373,9 +373,9 @@ public abstract class BaseSecurityService
         User user;
         try
         {
-            user = (User)getUserClass().newInstance();
+            user = (User) getUserClass().newInstance();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new UnknownEntityException("Failed to instantiate an User implementation object", e);
         }
@@ -388,7 +388,10 @@ public abstract class BaseSecurityService
      * This method calls getUserClass, and then creates a new object using
      * the default constructor.
      *
+     * @param userName The name of the user.
+     *
      * @return an object implementing User interface.
+     *
      * @throws UnknownEntityException if the object could not be instantiated.
      */
     public User getUserInstance(String userName)
@@ -410,7 +413,7 @@ public abstract class BaseSecurityService
     public Class getGroupClass()
         throws UnknownEntityException
     {
-        if ( groupClass == null )
+        if (groupClass == null)
         {
             throw new UnknownEntityException(
                 "Failed to create a Class object for Group implementation");
@@ -433,9 +436,9 @@ public abstract class BaseSecurityService
         Group group;
         try
         {
-            group = (Group)getGroupClass().newInstance();
+            group = (Group) getGroupClass().newInstance();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new UnknownEntityException("Failed to instantiate a Group implementation object", e);
         }
@@ -448,10 +451,13 @@ public abstract class BaseSecurityService
      * This method calls getGroupClass, and then creates a new object using
      * the default constructor.
      *
+     * @param groupName The name of the Group
+     *
      * @return an object implementing Group interface.
+     *
      * @throws UnknownEntityException if the object could not be instantiated.
      */
-    public Group getGroupInstance( String groupName )
+    public Group getGroupInstance(String groupName)
         throws UnknownEntityException
     {
         Group group = getGroupInstance();
@@ -470,7 +476,7 @@ public abstract class BaseSecurityService
     public Class getPermissionClass()
         throws UnknownEntityException
     {
-        if ( permissionClass == null )
+        if (permissionClass == null)
         {
             throw new UnknownEntityException(
                 "Failed to create a Class object for Permission implementation");
@@ -493,9 +499,9 @@ public abstract class BaseSecurityService
         Permission permission;
         try
         {
-            permission = (Permission)getPermissionClass().newInstance();
+            permission = (Permission) getPermissionClass().newInstance();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new UnknownEntityException("Failed to instantiate a Permission implementation object", e);
         }
@@ -507,6 +513,8 @@ public abstract class BaseSecurityService
      *
      * This method calls getPermissionClass, and then creates a new object using
      * the default constructor.
+     *
+     * @param permName The name of the permission.
      *
      * @return an object implementing Permission interface.
      * @throws UnknownEntityException if the object could not be instantiated.
@@ -530,7 +538,7 @@ public abstract class BaseSecurityService
     public Class getRoleClass()
         throws UnknownEntityException
     {
-        if ( roleClass == null )
+        if (roleClass == null)
         {
             throw new UnknownEntityException(
                 "Failed to create a Class object for Role implementation");
@@ -554,9 +562,9 @@ public abstract class BaseSecurityService
 
         try
         {
-            role = (Role)getRoleClass().newInstance();
+            role = (Role) getRoleClass().newInstance();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new UnknownEntityException("Failed to instantiate a Role implementation object", e);
         }
@@ -569,7 +577,10 @@ public abstract class BaseSecurityService
      * This method calls getRoleClass, and then creates a new object using
      * the default constructor.
      *
+     * @param roleName The name of the role.
+     *
      * @return an object implementing Role interface.
+     *
      * @throws UnknownEntityException if the object could not be instantiated.
      */
     public Role getRoleInstance(String roleName)
@@ -591,7 +602,7 @@ public abstract class BaseSecurityService
     public Class getAclClass()
         throws UnknownEntityException
     {
-        if ( aclClass == null )
+        if (aclClass == null)
         {
             throw new UnknownEntityException(
                 "Failed to create a Class object for ACL implementation");
@@ -615,7 +626,7 @@ public abstract class BaseSecurityService
         throws UnknownEntityException
     {
         Object[] objects    = { roles, permissions };
-        String[] signatures = {"java.util.Map","java.util.Map"};
+        String[] signatures = {"java.util.Map", "java.util.Map"};
         AccessControlList accessControlList;
         
         try
@@ -625,7 +636,7 @@ public abstract class BaseSecurityService
                                                                   objects, 
                                                                   signatures);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new UnknownEntityException(
                       "Failed to instantiate an ACL implementation object", e);
@@ -643,7 +654,7 @@ public abstract class BaseSecurityService
      * @return true if the specified account exists
      * @throws DataBackendException if there was an error accessing the data backend.
      */
-    public boolean accountExists( User user )
+    public boolean accountExists(User user)
         throws DataBackendException
     {
         return userManager.accountExists(user);
@@ -654,14 +665,16 @@ public abstract class BaseSecurityService
      *
      * The login name is used for looking up the account.
      *
-     * @param usename The name of the user to be checked.
+     * @param userName The name of the user to be checked.
+     *
      * @return true if the specified account exists
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      */
-    public boolean accountExists( String username )
+    public boolean accountExists(String userName)
         throws DataBackendException
     {
-        return userManager.accountExists(username);
+        return userManager.accountExists(userName);
     }
 
     /**
@@ -678,7 +691,7 @@ public abstract class BaseSecurityService
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public User getAuthenticatedUser( String username, String password )
+    public User getAuthenticatedUser(String username, String password)
         throws DataBackendException, UnknownEntityException,
                PasswordMismatchException
     {
@@ -695,7 +708,7 @@ public abstract class BaseSecurityService
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public User getUser( String username )
+    public User getUser(String username)
         throws DataBackendException, UnknownEntityException
     {
         return userManager.retrieve(username);
@@ -715,10 +728,32 @@ public abstract class BaseSecurityService
      * @throws DataBackendException if there is a problem accessing the
      *         storage.
      */
-    public User[] getUsers( Criteria criteria )
+    public User[] getUsers(Criteria criteria)
         throws DataBackendException
     {
-        return userManager.retrieve(criteria);
+        return (User []) userManager
+            .retrieveList(criteria)
+            .toArray(new User[0]);
+    }
+
+    /**
+     * Retrieve a set of users that meet the specified criteria.
+     *
+     * As the keys for the criteria, you should use the constants that
+     * are defined in {@link User} interface, plus the names
+     * of the custom attributes you added to your user representation
+     * in the data storage. Use verbatim names of the attributes -
+     * without table name prefix in case of DB implementation.
+     *
+     * @param criteria The criteria of selection.
+     * @return a List of users meeting the criteria.
+     * @throws DataBackendException if there is a problem accessing the
+     *         storage.
+     */
+    public List getUserList(Criteria criteria)
+        throws DataBackendException
+    {
+        return userManager.retrieveList(criteria);
     }
 
     /**
@@ -739,13 +774,15 @@ public abstract class BaseSecurityService
     /**
      * Saves User's data in the permanent storage. The user account is required
      * to exist in the storage.
+     * 
+     * @param user The user Object to store.
      *
      * @exception UnknownEntityException if the user's account does not
      *            exist in the database.
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public void saveUser( User user )
+    public void saveUser(User user)
         throws UnknownEntityException, DataBackendException
     {
         userManager.store(user);
@@ -755,10 +792,12 @@ public abstract class BaseSecurityService
      * Creates new user account with specified attributes.
      *
      * @param user the object describing account to be created.
+     * @param password The password to use for the account.
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws EntityExistsException if the user account already exists.
      */
-    public void addUser( User user, String password )
+    public void addUser(User user, String password)
         throws DataBackendException, EntityExistsException
     {
         userManager.createAccount(user, password);
@@ -771,7 +810,7 @@ public abstract class BaseSecurityService
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the user account is not present.
      */
-    public void removeUser( User user )
+    public void removeUser(User user)
         throws DataBackendException, UnknownEntityException
     {
         // revoke all roles form the user
@@ -793,7 +832,7 @@ public abstract class BaseSecurityService
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public void changePassword( User user, String oldPassword, String newPassword )
+    public void changePassword(User user, String oldPassword, String newPassword)
         throws PasswordMismatchException, UnknownEntityException,
                DataBackendException
     {
@@ -815,10 +854,10 @@ public abstract class BaseSecurityService
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public void forcePassword( User user, String password )
+    public void forcePassword(User user, String password)
         throws UnknownEntityException, DataBackendException
     {
-        userManager.forcePassword( user, password );
+        userManager.forcePassword(user, password);
     }
 
     /**
@@ -853,13 +892,13 @@ public abstract class BaseSecurityService
      */
     protected void lockExclusive()
     {
-        while(readerCount>0)
+        while (readerCount > 0)
         {
             try
             {
                this.wait();
             }
-            catch(InterruptedException e)
+            catch (InterruptedException e)
             {
             }
         }
@@ -885,11 +924,11 @@ public abstract class BaseSecurityService
      */
     public Group getGlobalGroup()
     {
-        if(globalGroup == null)
+        if (globalGroup == null)
         {
-            synchronized(BaseSecurityService.class)
+            synchronized (BaseSecurityService.class)
             {
-                if(globalGroup == null)
+                if (globalGroup == null)
                 {
                     try
                     {
@@ -912,13 +951,18 @@ public abstract class BaseSecurityService
      *
      * @param name the name of the Group.
      * @return an object representing the Group with specified name.
+     *
+     * @exception UnknownEntityException if the object does not
+     *            exist in the database.
+     * @exception DataBackendException if there is a problem accessing the
+     *            storage.
      */
-    public Group getGroup( String name )
+    public Group getGroup(String name)
         throws DataBackendException, UnknownEntityException
     {
         GroupSet groups = getAllGroups();
         Group group = groups.getGroup(name);
-        if(group != null)
+        if (group != null)
         {
             return group;
         }
@@ -933,13 +977,18 @@ public abstract class BaseSecurityService
      *
      * @param name the name of the Role.
      * @return an object representing the Role with specified name.
+     *
+     * @exception UnknownEntityException if the object does not
+     *            exist in the database.
+     * @exception DataBackendException if there is a problem accessing the
+     *            storage.
      */
-    public Role getRole( String name )
+    public Role getRole(String name)
         throws DataBackendException, UnknownEntityException
     {
         RoleSet roles = getAllRoles();
         Role role = roles.getRole(name);
-        if(role != null)
+        if (role != null)
         {
             role.setPermissions(getPermissions(role));
             return role;
@@ -955,13 +1004,18 @@ public abstract class BaseSecurityService
      *
      * @param name the name of the Permission.
      * @return an object representing the Permission with specified name.
+     *
+     * @exception UnknownEntityException if the permission does not
+     *            exist in the database.
+     * @exception DataBackendException if there is a problem accessing the
+     *            storage.
      */
-    public Permission getPermission( String name )
+    public Permission getPermission(String name)
         throws DataBackendException, UnknownEntityException
     {
         PermissionSet permissions = getAllPermissions();
         Permission permission = permissions.getPermission(name);
-        if(permission != null)
+        if (permission != null)
         {
             return permission;
         }
@@ -980,7 +1034,7 @@ public abstract class BaseSecurityService
     public GroupSet getAllGroups()
         throws DataBackendException
     {
-        return getGroups( new Criteria() );
+        return getGroups(new Criteria());
     }
 
     /**
@@ -992,7 +1046,7 @@ public abstract class BaseSecurityService
     public RoleSet getAllRoles()
         throws DataBackendException
     {
-        return getRoles( new Criteria() );
+        return getRoles(new Criteria());
     }
 
     /**
@@ -1004,6 +1058,6 @@ public abstract class BaseSecurityService
     public PermissionSet getAllPermissions()
         throws DataBackendException
     {
-        return getPermissions( new Criteria() );
+        return getPermissions(new Criteria());
     }
 }

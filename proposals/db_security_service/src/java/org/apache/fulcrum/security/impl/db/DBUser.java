@@ -61,23 +61,16 @@ import java.sql.Connection;
 
 import java.util.Date;
 import java.util.Hashtable;
-import java.util.Iterator;
 
 import org.apache.fulcrum.security.TurbineSecurity;
 
-import org.apache.fulcrum.security.entity.Group;
-import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.entity.SecurityEntity;
 import org.apache.fulcrum.security.entity.User;
 
 import org.apache.fulcrum.security.session.SessionBindingEvent;
 
-import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.TurbineSecurityException;
 
-import org.apache.torque.om.ObjectKey;
 import org.apache.torque.om.Persistent;
-
 
 /**
  * This is the User class used by the DBSecurity Service. It decouples
@@ -95,12 +88,10 @@ import org.apache.torque.om.Persistent;
  */
 
 public class DBUser
+    extends DBObject
     implements User,
                Persistent
 {
-    /** The underlying database Object which is proxied */
-    private Persistent obj = null;
-
     /** The date on which the user last accessed the application. */
     private Date lastAccessDate = null;
 
@@ -116,21 +107,22 @@ public class DBUser
      */
     public DBUser()
     {
+        super();
         setCreateDate(new Date());
         tempStorage = new Hashtable(10);
         setHasLoggedIn(Boolean.FALSE);
     }
 
     /**
-     * The package private Constructor is used when the UserPeerManager
+     * This Constructor is used when the UserPeerManager
      * has retrieved a list of Database Objects from the peer and
-     * must 'wrap' them into DBRole Objects.
+     * must 'wrap' them into DBRole Objects. You should not use it directly!
      *
      * @param obj An Object from the peer
      */
-    DBUser(Persistent obj)
+    public DBUser(Persistent obj)
     {
-        this.obj = obj;
+        super(obj);
 
         // Do not set creation date. This is only called on retrieval from
         // storage! 
@@ -150,7 +142,7 @@ public class DBUser
 
     public Persistent getPersistentObj()
     {
-        if(obj == null)
+        if (obj == null)
         {
             obj = UserPeerManager.newPersistentInstance();
         }
@@ -158,93 +150,18 @@ public class DBUser
     }
 
     /**
-     * getter for the object primaryKey.
-     *
-     * @return the object primaryKey as an Object
-     */
-    public ObjectKey getPrimaryKey()
-    {
-        return getPersistentObj().getPrimaryKey();
-    }
-
-    /**
-     * Sets the PrimaryKey for the object.
-     *
-     * @param primaryKey The new PrimaryKey for the object.
-     * @exception Exception, This method might throw an exceptions
-     */
-    public void setPrimaryKey(ObjectKey primaryKey) 
-        throws Exception
-    {
-        getPersistentObj().setPrimaryKey(primaryKey);
-    }
-
-    /**
-     * Sets the PrimaryKey for the object.
-     *
-     * @param primaryKey the String should be of the form produced by
-     *        ObjectKey.toString().
-     * @exception Exception, This method might throw an exceptions
-     */
-    public void setPrimaryKey(String primaryKey)
-        throws Exception
-    {
-        getPersistentObj().setPrimaryKey(primaryKey);
-    }
-
-    /**
-     * Returns whether the object has been modified, since it was
-     * last retrieved from storage.
-     *
-     * @return True if the object has been modified.
-     */
-    public boolean isModified()
-    {
-        return getPersistentObj().isModified();
-    }
-
-    /**
-     * Returns whether the object has ever been saved.  This will
-     * be false, if the object was retrieved from storage or was created
-     * and then saved.
-     *
-     * @return true, if the object has never been persisted.
-     */
-    public boolean isNew()
-    {
-        return getPersistentObj().isNew();
-    }
-
-    /**
-     * Setter for the isNew attribute.  This method will be called
-     * by Torque-generated children and Peers.
-     *
-     * @param b the state of the object.
-     */
-    public void setNew(boolean b)
-    {
-        getPersistentObj().setNew(b);
-    }
-
-    /**
-     * Sets the modified state for the object.
-     *
-     * @param m The new modified state for the object.
-     */
-    public void setModified(boolean m)
-    {
-        getPersistentObj().setModified(m);
-    }
-
-    /**
      * Stores the object in the database.  If the object is new,
      * it inserts it; otherwise an update is performed.
+     *
+     * @param dbName The name under which the object should be stored.
+     *
+     * @exception Exception This method might throw an exceptions
      */
     public void save(String dbName) 
         throws Exception
     {
         setObjectdata(ObjectUtils.serializeHashtable(getPermStorage()));
-        getPersistentObj().save(dbName);
+        super.save(dbName);
     }
 
     /**
@@ -253,12 +170,16 @@ public class DBUser
      * is meant to be used as part of a transaction, otherwise use
      * the save() method and the connection details will be handled
      * internally
+     *
+     * @param con A Connection object to save the object
+     *
+     * @exception Exception This method might throw an exceptions
      */
     public void save(Connection con) 
         throws Exception
     {
         setObjectdata(ObjectUtils.serializeHashtable(getPermStorage()));
-        getPersistentObj().save(con);
+        super.save(con);
     }
 
     /**
@@ -285,7 +206,7 @@ public class DBUser
             setObjectdata(ObjectUtils.serializeHashtable(getPermStorage()));
             getPersistentObj().save();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new TurbineSecurityException("User object said", e);
         }
@@ -344,7 +265,7 @@ public class DBUser
     /**
      * Sets the password of the User
      *
-     * @param name The new password of the User
+     * @param password The new password of the User
      */
     public void setPassword(String password)
     {
@@ -384,7 +305,7 @@ public class DBUser
     /**
      * Sets the last name of User
      *
-     * @param name The new last name of the User
+     * @param lastName The new last name of the User
      */
     public void setLastName(String lastName)
     {
@@ -487,7 +408,7 @@ public class DBUser
     /**
      * Sets the value of the objectdata for the user
      *
-     * @param object The new the date of the last login of the user
+     * @param objectdata The new the date of the last login of the user
      */
     public void setObjectdata(byte [] objectdata)
     {
@@ -640,12 +561,12 @@ public class DBUser
         {
             byte [] objectdata = getObjectdata();
 
-            if(objectdata != null)
+            if (objectdata != null)
             {
-                permStorage = (Hashtable)ObjectUtils.deserialize(objectdata);
+                permStorage = (Hashtable) ObjectUtils.deserialize(objectdata);
             }
 
-            if(permStorage == null)
+            if (permStorage == null)
             {
                 permStorage = new Hashtable();
             }
@@ -658,7 +579,7 @@ public class DBUser
      * This should only be used in the case where we want to save the
      * data to the database.
      *
-     * @param permStorage A Hashtable.
+     * @param storage A Hashtable.
      */
     public void setPermStorage(Hashtable storage)
     {
@@ -802,19 +723,19 @@ public class DBUser
     /**
      * Updates the last login date in the database.
      *
-     * @exception Exception, a generic exception.
+     * @exception Exception A generic exception.
      */
     public void updateLastLogin()
         throws Exception
     {
-        setLastLogin( new java.util.Date() );
+        setLastLogin(new java.util.Date());
     }
 
     /**
      * Implement this method if you wish to be notified when the User
      * has been Bound to the session.
      *
-     * @param event Inidication of value/session binding.
+     * @param event Indication of value/session binding.
      */
     public void valueBound(SessionBindingEvent event)
     {
@@ -825,7 +746,7 @@ public class DBUser
      * Implement this method if you wish to be notified when the User
      * has been Unbound from the session.
      *
-     * @param event Inidication of value/session unbinding.
+     * @param event Indication of value/session unbinding.
      */
     public void valueUnbound(SessionBindingEvent event)
     {
@@ -838,13 +759,13 @@ public class DBUser
         }
         catch (Exception e)
         {
-            //Log.error("DBUser.valueUnbobund(): " + e.getMessage(), e);
+            //Log.error("DBUser.valueUnbound(): " + e.getMessage(), e);
 
             // To prevent messages being lost in case the logging system
             // goes away before sessions get unbound on servlet container
             // shutdown, print the stcktrace to the container's console.
             ByteArrayOutputStream ostr = new ByteArrayOutputStream();
-            e.printStackTrace(new PrintWriter(ostr,true));
+            e.printStackTrace(new PrintWriter(ostr, true));
             String stackTrace = ostr.toString();
             System.out.println(stackTrace);
         }

@@ -54,10 +54,7 @@ package org.apache.fulcrum.security.impl;
  * <http://www.apache.org/>.
  */
 
-import java.io.Serializable;
-
 import java.util.Map;
-import java.util.Set;
 import java.util.Iterator;
 
 import org.apache.fulcrum.security.TurbineSecurity;
@@ -112,17 +109,29 @@ public class TurbineAccessControlList
      * @param roleSets a hashtable containing RoleSet objects keyed with Group objects
      * @param permissionSets a hashtable containing PermissionSet objects keyed with Group objects
      */
-    public TurbineAccessControlList( Map roleSets, Map permissionSets )
+    public TurbineAccessControlList(Map roleSets, Map permissionSets)
     {
         this.roleSets = roleSets;
         this.permissionSets = permissionSets;
     }
 
+    /**
+     * Returns the name of this ACL.
+     *
+     * @return The ACL Name
+     *
+     */
     public String getName()
     {
         return this.name;
     }
 
+    /**
+     * Sets the name of this ACL.
+     *
+     * @param name The new ACL name.
+     *
+     */
     public void setName(String name)
     {
         this.name = name;
@@ -134,17 +143,18 @@ public class TurbineAccessControlList
      * @param group the Group
      * @return the set of Roles this user has within the Group.
      */
-    public RoleSet getRoles( Group group )
+    public RoleSet getRoles(Group group)
     {
-        if(group == null)
+        if (group == null)
+        {
             return null;
-        return (RoleSet)roleSets.get(group);
+        }
+        return (RoleSet) roleSets.get(group);
     }
 
     /**
      * Retrieves a set of Roles an user is assigned in the global Group.
      *
-     * @param group the Group
      * @return the set of Roles this user has within the global Group.
      */
     public RoleSet getRoles()
@@ -158,17 +168,18 @@ public class TurbineAccessControlList
      * @param group the Group
      * @return the set of Permissions this user has within the Group.
      */
-    public PermissionSet getPermissions( Group group )
+    public PermissionSet getPermissions(Group group)
     {
-        if(group == null)
+        if (group == null)
+        {
             return null;
-        return (PermissionSet)permissionSets.get(group);
+        }
+        return (PermissionSet) permissionSets.get(group);
     }
 
     /**
      * Retrieves a set of Permissions an user is assigned in the global Group.
      *
-     * @param group the Group
      * @return the set of Permissions this user has within the global Group.
      */
     public PermissionSet getPermissions()
@@ -183,11 +194,13 @@ public class TurbineAccessControlList
      * @param group the Group
      * @return <code>true</code> if the user is assigned the Role in the Group.
      */
-    public boolean hasRole( Role role, Group group )
+    public boolean hasRole(Role role, Group group)
     {
         RoleSet set = getRoles(group);
-        if(set == null || role == null)
+        if (set == null || role == null)
+        {
             return false;
+        }
         return set.contains(role);
     }
 
@@ -200,20 +213,20 @@ public class TurbineAccessControlList
      * @return <code>true</code> if the user is assigned the Role in any of
      *         the given Groups.
      */
-    public boolean hasRole( Role role, GroupSet groupset )
+    public boolean hasRole(Role role, GroupSet groupset)
     {
-        if(role == null)
+        if (role == null)
         {
             return false;
         }
         Iterator groups = groupset.elements();
-        while(groups.hasNext())
+        while (groups.hasNext())
         {
-            Group group = (Group)groups.next();
+            Group group = (Group) groups.next();
             RoleSet roles = getRoles(group);
-            if(roles != null)
+            if (roles != null)
             {
-                if(roles.contains(role))
+                if (roles.contains(role))
                 {
                     return true;
                 }
@@ -229,13 +242,13 @@ public class TurbineAccessControlList
      * @param group the Group
      * @return <code>true</code> if the user is assigned the Role in the Group.
      */
-    public boolean hasRole( String role, String group )
+    public boolean hasRole(String role, String group)
     {
         try
         {
             return hasRole(TurbineSecurity.getRole(role), TurbineSecurity.getGroup(group));
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             return false;
         }
@@ -250,29 +263,29 @@ public class TurbineAccessControlList
      * @return <code>true</code> if the user is assigned the Role in any of
      *         the given Groups.
      */
-    public boolean hasRole( String rolename, GroupSet groupset )
+    public boolean hasRole(String rolename, GroupSet groupset)
     {
         Role role;
         try
         {
             role = TurbineSecurity.getRole(rolename);
         }
-        catch(TurbineSecurityException e)
+        catch (TurbineSecurityException e)
         {
             return false;
         }
-        if(role == null)
+        if (role == null)
         {
             return false;
         }
         Iterator groups = groupset.elements();
-        while(groups.hasNext())
+        while (groups.hasNext())
         {
-            Group group = (Group)groups.next();
+            Group group = (Group) groups.next();
             RoleSet roles = getRoles(group);
-            if(roles != null)
+            if (roles != null)
             {
-                if(roles.contains(role))
+                if (roles.contains(role))
                 {
                     return true;
                 }
@@ -285,10 +298,9 @@ public class TurbineAccessControlList
      * Checks if the user is assigned a specific Role in the global Group.
      *
      * @param role the Role
-     * @param group the Group
      * @return <code>true</code> if the user is assigned the Role in the global Group.
      */
-    public boolean hasRole( Role role )
+    public boolean hasRole(Role role)
     {
         return hasRole(role, TurbineSecurity.getGlobalGroup());
     }
@@ -297,16 +309,15 @@ public class TurbineAccessControlList
      * Checks if the user is assigned a specific Role in the global Group.
      *
      * @param role the Role
-     * @param group the Group
      * @return <code>true</code> if the user is assigned the Role in the global Group.
      */
-    public boolean hasRole( String role )
+    public boolean hasRole(String role)
     {
         try
         {
             return hasRole(TurbineSecurity.getRole(role));
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             return false;
         }
@@ -319,11 +330,13 @@ public class TurbineAccessControlList
      * @param group the Group
      * @return <code>true</code> if the user is assigned the Permission in the Group.
      */
-    public boolean hasPermission( Permission permission, Group group )
+    public boolean hasPermission(Permission permission, Group group)
     {
         PermissionSet set = getPermissions(group);
-        if(set == null || permission == null)
+        if (set == null || permission == null)
+        {
             return false;
+        }
         return set.contains(permission);
     }
 
@@ -336,20 +349,20 @@ public class TurbineAccessControlList
      * @return <code>true</code> if the user is assigned the Permission in any
      *         of the given Groups.
      */
-    public boolean hasPermission( Permission permission, GroupSet groupset )
+    public boolean hasPermission(Permission permission, GroupSet groupset)
     {
-        if(permission == null)
+        if (permission == null)
         {
             return false;
         }
         Iterator groups = groupset.elements();
-        while(groups.hasNext())
+        while (groups.hasNext())
         {
-            Group group = (Group)groups.next();
+            Group group = (Group) groups.next();
             PermissionSet permissions = getPermissions(group);
-            if(permissions != null)
+            if (permissions != null)
             {
-                if(permissions.contains(permission))
+                if (permissions.contains(permission))
                 {
                     return true;
                 }
@@ -365,14 +378,14 @@ public class TurbineAccessControlList
      * @param group the Group
      * @return <code>true</code> if the user is assigned the Permission in the Group.
      */
-    public boolean hasPermission( String permission, String group )
+    public boolean hasPermission(String permission, String group)
     {
         try
         {
             return hasPermission(TurbineSecurity.getPermission(permission),
                                  TurbineSecurity.getGroup(group));
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             return false;
         }
@@ -385,14 +398,14 @@ public class TurbineAccessControlList
      * @param group the Group
      * @return <code>true</code> if the user is assigned the Permission in the Group.
      */
-    public boolean hasPermission( String permission, Group group )
+    public boolean hasPermission(String permission, Group group)
     {
         try
         {
             return hasPermission(
                 TurbineSecurity.getPermission(permission), group);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             return false;
         }
@@ -407,29 +420,29 @@ public class TurbineAccessControlList
      * @return <code>true</code> if the user is assigned the Permission in any
      *         of the given Groups.
      */
-    public boolean hasPermission( String permissionName, GroupSet groupset )
+    public boolean hasPermission(String permissionName, GroupSet groupset)
     {
         Permission permission;
         try
         {
             permission = TurbineSecurity.getPermission(permissionName);
         }
-        catch(TurbineSecurityException e)
+        catch (TurbineSecurityException e)
         {
             return false;
         }
-        if(permission == null)
+        if (permission == null)
         {
             return false;
         }
         Iterator groups = groupset.elements();
-        while(groups.hasNext())
+        while (groups.hasNext())
         {
-            Group group = (Group)groups.next();
+            Group group = (Group) groups.next();
             PermissionSet permissions = getPermissions(group);
-            if(permissions != null)
+            if (permissions != null)
             {
-                if(permissions.contains(permission))
+                if (permissions.contains(permission))
                 {
                     return true;
                 }
@@ -442,10 +455,9 @@ public class TurbineAccessControlList
      * Checks if the user is assigned a specific Permission in the global Group.
      *
      * @param permission the Permission
-     * @param group the Group
      * @return <code>true</code> if the user is assigned the Permission in the global Group.
      */
-    public boolean hasPermission( Permission permission )
+    public boolean hasPermission(Permission permission)
     {
         return hasPermission(permission, TurbineSecurity.getGlobalGroup());
     }
@@ -454,16 +466,15 @@ public class TurbineAccessControlList
      * Checks if the user is assigned a specific Permission in the global Group.
      *
      * @param permission the Permission
-     * @param group the Group
      * @return <code>true</code> if the user is assigned the Permission in the global Group.
      */
-    public boolean hasPermission( String permission )
+    public boolean hasPermission(String permission)
     {
         try
         {
             return hasPermission(TurbineSecurity.getPermission(permission));
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             return false;
         }
@@ -476,6 +487,8 @@ public class TurbineAccessControlList
      * and permissions an user is assingned. This method is needed
      * because you can't call static methods of TurbineSecurity class
      * from within WebMacro/Velocity template
+     *
+     * @return A Group [] of all groups in the system.
      */
     public Group[] getAllGroups()
     {
@@ -483,7 +496,7 @@ public class TurbineAccessControlList
         {
             return TurbineSecurity.getAllGroups().getGroupsArray();
         }
-        catch(TurbineSecurityException e)
+        catch (TurbineSecurityException e)
         {
             return new Group[0];
         }

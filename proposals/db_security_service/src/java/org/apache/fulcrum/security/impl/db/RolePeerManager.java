@@ -62,18 +62,16 @@ import java.util.List;
 
 import org.apache.fulcrum.InitializationException;
 
+import org.apache.fulcrum.security.TurbineSecurity;
+
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
 
-import org.apache.fulcrum.security.impl.db.DBSecurityService;
-
 import org.apache.fulcrum.security.impl.db.entity.TurbineUserGroupRolePeer;
-import org.apache.fulcrum.security.impl.db.entity.TurbineUserPeer;
 
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.RoleSet;
-import org.apache.fulcrum.security.util.UnknownEntityException;
 
 import org.apache.commons.configuration.Configuration;
 
@@ -103,7 +101,7 @@ public class RolePeerManager
     /** The class name of the objects returned by the configured peer. */
     private static Class roleObject = null;
 
-    /** The name of the Table used for Group Object queries  */
+    /** The name of the Table used for Role Object queries  */
     private static String tableName = null;
 
     /** The name of the column used as "Name" Column */
@@ -122,7 +120,10 @@ public class RolePeerManager
      * Initializes the RolePeerManager, loading the class object for the 
      * Peer used to retrieve Role objects
      *
-     * @exception InitializationException A problem occured during initialization
+     * @param conf The configuration object used to configure the Manager
+     *
+     * @exception InitializationException A problem occured during 
+     *            initialization
      */
 
     public static void init(Configuration conf)
@@ -130,78 +131,94 @@ public class RolePeerManager
     {
         String rolePeerClassName = conf.getString(ROLE_PEER_CLASS_KEY, 
                                                   ROLE_PEER_CLASS_DEFAULT);
+
         String roleObjectName = null;
 
         try
         {
             rolePeerClass = Class.forName(rolePeerClassName);
 
-            tableName  = (String)rolePeerClass.getField("TABLE_NAME").get(null);
+            tableName  = 
+              (String) rolePeerClass.getField("TABLE_NAME").get(null);
 
             //
-            // We have either an user configured Object class or we use the default
-            // as supplied by the Peer class
+            // We have either an user configured Object class or we use the 
+            // default as supplied by the Peer class
             //
-            roleObject = getPersistenceClass(); // Default from Peer, can be overridden
-            
-            roleObjectName = (String)conf
-                .getString(ROLE_CLASS_KEY,
-                           roleObject.getName());
-            
-            roleObject = Class.forName(roleObjectName); // Maybe the user set a new value...
 
-            /* If any of the following Field queries fails, the role subsystem is unusable. So check
-             * this right here at init time, which saves us much time and hassle if it fails...
+            // Default from Peer, can be overridden
+
+            roleObject = getPersistenceClass();
+            
+            roleObjectName = 
+              (String) conf.getString(ROLE_CLASS_KEY,
+                                      roleObject.getName());
+            
+            // Maybe the user set a new value...
+            roleObject = Class.forName(roleObjectName); 
+
+            /* If any of the following Field queries fails, the role 
+             * subsystem is unusable. So check this right here at init time, 
+             * which saves us much time and hassle if it fails...
              */
 
-            nameColumn       = (String)rolePeerClass.getField((String)conf
-                                                              .getString(ROLE_NAME_COLUMN_KEY,
-                                                                         ROLE_NAME_COLUMN_DEFAULT)
-                                                              ).get(null);
+            nameColumn = 
+              (String) rolePeerClass.getField(
+                  (String) conf.getString(ROLE_NAME_COLUMN_KEY,
+                                          ROLE_NAME_COLUMN_DEFAULT)
+                  ).get(null);
 
-            idColumn         = (String)rolePeerClass.getField((String)conf
-                                                              .getString(ROLE_ID_COLUMN_KEY,
-                                                                         ROLE_ID_COLUMN_DEFAULT)  
-                                                              ).get(null);
+            idColumn = (String) rolePeerClass.getField(
+                (String) conf.getString(ROLE_ID_COLUMN_KEY,
+                                        ROLE_ID_COLUMN_DEFAULT)  
+                ).get(null);
 
 
-            namePropDesc       = new PropertyDescriptor((String)conf.getString(ROLE_NAME_PROPERTY_KEY,
-                                                                               ROLE_NAME_PROPERTY_DEFAULT),
-                                                        roleObject);
+            namePropDesc = 
+                new PropertyDescriptor(
+                    (String) conf.getString(ROLE_NAME_PROPERTY_KEY,
+                                            ROLE_NAME_PROPERTY_DEFAULT),
+                    roleObject);
 
-            idPropDesc         = new PropertyDescriptor((String)conf.getString(ROLE_ID_PROPERTY_KEY,
-                                                                               ROLE_ID_PROPERTY_DEFAULT),
-                                                        roleObject);
+            idPropDesc = 
+                new PropertyDescriptor(
+                    (String) conf.getString(ROLE_ID_PROPERTY_KEY,
+                                            ROLE_ID_PROPERTY_DEFAULT),
+                    roleObject);
 
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            if(rolePeerClassName == null || rolePeerClass == null)
+            if (rolePeerClassName == null || rolePeerClass == null)
             {
                 throw new InitializationException(
-                    "Could not find RolePeer class ("+ rolePeerClassName+ ")", e);
+                    "Could not find RolePeer class ("
+                    + rolePeerClassName + ")", e);
             }
-            if(tableName == null)
+            if (tableName == null)
             {
                 throw new InitializationException(
-                    "Failed to get the table name from the Peer object",e);
+                    "Failed to get the table name from the Peer object", e);
             }
-            if(roleObject == null || roleObjectName == null)
+
+            if (roleObject == null || roleObjectName == null)
             {
                 throw new InitializationException(
-                    "Failed to get the object type from the Peer object",e);
+                    "Failed to get the object type from the Peer object", e);
             }
 
 
-            if(nameColumn == null || namePropDesc == null)
+            if (nameColumn == null || namePropDesc == null)
             {
                 throw new InitializationException(
-                    "RolePeer " + rolePeerClassName + " has no name column information!",e);
+                    "RolePeer " + rolePeerClassName 
+                    + " has no name column information!", e);
             }
-            if(idColumn == null || idPropDesc == null)
+            if (idColumn == null || idPropDesc == null)
             {
                 throw new InitializationException(
-                    "RolePeer " + rolePeerClassName + " has no id column information!",e);
+                    "RolePeer " + rolePeerClassName 
+                    + " has no id column information!", e);
             }
         }
     }
@@ -218,7 +235,7 @@ public class RolePeerManager
 
     /**
      * Returns the fully qualified name of the Column to
-     * use as the Name Column for a group
+     * use as the Name Column for a role
      *
      * @return A String containing the column name
      */
@@ -229,12 +246,11 @@ public class RolePeerManager
 
     /**
      * Returns the fully qualified name of the Column to
-     * use as the Id Column for a group
+     * use as the Id Column for a role
      *
      * @return A String containing the column id
      */
     public static String getIdColumn()
-        throws Exception
     {
         return idColumn;
     }
@@ -242,6 +258,8 @@ public class RolePeerManager
     /**
      * Returns the full name of a column.
      *
+     * @param name The column to fully qualify
+     * 
      * @return A String with the full name of the column.
      */
     public static String getColumnName(String name)
@@ -267,9 +285,9 @@ public class RolePeerManager
         Persistent obj;
         try
         {
-            obj = (Persistent)roleObject.newInstance();
+            obj = (Persistent) roleObject.newInstance();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             obj = null; // FIXME ? 
         }
@@ -292,9 +310,10 @@ public class RolePeerManager
     {
         List results = doSelect(criteria);
         RoleSet rs = new RoleSet();
-        for (int i=0; i<results.size(); i++)
+        
+        for(Iterator it = results.iterator(); it.hasNext(); )
         {
-            rs.add( (Role)results.get(i) );
+            rs.add((Role) it.next());
         }
         return rs;
     }
@@ -314,12 +333,15 @@ public class RolePeerManager
     {
         Criteria criteria = new Criteria();
 
-        criteria.add(UserPeerManager.getNameColumn(), user.getUserName());
+        criteria.add(UserPeerManager.getNameColumn(), 
+                     user.getUserName());
 
         criteria.add(TurbineUserGroupRolePeer.GROUP_ID,
-                     ((Persistent)group).getPrimaryKey());
+                     ((Persistent) group).getPrimaryKey());
 
-        criteria.addJoin(TurbineUserPeer.USER_ID, TurbineUserGroupRolePeer.USER_ID);
+        criteria.addJoin(UserPeerManager.getIdColumn(), 
+                         TurbineUserGroupRolePeer.USER_ID);
+
         criteria.addJoin(TurbineUserGroupRolePeer.ROLE_ID, getIdColumn());
 
         return retrieveSet(criteria);
@@ -333,7 +355,7 @@ public class RolePeerManager
      * @return <code>true</code> if given Role exists in the system.
      * @throws DataBackendException when more than one Role with
      *         the same name exists.
-     * @throws Exception, a generic exception.
+     * @throws Exception A generic exception.
      */
     public static boolean checkExists(Role role)
         throws DataBackendException, Exception
@@ -383,13 +405,14 @@ public class RolePeerManager
         try
         {
             Class[] clazz = new Class[] { roleObject };
-            Object[] params = new Object[] { ((DBRole)role).getPersistentObj() };
+            Object[] params = 
+                new Object[] { ((DBRole) role).getPersistentObj() };
 
-            crit =  (Criteria)rolePeerClass
+            crit =  (Criteria) rolePeerClass
                 .getMethod("buildCriteria", clazz)
                 .invoke(null, params);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             crit = null;
         }
@@ -417,7 +440,7 @@ public class RolePeerManager
                 .getMethod("doUpdate", clazz)
                 .invoke(null, params);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new TorqueException("doUpdate failed", e);
         }
@@ -443,7 +466,7 @@ public class RolePeerManager
                 .getMethod("doInsert", clazz)
                 .invoke(null, params);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new TorqueException("doInsert failed", e);
         }
@@ -454,7 +477,7 @@ public class RolePeerManager
      *
      * @param criteria  A Criteria Object
      *
-     * return A List of Role Objects selected by the Criteria
+     * @return A List of Role Objects selected by the Criteria
      *
      * @exception TorqueException A problem occured.
      */
@@ -465,14 +488,15 @@ public class RolePeerManager
 
         try
         {
-            Class[] clazz = new Class[] { Class.forName("org.apache.torque.util.Criteria") };
+            Class[] clazz = 
+                new Class[] { Class.forName("org.apache.torque.util.Criteria") };
             Object[] params = new Object[] { criteria };
 
-            list = (List)rolePeerClass
+            list = (List) rolePeerClass
                 .getMethod("doSelect", clazz)
                 .invoke(null, params);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new TorqueException("doSelect failed", e);
         }
@@ -481,10 +505,10 @@ public class RolePeerManager
         //
         // Wrap the returned Objects into DBRoles.
         //
-        for(Iterator it = list.iterator(); it.hasNext(); )
+        for (Iterator it = list.iterator(); it.hasNext(); )
         {
-            DBRole dr = new DBRole((Persistent)it.next());
-            newList.add(dr);
+            Role r = getNewRole((Persistent) it.next());
+            newList.add(r);
         }
 
         return newList;
@@ -509,7 +533,7 @@ public class RolePeerManager
                 .getMethod("doDelete", clazz)
                 .invoke(null, params);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new TorqueException("doDelete failed", e);
         }
@@ -521,7 +545,6 @@ public class RolePeerManager
      * @param obj The object to use for setting the name
      * @param name The Name to set
      *
-     * @exception TorqueException A problem occured.
      */
     public static void setRoleName(Persistent obj, String name)
     {
@@ -530,11 +553,13 @@ public class RolePeerManager
             Object[] params = new Object[] { name };
             namePropDesc.getWriteMethod().invoke(obj, params);
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a Role Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a Role Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // Not much we can do; setName returns no exception
         }
@@ -546,23 +571,23 @@ public class RolePeerManager
      * @param obj The object to use for getting the name
      *
      * @return A string containing the name
-     *
-     * @exception TorqueException A problem occured.
      */
     public static String getRoleName(Persistent obj)
     {
         String name = null;
         try
         {
-            name = (String)namePropDesc
+            name = (String) namePropDesc
                 .getReadMethod()
                 .invoke(obj, new Object[] {});
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a Role Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a Role Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // see setRoleName
         }
@@ -574,7 +599,6 @@ public class RolePeerManager
      * from the peer
      *
      * @return The class of the objects returned by the configured peer
-     *
      */
 
     private static Class getPersistenceClass()
@@ -585,11 +609,11 @@ public class RolePeerManager
         {
             Object[] params = new Object[0];
 
-            persistenceClass =  (Class)rolePeerClass
+            persistenceClass =  (Class) rolePeerClass
                 .getMethod("getOMClass", null)
                 .invoke(null, params);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             persistenceClass = null;
         }
@@ -597,5 +621,39 @@ public class RolePeerManager
         return persistenceClass;
     }
 
+
+    /**
+     * Returns a new, configured Role Object with
+     * a supplied Persistent object at its core
+     *
+     * @param p The persistent object
+     *
+     * @return a new, configured Role Object
+     *
+     * @exception Exception Could not create a new Object
+     *
+     */
+
+    public static Role getNewRole(Persistent p)
+    {
+        Role r = null;
+        try
+        {
+            Class roleWrapperClass = TurbineSecurity.getRoleClass();
+
+            Class [] clazz = new Class [] { Class.forName("org.apache.torque.om.Persistent") };
+            Object [] params = new Object [] { p };
+
+            r = (Role) roleWrapperClass
+                .getConstructor(clazz)
+                .newInstance(params);
+        }
+        catch (Exception e)
+        {
+            // Uh, oh...
+        }
+
+        return r;
+    }
 }
 

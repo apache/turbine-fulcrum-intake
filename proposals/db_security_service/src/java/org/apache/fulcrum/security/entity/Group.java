@@ -66,7 +66,8 @@ import org.apache.fulcrum.security.util.TurbineSecurityException;
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @version $Id$
  */
-public interface Group extends SecurityEntity
+public interface Group 
+    extends SecurityEntity
 {
     /**
      * The name of the <a href="#global">global group</a>
@@ -78,14 +79,14 @@ public interface Group extends SecurityEntity
      *
      * @return The name of the object.
      */
-    public String getName();
+    String getName();
 
     /**
      * Sets the name of this object.
      *
      * @param name The name of the object.
      */
-    public void setName(String name);
+    void setName(String name);
 
     /**
      * Makes changes made to the Group attributes permanent.
@@ -93,7 +94,7 @@ public interface Group extends SecurityEntity
      * @throws TurbineSecurityException if there is a problem while
      *  saving data.
      */
-    public void save()
+    void save()
         throws TurbineSecurityException;
 
     /**
@@ -101,7 +102,7 @@ public interface Group extends SecurityEntity
      *
      * @throws TurbineSecurityException if the Group could not be removed.
      */
-    public void remove()
+    void remove()
         throws TurbineSecurityException;
 
     /**
@@ -110,7 +111,7 @@ public interface Group extends SecurityEntity
      * @param name The new Group name.
      * @throws TurbineSecurityException if the Group could not be renamed.
      */
-    public void rename(String name)
+    void rename(String name)
         throws TurbineSecurityException;
 
     /**
@@ -121,7 +122,7 @@ public interface Group extends SecurityEntity
      * @throws TurbineSecurityException if there is a problem while assigning
      * the Role.
      */
-    public void grant(User user, Role role)
+    void grant(User user, Role role)
         throws TurbineSecurityException;
 
     /**
@@ -132,7 +133,7 @@ public interface Group extends SecurityEntity
      * @throws TurbineSecurityException if there is a problem while assigning
      * the Roles.
      */
-    public void grant(User user, RoleSet roleSet)
+    void grant(User user, RoleSet roleSet)
         throws TurbineSecurityException;
 
     /**
@@ -143,7 +144,7 @@ public interface Group extends SecurityEntity
      * @throws TurbineSecurityException if there is a problem while unassigning
      * the Role.
      */
-    public void revoke(User user, Role role)
+    void revoke(User user, Role role)
         throws TurbineSecurityException;
 
     /**
@@ -154,7 +155,7 @@ public interface Group extends SecurityEntity
      * @throws TurbineSecurityException if there is a problem while unassigning
      * the Roles.
      */
-    public void revoke(User user, RoleSet roleSet)
+    void revoke(User user, RoleSet roleSet)
         throws TurbineSecurityException;
 
 }

@@ -117,84 +117,84 @@ of the following configuration, these are the defaults:
 <source><![CDATA[
 
 # This is the Peer class used to access the user peer (org.apache.fulcrum.security.impl.db.entity.TurbineUserPeer)
-service.SecurityService.db.userPeer.class = org.apache.fulcrum.security.impl.db.entity.TurbineUserPeer
+services.SecurityService.db.userPeer.class = org.apache.fulcrum.security.impl.db.entity.TurbineUserPeer
 
 # The columns in the peer used to retrieve information. These are the names of the constants
 # in the configured peer
-service.SecurityService.db.userPeer.column.name       = LOGIN_NAME
-service.SecurityService.db.userPeer.column.id         = USER_ID
-service.SecurityService.db.userPeer.column.password   = PASSWORD_VALUE
-service.SecurityService.db.userPeer.column.firstname  = FIRST_NAME
-service.SecurityService.db.userPeer.column.lastname   = LAST_NAME
-service.SecurityService.db.userPeer.column.email      = EMAIL
-service.SecurityService.db.userPeer.column.confirm    = CONFIRM_VALUE
-service.SecurityService.db.userPeer.column.createdate = CREATED
-service.SecurityService.db.userPeer.column.lastlogin  = LAST_LOGIN
-service.SecurityService.db.userPeer.column.objectdata = OBJECTDATA
+services.SecurityService.db.userPeer.column.name       = LOGIN_NAME
+services.SecurityService.db.userPeer.column.id         = USER_ID
+services.SecurityService.db.userPeer.column.password   = PASSWORD_VALUE
+services.SecurityService.db.userPeer.column.firstname  = FIRST_NAME
+services.SecurityService.db.userPeer.column.lastname   = LAST_NAME
+services.SecurityService.db.userPeer.column.email      = EMAIL
+services.SecurityService.db.userPeer.column.confirm    = CONFIRM_VALUE
+services.SecurityService.db.userPeer.column.createdate = CREATED
+services.SecurityService.db.userPeer.column.lastlogin  = LAST_LOGIN
+services.SecurityService.db.userPeer.column.objectdata = OBJECTDATA
 
 # These are the objects returned by the configured user peer (org.apache.fulcrum.security.impl.db.entity.TurbineUser)
-service.SecurityService.db.user.class = org.apache.fulcrum.security.impl.db.entity.TurbineUser
+services.SecurityService.db.user.class = org.apache.fulcrum.security.impl.db.entity.TurbineUser
 
 # These bean properties are queried from the returned object to retrieve the 
 # information
-service.SecurityService.db.user.property.name         = UserName
-service.SecurityService.db.user.property.id           = UserId
-service.SecurityService.db.user.property.password     = Password
-service.SecurityService.db.user.property.firstname    = FirstName
-service.SecurityService.db.user.property.lastname     = LastName
-service.SecurityService.db.user.property.email        = Email
-service.SecurityService.db.user.property.confirm      = Confirmed
-service.SecurityService.db.user.property.createdate   = CreateDate
-service.SecurityService.db.user.property.lastlogin    = LastLogin
-service.SecurityService.db.user.property.objectdata   = Objectdata
+services.SecurityService.db.user.property.name         = UserName
+services.SecurityService.db.user.property.id           = UserId
+services.SecurityService.db.user.property.password     = Password
+services.SecurityService.db.user.property.firstname    = FirstName
+services.SecurityService.db.user.property.lastname     = LastName
+services.SecurityService.db.user.property.email        = Email
+services.SecurityService.db.user.property.confirm      = Confirmed
+services.SecurityService.db.user.property.createdate   = CreateDate
+services.SecurityService.db.user.property.lastlogin    = LastLogin
+services.SecurityService.db.user.property.objectdata   = Objectdata
 
 # This is the Peer class used to access the Group Peer (org.apache.fulcrum.security.impl.db.entity.TurbineGroupPeer)
-service.SecurityService.db.groupPeer.class = org.apache.fulcrum.security.impl.db.entity.TurbineGroupPeer
+services.SecurityService.db.groupPeer.class = org.apache.fulcrum.security.impl.db.entity.TurbineGroupPeer
 
 # The columns in the peer used to retrieve information. These are the names of the constants
 # in the configured peer
-service.SecurityService.db.groupPeer.column.name      = GROUP_NAME
-service.SecurityService.db.groupPeer.column.id        = GROUP_ID
+services.SecurityService.db.groupPeer.column.name      = GROUP_NAME
+services.SecurityService.db.groupPeer.column.id        = GROUP_ID
 
 # These are the objects returned by the configured group peer (org.apache.fulcrum.security.impl.db.entity.TurbineGroup)
-service.SecurityService.db.group.class = org.apache.fulcrum.security.impl.db.entity.TurbineGroup
+services.SecurityService.db.group.class = org.apache.fulcrum.security.impl.db.entity.TurbineGroup
 
 # These bean properties are queried from the returned object to retrieve the 
 # information
-service.SecurityService.db.group.property.name        = Name
-service.SecurityService.db.group.property.id          = GroupId
+services.SecurityService.db.group.property.name        = Name
+services.SecurityService.db.group.property.id          = GroupId
 
 # This is the Peer class used to access the Role Peer (org.apache.fulcrum.security.impl.db.entity.TurbineRolePeer)
-service.SecurityService.db.rolePeer.class = org.apache.fulcrum.security.impl.db.entity.TurbineRolePeer
+services.SecurityService.db.rolePeer.class = org.apache.fulcrum.security.impl.db.entity.TurbineRolePeer
 
 # The columns in the peer used to retrieve information. These are the names of the constants
 # in the configured peer
-service.SecurityService.db.rolePeer.column.name       = ROLE_NAME
-service.SecurityService.db.rolePeer.column.id         = ROLE_ID
+services.SecurityService.db.rolePeer.column.name       = ROLE_NAME
+services.SecurityService.db.rolePeer.column.id         = ROLE_ID
 
 # These are the objects returned by the configured role peer (org.apache.fulcrum.security.impl.db.entity.TurbineRole)
-service.SecurityService.db.role.class = org.apache.fulcrum.security.impl.db.entity.TurbineRole
+services.SecurityService.db.role.class = org.apache.fulcrum.security.impl.db.entity.TurbineRole
 
 # These bean properties are queried from the returned object to retrieve the 
 # information
-service.SecurityService.db.role.property.name         = Name
-service.SecurityService.db.role.property.id           = RoleId
+services.SecurityService.db.role.property.name         = Name
+services.SecurityService.db.role.property.id           = RoleId
 
 # This is the Peer class used to access the Permission Peer (org.apache.fulcrum.security.impl.db.entity.TurbinePermissionPeer)
-service.SecurityService.db.permissionPeer.class = org.apache.fulcrum.security.impl.db.entity.TurbinePermissionPeer
+services.SecurityService.db.permissionPeer.class = org.apache.fulcrum.security.impl.db.entity.TurbinePermissionPeer
 
 # The columns in the peer used to retrieve information. These are the names of the constants
 # in the configured peer
-service.SecurityService.db.permissionPeer.column.name = PERMISSION_NAME
-service.SecurityService.db.permissionPeer.column.id   = PERMISSION_ID
+services.SecurityService.db.permissionPeer.column.name = PERMISSION_NAME
+services.SecurityService.db.permissionPeer.column.id   = PERMISSION_ID
 
 # These are the objects returned by the configured permission peer (org.apache.fulcrum.security.impl.db.entity.TurbinePermission)
-service.SecurityService.db.permission.class = org.apache.fulcrum.security.impl.db.entity.TurbinePermission
+services.SecurityService.db.permission.class = org.apache.fulcrum.security.impl.db.entity.TurbinePermission
 
 # These bean properties are queried from the returned object to retrieve the 
 # information
-service.SecurityService.db.permission.property.name   = Name
-service.SecurityService.db.permission.property.id     = PermissionId
+services.SecurityService.db.permission.property.name   = Name
+services.SecurityService.db.permission.property.id     = PermissionId
 ]]></source>
 <p>
 The column names and the bean properties do not always match, because
@@ -259,12 +259,12 @@ Now we configure the DB Security Service to for using this peer as UserPeer:
 </p>
 <source><![CDATA[
 # This is the Peer class used to access the user peer (org.apache.fulcrum.security.impl.db.entity.TurbineUserPeer)
-service.SecurityService.db.userPeer.class = CustomUserPeer
+services.SecurityService.db.userPeer.class = CustomUserPeer
 ]]></source>
 <p>
 Please note that we neither configure any column or property
 properties nor do we configure
-<i>service.SecurityService.db.user.class</i>.  So the DB Security
+<i>services.SecurityService.db.user.class</i>.  So the DB Security
 Service will query the <i>CustomPeer</i> for the class of the returned
 objects.  Now Fulcrum uses your supplied Custom User Peer for querying
 User information. However you can't access your custom columns
@@ -302,22 +302,22 @@ public class CustomUser extends DBUser
 {
   public String getPhone()
   {
-    return ((CustomPeer)getPersistentObj()).getPhone();
+    return ((CustomObject)getPersistentObj()).getPhone();
   }
 
   public void setPhone(String phone)
   {
-    ((CustomPeer)getPersistentObj()).setPhone(phone);
+    ((CustomObject)getPersistentObj()).setPhone(phone);
   }
 
   public String getFax()
   {
-    return ((CustomPeer)getPersistentObj()).getFax();
+    return ((CustomObject)getPersistentObj()).getFax();
   }
 
   public void setFax(String fax)
   {
-    ((CustomPeer)getPersistentObj()).setFax(fax);
+    ((CustomObject)getPersistentObj()).setFax(fax);
   }
 }
 
@@ -353,20 +353,20 @@ Consider the following schema:
 If you want to use this as the role peer, you can configure the DB Security Service like this:
 </p>
 <source><![CDATA[
-service.SecurityService.db.rolePeer.class = CustomRolePeer
+services.SecurityService.db.rolePeer.class = CustomRolePeer
 
 # The columns in the peer used to retrieve information. These are the names of the constants
 # in the configured peer
-service.SecurityService.db.rolePeer.column.name       = NAME_OF_ROLE
-service.SecurityService.db.rolePeer.column.id         = CUSTOM_ID
+services.SecurityService.db.rolePeer.column.name       = NAME_OF_ROLE
+services.SecurityService.db.rolePeer.column.id         = CUSTOM_ID
 
 # These are the objects returned by the configured role peer (org.apache.fulcrum.security.impl.db.entity.TurbineRole)
-service.SecurityService.db.role.class = CustomRole
+services.SecurityService.db.role.class = CustomRole
 
 # These bean properties are queried from the returned object to retrieve the 
 # information
-service.SecurityService.db.role.property.name         = NameOfRole
-service.SecurityService.db.role.property.id           = CustomId
+services.SecurityService.db.role.property.name         = NameOfRole
+services.SecurityService.db.role.property.id           = CustomId
 
 ]]></source>
 <p>

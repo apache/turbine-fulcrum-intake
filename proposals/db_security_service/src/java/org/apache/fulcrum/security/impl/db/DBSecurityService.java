@@ -56,15 +56,10 @@ package org.apache.fulcrum.security.impl.db;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
 
-import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
 
 import org.apache.fulcrum.security.BaseSecurityService;
@@ -73,7 +68,7 @@ import org.apache.fulcrum.security.TurbineSecurity;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.entity.SecurityEntity;
+
 import org.apache.fulcrum.security.entity.User;
 
 import org.apache.fulcrum.security.impl.db.entity.TurbineRolePermissionPeer;
@@ -108,7 +103,8 @@ public class DBSecurityService
     extends BaseSecurityService
 {
     /** Log4j category */
-    Category category = Category.getInstance(getClass().getName());
+    private Category category = 
+        Category.getInstance(getClass().getName());
 
     /**
      * Initializes the DBSecurityService, loading the various class objects
@@ -144,11 +140,14 @@ public class DBSecurityService
      * into an AccessControlList object.
      *
      * @param user the user for whom the AccessControlList are to be retrieved
+     *
+     * @return A new AccessControlList object.
+     *
      * @throws DataBackendException if there was an error accessing the data
      *         backend.
      * @throws UnknownEntityException if user account is not present.
      */
-    public AccessControlList getACL( User user )
+    public AccessControlList getACL(User user)
         throws DataBackendException, UnknownEntityException
     {
         if (!TurbineSecurity.accountExists(user))
@@ -168,20 +167,20 @@ public class DBSecurityService
 
             // foreach group in the system
             Iterator groupsIterator = getAllGroups().elements();
-            while(groupsIterator.hasNext())
+            while (groupsIterator.hasNext())
             {
-                Group group = (Group)groupsIterator.next();
+                Group group = (Group) groupsIterator.next();
                 // get roles of user in the group
                 RoleSet groupRoles = RolePeerManager.retrieveSet(user, group);
                 // put the Set into roles(group)
                 roles.put(group, groupRoles);
-                // collect all permissoins in this group
+                // collect all permissions in this group
                 PermissionSet groupPermissions = new PermissionSet();
                 // foreach role in Set
                 Iterator rolesIterator = groupRoles.elements();
-                while(rolesIterator.hasNext())
+                while (rolesIterator.hasNext())
                 {
-                    Role role = (Role)rolesIterator.next();
+                    Role role = (Role) rolesIterator.next();
                     // get permissions of the role
                     PermissionSet rolePermissions =
                         PermissionPeerManager.retrieveSet(role);
@@ -192,7 +191,7 @@ public class DBSecurityService
             }
             return getAclInstance(roles, permissions);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("Failed to build ACL for user '" +
                                            user.getUserName() + "'" , e);
@@ -211,15 +210,15 @@ public class DBSecurityService
     /**
      * Grant an User a Role in a Group.
      *
-     * @param User the user.
-     * @param Group the group.
-     * @param Role the role.
+     * @param user the user.
+     * @param group the group.
+     * @param role the role.
      * @throws DataBackendException if there was an error accessing the data
      *         backend.
      * @throws UnknownEntityException if user account, group or role is not
      *         present.
      */
-    public synchronized void grant( User user, Group group, Role role )
+    public synchronized void grant(User user, Group group, Role role)
         throws DataBackendException, UnknownEntityException
     {
         boolean userExists = false;
@@ -228,23 +227,23 @@ public class DBSecurityService
         try
         {
             lockExclusive();
-            userExists=TurbineSecurity.accountExists(user);
-            groupExists=checkExists(group);
-            roleExists=checkExists(role);
+            userExists = TurbineSecurity.accountExists(user);
+            groupExists = checkExists(group);
+            roleExists = checkExists(role);
             if (userExists && groupExists && roleExists)
             {
                 Criteria criteria = new Criteria();
                 criteria.add(TurbineUserGroupRolePeer.USER_ID,
-                             ((Persistent)user).getPrimaryKey());
+                             ((Persistent) user).getPrimaryKey());
                 criteria.add(TurbineUserGroupRolePeer.GROUP_ID,
-                             ((Persistent)group).getPrimaryKey());
+                             ((Persistent) group).getPrimaryKey());
                 criteria.add(TurbineUserGroupRolePeer.ROLE_ID,
-                             ((Persistent)role).getPrimaryKey());
+                             ((Persistent) role).getPrimaryKey());
                 TurbineUserGroupRolePeer.doInsert(criteria);
                 return;
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("grant(User,Group,Role) failed", e);
         }
@@ -272,15 +271,15 @@ public class DBSecurityService
     /**
      * Revoke a Role in a Group from an User.
      *
-     * @param User the user.
-     * @param Group the group.
-     * @param Role the role.
+     * @param user the user.
+     * @param group the group.
+     * @param role the role.
      * @throws DataBackendException if there was an error accessing the data
      *         backend.
      * @throws UnknownEntityException if user account, group or role is not
      *         present.
      */
-    public synchronized void revoke( User user, Group group, Role role )
+    public synchronized void revoke(User user, Group group, Role role)
         throws DataBackendException, UnknownEntityException
     {
         boolean userExists = false;
@@ -289,23 +288,23 @@ public class DBSecurityService
         try
         {
             lockExclusive();
-            userExists=TurbineSecurity.accountExists(user);
-            groupExists=checkExists(group);
-            roleExists=checkExists(role);
+            userExists = TurbineSecurity.accountExists(user);
+            groupExists = checkExists(group);
+            roleExists = checkExists(role);
             if (userExists && groupExists && roleExists)
             {
                 Criteria criteria = new Criteria();
                 criteria.add(TurbineUserGroupRolePeer.USER_ID,
-                             ((Persistent)user).getPrimaryKey());
+                             ((Persistent) user).getPrimaryKey());
                 criteria.add(TurbineUserGroupRolePeer.GROUP_ID,
-                             ((Persistent)group).getPrimaryKey());
+                             ((Persistent) group).getPrimaryKey());
                 criteria.add(TurbineUserGroupRolePeer.ROLE_ID,
-                             ((Persistent)role).getPrimaryKey());
+                             ((Persistent) role).getPrimaryKey());
                 TurbineUserGroupRolePeer.doDelete(criteria);
                 return;
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("revoke(User,Role,Group) failed", e);
         }
@@ -340,14 +339,14 @@ public class DBSecurityService
      *         backend.
      * @throws UnknownEntityException if the account is not present.
      */
-    public synchronized void revokeAll( User user )
+    public synchronized void revokeAll(User user)
         throws DataBackendException, UnknownEntityException
     {
         boolean userExists = false;
         try
         {
             lockExclusive();
-            userExists=TurbineSecurity.accountExists(user);
+            userExists = TurbineSecurity.accountExists(user);
             if (userExists)
             {
                 // The following would not work, due to an annoying misfeature
@@ -357,9 +356,9 @@ public class DBSecurityService
 
                 // Criteria criteria = new Criteria();
                 // criteria.add(UserGroupRolePeer.USER_ID,
-                //           ((Persistent)user).getPrimaryKey());
+                //           ((Persistent) user).getPrimaryKey());
                 // UserGroupRolePeer.doDelete(criteria);
-                ObjectKey key = ((Persistent) user).getPrimaryKey();
+                ObjectKey key = ((Persistent)  user).getPrimaryKey();
                 TurbineUserGroupRolePeer.deleteAll(
                     TurbineUserGroupRolePeer.TABLE_NAME,
                     TurbineUserGroupRolePeer.USER_ID,
@@ -367,7 +366,7 @@ public class DBSecurityService
                 return;
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("revokeAll(User) failed", e);
         }
@@ -388,7 +387,7 @@ public class DBSecurityService
      *         backend.
      * @throws UnknownEntityException if role or permission is not present.
      */
-    public synchronized void grant( Role role, Permission permission )
+    public synchronized void grant(Role role, Permission permission)
         throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
@@ -396,20 +395,20 @@ public class DBSecurityService
         try
         {
             lockExclusive();
-            roleExists=checkExists(role);
-            permissionExists=checkExists(permission);
+            roleExists = checkExists(role);
+            permissionExists = checkExists(permission);
             if (roleExists && permissionExists)
             {
                 Criteria criteria = new Criteria();
                 criteria.add(TurbineRolePermissionPeer.ROLE_ID,
-                             ((Persistent)role).getPrimaryKey());
+                             ((Persistent) role).getPrimaryKey());
                 criteria.add(TurbineRolePermissionPeer.PERMISSION_ID,
-                             ((Persistent)permission).getPrimaryKey());
+                             ((Persistent) permission).getPrimaryKey());
                 TurbineUserGroupRolePeer.doInsert(criteria);
                 return;
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("grant(Role,Permission) failed", e);
         }
@@ -438,7 +437,7 @@ public class DBSecurityService
      *         backend.
      * @throws UnknownEntityException if role or permission is not present.
      */
-    public synchronized void revoke( Role role, Permission permission )
+    public synchronized void revoke(Role role, Permission permission)
         throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
@@ -446,20 +445,20 @@ public class DBSecurityService
         try
         {
             lockExclusive();
-            roleExists=checkExists(role);
-            permissionExists=checkExists(permission);
+            roleExists = checkExists(role);
+            permissionExists = checkExists(permission);
             if (roleExists && permissionExists)
             {
                 Criteria criteria = new Criteria();
                 criteria.add(TurbineRolePermissionPeer.ROLE_ID,
-                             ((Persistent)role).getPrimaryKey());
+                             ((Persistent) role).getPrimaryKey());
                 criteria.add(TurbineRolePermissionPeer.PERMISSION_ID,
-                             ((Persistent)permission).getPrimaryKey());
+                             ((Persistent) permission).getPrimaryKey());
                 TurbineRolePermissionPeer.doDelete(criteria);
                 return;
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("revoke(Role,Permission) failed", e);
         }
@@ -489,25 +488,25 @@ public class DBSecurityService
      *         backend.
      * @throws  UnknownEntityException if the Role is not present.
      */
-    public synchronized void revokeAll( Role role )
+    public synchronized void revokeAll(Role role)
         throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
         try
         {
             lockExclusive();
-            roleExists=checkExists(role);
+            roleExists = checkExists(role);
             if (roleExists)
             {
                 // The following would not work, due to an annoying misfeature
                 // of Village.
-                // see revokeAll( user )
+                // see revokeAll(user)
 
                 // Criteria criteria = new Criteria();
                 // criteria.add(RolePermissionPeer.ROLE_ID, role.getPrimaryKey());
                 // RolePermissionPeer.doDelete(criteria);
 
-                ObjectKey key = ((Persistent)role).getPrimaryKey();
+                ObjectKey key = ((Persistent) role).getPrimaryKey();
                 TurbineRolePermissionPeer.deleteAll(
                     TurbineRolePermissionPeer.TABLE_NAME,
                     TurbineRolePermissionPeer.ROLE_ID,
@@ -515,7 +514,7 @@ public class DBSecurityService
                 return;
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("revokeAll(Role) failed", e);
         }
@@ -534,17 +533,20 @@ public class DBSecurityService
     /**
      * Retrieve a set of Groups that meet the specified Criteria.
      *
-     * @param a Criteria of Group selection.
+     * @param criteria A Criteria of Group selection.
      * @return a set of Groups that meet the specified Criteria.
+     *
+     * @throws DataBackendException if there was an error accessing the data
+     *         backend.
      */
-    public GroupSet getGroups( Criteria criteria )
+    public GroupSet getGroups(Criteria criteria)
         throws DataBackendException
     {
         Criteria dbCriteria = new Criteria();
         Iterator keys = criteria.keySet().iterator();
-        while(keys.hasNext())
+        while (keys.hasNext())
         {
-            String key = (String)keys.next();
+            String key = (String) keys.next();
             dbCriteria.put(GroupPeerManager.getColumnName(key),
                            criteria.get(key));
         }
@@ -553,7 +555,7 @@ public class DBSecurityService
         {
             groups = GroupPeerManager.doSelect(criteria);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("getGroups(Criteria) failed", e);
         }
@@ -563,17 +565,20 @@ public class DBSecurityService
     /**
      * Retrieve a set of Roles that meet the specified Criteria.
      *
-     * @param a Criteria of Roles selection.
+     * @param criteria A Criteria of Roles selection.
      * @return a set of Roles that meet the specified Criteria.
+     *
+     * @throws DataBackendException if there was an error accessing the data
+     *         backend.
      */
-    public RoleSet getRoles( Criteria criteria )
+    public RoleSet getRoles(Criteria criteria)
         throws DataBackendException
     {
         Criteria dbCriteria = new Criteria();
         Iterator keys = criteria.keySet().iterator();
-        while(keys.hasNext())
+        while (keys.hasNext())
         {
-            String key = (String)keys.next();
+            String key = (String) keys.next();
             dbCriteria.put(RolePeerManager.getColumnName(key),
                            criteria.get(key));
         }
@@ -582,7 +587,7 @@ public class DBSecurityService
         {
             roles = RolePeerManager.doSelect(criteria);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("getRoles(Criteria) failed", e);
         }
@@ -592,17 +597,20 @@ public class DBSecurityService
     /**
      * Retrieve a set of Permissions that meet the specified Criteria.
      *
-     * @param a Criteria of Permissions selection.
+     * @param criteria A Criteria of Permissions selection.
      * @return a set of Permissions that meet the specified Criteria.
+     *
+     * @throws DataBackendException if there was an error accessing the data
+     *         backend.
      */
-    public PermissionSet getPermissions( Criteria criteria )
+    public PermissionSet getPermissions(Criteria criteria)
         throws DataBackendException
     {
         Criteria dbCriteria = new Criteria();
         Iterator keys = criteria.keySet().iterator();
-        while(keys.hasNext())
+        while (keys.hasNext())
         {
-            String key = (String)keys.next();
+            String key = (String) keys.next();
             dbCriteria.put(PermissionPeerManager.getColumnName(key),
                            criteria.get(key));
         }
@@ -611,7 +619,7 @@ public class DBSecurityService
         {
             permissions = PermissionPeerManager.doSelect(criteria);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("getPermissions(Criteria) failed", e);
         }
@@ -622,11 +630,14 @@ public class DBSecurityService
      * Retrieves all permissions associated with a role.
      *
      * @param role the role name, for which the permissions are to be retrieved.
+     *
+     * @return A Permission set for the Role.
+     *
      * @throws DataBackendException if there was an error accessing the data
      *         backend.
      * @throws UnknownEntityException if the role is not present.
      */
-    public PermissionSet getPermissions( Role role )
+    public PermissionSet getPermissions(Role role)
         throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
@@ -639,7 +650,7 @@ public class DBSecurityService
                 return PermissionPeerManager.retrieveSet(role);
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("getPermissions(Role) failed", e);
         }
@@ -659,7 +670,7 @@ public class DBSecurityService
      *         backend.
      * @throws UnknownEntityException if the group does not exist.
      */
-    public void saveGroup( Group group )
+    public void saveGroup(Group group)
         throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
@@ -673,9 +684,9 @@ public class DBSecurityService
                 return;
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            throw new DataBackendException("saveGroup(Group) failed" ,e);
+            throw new DataBackendException("saveGroup(Group) failed" , e);
         }
         throw new UnknownEntityException("Unknown group '" + group + "'");
     }
@@ -688,7 +699,7 @@ public class DBSecurityService
      *         backend.
      * @throws UnknownEntityException if the role does not exist.
      */
-    public void saveRole( Role role )
+    public void saveRole(Role role)
         throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
@@ -702,7 +713,7 @@ public class DBSecurityService
                 return;
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("saveRole(Role) failed", e);
         }
@@ -718,7 +729,7 @@ public class DBSecurityService
      *         backend.
      * @throws UnknownEntityException if the permission does not exist.
      */
-    public void savePermission( Permission permission )
+    public void savePermission(Permission permission)
         throws DataBackendException, UnknownEntityException
     {
         boolean permissionExists = false;
@@ -732,7 +743,7 @@ public class DBSecurityService
                 return;
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("savePermission(Permission) failed", e);
         }
@@ -742,14 +753,15 @@ public class DBSecurityService
     /**
      * @deprecated Use getGroupInstance(String name) instead.
      */
-    public Group getNewGroup( String groupName )
+    public Group getNewGroup(String groupName)
     {
         try
         {
             return getGroupInstance(groupName);
         }
-        catch(UnknownEntityException uee)
+        catch (UnknownEntityException uee)
         {
+            uee.printStackTrace();
             return null;
         }
     }
@@ -757,13 +769,13 @@ public class DBSecurityService
     /**
      * @deprecated Use getRoleInstance(String name) instead.
      */
-    public Role getNewRole( String roleName )
+    public Role getNewRole(String roleName)
     {
         try
         {
             return getRoleInstance(roleName);
         }
-        catch(UnknownEntityException uee)
+        catch (UnknownEntityException uee)
         {
             return null;
         }
@@ -772,13 +784,13 @@ public class DBSecurityService
     /**
      * @deprecated Use getPermissionInstance(String name) instead.
      */
-    public Permission getNewPermission( String permissionName )
+    public Permission getNewPermission(String permissionName)
     {
         try
         {
             return getPermissionInstance(permissionName);
         }
-        catch(UnknownEntityException uee)
+        catch (UnknownEntityException uee)
         {
             return null;
         }
@@ -793,7 +805,7 @@ public class DBSecurityService
      *         backend.
      * @throws EntityExistsException if the group already exists.
      */
-    public synchronized Group addGroup( Group group )
+    public synchronized Group addGroup(Group group)
         throws DataBackendException, EntityExistsException
     {
         boolean groupExists = false;
@@ -817,14 +829,14 @@ public class DBSecurityService
                         "Internal error - query returned " +
                         results.size() + " rows");
                 }
-                Group newGroup = (Group)results.get(0);
+                Group newGroup = (Group) results.get(0);
                 // add the group to system-wide cache
                 getAllGroups().add(newGroup);
                 // return the object with correct id
                 return newGroup;
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("addGroup(Group) failed", e);
         }
@@ -847,7 +859,7 @@ public class DBSecurityService
      *         backend.
      * @throws EntityExistsException if the role already exists.
      */
-    public synchronized Role addRole( Role role )
+    public synchronized Role addRole(Role role)
         throws DataBackendException, EntityExistsException
     {
         boolean roleExists = false;
@@ -870,14 +882,14 @@ public class DBSecurityService
                         "Internal error - query returned " +
                         results.size() + " rows");
                 }
-                Role newRole = (Role)results.get(0);
+                Role newRole = (Role) results.get(0);
                 // add the role to system-wide cache
                 getAllRoles().add(newRole);
                 // return the object with correct id
                 return newRole;
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("addRole(Role) failed", e);
         }
@@ -899,7 +911,7 @@ public class DBSecurityService
      *         backend.
      * @throws EntityExistsException if the permission already exists.
      */
-    public synchronized Permission addPermission( Permission permission )
+    public synchronized Permission addPermission(Permission permission)
         throws DataBackendException, EntityExistsException
     {
         boolean permissionExists = false;
@@ -923,14 +935,14 @@ public class DBSecurityService
                         "Internal error - query returned " +
                         results.size() + " rows");
                 }
-                Permission newPermission = (Permission)results.get(0);
+                Permission newPermission = (Permission) results.get(0);
                 // add the permission to system-wide cache
                 getAllPermissions().add(newPermission);
                 // return the object with correct id
                 return newPermission;
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("addPermission(Permission) failed", e);
         }
@@ -947,12 +959,12 @@ public class DBSecurityService
     /**
      * Removes a Group from the system.
      *
-     * @param the object describing group to be removed.
+     * @param group The object describing group to be removed.
      * @throws DataBackendException if there was an error accessing the data
      *         backend.
      * @throws UnknownEntityException if the group does not exist.
      */
-    public synchronized void removeGroup( Group group )
+    public synchronized void removeGroup(Group group)
         throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
@@ -968,7 +980,7 @@ public class DBSecurityService
                 return;
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             category.error("Failed to delete a Group");
             category.error(e);
@@ -984,12 +996,12 @@ public class DBSecurityService
     /**
      * Removes a Role from the system.
      *
-     * @param the object describing role to be removed.
+     * @param role The object describing role to be removed.
      * @throws DataBackendException if there was an error accessing the data
      *         backend.
      * @throws UnknownEntityException if the role does not exist.
      */
-    public synchronized void removeRole( Role role )
+    public synchronized void removeRole(Role role)
         throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
@@ -1007,9 +1019,9 @@ public class DBSecurityService
                 return;
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            throw new DataBackendException("removeRole(Role)" ,e);
+            throw new DataBackendException("removeRole(Role)" , e);
         }
         finally
         {
@@ -1021,12 +1033,12 @@ public class DBSecurityService
     /**
      * Removes a Permission from the system.
      *
-     * @param the object describing permission to be removed.
+     * @param permission The object describing permission to be removed.
      * @throws DataBackendException if there was an error accessing the data
      *         backend.
      * @throws UnknownEntityException if the permission does not exist.
      */
-    public synchronized void removePermission( Permission permission )
+    public synchronized void removePermission(Permission permission)
         throws DataBackendException, UnknownEntityException
     {
         boolean permissionExists = false;
@@ -1042,9 +1054,9 @@ public class DBSecurityService
                 return;
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            throw new DataBackendException("removePermission(Permission)" ,e);
+            throw new DataBackendException("removePermission(Permission)" , e);
         }
         finally
         {
@@ -1057,13 +1069,13 @@ public class DBSecurityService
     /**
      * Renames an existing Group.
      *
-     * @param the object describing the group to be renamed.
+     * @param group The object describing the group to be renamed.
      * @param name the new name for the group.
      * @throws DataBackendException if there was an error accessing the data
      *         backend.
      * @throws UnknownEntityException if the group does not exist.
      */
-    public synchronized void renameGroup( Group group, String name )
+    public synchronized void renameGroup(Group group, String name)
         throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
@@ -1079,9 +1091,9 @@ public class DBSecurityService
                 return;
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            throw new DataBackendException("renameGroup(Group,String)" ,e);
+            throw new DataBackendException("renameGroup(Group,String)" , e);
         }
         finally
         {
@@ -1093,13 +1105,13 @@ public class DBSecurityService
     /**
      * Renames an existing Role.
      *
-     * @param the object describing the role to be renamed.
+     * @param role The object describing the role to be renamed.
      * @param name the new name for the role.
      * @throws DataBackendException if there was an error accessing the data
      *         backend.
      * @throws UnknownEntityException if the role does not exist.
      */
-    public synchronized void renameRole( Role role, String name )
+    public synchronized void renameRole(Role role, String name)
         throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
@@ -1115,9 +1127,9 @@ public class DBSecurityService
                 return;
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            throw new DataBackendException("renameRole(Role,String)" ,e);
+            throw new DataBackendException("renameRole(Role,String)" , e);
         }
         finally
         {
@@ -1129,7 +1141,7 @@ public class DBSecurityService
     /**
      * Renames an existing Permission.
      *
-     * @param the object describing the permission to be renamed.
+     * @param permission The object describing the permission to be renamed.
      * @param name the new name for the permission.
      * @throws DataBackendException if there was an error accessing the data
      *         backend.
@@ -1151,7 +1163,7 @@ public class DBSecurityService
                 return;
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("renamePermission(Permission,name)", e);
         }
@@ -1172,7 +1184,7 @@ public class DBSecurityService
      * @return true if the group exists in the system, false otherwise
      * @throws DataBackendException when more than one Group with
      *         the same name exists.
-     * @throws Exception, a generic exception.
+     * @throws Exception A generic exception.
      */
     protected boolean checkExists(Group group)
         throws DataBackendException, Exception
@@ -1187,7 +1199,7 @@ public class DBSecurityService
      * @return true if the role exists in the system, false otherwise
      * @throws DataBackendException when more than one Role with
      *         the same name exists.
-     * @throws Exception, a generic exception.
+     * @throws Exception A generic exception.
      */
     protected boolean checkExists(Role role)
         throws DataBackendException, Exception
@@ -1202,7 +1214,7 @@ public class DBSecurityService
      * @return true if the permission exists in the system, false otherwise
      * @throws DataBackendException when more than one Permission with
      *         the same name exists.
-     * @throws Exception, a generic exception.
+     * @throws Exception A generic exception.
      */
     protected boolean checkExists(Permission permission)
         throws DataBackendException, Exception

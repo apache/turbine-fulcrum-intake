@@ -67,7 +67,8 @@ import org.apache.fulcrum.security.util.TurbineSecurityException;
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @version $Id$
  */
-public interface Permission extends SecurityEntity
+public interface Permission 
+    extends SecurityEntity
 {
     /**
      * Makes changes made to the Permission attributes permanent.
@@ -75,7 +76,7 @@ public interface Permission extends SecurityEntity
      * @throws TurbineSecurityException if there is a problem while
      *  saving data.
      */
-    public void save()
+    void save()
         throws TurbineSecurityException;
 
     /**
@@ -83,7 +84,7 @@ public interface Permission extends SecurityEntity
      *
      * @throws TurbineSecurityException if the Permission could not be removed.
      */
-    public void remove()
+    void remove()
         throws TurbineSecurityException;
 
     /**
@@ -92,6 +93,6 @@ public interface Permission extends SecurityEntity
      * @param name The new Permission name.
      * @throws TurbineSecurityException if the Permission could not be renamed.
      */
-    public void rename(String name)
+    void rename(String name)
         throws TurbineSecurityException;
 }

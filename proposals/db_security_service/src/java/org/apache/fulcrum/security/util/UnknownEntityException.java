@@ -69,7 +69,7 @@ public class UnknownEntityException
      *
      * @param msg The detail message.
      */
-    public UnknownEntityException( String msg )
+    public UnknownEntityException(String msg)
     {
         super(msg);
     }
@@ -82,7 +82,7 @@ public class UnknownEntityException
      * @param nested the exception or error that caused this exception
      *               to be thrown.
      */
-    public UnknownEntityException( String msg, Throwable nested )
+    public UnknownEntityException(String msg, Throwable nested)
     {
         super(msg, nested);
     }

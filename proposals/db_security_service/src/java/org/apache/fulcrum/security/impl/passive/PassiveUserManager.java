@@ -54,6 +54,8 @@ package org.apache.fulcrum.security.impl.passive;
  * <http://www.apache.org/>.
  */
 
+import java.util.List;
+
 import org.apache.fulcrum.security.entity.User;
 
 import org.apache.torque.util.Criteria;
@@ -72,6 +74,7 @@ import org.apache.fulcrum.security.UserManager;
  * anonymous User objects when this UserManager is used.
  *
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
 public class PassiveUserManager implements UserManager
@@ -85,7 +88,7 @@ public class PassiveUserManager implements UserManager
      * @return true if the specified account exists
      * @throws DataBackendException if there was an error accessing the data backend.
      */
-    public boolean accountExists( User user )
+    public boolean accountExists(User user)
         throws DataBackendException
     {
         throw new DataBackendException("PassiveUserManager knows no users");
@@ -96,17 +99,17 @@ public class PassiveUserManager implements UserManager
      *
      * The login name is used for looking up the account.
      *
-     * @param usename The name of the user to be checked.
+     * @param userName The name of the user to be checked.
      * @return true if the specified account exists
      * @throws DataBackendException if there was an error accessing the data backend.
      */
-    public boolean accountExists( String username )
+    public boolean accountExists(String userName)
         throws DataBackendException
     {
         throw new DataBackendException("PassiveUserManager knows no users");
     }
 
-   /**
+    /**
      * Retrieve a user from persistent storage using username as the
      * key.
      *
@@ -117,7 +120,7 @@ public class PassiveUserManager implements UserManager
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public User retrieve( String username )
+    public User retrieve(String username)
         throws UnknownEntityException, DataBackendException
     {
         throw new DataBackendException("PassiveUserManager knows no users");
@@ -137,7 +140,27 @@ public class PassiveUserManager implements UserManager
      * @throws DataBackendException if there is a problem accessing the
      *         storage.
      */
-    public User[] retrieve( Criteria criteria )
+    public User[] retrieve(Criteria criteria)
+        throws DataBackendException
+    {
+        throw new DataBackendException("PassiveUserManager knows no users");
+    }
+
+    /**
+     * Retrieve a set of users that meet the specified criteria.
+     *
+     * As the keys for the criteria, you should use the constants that
+     * are defined in {@link User} interface, plus the names
+     * of the custom attributes you added to your user representation
+     * in the data storage. Use verbatim names of the attributes -
+     * without table name prefix in case of DB implementation.
+     *
+     * @param criteria The criteria of selection.
+     * @return a List of users meeting the criteria.
+     * @throws DataBackendException if there is a problem accessing the
+     *         storage.
+     */
+    public List retrieveList(Criteria criteria)
         throws DataBackendException
     {
         throw new DataBackendException("PassiveUserManager knows no users");
@@ -159,7 +182,7 @@ public class PassiveUserManager implements UserManager
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public User retrieve( String username, String password )
+    public User retrieve(String username, String password)
         throws PasswordMismatchException, UnknownEntityException,
                DataBackendException
     {
@@ -176,7 +199,7 @@ public class PassiveUserManager implements UserManager
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public void store( User user )
+    public void store(User user)
         throws UnknownEntityException, DataBackendException
     {
         throw new DataBackendException("PassiveUserManager does not support saving user data");
@@ -196,7 +219,7 @@ public class PassiveUserManager implements UserManager
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public void authenticate( User user, String password )
+    public void authenticate(User user, String password)
         throws PasswordMismatchException, UnknownEntityException,
                DataBackendException
     {
@@ -207,13 +230,15 @@ public class PassiveUserManager implements UserManager
      * Creates new user account with specified attributes.
      *
      * @param user the object describing account to be created.
+     * @param password The password to use for the object creation
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws EntityExistsException if the user account already exists.
      */
-    public void createAccount( User user, String initialPassword )
+    public void createAccount(User user, String password)
         throws EntityExistsException, DataBackendException
     {
-        throw new DataBackendException("PassiveUserManager does not support creting accounts");
+        throw new DataBackendException("PassiveUserManager does not support creating accounts");
     }
 
     /**
@@ -223,7 +248,7 @@ public class PassiveUserManager implements UserManager
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the user account is not present.
      */
-    public void removeAccount( User user )
+    public void removeAccount(User user)
         throws UnknownEntityException, DataBackendException
     {
         throw new DataBackendException("PassiveUserManager does not support removing accounts");
@@ -242,7 +267,7 @@ public class PassiveUserManager implements UserManager
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public void changePassword( User user, String oldPassword, String newPassword )
+    public void changePassword(User user, String oldPassword, String newPassword)
         throws PasswordMismatchException, UnknownEntityException,
                DataBackendException
     {
@@ -264,7 +289,7 @@ public class PassiveUserManager implements UserManager
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public void forcePassword( User user, String password )
+    public void forcePassword(User user, String password)
         throws UnknownEntityException, DataBackendException
     {
         throw new DataBackendException("PassiveUserManager does not support setting passwords");

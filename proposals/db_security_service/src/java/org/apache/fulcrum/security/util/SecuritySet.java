@@ -53,151 +53,153 @@ package org.apache.fulcrum.security.util;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-
 import java.io.Serializable;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
 
-import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.SecurityEntity;
 
 /**
- * This class represents a set of Permissions.  It makes it easy to
- * build a UI that would allow someone to add a group of Permissions
- * to a Role.  It enforces that only
- * Permission objects are allowed in the set and only relevant methods
- * are available.
+ * This class represents a set of Security Entities. 
+ * It makes it easy to build a UI.  
+ * It wraps a TreeSet object to enforce that only relevant 
+ * methods are available.  
+ * TreeSet's contain only unique Objects (no duplicates).
  *
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @version $Id$
  */
-public class PermissionSet
-    extends SecuritySet
+public abstract class SecuritySet 
+    implements Serializable
 {
+    /** Set to hold the Objects */
+    protected TreeSet set;
+
     /**
-     * Constructs an empty PermissionSet
+     * Constructs an empty Set
      */
-    public PermissionSet()
+    public SecuritySet()
     {
-        super();
+        set = new TreeSet();
     }
 
     /**
-     * Constructs a new PermissionSet with specifed contents.
+     * Constructs a new Set with specified contents.
      *
      * If the given collection contains multiple objects that are
      * identical WRT equals() method, some objects will be overwriten.
      *
-     * @param permissions A collection of permissions to be contained in the set.
+     * @param roles A collection of roles to be contained in the set.
      */
-    public PermissionSet(Collection permissions)
+    public SecuritySet(Collection objects)
     {
-        super(permissions);
+        this();
+        add(objects);
     }
 
     /**
-     * Adds a Permission to this PermissionSet.
+     * Returns the underlying Set object
      *
-     * @param permission A Permission.
-     * @return True if Permission was added; false if PermissionSet
-     * already contained the Permission.
+     * @return A set Object
+     *
      */
-    public boolean add(Permission permission)
+
+    public Set getSet()
     {
-        return set.add((Object) permission);
+        return set;
     }
 
     /**
-     * Adds the Permissions in another PermissionSet to this
-     * PermissionSet.
+     * Adds the Objects in a Collection to this SecuritySet.
      *
-     * @param permissionSet A PermissionSet.
+     * @param roles A Collection of SecurityObjects.
      *
-     * @return True if this PermissionSet changed as a result; false
-     * if no change to this PermissionSet occurred (this PermissionSet
-     * already contained all members of the added PermissionSet).
+     * @return True if this Set changed as a result; false
+     * if no change to this Set occurred (this Set
+     * already contained all members of the added Set).
      */
-    public boolean add(PermissionSet permissionSet)
+    public boolean add(Collection objs)
     {
-        return set.addAll(permissionSet.getSet());
+        return set.addAll(objs);
     }
 
     /**
-     * Removes a Permission from this PermissionSet.
-     *
-     * @param permission A Permission.
-     * @return True if this PermissionSet contained the Permission
-     * before it was removed.
+     * Removes all Objects from this Set.
      */
-    public boolean remove(Permission permission)
+    public void clear()
     {
-        return set.remove((Object) permission);
+        set.clear();
     }
 
     /**
-     * Checks whether this PermissionSet contains a Permission.
+     * Searches if an Object with a given name is in the
+     * Set
      *
-     * @param permission A Permission.
-     * @return True if this PermissionSet contains the Permission,
-     * false otherwise.
+     * @param roleName Name of the Security Object.
+     * @return True if argument matched an Object in this Set; false
+     * if no match.
      */
-    public boolean contains(Permission permission)
-    {
-        return set.contains((Object) permission);
-    }
-
-    /**
-     * Returns a Permission with the given name, if it is contained in
-     * this PermissionSet.
-     *
-     * @param permissionName Name of Permission.
-     * @return Permission if argument matched a Permission in this
-     * PermissionSet; null if no match.
-     */
-    public Permission getPermission(String permissionName)
+    public boolean contains(String name)
     {
         Iterator iter = set.iterator();
         while (iter.hasNext())
         {
-            Permission permission = (Permission) iter.next();
-            if (permissionName != null  &&
-                 permissionName.equals(permission.getName()))
+            SecurityEntity se = (SecurityEntity) iter.next();
+            if (name != null  &&
+                name.equals(se.getName()))
             {
-                return permission;
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
     /**
-     * Returns an Permissions [] of Permissions in this PermissionSet.
+     * Returns an Iterator for Objects in this Set.
      *
-     * @return A Permission [].
+     * @return An iterator for the Set
      */
-    public Permission [] getPermissionsArray()
+    public Iterator elements()
     {
-        return (Permission []) set.toArray(new Permission[0]);
+        return set.iterator();
     }
 
     /**
-     * Print out a PermissionSet as a String
+     * Returns size (cardinality) of this set.
      *
-     * @returns The Permission Set as String
+     * @return The cardinality of this Set.
+     */
+    public int size()
+    {
+        return set.size();
+    }
+
+    /**
+     * list of role names in this set
      *
+     * @return The string representation of this Set.
      */
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
-        sb.append("PermissionSet contains:\n");
-
-        for(Iterator it = elements(); it.hasNext(); )
+        StringBuffer sbuf = new StringBuffer(12 * size());
+        Iterator i = set.iterator();
+        while (i.hasNext()) 
         {
-            sb.append("  Permission "+((Permission)it.next()).getName()+"\n");
-        }
+            sbuf.append(((SecurityEntity) i.next()).getName());
 
-        return sb.toString();
+            if(i.hasNext())
+            {
+                sbuf.append(", ");
+            }
+
+        }
+        return sbuf.toString();
     }
+
 }
+

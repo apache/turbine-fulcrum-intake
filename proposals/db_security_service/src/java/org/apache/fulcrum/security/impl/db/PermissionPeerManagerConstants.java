@@ -79,7 +79,7 @@ package org.apache.fulcrum.security.impl.db;
 
 public interface PermissionPeerManagerConstants
 {
-    /** The key within the security service properties for the permission peer class implementation */
+    /** The key within the security service properties for the permission class implementation */
     public static final String PERMISSION_CLASS_KEY = 
         "db.permission.class";
 
@@ -90,7 +90,6 @@ public interface PermissionPeerManagerConstants
     /** Permission peer default class */
     public static final String PERMISSION_PEER_CLASS_DEFAULT =
         "org.apache.fulcrum.security.impl.db.entity.TurbinePermissionPeer";
-
 
     /** The column name for the login name field. */
     public static final String PERMISSION_NAME_COLUMN_KEY =

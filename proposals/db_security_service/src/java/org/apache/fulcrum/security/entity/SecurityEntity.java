@@ -73,12 +73,12 @@ public interface SecurityEntity
      *
      * @return The Name of the SecurityEntity.
      */
-    public String getName();
+    String getName();
 
     /**
      * Set the Name of the SecurityEntity.
      *
      * @param name Name of the SecurityEntity.
      */
-    public void setName(String name);
+    void setName(String name);
 }

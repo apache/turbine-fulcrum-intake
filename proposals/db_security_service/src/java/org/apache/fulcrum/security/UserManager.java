@@ -54,6 +54,8 @@ package org.apache.fulcrum.security;
  * <http://www.apache.org/>.
  */
 
+import java.util.List;
+
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
@@ -84,7 +86,7 @@ public interface UserManager
      * @return true if the specified account exists
      * @throws DataBackendException if there was an error accessing the data backend.
      */
-    public boolean accountExists( User user )
+    boolean accountExists(User user)
         throws DataBackendException;
 
     /**
@@ -92,11 +94,11 @@ public interface UserManager
      *
      * The login name is used for looking up the account.
      *
-     * @param usename The name of the user to be checked.
+     * @param userName The name of the user to be checked.
      * @return true if the specified account exists
      * @throws DataBackendException if there was an error accessing the data backend.
      */
-    public boolean accountExists( String username )
+    boolean accountExists(String userName)
         throws DataBackendException;
 
    /**
@@ -110,11 +112,22 @@ public interface UserManager
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public User retrieve( String username )
+    User retrieve(String username)
         throws UnknownEntityException, DataBackendException;
 
     /**
-     * Retrieve a set of users that meet the specified criteria.
+     * @deprecated Use <a href="#retrieveList">retrieveList</a> instead.
+     *
+     * @param criteria The criteria of selection.
+     * @return a List of users meeting the criteria.
+     * @throws DataBackendException if there is a problem accessing the
+     *         storage.
+     */
+    User[] retrieve(Criteria criteria)
+        throws DataBackendException;
+
+    /**
+     * Retrieve a list of users that meet the specified criteria.
      *
      * As the keys for the criteria, you should use the constants that
      * are defined in {@link User} interface, plus the names
@@ -127,7 +140,7 @@ public interface UserManager
      * @throws DataBackendException if there is a problem accessing the
      *         storage.
      */
-    public User[] retrieve( Criteria criteria )
+    List retrieveList(Criteria criteria)
         throws DataBackendException;
 
     /**
@@ -146,7 +159,7 @@ public interface UserManager
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public User retrieve( String username, String password )
+    User retrieve(String username, String password)
         throws PasswordMismatchException, UnknownEntityException,
                DataBackendException;
 
@@ -160,7 +173,7 @@ public interface UserManager
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public void store( User user )
+    void store(User user)
         throws UnknownEntityException, DataBackendException;
 
     /**
@@ -177,7 +190,7 @@ public interface UserManager
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public void authenticate( User user, String password )
+    void authenticate(User user, String password)
         throws PasswordMismatchException, UnknownEntityException,
                DataBackendException;
 
@@ -185,10 +198,12 @@ public interface UserManager
      * Creates new user account with specified attributes.
      *
      * @param user the object describing account to be created.
+     * @param password The password to use for the object creation
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws EntityExistsException if the user account already exists.
      */
-    public void createAccount( User user, String initialPassword )
+    void createAccount(User user, String password)
         throws EntityExistsException, DataBackendException;
 
     /**
@@ -198,7 +213,7 @@ public interface UserManager
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the user account is not present.
      */
-    public void removeAccount( User user )
+    void removeAccount(User user)
         throws UnknownEntityException, DataBackendException;
     /**
      * Change the password for an User.
@@ -213,7 +228,7 @@ public interface UserManager
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public void changePassword( User user, String oldPassword, String newPassword )
+    void changePassword(User user, String oldPassword, String newPassword)
         throws PasswordMismatchException, UnknownEntityException,
                DataBackendException;
 
@@ -232,6 +247,6 @@ public interface UserManager
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public void forcePassword( User user, String password )
+    void forcePassword(User user, String password)
         throws UnknownEntityException, DataBackendException;
 }

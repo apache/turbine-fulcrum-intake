@@ -83,7 +83,7 @@ public class ObjectUtils
      * as to not get NPE's. The point being that if the
      * value is null, Hashtable.put() will throw an exception.
      * That blows in the case of this class cause you may want to
-     * essentially treat put("Not Null", null ) == put("Not Null", "")
+     * essentially treat put("Not Null", null) == put("Not Null", "")
      * We will still throw a NPE if the key is null cause that should
      * never happen.
      *
@@ -94,17 +94,19 @@ public class ObjectUtils
      * @param key  The key to use
      * @param value The value to store in the hashtable
      *
+     * @throws NullPointerException The supplied key was null
+     *
      */
     public static final void safeAddToHashtable(Hashtable hash, Object key, Object value)
         throws NullPointerException
     {
         if (value == null)
         {
-            hash.put ( key, "" );
+            hash.put (key, "");
         }
         else
         {
-            hash.put ( key, value );
+            hash.put (key, value);
         }
     }
 
@@ -115,9 +117,9 @@ public class ObjectUtils
      *
      * @return A byte[] with the converted Hashtable.
      *
-     * @exception Exception, a generic exception.
+     * @exception Exception A generic exception.
      */
-    public static byte[] serializeHashtable( Hashtable hash )
+    public static byte[] serializeHashtable(Hashtable hash)
         throws Exception
     {
         Hashtable saveData = new Hashtable(hash.size());
@@ -127,13 +129,13 @@ public class ObjectUtils
 
         Enumeration keys = hash.keys();
 
-        while(keys.hasMoreElements())
+        while (keys.hasMoreElements())
         {
             key = (String) keys.nextElement();
             value = hash.get(key);
-            if ( value instanceof Serializable )
+            if (value instanceof Serializable)
             {
-                saveData.put ( key, value );
+                saveData.put (key, value);
             }
         }
 
@@ -181,7 +183,7 @@ public class ObjectUtils
      * @return The deserialized object, or <code>null</code> on failure.
      */
 
-    public static Object deserialize( byte[] objectData )
+    public static Object deserialize(byte[] objectData)
     {
         Object object = null;
 
@@ -220,7 +222,7 @@ public class ObjectUtils
                         bais.close();
                     }
                 } 
-                catch(IOException e)
+                catch (IOException e)
                 {
                 }
             }

@@ -67,6 +67,7 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.fulcrum.InitializationException;
 
 import org.apache.fulcrum.security.TurbineSecurity;
+
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
 
@@ -74,8 +75,6 @@ import org.apache.fulcrum.security.impl.db.entity.TurbineRolePermissionPeer;
 
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.PermissionSet;
-
-import org.apache.fulcrum.security.util.UnknownEntityException;
 
 import org.apache.torque.TorqueException;
 
@@ -103,7 +102,7 @@ public class PermissionPeerManager
     /** The class name of the objects returned by the configured peer. */
     private static Class permissionObject = null;
 
-    /** The name of the Table used for Group Object queries  */
+    /** The name of the Table used for Permission Object queries  */
     private static String tableName = null;
 
     /** The name of the column used as "Name" Column */
@@ -122,14 +121,17 @@ public class PermissionPeerManager
      * Initializes the PermissionPeerManager, loading the class object for the 
      * Peer used to retrieve Permission objects
      *
+     * @param conf The configuration object used to configure the Manager
+     *
      * @exception InitializationException A problem occured during initialization
      */
 
     public static void init(Configuration conf)
         throws InitializationException
     {
-        String persistentPeerClassName = conf.getString(PERMISSION_PEER_CLASS_KEY,
-                                                        PERMISSION_PEER_CLASS_DEFAULT);
+        String persistentPeerClassName = 
+            conf.getString(PERMISSION_PEER_CLASS_KEY,
+                           PERMISSION_PEER_CLASS_DEFAULT);
 
         String permissionObjectName = null;
 
@@ -137,71 +139,86 @@ public class PermissionPeerManager
         {
             persistentPeerClass = Class.forName(persistentPeerClassName);
 
-            tableName  = (String)persistentPeerClass.getField("TABLE_NAME").get(null);
+            tableName  = 
+                (String) persistentPeerClass.getField("TABLE_NAME").get(null);
 
             //
-            // We have either an user configured Object class or we use the default
-            // as supplied by the Peer class
+            // We have either an user configured Object class or we use the 
+            // default as supplied by the Peer class
             //
-            permissionObject = getPersistenceClass(); // Default from Peer, can be overridden
-            
-            permissionObjectName = (String)conf
-                .getString(PERMISSION_CLASS_KEY,
-                           permissionObject.getName());
-            
-            permissionObject = Class.forName(permissionObjectName); // Maybe the user set a new value...
+            // Default from Peer, can be overridden
 
-            /* If any of the following Field queries fails, the permission subsystem is unusable. So check
-             * this right here at init time, which saves us much time and hassle if it fails...
+            permissionObject = getPersistenceClass(); 
+            
+            permissionObjectName = 
+                (String) conf.getString(PERMISSION_CLASS_KEY,
+                                        permissionObject.getName());
+            
+            // Maybe the user set a new value...
+            permissionObject = Class.forName(permissionObjectName);
+
+            /* If any of the following Field queries fails, the permission 
+             * subsystem is unusable. So check this right here at init time,
+             * which saves us much time and hassle if it fails...
              */
 
-            nameColumn       = (String)persistentPeerClass.getField((String)conf
-                                                                    .getString(PERMISSION_NAME_COLUMN_KEY,
-                                                                               PERMISSION_NAME_COLUMN_DEFAULT)
-                                                                    ).get(null);
+            nameColumn = 
+                (String) persistentPeerClass.getField(
+                    (String) conf.getString(PERMISSION_NAME_COLUMN_KEY,
+                                            PERMISSION_NAME_COLUMN_DEFAULT)
+                   ).get(null);
 
-            idColumn         = (String)persistentPeerClass.getField((String)conf
-                                                                    .getString(PERMISSION_ID_COLUMN_KEY,
-                                                                               PERMISSION_ID_COLUMN_DEFAULT)  
-                                                                    ).get(null);
+            idColumn = 
+                (String) persistentPeerClass.getField(
+                    (String) conf.getString(PERMISSION_ID_COLUMN_KEY,
+                                            PERMISSION_ID_COLUMN_DEFAULT)  
+                   ).get(null);
 
 
-            namePropDesc       = new PropertyDescriptor((String)conf.getString(PERMISSION_NAME_PROPERTY_KEY,
-                                                                               PERMISSION_NAME_PROPERTY_DEFAULT),
-                                                        permissionObject);
+            namePropDesc = 
+                new PropertyDescriptor(
+                    (String) conf.getString(PERMISSION_NAME_PROPERTY_KEY,
+                                            PERMISSION_NAME_PROPERTY_DEFAULT),
+                    permissionObject);
 
-            idPropDesc         = new PropertyDescriptor((String)conf.getString(PERMISSION_ID_PROPERTY_KEY,
-                                                                               PERMISSION_ID_PROPERTY_DEFAULT),
-                                                        permissionObject);
+            idPropDesc = 
+                new PropertyDescriptor(
+                    (String) conf.getString(PERMISSION_ID_PROPERTY_KEY,
+                                            PERMISSION_ID_PROPERTY_DEFAULT),
+                    permissionObject);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            if(persistentPeerClassName == null || persistentPeerClass == null)
+            if (persistentPeerClassName == null || persistentPeerClass == null)
             {
                 throw new InitializationException(
-                    "Could not find PermissionPeer class ("+ persistentPeerClassName+ ")", e);
+                    "Could not find PermissionPeer class ("
+                    + persistentPeerClassName + ")", e);
             }
-            if(tableName == null)
+            if (tableName == null)
             {
                 throw new InitializationException(
-                    "Failed to get the table name from the Peer object",e);
+                    "Failed to get the table name from the Peer object", e);
             }
-            if(permissionObject == null || permissionObjectName == null)
+
+            if (permissionObject == null || permissionObjectName == null)
             {
                 throw new InitializationException(
-                    "Failed to get the object type from the Peer object",e);
+                    "Failed to get the object type from the Peer object", e);
             }
 
 
-            if(nameColumn == null || namePropDesc == null)
+            if (nameColumn == null || namePropDesc == null)
             {
                 throw new InitializationException(
-                    "PermissionPeer " + persistentPeerClassName + " has no name column information!",e);
+                    "PermissionPeer " + persistentPeerClassName + 
+                    " has no name column information!", e);
             }
-            if(idColumn == null || idPropDesc == null)
+            if (idColumn == null || idPropDesc == null)
             {
                 throw new InitializationException(
-                    "PermissionPeer " + persistentPeerClassName + " has no id column information!",e);
+                    "PermissionPeer " + persistentPeerClassName + 
+                    " has no id column information!", e);
             }
         }
     }
@@ -218,7 +235,7 @@ public class PermissionPeerManager
 
     /**
      * Returns the fully qualified name of the Column to
-     * use as the Name Column for a group
+     * use as the Name Column for a permission
      *
      * @return A String containing the column name
      */
@@ -229,12 +246,12 @@ public class PermissionPeerManager
 
     /**
      * Returns the fully qualified name of the Column to
-     * use as the Id Column for a group
+     * use as the Id Column for a permission
      *
      * @return A String containing the column id
+     *
      */
     public static String getIdColumn()
-        throws Exception
     {
         return idColumn;
     }
@@ -242,6 +259,8 @@ public class PermissionPeerManager
     /**
      * Returns the full name of a column.
      *
+     * @param name The column to fully qualify
+     * 
      * @return A String with the full name of the column.
      */
     public static String getColumnName(String name)
@@ -267,9 +286,9 @@ public class PermissionPeerManager
         Persistent obj;
         try
         {
-            obj = (Persistent)permissionObject.newInstance();
+            obj = (Persistent) permissionObject.newInstance();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             obj = null; // FIXME ? 
         }
@@ -284,9 +303,9 @@ public class PermissionPeerManager
      * @return <code>true</code> if given Permission exists in the system.
      * @throws DataBackendException when more than one Permission with
      *         the same name exists.
-     * @throws Exception, a generic exception.
+     * @throws Exception A generic exception.
      */
-    public static boolean checkExists( Permission permission )
+    public static boolean checkExists(Permission permission)
         throws DataBackendException, Exception
     {
         Criteria criteria = new Criteria();
@@ -310,16 +329,17 @@ public class PermissionPeerManager
      *
      * @param criteria The criteria to use.
      * @return A PermissionSet.
-     * @exception Exception, a generic exception.
+     * @exception Exception A generic Exception.
      */
     public static PermissionSet retrieveSet(Criteria criteria)
         throws Exception
     {
         List results = doSelect(criteria);
         PermissionSet ps = new PermissionSet();
-        for (int i=0; i<results.size(); i++)
+
+        for(Iterator it = results.iterator(); it.hasNext(); )
         {
-            ps.add( (Permission)results.get(i) );
+            ps.add((Permission) it.next());
         }
         return ps;
     }
@@ -329,14 +349,14 @@ public class PermissionPeerManager
      *
      * @param role The role to query permissions of.
      * @return A set of permissions associated with the Role.
-     * @exception Exception, a generic exception.
+     * @exception Exception A generic Exception.
      */
-    public static PermissionSet retrieveSet( Role role )
+    public static PermissionSet retrieveSet(Role role)
         throws Exception
     {
         Criteria criteria = new Criteria();
         criteria.add(TurbineRolePermissionPeer.ROLE_ID,
-                     ((Persistent)role).getPrimaryKey());
+                     ((Persistent) role).getPrimaryKey());
 
         criteria.addJoin(TurbineRolePermissionPeer.PERMISSION_ID,
                          getIdColumn());
@@ -354,15 +374,15 @@ public class PermissionPeerManager
      */
     public static final Vector getDifference(Vector some, Vector all)
     {
-        Vector clone = (Vector)all.clone();
+        Vector clone = (Vector) all.clone();
         for (Enumeration e = some.elements() ; e.hasMoreElements() ;)
         {
             Permission tmp = (Permission) e.nextElement();
             for (Enumeration f = clone.elements() ; f.hasMoreElements() ;)
             {
                 Permission tmp2 = (Permission) f.nextElement();
-                if (((Persistent)tmp).getPrimaryKey() ==
-                    ((Persistent)tmp2).getPrimaryKey())
+                if (((Persistent) tmp).getPrimaryKey() ==
+                    ((Persistent) tmp2).getPrimaryKey())
                 {
                     clone.removeElement(tmp2);
                     break;
@@ -405,13 +425,14 @@ public class PermissionPeerManager
         try
         {
             Class[] clazz = new Class[] { permissionObject };
-            Object[] params = new Object[] { ((DBPermission)permission).getPersistentObj() };
+            Object[] params = 
+              new Object[] { ((DBPermission) permission).getPersistentObj() };
 
-            crit =  (Criteria)persistentPeerClass
+            crit =  (Criteria) persistentPeerClass
                 .getMethod("buildCriteria", clazz)
                 .invoke(null, params);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             crit = null;
         }
@@ -439,7 +460,7 @@ public class PermissionPeerManager
                 .getMethod("doUpdate", clazz)
                 .invoke(null, params);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new TorqueException("doUpdate failed", e);
         }
@@ -465,7 +486,7 @@ public class PermissionPeerManager
                 .getMethod("doInsert", clazz)
                 .invoke(null, params);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new TorqueException("doInsert failed", e);
         }
@@ -476,7 +497,7 @@ public class PermissionPeerManager
      *
      * @param criteria  A Criteria Object
      *
-     * return A List of Permission Objects selected by the Criteria
+     * @return A List of Permission Objects selected by the Criteria
      *
      * @exception TorqueException A problem occured.
      */
@@ -487,14 +508,15 @@ public class PermissionPeerManager
 
         try
         {
-            Class[] clazz = new Class[] { Class.forName("org.apache.torque.util.Criteria") };
+            Class[] clazz = 
+              new Class[] { Class.forName("org.apache.torque.util.Criteria") };
             Object[] params = new Object[] { criteria };
 
-            list = (List)persistentPeerClass
+            list = (List) persistentPeerClass
                 .getMethod("doSelect", clazz)
                 .invoke(null, params);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new TorqueException("doSelect failed", e);
         }
@@ -504,10 +526,10 @@ public class PermissionPeerManager
         //
         // Wrap the returned Objects into DBPermissions.
         //
-        for(Iterator it = list.iterator(); it.hasNext(); )
+        for (Iterator it = list.iterator(); it.hasNext(); )
         {
-            DBPermission dr = new DBPermission((Persistent)it.next());
-            newList.add(dr);
+            Permission p = getNewPermission((Persistent) it.next());
+            newList.add(p);
         }
 
         return newList;
@@ -532,7 +554,7 @@ public class PermissionPeerManager
                 .getMethod("doDelete", clazz)
                 .invoke(null, params);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new TorqueException("doDelete failed", e);
         }
@@ -543,8 +565,6 @@ public class PermissionPeerManager
      *
      * @param obj The object to use for setting the name
      * @param name The Name to set
-     *
-     * @exception TorqueException A problem occured.
      */
     public static void setPermissionName(Persistent obj, String name)
     {
@@ -553,11 +573,12 @@ public class PermissionPeerManager
             Object[] params = new Object[] { name };
             namePropDesc.getWriteMethod().invoke(obj, params);
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a Role Object!");
+            throw new RuntimeException(obj.getClass().getName() +
+                                       " does not seem to be a Role Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // Not much we can do; setName returns no exception
         }
@@ -569,23 +590,22 @@ public class PermissionPeerManager
      * @param obj The object to use for getting the name
      *
      * @return A string containing the name
-     *
-     * @exception TorqueException A problem occured.
      */
     public static String getPermissionName(Persistent obj)
     {
         String name = null;
         try
         {
-            name = (String)namePropDesc
+            name = (String) namePropDesc
                 .getReadMethod()
                 .invoke(obj, new Object[] {});
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a Role Object!");
+            throw new RuntimeException(obj.getClass().getName() +
+                                       " does not seem to be a Role Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // see setPermissionName
         }
@@ -608,16 +628,50 @@ public class PermissionPeerManager
         {
             Object[] params = new Object[0];
 
-            persistenceClass =  (Class)persistentPeerClass
+            persistenceClass =  (Class) persistentPeerClass
                 .getMethod("getOMClass", null)
                 .invoke(null, params);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             persistenceClass = null;
         }
 
         return persistenceClass;
+    }
+
+    /**
+     * Returns a new, configured Permission Object with
+     * a supplied Persistent object at its core
+     *
+     * @param p The persistent object
+     *
+     * @return a new, configured Permission Object
+     *
+     * @exception Exception Could not create a new Object
+     *
+     */
+
+    public static Permission getNewPermission(Persistent p)
+    {
+        Permission perm = null;
+        try
+        {
+            Class permissionWrapperClass = TurbineSecurity.getPermissionClass();
+
+            Class [] clazz = new Class [] { Class.forName("org.apache.torque.om.Persistent") };
+            Object [] params = new Object [] { p };
+
+            perm = (Permission) permissionWrapperClass
+              .getConstructor(clazz)
+              .newInstance(params);
+        }
+        catch (Exception e)
+        {
+            // Uh, oh...
+        }
+
+        return perm;
     }
 }
 

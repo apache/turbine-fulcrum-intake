@@ -69,7 +69,7 @@ public class EntityExistsException
      *
      * @param msg The detail message.
      */
-    public EntityExistsException( String msg )
+    public EntityExistsException(String msg)
     {
         super(msg);
     }

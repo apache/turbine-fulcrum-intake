@@ -58,8 +58,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 
-import org.apache.torque.om.BaseObject;
-import org.apache.torque.om.ObjectKey;
 import org.apache.fulcrum.security.entity.User;
 
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -107,7 +105,7 @@ public class DBUserManager implements UserManager
      * @throws DataBackendException if there was an error accessing
      *         the data backend.
      */
-    public boolean accountExists( User user )
+    public boolean accountExists(User user)
         throws DataBackendException
     {
         return accountExists(user.getUserName());
@@ -118,74 +116,88 @@ public class DBUserManager implements UserManager
      *
      * The login name is used for looking up the account.
      *
-     * @param usename The name of the user to be checked.
+     * @param userName The name of the user to be checked.
      * @return true if the specified account exists
      * @throws DataBackendException if there was an error accessing
      *         the data backend.
      */
-    public boolean accountExists( String username )
+    public boolean accountExists(String userName)
         throws DataBackendException
     {
         Criteria criteria = new Criteria();
-        criteria.add(UserPeerManager.getNameColumn(), username);
+        criteria.add(UserPeerManager.getNameColumn(), userName);
         List users;
         try
         {
             users = UserPeerManager.doSelect(criteria);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException(
                 "Failed to check account's presence", e);
         }
-        if ( users.size() > 1 )
+        if (users.size() > 1)
         {
             throw new DataBackendException(
-                "Multiple Users with same username '" + username + "'");
+                "Multiple Users with same username '" + userName + "'");
         }
-        return(users.size() == 1);
+        return (users.size() == 1);
     }
 
     /**
      * Retrieve a user from persistent storage using username as the
      * key.
      *
-     * @param username the name of the user.
+     * @param userName the name of the user.
      * @return an User object.
      * @exception UnknownEntityException if the user's account does not
      *            exist in the database.
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public User retrieve( String username )
+    public User retrieve(String userName)
         throws UnknownEntityException, DataBackendException
     {
         Criteria criteria = new Criteria();
-        criteria.add( UserPeerManager.getNameColumn(), username );
+        criteria.add(UserPeerManager.getNameColumn(), userName);
         List users;
         try
         {
             users = UserPeerManager.doSelect(criteria);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("Failed to retrieve user '" +
-                                           username + "'", e);
+                                           userName + "'", e);
         }
-        if ( users.size() > 1 )
+        if (users.size() > 1)
         {
             throw new DataBackendException(
-                "Multiple Users with same username '" + username + "'");
+                "Multiple Users with same username '" + userName + "'");
         }
-        if ( users.size() == 1 )
+        if (users.size() == 1)
         {
-            return (User)users.get(0);
+            return (User) users.get(0);
         }
-        throw new UnknownEntityException("Unknown user '" + username + "'");
+        throw new UnknownEntityException("Unknown user '" + userName + "'");
     }
 
     /**
-     * Retrieve a set of users that meet the specified criteria.
+     * @deprecated Use <a href="#retrieveList">retrieveList</a> instead.
+     *
+     * @param criteria The criteria of selection.
+     * @return a List of users meeting the criteria.
+     * @throws DataBackendException if there is a problem accessing the
+     *         storage.
+     */
+    public User[] retrieve(Criteria criteria)
+        throws DataBackendException
+    {
+        return (User [])retrieveList(criteria).toArray(new User[0]);
+    }
+
+    /**
+     * Retrieve a list of users that meet the specified criteria.
      *
      * As the keys for the criteria, you should use the constants that
      * are defined in {@link User} interface, plus the names
@@ -198,20 +210,22 @@ public class DBUserManager implements UserManager
      * @throws DataBackendException if there is a problem accessing the
      *         storage.
      */
-    public User[] retrieve( Criteria criteria )
+    public List retrieveList(Criteria criteria)
         throws DataBackendException
     {
         Iterator keys = criteria.keySet().iterator();
-        while(keys.hasNext())
+        while (keys.hasNext())
         {
-            String key = (String)keys.next();
+            String key = (String) keys.next();
+
             // set the table name for all attached criterion
             Criteria.Criterion[] criterion = criteria
                 .getCriterion(key).getAttachedCriterion();
-            for (int i=0;i<criterion.length;i++)
+
+            for (int i = 0; i < criterion.length; i++)
             {
                 String table = criterion[i].getTable();
-                if ( table == null || "".equals(table) )
+                if (table == null || "".equals(table))
                 {
                     criterion[i].setTable(UserPeerManager.getTableName());
                 }
@@ -222,11 +236,11 @@ public class DBUserManager implements UserManager
         {
             users = UserPeerManager.doSelect(criteria);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("Failed to retrieve users", e);
         }
-        return (User[])users.toArray(new User[0]);
+        return users;
     }
 
     /**
@@ -235,7 +249,7 @@ public class DBUserManager implements UserManager
      * to authenticate to the server as the user whose data is being
      * retrieved.
      *
-     * @param username the name of the user.
+     * @param userName the name of the user.
      * @param password the user supplied password.
      * @return an User object.
      * @exception PasswordMismatchException if the supplied password was
@@ -245,11 +259,11 @@ public class DBUserManager implements UserManager
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public User retrieve( String username, String password )
+    public User retrieve(String userName, String password)
         throws PasswordMismatchException, UnknownEntityException,
                DataBackendException
     {
-        User user = retrieve(username);
+        User user = retrieve(userName);
         authenticate(user, password);
         return user;
     }
@@ -279,11 +293,11 @@ public class DBUserManager implements UserManager
             // should be new that is passed to this method.  It would be
             // better if this was checked, but the original code did not
             // care about the user's state, so we set it to be appropriate
-            ((Persistent)user).setNew(false);
-            ((Persistent)user).setModified(true);
-            ((Persistent)user).save();
+            ((Persistent) user).setNew(false);
+            ((Persistent) user).setModified(true);
+            ((Persistent) user).save();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("Failed to save user object", e);
         }
@@ -303,7 +317,7 @@ public class DBUserManager implements UserManager
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public void authenticate( User user, String password )
+    public void authenticate(User user, String password)
         throws PasswordMismatchException, UnknownEntityException,
                DataBackendException
     {
@@ -325,17 +339,19 @@ public class DBUserManager implements UserManager
          * into the checkPassword routine
          */
 
-        if(!TurbineSecurity.checkPassword(password, user.getPassword()))
+        if (!TurbineSecurity.checkPassword(password, user.getPassword()))
         {
             throw new PasswordMismatchException("The passwords do not match");
         }
     }
 
     /**
-     * Change the password for an User.
+     * Change the password for an User. The user must have supplied the
+     * old password to allow the change.
      *
      * @param user an User to change password for.
-     * @param password the new password.
+     * @param oldPassword The old password to verify
+     * @param newPassword The new password to set
      * @exception PasswordMismatchException if the supplied password was
      *            incorrect.
      * @exception UnknownEntityException if the user's account does not
@@ -343,8 +359,8 @@ public class DBUserManager implements UserManager
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public void changePassword( User user, String oldPassword,
-                                String newPassword )
+    public void changePassword(User user, String oldPassword,
+                                String newPassword)
         throws PasswordMismatchException, UnknownEntityException,
                DataBackendException
     {
@@ -354,7 +370,7 @@ public class DBUserManager implements UserManager
                                              user.getUserName() + "' does not exist");
         }
 
-        if(!TurbineSecurity.checkPassword(oldPassword, user.getPassword()))
+        if (!TurbineSecurity.checkPassword(oldPassword, user.getPassword()))
         {
             throw new PasswordMismatchException(
                 "The supplied old password for '" + user.getUserName() +
@@ -382,7 +398,7 @@ public class DBUserManager implements UserManager
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public void forcePassword( User user, String password )
+    public void forcePassword(User user, String password)
         throws UnknownEntityException, DataBackendException
     {
         if (!accountExists(user))
@@ -400,12 +416,14 @@ public class DBUserManager implements UserManager
     /**
      * Creates new user account with specified attributes.
      *
-     * @param user the object describing account to be created.
+     * @param user The object describing account to be created.
+     * @param password The initial password to use.
+     *
      * @throws DataBackendException if there was an error accessing
      the data backend.
      * @throws EntityExistsException if the user account already exists.
      */
-    public void createAccount( User user, String initialPassword )
+    public void createAccount(User user, String password)
         throws EntityExistsException, DataBackendException
     {
         if (accountExists(user))
@@ -414,7 +432,7 @@ public class DBUserManager implements UserManager
                                             user.getUserName() + "' already exists");
         }
 
-        user.setPassword(TurbineSecurity.encryptPassword(initialPassword));
+        user.setPassword(TurbineSecurity.encryptPassword(password));
 
         try
         {
@@ -422,11 +440,11 @@ public class DBUserManager implements UserManager
             // should be new that is passed to this method.  It would be
             // better if this was checked, but the original code did not
             // care about the user's state, so we set it to be appropriate
-            ((Persistent)user).setNew(true);
-            ((Persistent)user).setModified(true);
-            ((Persistent)user).save();
+            ((Persistent) user).setNew(true);
+            ((Persistent) user).setModified(true);
+            ((Persistent) user).save();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("Failed to create account '" +
                                            user.getUserName() + "'", e);
@@ -441,7 +459,7 @@ public class DBUserManager implements UserManager
      the data backend.
      * @throws UnknownEntityException if the user account is not present.
      */
-    public void removeAccount( User user )
+    public void removeAccount(User user)
         throws UnknownEntityException, DataBackendException
     {
         if (!accountExists(user))
@@ -455,7 +473,7 @@ public class DBUserManager implements UserManager
         {
             UserPeerManager.doDelete(criteria);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DataBackendException("Failed to remove account '" +
                                            user.getUserName() + "'", e);

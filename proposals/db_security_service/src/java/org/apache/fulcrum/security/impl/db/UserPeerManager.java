@@ -64,15 +64,9 @@ import org.apache.fulcrum.InitializationException;
 
 import org.apache.fulcrum.security.TurbineSecurity;
 
-import org.apache.fulcrum.security.entity.Group;
-import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
 
-import org.apache.fulcrum.security.impl.db.DBSecurityService;
-
 import org.apache.fulcrum.security.util.DataBackendException;
-import org.apache.fulcrum.security.util.RoleSet;
-import org.apache.fulcrum.security.util.UnknownEntityException;
 
 import org.apache.commons.configuration.Configuration;
 
@@ -168,7 +162,10 @@ public class UserPeerManager
      * Initializes the UserPeerManager, loading the class object for the 
      * Peer used to retrieve User objects
      *
-     * @exception InitializationException A problem occured during initialization
+     * @param conf The configuration object used to configure the Manager
+     *
+     * @exception InitializationException A problem occured during
+     *            initialization
      */
 
     public static void init(Configuration conf)
@@ -182,184 +179,221 @@ public class UserPeerManager
         {
             userPeerClass = Class.forName(userPeerClassName);
 
-            tableName  = (String)userPeerClass.getField("TABLE_NAME").get(null);
+            tableName  = 
+              (String) userPeerClass.getField("TABLE_NAME").get(null);
 
             //
-            // We have either an user configured Object class or we use the default
-            // as supplied by the Peer class
+            // We have either an user configured Object class or we use the 
+            // default as supplied by the Peer class
             //
-            userObject = getPersistenceClass(); // Default from Peer, can be overridden
 
-            userObjectName = (String)conf
+            // Default from Peer, can be overridden
+
+            userObject = getPersistenceClass();
+
+            userObjectName = (String) conf
                 .getString(USER_CLASS_KEY,
                            userObject.getName());
 
-            userObject = Class.forName(userObjectName); // Maybe the user set a new value...
+            // Maybe the user set a new value...
+            userObject = Class.forName(userObjectName);
 
-            /* If any of the following Field queries fails, the user subsystem is unusable. So check
-             * this right here at init time, which saves us much time and hassle if it fails...
+            /* If any of the following Field queries fails, the user 
+             * subsystem is unusable. So check this right here at init time, 
+             * which saves us much time and hassle if it fails...
              */
 
-            nameColumn       = (String)userPeerClass.getField((String)conf
-                                                              .getString(USER_NAME_COLUMN_KEY,
-                                                                         USER_NAME_COLUMN_DEFAULT)
-                                                              ).get(null);
+            nameColumn = (String) userPeerClass.getField(
+                (String) conf.getString(USER_NAME_COLUMN_KEY,
+                                        USER_NAME_COLUMN_DEFAULT)
+                ).get(null);
             
-            idColumn         = (String)userPeerClass.getField((String)conf
-                                                              .getString(USER_ID_COLUMN_KEY,
-                                                                         USER_ID_COLUMN_DEFAULT)  
-                                                              ).get(null);
+            idColumn = (String) userPeerClass.getField(
+                (String) conf.getString(USER_ID_COLUMN_KEY,
+                                        USER_ID_COLUMN_DEFAULT)  
+                ).get(null);
 
-            passwordColumn   = (String)userPeerClass.getField((String)conf
-                                                              .getString(USER_PASSWORD_COLUMN_KEY,
-                                                                         USER_PASSWORD_COLUMN_DEFAULT)
-                                                              ).get(null);
+            passwordColumn = (String) userPeerClass.getField(
+                (String) conf.getString(USER_PASSWORD_COLUMN_KEY,
+                                        USER_PASSWORD_COLUMN_DEFAULT)
+                ).get(null);
 
-            firstNameColumn  = (String)userPeerClass.getField((String)conf
-                                                              .getString(USER_FIRST_NAME_COLUMN_KEY,
-                                                                         USER_FIRST_NAME_COLUMN_DEFAULT)
-                                                              ).get(null);
+            firstNameColumn  = (String) userPeerClass.getField(
+                (String) conf.getString(USER_FIRST_NAME_COLUMN_KEY,
+                                        USER_FIRST_NAME_COLUMN_DEFAULT)
+                ).get(null);
 
-            lastNameColumn   = (String)userPeerClass.getField((String)conf
-                                                              .getString(USER_LAST_NAME_COLUMN_KEY,
-                                                                         USER_LAST_NAME_COLUMN_DEFAULT)
-                                                              ).get(null);
+            lastNameColumn = (String) userPeerClass.getField(
+                (String) conf.getString(USER_LAST_NAME_COLUMN_KEY,
+                                        USER_LAST_NAME_COLUMN_DEFAULT)
+                ).get(null);
 
-            emailColumn      = (String)userPeerClass.getField((String)conf
-                                                              .getString(USER_EMAIL_COLUMN_KEY,
-                                                                         USER_EMAIL_COLUMN_DEFAULT)
-                                                              ).get(null);
+            emailColumn = (String) userPeerClass.getField(
+                (String) conf.getString(USER_EMAIL_COLUMN_KEY,
+                                        USER_EMAIL_COLUMN_DEFAULT)
+                ).get(null);
 
-            confirmColumn    = (String)userPeerClass.getField((String)conf
-                                                              .getString(USER_CONFIRM_COLUMN_KEY,
-                                                                         USER_CONFIRM_COLUMN_DEFAULT)
-                                                              ).get(null);
+            confirmColumn    = (String) userPeerClass.getField(
+                (String) conf.getString(USER_CONFIRM_COLUMN_KEY,
+                                        USER_CONFIRM_COLUMN_DEFAULT)
+                ).get(null);
 
-            createDateColumn = (String)userPeerClass.getField((String)conf
-                                                              .getString(USER_CREATE_COLUMN_KEY,
-                                                                         USER_CREATE_COLUMN_DEFAULT)
-                                                              ).get(null);
+            createDateColumn = (String) userPeerClass.getField(
+                (String) conf.getString(USER_CREATE_COLUMN_KEY,
+                                        USER_CREATE_COLUMN_DEFAULT)
+                ).get(null);
 
-            lastLoginColumn  = (String)userPeerClass.getField((String)conf
-                                                              .getString(USER_LAST_LOGIN_COLUMN_KEY,
-                                                                         USER_LAST_LOGIN_COLUMN_DEFAULT)
-                                                              ).get(null); 
+            lastLoginColumn = (String) userPeerClass.getField(
+                (String) conf.getString(USER_LAST_LOGIN_COLUMN_KEY,
+                                        USER_LAST_LOGIN_COLUMN_DEFAULT)
+                ).get(null); 
             
-            objectdataColumn  = (String)userPeerClass.getField((String)conf
-                                                               .getString(USER_OBJECTDATA_COLUMN_KEY,
-                                                                          USER_OBJECTDATA_COLUMN_DEFAULT)
-                                                               ).get(null); 
+            objectdataColumn = (String) userPeerClass.getField(
+                (String) conf.getString(USER_OBJECTDATA_COLUMN_KEY,
+                                        USER_OBJECTDATA_COLUMN_DEFAULT)
+                ).get(null); 
             
-            namePropDesc       = new PropertyDescriptor((String)conf.getString(USER_NAME_PROPERTY_KEY,
-                                                                               USER_NAME_PROPERTY_DEFAULT),
-                                                        userObject);
+            namePropDesc = 
+                new PropertyDescriptor((String) conf.getString(
+                                           USER_NAME_PROPERTY_KEY,
+                                           USER_NAME_PROPERTY_DEFAULT),
+                                       userObject);
             
-            idPropDesc         = new PropertyDescriptor((String)conf.getString(USER_ID_PROPERTY_KEY,
-                                                                               USER_ID_PROPERTY_DEFAULT),
-                                                        userObject);
+            idPropDesc =
+                new PropertyDescriptor((String) conf.getString(
+                                           USER_ID_PROPERTY_KEY,
+                                           USER_ID_PROPERTY_DEFAULT),
+                                       userObject);
             
-            passwordPropDesc   = new PropertyDescriptor((String)conf.getString(USER_PASSWORD_PROPERTY_KEY,
-                                                                               USER_PASSWORD_PROPERTY_DEFAULT),
-                                                        userObject);
+            passwordPropDesc = 
+                new PropertyDescriptor((String) conf.getString(
+                                           USER_PASSWORD_PROPERTY_KEY,
+                                           USER_PASSWORD_PROPERTY_DEFAULT),
+                                       userObject);
             
-            firstNamePropDesc  = new PropertyDescriptor((String)conf.getString(USER_FIRST_NAME_PROPERTY_KEY,
-                                                                               USER_FIRST_NAME_PROPERTY_DEFAULT),
-                                                        userObject);
+            firstNamePropDesc = 
+                new PropertyDescriptor((String) conf.getString(
+                                           USER_FIRST_NAME_PROPERTY_KEY,
+                                           USER_FIRST_NAME_PROPERTY_DEFAULT),
+                                       userObject);
             
-            lastNamePropDesc   = new PropertyDescriptor((String)conf.getString(USER_LAST_NAME_PROPERTY_KEY,
-                                                                               USER_LAST_NAME_PROPERTY_DEFAULT),
-                                                        userObject);
+            lastNamePropDesc   =
+                new PropertyDescriptor((String) conf.getString(
+                                           USER_LAST_NAME_PROPERTY_KEY,
+                                           USER_LAST_NAME_PROPERTY_DEFAULT),
+                                       userObject);
             
-            emailPropDesc      = new PropertyDescriptor((String)conf.getString(USER_EMAIL_PROPERTY_KEY,
-                                                                               USER_EMAIL_PROPERTY_DEFAULT),
-                                                        userObject);
+            emailPropDesc = 
+                new PropertyDescriptor((String) conf.getString(
+                                           USER_EMAIL_PROPERTY_KEY,
+                                           USER_EMAIL_PROPERTY_DEFAULT),
+                                       userObject);
             
-            confirmPropDesc    = new PropertyDescriptor((String)conf.getString(USER_CONFIRM_PROPERTY_KEY,
-                                                                               USER_CONFIRM_PROPERTY_DEFAULT),
-                                                        userObject);
+            confirmPropDesc = 
+                new PropertyDescriptor((String) conf.getString(
+                                           USER_CONFIRM_PROPERTY_KEY,
+                                           USER_CONFIRM_PROPERTY_DEFAULT),
+                                       userObject);
             
-            createDatePropDesc = new PropertyDescriptor((String)conf.getString(USER_CREATE_PROPERTY_KEY,
-                                                                               USER_CREATE_PROPERTY_DEFAULT),
-                                                        userObject);
+            createDatePropDesc = 
+                new PropertyDescriptor((String) conf.getString(
+                                           USER_CREATE_PROPERTY_KEY,
+                                           USER_CREATE_PROPERTY_DEFAULT),
+                                       userObject);
             
-            lastLoginPropDesc  = new PropertyDescriptor((String)conf.getString(USER_LAST_LOGIN_PROPERTY_KEY,
-                                                                               USER_LAST_LOGIN_PROPERTY_DEFAULT),
-                                                        userObject);
+            lastLoginPropDesc  = 
+                new PropertyDescriptor((String) conf.getString(
+                                           USER_LAST_LOGIN_PROPERTY_KEY,
+                                           USER_LAST_LOGIN_PROPERTY_DEFAULT),
+                                       userObject);
 
-            objectdataPropDesc  = new PropertyDescriptor((String)conf.getString(USER_OBJECTDATA_PROPERTY_KEY,
-                                                                                USER_OBJECTDATA_PROPERTY_DEFAULT),
-                                                         userObject);
+            objectdataPropDesc = 
+                new PropertyDescriptor((String) conf.getString(
+                                           USER_OBJECTDATA_PROPERTY_KEY,
+                                           USER_OBJECTDATA_PROPERTY_DEFAULT),
+                                       userObject);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            if(userPeerClassName == null || userPeerClass == null)
+            if (userPeerClassName == null || userPeerClass == null)
             {
                 throw new InitializationException(
-                    "Could not find UserPeer class ("+ userPeerClassName+ ")", e);
+                    "Could not find UserPeer class ("
+                    + userPeerClassName + ")", e);
             }
-            if(tableName == null)
+            if (tableName == null)
             {
                 throw new InitializationException(
-                    "Failed to get the table name from the Peer object",e);
+                    "Failed to get the table name from the Peer object", e);
             }
-            if(userObject == null || userObjectName == null)
+
+            if (userObject == null || userObjectName == null)
             {
                 throw new InitializationException(
-                    "Failed to get the object type from the Peer object",e);
+                    "Failed to get the object type from the Peer object", e);
             }
 
 
-            if(nameColumn == null || namePropDesc == null)
+            if (nameColumn == null || namePropDesc == null)
             {
                 throw new InitializationException(
-                    "UserPeer " + userPeerClassName + " has no name column information!",e);
+                    "UserPeer " + userPeerClassName 
+                    + " has no name column information!", e);
             }
-            if(idColumn == null || idPropDesc == null)
+            if (idColumn == null || idPropDesc == null)
             {
                 throw new InitializationException(
-                    "UserPeer " + userPeerClassName + " has no id column information!",e);
+                    "UserPeer " + userPeerClassName 
+                    + " has no id column information!", e);
             }
-            if(passwordColumn == null || passwordPropDesc == null)
+            if (passwordColumn == null || passwordPropDesc == null)
             {
                 throw new InitializationException(
-                    "UserPeer " + userPeerClassName + " has no password column information!",e);
+                    "UserPeer " + userPeerClassName 
+                    + " has no password column information!", e);
             }
-            if(firstNameColumn == null || firstNamePropDesc == null)
+            if (firstNameColumn == null || firstNamePropDesc == null)
             {
                 throw new InitializationException(
-                    "UserPeer " + userPeerClassName + " has no firstName column information!",e);
+                    "UserPeer " + userPeerClassName 
+                    + " has no firstName column information!", e);
             }
-            if(lastNameColumn == null || lastNamePropDesc == null)
+            if (lastNameColumn == null || lastNamePropDesc == null)
             {
                 throw new InitializationException(
-                    "UserPeer " + userPeerClassName + " has no lastName column information!",e);
+                    "UserPeer " + userPeerClassName 
+                    + " has no lastName column information!", e);
             }
-            if(emailColumn == null || emailPropDesc == null)
+            if (emailColumn == null || emailPropDesc == null)
             {
                 throw new InitializationException(
-                    "UserPeer " + userPeerClassName + " has no email column information!",e);
+                    "UserPeer " + userPeerClassName 
+                    + " has no email column information!", e);
             }
-            if(confirmColumn == null || confirmPropDesc == null)
+            if (confirmColumn == null || confirmPropDesc == null)
             {
                 throw new InitializationException(
-                    "UserPeer " + userPeerClassName + " has no confirm column information!",e);
+                    "UserPeer " + userPeerClassName 
+                    + " has no confirm column information!", e);
             }
-            if(createDateColumn == null || createDatePropDesc == null)
+            if (createDateColumn == null || createDatePropDesc == null)
             {
                 throw new InitializationException(
-                    "UserPeer " + userPeerClassName + " has no createDate column information!",e);
+                    "UserPeer " + userPeerClassName 
+                    + " has no createDate column information!", e);
             }
-            if(lastLoginColumn == null || lastLoginPropDesc == null)
+            if (lastLoginColumn == null || lastLoginPropDesc == null)
             {
                 throw new InitializationException(
-                    "UserPeer " + userPeerClassName + " has no lastLogin column information!",e);
+                    "UserPeer " + userPeerClassName 
+                    + " has no lastLogin column information!", e);
             }
-            if(objectdataColumn == null || objectdataPropDesc == null)
+            if (objectdataColumn == null || objectdataPropDesc == null)
             {
                 throw new InitializationException(
-                    "UserPeer " + userPeerClassName + " has no objectdata column information!",e);
+                    "UserPeer " + userPeerClassName 
+                    + " has no objectdata column information!", e);
             }
-
         }
     }
 
@@ -391,7 +425,6 @@ public class UserPeerManager
      * @return A String containing the column id
      */
     public static String getIdColumn()
-        throws Exception
     {
         return idColumn;
     }
@@ -487,6 +520,8 @@ public class UserPeerManager
     /**
      * Returns the full name of a column.
      *
+     * @param name The column to fully qualify
+     * 
      * @return A String with the full name of the column.
      */
     public static String getColumnName(String name)
@@ -501,6 +536,8 @@ public class UserPeerManager
     /**
      * Returns the full name of a column.
      *
+     * @param name The column to fully qualify
+     * 
      * @return A String with the full name of the column.
      * @deprecated use getColumnName(String name)
      */
@@ -524,10 +561,11 @@ public class UserPeerManager
         Persistent obj;
         try
         {
-            obj = (Persistent)userObject.newInstance();
+            obj = (Persistent) userObject.newInstance();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
+            e.printStackTrace();
             obj = null; // FIXME ? 
         }
         return obj;
@@ -537,13 +575,13 @@ public class UserPeerManager
      * Checks if a User is defined in the system. The name
      * is used as query criteria.
      *
-     * @param permission The User to be checked.
+     * @param user The User to be checked.
      * @return <code>true</code> if given User exists in the system.
      * @throws DataBackendException when more than one User with
      *         the same name exists.
-     * @throws Exception, a generic exception.
+     * @throws Exception A generic exception.
      */
-    public static boolean checkExists( User user )
+    public static boolean checkExists(User user)
         throws DataBackendException, Exception
     {
         Criteria criteria = new Criteria();
@@ -566,7 +604,7 @@ public class UserPeerManager
      * Returns a List of all User objects.
      *
      * @return A List with all users in the system.
-     * @exception Exception, a generic exception.
+     * @exception Exception A generic exception.
      */
     public static List selectAllUsers()
         throws Exception
@@ -582,14 +620,14 @@ public class UserPeerManager
      * Returns a List of all confirmed User objects.
      *
      * @return A List with all confirmed users in the system.
-     * @exception Exception, a generic exception.
+     * @exception Exception A generic exception.
      */
     public static List selectAllConfirmedUsers()
         throws Exception
     {
         Criteria criteria = new Criteria();
 
-        criteria.add ( getConfirmColumn(), User.CONFIRM_DATA );
+        criteria.add (getConfirmColumn(), User.CONFIRM_DATA);
         criteria.addAscendingOrderByColumn(getLastNameColumn());
         criteria.addAscendingOrderByColumn(getFirstNameColumn());
         criteria.setIgnoreCase(true);
@@ -625,13 +663,14 @@ public class UserPeerManager
         try
         {
             Class[] clazz = new Class[] { userObject };
-            Object[] params = new Object[] { ((DBUser)user).getPersistentObj() };
+            Object[] params = 
+                new Object[] { ((DBUser) user).getPersistentObj() };
 
-            crit =  (Criteria)userPeerClass
+            crit =  (Criteria) userPeerClass
                 .getMethod("buildCriteria", clazz)
                 .invoke(null, params);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             crit = null;
         }
@@ -659,7 +698,7 @@ public class UserPeerManager
                 .getMethod("doUpdate", clazz)
                 .invoke(null, params);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new TorqueException("doUpdate failed", e);
         }
@@ -685,7 +724,7 @@ public class UserPeerManager
                 .getMethod("doInsert", clazz)
                 .invoke(null, params);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new TorqueException("doInsert failed", e);
         }
@@ -696,7 +735,7 @@ public class UserPeerManager
      *
      * @param criteria  A Criteria Object
      *
-     * return A List of User Objects selected by the Criteria
+     * @return A List of User Objects selected by the Criteria
      *
      * @exception TorqueException A problem occured.
      */
@@ -707,14 +746,15 @@ public class UserPeerManager
 
         try
         {
-            Class[] clazz = new Class[] { Class.forName("org.apache.torque.util.Criteria") };
+            Class[] clazz = 
+                new Class[] { Class.forName("org.apache.torque.util.Criteria") };
             Object[] params = new Object[] { criteria };
 
-            list = (List)userPeerClass
+            list = (List) userPeerClass
                 .getMethod("doSelect", clazz)
                 .invoke(null, params);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new TorqueException("doSelect failed", e);
         }
@@ -723,10 +763,10 @@ public class UserPeerManager
         //
         // Wrap the returned Objects into DBUsers.
         //
-        for(Iterator it = list.iterator(); it.hasNext(); )
+        for (Iterator it = list.iterator(); it.hasNext(); )
         {
-            DBUser dr = new DBUser((Persistent)it.next());
-            newList.add(dr);
+            User u = getNewUser((Persistent) it.next());
+            newList.add(u);
         }
 
         return newList;
@@ -751,7 +791,7 @@ public class UserPeerManager
                 .getMethod("doDelete", clazz)
                 .invoke(null, params);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new TorqueException("doDelete failed", e);
         }
@@ -762,8 +802,6 @@ public class UserPeerManager
      *
      * @param obj The object to use for setting the name
      * @param name The Name to set
-     *
-     * @exception TorqueException A problem occured.
      */
     public static void setUserName(Persistent obj, String name)
     {
@@ -772,11 +810,13 @@ public class UserPeerManager
             Object[] params = new Object[] { name };
             namePropDesc.getWriteMethod().invoke(obj, params);
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a User Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a User Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // Not much we can do; setName returns no exception
         }
@@ -788,23 +828,23 @@ public class UserPeerManager
      * @param obj The object to use for getting the name
      *
      * @return A string containing the name
-     *
-     * @exception TorqueException A problem occured.
      */
     public static String getUserName(Persistent obj)
     {
         String name = null;
         try
         {
-            name = (String)namePropDesc
+            name = (String) namePropDesc
                 .getReadMethod()
                 .invoke(obj, new Object[] {});
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a User Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a User Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // see setUserName
         }
@@ -816,8 +856,6 @@ public class UserPeerManager
      *
      * @param obj The object to use for setting the password
      * @param password The Password to set
-     *
-     * @exception TorqueException A problem occured.
      */
     public static void setUserPassword(Persistent obj, String password)
     {
@@ -826,11 +864,13 @@ public class UserPeerManager
             Object[] params = new Object[] { password };
             passwordPropDesc.getWriteMethod().invoke(obj, params);
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a User Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a User Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // Not much we can do; setPassword returns no exception
         }
@@ -842,23 +882,23 @@ public class UserPeerManager
      * @param obj The object to use for getting the password
      *
      * @return A string containing the password
-     *
-     * @exception TorqueException A problem occured.
      */
     public static String getUserPassword(Persistent obj)
     {
         String password = null;
         try
         {
-            password = (String)passwordPropDesc
+            password = (String) passwordPropDesc
                 .getReadMethod()
                 .invoke(obj, new Object[] {});
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a User Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a User Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // see setUserPassword
         }
@@ -870,8 +910,6 @@ public class UserPeerManager
      *
      * @param obj The object to use for setting the first name
      * @param firstName The first name to set
-     *
-     * @exception TorqueException A problem occured.
      */
     public static void setUserFirstName(Persistent obj, String firstName)
     {
@@ -880,11 +918,13 @@ public class UserPeerManager
             Object[] params = new Object[] { firstName };
             firstNamePropDesc.getWriteMethod().invoke(obj, params);
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a User Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a User Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // Not much we can do; setFirstName returns no exception
         }
@@ -896,23 +936,23 @@ public class UserPeerManager
      * @param obj The object to use for getting the first name
      *
      * @return A string containing the first name
-     *
-     * @exception TorqueException A problem occured.
      */
     public static String getUserFirstName(Persistent obj)
     {
         String firstName = null;
         try
         {
-            firstName = (String)firstNamePropDesc
+            firstName = (String) firstNamePropDesc
                 .getReadMethod()
                 .invoke(obj, new Object[] {});
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a User Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a User Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // see setUserFirstName
         }
@@ -924,8 +964,6 @@ public class UserPeerManager
      *
      * @param obj The object to use for setting the last name
      * @param lastName The Last Name to set
-     *
-     * @exception TorqueException A problem occured.
      */
     public static void setUserLastName(Persistent obj, String lastName)
     {
@@ -934,11 +972,13 @@ public class UserPeerManager
             Object[] params = new Object[] { lastName };
             lastNamePropDesc.getWriteMethod().invoke(obj, params);
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a User Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a User Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // Not much we can do; setLastName returns no exception
         }
@@ -950,23 +990,23 @@ public class UserPeerManager
      * @param obj The object to use for getting the last name
      *
      * @return A string containing the last name
-     *
-     * @exception TorqueException A problem occured.
      */
     public static String getUserLastName(Persistent obj)
     {
         String lastName = null;
         try
         {
-            lastName = (String)lastNamePropDesc
+            lastName = (String) lastNamePropDesc
                 .getReadMethod()
                 .invoke(obj, new Object[] {});
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a User Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a User Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // see setUserLastName
         }
@@ -978,8 +1018,6 @@ public class UserPeerManager
      *
      * @param obj The object to use for setting the email
      * @param email The Email to set
-     *
-     * @exception TorqueException A problem occured.
      */
     public static void setUserEmail(Persistent obj, String email)
     {
@@ -988,11 +1026,13 @@ public class UserPeerManager
             Object[] params = new Object[] { email };
             emailPropDesc.getWriteMethod().invoke(obj, params);
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a User Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a User Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // Not much we can do; setEmail returns no exception
         }
@@ -1004,23 +1044,23 @@ public class UserPeerManager
      * @param obj The object to use for getting the email
      *
      * @return A string containing the email
-     *
-     * @exception TorqueException A problem occured.
      */
     public static String getUserEmail(Persistent obj)
     {
         String email = null;
         try
         {
-            email = (String)emailPropDesc
+            email = (String) emailPropDesc
                 .getReadMethod()
                 .invoke(obj, new Object[] {});
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a User Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a User Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // see setUserEmail
         }
@@ -1032,8 +1072,6 @@ public class UserPeerManager
      *
      * @param obj The object to use for setting the confirm value
      * @param confirm The confirm value to set
-     *
-     * @exception TorqueException A problem occured.
      */
     public static void setUserConfirmed(Persistent obj, String confirm)
     {
@@ -1042,11 +1080,13 @@ public class UserPeerManager
             Object[] params = new Object[] { confirm };
             confirmPropDesc.getWriteMethod().invoke(obj, params);
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a User Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a User Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // Not much we can do; setConfirmed returns no exception
         }
@@ -1058,21 +1098,23 @@ public class UserPeerManager
      * @param obj The object to use for getting the confirm value
      *
      * @return A string containing the confirm value
-     *
-     * @exception TorqueException A problem occured.
      */
     public static String getUserConfirmed(Persistent obj)
     {
         String confirm = null;
         try
         {
-            confirm = (String)confirmPropDesc.getReadMethod().invoke(obj, new Object[] {});
+            confirm = (String) confirmPropDesc
+                .getReadMethod()
+                .invoke(obj, new Object[] {});
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a User Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a User Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // see setUserConfirmed
         }
@@ -1084,8 +1126,6 @@ public class UserPeerManager
      *
      * @param obj The object to use for setting the create date
      * @param createDate The create date to set
-     *
-     * @exception TorqueException A problem occured.
      */
     public static void setUserCreateDate(Persistent obj, java.util.Date createDate)
     {
@@ -1094,11 +1134,13 @@ public class UserPeerManager
             Object[] params = new Object[] { createDate };
             createDatePropDesc.getWriteMethod().invoke(obj, params);
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a User Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a User Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // Not much we can do; setCreateDate returns no exception
         }
@@ -1110,23 +1152,23 @@ public class UserPeerManager
      * @param obj The object to use for getting the create date
      *
      * @return A string containing the create date
-     *
-     * @exception TorqueException A problem occured.
      */
     public static java.util.Date getUserCreateDate(Persistent obj)
     {
         java.util.Date createDate = null;
         try
         {
-            createDate = (java.util.Date)createDatePropDesc
+            createDate = (java.util.Date) createDatePropDesc
                 .getReadMethod()
                 .invoke(obj, new Object[] {});
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a User Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a User Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // see setUserCreateDate
         }
@@ -1138,8 +1180,6 @@ public class UserPeerManager
      *
      * @param obj The object to use for setting the last login daet
      * @param lastLogin The last login date to set
-     *
-     * @exception TorqueException A problem occured.
      */
     public static void setUserLastLogin(Persistent obj, java.util.Date lastLogin)
     {
@@ -1148,11 +1188,13 @@ public class UserPeerManager
             Object[] params = new Object[] { lastLogin };
             lastLoginPropDesc.getWriteMethod().invoke(obj, params);
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a User Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a User Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // Not much we can do; setLastLogin returns no exception
         }
@@ -1164,23 +1206,23 @@ public class UserPeerManager
      * @param obj The object to use for getting the last login date
      *
      * @return A string containing the last login date
-     *
-     * @exception TorqueException A problem occured.
      */
     public static java.util.Date getUserLastLogin(Persistent obj)
     {
         java.util.Date lastLogin = null;
         try
         {
-            lastLogin = (java.util.Date)lastLoginPropDesc
+            lastLogin = (java.util.Date) lastLoginPropDesc
                 .getReadMethod()
                 .invoke(obj, new Object[] {});
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a User Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a User Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // see setUserLastLogin
         }
@@ -1200,11 +1242,13 @@ public class UserPeerManager
             Object[] params = new Object[] { objectdata };
             objectdataPropDesc.getWriteMethod().invoke(obj, params);
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a User Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a User Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // Not much we can do; setObjectdata returns no exception
         }
@@ -1222,15 +1266,17 @@ public class UserPeerManager
         byte [] objectdata = null;
         try
         {
-            objectdata = (byte [])objectdataPropDesc
+            objectdata = (byte []) objectdataPropDesc
                 .getReadMethod()
                 .invoke(obj, new Object[] {});
         }
-        catch(ClassCastException cce)
+        catch (ClassCastException cce)
         {
-            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a User Object!");
+            throw new RuntimeException(
+                obj.getClass().getName()
+                + " does not seem to be a User Object!");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             // see setUserObjectdata
         }
@@ -1253,11 +1299,11 @@ public class UserPeerManager
         {
             Object[] params = new Object[0];
 
-            persistenceClass =  (Class)userPeerClass
+            persistenceClass =  (Class) userPeerClass
                 .getMethod("getOMClass", null)
                 .invoke(null, params);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             persistenceClass = null;
         }
@@ -1265,6 +1311,40 @@ public class UserPeerManager
         return persistenceClass;
     }
 
+    /**
+     * Returns a new, configured User Object with
+     * a supplied Persistent object at its core
+     *
+     * @param p The persistent object
+     *
+     * @return a new, configured User Object
+     *
+     * @exception Exception Could not create a new Object
+     *
+     */
+
+    public static User getNewUser(Persistent p)
+    {
+        User u = null;
+        try
+        {
+            Class userWrapperClass = TurbineSecurity.getUserClass();
+
+            Class [] clazz = new Class [] { Class.forName("org.apache.torque.om.Persistent") };
+            Object [] params = new Object [] { (Persistent)p };
+
+            u = (User) userWrapperClass
+                .getConstructor(clazz)
+                .newInstance(params);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            // Uh, oh...
+        }
+
+        return u;
+    }
 }
 
 

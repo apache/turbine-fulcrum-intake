@@ -54,7 +54,9 @@ package org.apache.fulcrum.security;
  * <http://www.apache.org/>.
  */
 
+import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
@@ -68,40 +70,33 @@ import org.apache.fulcrum.factory.TurbineFactoryService;
 import org.apache.fulcrum.security.SecurityService;
 
 import org.apache.fulcrum.security.entity.Group;
-
-import org.apache.fulcrum.security.impl.db.DBGroup;
+import org.apache.fulcrum.security.entity.Permission;
+import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.impl.db.DBSecurityService;
 import org.apache.fulcrum.security.impl.db.GroupPeerManager;
-import org.apache.fulcrum.security.impl.db.entity.TurbineGroupPeer;
+import org.apache.fulcrum.security.impl.db.PermissionPeerManager;
+import org.apache.fulcrum.security.impl.db.RolePeerManager;
+import org.apache.fulcrum.security.impl.db.UserPeerManager;
+import org.apache.fulcrum.security.impl.db.entity.TurbineGroup;
+import org.apache.fulcrum.security.impl.db.entity.TurbinePermission;
+import org.apache.fulcrum.security.impl.db.entity.TurbineRole;
+import org.apache.fulcrum.security.impl.db.entity.TurbineUser;
 
 import org.apache.torque.util.Criteria;
+import org.apache.torque.om.Persistent;
 
-public class GroupManagerTest
+
+public class PeerManagerTest
     extends TestCase
 {
     private static final String PREFIX = "services." +
         SecurityService.SERVICE_NAME + '.';
 
-    public GroupManagerTest( String name )
+    public PeerManagerTest( String name )
     {
         super(name);
-    }
 
-    public void testSelection()
-    {
-         try
-        {
-            doit();
-        }
-        catch( Exception e )
-        {
-            fail( e.getMessage() );
-        }
-   }
-
-    public void doit()
-        throws Exception
-    {
         ServiceManager serviceManager = TurbineServices.getInstance();
         serviceManager.setApplicationRoot(".");
 
@@ -110,52 +105,109 @@ public class GroupManagerTest
         cfg.setProperty(PREFIX + "classname", 
                         DBSecurityService.class.getName());
 
-        cfg.setProperty(PREFIX + "group.class", 
-                        DBGroup.class.getName());
-
         // We must run init! 
         cfg.setProperty(PREFIX+"earlyInit", "true");
 
         /* Ugh */
-
+        
         cfg.setProperty("services." + FactoryService.SERVICE_NAME + ".classname",
                         TurbineFactoryService.class.getName());
 
         serviceManager.setConfiguration(cfg);
-
-        serviceManager.init();
-
-        String nameCol   = GroupPeerManager.getNameColumn();
-        String idCol     = GroupPeerManager.getIdColumn();
-        String tableName = GroupPeerManager.getTableName();
-
-        if(!nameCol.equals(TurbineGroupPeer.GROUP_NAME))
-        {
-            fail("name Column is "+nameCol+", expected was "+TurbineGroupPeer.GROUP_NAME);
-        }
-
-        if(!idCol.equals(TurbineGroupPeer.GROUP_ID))
-        {
-            fail("id Column is "+idCol+", expected was "+TurbineGroupPeer.GROUP_ID);
-        }
-
-        if(!tableName.equals(TurbineGroupPeer.TABLE_NAME))
-        {
-            fail("Table Name is "+tableName+", expected was "+TurbineGroupPeer.TABLE_NAME);
-        }
-        
-        Group g = TurbineSecurity.getService().getGroupInstance();
-
-        g.setName("demo");
-
+      
         try
         {
-            Criteria c = GroupPeerManager.buildCriteria(g);
-            System.out.println(c.toString());
+            serviceManager.init();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
+            fail();
+        }
+    }
+
+    public static Test suite()
+    {
+        return new TestSuite(PeerManagerTest.class);
+    }
+                    
+    public void testUserPeerManager()
+    {
+        try 
+        {
+            Persistent p = new TurbineUser();
+            
+            User u = UserPeerManager.getNewUser(p);
+            String userClassName = u.getClass().getName();
+            
+            assertEquals("Didn't get a DBUser object from Peer: " + userClassName, 
+                         userClassName, 
+                         "org.apache.fulcrum.security.impl.db.DBUser");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testGroupPeerManager()
+    {
+        try 
+        {
+            Persistent p = new TurbineGroup();
+            
+            Group u = GroupPeerManager.getNewGroup(p);
+            String groupClassName = u.getClass().getName();
+            
+            assertEquals("Didn't get a DBGroup object from Peer: " + groupClassName, 
+                         groupClassName, 
+                         "org.apache.fulcrum.security.impl.db.DBGroup");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testRolePeerManager()
+    {
+        try 
+        {
+            Persistent p = new TurbineRole();
+            
+            Role u = RolePeerManager.getNewRole(p);
+            String roleClassName = u.getClass().getName();
+            
+            assertEquals("Didn't get a DBRole object from Peer: " + roleClassName, 
+                         roleClassName, 
+                         "org.apache.fulcrum.security.impl.db.DBRole");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testPermissionPeerManager()
+    {
+        try 
+        {
+            Persistent p = new TurbinePermission();
+            
+            Permission u = PermissionPeerManager.getNewPermission(p);
+            String permissionClassName = u.getClass().getName();
+            
+            assertEquals("Didn't get a DBPermission object from Peer: " + permissionClassName, 
+                         permissionClassName, 
+                         "org.apache.fulcrum.security.impl.db.DBPermission");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
         }
     }
 }

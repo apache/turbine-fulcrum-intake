@@ -79,7 +79,7 @@ package org.apache.fulcrum.security.impl.db;
 
 public interface GroupPeerManagerConstants
 {
-    /** The key within the security service properties for the group peer class implementation */
+    /** The key within the security service properties for the group class implementation */
     public static final String GROUP_CLASS_KEY = 
         "db.group.class";
 
@@ -90,7 +90,6 @@ public interface GroupPeerManagerConstants
     /** Group peer default class */
     public static final String GROUP_PEER_CLASS_DEFAULT =
         "org.apache.fulcrum.security.impl.db.entity.TurbineGroupPeer";
-
 
     /** The column name for the login name field. */
     public static final String GROUP_NAME_COLUMN_KEY =

@@ -68,7 +68,7 @@ public class PasswordMismatchException
      *
      * @param msg The detail message.
      */
-    public PasswordMismatchException( String msg )
+    public PasswordMismatchException(String msg)
     {
         super(msg);
     }
