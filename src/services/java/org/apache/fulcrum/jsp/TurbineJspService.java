@@ -1,4 +1,4 @@
-package org.apache.turbine.services.jsp;
+package org.apache.fulcrum.jsp;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
