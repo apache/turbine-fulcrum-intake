@@ -23,20 +23,6 @@
     </dependency>  
 
     <dependency>
-      <groupId>avalon-framework</groupId>
-      <artifactId>avalon-framework-api</artifactId>
-      <version>4.1.5</version>
-    </dependency> 
-    
-    <dependency>
-      <id>commons-logging</id>
-      <version>1.0.3</version>
-    </dependency>      
-    <dependency>
-      <id>commons-lang</id>
-      <version>2.0</version>
-    </dependency>  
-    <dependency>
       <id>cryptix</id>
       <version>3.2.0</version>
       <url>http://www.cryptix.org/</url>
@@ -54,11 +40,6 @@
       <artifactId>fulcrum-security-memory</artifactId>
       <version>1.0.6</version>
     </dependency>      
-    <dependency>
-      <groupId>fulcrum</groupId>    
-      <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0.3</version>
-    </dependency>        
 
   </dependencies>
 
