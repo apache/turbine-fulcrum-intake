@@ -199,7 +199,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest
     /*
      * Class to test for User retrieve(String, String)
      */
-    public void testRetrieveStringString() throws Exception
+    public void testGetUserStringString() throws Exception
     {
         try
         {
@@ -239,10 +239,25 @@ public class NTUserManagerTest extends AbstractUserManagerTest
         }
     }
     /** ******* ALL BELOW HERE THROW RUNTIME EXCEPTIONS ******** */
+	/*
+	 * Class to test for User retrieve(String, String)
+	 */
+	public void testGetAllUsers() throws Exception
+	{
+		try
+	   {
+		   userManager.getAllUsers();
+		   fail("Should throw runtime exception");
+	   }
+	   catch (RuntimeException re)
+	   {
+		   assertTrue(re.getMessage().equals(ERROR_MSG));
+	   }
+	}    
     /*
      * Class to test for User retrieve(String)
      */
-    public void testRetrieveString() throws Exception
+    public void testGetUserString() throws Exception
     {
         try
         {

@@ -62,6 +62,7 @@ import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.spi.AbstractUserManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.apache.fulcrum.security.util.UserSet;
 
 /**
  * This implementation keeps all objects in memory.  This is mostly meant to help
@@ -170,6 +171,16 @@ public class MemoryUserManagerImpl
         throw new UnknownEntityException("Unknown user '" + userName + "'");
     }
     
+	/**
+	 * Retrieves all users defined in the system.
+	 * 
+	 * @return the names of all users defined in the system.
+	 * @throws DataBackendException if there was an error accessing the data backend.
+	 */
+	public UserSet getAllUsers() throws DataBackendException
+	{
+		return new UserSet(users);
+	}    
     /**
     	* Removes an user account from the system.
     	*

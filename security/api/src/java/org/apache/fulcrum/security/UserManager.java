@@ -59,6 +59,7 @@ import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.apache.fulcrum.security.util.UserSet;
 /**
  * An UserManager performs {@link org.apache.fulcrum.security.entity.User} objects
  * related tasks on behalf of the {@link org.apache.fulcrum.security.BaseSecurityService}.
@@ -148,6 +149,15 @@ public interface UserManager extends Component
      */
     User getUser(String username, String password)
         throws PasswordMismatchException, UnknownEntityException, DataBackendException;
+
+	/**
+	   * Retrieves all users defined in the system.
+	   *
+	   * @return the names of all users defined in the system.
+	   * @throws DataBackendException if there was an error accessing the data
+	   *         backend.
+	   */
+	UserSet getAllUsers() throws DataBackendException;    
     /**
     * Saves User's data in the permanent storage. The user account is required
     * to exist in the storage.

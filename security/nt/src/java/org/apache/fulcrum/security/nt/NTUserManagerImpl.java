@@ -65,6 +65,7 @@ import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.apache.fulcrum.security.util.UserSet;
 
 import com.tagish.auth.win32.NTSystem;
 /**
@@ -270,5 +271,16 @@ public class NTUserManagerImpl extends AbstractUserManager
     {
         throw new RuntimeException("Not supported by NT User Manager");
     }
+    
+	/**
+	 * Retrieves all users defined in the system.
+	 * 
+	 * @return the names of all users defined in the system.
+	 * @throws DataBackendException if there was an error accessing the data backend.
+	 */
+	public UserSet getAllUsers() throws DataBackendException
+	{
+		throw new RuntimeException("Not supported by NT User Manager");
+	}       
 
 }

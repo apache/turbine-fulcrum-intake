@@ -59,6 +59,7 @@ import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.apache.fulcrum.security.util.UserSet;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 /**
  * @author Eric Pugh
@@ -92,7 +93,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
     /*
      * Class to test for User retrieve(String)
      */
-    public void testRetrieveString() throws Exception
+    public void testGetUserString() throws Exception
     {
         user = userManager.getUserInstance("QuietMike");
         userManager.addUser(user, "bobo");
@@ -102,7 +103,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
     /*
      * Class to test for User retrieve(String, String)
      */
-    public void testRetrieveStringString() throws Exception
+    public void testGetUserStringString() throws Exception
     {
         user = userManager.getUserInstance("Richard");
         userManager.addUser(user, "va");
@@ -120,6 +121,15 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
             //good
         }
     }
+	public void testGetAllUsers() throws Exception
+	{
+		int size = userManager.getAllUsers().size();
+		user = userManager.getUserInstance("Bob");
+		userManager.addUser(user,"");
+		UserSet userSet = userManager.getAllUsers();
+		assertEquals(size + 1, userSet.size());
+	}    
+	
     public void testAuthenticate() throws Exception
     {
         user = userManager.getUserInstance("Kay");
