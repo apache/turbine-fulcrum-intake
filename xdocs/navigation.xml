@@ -18,7 +18,7 @@
     <menu name="Components">
       <item name="Test Container"        href="/fulcrum-testcontainer/index.html"/>
       <item name="Cache"                 href="/fulcrum-cache/index.html"/>
-      <item name="Configiguration"       href="/fulcrum-configuration/index.html"/>
+      <item name="Configuration"         href="/fulcrum-configuration/index.html"/>
       <item name="Crypto"                href="/fulcrum-crypto/index.html"/>
       <item name="DVSL"                  href="/fulcrum-dvsl/index.html"/>
       <item name="Factory"               href="/fulcrum-factory/index.html"/>
