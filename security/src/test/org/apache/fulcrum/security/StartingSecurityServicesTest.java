@@ -52,14 +52,18 @@ package org.apache.fulcrum.security;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+import org.apache.fulcrum.security.spi.hibernate.simple.HibernateGroupManagerImpl;
+import org.apache.fulcrum.security.spi.hibernate.simple.HibernatePermissionManagerImpl;
+import org.apache.fulcrum.security.spi.hibernate.simple.HibernateRoleManagerImpl;
+import org.apache.fulcrum.security.spi.hibernate.simple.HibernateUserManagerImpl;
 import org.apache.fulcrum.security.spi.memory.simple.MemoryGroupManagerImpl;
 import org.apache.fulcrum.security.spi.memory.simple.MemoryPermissionManagerImpl;
 import org.apache.fulcrum.security.spi.memory.simple.MemoryRoleManagerImpl;
 import org.apache.fulcrum.security.spi.memory.simple.MemoryUserManagerImpl;
-import org.apache.fulcrum.security.spi.torque.TorqueGroupManager;
-import org.apache.fulcrum.security.spi.torque.TorquePermissionManager;
-import org.apache.fulcrum.security.spi.torque.TorqueRoleManager;
-import org.apache.fulcrum.security.spi.torque.TorqueUserManager;
+import org.apache.fulcrum.security.spi.torque.turbine.TorqueGroupManager;
+import org.apache.fulcrum.security.spi.torque.turbine.TorquePermissionManager;
+import org.apache.fulcrum.security.spi.torque.turbine.TorqueRoleManager;
+import org.apache.fulcrum.security.spi.torque.turbine.TorqueUserManager;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 public class StartingSecurityServicesTest extends BaseUnitTest
 {
@@ -101,5 +105,18 @@ public class StartingSecurityServicesTest extends BaseUnitTest
         assertTrue(securityService.getPermissionManager() instanceof MemoryPermissionManagerImpl);
         assertTrue(securityService.getGroupManager() instanceof MemoryGroupManagerImpl);
     }
-   
+    public void testStartingHibernateSecurity() throws Exception
+    {
+        this.setRoleFileName(null);
+        this.setConfigurationFileName("src/test/SimpleHibernate.xml");
+        securityService = (SecurityService) lookup(SecurityService.ROLE);
+        assertNotNull(securityService.getUserManager());
+        assertNotNull(securityService.getRoleManager());
+        assertNotNull(securityService.getPermissionManager());
+        assertNotNull(securityService.getGroupManager());
+        assertTrue(securityService.getUserManager() instanceof HibernateUserManagerImpl);
+        assertTrue(securityService.getRoleManager() instanceof HibernateRoleManagerImpl);
+        assertTrue(securityService.getPermissionManager() instanceof HibernatePermissionManagerImpl);
+        assertTrue(securityService.getGroupManager() instanceof HibernateGroupManagerImpl);
+    }
 }
