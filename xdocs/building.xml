@@ -72,10 +72,12 @@ $ maven plugin:download -DartifactId=merlin-plugin -DgroupId=merlin -Dversion=3.
         </p>        
         <p>
           Depending on your version of Maven, you may have various problems with
-          the reports being generate, or you may run out of memory when you do a
+          the reports being generated, or you may run out of memory when you do a
           complete build.  One approach to take is to turn off running unit tests
-          and excluding various components:<br/> 'maven multiproject:site -Dmaven.test.skip=true 
-          -Dmaven.multiproject.excludes=security/*.*,cache/*.*,scheduler/*.*'
+          and excluding various components:
+<source><![CDATA[
+$ maven multiproject:site -Dmaven.test.skip=true -Dmaven.multiproject.excludes=security/*.*,cache/*.*,scheduler/*.*'
+]]></source>
         </p>        
       </subsection>     
       <subsection name="Maven Repositories">

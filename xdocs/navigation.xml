@@ -16,7 +16,7 @@
       <item name="Changes"               href="/changes-report.html"/>
     </menu>
     
-    <menu name="Componentsd">
+    <menu name="Components">
       
       <item name="BSF"                   href="/fulcrum-bsf/index.html"/>
       <item name="Cache"                 href="/fulcrum-cache/index.html"/>

@@ -25,8 +25,8 @@
  
  <section name="Container compatibility">
    <p>
-     All components are compatible if Avalon's ECM container.  Any dependancies 
-     on other components, system properties, or context elements is clearly 
+     All components are compatible in Avalon's ECM container.  Any dependancies 
+     on other components, system properties, or context elements are clearly 
      documentmented in the docs for each component.
    </p>
  </section>
