@@ -62,7 +62,7 @@ import org.apache.fulcrum.pool.TurbinePool;
  * @author <a href="mailto:ilkka.priha@simsoft.fi">Ilkka Priha</a>
  * @version $Id$
  */
-public class RecyclableSupport implements Recyclable
+public abstract class RecyclableSupport implements Recyclable
 {
     /**
      * The disposed flag.
@@ -70,9 +70,10 @@ public class RecyclableSupport implements Recyclable
     private boolean disposed;
 
     /**
-     * Constructs a new recyclable support and calls the default recycle method.
+     * Constructs a new recyclable support and calls the default
+     * recycle method.
      */
-    public void Recyclable()
+    protected void Recyclable()
     {
         recycle();
     }
