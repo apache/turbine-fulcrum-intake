@@ -67,7 +67,7 @@ import java.util.Stack;
 import org.apache.fulcrum.ServiceException;
 import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
-import org.apache.log4j.helpers.NullEnumeration
+import org.apache.log4j.helpers.NullEnumeration;
 
 // NOTE:
 // initClass is taking the name of the service now not
@@ -441,7 +441,7 @@ public abstract class BaseServiceBroker
      * @exception InitializationException Initilaization of this
      * service was not successful.
      */
-    public void initService(String name)
+    public synchronized void initService(String name)
         throws InitializationException
     {
         String className = (String) mapping.get(name);
@@ -483,7 +483,6 @@ public abstract class BaseServiceBroker
      * after one service fails, the other will not have the chance
      * to initialize.
      *
-     * @param data An Object to use for initialization activities.
      * @param report <code>true</code> if you want exceptions thrown.
      */
     public void initServices(boolean report)
@@ -562,7 +561,7 @@ public abstract class BaseServiceBroker
      *
      * @param name The name of the <code>Service</code> to be uninitialized.
      */
-    public void shutdownService(String name)
+    public synchronized void shutdownService(String name)
     {
         String className = (String) mapping.get(name);
 
