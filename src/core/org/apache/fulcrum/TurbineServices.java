@@ -92,16 +92,6 @@ public class TurbineServices
     }
 
     /**
-     * The method through which this class is accessed as a manager.
-     *
-     * @return The single instance of this class.
-     */
-    public static ServiceManager getManager()
-    {
-        return (ServiceManager) instance;
-    }
-
-    /**
      * The method through which to change the default manager.
      * Note that services of the previous manager will be shutdown.
      * @param manager a new service manager.
