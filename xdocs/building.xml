@@ -63,7 +63,9 @@ $ maven plugin:download -DartifactId=merlin-plugin -DgroupId=merlin -Dversion=3.
           install due to licensing restrictions.  Javamail.jar will need to be downloaded.
           Note, when you download it from Sun's site, you will need to rename it from mail.jar
           to javamail-1.3.1.jar and place it in your MAVEN_REPO/javamail/jars/ directory.  You
-          will also need to download jdbc-2.0.jar as well.  
+          will also need to download jdbc-2.0.jar as well.  Lastly, for the Hibernate security 
+          provider, you need Sun's JTA jar file.  Currently, the easiest place to go is <a href="http://www.hibernate.org">
+          Hibernate</a> and download the jar from there by downloading the current distribution.     
         </p>        
         <p>
           Depending on your version of Maven, you may have various problems with
