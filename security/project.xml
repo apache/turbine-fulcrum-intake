@@ -44,7 +44,7 @@
       <url>http://db.apache.org/torque/</url>
     </dependency>
     
-	<dependency>
+  <dependency>
       <id>village</id>
       <version>2.0-dev-20030625</version>
       <url>http://share.whichever.com/index.php?SCREEN=village</url>
@@ -122,22 +122,22 @@
 <!-- alternative testing of sql -->
 <!--
     <dependency>
-	  <id>msbase</id>
-	  <version/>
-	  <jar>msbase.jar</jar>
-	</dependency>
-	<dependency>
-   	  <id>mssqlserver</id>
-	  <version/>
-	  <jar>mssqlserver.jar</jar>
-	</dependency>
-	<dependency>
-   	  <id>msutil</id>
-	  <version/>
-	  <jar>msutil.jar</jar>
-	</dependency>  
--->		
-	<!-- Needed only for testing the adaptors -->
+    <id>msbase</id>
+    <version/>
+    <jar>msbase.jar</jar>
+  </dependency>
+  <dependency>
+      <id>mssqlserver</id>
+    <version/>
+    <jar>mssqlserver.jar</jar>
+  </dependency>
+  <dependency>
+      <id>msutil</id>
+    <version/>
+    <jar>msutil.jar</jar>
+  </dependency>  
+-->   
+  <!-- Needed only for testing the adaptors -->
     <dependency>
       <id>stratum</id>
       <version>1.0-b3</version>
@@ -146,19 +146,15 @@
     
     <dependency>
       <groupId>mockobjects</groupId>
-   	  <artifactId>mockobjects-jdk1.4-j2ee1.3</artifactId>
-   	  <version>0.09</version>
-    </dependency>	
+      <artifactId>mockobjects-jdk1.4-j2ee1.3</artifactId>
+      <version>0.09</version>
+    </dependency> 
     <dependency>
       <groupId>mockobjects</groupId>
-   	  <artifactId>mockobjects-core</artifactId>
-   	  <version>0.09</version>
-    </dependency>	      
-    <dependency>
-      <id>commons-configuration</id>
-      <version>20030706.202021</version>
-      <url>http://jakarta.apache.org/commons/sandbox/configuration/index.html</url>
-    </dependency>    
+      <artifactId>mockobjects-core</artifactId>
+      <version>0.09</version>
+    </dependency>       
+  
     <dependency>
       <id>commons-configuration</id>
       <version>20030706.202021</version>
@@ -171,7 +167,7 @@
     </dependency>    
     
     <!-- SLEDGEHAMMER APPROACH because I can't figure out the minimal list-->
-	<dependency>
+  <dependency>
       <id>avalon-framework</id>
       <version>4.1.4</version>
       <url>http://jakarta.apache.org/avalon/</url>
@@ -454,14 +450,22 @@
 
   </dependencies>
 
- <build>
+  <build>
     <unitTest>
       <includes>
         <include>**/*Test.java</include>
       </includes>
- 	  <excludes>
+      <excludes>
         <exclude>**/Abstract*.java</exclude>
       </excludes>      
+      <resources>
+        <resource>
+          <directory>${basedir}/src/test</directory>
+          <includes>
+            <include>**/*.xml</include>
+          </includes>
+        </resource>
+      </resources>
     </unitTest>    
   </build>
 
