@@ -53,10 +53,9 @@ package org.apache.fulcrum.localization;
  * <http://www.apache.org/>.
  */
 
-// Cactus and Junit imports
 import java.util.Locale;
 
-import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
+import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
  * Test the facade class for LocalizationService.
@@ -65,7 +64,7 @@ import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
  * @author <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>
  * @version $Id$
  */
-public class LocalizationFacadeTest extends AbstractMerlinTestCase
+public class LocalizationFacadeTest extends BaseUnitTest
 {
     /**
      * Defines the testcase name for JUnit.
@@ -93,8 +92,8 @@ public class LocalizationFacadeTest extends AbstractMerlinTestCase
     public void testFacadeConfigured() throws Exception
     {
         // this.lookup causes the service to be configured.
-        this.resolve( "/test/localization" );
-        LocalizationService ls = (LocalizationService) this.resolve( "/test/localization" );
+        this.resolve( LocalizationService.class.getName() );
+        LocalizationService ls = (LocalizationService) this.resolve( LocalizationService.class.getName() );
         ls.getString(null, new Locale("ko", "KR"), "key4");
         assertTrue(Localization.isInitialized());
         String s = Localization.getString(null, new Locale("ko", "KR"), "key4");

@@ -55,7 +55,7 @@ package org.apache.fulcrum.localization;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
-import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
+import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
  * Tests the API of the
@@ -66,7 +66,7 @@ import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:jason@zenplex.com">Jason van Zyl</a>
  */
-public class LocalizationTest extends AbstractMerlinTestCase
+public class LocalizationTest extends BaseUnitTest
 {
     
     private LocalizationService ls = null;
@@ -80,7 +80,7 @@ public class LocalizationTest extends AbstractMerlinTestCase
         super.setUp();
         try
         {
-            ls = (LocalizationService) this.resolve( "/test/localization" );
+            ls = (LocalizationService) this.resolve( LocalizationService.class.getName() );
         }
         catch (Throwable e)
         {

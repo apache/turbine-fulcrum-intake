@@ -6,6 +6,11 @@
   </properties>
 
   <body>
+    <release version="1.0.5" date="">
+      <action dev="epugh" type="update">
+      	Tweak dependencies to build under gump.
+      </action>          
+    </release>
     <release version="1.0.4" date="">
       <action dev="epugh" type="update">
       	Use inherited getLogger() instead of Log in classes
