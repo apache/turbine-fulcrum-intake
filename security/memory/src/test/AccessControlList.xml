@@ -1,8 +1,4 @@
 <my-system>
-  <component
-    role="org.apache.fulcrum.factory.FactoryService"
-    class="org.apache.fulcrum.factory.DefaultFactoryService">   
-  </component>  
   
   
   <!-- standard components for In Memory -->
@@ -38,4 +34,9 @@
     role="org.apache.fulcrum.security.ModelManager"
     class="org.apache.fulcrum.security.memory.dynamic.MemoryModelManagerImpl">   
   </component>      
+  
+  <component
+    role="org.apache.fulcrum.security.model.ACLFactory"
+    class="org.apache.fulcrum.security.model.dynamic.DynamicACLFactory">   
+  </component>     
 </my-system>
