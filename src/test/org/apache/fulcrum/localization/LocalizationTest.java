@@ -3,7 +3,7 @@ package org.apache.fulcrum.localization;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,10 +59,10 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import org.apache.commons.collections.ExtendedProperties;
 import org.apache.fulcrum.ServiceManager;
 import org.apache.fulcrum.TurbineServices;
-import org.apache.stratum.configuration.ConfigurationConverter;
+import org.apache.stratum.configuration.BaseConfiguration;
+import org.apache.stratum.configuration.Configuration;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -85,8 +85,8 @@ public class LocalizationTest
     public LocalizationTest(String name)
     {
         super(name);
-    }        
-    
+    }
+
     public static Test suite()
     {
         return new TestSuite(LocalizationTest.class);
@@ -99,17 +99,16 @@ public class LocalizationTest
             ServiceManager serviceManager = TurbineServices.getManager();
             serviceManager.setApplicationRoot(".");
 
-            ExtendedProperties cfg = new ExtendedProperties();
+            Configuration cfg = new BaseConfiguration();
             cfg.setProperty(PREFIX + "classname",
                             TurbineLocalizationService.class.getName());
             cfg.setProperty(PREFIX + "locale.default.bundles",
                             "FooBundle,MissingBundle,BarBundle");
             cfg.setProperty(PREFIX + "locale.default.language", "en");
             cfg.setProperty(PREFIX + "locale.default.country", "US");
-        
-            serviceManager.setConfiguration(
-                ConfigurationConverter.getConfiguration(cfg));
-        
+
+            serviceManager.setConfiguration(cfg);
+
             serviceManager.init();
 
             // Test retrieval of text using multiple default bundles
@@ -145,13 +144,13 @@ public class LocalizationTest
             }
             catch (MissingResourceException expectedFailure)
             {
-                // Asked for key from default bundle which does not exist, 
+                // Asked for key from default bundle which does not exist,
             }
         }
         catch (Exception e)
         {
             e.printStackTrace();
             fail();
-        }            
+        }
     }
 }
