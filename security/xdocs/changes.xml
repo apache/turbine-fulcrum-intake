@@ -6,6 +6,11 @@
   </properties>
 
   <body>
+  	<release version="1.0-alpha-6" date="in cvs">
+      <action dev="epugh" type="add">
+	  Added getAllUsers() to UserManager
+      </action>
+    </release>
     <release version="1.0-alpha-4" date="in cvs">
       <action dev="epugh" type="add">
 	  Added ThreadSafe marker interface to AbstractManager.
