@@ -62,25 +62,24 @@ import org.apache.fulcrum.ServiceBroker;
 import org.apache.fulcrum.TurbineServices;
 
 /**
- * Wrapper around the TurbineLocalization Service that makes it easy
- * to grab something from the service and make the code cleaner.
+ * <p>Wrapper around the TurbineLocalization Service that makes it easy
+ * to grab something from the service.</p>
  *
- * <p>
+ * <p>Instead of typing:
  *
- * Instead of typing:
+ * <blockquote><code><pre>
+ * ((LocalizationService)TurbineServices.getInstance()
+ *           .getService(LocalizationService.SERVICE_NAME))
+ *     .getBundle(data)
+ *     .getString(key)
+ * </pre></code></blockquote>
  *
- * <br>
+ * You need only type:
  *
- * ((LocalizationService)TurbineServices.getInstance()<br>
- *           .getService(LocalizationService.SERVICE_NAME))<br>
- *     .getBundle(data)<br>
- *     .getString(str)<br>
- *
- * Now you only need to type:
- *
- * <br>
- *
- * Localization.getString(str)
+ * <blockquote><code><pre>
+ * Localization.getString(key)
+ * </pre></code></blockquote>
+ * </p>
  *
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
@@ -96,12 +95,22 @@ public abstract class Localization
      * values.  If those cannot be found, then the JVM defaults are
      * used.
      *
-     * @param str Name of string.
+     * @param key Name of string.
      * @return A localized String.
      */
-    public static String getString(String str)
+    public static String getString(String key)
     {
-        return getService().getBundle().getString(str);
+        return getService().getBundle().getString(key);
+    }
+
+    /**
+     * @param key Name of the text to retrieve.
+     * @param locale Locale to get text for.
+     * @return Localized text.
+     */
+    public static String getString(String key, Locale locale)
+    {
+        return getService().getBundle(null, locale).getString(key);
     }
 
     /**
@@ -114,12 +123,20 @@ public abstract class Localization
      * defaults are used.
      *
      * @param req HttpServletRequest information.
-     * @param str Name of string.
+     * @param key Name of string.
      * @return A localized String.
      */
-    public static String getString(HttpServletRequest req, String str)
+    public static String getString(String key, HttpServletRequest req)
     {
-        return getService().getBundle(req).getString(str);
+        return getService().getBundle(req).getString(key);
+    }
+
+    /**
+     * @deprecated Use getString(String, HttpServletRequest) instead.
+     */
+    public static final String getString(HttpServletRequest req, String key)
+    {
+        return getString(key, req);
     }
 
     /**
@@ -128,14 +145,14 @@ public abstract class Localization
      * defined in the TurbineResources.properties file and the
      * specified language name in ISO format.
      *
-     * @param str Name of string.
+     * @param key Name of string.
      * @param lang Desired language for the localized string.
      * @return A localized string.
      */
-    public static String getString (String str, String lang)
+    public static String getString(String key, String lang)
     {
         return Localization.getBundle(getDefaultBundle(), new Locale(lang, ""))
-            .getString(str);
+            .getString(key);
     }
 
     /**
@@ -197,8 +214,7 @@ public abstract class Localization
      * @param locale A Locale.
      * @return A localized ResourceBundle.
      */
-    public static ResourceBundle getBundle(String bundleName,
-                                           Locale locale)
+    public static ResourceBundle getBundle(String bundleName, Locale locale)
     {
         return getService().getBundle(bundleName, locale);
     }
