@@ -16,8 +16,8 @@
     <maven:reactor
       basedir="${basedir}"
       includes="*/project.xml"
-      excludes="axis/*,summit/*"
-      goals="clean,java:jar,jar:install"
+      excludes="axis/*,summit/*,xmlrpc/*"
+      goals="clean,jar:jar,jar:install"
       banner="Building"
       ignoreFailures="false"
     />
@@ -37,8 +37,8 @@
       basedir="${basedir}"
       includes="*/project.xml"
       excludes="jcs/*"
-      goals="site:generate"
-      banner="Building"
+      goals="clean,site"
+      banner="Building Site :"
       ignoreFailures="false"
     />
    </goal>

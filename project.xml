@@ -188,6 +188,12 @@
       <version>2.1</version>
       <url>http://jakarta.apache.org/commons/collections.html</url>
     </dependency>
+    
+    <dependency>
+      <id>commons-configuration</id>
+      <version>20030706.202021</version>
+      <url>http://jakarta.apache.org/commons/sandbox/configuration</url>
+    </dependency>    
 
     <dependency>
       <id>excalibur-component</id>
@@ -299,11 +305,7 @@
       <id>commons-codec</id>
       <version>1.0-dev</version>
     </dependency>
-    <dependency>
-      <id>commons-configuration</id>
-      <version>SNAPSHOT</version>
-      <url>http://jakarta.apache.org/commons/</url>
-    </dependency>
+    
     <dependency>
       <id>commons-email</id>
       <version>20030310.165926</version>
@@ -513,8 +515,10 @@
     <!--
     <report>maven-junit-report-plugin</report>
     <report>maven-linkcheck-plugin</report>
-    -->
+    
     <report>maven-tasklist-plugin</report>
+    -->
+    <report>maven-pmd-plugin</report>
 
 
   </reports>
