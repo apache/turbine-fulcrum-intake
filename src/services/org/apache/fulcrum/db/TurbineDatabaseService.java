@@ -54,6 +54,7 @@ package org.apache.fulcrum.db;
  * <http://www.apache.org/>.
  */
 
+import org.apache.log4j.Category;
 import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
 import org.apache.fulcrum.TurbineServices;
@@ -104,6 +105,16 @@ public class TurbineDatabaseService
     public void shutdown()
     {
         Torque.shutdown();
+    }
+
+    /**
+     * The log4j category used for logging db service events.
+     *
+     * @return a <code>Category</code> value
+     */
+    public Category getCategory()
+    {
+        return Category.getInstance(getClass().getName());
     }
 
     /**
