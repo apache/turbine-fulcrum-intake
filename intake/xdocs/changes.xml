@@ -7,6 +7,9 @@
 
   <body>
     <release version="Not applicable" date="">
+      <action dev="epugh" type="add">
+      	Added the Intake class which is a facade to the underlying IntakeService.
+      </action>
       <action dev="epugh" type="fix">
        The intake validators were fixed so that fields with required=false 
        rules no longer attempt to execute the remaining rules when no

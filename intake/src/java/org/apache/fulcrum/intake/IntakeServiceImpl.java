@@ -764,7 +764,11 @@ public class IntakeServiceImpl
 	 * @throws InitializationException if initialization fails.
 	 */
 	public void initialize() throws Exception {
-
+		Intake.setIntakeService(this);
+		if (log.isInfoEnabled())
+		{
+			log.info("Intake Service is Initialized now..");
+		}
 	}
 
 	public void contextualize(Context context) throws ContextException {
