@@ -167,7 +167,7 @@ public abstract class BaseSecurityService
             }
             catch (Exception e)
             {
-                getCategory().error("Unable to encrypt password."+e.getMessage());
+                getCategory().error("Unable to encrypt password");
                 getCategory().error(e);
 
                 return null;
