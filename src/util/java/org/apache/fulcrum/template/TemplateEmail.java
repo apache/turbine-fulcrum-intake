@@ -165,14 +165,14 @@ public class TemplateEmail
     /**
      * Constructor
      */
-    public TemplateEmail ()
+    public TemplateEmail()
     {
     }
 
     /**
      * Constructor
      */
-    public TemplateEmail (TemplateContext context)
+    public TemplateEmail(TemplateContext context)
     {
         this.context = context;
     }
@@ -230,7 +230,14 @@ public class TemplateEmail
      */
     public TemplateEmail setSubject(String subject)
     {
-        this.subject = subject;
+        if (subject == null)
+        {
+            this.subject = "";
+        }
+        else
+        {
+            this.subject = subject;
+        }
         return (this);
     }
 
@@ -289,11 +296,17 @@ public class TemplateEmail
     }
 
     /**
-     * This method sends the email.
+     * This method sends the email. It will throw an exception
+     * if the To name or To Email values are null.
      */
     public void send()
         throws Exception
     {
+        if (toEmail == null || toName == null)
+        {
+            throw new Exception ("Must set a To:");
+        }
+
         // Process the template.
         String body = TurbineTemplate.handleRequest(context,template);
 
@@ -308,7 +321,10 @@ public class TemplateEmail
         SimpleEmail se = new SimpleEmail();
         se.setFrom(fromEmail, fromName);
         se.addTo(toEmail, toName);
-        se.addCc(ccEmail, ccName);
+        if (ccEmail != null && ccName != null)
+        {
+            se.addCc(ccEmail, ccName);
+        }
         se.setSubject(subject);
         se.setMsg(body);
         se.send();
