@@ -22,7 +22,7 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0.4</version>
+      <version>1.0.5-dev</version>
     </dependency>
     
     <dependency>
@@ -42,7 +42,7 @@
     <report>maven-multiproject-plugin</report>
     <report>maven-faq-plugin</report>    
     <report>maven-pmd-plugin</report>
-    <report>maven-simian-plugin</report>
+    <!-- report>maven-simian-plugin</report -->
 
     <report>maven-javadoc-plugin</report>
     <report>maven-jxr-plugin</report>      
