@@ -61,7 +61,6 @@ import org.apache.fulcrum.intake.xmlmodel.AppData;
 import org.apache.fulcrum.intake.xmlmodel.Rule;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 import org.apache.fulcrum.intake.xmlmodel.XmlGroup;
-import org.apache.xerces.framework.XMLParser;
 import org.apache.xerces.parsers.SAXParser;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
