@@ -1,7 +1,0 @@
-<!-- This configuration file for Avalon components is used for testing the TestComponent -->
-<role-list>
-  <role
-    name="org.apache.fulcrum.configuration.Config"
-    shorthand="config"
-    default-class="org.apache.fulcrum.configuration.DefaultConfigurationService"/>
-</role-list>
