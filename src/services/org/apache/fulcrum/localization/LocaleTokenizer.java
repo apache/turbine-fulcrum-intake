@@ -110,8 +110,14 @@ public class LocaleTokenizer
                 element = element.substring(0, index);
                 if ( (index = q.indexOf('=')) != -1 )
                 {
-                    acceptLang.quality =
-                        Float.parseFloat(q.substring(index + 1));
+                    try
+                    {
+                        acceptLang.quality =
+                            Float.valueOf(q.substring(index + 1));
+                    }
+                    catch (NumberFormatException useDefault)
+                    {
+                    }
                 }
             }
 
@@ -176,6 +182,8 @@ public class LocaleTokenizer
      */
     private class AcceptLanguage implements Comparable
     {
+        static final Float DEFAULT_QUALITY = new Float(1.0f);
+
         /**
          * The language and country.
          */
@@ -185,15 +193,11 @@ public class LocaleTokenizer
          * The quality of our locale (as values approach
          * <code>1.0</code>, they indicate increased user preference).
          */
-        float quality = 1.0f;
+        Float quality = DEFAULT_QUALITY;
 
         public final int compareTo(Object acceptLang)
         {
-            int i = (int) (quality * 10);
-            int j = (int) ( ((AcceptLanguage) acceptLang).quality * 10 );
-            //System.out.println("compareTo: i - j = " + i + " - " + j +
-            //                   " = " + (i - j));
-            return (i - j);
+            return quality.compareTo( ((AcceptLanguage) acceptLang).quality );
         }
     }
 }
