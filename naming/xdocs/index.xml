@@ -10,12 +10,9 @@
   <body>
 
   <section name="Overview">
-<p>
-The Naming Service provides access to JNDI contexts. Please note that if
-you are using Tomcat as your servlet engine and you get errors about
-sealing violations, you may need to read <a
-href="../howto/jboss-howto.html">this document</a>.
-</p>
+    <p>
+    The Naming Service provides access to JNDI contexts.
+    </p>
       
     <p>
       It is written 

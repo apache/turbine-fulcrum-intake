@@ -42,7 +42,7 @@
     <source>
 
     <![CDATA[
-        <cache cacheInitialSize="20" cacheCheckFrequency="5"/>
+        <bsf use-property-file="true" scriptsDirectory="WEB-INF/scripts" defaultExtension="py"/>
     ]]>
     </source>
 
