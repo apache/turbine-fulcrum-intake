@@ -46,12 +46,21 @@
 
    <!-- Needed for the Hibernate SPI -->
      <dependency>
+       <groupId>mckoi</groupId>      
+       <artifactId>mckoidb</artifactId>             
+       <version>1.0.2</version>
+     </dependency>    
+     <dependency>
+       <id>hsqldb</id>      
+       <version>1.7.1</version>
+     </dependency>    
+     <dependency>
        <id>hibernate</id>      
-       <version>2.0.1</version>
+       <version>2.0.2</version>
      </dependency>          
      <dependency>
        <id>hibernate:hibernate-avalon</id>
-       <version>0.1</version>       
+       <version>0.2</version>       
      </dependency>                
      <dependency>
        <id>odmg</id>      
@@ -419,6 +428,16 @@
 
   </dependencies>
 
+ <build>
+    <unitTest>
+      <includes>
+        <include>**/*Test.java</include>
+      </includes>
+ 	  <excludes>
+        <exclude>**/Abstract*.java</exclude>
+      </excludes>      
+    </unitTest>    
+  </build>
 
 </project>
 
