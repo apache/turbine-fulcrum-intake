@@ -61,8 +61,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.fulcrum.Service;
 
 /**
- * Provides localization functionality using the interface provided by
- * <code>ResourceBundle</code>.
+ * <p>Provides localization functionality using the interface provided
+ * by <code>ResourceBundle</code>, plus leverages a "search path"
+ * style traversal of the <code>ResourceBundle</code> objects named by
+ * the <code>locale.default.bundles</code> to discover a value for a
+ * given key.</p>
  *
  * <p>It is suggested that one handle
  * <a href="http://www.math.fu-berlin.de/~rene/www/java/tutorial/i18n/message/messageFormat.html">dealing with concatenated messages</a>

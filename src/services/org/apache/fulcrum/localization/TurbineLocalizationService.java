@@ -81,7 +81,8 @@ import org.apache.fulcrum.InitializationException;
  *     .getInstance().getService(LocalizationService.SERVICE_NAME);
  * </pre></code></blockquote>
  *
- * <p>Then call one of four methods to retrieve a ResourceBundle:
+ * <p>Then call {@link #getString(String, Locale, String)}, or one of
+ * four methods to retrieve a ResourceBundle:
  *
  * <ul>
  * <li>getBundle("MyBundleName")</li>
