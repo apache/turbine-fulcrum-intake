@@ -6,7 +6,10 @@
   </properties>
 
   <body>
-    <release version="1.0-alpha-4" date="in cvs">
+    <release version="1.0.4" date="in cvs">
+      <action dev="epugh" type="update">
+      	Update to use Merlin 3.3.0
+      </action>      
       <action dev="epugh" type="add">
         Committing first cut of Merlin enabled components..
       </action>

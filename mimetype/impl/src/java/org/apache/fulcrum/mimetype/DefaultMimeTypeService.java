@@ -350,6 +350,11 @@ public class DefaultMimeTypeService
             charSetMap = new CharSetMap();
         }
     }
+    
+    /**
+     * @see org.apache.avalon.framework.context.Contextualizable
+     * @avalon.entry key="urn:avalon:home" type="java.io.File"
+     */    
     public void contextualize(Context context) throws ContextException
     {
         this.context = context;
