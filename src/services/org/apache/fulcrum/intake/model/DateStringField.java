@@ -78,7 +78,7 @@ public class DateStringField extends Field
     {
         super(field, group);
         
-        if ( validator == null ) 
+        if ( validator == null || !(validator instanceof DateStringValidator)) 
         {
             df = DateFormat.getInstance();
             df.setLenient(true);
@@ -122,7 +122,7 @@ public class DateStringField extends Field
         try
         {
             // FIXME: Canonicalize user-entered date strings.
-            if ( df == null ) // guarantees validator != null
+            if (validator != null && validator instanceof DateStringValidator)
             {
                 date = ((DateStringValidator)validator).parse(dateString);
             }
@@ -136,5 +136,24 @@ public class DateStringField extends Field
             //ignore, return null
         }
         return date;
+    }
+
+    public String toString()
+    {
+        String s = null;
+        Object value = getValue();
+        if (value instanceof String) 
+        {
+            s = (String)value;
+        }
+        else if (validator != null && validator instanceof DateStringValidator) 
+        {
+            s= ((DateStringValidator)validator).format((Date)value);
+        }
+        else 
+        {
+            s = df.format((Date)value);
+        }
+        return s;
     }
 }

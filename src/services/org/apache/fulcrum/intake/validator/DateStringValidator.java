@@ -215,6 +215,11 @@ public class DateStringValidator
         return date;
     }
 
+    public String format(Date date)
+    {
+        sdf.applyPattern((String)dateFormats.get(0));
+        return sdf.format(date);                
+    }
 
 
     // ************************************************************
