@@ -6,8 +6,8 @@
        <repository>
          <resource id="fulcrum:fulcrum-localization-api" version="1.0-alpha-4"/>
          <resource id="fulcrum:fulcrum-localization-impl" version="1.0-alpha-4"/>
-         <resource id="fulcrum:fulcrum-factory-api" version="1.0-alpha-1"/>
-         <resource id="fulcrum:fulcrum-factory-impl" version="1.0-alpha-1"/>
+         <resource id="fulcrum:fulcrum-factory-api" version="1.0-alpha-2"/>
+         <resource id="fulcrum:fulcrum-factory-impl" version="1.0-alpha-2"/>
          <resource id="servletapi:servletapi" version="2.3"/>
          <resource id="commons-lang:commons-lang" version="2.0"/>
          <resource id="commons-logging:commons-logging" version="1.0.3"/>

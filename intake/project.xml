@@ -20,7 +20,7 @@
     <dependency>
       <groupId>fulcrum</groupId>    
       <artifactId>fulcrum-factory-api</artifactId>
-      <version>1.0-alpha-1</version>
+      <version>1.0-alpha-2</version>
     </dependency>  
     
     <dependency>
