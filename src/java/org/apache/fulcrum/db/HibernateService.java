@@ -66,13 +66,13 @@ import org.apache.avalon.framework.component.Component;
 import org.apache.torque.Torque;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.map.DatabaseMap;
-
-import cirrus.hibernate.Hibernate;
-import cirrus.hibernate.Datastore;
-import cirrus.hibernate.Session;
-import cirrus.hibernate.SessionFactory;
-import cirrus.hibernate.sql.Dialect;
-import cirrus.hibernate.tools.SchemaExport;
+import net.sf.hibernate.*;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.SessionFactory;
+import net.sf.hibernate.cfg.Configuration;
+import net.sf.hibernate.dialect.*;
+import net.sf.hibernate.tool.hbm2ddl.SchemaExport;
+import net.sf.hibernate.HibernateException;
 
 /**
  * Fulcrum's default implementation of the Hibernate Object Modeling tool.
@@ -83,7 +83,7 @@ import cirrus.hibernate.tools.SchemaExport;
 public class HibernateService extends AbstractLogEnabled implements Initializable, Configurable, Startable, Component
 {
     private String xmlFile;
-    private Datastore datastore;
+    private net.sf.hibernate.cfg.Configuration configuration;
     private SessionFactory sessionFactory;
 
     /** Avalon role - used to id the component within the manager */
@@ -91,16 +91,16 @@ public class HibernateService extends AbstractLogEnabled implements Initializabl
 
     public static final String SERVICE_NAME = "HibernateService";
     public static final String XML_FILE = "xmlFile";
-    public Datastore getDatastore()
+    public net.sf.hibernate.cfg.Configuration getConfiguration()
     {
-        return datastore;
+        return configuration;
     }
 
     /** 
      * returns a Hibernate Session object that can then be used from now on! 
      * 
      */
-    public Session openSession() throws java.sql.SQLException
+    public Session openSession() throws HibernateException
     {
         return sessionFactory.openSession();
     }
@@ -114,12 +114,13 @@ public class HibernateService extends AbstractLogEnabled implements Initializabl
     {
         try
         {
-            getLogger().info("Preparing HibernateService with xml file " + xmlFile);
-            datastore = Hibernate.createDatastore();
-            datastore.storeFile(xmlFile);
+            
+            //getLogger().info("Preparing HibernateService with xml file " + xmlFile);
+            configuration =new net.sf.hibernate.cfg.Configuration().configure();
+            
             
             //      Then build a session to the database
-            sessionFactory = datastore.buildSessionFactory();
+            sessionFactory = configuration.buildSessionFactory();
         }
         catch (Exception e)
         {
@@ -130,14 +131,13 @@ public class HibernateService extends AbstractLogEnabled implements Initializabl
     /**
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
-    public void configure(Configuration configuration) throws ConfigurationException
+    public void configure(org.apache.avalon.framework.configuration.Configuration configuration) throws ConfigurationException
     {
         getLogger().info("Configuring HibernateService");
         xmlFile = configuration.getAttribute(XML_FILE, null);
-
-        if (xmlFile == null)
-        {
-            throw new ConfigurationException("You must provide a the xml file to load Hibernate mappings from!");
+        
+        if (xmlFile == null){
+            getLogger().warn("No XmlFile provided for configuration.");
         }
 
     }

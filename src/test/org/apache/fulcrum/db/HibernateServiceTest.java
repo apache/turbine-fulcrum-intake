@@ -1,11 +1,11 @@
 package org.apache.fulcrum.db;
 
-import org.apache.plexus.PlexusTestCase;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.SessionFactory;
+import net.sf.hibernate.cfg.*;
+import net.sf.hibernate.tool.hbm2ddl.SchemaExport;
 
-import cirrus.hibernate.Datastore;
-import cirrus.hibernate.Session;
-import cirrus.hibernate.SessionFactory;
-import cirrus.hibernate.tools.SchemaExport;
+import org.apache.plexus.PlexusTestCase;
 
 /**
  * HibernateServiceTest
@@ -34,9 +34,9 @@ public class HibernateServiceTest extends PlexusTestCase
 
         HibernateService hibernateService = (HibernateService) getComponent(HibernateService.ROLE);
 
-        Datastore ds = hibernateService.getDatastore();
+        Configuration c = hibernateService.getConfiguration();
 
-        new SchemaExport(ds).create(true, true);
+        new SchemaExport(c).create(true, true);
 
         Labor labor = new Labor();
         Labor labor2 = new Labor();
