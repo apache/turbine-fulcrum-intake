@@ -26,13 +26,3 @@ services are only going to be used in Turbine at first. The
 separate build for each service will isolate the coupling
 to a service. A service can state it's deps and have properties
 set to satisfy any requirements.
-
-The following classes are also used all over the services
-so we need to get these in a common location. Maybe have
-a little build for Turbine utilties until we get them
-in the commons:
-
-ObjectUtils.java
-StringStackBuffer.java
-StringUtils.java
-list
