@@ -7,6 +7,7 @@
   <!-- Set default values for the build -->
   <property file="default.properties" />
 
+  <property name="omStatusFile" value="${build.dir}/report.turbine.om.generation"/>
 
   <!-- ================================================================ -->
   <!-- I N I T  T A R G E T                                             -->
