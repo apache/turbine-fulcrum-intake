@@ -5,3 +5,4 @@ maven.log
 .classpath
 .project
 OldSite
+*.patch
