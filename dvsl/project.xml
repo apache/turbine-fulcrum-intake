@@ -5,7 +5,7 @@
   <id>fulcrum-dvsl</id>
   <extend>${basedir}/../project.xml</extend>
   <name>Fulcrum DVSL</name>
-  <currentVersion>1.0.5</currentVersion>
+  <currentVersion>1.0.6-dev</currentVersion>
   <package>org.apache.fulcrum.dvsl</package>
   <versions>
     <version>
@@ -52,6 +52,7 @@
       <version>1.2.8</version>
       <url>http://jakarta.apache.org/log4j/</url>
     </dependency>   
+	
     <!--  Needed only for testing -->
     <dependency>
       <groupId>fulcrum</groupId>
@@ -64,6 +65,14 @@
       <artifactId>fulcrum-yaafi</artifactId>
       <version>1.0.3</version>
     </dependency>
+	
+	<!-- Needed for Gump -->
+    <dependency>
+      <groupId>avalon-logkit</groupId>
+      <artifactId>avalon-logkit</artifactId>
+      <version>2.0.0</version>
+      <url>http://avalon.apache.org</url>
+    </dependency> 	
 
   </dependencies>
 
