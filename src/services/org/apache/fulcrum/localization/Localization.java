@@ -105,29 +105,29 @@ public abstract class Localization
     }
 
     /**
-     * @param key Name of the text to retrieve.
-     * @param locale Locale to get text for.
-     * @return Localized text.
+     * @see org.apache.fulcrum.localization.LocalizationService#getString(String, Locale, String)
      */
-    public static String getString(String key, Locale locale)
+    public static String getString(Locale locale, String key)
     {
-        return getService().getBundle(null, locale).getString(key);
+        return getService().getString(null, locale, key);
     }
 
     /**
-     * Pulls a string out of the LocalizationService and attempts to
-     * determine the Locale by the Accept-Language header.  If that
-     * header is not present, it will fall back to using the locale
-     * values of what is defined in the TurbineResources.properties
-     * file for the locale.default.language and locale.default.country
-     * property values.  If those cannot be found, then the JVM
-     * defaults are used.
+     * Fetches the localized text from the specified bundle, ignoring
+     * any default bundles.
      *
-     * @param req HttpServletRequest information.
-     * @param key Name of string.
-     * @return A localized String.
+     * @see org.apache.fulcrum.localization.LocalizationService#getString(String, Locale, String)
      */
-    public static String getString(String key, HttpServletRequest req)
+    public static String getString(String bundleName, Locale locale,
+                                   String key)
+    {
+        return getService().getString(bundleName, locale, key);
+    }
+
+    /**
+     * @see org.apache.fulcrum.localization.LocalizationService#getString(HttpServletRequest, String)
+     */
+    public static String getString(HttpServletRequest req, String key)
     {
         return getService().getBundle(req).getString(key);
     }
@@ -216,6 +216,7 @@ public abstract class Localization
      * This method sets the name of the default bundle.
      *
      * @param defaultBundle Name of default bundle.
+     * @see org.apache.fulcrum.localization.LocalizationService#setBundle(String)
      */
     public static void setBundle(String defaultBundle)
     {
@@ -223,12 +224,7 @@ public abstract class Localization
     }
 
     /**
-     * Attempts to pull the <code>Accept-Language</code> header out of
-     * the HttpServletRequest object and then parse it.  If the header
-     * is not present, it will return a null Locale.
-     *
-     * @param req HttpServletRequest.
-     * @return A Locale.
+     * @see org.apache.fulcrum.localization.LocalizationService#getLocale(HttpServletRequest)
      */
     public static Locale getLocale(HttpServletRequest req)
     {
@@ -248,7 +244,7 @@ public abstract class Localization
     }
 
     /**
-     * @see org.apache.fulcrum.localization.LocalizationService#getDefaultBundle()
+     * @see org.apache.fulcrum.localization.LocalizationService#getDefaultBundleName()
      */
     public static String getDefaultBundleName()
     {
@@ -291,5 +287,25 @@ public abstract class Localization
                                 String key, Object[] args)
     {
         return getService().format(bundleName, locale, key, args);
+    }
+
+
+    // ---- Deprecated method(s) -------------------------------------------
+
+    /**
+     * @deprecated Use getString(Locale, String) instead.
+     */
+    public static String getString(String key, Locale locale)
+    {
+        return getString(locale, key);
+    }
+
+
+    /**
+     * @deprecated Use getString(HttpServletRequest, String) instead.
+     */
+    public static String getString(String key, HttpServletRequest req)
+    {
+        return getString(req, key);
     }
 }
