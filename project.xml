@@ -209,9 +209,9 @@
   <build>
         
     <sourceDirectories>
-      <sourceDirectory>src/core</sourceDirectory>
-      <sourceDirectory>src/services</sourceDirectory>
-      <sourceDirectory>src/util</sourceDirectory>
+      <sourceDirectory>src/core/java</sourceDirectory>
+      <sourceDirectory>src/services/java</sourceDirectory>
+      <sourceDirectory>src/util/java</sourceDirectory>
     </sourceDirectories>  
 
     <testSourceDirectories>
