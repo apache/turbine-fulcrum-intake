@@ -56,10 +56,11 @@ package org.apache.fulcrum.security.adapter.turbine;
 import com.mockobjects.servlet.MockHttpServletRequest;
 
 /**
- * @author Eric Pugh
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * Needed to extend the stand MockHttpServletRequest to work with
+ * Turbine.
+ * 
+ * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
+ * @version $Id$
  */
 public class BetterMockHttpServletRequest extends MockHttpServletRequest
 {

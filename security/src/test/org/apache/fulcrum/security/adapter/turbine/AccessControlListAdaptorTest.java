@@ -88,6 +88,15 @@ import org.apache.turbine.util.security.RoleSet;
 import com.mockobjects.servlet.MockHttpServletResponse;
 import com.mockobjects.servlet.MockHttpSession;
 import com.mockobjects.servlet.MockServletConfig;
+
+/**
+ * Test that we can load up a fulcrum ACL in Turbine, without Turbine
+ * knowing that anything has changed.
+ * 
+ * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
+ * @version $Id$
+ */
+
 public class AccessControlListAdaptorTest extends BaseUnitTest
 {
     private static final String PREFIX = "services." + SecurityService.SERVICE_NAME + '.';

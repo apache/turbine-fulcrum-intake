@@ -58,10 +58,11 @@ import junit.framework.TestCase;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
 /**
- * @author Eric Pugh
- *
- * Test that we can use a GroupAdapter with a Group that has various
- * types of Id objects.
+ * Test that we can use a GroupAdapter with a Group that has 
+ * various types of Id objects.
+ * 
+ * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
+ * @version $Id$
  */
 public class GroupAdapterTest extends TestCase
 {

@@ -58,10 +58,11 @@ import junit.framework.TestCase;
 import org.apache.fulcrum.security.entity.SecurityEntity;
 import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
 /**
- * @author Eric Pugh
- *
- * Test that we can use a GroupAdapter with a Group that has various
- * types of Id objects.
+ * Test that we can use a BaseAdapter with a SecurityEntity that has 
+ * various types of Id objects.
+ * 
+ * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
+ * @version $Id$
  */
 public class BaseAdapterTest extends TestCase
 {
