@@ -11,15 +11,6 @@ mkdir -p src/java/org/apache/turbine
 cd src/java/org/apache/turbine
 ln -s <fullpath-to-turbine-package>/services services
 
-SecurityService
----------------
-
-BaseSecurityService.java is tied to JavaMail simply for the
-base64 encoding. There are a number of base64 encoding
-classes in Jakarta, take one of those and get rid of
-this tie.
-The base64 encoder from Tomcat is a possible replacement.
-
 TemplateService
 ---------------
 
