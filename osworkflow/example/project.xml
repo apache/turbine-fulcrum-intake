@@ -41,7 +41,7 @@
     <dependency>
       <groupId>turbine</groupId>
       <artifactId>turbine</artifactId>
-      <version>2.3</version>
+      <version>2.3.1</version>
       <url>http://jakarta.apache.org/turbine/</url>
       <properties>        
         <war.bundle>true</war.bundle>
