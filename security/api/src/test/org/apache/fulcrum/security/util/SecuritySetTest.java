@@ -114,11 +114,40 @@ public class SecuritySetTest extends TestCase
         assertFalse(securitySet.containsName(null));
         g = new DynamicGroup();
         g.setName("BOB");
-		g.setId("BOB");
+        g.setId("BOB");
 
         ((GroupSet) securitySet2).add(g);
         securitySet.removeAll(securitySet2);
-        assertEquals(0,securitySet.size());
+        assertEquals(0, securitySet.size());
+    }
+
+    public void testToArray() throws Exception
+    {
+        SecuritySet securitySet = getTestData();
+        Object array[] = securitySet.toArray();
+        assertEquals(2, array.length);
+        Object array2[] = new Object[2];
+        array2[0]="hi";
+        Object array3[]= securitySet.toArray(array2);
+		assertEquals(2, array3.length);
+    }
+
+    private SecuritySet getTestData()
+    {
+        SecuritySet securitySet = new GroupSet();
+        assertFalse(securitySet.containsName(null));
+        Group g = new DynamicGroup();
+        g.setName("JOE");
+        g.setId("JOE");
+
+        Group g2 = new DynamicGroup();
+        g2.setName("RICK");
+        g2.setId("RICK");
+
+		((GroupSet) securitySet).add(g);
+		((GroupSet) securitySet).add(g2);
+
+        return securitySet;
     }
 
 }

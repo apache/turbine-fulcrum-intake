@@ -291,7 +291,7 @@ public abstract class SecuritySet implements Serializable, Set
 	 */
     public Object[] toArray(Object[] a)
     {
-        throw new RuntimeException("not implemented");
+        return getSet().toArray(a);
     }
     
     public SecurityEntity getByName(String name){
