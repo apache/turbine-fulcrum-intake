@@ -25,6 +25,7 @@
     <pathelement location="${jdbc.jar}"/>
     <pathelement location="${javamail.jar}"/>
     <pathelement location="${jaf.jar}"/>
+    <pathelement location="${commons-util.jar}"/>
   </path>
 
   <!-- ================================================================== -->
@@ -44,6 +45,7 @@
     <echo message="jaf.jar = ${jaf.jar}"/>
     <echo message="xalan.jar = ${xalan.jar}"/>
     <echo message="xmlrpc.jar = ${xmlrpc.jar}"/>
+    <echo message="commons-util.jar = ${commons-util.jar}"/>
   </target>
 
   <!-- ================================================================== -->
