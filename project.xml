@@ -160,7 +160,7 @@
     </dependency>
     <dependency>
       <id>log4j</id>
-      <version>1.2.4</version>
+      <version>1.2.6</version>
     </dependency>
     <dependency>
       <id>javamail</id>
@@ -178,7 +178,7 @@
     </dependency>
     <dependency>
       <id>stratum</id>
-      <version>1.0-b2-dev</version>
+      <version>1.0-b3-dev</version>
       <url>http://jakarta.apache.org/turbine/stratum/</url>
     </dependency>
     <dependency>
