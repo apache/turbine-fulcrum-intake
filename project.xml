@@ -224,7 +224,7 @@
     <dependency>
       <name>jakarta-velocity-dvsl</name>
       <type>documentation</type>
-      <version>0.40</version>
+      <version>0.43</version>
       <jar>velocity-dvsl-0.43.jar</jar>
     </dependency>
 
