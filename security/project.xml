@@ -6,6 +6,7 @@
   <currentVersion>1.0-alpha-1</currentVersion>
 
   <dependencies>
+
     <dependency>
       <id>commons-lang</id>
       <version>1.0.1</version>
@@ -118,6 +119,24 @@
       <url>http://xml.apache.org/xerces2-j/</url>
     </dependency>
 
+<!-- alternative testing of sql -->
+<!--
+    <dependency>
+	  <id>msbase</id>
+	  <version/>
+	  <jar>msbase.jar</jar>
+	</dependency>
+	<dependency>
+   	  <id>mssqlserver</id>
+	  <version/>
+	  <jar>mssqlserver.jar</jar>
+	</dependency>
+	<dependency>
+   	  <id>msutil</id>
+	  <version/>
+	  <jar>msutil.jar</jar>
+	</dependency>  
+-->		
 	<!-- Needed only for testing the adaptors -->
     <dependency>
       <id>stratum</id>
