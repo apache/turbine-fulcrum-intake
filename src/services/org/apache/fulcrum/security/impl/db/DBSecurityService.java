@@ -656,6 +656,7 @@ public class DBSecurityService
             {
                 Criteria criteria = TurbineGroupPeer.buildCriteria(group);
                 TurbineGroupPeer.doUpdate(criteria);
+                return;
             }
         }
         catch(Exception e)
@@ -684,6 +685,7 @@ public class DBSecurityService
             {
                 Criteria criteria = TurbineRolePeer.buildCriteria(role);
                 TurbineRolePeer.doUpdate(criteria);
+                return;
             }
         }
         catch(Exception e)
@@ -713,6 +715,7 @@ public class DBSecurityService
             {
                 Criteria criteria = TurbinePermissionPeer.buildCriteria(permission);
                 TurbinePermissionPeer.doUpdate(criteria);
+                return;
             }
         }
         catch(Exception e)
