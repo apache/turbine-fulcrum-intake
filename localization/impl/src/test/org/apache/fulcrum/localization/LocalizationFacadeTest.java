@@ -56,10 +56,6 @@ package org.apache.fulcrum.localization;
 // Cactus and Junit imports
 import java.util.Locale;
 
-import junit.awtui.TestRunner;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
 
 /**
@@ -98,6 +94,8 @@ public class LocalizationFacadeTest extends AbstractMerlinTestCase
     {
         // this.lookup causes the service to be configured.
         this.resolve( "/test/localization" );
+        LocalizationService ls = (LocalizationService) this.resolve( "/test/localization" );
+        ls.getString(null, new Locale("ko", "KR"), "key4");
         assertTrue(Localization.isInitialized());
         String s = Localization.getString(null, new Locale("ko", "KR"), "key4");
         assertEquals(

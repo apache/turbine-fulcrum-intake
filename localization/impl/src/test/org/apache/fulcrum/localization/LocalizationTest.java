@@ -55,9 +55,6 @@ package org.apache.fulcrum.localization;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
 
 /**
