@@ -6,7 +6,7 @@
   </properties>
 
   <body>
-	 <release version="1.0.4" date="">
+	 <release version="1.0.5" date="2004-11-24">
       <action dev="epugh" type="update" due-to="Kostyantyn Shchekotykhin">
         Merge api and impl jars into one project.
       </action> 

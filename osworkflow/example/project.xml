@@ -5,10 +5,16 @@
   <pomVersion>3</pomVersion>
   <name>Fulcrum OSWorkflow Example Webapp</name>
   <id>fulcrum-osworkflow-example</id>
-  <currentVersion>1.0.1-dev</currentVersion>
+  <currentVersion>1.0.1</currentVersion>
   <inceptionYear>2003</inceptionYear>
   <package>org.apache.fulcrum.osworkflow.example</package>
-
+  <versions>
+    <version>
+      <id>1.0.1</id>
+      <name>1.0.1</name>
+      <tag>FULCRUM_OSWORKFLOW_EXAMPLE_1_0_1</tag>
+    </version>
+  </versions>
   <shortDescription>An example application implementing workflow.</shortDescription>
   <description>This is a small example application using the Turbine framework with the Fulcrum OSWorkflow component.  The engine underneath
     is provided by OpenSymphony's OSWorkflow project.</description>
@@ -51,7 +57,7 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-osworkflow</artifactId>
-      <version>1.0-alpha-1</version>
+      <version>1.0.1</version>
       <url>http://jakarta.apache.org/turbine/fulcrum/osworkflow</url>
       <properties>        
         <war.bundle>true</war.bundle>

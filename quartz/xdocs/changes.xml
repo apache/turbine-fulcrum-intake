@@ -6,7 +6,7 @@
   </properties>
 
   <body>
-    <release version="1.0.0" date="">
+    <release version="1.0" date="2004-11-24">
      <action dev="epugh" type="add">
         If you provide a jobName and jobGroup for a trigger it will autoschedule
         that component.

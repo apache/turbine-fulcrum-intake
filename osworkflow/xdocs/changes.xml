@@ -6,7 +6,7 @@
   </properties>
 
   <body>
-    <release version="in cvs" date="">
+    <release version="1.0.1" date="2004-11-24">
       <action dev="ycho" type="add">
         New WorkflowServiceFacade.
       </action>

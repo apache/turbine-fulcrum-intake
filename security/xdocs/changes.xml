@@ -6,7 +6,7 @@
   </properties>
 
   <body>
-    <release version="1.0.7" date="in cvs">
+    <release version="1.0.7" date="2004-11-24">
       <action dev="epugh" type="add" due-to="Ben Gidley">
         Add test to verify that usernames bob and BOB are treated the same.
       </action>     

@@ -3,8 +3,14 @@
   <extend>${basedir}/../project.xml</extend>
   <id>fulcrum-osworkflow</id>
   <name>Fulcrum OSWorkflow Component</name>
-  <currentVersion>1.0.1-dev</currentVersion>
-
+  <currentVersion>1.0.1</currentVersion>
+  <versions>
+    <version>
+      <id>1.0.1</id>
+      <name>1.0.1</name>
+      <tag>FULCRUM_OSWORKFLOW_1_0_1</tag>
+    </version>
+  </versions>
   <contributors>
     <contributor>
       <name>Youngho Cho</name>

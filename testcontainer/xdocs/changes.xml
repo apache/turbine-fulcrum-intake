@@ -7,7 +7,7 @@
   </properties>
 
   <body>
-  	<release version="1.0.4-dev" date="in cvs">    
+  	<release version="1.0.4" date="2004-11-24">    
       <action dev="epugh" type="add">
         By default use Yaafi as the Test container, but you can swap to ECM for
         more "real" testing if required by doing <code>containerType=CONTAINER_ECM;</code>.

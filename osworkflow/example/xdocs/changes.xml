@@ -6,7 +6,7 @@
   </properties>
 
   <body>
-    <release version="Not applicable" date="">
+    <release version="1.0.1" date="2004-11-24">
       <action dev="ycho" type="add">
         Tweak documentation with more details on building.  Fix link to CVS.
       </action> 

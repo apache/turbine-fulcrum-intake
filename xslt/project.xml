@@ -3,8 +3,14 @@
   <extend>${basedir}/../project.xml</extend>
   <id>fulcrum-xslt</id>
   <name>Fulcrum XSLT Component</name>
-  <currentVersion>1.0.3-dev</currentVersion>
-
+  <currentVersion>1.0.3</currentVersion>
+  <versions>
+    <version>
+      <id>1.0.3</id>
+      <name>1.0.3</name>
+      <tag>FULCRUM_XSLT_1_0_3</tag>
+    </version>
+  </versions>
   <dependencies>
   
     
@@ -12,13 +18,13 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0.4-dev</version>
+      <version>1.0.4</version>
     </dependency>
     
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
-      <version>1.0.3-dev</version>
+      <version>1.0.3</version>
     </dependency>
 
 

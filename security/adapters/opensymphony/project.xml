@@ -8,12 +8,12 @@
     <dependency>
       <groupId>fulcrum</groupId>   
       <artifactId>fulcrum-security-api</artifactId>
-      <version>1.0.7-dev</version>
+      <version>1.0.7</version>
     </dependency>      
     <dependency>
       <groupId>fulcrum</groupId>   
       <artifactId>fulcrum-crypto</artifactId>
-      <version>1.0.5-dev</version>
+      <version>1.0.5</version>
     </dependency>
     
     <dependency>

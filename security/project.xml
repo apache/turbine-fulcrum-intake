@@ -3,9 +3,15 @@
   <extend>${basedir}/../project.xml</extend>
   <id>fulcrum-security-site</id>
   <name>Fulcrum Security Site</name>
-  <currentVersion>1.0.7-dev</currentVersion>
+  <currentVersion>1.0.7</currentVersion>
   <package>org.apache.fulcrum.security</package>
-
+  <versions>
+    <version>
+      <id>1.0.7</id>
+      <name>1.0.7</name>
+      <tag>FULCRUM_SECURITY_1_0_7</tag>
+    </version>
+  </versions>
  <contributors>
     <contributor>
       <name>Ben Gidley</name>
@@ -43,13 +49,13 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0.4-dev</version>
+      <version>1.0.4</version>
     </dependency>
     
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
-      <version>1.0.3-dev</version>
+      <version>1.0.3</version>
     </dependency>     
   </dependencies>
   <resources>
