@@ -51,7 +51,7 @@ public class FileResourceManager
 
     /** the cached list of all available resources */
     private String[] resourceFileNameList;
-
+    
     /////////////////////////////////////////////////////////////////////////
     // Avalon Service Lifecycle Implementation
     /////////////////////////////////////////////////////////////////////////
@@ -79,6 +79,12 @@ public class FileResourceManager
 
         this.useLocator = cfg.getChild(CONFIG_KEY_USELOCATOR).getValueAsBoolean(false);
 
+        // are we using encryption/decryption
+        
+        this.setUseEncryption(
+            cfg.getChild(CONFIG_KEY_USEENCRYPTION).getValue("false")
+            );
+        
         // locate the directory where we the resources are located
 
         String currLocationName = cfg.getChild(CONFIG_KEY_LOCATION).getValue();
@@ -125,7 +131,17 @@ public class FileResourceManager
         this.resourceDir = null;
         this.resourceFileNameList = null;
     }
-
+    
+    /**
+     * @see org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.apache.avalon.framework.configuration.Configuration)
+     */
+    public void reconfigure(Configuration configuration)
+        throws ConfigurationException
+    {
+        super.reconfigure( configuration );
+        this.configure(configuration);
+    }
+    
     /////////////////////////////////////////////////////////////////////////
     // Service interface implementation
     /////////////////////////////////////////////////////////////////////////
@@ -178,15 +194,12 @@ public class FileResourceManager
         throws IOException
     {
         File resourceFile = new File( this.getResourceDir(), resourcePath );
-
         this.getLogger().debug( "Creating resource : " + resourceFile.getAbsolutePath() );
-
-        byte[] byteContent = this.getContent( resourceContent);
-        FileOutputStream fos = new FileOutputStream( resourceFile );        
-        fos.write(byteContent);
+        byte[] byteContent = this.getContent( resourceContent);        
+        FileOutputStream fos = new FileOutputStream(resourceFile);
+        this.write( fos, byteContent );        
         fos.flush();
         fos.close();
-
         this.createResourceFileNameList();
     }
             
@@ -203,10 +216,9 @@ public class FileResourceManager
         if( resourceFile != null )
         {
             this.getLogger().debug( "Loading the resource : " + resourceFile.getAbsolutePath() );
-	        FileInputStream fis = new FileInputStream(resourceFile);
-	        result = new byte[fis.available()];
-	        fis.read(result);
-	        fis.close();
+            FileInputStream fis = new FileInputStream(resourceFile);
+            result = this.read( fis );
+            fis.close();            
 	        return result;
         }
         else
@@ -346,7 +358,7 @@ public class FileResourceManager
     {
         return this.resourceDir;
     }
-
+    
     /**
      * Finds the resource file for the given name.
      * @param resourceName the script name
@@ -497,5 +509,5 @@ public class FileResourceManager
         result.append( resourceName );
         
         return result.toString();
-    }
+    }    
 }

@@ -107,9 +107,15 @@ public class ResourceManagerServiceTest extends BaseUnitTest
     public void testListDomains() throws Exception
     {
         // get a list of available domains
+        // 
+        // -) crypto
+        // -) scripts
+        // -) test
+        // -) xslt
+        //        
 
         String [] result = this.service.listDomains();
-        assertTrue( result.length == 3 );
+        assertTrue( result.length == 4 );
     }
 
     /**
@@ -228,6 +234,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
         result = new String( this.service.read( resourceDomain, resourceName ), "utf-16" );
         assertEquals( result, resourceContent );
         this.service.delete( resourceDomain, resourceName );
+        assertFalse( this.service.exists( resourceDomain, resourceName ) );
 
         // use a java.io.InputStream
 
@@ -235,16 +242,19 @@ public class ResourceManagerServiceTest extends BaseUnitTest
         resourceContent = "Hello World";
         FileInputStream fis = new FileInputStream( "project.xml" );
         this.service.create( resourceDomain, resourceName, fis );
+        fis.close();
         assertTrue( this.service.read(resourceDomain,resourceName).length > 0 );
         this.service.delete( resourceDomain, resourceName );
+        assertFalse( this.service.exists( resourceDomain, resourceName ) );
 
         // use java.util.Properties
 
         resourceName = "properties.txt";
-        Properties props = new Properties();
+        Properties props = new Properties(); 
         props.setProperty("foo","bar");
         this.service.create( resourceDomain, resourceName, props );
         this.service.delete( resourceDomain, resourceName );
+        assertFalse( this.service.exists( resourceDomain, resourceName ) );
 
         // use a java.util.Date - throws an exception
 
@@ -277,6 +287,36 @@ public class ResourceManagerServiceTest extends BaseUnitTest
         // look for an existing resource
         location = this.service.getResourceURL( resourceDomain, resourceContext, "foo.groovy" );   
         assertNotNull( location );
+    }
+    
+    /**
+     * Create a resource file using the various input data types
+     */
+    public void testAutoDecrytpion() throws Exception
+    {
+        String result = null;
+        String resourceDomain = "crypto";
+        String resourceName = null;
+        String resourceContent = null;
+
+        // dump a text which is automatically encrypted
+
+        resourceName = "lyrics.txt";
+        resourceContent = "Nobody knows the troubles I have seen ...";
+        assertFalse( this.service.exists( resourceDomain, resourceName ) );
+        this.service.create( resourceDomain, resourceName, resourceContent.getBytes() );
+        assertTrue( this.service.exists( resourceDomain, resourceName ) );
+        result = new String( this.service.read( resourceDomain, resourceName ) );
+        assertEquals( result, resourceContent );
+        this.service.delete( resourceDomain, resourceName );
+        assertFalse( this.service.exists( resourceDomain, resourceName ) );
+
+        // load a plain text resource
+        
+        resourceName = "plain.txt";
+        assertTrue( this.service.exists( resourceDomain, resourceName ) );
+        result = new String( this.service.read( resourceDomain, resourceName ) );
+        assertTrue( result.indexOf("http://www.apache.org/licenses/LICENSE-2.0") > 0 );        
     }
     
     /**

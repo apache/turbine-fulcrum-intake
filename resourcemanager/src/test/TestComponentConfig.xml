@@ -17,7 +17,14 @@
       <suffix>txt</suffix>
       <location>./src/test/resources/test</location>
       <useLocator>false</useLocator>
+      <useEncryption>true</useEncryption>
     </domain>    
+    <domain name="crypto" type="org.apache.fulcrum.resourcemanager.impl.FileResourceManager">
+      <suffix>txt</suffix>
+      <location>./src/test/resources/crypto</location>
+      <useLocator>false</useLocator>
+      <useEncryption>auto</useEncryption>
+    </domain>        
   </ResourceManagerService>
   
 </componentConfig>

@@ -19,10 +19,12 @@ package org.apache.fulcrum.resourcemanager.impl;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Properties;
 
 import org.apache.avalon.framework.activity.Disposable;
@@ -30,6 +32,7 @@ import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.configuration.Reconfigurable;
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
@@ -38,6 +41,7 @@ import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 import org.apache.fulcrum.resourcemanager.ResourceManager;
+import org.apache.fulcrum.pbe.PBEService;
 
 /**
  * Base class for a service implementation capturing the Avalon
@@ -48,7 +52,8 @@ import org.apache.fulcrum.resourcemanager.ResourceManager;
 
 public abstract class BaseResourceManager
 	extends AbstractLogEnabled
-    implements Contextualizable, Serviceable, Configurable,  Initializable, Disposable, ResourceManager
+    implements Contextualizable, Serviceable, Configurable,  
+    	Initializable, Disposable, Reconfigurable, ResourceManager
 {
     /** The context supplied by the avalon framework */
     private Context context;
@@ -68,6 +73,16 @@ public abstract class BaseResourceManager
     /** the name of the domain */
     private String domain;
 
+    /** the seed to generate the password */
+    private String seed;
+    
+    /** use transparent encryption/decryption */
+    private String useEncryption;   
+    
+    /////////////////////////////////////////////////////////////////////////
+    // Avalon Service Lifecycle Implementation
+    /////////////////////////////////////////////////////////////////////////
+    
     /**
      * Constructor
      */
@@ -100,10 +115,8 @@ public abstract class BaseResourceManager
     public void configure(Configuration configuration) throws ConfigurationException
     {
         this.configuration = configuration;
-        
-        // extract the domain name
-        
         this.setDomain( configuration.getAttribute("name") );
+        this.seed = "resourcemanager";
     }
     
     /**
@@ -120,12 +133,27 @@ public abstract class BaseResourceManager
     public void dispose()
     {
         this.applicationDir = null;
-        this.tempDir = null;
-        this.context = null;
-        this.serviceManager = null;
         this.configuration = null;
+        this.context = null;
+        this.domain = null;
+        this.seed = null;
+        this.serviceManager = null;
+        this.tempDir = null;        
+    }
+
+    /**
+     * @see org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.apache.avalon.framework.configuration.Configuration)
+     */
+    public void reconfigure(Configuration configuration)
+        throws ConfigurationException
+    {
+        this.configure(configuration);
     }
     
+    /////////////////////////////////////////////////////////////////////////
+    // Service Implementation
+    /////////////////////////////////////////////////////////////////////////
+
     /**
      * @return Returns the configuration.
      */
@@ -242,4 +270,251 @@ public abstract class BaseResourceManager
     {
         this.domain = domain;
     }
+    
+    /**
+     * @return Returns the useEncryption.
+     */
+    protected String getUseEncryption()
+    {
+        return useEncryption;
+    }
+    
+    /**
+     * @param useEncryption The useEncryption to set.
+     */
+    protected void setUseEncryption(String useEncryption)
+    {
+        this.useEncryption = useEncryption;
+    }
+    
+    /** 
+     * @return the instance of the PBEService
+     */
+    protected PBEService getPBEService()
+    {
+        String service = PBEService.class.getName();
+        PBEService result = null;
+        
+        if( this.getServiceManager().hasService(service) )
+        {
+            try
+            {
+                result = (PBEService) this.getServiceManager().lookup(service);
+            }
+            catch (ServiceException e)
+            {
+                String msg = "The PBEService can't be accessed";
+                this.getLogger().error( msg, e );
+                throw new RuntimeException( msg );
+            }
+        }
+        else
+        {
+            String msg = "The PBEService is not registered";
+            throw new RuntimeException( msg );
+        }
+        
+        return result;
+    }    
+    
+    /** 
+     * @return the password for the resource manager
+     */
+    private char[] getPassword() throws Exception
+	{
+	    return this.getPBEService().createPassword( this.seed.toCharArray() );
+	}
+    
+    /**
+     * Reads the given file and decrypts it if required
+     * @param source the source file
+     * @return the content of the file
+     */
+    protected byte[] read( InputStream is )
+    	throws IOException
+    {
+        if( this.getUseEncryption().equalsIgnoreCase("true") )
+        {
+            return readEncrypted( is );
+        }
+        else if( this.getUseEncryption().equalsIgnoreCase("auto") )
+        {
+            return readSmartEncrypted( is );
+        }
+        else
+        {
+            return readPlain( is );
+        }
+    }
+
+    /**
+     * Reads from an unencrypted input stream
+     * @param is the source input stream
+     * @return the content of the input stream
+     */
+    private byte[] readPlain( InputStream is )
+    	throws IOException
+    {
+        byte[] result = null;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        this.copy(is,baos);
+        result = baos.toByteArray();        
+        return result;
+    }
+
+    /**
+     * Reads a potentially encrypted input stream.
+     * @param is the source input stream
+     * @return the content of the input stream
+     */
+    private byte[] readSmartEncrypted( InputStream is )
+    	throws IOException
+    {
+        byte[] result = null;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        try
+        {
+            char[] password = getPassword();
+            InputStream sdis = this.getPBEService().getSmartInputStream( is, password );
+            this.copy( sdis, baos );
+            result = baos.toByteArray();
+            return result;
+        }
+        catch (IOException e)
+        {
+            String msg = "Failed to process the input stream";
+            this.getLogger().error( msg, e );
+            throw e;
+        }
+        catch (Exception e)
+        {
+            String msg = "Failed to decrypt the input stream";
+            this.getLogger().error( msg, e );
+            throw new IOException( msg );
+        }
+    }
+
+    /**
+     * Reads a potentially encrypted input stream.
+     * @param is the source input stream
+     * @return the content of the input stream
+     */
+    private byte[] readEncrypted( InputStream is )
+    	throws IOException
+    {
+        byte[] result = null;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        try
+        {
+            char[] password = getPassword();
+            InputStream sdis = this.getPBEService().getInputStream( is, password );
+            this.copy( sdis, baos );
+            result = baos.toByteArray();
+            return result;
+        }
+        catch (IOException e)
+        {
+            String msg = "Failed to process the input stream";
+            this.getLogger().error( msg, e );
+            throw e;
+        }
+        catch (Exception e)
+        {
+            String msg = "Failed to decrypt the input stream";
+            this.getLogger().error( msg, e );
+            throw new IOException( msg );
+        }
+    }
+
+    /**
+     * Write the given file and encrypts it if required
+     * @param target the target file
+     * @parwm content the content to be written
+     * @return
+     */
+    protected void write( OutputStream os, byte[] content )
+    	throws IOException
+    {
+        if( this.getUseEncryption().equalsIgnoreCase("true") )
+        {
+            writeEncrypted( os, content );
+        }
+        else if( this.getUseEncryption().equalsIgnoreCase("auto") )
+        {
+            writeEncrypted( os, content );
+        }
+        else
+        {
+            writePlain( os, content );
+        }
+    }
+
+    /**
+     * Write the given file without encryption.
+     * @param target the target file
+     * @parwm content the content to be written
+     * @return
+     */
+    private void writePlain( OutputStream os, byte[] content )
+    	throws IOException
+    {
+        ByteArrayInputStream bais = new ByteArrayInputStream(content);
+        this.copy( bais, os );        
+    }
+    
+    /**
+     * Write the given file and encrypt it.
+     * @param target the target file
+     * @parwm content the content to be written
+     * @return
+     */
+    private void writeEncrypted( OutputStream os, byte[] content )
+    	throws IOException
+    {
+        try
+        {
+            char[] password = this.getPassword();
+            ByteArrayInputStream bais = new ByteArrayInputStream(content);
+            OutputStream eos = this.getPBEService().getOutputStream( os, password );
+            this.copy(bais,eos);
+        }
+        catch (IOException e)
+        {
+            String msg = "Failed to process the output stream";
+            this.getLogger().error( msg, e );
+            throw e;
+        }
+        catch (Exception e)
+        {
+            String msg = "Failed to encrypt the input stream";
+            this.getLogger().error( msg, e );
+            throw new IOException( msg );
+        }
+    }
+    
+    /**
+     * Pumps the input stream to the output stream.
+     *
+     * @param is the source input stream
+     * @param os the target output stream
+     * @throws IOException the copying failed
+     */
+    private void copy( InputStream is, OutputStream os )
+        throws IOException
+    {
+        byte[] buf = new byte[1024];
+        int n = 0;
+        int total = 0;
+
+        while ((n = is.read(buf)) > 0)
+        {
+            os.write(buf, 0, n);
+            total += n;
+        }
+
+        os.flush();
+        os.close();
+    }        
 }

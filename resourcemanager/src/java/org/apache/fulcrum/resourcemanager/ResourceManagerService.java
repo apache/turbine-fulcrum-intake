@@ -145,5 +145,4 @@ public interface ResourceManagerService
      * @return the file name or null
      */
     URL getResourceURL( String domain, String[] context, String resourceName );
-
 }

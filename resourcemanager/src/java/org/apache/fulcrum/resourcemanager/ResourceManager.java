@@ -33,6 +33,9 @@ public interface ResourceManager
     /** Key to locate a resource automagically */
     String CONFIG_KEY_USELOCATOR = "useLocator";
 
+    /** Key to locate a resource automagically */
+    String CONFIG_KEY_USEENCRYPTION = "useEncryption";
+
     /** Key of the location of the resources */
     String CONFIG_KEY_LOCATION = "location";
 

@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <role-list>
-    
-    <role
-        name="org.apache.fulcrum.resourcemanager.ResourceManagerService"
-        default-class="org.apache.fulcrum.resourcemanager.impl.ResourceManagerServiceImpl"
-        shorthand="ResourceManagerService" 
-        early-init="true"
-        description="Handles the management of resources"
-     />
-         
+   <role
+     name="org.apache.fulcrum.pbe.PBEService"
+     shorthand="PBEService"
+     default-class="org.apache.fulcrum.pbe.PBEServiceImpl"
+     early-init="true"
+     component-type="merlin"
+     description="Provides Password Based Encyrption using JCA/JCE"
+   />        
+  <role
+    name="org.apache.fulcrum.resourcemanager.ResourceManagerService"
+    default-class="org.apache.fulcrum.resourcemanager.impl.ResourceManagerServiceImpl"
+    shorthand="ResourceManagerService" 
+    early-init="true"
+    component-type="merlin"
+    description="Handles the management of resources"
+   />
 </role-list>
