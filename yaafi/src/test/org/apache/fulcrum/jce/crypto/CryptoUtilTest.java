@@ -32,21 +32,20 @@ import junit.framework.TestCase;
 /**
  * Test suite for crypto functionality
  *
- * @author <a href="mailto:siegfried.goeschl@drei.com">Siegfried Goeschl</a>
- * @version $Id$
+ * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
 public class CryptoUtilTest extends TestCase
-{   
+{
     /** the password to be used */
     private String password;
-    
+
     /** the test data directory */
     private File testDataDirectory;
-    
+
     /** the temp data director */
     private File tempDataDirectory;
-    
+
     /**
      * Constructor
      * @param name the name of the test case
@@ -54,17 +53,17 @@ public class CryptoUtilTest extends TestCase
     public CryptoUtilTest( String name )
     {
         super(name);
-        
+
         this.password = "mysecret";
         this.testDataDirectory = new File( "./src/test/data" );
         this.tempDataDirectory = new File( "./temp" );
     }
-    
+
     /**
      * @see junit.framework.TestCase#setUp()
-     *         byte[] salt,  
-        int count, 
-        String algorithm, 
+     *         byte[] salt,
+        int count,
+        String algorithm,
         String providerName )
 
      */
@@ -76,10 +75,10 @@ public class CryptoUtilTest extends TestCase
             "PBEWithMD5AndDES",
             CryptoParameters.PROVIDERNAME
             );
-        
-        CryptoStreamFactoryImpl.setInstance( factory );           
+
+        CryptoStreamFactoryImpl.setInstance( factory );
     }
-    
+
     /**
      * @return Returns the password.
      */
@@ -95,7 +94,7 @@ public class CryptoUtilTest extends TestCase
     {
         return tempDataDirectory;
     }
-    
+
     /**
      * @return Returns the testDataDirectory.
      */
@@ -111,15 +110,15 @@ public class CryptoUtilTest extends TestCase
         File targetFile = new File( this.getTempDataDirectory(), "plain.enc.txt" );
         CryptoUtil.encrypt( sourceFile, targetFile, this.getPassword() );
     }
-    
+
     /** Decrypt a text file */
     public void testTextDecryption() throws Exception
     {
         testTextEncryption();
         File sourceFile = new File( this.getTempDataDirectory(), "plain.enc.txt" );
         File targetFile = new File( this.getTempDataDirectory(), "plain.dec.txt" );
-        CryptoUtil.decrypt( sourceFile, targetFile, this.getPassword() );        
-    }    
+        CryptoUtil.decrypt( sourceFile, targetFile, this.getPassword() );
+    }
 
     /** Encrypt an empty text file */
     public void testEmptyTextEncryption() throws Exception
@@ -128,7 +127,7 @@ public class CryptoUtilTest extends TestCase
         File targetFile = new File( this.getTempDataDirectory(), "empty.enc.txt" );
         CryptoUtil.encrypt( sourceFile, targetFile, this.getPassword() );
     }
-    
+
     /** Decrypt a text file */
     public void testEmptyTextDecryption() throws Exception
     {
@@ -136,7 +135,7 @@ public class CryptoUtilTest extends TestCase
         File sourceFile = new File( this.getTempDataDirectory(), "empty.enc.txt" );
         File targetFile = new File( this.getTempDataDirectory(), "empty.dec.txt" );
         CryptoUtil.decrypt( sourceFile, targetFile, this.getPassword() );
-    }    
+    }
 
     /** Encrypt a PDF file */
     public void testPdfEncryption() throws Exception
@@ -145,7 +144,7 @@ public class CryptoUtilTest extends TestCase
         File targetFile = new File( this.getTempDataDirectory(), "plain.enc.pdf" );
         CryptoUtil.encrypt( sourceFile, targetFile, this.getPassword() );
     }
-    
+
     /** Decrypt a PDF file */
     public void testPdfDecryption() throws Exception
     {
@@ -153,7 +152,7 @@ public class CryptoUtilTest extends TestCase
         File sourceFile = new File( this.getTempDataDirectory(), "plain.enc.pdf" );
         File targetFile = new File( this.getTempDataDirectory(), "plain.dec.pdf" );
         CryptoUtil.decrypt( sourceFile, targetFile, this.getPassword() );
-    }    
+    }
 
     /** Encrypt a ZIP file */
     public void testZipEncryption() throws Exception
@@ -162,7 +161,7 @@ public class CryptoUtilTest extends TestCase
         File targetFile = new File( this.getTempDataDirectory(), "plain.enc.zip" );
         CryptoUtil.encrypt( sourceFile, targetFile, this.getPassword() );
     }
-    
+
     /** Decrypt a ZIP file */
     public void testZipDecryption() throws Exception
     {
@@ -170,16 +169,16 @@ public class CryptoUtilTest extends TestCase
         File sourceFile = new File( this.getTempDataDirectory(), "plain.enc.zip" );
         File targetFile = new File( this.getTempDataDirectory(), "plain.dec.zip" );
         CryptoUtil.decrypt( sourceFile, targetFile, this.getPassword() );
-    }    
+    }
 
     /** Encrypt a UTF-16 XML file */
     public void testXmlUTF16Encryption() throws Exception
     {
         File sourceFile = new File( this.getTestDataDirectory(), "plain-utf16.xml" );
-        File targetFile = new File( this.getTempDataDirectory(), "plain-utf16.enc.xml" );        
+        File targetFile = new File( this.getTempDataDirectory(), "plain-utf16.enc.xml" );
         CryptoUtil.encrypt( sourceFile, targetFile, this.getPassword() );
     }
-    
+
     /** Decrypt a UTF-16 XML file */
     public void testXMLUTF16Decryption() throws Exception
     {
@@ -187,16 +186,16 @@ public class CryptoUtilTest extends TestCase
         File sourceFile = new File( this.getTempDataDirectory(), "plain-utf16.enc.xml" );
         File targetFile = new File( this.getTempDataDirectory(), "plain-utf16.dec.xml" );
         CryptoUtil.decrypt( sourceFile, targetFile, this.getPassword() );
-    }  
+    }
 
     /** Encrypt a UTF-8 XML file */
     public void testXmlUTF8Encryption() throws Exception
     {
         File sourceFile = new File( this.getTestDataDirectory(), "plain-utf8.xml" );
-        File targetFile = new File( this.getTempDataDirectory(), "plain-utf8.enc.xml" );        
+        File targetFile = new File( this.getTempDataDirectory(), "plain-utf8.enc.xml" );
         CryptoUtil.encrypt( sourceFile, targetFile, this.getPassword() );
     }
-    
+
     /** Decrypt a UTF-8 XML file */
     public void testXMLUTF8Decryption() throws Exception
     {
@@ -204,16 +203,16 @@ public class CryptoUtilTest extends TestCase
         File sourceFile = new File( this.getTempDataDirectory(), "plain-utf8.enc.xml" );
         File targetFile = new File( this.getTempDataDirectory(), "plain-utf8.dec.xml" );
         CryptoUtil.decrypt( sourceFile, targetFile, this.getPassword() );
-    }  
+    }
 
     /** Encrypt a ISO-8859-1 XML file */
     public void testXmlISO88591Encryption() throws Exception
     {
         File sourceFile = new File( this.getTestDataDirectory(), "plain-iso-8859-1.xml" );
-        File targetFile = new File( this.getTempDataDirectory(), "plain-iso-8859-1.enc.xml" );        
+        File targetFile = new File( this.getTempDataDirectory(), "plain-iso-8859-1.enc.xml" );
         CryptoUtil.encrypt( sourceFile, targetFile, this.getPassword() );
     }
-    
+
     /** Decrypt a UTF-8 XML file */
     public void testXmlISO88591Decryption() throws Exception
     {
@@ -226,64 +225,64 @@ public class CryptoUtilTest extends TestCase
     public void testStringEncryption() throws Exception
     {
         char[] testVector = new char[513];
-        
+
         for( int i=0; i<testVector.length; i++ )
         {
             testVector[i] = (char) i;
         }
-        
+
         String source = new String( testVector );
         String cipherText = CryptoUtil.encryptString( source, this.getPassword() );
         String plainText = CryptoUtil.decryptString( cipherText, this.getPassword() );
-        assertEquals( source, plainText );                    
+        assertEquals( source, plainText );
     }
-    
+
     /** Test encryption and decryption of Strings */
     public void testStringHandling() throws Exception
     {
         String source = "Nobody knows the toubles I have seen ...";
         String cipherText = CryptoUtil.encryptString( source, this.getPassword() );
         String plainText = CryptoUtil.decryptString( cipherText, this.getPassword() );
-        assertEquals( source, plainText );           
+        assertEquals( source, plainText );
     }
-    
+
     /** Test encryption and decryption of binary data */
     public void testBinaryHandling() throws Exception
     {
         byte[] source = new byte[256];
         byte[] result = null;
-        
+
         for( int i=0; i<source.length; i++ )
         {
             source[i] = (byte) i;
         }
 
         ByteArrayOutputStream cipherText = new ByteArrayOutputStream();
-        ByteArrayOutputStream plainText = new ByteArrayOutputStream();                
-        
+        ByteArrayOutputStream plainText = new ByteArrayOutputStream();
+
         CryptoUtil.encrypt( source, cipherText, this.getPassword() );
         CryptoUtil.decrypt( cipherText, plainText, this.getPassword() );
-        
-        result = plainText.toByteArray();        
-        
+
+        result = plainText.toByteArray();
+
         for( int i=0; i<source.length; i++ )
         {
             if( source[i] != result[i] )
             {
                 fail( "Binary data are different at position " + i );
             }
-        }           
-    }   
-    
+        }
+    }
+
     /** Test creating a password */
     public void testPasswordFactory() throws Exception
     {
-        char[] result = null;        
+        char[] result = null;
         result = PasswordFactory.create();
-        result = PasswordFactory.create( this.getPassword() );        
+        result = PasswordFactory.create( this.getPassword() );
         return;
     }
-    
+
     public void testHexConverter() throws Exception
     {
         String source = "DceuATAABWSaVTSIK";

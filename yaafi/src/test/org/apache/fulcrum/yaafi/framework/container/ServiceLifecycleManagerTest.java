@@ -36,8 +36,7 @@ import org.apache.fulcrum.yaafi.service.reconfiguration.ReconfigurationService;
 /**
  * Test suite for the ServiceLifecycleManager.
  *
- * @author <a href="mailto:siegfried.goeschl@drei.com">Siegfried Goeschl</a>
- * @version $Id$
+ * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
 public class ServiceLifecycleManagerTest extends TestCase
@@ -62,10 +61,10 @@ public class ServiceLifecycleManagerTest extends TestCase
         super.setUp();
         ServiceContainerConfiguration config = new ServiceContainerConfiguration();
         config.loadContainerConfiguration( "./src/test/TestYaafiContainerConfig.xml" );
-        this.container = ServiceContainerFactory.create( config ); 
+        this.container = ServiceContainerFactory.create( config );
         this.lifecycleManager = this.container;
     }
-    
+
     /**
      * @see junit.framework.TestCase#tearDown()
      */
@@ -77,7 +76,7 @@ public class ServiceLifecycleManagerTest extends TestCase
 
     /**
      * Check our TestComponent.
-     * 
+     *
      * @throws Exception
      */
     private void checkTestComponent()
@@ -103,15 +102,15 @@ public class ServiceLifecycleManagerTest extends TestCase
     }
 
     private RoleEntry getRoleEntry( String name )
-    	throws ServiceException
+        throws ServiceException
     {
         RoleEntry result =  this.container.getRoleEntry(
             name
             );
-        
+
         return result;
-  	}
-    
+    }
+
     /**
      * Gets a list of all available services and dumps them
      * on System.out.
@@ -121,25 +120,25 @@ public class ServiceLifecycleManagerTest extends TestCase
         RoleEntry[] list = this.lifecycleManager.getRoleEntries();
         assertNotNull( list );
         assertTrue( list.length > 0  );
-        
+
         for( int i=0; i<list.length; i++ )
         {
             System.out.println(list[i].toString());
-        }        
+        }
     }
-        
+
     /**
      * Reconfigure the all services
      */
     public void testGeneralReconfiguration() throws Exception
     {
         RoleEntry[] list = this.lifecycleManager.getRoleEntries();
-        
+
         for( int i=0; i<list.length; i++ )
         {
             String serviceName = list[i].getName();
             System.out.println("Reconfiguring " + serviceName + " ...");
-            
+
             this.lifecycleManager.reconfigure(list[i].getName());
             assertTrue(this.container.hasService(serviceName));
             assertNotNull(this.container.lookup(serviceName));
@@ -153,12 +152,12 @@ public class ServiceLifecycleManagerTest extends TestCase
     {
         String serviceName = null;
         RoleEntry[] list = this.lifecycleManager.getRoleEntries();
-        
+
         for( int i=0; i<list.length; i++ )
         {
             serviceName = list[i].getName();
             System.out.println("Decommissiong " + serviceName + " ...");
-            
+
             assertTrue(this.container.hasService(serviceName));
             this.lifecycleManager.decommision(serviceName);
             assertTrue(this.container.hasService(serviceName));
@@ -176,30 +175,30 @@ public class ServiceLifecycleManagerTest extends TestCase
     {
         String serviceName = null;
         RoleEntry[] list = this.lifecycleManager.getRoleEntries();
-		DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
-		Configuration configuration = builder.buildFromFile( "./src/test/TestReconfigurationConfig.xml" );
-                
+        DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
+        Configuration configuration = builder.buildFromFile( "./src/test/TestReconfigurationConfig.xml" );
+
         for( int i=0; i<list.length; i++ )
         {
             serviceName = list[i].getName();
             System.out.println("Processing " + serviceName + " ...");
-            
-            // reconfigure/decommission/reconfigure the service                
+
+            // reconfigure/decommission/reconfigure the service
             this.lifecycleManager.reconfigure(serviceName);
             this.lifecycleManager.decommision(serviceName);
             this.lifecycleManager.reconfigure(serviceName);
-            
-            // run a reconfiguration over all services            
+
+            // run a reconfiguration over all services
             this.container.reconfigure(configuration);
-            
-            // reconfigure/decommission/reconfigure the service    
+
+            // reconfigure/decommission/reconfigure the service
             this.container.lookup(serviceName);
             this.lifecycleManager.reconfigure(serviceName);
             this.lifecycleManager.decommision(serviceName);
-            this.lifecycleManager.reconfigure(serviceName);            
+            this.lifecycleManager.reconfigure(serviceName);
         }
     }
-    
+
 
     /**
      * Decommissions the TestComponent and ReconfigurationService
@@ -208,31 +207,31 @@ public class ServiceLifecycleManagerTest extends TestCase
     public void testIndividualDecommission() throws Exception
     {
         String serviceName = null;
-        
+
         // teminate the TestComponent and run it again
-        
+
         serviceName = TestComponent.class.getName();
-        
+
         this.checkTestComponent();
         this.lifecycleManager.decommision( serviceName );
         this.checkTestComponent();
-        
-        // terminate the ReconfigurationService which is currently 
-        // not instantiated and resurrect it. The moment the 
+
+        // terminate the ReconfigurationService which is currently
+        // not instantiated and resurrect it. The moment the
         // ReconfigurationService is instantiated it is starting to
         // work
-        
+
         serviceName = ReconfigurationService.class.getName();
-        
+
         this.lifecycleManager.decommision( ReconfigurationService.class.getName() );
         this.container.lookup( ReconfigurationService.class.getName() );
-        
+
         // now we should see that the service is starting up
-        
+
         Thread.sleep( 5000 );
-        
+
         // and terminate it again
-        
+
         this.lifecycleManager.decommision( ReconfigurationService.class.getName() );
-    }    
+    }
 }

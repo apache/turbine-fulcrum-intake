@@ -73,7 +73,6 @@ import java.util.Map;
  * @author Stephen Colebourne
  * @author Gary Gregory
  * @since 2.0
- * @version $Id$
  */
 public class Validate {
 

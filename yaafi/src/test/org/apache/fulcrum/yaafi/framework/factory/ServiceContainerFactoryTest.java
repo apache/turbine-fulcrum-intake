@@ -33,14 +33,13 @@ import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
 /**
  * Test suite for the ServiceContainerFactory.
  *
- * @author <a href="mailto:siegfried.goeschl@drei.com">Siegfried Goeschl</a>
- * @version $Id$
+ * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
 public class ServiceContainerFactoryTest extends TestCase
 {
     private ServiceContainer container = null;
-    
+
     /**
      * Constructor
      * @param name the name of the test case
@@ -49,7 +48,7 @@ public class ServiceContainerFactoryTest extends TestCase
     {
         super(name);
     }
-    
+
     /**
      * @see junit.framework.TestCase#tearDown()
      */
@@ -58,57 +57,57 @@ public class ServiceContainerFactoryTest extends TestCase
         ServiceContainerFactory.dispose(this.container);
         super.tearDown();
     }
-    
+
     private void checkTestComponent()
-    	throws Exception
+        throws Exception
     {
         TestComponent testComponent = this.getTestComponent();
-        
-        testComponent.test();  
-        
+
+        testComponent.test();
+
         assertEquals( ((TestComponentImpl) testComponent).bar, "BAR" );
-        assertEquals( ((TestComponentImpl) testComponent).foo, "FOO" );      
+        assertEquals( ((TestComponentImpl) testComponent).foo, "FOO" );
         assertNotNull( ((TestComponentImpl) testComponent).urnAvalonClassLoader );
-        assertNotNull( ((TestComponentImpl) testComponent).urnAvaloneHome );        
-        assertNotNull( ((TestComponentImpl) testComponent).urnAvaloneTemp );        
+        assertNotNull( ((TestComponentImpl) testComponent).urnAvaloneHome );
+        assertNotNull( ((TestComponentImpl) testComponent).urnAvaloneTemp );
         assertNotNull( ((TestComponentImpl) testComponent).urnAvalonName );
         assertNotNull( ((TestComponentImpl) testComponent).urnAvalonPartition );
-        
+
         assertTrue( ((TestComponentImpl) testComponent).urnAvaloneHome instanceof File );
         assertTrue( ((TestComponentImpl) testComponent).urnAvaloneTemp instanceof File );
         assertTrue( ((TestComponentImpl) testComponent).urnAvalonClassLoader instanceof ClassLoader );
     }
-    
-    /** 
+
+    /**
      * @return get our simple test component
      */
     private TestComponent getTestComponent() throws ServiceException
     {
-        return (TestComponent) container.lookup( 
-            TestComponent.ROLE 
+        return (TestComponent) container.lookup(
+            TestComponent.ROLE
             );
     }
-    
+
     /**
      * Creates a YAAFI container using a container configuration file
      * which already contains most of the required settings
      */
     public void testCreationWithContainerConfiguration() throws Exception
     {
-        ServiceContainerConfiguration config = new ServiceContainerConfiguration();                
-        config.loadContainerConfiguration( "./src/test/TestMerlinContainerConfig.xml" );        
+        ServiceContainerConfiguration config = new ServiceContainerConfiguration();
+        config.loadContainerConfiguration( "./src/test/TestMerlinContainerConfig.xml" );
         this.container = ServiceContainerFactory.create( config );
-        this.checkTestComponent();  
+        this.checkTestComponent();
     }
 
     /**
-     * Creates a YAAFI container using a non-existent container 
+     * Creates a YAAFI container using a non-existent container
      * configuration file. Therefore the creation should fail.
      */
     public void testCreationWithMissingContainerConfiguration() throws Exception
     {
-        ServiceContainerConfiguration config = new ServiceContainerConfiguration();                
-        
+        ServiceContainerConfiguration config = new ServiceContainerConfiguration();
+
         try
         {
             config.loadContainerConfiguration( "./src/test/MissingTestContainerConfig.xml" );
@@ -122,21 +121,21 @@ public class ServiceContainerFactoryTest extends TestCase
         catch (Exception e)
         {
             fail("We are expecting an IOException");
-        }        
+        }
     }
 
     /**
      * Creates a YAAFI container providing all required settings
-     * manually 
+     * manually
      */
     public void testCreationWithManualSettings() throws Exception
     {
-        ServiceContainerConfiguration config = new ServiceContainerConfiguration();        
+        ServiceContainerConfiguration config = new ServiceContainerConfiguration();
         config.setComponentRolesLocation( "./src/test/TestRoleConfig.xml" );
-        config.setComponentConfigurationLocation( "./src/test/TestComponentConfig.xml" );                               
+        config.setComponentConfigurationLocation( "./src/test/TestComponentConfig.xml" );
         config.setParametersLocation( "./src/test/TestParameters.properties" );
-        this.container = ServiceContainerFactory.create( config );   
-        this.checkTestComponent();        
+        this.container = ServiceContainerFactory.create( config );
+        this.checkTestComponent();
     }
 
     /**
@@ -147,26 +146,26 @@ public class ServiceContainerFactoryTest extends TestCase
         ServiceContainer container = null;
         ServiceContainerConfiguration config = new ServiceContainerConfiguration();
         DefaultContext context = new DefaultContext();
-        
+
         // use an existing container configuration
-        
+
         config.loadContainerConfiguration( "./src/test/TestPhoenixContainerConfig.xml" );
-        
+
         // fill the context with Phoenix settings
-        
+
         context.put( "app.name", "ServiceContainerFactoryTest" );
         context.put( "block.name", "fulcrum-yaafi" );
         context.put( "app.home", new File( new File("").getAbsolutePath() ) );
-        
+
         // create an instance
-        
+
         this.container = ServiceContainerFactory.create( config, context );
-        
+
         // execute the test component
-        
-        this.checkTestComponent();        
+
+        this.checkTestComponent();
     }
-    
+
     /**
      * Creates a YAAFI container providing a Fortress context
      */
@@ -175,56 +174,56 @@ public class ServiceContainerFactoryTest extends TestCase
         ServiceContainer container = null;
         ServiceContainerConfiguration config = new ServiceContainerConfiguration();
         DefaultContext context = new DefaultContext();
-        
+
         // use an existing container configuration
-        
+
         config.loadContainerConfiguration( "./src/test/TestFortressContainerConfig.xml" );
-        
+
         // fill the context with Fortress settings
-        
+
         context.put( "component.id", "ServiceContainerFactoryTest" );
         context.put( "component.logger", "fulcrum-yaafi" );
         context.put( "context-root", new File( new File("").getAbsolutePath() ) );
         context.put( "impl.workDir", new File( new File("").getAbsolutePath() ) );
-        
+
         // create an instance
-        
+
         this.container = ServiceContainerFactory.create( config, context );
-        
+
         // execute the test component
-        
-        this.checkTestComponent();        
-    }    
-    
+
+        this.checkTestComponent();
+    }
+
     /**
-     * Reconfigures the YAAFI container with the "TestReconfigurationConfig.xml". 
+     * Reconfigures the YAAFI container with the "TestReconfigurationConfig.xml".
      */
     public void testReconfiguration() throws Exception
     {
         // create a YAAFI instance
-        
-        ServiceContainerConfiguration config = new ServiceContainerConfiguration();                
-        config.loadContainerConfiguration( "./src/test/TestYaafiContainerConfig.xml" );        
-        this.container = ServiceContainerFactory.create( config );        
-        
+
+        ServiceContainerConfiguration config = new ServiceContainerConfiguration();
+        config.loadContainerConfiguration( "./src/test/TestYaafiContainerConfig.xml" );
+        this.container = ServiceContainerFactory.create( config );
+
         // load a different configuration
 
-		DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
-		Configuration configuration = builder.buildFromFile( "./src/test/TestReconfigurationConfig.xml" );
-		this.checkTestComponent();
+        DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
+        Configuration configuration = builder.buildFromFile( "./src/test/TestReconfigurationConfig.xml" );
+        this.checkTestComponent();
         System.out.println(ConfigurationUtil.toString(configuration));
-        
-		// reconfigure YAAFI
+
+        // reconfigure YAAFI
 
         this.container.reconfigure( configuration );
         TestComponent testComponent = this.getTestComponent();
         testComponent.test();
-        
+
         // the TestReconfigurationConfig.xml overwrites the
         // TestComponentImpl.foo and the SystemProperty.FOO
-        
+
         assertEquals( ((TestComponentImpl) testComponent).foo, "YAAFI" );
         assertEquals( System.getProperty("FOO"), "YAAFI" );
-    }    
-     
+    }
+
 }

@@ -24,59 +24,58 @@ import java.security.GeneralSecurityException;
 
 /**
  * Interface for creating encrypting/decrypting streams.
- * 
+ *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl </a>
- * @version $Id$
  */
 
 public interface CryptoStreamFactory
 {
-    /** 
+    /**
      * Creates a decrypting input stream.
-     * 
+     *
      * @param is the input stream to be wrapped
      * @return an decrypting input stream
      */
     InputStream getInputStream(InputStream is)
-    	throws GeneralSecurityException, IOException;
+        throws GeneralSecurityException, IOException;
 
-    /** 
+    /**
      * Creates an decrypting input stream
-     * 
+     *
      * @param is the input stream to be wrapped
      * @param password the password to be used
      * @return an decrypting input stream
      */
     InputStream getInputStream(InputStream is, char[] password)
-    	throws GeneralSecurityException, IOException;
+        throws GeneralSecurityException, IOException;
 
-    /** 
+    /**
      * Creates a smart decrypting input stream.
-     * 
+     *
      * @param is the input stream to be wrapped
      * @return an decrypting input stream
      */
     InputStream getSmartInputStream(InputStream is)
-    	throws GeneralSecurityException, IOException;
+        throws GeneralSecurityException, IOException;
 
-    /** 
+    /**
      * Creates an decrypting input stream
-     * 
+     *
      * @param is the input stream to be wrapped
      * @param password the password to be used
      * @return an decrypting input stream
      */
     InputStream getSmartInputStream(InputStream is, char[] password)
-    	throws GeneralSecurityException, IOException;
+        throws GeneralSecurityException, IOException;
 
-    
-    /** 
+
+    /**
      * Creates an encrypting output stream
-     * 
+     *
      * @param os the output stream to be wrapped
      * @param password the password to be used
      * @return an decrypting input stream
      */
-    OutputStream getOutputStream(OutputStream os, char[] password) 
-    	throws GeneralSecurityException, IOException;
+    OutputStream getOutputStream(OutputStream os, char[] password)
+        throws GeneralSecurityException, IOException;
 }

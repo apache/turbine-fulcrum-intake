@@ -25,7 +25,6 @@ import org.apache.avalon.framework.component.Component;
  * service.
  *
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
- * @version $Id$
  */
 public interface TestComponent
         extends Component

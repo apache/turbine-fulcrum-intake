@@ -37,7 +37,6 @@ import org.apache.avalon.framework.context.ContextException;
  * Implementation of the test component.
  *
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
- * @version $Id$
  */
 public class TestComponentImpl
         extends AbstractLogEnabled
@@ -48,7 +47,7 @@ public class TestComponentImpl
     public String urnAvalonPartition;
     public String urnAvalonName;
     public ClassLoader urnAvalonClassLoader;
-    
+
     public String foo;
     public String bar;
     public static boolean decomissioned;
@@ -79,7 +78,7 @@ public class TestComponentImpl
     {
         this.configure(configuration);
     }
-    
+
     public void parameterize(Parameters parameters) throws ParameterException
     {
         this.bar = parameters.getParameter("BAR", "BAR Not Found?!");

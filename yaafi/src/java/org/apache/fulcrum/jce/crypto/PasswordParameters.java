@@ -21,7 +21,6 @@ package org.apache.fulcrum.jce.crypto;
  * Parameters for creating a password.
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
- * @version $Id$
  */
 
 public interface PasswordParameters

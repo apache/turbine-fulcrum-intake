@@ -28,8 +28,7 @@ import org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerServiceImpl
 /**
  * Test suite for the ServiceManagereService.
  *
- * @author <a href="mailto:siegfried.goeschl@drei.com">Siegfried Goeschl</a>
- * @version $Id$
+ * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
 public class ServiceManagerServiceTest extends TestCase
@@ -44,18 +43,18 @@ public class ServiceManagerServiceTest extends TestCase
     {
         super(name);
     }
-    
+
     /**
      * @see junit.framework.TestCase#setUp()
      */
     protected void setUp() throws Exception
     {
-        super.setUp();        
+        super.setUp();
         ServiceContainerConfiguration config = new ServiceContainerConfiguration();
         config.loadContainerConfiguration( "./src/test/TestYaafiContainerConfig.xml" );
-        this.container = ServiceContainerFactory.create( config );        
+        this.container = ServiceContainerFactory.create( config );
     }
-    
+
     /**
      * @see junit.framework.TestCase#tearDown()
      */
@@ -72,13 +71,13 @@ public class ServiceManagerServiceTest extends TestCase
     {
         ServiceManagerService serviceManagerService = ServiceManagerServiceImpl.getInstance();
         assertNotNull(serviceManagerService);
-        
-        assertNotNull( serviceManagerService.getAvalonLogger() ); 
+
+        assertNotNull( serviceManagerService.getAvalonLogger() );
         assertNotNull( serviceManagerService.getContext().get("urn:avalon:home") );
         assertNotNull( serviceManagerService.getContext().get("urn:avalon:temp") );
         serviceManagerService.getParameters();
-        serviceManagerService.lookup( ServiceManagerService.class.getName() );        
+        serviceManagerService.lookup( ServiceManagerService.class.getName() );
         assertTrue( serviceManagerService.hasService( ServiceManagerService.class.getName() ) );
-        assertTrue( serviceManagerService.getServiceManager() instanceof ServiceManager );       
+        assertTrue( serviceManagerService.getServiceManager() instanceof ServiceManager );
     }
 }

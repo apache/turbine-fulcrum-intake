@@ -22,7 +22,6 @@ package org.apache.fulcrum.jce.crypto;
  * CryptoParameters used for encryption/decrytpion.
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
- * @version $Id$
  */
 
 public interface CryptoParameters

@@ -23,8 +23,7 @@ import org.apache.fulcrum.yaafi.testcontainer.BaseUnitTest;
 /**
  * Test suite for the project
  *
- * @author <a href="mailto:siegfried.goeschl@drei.com">Siegfried Goeschl</a>
- * @version $Id$
+ * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
 public class TestComponentTest extends BaseUnitTest
@@ -38,25 +37,25 @@ public class TestComponentTest extends BaseUnitTest
         super(name);
     }
 
-    
+
     public void testTestComponent() throws Exception
     {
-        TestComponent testComponent = (TestComponent) this.lookup( 
-            TestComponent.ROLE 
+        TestComponent testComponent = (TestComponent) this.lookup(
+            TestComponent.ROLE
             );
-        
+
         testComponent.test();
-        
+
         assertEquals( ((TestComponentImpl) testComponent).bar, "BAR" );
         assertEquals( ((TestComponentImpl) testComponent).foo, "FOO" );
-        
+
         assertNotNull( ((TestComponentImpl) testComponent).urnAvalonClassLoader );
         assertNotNull( ((TestComponentImpl) testComponent).urnAvaloneHome );
         assertNotNull( ((TestComponentImpl) testComponent).urnAvaloneTemp );
         assertNotNull( ((TestComponentImpl) testComponent).urnAvalonName );
         assertNotNull( ((TestComponentImpl) testComponent).urnAvalonPartition );
     }
-    
+
     /**
      * Verify bug fix for not calling dispose method of components
      * @throws Exception
@@ -64,20 +63,20 @@ public class TestComponentTest extends BaseUnitTest
     public void testTestComponentDecomissioned() throws Exception
     {
         // lookup the test component
-        TestComponent testComponent = (TestComponent) this.lookup( 
-            TestComponent.ROLE 
+        TestComponent testComponent = (TestComponent) this.lookup(
+            TestComponent.ROLE
             );
         assertFalse( TestComponentImpl.decomissioned );
-        
+
         // decommision the test component
         this.decommision( TestComponent.ROLE );
         assertTrue( TestComponentImpl.decomissioned );
 
         // resurrect the test component - resurrecting a decommisioned service
         // might need some reviewing but I'm quite happy with the semantics
-        testComponent = (TestComponent) this.lookup( 
-            TestComponent.ROLE 
+        testComponent = (TestComponent) this.lookup(
+            TestComponent.ROLE
             );
         assertFalse( TestComponentImpl.decomissioned );
-    }    
+    }
 }

@@ -30,8 +30,7 @@ import org.apache.fulcrum.yaafi.service.reconfiguration.ReconfigurationService;
  * anything apart from running a minute so you have some time to tinker
  * with the component configuration file.
  *
- * @author <a href="mailto:siegfried.goeschl@drei.com">Siegfried Goeschl</a>
- * @version $Id$
+ * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
 public class ReconfigurationTest extends TestCase
