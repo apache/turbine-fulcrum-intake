@@ -7,6 +7,12 @@
 
   <body>
     <release version="1.0-alpha-1" date="in cvs">
+      <action dev="epugh" type="add">
+		Pluggable Authenticators done.  Added NT, crypto, and plain text.
+      </action>       
+      <action dev="epugh" type="add">
+		Hibernate based Simple model done.
+      </action>    
       <action dev="epugh" type="update">
         Converted all id's for security objects to "long" values to prevent running out of numbers.
       </action>

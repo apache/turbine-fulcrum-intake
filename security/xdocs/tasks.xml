@@ -22,6 +22,9 @@
               Need to provide an Memory implementation of the Turbine model for unit testing.
             </li>
            <li>
+              Need to use the encryption component!
+            </li>            
+           <li>
               Finish fleshing out the Adapters for Turbine.  Right now they are a pretty minimal implementation
               to validate that the Adapter concept would work.  Currently they only support moving objects from
               fulcrum to turbine.  Sending objects from Turbine back to Fulcrum is not supported.  Just needs some

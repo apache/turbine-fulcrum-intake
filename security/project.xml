@@ -28,6 +28,13 @@
       <id>fulcrum-factory</id>
       <version>1.0-alpha-1</version>
     </dependency>
+
+<!--  Needed for the NT SPI -->   
+     <dependency>
+      <id>tagishauth</id>
+      <version>1.0.2</version>
+      <url>http://free.tagish.net/jaas/index.jsp</url>
+    </dependency>   
     
 <!--  Needed for the Torque SPI -->    
     <dependency>
