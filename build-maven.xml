@@ -25,7 +25,7 @@
         
   <target 
     name="maven:jar"
-    depends="om">
+    depends="maven:init,om">
     <ant antfile="${maven.home}/build-maven.xml" target="jar"/>
   </target>
         
@@ -82,8 +82,13 @@
         
   <target 
     name="maven:compile"
-    depends="om">
+    depends="maven:init,om">
     <ant antfile="${maven.home}/build-maven.xml" target="compile"/>
+  </target>
+
+  <target 
+    name="maven:init">
+    <ant antfile="${maven.home}/build-maven.xml" target="init"/>
   </target>
 
   <!-- maven:end -->
