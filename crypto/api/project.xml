@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<project>
+
+  <extend>${basedir}/../../merlin-project.xml</extend>
+  <id>fulcrum-crypto-api</id>
+  <name>Fulcrum Crypto Component API</name>
+  <currentVersion>1.0-alpha-4</currentVersion>
+  <package>org.apache.fulcrum.crypto</package>
+ 
+</project>
+
