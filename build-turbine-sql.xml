@@ -312,6 +312,7 @@
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
 
+    <!-- FIXME: Don't reference files from a Torque checkout. -->
     <torque-sql
       contextProperties="${torque.dir}/target/torque/torque/templates/sql/id-table/turbine.props"
       controlTemplate="${idTableControlTemplate}"
@@ -337,6 +338,7 @@
     <echo message="|                                            |"/>
     <echo message="+--------------------------------------------+"/>
 
+    <!-- FIXME: Don't reference files from a Torque checkout. -->
     <torque-sql
       contextProperties="${torque.dir}/target/torque/torque/templates/sql/id-table/scheduler.props"
       controlTemplate="${idTableControlTemplate}"
@@ -363,6 +365,7 @@
 
     <!-- This could probably be a simple texen task -->
 
+    <!-- FIXME: Don't reference files from a Torque checkout. -->
     <torque-sql
       contextProperties="${torque.dir}/target/torque/torque/templates/sql/id-table/project.props"
       controlTemplate="${securityControlTemplate}"
