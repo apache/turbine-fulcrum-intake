@@ -54,6 +54,8 @@ package org.apache.fulcrum.template;
  * <http://www.apache.org/>.
  */
 
+import java.util.ArrayList;
+import javax.mail.internet.InternetAddress;
 import org.apache.commons.mail.SimpleEmail;
 import org.apache.commons.util.StringUtils;
 
@@ -123,6 +125,7 @@ import org.apache.commons.util.StringUtils;
  *
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
  * @author <a href="mailto:gcoladonato@yahoo.com">Greg Coladonato</a>
+ * @author <a href="mailto:elicia@collab.net">Elicia David</a>
  * @version $Id$
  */
 public class TemplateEmail
@@ -147,6 +150,12 @@ public class TemplateEmail
 
     /** The subject of the message. */
     private String subject = null;
+
+    /** The to email list. */
+    private ArrayList toList = null;
+
+    /** The cc list. */
+    private ArrayList ccList = null;
 
     /** The column to word-wrap at.  <code>0</code> indicates no wrap. */
     private int wordWrap = 0;
@@ -176,6 +185,67 @@ public class TemplateEmail
     {
         this.context = context;
     }
+
+
+    /** Add a recipient TO to the email.
+     *
+     * @param email A String.
+     * @param name A String.
+     */
+    public void addTo(String email, String name) 
+        throws Exception
+    {
+        try
+        {
+            if ((name == null) || (name.trim().equals("")))
+            {
+                name = email;
+            }
+
+            if (toList == null)
+            {
+                toList = new ArrayList();
+            }
+
+            toList.add(new InternetAddress(email, name));
+        }
+        catch (Exception e)
+        {
+            throw new Exception("cannot add to");
+        }
+    }
+
+ 
+     /**
+     * Add a recipient CC to the email.
+     *
+     * @param email A String.
+     * @param name A String.
+     */
+    public void addCc(String email, String name) 
+        throws Exception
+    {
+        try
+        {
+            if ((name == null) || (name.trim().equals("")))
+            {
+                name = email;
+            }
+
+            if (ccList == null)
+            {
+                ccList = new ArrayList();
+            }
+
+            ccList.add(new InternetAddress(email, name));
+        }
+        catch (Exception e)
+        {
+            throw new Exception("cannot add cc");
+        }
+    }
+
+
 
     /**
      * To: name, email
@@ -324,6 +394,40 @@ public class TemplateEmail
         if (ccEmail != null && ccName != null)
         {
             se.addCc(ccEmail, ccName);
+        }
+        se.setSubject(subject);
+        se.setMsg(body);
+        se.send();
+    }
+
+    /**
+     * This method sends the email to multiple addresses.
+     */
+    public void sendMultiple()
+        throws Exception
+    {
+        if (toList.isEmpty())
+        {
+            throw new Exception ("Must set a To:");
+        }
+
+        // Process the template.
+        String body = TurbineTemplate.handleRequest(context,template);
+
+        // If the caller desires word-wrapping, do it here
+        if (wordWrap > 0)
+        {
+            body = StringUtils.wrapText (body,
+                                         System.getProperty("line.separator"),
+                                         wordWrap);
+        }
+
+        SimpleEmail se = new SimpleEmail();
+        se.setFrom(fromEmail, fromName);
+        se.setTo(toList);
+        if (ccList != null && !ccList.isEmpty())
+        {
+            se.setCc(ccList);
         }
         se.setSubject(subject);
         se.setMsg(body);
