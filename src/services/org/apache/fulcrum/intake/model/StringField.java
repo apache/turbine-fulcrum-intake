@@ -94,10 +94,42 @@ public class StringField extends Field
     public void setRequired(boolean v, String message)
     {
         this.required = v;
-        if (v && (!set_flag || ((String)getTestValue()).length() == 0) )
+        if (v) 
         {
-            valid_flag = false;
-            this.message = message;
-        }
+            if (isMultiValued) 
+            {
+                String[] ss = (String[])getTestValue();
+                if (ss == null || ss.length == 0) 
+                {
+                    valid_flag = false;
+                    this.message = message;                
+                }
+                else if (ss.length == 0)
+                {
+                    boolean set = false;
+                    for (int i=0; i<ss.length; i++) 
+                    {
+                        if (ss[i] != null && ss[i].length() > 0) 
+                        {
+                            set = true;
+                        }
+                    }
+                    if (!set) 
+                    {
+                        valid_flag = false;
+                        this.message = message;
+                    }
+                }
+            }
+            else 
+            {
+                if (!set_flag || ((String)getTestValue()).length() == 0)
+                {
+                    valid_flag = false;
+                    this.message = message;
+                }
+            }        
+            
+        }        
     }
 }
