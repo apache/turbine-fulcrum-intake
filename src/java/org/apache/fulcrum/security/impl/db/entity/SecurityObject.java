@@ -59,6 +59,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.torque.om.BaseObject;
 
+import org.apache.fulcrum.security.entity.SecurityEntity;
+
 /**
  * This class represents a generic object used in the Access Control Lists.
  *
@@ -66,11 +68,14 @@ import org.apache.torque.om.BaseObject;
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
+ * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @version $Id$
  */
 public abstract class SecurityObject
     extends BaseObject
-    implements Comparable
+    implements Comparable,
+               SecurityEntity
 {
     /** The name of this object. */
     private String name;

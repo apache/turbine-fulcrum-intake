@@ -96,7 +96,7 @@ public class TurbineUserPeer
         {
             String className = TurbineSecurity.getService()
                 .getConfiguration().getString("user.class",
-                    "org.apache.turbine.om.security.TurbineUser");
+                    "org.apache.fulcrum.security.impl.db.entity.TurbineUser");
 
             try
             {

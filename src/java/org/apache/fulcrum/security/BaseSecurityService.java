@@ -54,21 +54,30 @@ package org.apache.fulcrum.security;
  * <http://www.apache.org/>.
  */
 
+import java.util.Map;
+
 import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
+import org.apache.fulcrum.TurbineServices;
+
+import org.apache.fulcrum.factory.FactoryService;
+
 import org.apache.fulcrum.security.UserManager;
-import org.apache.fulcrum.security.entity.User;
+
 import org.apache.fulcrum.security.entity.Group;
-import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.Permission;
-import org.apache.fulcrum.security.util.GroupSet;
-import org.apache.fulcrum.security.util.RoleSet;
-import org.apache.fulcrum.security.util.PermissionSet;
+import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.entity.User;
+
+import org.apache.fulcrum.security.util.AccessControlList;
 import org.apache.fulcrum.security.util.DataBackendException;
-import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.EntityExistsException;
+import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
+import org.apache.fulcrum.security.util.PermissionSet;
+import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.TurbineSecurityException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
 
 import org.apache.torque.util.Criteria;
 
@@ -93,6 +102,8 @@ import org.apache.commons.codec.base64.Base64;
  * </ul>
  *
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
+ * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @version $Id$
  */
 public abstract class BaseSecurityService
@@ -118,6 +129,21 @@ public abstract class BaseSecurityService
 
     /** The class of User the SecurityService uses */
     private Class userClass = null;
+
+    /** The class of Group the SecurityService uses */
+    private Class groupClass = null;
+
+    /** The class of Permission the SecurityService uses */
+    private Class permissionClass = null;
+    
+    /** The class of Role the SecurityService uses */
+    private Class roleClass = null;
+
+    /** The class of ACL the SecurityService uses */
+    private Class aclClass = null;
+
+    /** A factory to construct ACL Objects */
+    private FactoryService aclFactoryService = null;
 
     /**
      * The Group object that represents the <a href="#global">global group</a>.
@@ -195,27 +221,83 @@ public abstract class BaseSecurityService
             SecurityService.USER_CLASS_KEY,
             SecurityService.USER_CLASS_DEFAULT);
 
+        String groupClassName = getConfiguration().getString(
+            SecurityService.GROUP_CLASS_KEY, 
+            SecurityService.GROUP_CLASS_DEFAULT);
+
+        String permissionClassName = getConfiguration().getString(
+            SecurityService.PERMISSION_CLASS_KEY, 
+            SecurityService.PERMISSION_CLASS_DEFAULT);
+
+        String roleClassName = getConfiguration().getString(
+            SecurityService.ROLE_CLASS_KEY, 
+            SecurityService.ROLE_CLASS_DEFAULT);
+
+        String aclClassName = getConfiguration().getString(
+            SecurityService.ACL_CLASS_KEY, 
+            SecurityService.ACL_CLASS_DEFAULT);
+
         try
         {
             userClass = Class.forName(userClassName);
+            groupClass      = Class.forName(groupClassName);
+            permissionClass = Class.forName(permissionClassName);
+            roleClass       = Class.forName(roleClassName);
+            aclClass        = Class.forName(aclClassName);
         }
         catch(Exception e)
         {
+            if(userClass == null)
+            {
+                throw new InitializationException(
+                      "Failed to create a Class object for User implementation", e);
+            }
+            if(groupClass == null)
+            {
+                throw new InitializationException(
+                      "Failed to create a Class object for Group implementation", e);
+            }
+            if(permissionClass == null)
+            {
+                throw new InitializationException(
+                      "Failed to create a Class object for Permission implementation", e);
+            }
+            if(roleClass == null)
+            {
             throw new InitializationException(
-                "Failed create a Class object for User implementation", e);
+                      "Failed to create a Class object for Role implementation", e);
+            }
+            if(aclClass == null)
+            {
+                throw new InitializationException(
+                      "Failed to create a Class object for ACL implementation", e);
+            }
         }
 
         try
         {
             userManager =  (UserManager)Class.
                 forName(userManagerClassName).newInstance();
-            setInit(true);
         }
         catch(Exception e)
         {
             throw new InitializationException(
                 "BaseSecurityService.init: Failed to instantiate UserManager" ,e);
         }
+
+        try 
+        {
+            aclFactoryService = (FactoryService)TurbineServices.getInstance().
+                getService(FactoryService.SERVICE_NAME);
+        }
+        catch(Exception e)
+        {
+            throw new InitializationException(
+                "BaseSecurityService.init: Failed to get the Factory Service object", e);
+        }
+
+
+        setInit(true);
     }
 
     /**
@@ -259,6 +341,257 @@ public abstract class BaseSecurityService
             throw new UnknownEntityException("Failed instantiate an User implementation object", e);
         }
         return user;
+    }
+
+    /**
+     * Construct a blank User object.
+     *
+     * This method calls getUserClass, and then creates a new object using
+     * the default constructor.
+     *
+     * @return an object implementing User interface.
+     * @throws UnknownEntityException if the object could not be instantiated.
+     */
+    public User getUserInstance(String userName)
+        throws UnknownEntityException
+    {
+        User user = getUserInstance();
+        user.setName(userName);
+        return user;
+    }
+
+    /**
+     * Return a Class object representing the system's chosen implementation of
+     * of Group interface.
+     *
+     * @return systems's chosen implementation of Group interface.
+     * @throws UnknownEntityException if the implementation of Group interface
+     *         could not be determined, or does not exist.
+     */
+    public Class getGroupClass()
+        throws UnknownEntityException
+    {
+        if ( groupClass == null )
+        {
+            throw new UnknownEntityException(
+                "Failed to create a Class object for Group implementation");
+        }
+        return groupClass;
+    }
+
+    /**
+     * Construct a blank Group object.
+     *
+     * This method calls getGroupClass, and then creates a new object using
+     * the default constructor.
+     *
+     * @return an object implementing Group interface.
+     * @throws UnknownEntityException if the object could not be instantiated.
+     */
+    public Group getGroupInstance()
+        throws UnknownEntityException
+    {
+        Group group;
+        try
+        {
+            group = (Group)getGroupClass().newInstance();
+        }
+        catch(Exception e)
+        {
+            throw new UnknownEntityException("Failed instantiate an Group implementation object", e);
+        }
+        return group;
+    }
+
+    /**
+     * Construct a blank Group object.
+     *
+     * This method calls getGroupClass, and then creates a new object using
+     * the default constructor.
+     *
+     * @return an object implementing Group interface.
+     * @throws UnknownEntityException if the object could not be instantiated.
+     */
+    public Group getGroupInstance( String groupName )
+        throws UnknownEntityException
+    {
+        Group group = getGroupInstance();
+        group.setName(groupName);
+        return group;
+    }
+
+    /**
+     * Return a Class object representing the system's chosen implementation of
+     * of Permission interface.
+     *
+     * @return systems's chosen implementation of Permission interface.
+     * @throws UnknownEntityException if the implementation of Permission interface
+     *         could not be determined, or does not exist.
+     */
+    public Class getPermissionClass()
+        throws UnknownEntityException
+    {
+        if ( permissionClass == null )
+        {
+            throw new UnknownEntityException(
+                "Failed to create a Class object for Permission implementation");
+        }
+        return permissionClass;
+    }
+
+    /**
+     * Construct a blank Permission object.
+     *
+     * This method calls getPermissionClass, and then creates a new object using
+     * the default constructor.
+     *
+     * @return an object implementing Permission interface.
+     * @throws UnknownEntityException if the object could not be instantiated.
+     */
+    public Permission getPermissionInstance()
+        throws UnknownEntityException
+    {
+        Permission permission;
+        try
+        {
+            permission = (Permission)getPermissionClass().newInstance();
+        }
+        catch(Exception e)
+        {
+            throw new UnknownEntityException("Failed instantiate an Permission implementation object", e);
+        }
+        return permission;
+    }
+
+    /**
+     * Construct a blank Permission object.
+     *
+     * This method calls getPermissionClass, and then creates a new object using
+     * the default constructor.
+     *
+     * @return an object implementing Permission interface.
+     * @throws UnknownEntityException if the object could not be instantiated.
+     */
+    public Permission getPermissionInstance(String permName)
+        throws UnknownEntityException
+    {
+        Permission perm = getPermissionInstance();
+        perm.setName(permName);
+        return perm;
+    }
+
+    /**
+     * Return a Class object representing the system's chosen implementation of
+     * of Role interface.
+     *
+     * @return systems's chosen implementation of Role interface.
+     * @throws UnknownEntityException if the implementation of Role interface
+     *         could not be determined, or does not exist.
+     */
+    public Class getRoleClass()
+        throws UnknownEntityException
+    {
+        if ( roleClass == null )
+        {
+            throw new UnknownEntityException(
+                "Failed to create a Class object for Role implementation");
+        }
+        return roleClass;
+    }
+
+    /**
+     * Construct a blank Role object.
+     *
+     * This method calls getRoleClass, and then creates a new object using
+     * the default constructor.
+     *
+     * @return an object implementing Role interface.
+     * @throws UnknownEntityException if the object could not be instantiated.
+     */
+    public Role getRoleInstance()
+        throws UnknownEntityException
+    {
+        Role role;
+        try
+        {
+            role = (Role)getRoleClass().newInstance();
+        }
+        catch(Exception e)
+        {
+            throw new UnknownEntityException("Failed instantiate an Role implementation object", e);
+        }
+        return role;
+    }
+
+    /**
+     * Construct a blank Role object.
+     *
+     * This method calls getRoleClass, and then creates a new object using
+     * the default constructor.
+     *
+     * @return an object implementing Role interface.
+     * @throws UnknownEntityException if the object could not be instantiated.
+     */
+    public Role getRoleInstance(String roleName)
+        throws UnknownEntityException
+    {
+        Role role = getRoleInstance();
+        role.setName(roleName);
+        return role;
+    }
+
+    /**
+     * Return a Class object representing the system's chosen implementation of
+     * of ACL interface.
+     *
+     * @return systems's chosen implementation of ACL interface.
+     * @throws UnknownEntityException if the implementation of ACL interface
+     *         could not be determined, or does not exist.
+     */
+    public Class getAclClass()
+        throws UnknownEntityException
+    {
+        if ( aclClass == null )
+        {
+            throw new UnknownEntityException(
+                "Failed to create a Class object for ACL implementation");
+        }
+        return aclClass;
+    }
+
+    /**
+     * Construct a new ACL object.
+     *
+     * This constructs a new ACL object from the configured class and
+     * initializes it with the supplied roles and permissions.
+     * 
+     * @param roles The roles that this ACL should contain
+     * @param permissions The permissions for this ACL
+     *
+     * @return an object implementing ACL interface.
+     * @throws UnknownEntityException if the object could not be instantiated.
+     */
+    public AccessControlList getAclInstance(Map roles, Map permissions)
+        throws UnknownEntityException
+    {
+        Object[] objects    = { roles, permissions };
+        String[] signatures = {"java.util.Map","java.util.Map"};
+        AccessControlList accessControlList;
+        
+        try
+        {
+            accessControlList = 
+                (AccessControlList) aclFactoryService.getInstance(aclClass.getName(), 
+                                                                  objects, 
+                                                                  signatures);
+        }
+        catch(Exception e)
+        {
+            throw new UnknownEntityException(
+                      "Failed instantiate an ACL implementation object", e);
+        }
+
+        return accessControlList;
     }
 
     /**

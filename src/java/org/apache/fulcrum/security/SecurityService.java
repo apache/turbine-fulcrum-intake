@@ -54,21 +54,27 @@ package org.apache.fulcrum.security;
  * <http://www.apache.org/>.
  */
 
+import java.util.Map;
+
 import org.apache.fulcrum.Service;
-import org.apache.fulcrum.security.entity.User;
+
 import org.apache.fulcrum.security.entity.Group;
-import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.Permission;
+import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.entity.User;
+
 import org.apache.fulcrum.security.impl.db.entity.UserPeer;
-import org.apache.fulcrum.security.util.GroupSet;
-import org.apache.fulcrum.security.util.RoleSet;
-import org.apache.fulcrum.security.util.PermissionSet;
+
 import org.apache.fulcrum.security.util.AccessControlList;
 import org.apache.fulcrum.security.util.DataBackendException;
-import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.EntityExistsException;
+import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
+import org.apache.fulcrum.security.util.PermissionSet;
+import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.TurbineSecurityException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+
 import org.apache.torque.util.Criteria;
 
 /**
@@ -85,6 +91,8 @@ import org.apache.torque.util.Criteria;
  * and directory server as the data backend.<br>
  *
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
+ * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @version $Id$
  */
 public interface SecurityService
@@ -96,14 +104,38 @@ public interface SecurityService
     /** the key within services's properties for user implementation classname (user.class) */
     public static final String USER_CLASS_KEY = "user.class";
 
-    /** the default implementation of User interface (org.apache.turbine.om.security.DBUser) */
-    public static final String USER_CLASS_DEFAULT = "org.apache.turbine.om.security.TurbineUser";
+    /** the default implementation of User interface (org.apache.fulcrum.security.impl.db.entity.TurbineUser) */
+    public static final String USER_CLASS_DEFAULT = "org.apache.fulcrum.security.impl.db.entity.TurbineUser";
 
-    /** the key within services's properties for user implementation classname (user.manager) */
+    /** The key within services' properties for the GROUP implementation classname (group.class) */
+    public static final String GROUP_CLASS_KEY = "group.class";
+
+    /** The default implementation of the Group interface (org.apache.fulcrum.security.impl.db.entity.TurbineGroup) */
+    public static final String GROUP_CLASS_DEFAULT = "org.apache.fulcrum.security.impl.db.entity.TurbineGroup";
+        
+    /** The key within services' properties for the PERMISSION implementation classname (permission.class) */
+    public static final String PERMISSION_CLASS_KEY = "permission.class";
+
+    /** The default implementation of the Permissions interface (org.apache.fulcrum.security.impl.db.entity.TurbinePermission) */
+    public static final String PERMISSION_CLASS_DEFAULT = "org.apache.fulcrum.security.impl.db.entity.TurbinePermission";
+        
+    /** The key within services' properties for the ROLE implementation classname (role.class) */
+    public static final String ROLE_CLASS_KEY = "role.class";
+
+    /** The default implementation of the Role Interface (org.apache.fulcrum.security.impl.db.entity.TurbineRole) */
+    public static final String ROLE_CLASS_DEFAULT = "org.apache.fulcrum.security.impl.db.entity.TurbineRole";
+        
+    /** The key within services' properties for the ACL implementation classname (acl.class) */
+    public static final String ACL_CLASS_KEY = "acl.class";
+
+    /** The default implementation of the Acl Interface (org.apache.fulcrum.security.impl.TurbineAccessControlList) */
+    public static final String ACL_CLASS_DEFAULT = "org.apache.fulcrum.security.impl.TurbineAccessControlList";
+        
+    /** the key within services's properties for user manager implementation classname (user.manager) */
     public static final String USER_MANAGER_KEY = "user.manager";
 
     /** the default implementation of UserManager interface (org.apache.fulcrum.security.DBUserManager) */
-    public static final String USER_MANAGER_DEFAULT = "org.apache.fulcrum.security.DBUserManager";
+    public static final String USER_MANAGER_DEFAULT = "org.apache.fulcrum.security.impl.db.DBUserManager";
 
     /** the key within services's properties for secure passwords flag (secure.passwords) */
     public static final String SECURE_PASSWORDS_KEY = "secure.passwords";
@@ -142,6 +174,149 @@ public interface SecurityService
      * @throws UnknownEntityException if the object could not be instantiated.
      */
     public User getUserInstance()
+        throws UnknownEntityException;
+
+    /**
+     * Construct a blank User object.
+     *
+     * This method calls getUserClass, and then creates a new object using
+     * the default constructor.
+     *
+     * @return an object implementing User interface.
+     * @throws UnknownEntityException if the object could not be instantiated.
+     */
+    public User getUserInstance(String userName)
+        throws UnknownEntityException;
+
+    /**
+     * Returns the Class object for the implementation of Group interface
+     * used by the system.
+     *
+     * @return the implementation of Group interface used by the system.
+     * @throws UnknownEntityException if the system's implementation of Group
+     *         interface could not be determined.
+     */
+    public Class getGroupClass()
+        throws UnknownEntityException;
+
+    /**
+     * Construct a blank Group object.
+     *
+     * This method calls getGroupClass, and then creates a new object using
+     * the default constructor.
+     *
+     * @return an object implementing Group interface.
+     * @throws UnknownEntityException if the object could not be instantiated.
+     */
+    public Group getGroupInstance()
+        throws UnknownEntityException;
+
+    /**
+     * Construct a blank Group object.
+     *
+     * This method calls getGroupClass, and then creates a new object using
+     * the default constructor.
+     *
+     * @return an object implementing Group interface.
+     * @throws UnknownEntityException if the object could not be instantiated.
+     */
+    public Group getGroupInstance( String groupName )
+        throws UnknownEntityException;
+
+    /**
+     * Returns the Class object for the implementation of Permission interface
+     * used by the system.
+     *
+     * @return the implementation of Permission interface used by the system.
+     * @throws UnknownEntityException if the system's implementation of Permission
+     *         interface could not be determined.
+     */
+    public Class getPermissionClass()
+        throws UnknownEntityException;
+
+    /**
+     * Construct a blank Permission object.
+     *
+     * This method calls getPermissionClass, and then creates a new object using
+     * the default constructor.
+     *
+     * @return an object implementing Permission interface.
+     * @throws UnknownEntityException if the object could not be instantiated.
+     */
+    public Permission getPermissionInstance()
+        throws UnknownEntityException;
+
+    /**
+     * Construct a blank Permission object.
+     *
+     * This method calls getPermissionClass, and then creates a new object using
+     * the default constructor.
+     *
+     * @return an object implementing Permission interface.
+     * @throws UnknownEntityException if the object could not be instantiated.
+     */
+    public Permission getPermissionInstance(String permName)
+        throws UnknownEntityException;
+
+    /**
+     * Returns the Class object for the implementation of Role interface
+     * used by the system.
+     *
+     * @return the implementation of Role interface used by the system.
+     * @throws UnknownEntityException if the system's implementation of Role
+     *         interface could not be determined.
+     */
+    public Class getRoleClass()
+        throws UnknownEntityException;
+
+    /**
+     * Construct a blank Role object.
+     *
+     * This method calls getRoleClass, and then creates a new object using
+     * the default constructor.
+     *
+     * @return an object implementing Role interface.
+     * @throws UnknownEntityException if the object could not be instantiated.
+     */
+    public Role getRoleInstance()
+        throws UnknownEntityException;
+
+    /**
+     * Construct a blank Role object.
+     *
+     * This method calls getRoleClass, and then creates a new object using
+     * the default constructor.
+     *
+     * @return an object implementing Role interface.
+     * @throws UnknownEntityException if the object could not be instantiated.
+     */
+    public Role getRoleInstance(String roleName)
+        throws UnknownEntityException;
+
+    /**
+     * Returns the Class object for the implementation of AccessControlList interface
+     * used by the system.
+     *
+     * @return the implementation of AccessControlList interface used by the system.
+     * @throws UnknownEntityException if the system's implementation of AccessControlList
+     *         interface could not be determined.
+     */
+    public Class getAclClass()
+        throws UnknownEntityException;
+
+    /**
+     * Construct a new ACL object.
+     *
+     * This constructs a new ACL object from the configured class and
+     * initializes it with the supplied roles and permissions.
+     * 
+     * @param roles The roles that this ACL should contain
+     * @param permissions The permissions for this ACL
+     *
+     * @return an object implementing ACL interface.
+     * @throws UnknownEntityException if the object could not be instantiated.
+     */
+    public AccessControlList getAclInstance(Map roles, Map permissions)
         throws UnknownEntityException;
 
     /**
@@ -417,29 +592,17 @@ public interface SecurityService
     public Group getGlobalGroup();
 
     /**
-     * Retrieves a new Group. It creates
-     * a new Group based on the Services Group implementation. It does not
-     * create a new Group in the system though. Use addGroup for that.
-     *
-     * @param groupName The name of the Group to be retrieved.
+     * @deprecated Use getGroupInstance(String name) instead.
      */
     public Group getNewGroup( String groupName );
 
     /**
-     * Retrieves a new Role. It creates
-     * a new Group based on the Services Role implementation. It does not
-     * create a new Role in the system though. Use addRole for that.
-     *
-     * @param roleName The name of the Role to be retrieved.
+     * @deprecated Use getRoleInstance(String name) instead.
      */
     public Role getNewRole( String roleName );
 
     /**
-     * Retrieves a new Permission. It creates
-     * a new Permission based on the Services Permission implementation. It does not
-     * create a new Permission in the system though. Use addPermission for that.
-     *
-     * @param permissionName The name of the Permission to be retrieved.
+     * @deprecated Use getPermissionInstance(String name) instead.
      */
     public Permission getNewPermission( String permissionName );
 
