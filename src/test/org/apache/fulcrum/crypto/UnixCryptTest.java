@@ -92,18 +92,6 @@ public class UnixCryptTest
     }
 
 
-    public void setUp()
-    {
-    }
-
-    public void tearDown()
-    {
-    }
-
-    public void testConstruction()
-    {
-    }
-
     public void testSelection()
     {
         try
