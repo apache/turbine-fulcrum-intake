@@ -6,10 +6,10 @@
   >
 
 
-<goal name="fulcrum:build" description="Build all Fulcrum components">
+<goal name="fulcrum:build" description="Build and install all Fulcrum components">
     <maven:reactor basedir="${basedir}"
-      includes="**/project.xml"
-      excludes="proposals/**,target/**,project.xml,quartz/**"
+      includes="${maven.multiproject.includes}"
+      excludes="${maven.multiproject.excludes}"
       goals="jar:install"
       banner="Installing:"
       ignoreFailures="false" />
@@ -17,8 +17,8 @@
 
   <goal name="fulcrum:clean" description="Clean all Fulcrum components" prereqs="clean">
     <maven:reactor basedir="${basedir}"
-      includes="**/project.xml"
-      excludes="proposals/**,target/**,project.xml"
+      includes="${maven.multiproject.includes}"
+      excludes="${maven.multiproject.excludes}"
       goals="clean:clean"
       banner="Cleaning:"
       ignoreFailures="false" />
