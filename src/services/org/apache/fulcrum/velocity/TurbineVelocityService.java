@@ -271,14 +271,23 @@ public class TurbineVelocityService
     {
         try
         {
+            // need to convert to a VelocityContext because EventCartridges
+            // need that. this sucks because it seems like unnecessary
+            // object creation.
+            VelocityContext velocityContext = new VelocityContext(context);        
+    
+            // Attach the EC to the context
+            getEventCartridge().attachToContext(velocityContext);
+
             if (encoding != null)
             {
                 // Request scoped encoding first supported by Velocity 1.1.
-                Velocity.mergeTemplate(filename, encoding, context, writer);
+                Velocity.mergeTemplate(filename, encoding, 
+                                       velocityContext, writer);
             }
             else
             {
-                Velocity.mergeTemplate(filename, context, writer);
+                Velocity.mergeTemplate(filename, velocityContext, writer);
             }
         }
         catch (Exception e)
@@ -324,14 +333,6 @@ public class TurbineVelocityService
         {
             charset = DEFAULT_CHAR_SET;
         }
-
-        // need to convert to a VelocityContext because EventCartridges
-        // need that. this sucks because it seems like unnecessary
-        // object creation.
-        VelocityContext vc = new VelocityContext(context);        
-
-        // Attach the EC to the context
-        getEventCartridge().attachToContext(vc);
 
         OutputStreamWriter writer = null;
         try
@@ -404,6 +405,7 @@ public class TurbineVelocityService
             .getVector("eventCartridge.classes", null);
         if (ecconfig == null)
         {
+            getCategory().info("No Velocity EventCartridges configured.");
             return;
         }
 
@@ -414,23 +416,27 @@ public class TurbineVelocityService
             className = (String) e.nextElement();
             try
             {
+                boolean result = false;
+
                 obj = Class.forName(className).newInstance();
 
                 if (obj instanceof ReferenceInsertionEventHandler)
                 {
-                    getEventCartridge()
+                    result = getEventCartridge()
                         .addEventHandler((ReferenceInsertionEventHandler)obj);
                 }
                 else if (obj instanceof NullSetEventHandler)
                 {
-                    getEventCartridge()
+                    result = getEventCartridge()
                         .addEventHandler((NullSetEventHandler)obj);
                 }
                 else if (obj instanceof MethodExceptionEventHandler)
                 {
-                    getEventCartridge()
+                    result = getEventCartridge()
                         .addEventHandler((MethodExceptionEventHandler)obj);
                 }
+                getCategory().info("Added EventCartridge: " + 
+                    obj.getClass().getName() + " : " + result);
             }
             catch (Exception h)
             {
