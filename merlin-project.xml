@@ -5,7 +5,7 @@
   <organization>
     <name>Apache Software Foundation</name>
     <url>http://jakarta.apache.org/</url>
-    <logo>/images/jakarta-logo-blue.gif</logo>
+    <logo>http://jakarta.apache.org/images/jakarta-logo.gif</logo>
   </organization>
   <inceptionYear>2000</inceptionYear>
   <package>org.apache.fulcrum</package>
@@ -133,13 +133,15 @@
   </contributors>
   
   <dependencies>
+  <!--
     <dependency> 
- 		<groupId>avalon-meta</groupId> 
- 		<artifactId>avalon-meta-plugin</artifactId> 
- 		<version>1.3.2</version> 
- 		<url>http://avalon.apache.org</url> 
- 		<type>plugin</type>
- 	</dependency> 
+    <groupId>avalon-meta</groupId> 
+    <artifactId>avalon-meta-plugin</artifactId> 
+    <version>1.3.2</version> 
+    <url>http://avalon.apache.org</url> 
+    <type>plugin</type>
+  </dependency> 
+  -->
   </dependencies>
 
   <build>
@@ -167,7 +169,7 @@
             <include>block.xml</include>
           </includes>
         </resource>
-		<resource>
+        <resource>
           <directory>${basedir}/target/classes</directory>
           <includes>
             <include>**/*.xinfo</include>
@@ -200,14 +202,20 @@
     <report>maven-changes-plugin</report>
     <report>maven-developer-activity-plugin</report>
     <report>maven-file-activity-plugin</report>
-    <report>maven-javadoc-plugin</report>
-    <report>maven-jxr-plugin</report>    
+  
     <report>maven-junit-report-plugin</report>
-    <report>maven-pmd-plugin</report>
-    <report>maven-jcoverage-plugin</report>
-    <report>maven-simian-plugin</report>
+
     <report>maven-multiproject-plugin</report>
     <report>maven-faq-plugin</report>    
+    <report>maven-pmd-plugin</report>
+    <report>maven-simian-plugin</report>
+    <!-- stripped down list
+    <report>maven-javadoc-plugin</report>
+    <report>maven-jxr-plugin</report>      
+    
+    <report>maven-jcoverage-plugin</report>
+    
+    -->
   </reports> 
 </project>
 
