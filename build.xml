@@ -26,6 +26,7 @@
     <pathelement location="${javamail.jar}"/>
     <pathelement location="${jaf.jar}"/>
     <pathelement location="${commons-util.jar}"/>
+    <pathelement location="${commons-email.jar}"/>
   </path>
 
   <!-- ================================================================== -->
@@ -46,6 +47,7 @@
     <echo message="xalan.jar = ${xalan.jar}"/>
     <echo message="xmlrpc.jar = ${xmlrpc.jar}"/>
     <echo message="commons-util.jar = ${commons-util.jar}"/>
+    <echo message="[optional] commons-email.jar = ${commons-email.jar}"/>
   </target>
 
   <!-- ================================================================== -->
@@ -144,6 +146,12 @@
       property="commons-util.present"
       classpathref="classpath"
     />
+
+    <available
+      classname="org.apache.commons.mail.SimpleEmail" 
+      property="commons-email.present"
+      classpathref="classpath"
+    />
   </target>
 
   <!-- ================================================================== -->
@@ -227,6 +235,20 @@
     </antcall>
   </target>
 
+<!--
+  This is commented out because the inclusion of the .jar file is 
+  conditional depending on whether or not it is in your path. This
+  is kept here in the event that this conditional requirement is
+  removed in the future.
+  
+  <target name="check.commons-email" unless="commons-email.present">
+    <antcall target="property-warning">
+      <param name="name" value="commons-email.jar"/>
+      <param name="value" value="${commons-email.jar}"/>
+    </antcall>
+  </target>
+-->
+
   <target name="property-warning">
     <echo>
       +----------------------------------------------------------------+
@@ -249,12 +271,17 @@
   <!-- P R E P A R E                                                      -->
   <!-- ================================================================== -->
   
+  <target name="include-email" if="commons-email.present">
+    <copy todir="${build.dir}/src/org" overwrite="no">
+      <fileset dir="${src.dir}/util/java/org"/>
+    </copy>  
+  </target>
+  
   <target name="prepare" 
-    depends="init,
+    depends="init,env,
         check.velocity,check.log4j,check.torque,check.bsf,check.servlet,
         check.javamail,check.jaf,check.xerces,check.xalan,check.xmlrpc,
-        check.commons-util,
-        om,env">
+        check.commons-util,include-email,om">
     
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}/classes"/>
@@ -263,7 +290,6 @@
     <!-- We have some static files that should overwrite
          The torque generated files so overwrite must be
          set to 'yes'. -->
-    
     <copy todir="${build.dir}/src/org" overwrite="yes">
       <fileset dir="${src.dir}/core/java/org"/>
       <fileset dir="${src.dir}/services/java/org"/>
@@ -283,11 +309,6 @@
       optimize="${optimize}">
       <classpath refid="classpath"/>
     </javac>
-
-    <!-- copy database.dtd to the right place
-    <copy file="${src.dir}/dtd/database.dtd"
-      todir="${build.dir}/classes/org/apache/turbine/torque/engine/database/transform"/>
-     -->
   </target>
 
   <!-- ================================================================== -->
