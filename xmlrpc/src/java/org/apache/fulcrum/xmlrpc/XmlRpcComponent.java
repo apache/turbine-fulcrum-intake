@@ -3,7 +3,7 @@ package org.apache.fulcrum.xmlrpc;
 /* ----------------------------------------------------------------------------
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2000-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2000-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,14 +56,11 @@ package org.apache.fulcrum.xmlrpc;
  * ----------------------------------------------------------------------------
  */
 
-import java.util.Vector;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
+import java.util.Vector;
 
 import org.apache.xmlrpc.XmlRpcException;
-
-import org.apache.avalon.framework.component.Component;
 
 /**
  * The interface an XmlRpcService implements.
@@ -71,7 +68,8 @@ import org.apache.avalon.framework.component.Component;
  * @author <a href="mailto:josh@stonecottage.com">Josh Lucas</a>
  * @author <a href="mailto:magnus@handtolvur.is">Magnús Þór Torfason</a>
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
- * @author <a href="jvanzyl@periapt.com">Jason van Zyl</a>
+ * @author <a href="mailto:jvanzyl@periapt.com">Jason van Zyl</a>
+ * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
  */
 public interface XmlRpcComponent
@@ -86,8 +84,8 @@ public interface XmlRpcComponent
      * @param methodName A String with the method name.
      * @param params A Vector with the parameters.
      * @return An Object.
-     * @exception XmlRpcException.
-     * @exception IOException.
+     * @exception XmlRpcException
+     * @exception IOException
      */
     Object executeRpc(URL url,
                       String methodName,
@@ -100,8 +98,8 @@ public interface XmlRpcComponent
      * @param handlerName The name under which we want
      * to register the service
      * @param handler The handler object
-     * @exception XmlRpcException.
-     * @exception IOException.
+     * @exception XmlRpcException
+     * @exception IOException
      */
     void registerHandler(String handlerName, Object handler)
         throws XmlRpcException, IOException;
@@ -111,8 +109,8 @@ public interface XmlRpcComponent
      * the XmlRpc Server part.
      *
      * @param handler The handler object
-     * @exception XmlRpcException.
-     * @exception IOException.
+     * @exception XmlRpcException
+     * @exception IOException
      */
     void registerHandler(Object handler)
         throws XmlRpcException, IOException;
@@ -152,9 +150,17 @@ public interface XmlRpcComponent
      */
     void denyClient(String address);
 
-    /** Message Listener. */
+    /**
+     * Message Listener.
+     *
+     * @param listener the listener
+     */
     void addMessageListener(XmlRpcMessageListener listener);
 
-    /** Message Received. */
+    /**
+     * Message Received.
+     *
+     * @param fileContents file contents
+     */
     void messageReceived(String fileContents);
 }
