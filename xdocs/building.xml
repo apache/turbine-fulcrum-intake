@@ -5,6 +5,7 @@
   <properties>
     <title>Building Fulcrum</title>
     <author email="pete@kazmier.com">Pete Kazmier</author>
+    <author email="quintonm@bellsouth.net">Quinton McCombs</author>
   </properties>
 
   <body>
@@ -15,18 +16,25 @@
         Maven-enabled.  Before you begin, you'll need to check out the
         <code>jakarta-turbine-fulcrum</code> CVS repository (if you are
         not familiar with the Jakarta CVS repositories, please refer to
-        the <a href="/site/cvsindex.html">documentation</a>).  In
-        addition, you'll also have to check out the
-        <code>jakarta-turbine-torque</code> repository because the
-        current build process references templates in that source
-        directory.  Note: both repositories should be checked out in the
-        same top-level directory.
+        the <a href="/site/cvsindex.html">documentation</a>).  
       </p>
       <p>
         Please refer to the Maven <a
-        href="http://jakarta.apache.org/turbine/maven/getting-started.html">Getting
-        Started</a> document for instructions on how to build the
-        project using Maven.
+        href="http://maven.apache.org/getting-started.html">Getting
+        Started</a> document for instructions on how to install and
+        use Maven.
+      </p>
+      <p>
+        From the root directory of the fuklcrum project (where you checked
+        out the code to or unpacked a source distribution), simply type 
+        'maven' and press enter.  This will start a process that will
+        build each component.  After the component is built, it will be 
+        installed into you local maven repository.
+      </p>
+      <p>
+        To build a local copy of the documentation, use 'mave site-all'.
+        This will build a local copy of the web site in the 'target/docs' 
+        directory.
       </p>
     </section>
   </body>
