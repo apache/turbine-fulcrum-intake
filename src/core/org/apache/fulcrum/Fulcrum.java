@@ -63,6 +63,7 @@ import org.apache.stratum.configuration.Configuration;
  * lifecycle interfaces.
  *
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
+ * @author <a href="mailto:ericATdobbse.net">Eric Dobbs</a>
  * @version $Id$
  */
 public class Fulcrum
@@ -98,6 +99,9 @@ public class Fulcrum
         return ts.getService(name);
     }
 
+    /**
+     * shutdown the services
+     */ 
     public static void shutdownServices()
     {
         ts.shutdownServices();
