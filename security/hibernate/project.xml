@@ -82,12 +82,18 @@
        <id>odmg</id>      
        <version>3.0</version>
     </dependency>                  
-    <dependency>
-      <groupId>hibernate</groupId>      
-      <artifactId>hibernate-cglib</artifactId>            
+	<dependency>
+      <groupId>cglib</groupId>      
+      <artifactId>cglib</artifactId>            
       <version>2.1.1</version>
-      <url>http://www.hibernate.org</url>  
-    </dependency>
+      <url>http://cglib.sf.net</url>  
+	</dependency>
+	<dependency>
+      <groupId>asm</groupId>      
+      <artifactId>asm</artifactId>            
+      <version>1.4.1</version>
+      <url>http://www.objectweb.org/asm</url>  
+	</dependency>
  	<dependency>
       <groupId>hibernate</groupId>      
       <artifactId>jta</artifactId>            
