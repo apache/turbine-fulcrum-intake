@@ -274,9 +274,12 @@ public class TurbineLocalizationService
      * Caches the named bundle for fast lookups.  This operation is
      * relatively expesive in terms of memory use, but is optimized
      * for run-time speed in the usual case.
+     *
+     * @exception MissingResourceException Bundle not found.
      */
     private synchronized ResourceBundle cacheBundle(String bundleName,
                                                     Locale locale)
+        throws MissingResourceException
     {
         HashMap bundlesByLocale = (HashMap) bundles.get(bundleName);
         ResourceBundle rb = (bundlesByLocale == null ? null :
@@ -292,10 +295,10 @@ public class TurbineLocalizationService
             }
             catch (MissingResourceException e)
             {
-                rb = guessBundle(bundleName, locale);
+                rb = guessBundle(bundleName, locale, bundlesByLocale);
                 if (rb == null)
                 {
-                    throw e.fillInStackTrace();
+                    throw (MissingResourceException) e.fillInStackTrace();
                 }
             }
 
@@ -321,7 +324,8 @@ public class TurbineLocalizationService
      * language matches the default to avoid disconnects between
      * language and country).
      */
-    private final ResourceBundle guessBundle(String bundleName, Locale locale)
+    private final ResourceBundle guessBundle(String bundleName, Locale locale,
+                                             HashMap bundlesByLocale)
     {
         ResourceBundle rb = null;
         if ( !StringUtils.isValid(locale.getCountry()) &&
@@ -329,7 +333,7 @@ public class TurbineLocalizationService
         {
             Locale withDefaultCountry = new Locale(locale.getLanguage(),
                                                    defaultCountry);
-            rb = bundlesByLocale.get(withDefaultCountry);
+            rb = (ResourceBundle) bundlesByLocale.get(withDefaultCountry);
             if (rb == null)
             {
                 try
