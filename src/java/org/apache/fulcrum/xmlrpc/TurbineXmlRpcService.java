@@ -149,13 +149,16 @@ public class TurbineXmlRpcService
 
             if(port != 0)
             {
-                try
+                if (addr != null && addr.length() > 0)
                 {
-                    address = InetAddress.getByName(addr);
-                }
-                catch (UnknownHostException useDefault)
-                {
-                    address = null;
+                    try
+                    {
+                        address = InetAddress.getByName(addr);
+                    }
+                    catch (UnknownHostException useDefault)
+                    {
+                        address = null;
+                    }
                 }
 
                 if (getConfiguration().getBoolean("secure.server", false))
