@@ -7,8 +7,14 @@
   </properties>
 
   <body>
-  	 <release version="1.0-alpha-3" date="CVS">
-
+  	 <release version="1.0.3" date="CVS">
+      <action dev="epugh" type="update">
+      	Update to Apache License 2.0
+      </action>
+      <action dev="epugh" type="update">
+      	Use inherited getLogger() instead of Log in classes
+      	extending AbstractLogEnabled.
+      </action>      
     </release>
 	 <release version="1.0-alpha-2" date="02-16-2004">
       <action dev="epugh" type="update">
