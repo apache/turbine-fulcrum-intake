@@ -1,4 +1,4 @@
-package org.apache.fulcrum.yaafi.framework.crypto;
+package org.apache.fulcrum.jce.crypto;
 
 
 /*
@@ -172,23 +172,56 @@ public class CryptoUtilTest extends TestCase
         CryptoUtil.decrypt( sourceFile, targetFile, this.getPassword() );
     }    
 
-    /** Encrypt a XML file */
-    public void testXmlEncryption() throws Exception
+    /** Encrypt a UTF-16 XML file */
+    public void testXmlUTF16Encryption() throws Exception
     {
-        File sourceFile = new File( this.getTestDataDirectory(), "plain.xml" );
-        File targetFile = new File( this.getTempDataDirectory(), "plain.enc.xml" );        
+        File sourceFile = new File( this.getTestDataDirectory(), "plain-utf16.xml" );
+        File targetFile = new File( this.getTempDataDirectory(), "plain-utf16.enc.xml" );        
         CryptoUtil.encrypt( sourceFile, targetFile, this.getPassword() );
     }
     
-    /** Decrypt a XML file */
-    public void testXMLDecryption() throws Exception
+    /** Decrypt a UTF-16 XML file */
+    public void testXMLUTF16Decryption() throws Exception
     {
-        testXmlEncryption();
-        File sourceFile = new File( this.getTempDataDirectory(), "plain.enc.xml" );
-        File targetFile = new File( this.getTempDataDirectory(), "plain.dec.xml" );
+        testXmlUTF16Encryption();
+        File sourceFile = new File( this.getTempDataDirectory(), "plain-utf16.enc.xml" );
+        File targetFile = new File( this.getTempDataDirectory(), "plain-utf16.dec.xml" );
         CryptoUtil.decrypt( sourceFile, targetFile, this.getPassword() );
     }  
+
+    /** Encrypt a UTF-8 XML file */
+    public void testXmlUTF8Encryption() throws Exception
+    {
+        File sourceFile = new File( this.getTestDataDirectory(), "plain-utf8.xml" );
+        File targetFile = new File( this.getTempDataDirectory(), "plain-utf8.enc.xml" );        
+        CryptoUtil.encrypt( sourceFile, targetFile, this.getPassword() );
+    }
     
+    /** Decrypt a UTF-8 XML file */
+    public void testXMLUTF8Decryption() throws Exception
+    {
+        testXmlUTF8Encryption();
+        File sourceFile = new File( this.getTempDataDirectory(), "plain-utf8.enc.xml" );
+        File targetFile = new File( this.getTempDataDirectory(), "plain-utf8.dec.xml" );
+        CryptoUtil.decrypt( sourceFile, targetFile, this.getPassword() );
+    }  
+
+    /** Encrypt a ISO-8859-1 XML file */
+    public void testXmlISO88591Encryption() throws Exception
+    {
+        File sourceFile = new File( this.getTestDataDirectory(), "plain-iso-8859-1.xml" );
+        File targetFile = new File( this.getTempDataDirectory(), "plain-iso-8859-1.enc.xml" );        
+        CryptoUtil.encrypt( sourceFile, targetFile, this.getPassword() );
+    }
+    
+    /** Decrypt a UTF-8 XML file */
+    public void testXmlISO88591Decryption() throws Exception
+    {
+        testXmlISO88591Encryption();
+        File sourceFile = new File( this.getTempDataDirectory(), "plain-iso-8859-1.enc.xml" );
+        File targetFile = new File( this.getTempDataDirectory(), "plain-iso-8859-1.dec.xml" );
+        CryptoUtil.decrypt( sourceFile, targetFile, this.getPassword() );
+    }
     /** Test encryption and decryption of Strings */
     public void testStringEncryption() throws Exception
     {
@@ -237,7 +270,7 @@ public class CryptoUtilTest extends TestCase
         {
             if( source[i] != result[i] )
             {
-                fail( "Binary data are different" );
+                fail( "Binary data are different at position " + i );
             }
         }           
     }   

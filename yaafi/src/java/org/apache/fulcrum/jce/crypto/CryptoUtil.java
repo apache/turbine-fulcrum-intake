@@ -279,7 +279,7 @@ public final class CryptoUtil
 
         return os;
     }
-    
+        
     /**
      * Pumps the input stream to the output stream.
      *
@@ -305,9 +305,12 @@ public final class CryptoUtil
         os.flush();
         os.close();
     }    
-    
-    private static CryptoStreamFactory getCryptoStreamFactory()
+
+    /**
+     * @return the CryptoStreamFactory to be used
+     */
+    public static CryptoStreamFactory getCryptoStreamFactory()
     {
         return CryptoStreamFactoryImpl.getInstance();
-    }
+    }    
 }

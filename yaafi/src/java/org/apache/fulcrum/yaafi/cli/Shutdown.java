@@ -24,17 +24,16 @@ import org.apache.avalon.framework.logger.Logger;
  * This class process the shutdown notification from the JVM.
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
- * @version $Id$
  */
 
-public class Shutdown implements Runnable 
+public class Shutdown implements Runnable
 {
     /** The service manager tobe disposed */
     private Disposable disposable;
-    
+
     /** The logger to use */
     private Logger logger;
-    
+
     /**
      * Constructor
      * @param disposable The service manager to be disposed
@@ -42,7 +41,7 @@ public class Shutdown implements Runnable
     public Shutdown( Disposable disposable, Logger logger )
     {
         this.disposable = disposable;
-        this.logger 	= logger;
+        this.logger     = logger;
     }
 
     /**

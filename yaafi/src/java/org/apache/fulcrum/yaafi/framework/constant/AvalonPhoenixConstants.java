@@ -1,4 +1,4 @@
-package org.apache.fulcrum.yaafi.framework.container;
+package org.apache.fulcrum.yaafi.framework.constant;
 
 /*
  * Copyright 2004 Apache Software Foundation
@@ -23,24 +23,21 @@ package org.apache.fulcrum.yaafi.framework.container;
  *  @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
-public interface AvalonFortressConstants
-{
-	/** The Fortress Container */
-	String AVALON_CONTAINER_FORTESS = "fortress";
-
+public interface AvalonPhoenixConstants
+{	
+	/** The Phoenix Container */
+	String AVALON_CONTAINER_PHOENIX = "phoenix";
+	    
 	/////////////////////////////////////////////////////////////////////////
-	// Fortress keys for Context
+	// Phoenix keys for Context
 	/////////////////////////////////////////////////////////////////////////
+    
+    /** Phoenix alias for "urn:avalon:partition" */
+    String PHOENIX_APP_NAME = "app.name";
 
-    /** Fortress alias for "urn:avalon:partition" */
-    String FORTRESS_COMPONENT_ID = "component.id";
+    /** Phoenix alias for "urn:avalon:name" */
+    String PHOENIX_BLOCK_NAME = "block.name";
 
-    /** Fortress alias for "urn:avalon:name" */
-    String FORTRESS_COMPONENT_LOGGER = "component.logger";
-
-    /** Fortress alias for "urn:avalon:home" */
-    String FORTRESS_CONTEXT_ROOT = "context-root";
-
-    /** Fortress alias for "urn:avalon:home" */
-    String FORTRESS_IMPL_WORKDIR = "impl.workDir";
+    /** Phoenix alias for "urn:avalon:home" */
+    String PHOENIX_APP_HOME = "app.home";
 }

@@ -18,9 +18,12 @@ package org.apache.fulcrum.yaafi.service;
 
 import junit.framework.TestCase;
 
+import org.apache.avalon.framework.service.ServiceException;
+import org.apache.fulcrum.yaafi.TestComponent;
 import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerConfiguration;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
+import org.apache.fulcrum.yaafi.service.reconfiguration.ReconfigurationService;
 
 /**
  * Test suite for the ReconfigurationService. This test doesn't do
@@ -49,23 +52,44 @@ public class ReconfigurationTest extends TestCase
      */
     protected void tearDown() throws Exception
     {
-        if( this.container != null )
-        {
-            this.container.dispose();
-        }
-
+        ServiceContainerFactory.dispose(this.container);
         super.tearDown();
     }
 
     /**
-     * Creates a YAAFI container using a container configuration file
-     * which already contains most of the required settings
+     * @return get our simple test component
      */
-    public void testCreationWithContainerConfiguration() throws Exception
+    private TestComponent getTestComponent() throws ServiceException
     {
+        return (TestComponent) container.lookup(
+            TestComponent.ROLE
+            );
+    }
+
+    /**
+     * Trigger the ReconfigurationService by instantiating it manually.
+     */
+    public void testReconfigurationService() throws Exception
+    {
+        // instantiate a YAAFI container
+
         ServiceContainerConfiguration config = new ServiceContainerConfiguration();
-        config.setContainerConfiguration( "./src/test/TestMerlinContainerConfig.xml", false );
+        config.loadContainerConfiguration( "./src/test/TestYaafiContainerConfig.xml" );
         this.container = ServiceContainerFactory.create( config );
-        Thread.sleep(10000);
+
+        // the ReconfigurationService is configured to be instantiated on demand
+        // get an instance to start monitoring ...
+
+        ReconfigurationService reconfigurationService = null;
+
+        reconfigurationService = (ReconfigurationService) this.container.lookup(
+            ReconfigurationService.class.getName()
+            );
+
+        // comment out if you want to tinker with componentConfiguration manually
+
+        // Thread.sleep(60000);
+
+        this.getTestComponent().test();
     }
 }

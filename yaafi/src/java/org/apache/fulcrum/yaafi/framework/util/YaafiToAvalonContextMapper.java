@@ -17,11 +17,15 @@ package org.apache.fulcrum.yaafi.framework.util;
  * limitations under the License.
  */
 
+import java.io.File;
+
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
-import org.apache.fulcrum.yaafi.framework.container.AvalonFortressConstants;
-import org.apache.fulcrum.yaafi.framework.container.AvalonMerlinConstants;
-import org.apache.fulcrum.yaafi.framework.container.AvalonPhoenixConstants;
+import org.apache.avalon.framework.context.DefaultContext;
+import org.apache.fulcrum.yaafi.framework.constant.AvalonFortressConstants;
+import org.apache.fulcrum.yaafi.framework.constant.AvalonMerlinConstants;
+import org.apache.fulcrum.yaafi.framework.constant.AvalonPhoenixConstants;
+import org.apache.fulcrum.yaafi.framework.constant.AvalonYaafiConstants;
 
 /**
  * Helper for converting a YAAFI context to a different container
@@ -30,7 +34,44 @@ import org.apache.fulcrum.yaafi.framework.container.AvalonPhoenixConstants;
  */
 
 public class YaafiToAvalonContextMapper
-{    
+{   
+    /** the name of the component for which we create the context */
+    private String urnAvalonName;
+    
+    /** the classloader of the component */
+    private ClassLoader urnAvalonClassLoader;
+    
+    /**
+     * Constructor
+     * 
+     * @param urnAvalonName the name of the component for which we create the context
+     * @param urnAvalonClassLoader the classloader of the component
+     */
+    public YaafiToAvalonContextMapper( String urnAvalonName, ClassLoader urnAvalonClassLoader )
+    {
+        Validate.notEmpty( urnAvalonName, "urnAvalonName" );
+        Validate.notNull( urnAvalonClassLoader, "urnAvalonClassLoader" );
+    
+        this.urnAvalonName = urnAvalonName;
+        this.urnAvalonClassLoader = urnAvalonClassLoader;
+    }
+    
+    /**
+     * @return Returns the urnAvalonClassLoader.
+     */
+    public ClassLoader getUrnAvalonClassLoader()
+    {
+        return urnAvalonClassLoader;
+    }
+    
+    /**
+     * @return Returns the urnAvalonName.
+     */
+    public String getUrnAvalonName()
+    {
+        return urnAvalonName;
+    }
+    
     /**
      * Map a YAAFI (Merlin) context to a different incarnation
      * 
@@ -39,7 +80,7 @@ public class YaafiToAvalonContextMapper
      * @return the mapped context
      * @throws ContextException accessing the context failed
      */
-    public static Context mapTo( Context context, String to )
+    public Context mapTo( Context context, String to )
     	throws ContextException
     {
         Validate.notNull( context, "context" );
@@ -59,27 +100,126 @@ public class YaafiToAvalonContextMapper
         {
             return mapToMerlin(context);            
         }
+        else if( AvalonYaafiConstants.AVALON_CONTAINER_YAAFI.equals(to) )
+        {
+            return mapToYaafi(context);            
+        }
         else
         {
-            throw new IllegalArgumentException(to);
+            String msg = "Don't know the following container type : " + to;
+            throw new IllegalArgumentException(msg);
         }                
     }
     
-    private static Context mapToPhoenix( Context context )
+    /**
+     * Map to a Phoenix context
+     * 
+     * @param context the original context
+     * @return the mapped context
+     * @throws ContextException accessing the context failed
+     */
+    private Context mapToPhoenix( Context context )
     	throws ContextException
     {
-        return null;
+        DefaultContext result = createDefaultContext(context);
+        
+        String urnAvalonPartition = (String) context.get(AvalonYaafiConstants.URN_AVALON_PARTITION);
+        File urnAvalonHome = (File) context.get(AvalonYaafiConstants.URN_AVALON_HOME);
+        String urnAvalonName = this.getUrnAvalonName();
+
+        result.put(AvalonPhoenixConstants.PHOENIX_APP_NAME,urnAvalonPartition);
+        result.put(AvalonPhoenixConstants.PHOENIX_APP_HOME,urnAvalonHome);
+        result.put(AvalonPhoenixConstants.PHOENIX_BLOCK_NAME,urnAvalonName);
+       
+        return result;
     }
 
-    private static Context mapToFortress( Context context )
+    /**
+     * Map to a Fortress context
+     * 
+     * @param context the original context
+     * @return the mapped context
+     * @throws ContextException accessing the context failed
+     */
+    private Context mapToFortress( Context context )
 		throws ContextException
 	{
-	    return null;
+        DefaultContext result = createDefaultContext(context);
+        
+        String urnAvalonPartition = (String) context.get(AvalonYaafiConstants.URN_AVALON_PARTITION);
+        File urnAvalonHome = (File) context.get(AvalonYaafiConstants.URN_AVALON_HOME);
+        File urnAvalonTemp = (File) context.get(AvalonYaafiConstants.URN_AVALON_TEMP);
+        String urnAvalonName = this.getUrnAvalonName();
+            
+        result.put(AvalonFortressConstants.FORTRESS_COMPONENT_ID,urnAvalonPartition);
+        result.put(AvalonFortressConstants.FORTRESS_COMPONENT_LOGGER,urnAvalonName);
+        result.put(AvalonFortressConstants.FORTRESS_CONTEXT_ROOT,urnAvalonHome);
+        result.put(AvalonFortressConstants.FORTRESS_IMPL_WORKDIR,urnAvalonTemp);
+                
+	    return result;
 	}
 
-    private static Context mapToMerlin( Context context )
+    /**
+     * Map to a Merlin context. Actually there is nothing to do but
+     * we do the full monty to ensure that context mannipulation wirks.
+     * 
+     * @param context the original context
+     * @return the mapped context
+     * @throws ContextException accessing the context failed
+     */
+    private Context mapToMerlin( Context context )
 		throws ContextException
 	{
-	    return null;
+        DefaultContext result = createDefaultContext(context);
+        
+        String urnAvalonPartition = (String) context.get(AvalonYaafiConstants.URN_AVALON_PARTITION);
+        File urnAvalonHome = (File) context.get(AvalonYaafiConstants.URN_AVALON_HOME);
+        File urnAvalonTemp = (File) context.get(AvalonYaafiConstants.URN_AVALON_TEMP);
+        String urnAvalonName = this.getUrnAvalonName();
+        ClassLoader urnAvalonClossLoader = this.getUrnAvalonClassLoader();
+        
+        result.put(AvalonMerlinConstants.URN_AVALON_PARTITION,urnAvalonPartition);
+        result.put(AvalonMerlinConstants.URN_AVALON_NAME,urnAvalonName);
+        result.put(AvalonMerlinConstants.URN_AVALON_HOME,urnAvalonHome);
+        result.put(AvalonMerlinConstants.URN_AVALON_TEMP,urnAvalonTemp);
+        result.put(AvalonMerlinConstants.URN_AVALON_CLASSLOADER,urnAvalonClossLoader);
+        
+	    return result;
 	}
-}
+
+    /**
+     * Map to a YAAFI context.
+     * 
+     * @param context the original context
+     * @return the mapped context
+     * @throws ContextException accessing the context failed
+     */
+    private Context mapToYaafi( Context context )
+		throws ContextException
+	{
+        DefaultContext result = createDefaultContext(context);
+        
+        String urnAvalonPartition = (String) context.get(AvalonYaafiConstants.URN_AVALON_PARTITION);
+        File urnAvalonHome = (File) context.get(AvalonYaafiConstants.URN_AVALON_HOME);
+        File urnAvalonTemp = (File) context.get(AvalonYaafiConstants.URN_AVALON_TEMP);
+        String urnAvalonName = this.getUrnAvalonName();
+        ClassLoader urnAvalonClossLoader = this.getUrnAvalonClassLoader();
+        
+        result.put(AvalonYaafiConstants.URN_AVALON_PARTITION,urnAvalonPartition);
+        result.put(AvalonYaafiConstants.URN_AVALON_NAME,urnAvalonName);
+        result.put(AvalonYaafiConstants.URN_AVALON_HOME,urnAvalonHome);
+        result.put(AvalonYaafiConstants.URN_AVALON_TEMP,urnAvalonTemp);
+        result.put(AvalonYaafiConstants.URN_AVALON_CLASSLOADER,urnAvalonClossLoader);
+        result.put(AvalonYaafiConstants.COMPONENT_APP_ROOT,urnAvalonHome.getAbsolutePath());
+        
+	    return result;
+	}
+
+    /**
+     * Create a context to work with
+     */
+    private DefaultContext createDefaultContext(Context context)
+    {
+        return new DefaultContext(context);
+    }
+} 

@@ -17,18 +17,14 @@ package org.apache.fulcrum.yaafi.service.reconfiguration;
  * limitations under the License.
  */
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.security.MessageDigest;
 
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.activity.Startable;
 import org.apache.avalon.framework.activity.Suspendable;
-import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
@@ -40,7 +36,7 @@ import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
-import org.apache.fulcrum.yaafi.framework.util.InputStreamLocator;
+import org.apache.fulcrum.yaafi.framework.container.ServiceLifecycleManager;
 
 
 /**
@@ -52,17 +48,12 @@ import org.apache.fulcrum.yaafi.framework.util.InputStreamLocator;
 
 public class ReconfigurationServiceImpl
     extends AbstractLogEnabled
-    implements ReconfigurationService, Serviceable, Contextualizable, Configurable, Initializable, Runnable, Startable, Disposable
+    implements ReconfigurationService, Serviceable, Contextualizable, 
+    	Reconfigurable, Initializable, Runnable, Startable, Disposable
 {    
     /** the interval between two checks in ms */
     private int interval;
-    
-    /** the location of the componentConfiguration file */
-    private String location;
         
-    /** helper for locating the component configuration */
-    private InputStreamLocator locator;
-    
     /** shall the worker thread terminate immediately */
     private boolean terminateNow;
     
@@ -71,6 +62,15 @@ public class ReconfigurationServiceImpl
     
     /** the ServiceManager to use */
     private ServiceManager serviceManager;
+    
+    /** the application directory */
+    private File applicationDir;
+    
+    /** our list of resources to monitor */
+    private ReconfigurationEntry[] reconfigurationEntryList;
+    
+    /** the interface to reconfigure individual services */
+    private ServiceLifecycleManager serviceLifecycleManager;
     
     /////////////////////////////////////////////////////////////////////////
     // Avalon Service Lifecycle Implementation
@@ -81,7 +81,7 @@ public class ReconfigurationServiceImpl
      */
     public ReconfigurationServiceImpl()
     {
-        // nothing to do
+        this.terminateNow = false;
     }
 
     /**
@@ -90,6 +90,7 @@ public class ReconfigurationServiceImpl
     public void service(ServiceManager manager) throws ServiceException
     {
         this.serviceManager = manager;
+        this.serviceLifecycleManager = (ServiceLifecycleManager) manager;
     }
     
     /**
@@ -97,7 +98,7 @@ public class ReconfigurationServiceImpl
      */
     public void contextualize(Context context) throws ContextException
     {
-        this.locator  = new InputStreamLocator( (File) context.get("urn:avalon:home") );
+        this.applicationDir  = (File) context.get("urn:avalon:home");
     }
     
     /**
@@ -105,38 +106,74 @@ public class ReconfigurationServiceImpl
      */
     public void configure(Configuration configuration) throws ConfigurationException
     {
-        this.interval = Math.max( configuration.getAttributeAsInteger("interval",5000), 1000 );
-        this.location = configuration.getChild("location").getValue();
+        // limit to minimum interval of 1 second
+        
+        this.interval = Math.max( configuration.getAttributeAsInteger("interval",5000), 1000 );    
+        
+        this.getLogger().debug( "Monitoring the resources every " + this.interval + " ms" );
+        
+        // parse the resources to monitor
+        
+        Configuration entry = null;        
+        Configuration services = null;
+        Configuration[] serviceEntries = null;
+        Configuration[] entryList = configuration.getChildren("entry");
+        
+        String location = null;
+        String serviceName = null;
+        String[] serviceNameList = null;
+        ReconfigurationEntry reconfigurationEntry = null;        
+        ReconfigurationEntry[] list = new ReconfigurationEntry[entryList.length];
+        
+        for( int i=0; i<entryList.length; i++ )
+        {
+            entry = entryList[i];       
+            location = entry.getChild("location").getValue();            
+            services = entry.getChild("services",false);
+            
+            this.getLogger().debug( "Adding the following resource to monitor : " + location );
+            
+            if( services != null )
+            {
+                serviceEntries = services.getChildren("service");
+                serviceNameList = new String[serviceEntries.length];
+                                             
+                for( int j=0; j<serviceEntries.length; j++ )
+                {
+                    serviceName = serviceEntries[j].getAttribute("name");
+                    serviceNameList[j] = serviceName;
+                }
+            }
+            
+            reconfigurationEntry = new ReconfigurationEntry(
+                this.getLogger(),
+                this.applicationDir,
+                location,
+                serviceNameList
+                );
+            
+            list[i] = reconfigurationEntry;            
+        }           
+        
+        this.getLogger().debug( "Monitoring " + list.length + " resources" );
+        
+        this.setReconfigurationEntryList(list);
     }
     
     /**
      * @see org.apache.avalon.framework.activity.Initializable#initialize()
      */
     public void initialize() throws Exception
-    {
-        // ensure that we actually find our target
-        
-        if( this.locate() == null )
-        {
-            String msg = "The component configuration was not found : " + this.location;
-            this.getLogger().error(msg);
-            throw new IllegalArgumentException(msg);
-        }
-        else
-        {
-            String msg = "Checking " + this.location + " every " + this.interval + " ms";
-            this.getLogger().debug( msg );            
-        }
-        
+    {               
         // request a SHA-1 to make sure that it is supported
         
         MessageDigest.getInstance( "SHA1" );
                 
         // check that the ServiceManager inplements Reconfigurable
         
-        if( (this.serviceManager instanceof Reconfigurable) == false )
+        if( (this.serviceManager instanceof ServiceLifecycleManager) == false )
         {
-            String msg = "The ServiceManager instance does not implement Reconfigurable?!";
+            String msg = "The ServiceManager instance does not implement ServiceLifecycleManager?!";
             throw new IllegalArgumentException( msg );
         }
         
@@ -150,6 +187,7 @@ public class ReconfigurationServiceImpl
      */
     public void start() throws Exception
     {
+        this.getLogger().debug( "Starting worker thread ..." );
         this.workerThread.start();
     }
     
@@ -158,6 +196,7 @@ public class ReconfigurationServiceImpl
      */
     public void stop() throws Exception
     {
+        this.getLogger().debug( "Stopping worker thread ..." );
         this.terminateNow = true;
         this.workerThread.interrupt();
         this.workerThread.join( 10000 );
@@ -168,9 +207,20 @@ public class ReconfigurationServiceImpl
      */
     public void dispose()
     {
-        this.locator = null;
+        this.terminateNow = false;
+        this.applicationDir = null;
     	this.workerThread = null;
     	this.serviceManager = null;
+    	this.reconfigurationEntryList = null;
+    }
+    
+    /**
+     * @see org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.apache.avalon.framework.configuration.Configuration)
+     */
+    public void reconfigure(Configuration configuration)
+        throws ConfigurationException
+    {
+        this.configure(configuration);
     }
     
     /////////////////////////////////////////////////////////////////////////
@@ -182,49 +232,26 @@ public class ReconfigurationServiceImpl
      */
     public void run()
     {
-        byte[] lastDigest = null;
-        byte[] currDigest = null;
-        InputStream is = null;
-        boolean isFirstInvocation = true;
+        ReconfigurationEntry reconfigurationEntry = null;        
+        ReconfigurationEntry[] list = null;
         
         while( this.terminateNow == false )
         {
+            list = this.getReconfigurationEntryList();
+            
             try
             {
-                // get a grip on our file 
-                
-                is = this.locate();
-
-                if( is == null )
+                for( int i=0; i<list.length; i++ )
                 {
-                    String msg = "Unable to find the component configuration";
-                    this.getLogger().warn(msg);
-                    continue;
+                    reconfigurationEntry = list[i];
+                    
+                    if( reconfigurationEntry.hasChanged() )
+                    {
+                        this.onReconfigure( reconfigurationEntry ); 
+                    }                    
                 }
                 
-                // calculate a SHA-1 digest
-                
-                currDigest = this.getDigest(is);
-                is.close();
-                is = null;
-             
-                if( isFirstInvocation == true )
-                { 
-                    isFirstInvocation = false;
-                    this.getLogger().debug( "Storing SHA-1 digest of componentConfiguration" );
-                    lastDigest = currDigest;
-                }
-                else
-                {
-                    this.getLogger().debug( "Checking the componentConfiguration to detect changes ..." );    
-	                if( equals( lastDigest, currDigest ) == false )
-	                {
-	                    this.getLogger().debug( "The componentConfiguration has changed" );
-	                    lastDigest = currDigest;
-	                    this.reconfigure();
-	                }
-	                Thread.sleep( this.interval );
-                }
+                Thread.sleep( this.interval );                
             }
             catch( InterruptedException e )
             {
@@ -236,140 +263,69 @@ public class ReconfigurationServiceImpl
                 this.getLogger().error(msg,e);
                 continue;
             }
-            finally
-            {
-                if( is != null )
-                {
-                    try
-                    {
-                        is.close();
-                    }
-                    catch (Exception e)
-                    {
-                        String msg = "Can't close the InputStream during error recovery";
-                        this.getLogger().error(msg,e);
-                    }
-                }
-            }
         }
-        
-        return;
     }    
     
     /////////////////////////////////////////////////////////////////////////
     // Service implementation
     /////////////////////////////////////////////////////////////////////////
 
-    private void reconfigure() throws Exception
-    {
-        InputStream is = this.locate();
-        DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
-        Configuration configuration = builder.build(is);
-        is.close();
-        is = null;
-      
-        this.getLogger().warn( "Starting to reconfigure the container" );
-        
-        if( this.serviceManager instanceof Suspendable)
-        {
-            this.getLogger().info( "Calling suspend() of the container" );
-            ((Suspendable) this.serviceManager).suspend();
-        }
-
-        if( this.serviceManager instanceof Reconfigurable)
-        {
-            this.getLogger().info( "Calling reconfigure() of the container" );
-            ((Reconfigurable) this.serviceManager).reconfigure(configuration);
-        }
-
-        if( this.serviceManager instanceof Suspendable)
-        {
-            this.getLogger().info( "Calling resume() of the container" );
-            ((Suspendable) this.serviceManager).resume();
-        }
-        
-        this.getLogger().info( "Reconfiguring the container was successful" );
-    }
-    
-    /**
-     * Creates an InputStream  
-     */
-    private InputStream locate() throws IOException
-    {
-        return this.locator.locate(this.location);
-    }
-    
-    /**
-     * Pumps the input stream to the output stream.
-     *
-     * @param is the source input stream
-     * @param os the target output stream
-     * @throws IOException the copying failed
-     */
-    private static void copy( InputStream is, OutputStream os )
-        throws IOException
-    {
-        byte[] buf = new byte[1024];
-        int n = 0;
-        int total = 0;
-
-        while ((n = is.read(buf)) > 0)
-        {
-            os.write(buf, 0, n);
-            total += n;
-        }
-
-        is.close();
-        
-        os.flush();
-        os.close();
-    }    
-    
-    /** 
-     * Creates a message digest 
-     */
-    private byte[] getDigest( InputStream is )
+    protected void onReconfigure( ReconfigurationEntry reconfigurationEntry ) 
     	throws Exception
-    {
-        byte[] result = null;
-        byte[] content = null;
+    {      
+        if( reconfigurationEntry.getServiceList() == null )
+        {        
+            // reconfigure the whole container using Avalon Lifecycle Spec
+     
+            InputStream is = reconfigurationEntry.locate();
+            DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
+            Configuration configuration = builder.build(is);
+            is.close();
+            is = null;
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        copy( is, baos );
-        content = baos.toByteArray();
-        baos.close();        
-        
-        MessageDigest sha1 = MessageDigest.getInstance( "SHA1" );
-        sha1.update( content );
-        result = sha1.digest();
-
-        return result;
-    }
- 
-    /**
-     * Compares two byte[] for equality
-     */
-    private static boolean equals(byte[] lhs, byte[] rhs)
-    {
-        if( lhs == rhs )
-        {
-            return true;
-        }
-        else if( lhs.length != rhs.length )
-        {
-            return false;
+	        this.getLogger().warn( "Starting to reconfigure the container" );
+	        
+	        if( this.serviceManager instanceof Suspendable)
+	        {
+	            this.getLogger().info( "Calling suspend() of the container" );
+	            ((Suspendable) this.serviceManager).suspend();
+	        }
+	
+	        if( this.serviceManager instanceof Reconfigurable)
+	        {
+	            this.getLogger().info( "Calling reconfigure() of the container" );
+	            ((Reconfigurable) this.serviceManager).reconfigure(configuration);
+	        }
+	
+	        if( this.serviceManager instanceof Suspendable)
+	        {
+	            this.getLogger().info( "Calling resume() of the container" );
+	            ((Suspendable) this.serviceManager).resume();
+	        }
+	        
+	        this.getLogger().info( "Reconfiguring the container was successful" );
         }
         else
         {
-            for( int i=0; i<lhs.length; i++ )
-            {
-                if( lhs[i] != rhs[i] )
-                {
-                    return false;
-                }
-            }
+            String[] serviceList = reconfigurationEntry.getServiceList();
+            this.serviceLifecycleManager.reconfigure(serviceList);
         }
-        
-        return true;
+    }     
+    
+    /**
+     * @return Returns the reconfigurationEntryList.
+     */
+    private synchronized ReconfigurationEntry [] getReconfigurationEntryList()
+    {
+        return reconfigurationEntryList;
+    }
+
+    /**
+     * @param reconfigurationEntryList The reconfigurationEntryList to set.
+     */
+    private synchronized void setReconfigurationEntryList(
+        ReconfigurationEntry [] reconfigurationEntryList)
+    {
+        this.reconfigurationEntryList = reconfigurationEntryList;
     }
 }

@@ -62,7 +62,7 @@ public class PasswordFactory implements PasswordParameters
 	}
 
     /**
-     * @param the default password supplied by the caller
+     * @param seed the default password supplied by the caller
      * @return a password using "xxxx-xxxx-xxxx-xxxxx"
      */
     public static final char[] create( char[] seed ) 

@@ -24,6 +24,7 @@ import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.logger.Logger;
 import org.apache.fulcrum.yaafi.framework.container.ServiceConstants;
 import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
+import org.apache.fulcrum.yaafi.framework.util.Validate;
 
 /**
  * A factory to hide how to initialize YAFFI since this might change over the time
@@ -46,6 +47,7 @@ public class ServiceContainerFactory
         ServiceContainerConfiguration serviceManagerConfig)
         throws Exception
     {
+        Validate.notNull(serviceManagerConfig,"serviceManagerConfig");
         Context context = serviceManagerConfig.createFinalContext();
         return ServiceContainerFactory.create( serviceManagerConfig, context );
     }
@@ -61,6 +63,9 @@ public class ServiceContainerFactory
         ServiceContainerConfiguration serviceManagerConfig, Context context )
         throws Exception
     {
+        Validate.notNull(serviceManagerConfig,"serviceManagerConfig");
+        Validate.notNull(context,"context");
+        
         String clazzName;
         Class clazz = null;
         Configuration configuration = null;
@@ -116,6 +121,29 @@ public class ServiceContainerFactory
         ContainerUtil.initialize( result );
 
         return result;
+    }
+
+    /**
+     * Disposes the container
+     * @param container the container to be disposed
+     */
+    public static boolean dispose( ServiceContainer container )
+    {
+        try
+        {
+            if( container != null )
+            {
+                container.dispose();
+            }
+            
+            return true;
+        }
+        catch( Throwable t )
+        {
+            String msg = "Disposing the container failed : " + t.getMessage();
+            System.err.println(msg);
+            return false;
+        }
     }
     
     /**

@@ -12,7 +12,7 @@
     shorthand="SystemPropertyService"
     default-class="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyServiceImpl"
     early-init="true"
-    description="Copies name/value pairs into the SystemProperties"
+    description="ÜÖÄüöäß"
   />   
   <!-- 
     This ReconfigurationService is instantiated during the first access. Until

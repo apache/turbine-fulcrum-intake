@@ -31,9 +31,10 @@ import org.apache.avalon.framework.context.DefaultContext;
 import org.apache.avalon.framework.logger.ConsoleLogger;
 import org.apache.avalon.framework.logger.Logger;
 import org.apache.fulcrum.jce.crypto.CryptoStreamFactoryImpl;
-import org.apache.fulcrum.yaafi.framework.container.AvalonMerlinConstants;
+import org.apache.fulcrum.yaafi.framework.constant.AvalonMerlinConstants;
 import org.apache.fulcrum.yaafi.framework.container.ServiceConstants;
 import org.apache.fulcrum.yaafi.framework.util.InputStreamLocator;
+import org.apache.fulcrum.yaafi.framework.util.Validate;
 
 /**
  * Helper class to capture configuration related stuff. The are two ways
@@ -61,19 +62,19 @@ public class ServiceContainerConfiguration
     private String componentRolesLocation;
     
     /** is the component role file encrypted? */
-    private boolean isComponentRolesEncrypted;
+    private String isComponentRolesEncrypted;
     
     /** the location of the component configuration file */
     private String componentConfigurationLocation;
 
     /** is the component configuration file encrypted? */
-    private boolean isComponentConfigurationEncrypted;
+    private String isComponentConfigurationEncrypted;
 
     /** the location of the paramaters file */
     private String parametersLocation;
 
     /** is the parameters file encrypted? */
-    private boolean isParametersEncrypted;
+    private String isParametersEncrypted;
     
     /** the user-supplied Avalon context */
     private DefaultContext context;
@@ -91,7 +92,7 @@ public class ServiceContainerConfiguration
     private ClassLoader componentClassLoader;
     
     /** the type of container where YAAFI is embedded */
-    private String containerType;
+    private String containerFlavour;
     
     /** the caller-supplied container configuration */
     private Configuration containerConfiguration;    
@@ -100,14 +101,14 @@ public class ServiceContainerConfiguration
     public ServiceContainerConfiguration()
     {
         this.logger = new ConsoleLogger();
-        this.containerType = ServiceConstants.AVALON_CONTAINER_YAAFI;
+        this.containerFlavour = ServiceConstants.AVALON_CONTAINER_YAAFI;
         this.serviceContainerClazzName = ServiceConstants.CLAZZ_NAME;
         this.componentRolesLocation = ServiceConstants.COMPONENT_ROLE_VALUE;
-        this.isComponentRolesEncrypted = false;
+        this.isComponentRolesEncrypted = "false";
         this.componentConfigurationLocation = ServiceConstants.COMPONENT_CONFIG_VALUE;
-        this.isComponentConfigurationEncrypted = false;
+        this.isComponentConfigurationEncrypted = "false";
         this.parametersLocation = ServiceConstants.COMPONENT_PARAMETERS_VALUE;
-        this.isParametersEncrypted = false;        
+        this.isParametersEncrypted = "false";        
         this.context = new DefaultContext();
         this.applicationRootDir = new File( new File("").getAbsolutePath() );
         this.tempRootDir = new File( System.getProperty("java.io.tmpdir","."));      
@@ -121,6 +122,8 @@ public class ServiceContainerConfiguration
 	 */
 	public void addToContext( String name, Object value )
 	{
+        Validate.notEmpty(name,"name");
+        Validate.notNull(value,"value");
 	    this.getContext().put( name, value );
 	}    
 
@@ -130,6 +133,8 @@ public class ServiceContainerConfiguration
 	 */
 	public void addToContext( Hashtable hashtable )
 	{
+	    Validate.notNull(hashtable,"hashtable");
+	    
 	    String name = null;
 	    Object value = null;
 	    Enumeration keys = hashtable.keys();
@@ -218,15 +223,15 @@ public class ServiceContainerConfiguration
 	
 	        // add the following fragement
 	        //
-	        // <containerType>merlin</containerType>
+	        // <containerFlavour>merlin</containerFlavour>
 	        
-	        DefaultConfiguration containerTypeConfig = new DefaultConfiguration(
-	            ServiceConstants.CONTAINERTYPE_CONFIG_KEY
+	        DefaultConfiguration containerFlavourConfig = new DefaultConfiguration(
+	            ServiceConstants.CONTAINERFLAVOUR_CONFIG_KEY
 	            );
 	        
-	        containerTypeConfig.setValue( this.getContainerType() );
+	        containerFlavourConfig.setValue( this.getContainerFlavour() );
 	        
-	        result.addChild( containerTypeConfig );
+	        result.addChild( containerFlavourConfig );
 	
 	        // add the following fragement
 	        //
@@ -352,16 +357,7 @@ public class ServiceContainerConfiguration
     {
         return this.serviceContainerClazzName;
     }
-    
-    /**
-     * @param serviceContainerClazzName The serviceContainerClazzName to set.
-     */
-    public void setServiceContainerClazzName(
-        String serviceContainerClazzName)
-    {
-        this.serviceContainerClazzName = serviceContainerClazzName;
-    }
-    
+        
     /**
      * @return Returns the componentConfigurationLocation.
      */
@@ -421,7 +417,7 @@ public class ServiceContainerConfiguration
     /**
      * @return Returns the isComponentConfigurationEncrypted.
      */
-    private boolean isComponentConfigurationEncrypted()
+    private String isComponentConfigurationEncrypted()
     {
         return isComponentConfigurationEncrypted;
     }
@@ -430,7 +426,7 @@ public class ServiceContainerConfiguration
      * @param isComponentConfigurationEncrypted The isComponentConfigurationEncrypted to set.
      */
     public void setComponentConfigurationEncrypted(
-        boolean isComponentConfigurationEncrypted)
+        String isComponentConfigurationEncrypted)
     {
         this.isComponentConfigurationEncrypted = isComponentConfigurationEncrypted;
     }
@@ -438,14 +434,14 @@ public class ServiceContainerConfiguration
     /**
      * @return Returns the isComponentRolesEncrypted.
      */
-    private boolean isComponentRolesEncrypted()
+    private String isComponentRolesEncrypted()
     {
         return isComponentRolesEncrypted;
     }
     /**
      * @param isComponentRolesEncrypted The isComponentRolesEncrypted to set.
      */
-    public void setComponentRolesEncrypted(boolean isComponentRolesEncrypted)
+    public void setComponentRolesEncrypted(String isComponentRolesEncrypted)
     {
         this.isComponentRolesEncrypted = isComponentRolesEncrypted;
     }
@@ -453,7 +449,7 @@ public class ServiceContainerConfiguration
     /**
      * @return Returns the isParametersEncrypted.
      */
-    private boolean isParametersEncrypted()
+    private String isParametersEncrypted()
     {
         return isParametersEncrypted;
     }
@@ -461,7 +457,7 @@ public class ServiceContainerConfiguration
     /**
      * @param isParametersEncrypted The isParametersEncrypted to set.
      */
-    public void setParametersEncrypted(boolean isParametersEncrypted)
+    public void setParametersEncrypted(String isParametersEncrypted)
     {
         this.isParametersEncrypted = isParametersEncrypted;
     }
@@ -547,18 +543,18 @@ public class ServiceContainerConfiguration
     }    
     
     /**
-     * @return Returns the containerType.
+     * @return Returns the containerFlavour.
      */
-    private String getContainerType()
+    private String getContainerFlavour()
     {
-        return containerType;
+        return containerFlavour;
     }
     /**
-     * @param containerType The containerType to set.
+     * @param containerFlavour The containerFlavour to set.
      */
-    public void setContainerType(String containerType)
+    public void setContainerFlavour(String containerFlavour)
     {
-        this.containerType = containerType;
+        this.containerFlavour = containerFlavour;
     }
         
     /**
@@ -576,15 +572,35 @@ public class ServiceContainerConfiguration
     {
         this.containerConfiguration = containerConfiguration;
     }
-    
+
     /**
-     * Loads a containerConfiguration.
+     * Loads a containerConfiguration file and set is as the Avalon
+     * configuration to be used for Configurable.configure(). Take
+     * care that the implementation uses an InputStreamLocator to
+     * find the containerConfiguration which uses the previously
+     * set application root directory.
+     * 
+     * @param location the location of the containerConfiguration
+     * @throws IOException loading the configuration failed
+     */
+    public void loadContainerConfiguration( String location )
+    	throws IOException
+    {
+        this.loadContainerConfiguration( location, "false" );
+    }
+
+    /**
+     * Loads a containerConfiguration file and set is as the Avalon
+     * configuration to be used for Configurable.configure(). Take
+     * care that the implementation uses an InputStreamLocator to
+     * find the containerConfiguration which uses the previously
+     * set application root directory.
      * 
      * @param location the location of the containerConfiguration
      * @param isEncrypted is the file encrypted
      * @throws IOException loading the configuration failed
      */
-    public void setContainerConfiguration( String location, boolean isEncrypted ) 
+    public void loadContainerConfiguration( String location, String isEncrypted ) 
 		throws IOException
     {
 		Configuration result = null;
@@ -594,19 +610,32 @@ public class ServiceContainerConfiguration
 		    this.getLogger() 
 		    );
     	
+		DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
 		InputStream is = locator.locate( location );
+		InputStream cis = is;
 		
 		if( is != null )
 		{
 		    try
 		    {		        
-		        if( isEncrypted )
+		        if( isEncrypted.equalsIgnoreCase("true") )
 		        {
-		            is = CryptoStreamFactoryImpl.getInstance().getInputStream(is); 
+		            cis = CryptoStreamFactoryImpl.getInstance().getInputStream(is); 
+		            result = builder.build( cis );
+		            cis.close();
 		        }
-		
-		        DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
-		        result = builder.build( is );
+		        if( isEncrypted.equalsIgnoreCase("auto") )
+		        {
+		            cis = CryptoStreamFactoryImpl.getInstance().getSmartInputStream(is); 
+		            result = builder.build( cis );
+		            cis.close();
+		        }
+		        else
+		        {
+		            result = builder.build( is );
+		            is.close();
+		        }		        
+				        
 		        this.setContainerConfiguration( result );
 		    }
 		    catch ( Exception e )

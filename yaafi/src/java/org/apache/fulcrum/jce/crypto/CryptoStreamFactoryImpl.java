@@ -138,7 +138,6 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
         CipherInputStream cis = new CipherInputStream( is, cipher );      
         return cis;
 	}
-
     
     /**
      * @param is the input stream to be wrapped
@@ -153,6 +152,36 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
         return cis;
 	}
 
+    /**
+     * @see org.apache.fulcrum.jce.crypto.CryptoStreamFactory#getSmartInputStream(java.io.InputStream)
+     */
+    public InputStream getSmartInputStream(InputStream is)
+        throws GeneralSecurityException, IOException
+    {
+        return this.getSmartInputStream(
+            is,
+            PasswordFactory.create()
+            );            
+    }
+
+    /**
+     * @see org.apache.fulcrum.jce.crypto.CryptoStreamFactory#getSmartInputStream(java.io.InputStream)
+     */
+    public InputStream getSmartInputStream(InputStream is, char[] password )
+        throws GeneralSecurityException, IOException
+    {
+        SmartDecryptingInputStream result = null;
+        
+        result = new SmartDecryptingInputStream(
+            getInstance(),
+            is,
+    		password 
+    		);
+        
+        return result;
+    }
+
+    
     /**
      * @param os the output stream to be wrapped
      * @param password the password for encryption

@@ -34,7 +34,7 @@ public class Clazz
      * 
      * @param classLoader the classloader to be used
      * @param clazzName the name of the class to be loaded
-     * @return
+     * @return true if the class was found
      */
     public static boolean hasClazz( ClassLoader classLoader, String clazzName )
     {

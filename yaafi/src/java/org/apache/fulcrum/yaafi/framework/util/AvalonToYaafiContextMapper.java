@@ -22,10 +22,10 @@ import java.io.File;
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.DefaultContext;
-import org.apache.fulcrum.yaafi.framework.container.AvalonFortressConstants;
-import org.apache.fulcrum.yaafi.framework.container.AvalonMerlinConstants;
-import org.apache.fulcrum.yaafi.framework.container.AvalonPhoenixConstants;
-import org.apache.fulcrum.yaafi.framework.container.AvalonYaafiConstants;
+import org.apache.fulcrum.yaafi.framework.constant.AvalonFortressConstants;
+import org.apache.fulcrum.yaafi.framework.constant.AvalonMerlinConstants;
+import org.apache.fulcrum.yaafi.framework.constant.AvalonPhoenixConstants;
+import org.apache.fulcrum.yaafi.framework.constant.AvalonYaafiConstants;
 
 /**
  * Helper for converting Avalon Context of Fortress and Phoenix
@@ -46,7 +46,6 @@ public class AvalonToYaafiContextMapper
 	 * Constructor
 	 * 
 	 * @param tempRootDir current temp directory
-	 * @param classLoader the classloader 
 	 * @param context the existing context
 	 */
     public AvalonToYaafiContextMapper(
@@ -56,15 +55,7 @@ public class AvalonToYaafiContextMapper
         Validate.notNull( tempRootDir, "tempRootDir" );
         
         this.tempRootDir = tempRootDir;
-        
-        if( context instanceof DefaultContext )
-        {
-            this.defaultContext = (DefaultContext) context;
-        }
-        else
-        {
-            this.defaultContext = new DefaultContext( context );
-        }
+        this.defaultContext = new DefaultContext( context );
     }
         
     /**
@@ -98,6 +89,10 @@ public class AvalonToYaafiContextMapper
             
         }
         else if( AvalonMerlinConstants.AVALON_CONTAINER_MERLIN.equals(from) )
+        {
+            return mapFromMerlin(context);            
+        }
+        else if( AvalonYaafiConstants.AVALON_CONTAINER_YAAFI.equals(from) )
         {
             return mapFromMerlin(context);            
         }
@@ -168,14 +163,22 @@ public class AvalonToYaafiContextMapper
     {  
         DefaultContext result = this.getDefaultContext();
         
-        File urnAvalonHome = (File) context.get( AvalonMerlinConstants.URN_AVALON_HOME );
+        String urnAvalonPartition = (String) context.get(AvalonYaafiConstants.URN_AVALON_PARTITION);
+        File urnAvalonHome = (File) context.get(AvalonYaafiConstants.URN_AVALON_HOME);
+        File urnAvalonTemp = (File) context.get(AvalonYaafiConstants.URN_AVALON_TEMP);
+        String urnAvalonName = (String) (String) context.get(AvalonYaafiConstants.URN_AVALON_NAME);
+        ClassLoader urnAvalonClossLoader = (ClassLoader) context.get(AvalonYaafiConstants.URN_AVALON_CLASSLOADER);
         
-        result.put( AvalonYaafiConstants.COMPONENT_APP_ROOT, urnAvalonHome.getAbsolutePath() );
+        result.put(AvalonMerlinConstants.URN_AVALON_PARTITION,urnAvalonPartition);
+        result.put(AvalonMerlinConstants.URN_AVALON_NAME,urnAvalonName);
+        result.put(AvalonMerlinConstants.URN_AVALON_HOME,urnAvalonHome);
+        result.put(AvalonMerlinConstants.URN_AVALON_TEMP,urnAvalonTemp);
+        result.put(AvalonMerlinConstants.URN_AVALON_CLASSLOADER,urnAvalonClossLoader);        
+        result.put(AvalonYaafiConstants.COMPONENT_APP_ROOT, urnAvalonHome.getAbsolutePath());
         	
         return result;  
  
     }    
-    
     
     private DefaultContext getDefaultContext()
     {

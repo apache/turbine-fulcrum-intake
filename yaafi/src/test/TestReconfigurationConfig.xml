@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<componentConfig>  
+ 
+ <test>
+    <FOO>YAAFI</FOO>
+  </test>
+ 
+ <SystemPropertyService>
+    <property name="FOO">YAAFI</property>
+  </SystemPropertyService>
+  
+  <ReconfigurationService interval="10000">
+    <entry>
+      <location>./src/test/TestComponentConfig.xml</location>
+    </entry>
+  </ReconfigurationService>
+  
+</componentConfig>

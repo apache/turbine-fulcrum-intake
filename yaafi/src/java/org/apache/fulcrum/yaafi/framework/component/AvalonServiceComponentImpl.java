@@ -1,4 +1,4 @@
-package org.apache.fulcrum.yaafi.framework.container;
+package org.apache.fulcrum.yaafi.framework.component;
 
 /*
  * Copyright 2004 Apache Software Foundation
@@ -37,123 +37,178 @@ import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
+import org.apache.fulcrum.yaafi.framework.role.RoleEntry;
+import org.apache.fulcrum.yaafi.framework.util.Validate;
 
 /**
- * Holder of the metadata of a service component.
+ * This class implements a service component singleton with
+ * an arbitray lifecycle.
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
-public class ServiceComponentImpl
-    implements ServiceComponent
-{
-    /** The name of the service */
-    private String name;
-
-    /** The name of the implementation class of the service */
-    private String clazzName;
-    
-    /** The actual implementation class of the service */
-    private Class clazz;
-
-    /** The instance of the implementation class of the service */
-    private Object instance;
-
-    /** The short name of this service */
-    private String shorthand;
-    
-    /** The logger to be used  */
-    private Logger logger;
-     
-    /** Do we incarnate this instance during start-up */
-    private boolean isEarlyInit;
-    
-    /** A description for the service if any */
-    private String description;
-    
-    /** The type of component´, e.g. "merlin", "phoenix" or "fortress*/
-    private String componentType;
-    
+public class AvalonServiceComponentImpl
+    extends ServiceComponentImpl
+{       
     /**
-     * Constructor
-     * @param configuration The configuration to obtain the meta informations
+     * Constructor to parse the configuration.
+     * 
+     * @param roleEntry The information extracted from the role configuration file
      * @param logger The logger of the service container
      */
-    public ServiceComponentImpl( Configuration configuration, Logger logger )
-    	throws ConfigurationException
+    public AvalonServiceComponentImpl( RoleEntry roleEntry, Logger logger )
     {
-        this.notNull( configuration, "configuration" );
-        this.notNull( logger, "logger" );
-        
-        if( configuration.getName().equals("role") )
-        {
-			this.clazzName		= configuration.getAttribute("default-class");
-	        this.name			= configuration.getAttribute("name",this.clazzName);
-	        this.shorthand		= configuration.getAttribute("shorthand",this.name);
-	        this.logger			= logger;
-	        this.isEarlyInit 	= configuration.getAttributeAsBoolean("early-init",true);
-	        this.description	= configuration.getAttribute("description",null);
-	        this.componentType	= configuration.getAttribute("component-type","merlin");
-        }
-        else
-        {
-			this.clazzName		= configuration.getAttribute("class");
-	        this.name			= configuration.getAttribute("name",this.clazzName);
-	        this.shorthand		= configuration.getAttribute("shorthand",this.name);
-	        this.logger			= logger;
-	        this.isEarlyInit 	= configuration.getAttributeAsBoolean("early-init",true);
-	        this.description	= configuration.getAttribute("description",null);
-	        this.componentType	= configuration.getAttribute("component-type","merlin");
-        }
+        super( roleEntry, logger );
     }
 	
     /////////////////////////////////////////////////////////////////////////
-    // Service Lifecycle Implementation
+    // Service Component Lifecycle Implementation
     /////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Create an instance of the service class
-     *
-     * @throws ClassNotFoundException
-     */
-    public Class loadClass()
-    	throws ClassNotFoundException
-    {
-        this.getLogger().debug( "Loading the implementation class for " + this.getShorthand() );
-        this.clazz = this.getClass().getClassLoader().loadClass(this.clazzName);
-        return this.clazz;
-    }
     
     /**
-     * Create an instance of the service class
-     *
-     * @throws InstantiationException
-     * @throws IllegalAccessException
+     * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponent#incarnate()
      */
-    public Object create()
-        throws InstantiationException, IllegalAccessException
+    protected void incarnateInstance() throws Exception
     {
-        this.getLogger().debug( "Instantiating the implementation class for " + this.getShorthand() );
-        this.instance =  this.clazz.newInstance();
-        return this.instance;
+        this.getLogger().debug( "Incarnating the service " + this.getShorthand() );
+        
+        if( this.getLogger() != null )
+        {
+            this.enableLogging( this.getLogger() );
+        }
+        
+        if( this.getContext() != null )
+        {
+            this.contextualize( this.getContext() );
+        }
+        
+        if( this.getServiceManager() != null )
+        {
+            this.service( this.getServiceManager() );    
+        }
+        
+        if( this.getConfiguration() != null )
+        {
+            this.configure( this.getConfiguration() );
+        }
+        
+        if( this.getParamaters() != null )
+        {
+            this.parameterize( this.getParamaters() );
+        }
+        
+        this.initialize();
+        this.execute();
+        this.start();
     }
+
+    /**
+     * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponent#reconfigure()
+     */
+    public void reconfigure() throws Exception
+    {
+        Throwable lastThrowable = null;
+        
+        this.getLogger().debug( "Reconfiguring " + this.getShorthand() );
+
+        try
+        {
+            this.suspend();
+        }
+        catch (Throwable t)
+        {
+            String msg = "Suspending the following service failed : " + this.getShorthand();
+            this.getLogger().error( msg, t );
+            lastThrowable = t;
+        }
+
+        try
+        {
+            if( this.getConfiguration() != null )
+            {
+                this.reconfigure( this.getConfiguration() );
+            }
+        }
+        catch (Throwable t)
+        {
+            String msg = "Reconfiguring the following service failed : " + this.getShorthand();
+            this.getLogger().error( msg, t );
+            lastThrowable = t;
+        }
+        
+        try
+        {
+            this.resume();
+        }
+        catch (Throwable t)
+        {
+            String msg = "Resumimg the following service failed : " + this.getShorthand();
+            this.getLogger().error( msg, t );
+            lastThrowable = t;
+        }
+
+        if( lastThrowable != null )
+        {
+            if( lastThrowable instanceof Exception )
+            {
+                throw (Exception) lastThrowable;
+            }
+            else
+            {
+                throw new RuntimeException( lastThrowable.getMessage() );
+            }
+        }
+    }
+
+    /** 
+     * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponent#decommision()
+     */
+    public void decommision() throws Exception
+    {
+        this.getLogger().debug( "Decommisioning the service " + this.getShorthand() );
+     
+        try
+        {
+            this.stop();
+        }
+        catch (Throwable e)
+        {
+            String msg = "Stopping the following service failed : " + this.getShorthand();
+            this.getLogger().error( msg, e );
+        }
+
+        try
+        {
+            this.dispose();
+        }
+        catch (Throwable e)
+        {
+            String msg = "Disposing the following service failed : " + this.getShorthand();
+            this.getLogger().error( msg, e );
+        }
+        
+        super.decommision();
+    }
+
+    /////////////////////////////////////////////////////////////////////////
+    // Avalon Lifecycle Implementation
+    /////////////////////////////////////////////////////////////////////////
 
     /**
      * @see org.apache.avalon.framework.logger.LogEnabled#enableLogging(org.apache.avalon.framework.logger.Logger)
      */
     public void enableLogging(Logger logger)
     {
-		if( this.instance instanceof LogEnabled )
+		if( this.getRawInstance() instanceof LogEnabled )
 		{
 			try
 			{
 				this.getLogger().debug( "LogEnabled.enableLogging() for " + this.getShorthand() );
-				Logger avalonLogger = logger.getChildLogger( this.getShorthand() ); 
-				((LogEnabled )this.getInstance()).enableLogging(avalonLogger);
+				((LogEnabled )this.getInstance()).enableLogging(logger);
 			}
 			catch (Throwable t)
 			{
-				String msg = "LogEnable the following service failed : " + this.getName();
+				String msg = "LogEnable the following service failed : " + this.getShorthand();
 				this.getLogger().error(msg,t);
 				throw new RuntimeException(msg);
 			}		    
@@ -164,10 +219,8 @@ public class ServiceComponentImpl
      * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
      */
     public void contextualize(Context context) throws ContextException
-    {
-        this.notNull( context, "context" );
-        
-		if( this.instance instanceof Contextualizable )
+    {        
+		if( this.getRawInstance() instanceof Contextualizable )
 		{
 			try
 			{
@@ -186,17 +239,15 @@ public class ServiceComponentImpl
 				this.getLogger().error(msg,t);
 				throw new ContextException(msg,t);
 			}
-		 }
+		}
     }
 
 	/**
-	 * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceContainer)
+	 * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
 	 */
 	public void service(ServiceManager serviceManager) throws ServiceException
 	{
-	    this.notNull( serviceManager, "serviceManager" );
-	    
-		if( this.instance instanceof Serviceable )
+		if( this.getRawInstance() instanceof Serviceable )
 		{
 			try
 			{
@@ -223,15 +274,12 @@ public class ServiceComponentImpl
      */
     public void configure(Configuration configuration) throws ConfigurationException
     {
-        this.notNull( configuration, "configuration" );
-        
-        if( this.instance instanceof Configurable )
+        if( this.getRawInstance() instanceof Configurable )
         {
             try
             {
                 this.getLogger().debug( "Configurable.configure() for " + this.getShorthand() );
-            	Configuration componentConfiguraton = configuration.getChild(this.getShorthand());
-            	((Configurable )this.getInstance()).configure(componentConfiguraton);
+            	((Configurable )this.getInstance()).configure(configuration);
             }
             catch (ConfigurationException e)
             {
@@ -249,13 +297,11 @@ public class ServiceComponentImpl
     }
 
     /**
-     * @see org.apache.avalon.framework.parameters.Parameterizable#parameterize(org.apache.avalon.framework.parameters.CryptoParameters)
+     * @see org.apache.avalon.framework.parameters.Parameterizable#parameterize(org.apache.avalon.framework.parameters.Parameters)
      */
     public void parameterize(Parameters parameters) throws ParameterException
     {
-        this.notNull( parameters, "parameters" );
-        
-		if( this.instance instanceof Parameterizable )
+		if( this.getRawInstance() instanceof Parameterizable )
 		{
 			try
 			{
@@ -282,7 +328,7 @@ public class ServiceComponentImpl
      */
     public void initialize() throws Exception
     {
-        if( this.instance instanceof Initializable )
+        if( this.getRawInstance() instanceof Initializable )
         {
             try
             {
@@ -299,7 +345,7 @@ public class ServiceComponentImpl
             {
                 String msg = "Initializing the following service failed : " + this.getShorthand();
                 this.getLogger().error(msg,t);
-                throw new ConfigurationException(msg,t);
+                throw new RuntimeException(msg);
             }
         }
     }
@@ -309,7 +355,7 @@ public class ServiceComponentImpl
      */
     public void execute() throws Exception
     {
-        if( this.instance instanceof Executable )
+        if( this.getRawInstance() instanceof Executable )
         {
             try
             {
@@ -326,7 +372,7 @@ public class ServiceComponentImpl
             {
                 String msg = "Executing the following service failed : " + this.getShorthand();
                 this.getLogger().error(msg,t);
-                throw new ConfigurationException(msg,t);
+                throw new RuntimeException(msg);
             }            
         }        
     }
@@ -336,7 +382,7 @@ public class ServiceComponentImpl
      */
     public void start() throws Exception
     {
-        if( this.instance instanceof Startable )
+        if( this.getRawInstance() instanceof Startable )
         {
             try
             {
@@ -363,7 +409,7 @@ public class ServiceComponentImpl
      */
     public void stop() throws Exception
     {
-        if( this.instance instanceof Startable )
+        if( this.getRawInstance() instanceof Startable )
         {
             try
             {
@@ -376,6 +422,12 @@ public class ServiceComponentImpl
                 this.getLogger().error(msg,e);
                 throw e;
             }
+            catch (Throwable t)
+            {
+                String msg = "Stopping the following service failed : " + this.getShorthand();
+                this.getLogger().error(msg,t);
+                throw new RuntimeException(msg);
+            }            
         }
     }
 
@@ -384,17 +436,18 @@ public class ServiceComponentImpl
      */
     public void resume()
     {
-        if( this.instance instanceof Suspendable )
+        if( this.getRawInstance() instanceof Suspendable )
         {
             try
             {
                 this.getLogger().debug( "Suspendable.resume() for " + this.getShorthand() );
                 ((Suspendable )this.getInstance()).resume();
             }
-            catch (Exception e)
+            catch (Throwable t)
             {
                 String msg = "Resuming the following service failed : " + this.getShorthand();
-                this.getLogger().error(msg,e);
+                this.getLogger().error(msg,t);
+                throw new RuntimeException(msg);
             }            
         }
     }
@@ -404,17 +457,18 @@ public class ServiceComponentImpl
      */
     public void suspend()
     {
-        if( this.instance instanceof Suspendable )
+        if( this.getRawInstance() instanceof Suspendable )
         {
             try
             {
                 this.getLogger().debug( "Suspendable.suspend() for " + this.getShorthand() );
                 ((Suspendable )this.getInstance()).suspend();
             }
-            catch (Exception e)
+            catch (Throwable t)
             {
                 String msg = "Suspending the following service failed : " + this.getShorthand();
-                this.getLogger().error(msg,e);
+                this.getLogger().error(msg,t);
+                throw new RuntimeException(msg);
             }
         }
     }
@@ -424,21 +478,20 @@ public class ServiceComponentImpl
      */
     public void reconfigure(Configuration configuration) throws ConfigurationException
     {
-        this.notNull( configuration, "configuration" );
+        Validate.notNull( configuration, "configuration" );
         
-        if( this.instance instanceof Reconfigurable )
+        if( this.getRawInstance() instanceof Reconfigurable )
         {
             try
             {
                 this.getLogger().debug( "Reconfigurable.reconfigure() for " + this.getShorthand() );
-    			String shorthand = this.getShorthand();
-    			Configuration componentConfiguraton = configuration.getChild(shorthand);
-                ((Reconfigurable )this.getInstance()).reconfigure(componentConfiguraton);
+                ((Reconfigurable )this.getInstance()).reconfigure(configuration);
             }
-            catch (Exception e)
+            catch (Throwable t)
             {
                 String msg = "Reconfiguring the following service failed : " + this.getShorthand();
-                this.getLogger().error(msg,e);
+                this.getLogger().error(msg,t);
+                throw new RuntimeException(msg);
             }            
         }
     }
@@ -448,180 +501,19 @@ public class ServiceComponentImpl
      */
     public void dispose()
     {
-        if( this.instance instanceof Disposable )
+        if( this.getRawInstance() instanceof Disposable )
         {
             try
             {
                 this.getLogger().debug( "Disposable.dispose() for " + this.getShorthand() );
                 ((Disposable )this.getInstance()).dispose();
-                this.instance = null;
             }
             catch (Exception e)
             {
                 String msg = "Disposing the following service failed : " + this.getShorthand();
                 this.getLogger().error(msg,e);
+                throw new RuntimeException(msg);
             }
-        }
-    }
-    
-    
-    /**
-     * @return Returns the if the service instance was already instantiated.
-     */
-    public boolean isInstantiated()
-    {
-        return ( this.instance != null ? true : false );
-    }
-
-    /**
-     * @return Return true if the service is created on startup
-     */
-    public boolean isEarlyInit()
-    {
-        return this.isEarlyInit;
-    }
-    
-    /**
-     * @return Returns the instance. If it is not instantiated yet then
-     * do it
-     */
-    public Object getInstance()
-    	throws InstantiationException, IllegalAccessException
-    {
-        if( this.isInstantiated() )
-        {
-            return this.instance;
-        }
-        else
-        {
-            return this.create();
-        }
-    }
-        
-    /////////////////////////////////////////////////////////////////////////
-    // Generated getters and setters
-    /////////////////////////////////////////////////////////////////////////
-    
-    /**
-     * @return Returns the clazz.
-     */
-    public Class getClazz()
-    {
-        return this.clazz;
-    }
-    /**
-     * @param clazz The clazz to set.
-     */
-    public void setClazz(Class clazz)
-    {
-        this.clazz = clazz;
-    }
-    /**
-     * @return Returns the clazzName.
-     */
-    public String getClazzName()
-    {
-        return this.clazzName;
-    }
-    /**
-     * @param clazzName The clazzName to set.
-     */
-    public void setClazzName(String clazzName)
-    {
-        this.clazzName = clazzName;
-    }
-    /**
-     * @param instance The instance to set.
-     */
-    public void setInstance(Object instance)
-    {
-        this.instance = instance;
-    }
-    /**
-     * @return Returns the logger.
-     */
-    public Logger getLogger()
-    {
-        return this.logger;
-    }
-    /**
-     * @param logger The logger to set.
-     */
-    public void setLogger(Logger logger)
-    {
-        this.logger = logger;
-    }
-    /**
-     * @return Returns the name.
-     */
-    public String getName()
-    {
-        return this.name;
-    }
-    /**
-     * @param name The name to set.
-     */
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-    /**
-     * @return Returns the shorthand.
-     */
-    public String getShorthand()
-    {
-        return this.shorthand;
-    }
-    /**
-     * @param shorthand The shorthand to set.
-     */
-    public void setShorthand(String shorthand)
-    {
-        this.shorthand = shorthand;
-    }
-    
-    /**
-     * @return Returns the description if any.
-     */
-    public String getDescription()
-    {
-        return description;
-    }
-
-    /**
-     * @param description The description to set.
-     */
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
-    
-    
-    /**
-     * @return Returns the componentType.
-     */
-    public String getComponentType()
-    {
-        return componentType;
-    }
-    
-    /**
-     * @param componentType The componentType to set.
-     */
-    public void setComponentType(String componentType)
-    {
-        this.componentType = componentType;
-    }
-    
-    /////////////////////////////////////////////////////////////////////////
-    // MISC
-    /////////////////////////////////////////////////////////////////////////
-    
-    private void notNull( Object object, String name )
-    {
-        if( object == null )
-        {
-            throw new NullPointerException( name );
         }
     }
 }

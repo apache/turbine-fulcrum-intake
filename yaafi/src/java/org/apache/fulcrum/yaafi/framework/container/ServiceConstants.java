@@ -1,5 +1,7 @@
 package org.apache.fulcrum.yaafi.framework.container;
 
+import org.apache.fulcrum.yaafi.framework.constant.AvalonYaafiConstants;
+
 /*
  * Copyright 2004 Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
@@ -36,7 +38,7 @@ public interface ServiceConstants extends AvalonYaafiConstants
 	/////////////////////////////////////////////////////////////////////////
 
 	/** property to lookup the container type */
-	String CONTAINERTYPE_CONFIG_KEY = "containerType";
+	String CONTAINERFLAVOUR_CONFIG_KEY = "containerFlavour";
 
 	/** property to lookup the implementation class of the container */
 	String CONTAINERCLAZZNAME_CONFIG_KEY = "containerClazzName";
@@ -68,8 +70,11 @@ public interface ServiceConstants extends AvalonYaafiConstants
 
 	/** default file name of the parameters file */
 	String COMPONENT_PARAMETERS_VALUE = "/parameters.properties";
+
+	/** default value for container flavour */
+	String COMPONENT_CONTAINERFLAVOUR_VALUE = "yaafi";
 	
-	/** default value for container type */
-	String COMPONENT_CONTAINERTYPE_VALUE = "merlin";	
-	
+	/** default value for role config flavour */
+	String COMPONENT_ROLECONFIGFLAVOUR_VALUE = "yaafi";	
+
 }

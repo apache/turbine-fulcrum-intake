@@ -32,7 +32,7 @@ import java.security.GeneralSecurityException;
 public interface CryptoStreamFactory
 {
     /** 
-     * Creates an decrypting input stream
+     * Creates a decrypting input stream.
      * 
      * @param is the input stream to be wrapped
      * @return an decrypting input stream
@@ -50,6 +50,26 @@ public interface CryptoStreamFactory
     InputStream getInputStream(InputStream is, char[] password)
     	throws GeneralSecurityException, IOException;
 
+    /** 
+     * Creates a smart decrypting input stream.
+     * 
+     * @param is the input stream to be wrapped
+     * @return an decrypting input stream
+     */
+    InputStream getSmartInputStream(InputStream is)
+    	throws GeneralSecurityException, IOException;
+
+    /** 
+     * Creates an decrypting input stream
+     * 
+     * @param is the input stream to be wrapped
+     * @param password the password to be used
+     * @return an decrypting input stream
+     */
+    InputStream getSmartInputStream(InputStream is, char[] password)
+    	throws GeneralSecurityException, IOException;
+
+    
     /** 
      * Creates an encrypting output stream
      * 

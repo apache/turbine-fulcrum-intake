@@ -17,9 +17,9 @@ package org.apache.fulcrum.yaafi.service.systemproperty;
  * limitations under the License.
  */
 
-import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.configuration.Reconfigurable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 
 
@@ -27,14 +27,11 @@ import org.apache.avalon.framework.logger.AbstractLogEnabled;
  * Copies the properties found in the configuration into the SystemProperties
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
- * @avalon.component name="SystemPropertyService" lifestyle="singleton"
- * @avalon.service type="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyService"
- * @avalon.attribute key="urn:composition:deployment.timeout" value="0"
  */
 
 public class SystemPropertyServiceImpl
 	extends AbstractLogEnabled
-    implements SystemPropertyService, Configurable
+    implements SystemPropertyService, Reconfigurable
 {
     /**
      * Constructor
@@ -78,5 +75,13 @@ public class SystemPropertyServiceImpl
             this.getLogger().debug( "Processed the following number of properties : " + systemProperties.length );
         }
     }
-
+    
+    /**
+     * @see org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.apache.avalon.framework.configuration.Configuration)
+     */
+    public void reconfigure(Configuration configuration)
+        throws ConfigurationException
+    {
+        this.configure(configuration);
+    }
 }

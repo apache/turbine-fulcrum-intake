@@ -17,18 +17,10 @@ package org.apache.fulcrum.yaafi.service.servicemanager;
  * limitations under the License.
  */
 
-import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.context.Context;
-import org.apache.avalon.framework.context.ContextException;
-import org.apache.avalon.framework.context.Contextualizable;
-import org.apache.avalon.framework.logger.AbstractLogEnabled;
-import org.apache.avalon.framework.parameters.ParameterException;
-import org.apache.avalon.framework.parameters.Parameterizable;
+import org.apache.avalon.framework.logger.Logger;
 import org.apache.avalon.framework.parameters.Parameters;
-import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
-import org.apache.avalon.framework.service.Serviceable;
-
 
 /**
  * Let's try to break the singleton addiction with this service. This
@@ -39,133 +31,31 @@ import org.apache.avalon.framework.service.Serviceable;
  *   <li>Logger instance
  *   <li>ServiceManager instance
  * 	 <li>Context instance
- *   <li>CryptoParameters instance
+ *   <li>Parameters instance
  * </ul>
  * 
  *  @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
-public class ServiceManagerService
-	extends AbstractLogEnabled
-	implements ServiceManager, Contextualizable, Parameterizable, Serviceable, Disposable
+public interface ServiceManagerService extends ServiceManager
 {
-    /** Store the ServiceContainer on a per instance base */
-    private static ServiceManager serviceManager;
-    
-    /** Store the passed parameters on a per instance base */
-    private static Parameters parameters;    
-
-    /** Store the passed parameters on a per instance base */
-    private static Context context;    
-
     /**
-     * Constructor
+     * @return the Logger of the container
      */
-    public ServiceManagerService()
-    {
-        // nothing to do here
-    }
-
+    Logger getAvalonLogger();
+    
     /** 
      * @return the ServiceManager for the container
      */
-    public static ServiceManager getServiceManager()
-    {
-        return ServiceManagerService.serviceManager;
-    }
+    ServiceManager getServiceManager();
 
     /** 
      * @return the Paramters for the container
      */
-    public static Parameters getParameters()
-    {
-        return ServiceManagerService.parameters;
-    }
+    Parameters getParameters();
 
     /** 
      * @return the Context for the container
      */
-    public static Context getContext()
-    {
-        return ServiceManagerService.context;
-    }    
-    
-    /////////////////////////////////////////////////////////////////////////
-    // Avalon Lifecycle Implementation
-    /////////////////////////////////////////////////////////////////////////
-
-    /**
-     * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceContainer)
-     */
-    public void service(ServiceManager serviceManager) throws ServiceException
-    {       
-        if( ServiceManagerService.serviceManager == null  )
-        {
-	        this.getLogger().debug( "Storing the ServiceContainer instance" );
-	        ServiceManagerService.serviceManager = serviceManager;
-        }
-    }
-    
-    /**
-     * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
-     */
-    public void contextualize(Context context) throws ContextException
-    {
-        if( ServiceManagerService.context == null  )
-        {
-	        this.getLogger().debug( "Storing the Context instance" );
-	        ServiceManagerService.context = context;
-        }        
-    }
-    
-    /**
-     * @see org.apache.avalon.framework.parameters.Parameterizable#parameterize(org.apache.avalon.framework.parameters.CryptoParameters)
-     */
-    public void parameterize(Parameters parameters) throws ParameterException
-    {
-        if( ServiceManagerService.parameters == null  )
-        {
-	        this.getLogger().debug( "Storing the CryptoParameters instance" );
-	        ServiceManagerService.parameters = parameters;
-        }
-    }
-    
-    /**
-     * @see org.apache.avalon.framework.activity.Disposable#dispose()
-     */
-    public void dispose()
-    {
-        this.getLogger().debug( "Removing the ServiceContainer instance" );
-        ServiceManagerService.serviceManager 	= null;
-        ServiceManagerService.parameters		= null;
-        ServiceManagerService.context 			= null;
-    }
-
-    /////////////////////////////////////////////////////////////////////////
-    // ServiceContainer Implementation
-    /////////////////////////////////////////////////////////////////////////
-    
-    /**
-     * @see org.apache.avalon.framework.service.ServiceContainer#hasService(java.lang.String)
-     */
-    public boolean hasService(String name)
-    {
-        return ServiceManagerService.serviceManager.hasService(name);
-    }
-    
-    /**
-     * @see org.apache.avalon.framework.service.ServiceContainer#lookup(java.lang.String)
-     */
-    public Object lookup(String name) throws ServiceException
-    {
-        return ServiceManagerService.serviceManager.lookup(name);    
-    }
-    
-    /**
-     * @see org.apache.avalon.framework.service.ServiceContainer#release(java.lang.Object)
-     */
-    public void release(Object object)
-    {
-        ServiceManagerService.serviceManager.release(object);   
-    }
+    Context getContext();
 }

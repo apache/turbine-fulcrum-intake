@@ -1,4 +1,4 @@
-package org.apache.fulcrum.yaafi.framework.container;
+package org.apache.fulcrum.yaafi.framework.constant;
 
 /*
  * Copyright 2004 Apache Software Foundation
@@ -23,27 +23,24 @@ package org.apache.fulcrum.yaafi.framework.container;
  *  @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
-public interface AvalonMerlinConstants
+public interface AvalonFortressConstants
 {
-	/** The Merlin Container */
-	String AVALON_CONTAINER_MERLIN = "merlin";
+	/** The Fortress Container */
+	String AVALON_CONTAINER_FORTESS = "fortress";
 
 	/////////////////////////////////////////////////////////////////////////
-	// Merlin keys for Context
+	// Fortress keys for Context
 	/////////////////////////////////////////////////////////////////////////
-	
-    /** define the Merlin application root (File) */
-    String URN_AVALON_HOME = "urn:avalon:home";
 
-    /** define the Merlin temporary directory (File) */
-    String URN_AVALON_TEMP = "urn:avalon:temp";    	
+    /** Fortress alias for "urn:avalon:partition" */
+    String FORTRESS_COMPONENT_ID = "component.id";
 
-    /** define the Merlin component name (String) */
-    String URN_AVALON_NAME = "urn:avalon:name";    
-    
-    /** define the Merlin partition name (String) */
-    String URN_AVALON_PARTITION = "urn:avalon:partition";    	
-    
-    /** define the Merlin component classloader (ClassLoader) */
-    String URN_AVALON_CLASSLOADER = "urn:avalon:classloader";
+    /** Fortress alias for "urn:avalon:name" */
+    String FORTRESS_COMPONENT_LOGGER = "component.logger";
+
+    /** Fortress alias for "urn:avalon:home" */
+    String FORTRESS_CONTEXT_ROOT = "context-root";
+
+    /** Fortress alias for "urn:avalon:temp" */
+    String FORTRESS_IMPL_WORKDIR = "impl.workDir";
 }

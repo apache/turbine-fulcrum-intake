@@ -26,9 +26,9 @@ import org.apache.avalon.framework.parameters.Parameterizable;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.configuration.Reconfigurable;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
@@ -41,7 +41,7 @@ import org.apache.avalon.framework.context.ContextException;
  */
 public class TestComponentImpl
         extends AbstractLogEnabled
-        implements Initializable, Configurable, Parameterizable, Disposable, TestComponent, Contextualizable
+        implements Initializable, Reconfigurable, Parameterizable, Disposable, TestComponent, Contextualizable
 {
     public File urnAvaloneHome;
     public File urnAvaloneTemp;
@@ -74,6 +74,12 @@ public class TestComponentImpl
         this.foo = configuration.getChild("FOO").getValue("FOO Not Found?!");
     }
 
+    public void reconfigure(Configuration configuration)
+        throws ConfigurationException
+    {
+        this.configure(configuration);
+    }
+    
     public void parameterize(Parameters parameters) throws ParameterException
     {
         this.bar = parameters.getParameter("BAR", "BAR Not Found?!");

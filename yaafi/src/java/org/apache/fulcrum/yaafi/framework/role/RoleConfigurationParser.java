@@ -1,4 +1,4 @@
-package org.apache.fulcrum.yaafi.framework.container;
+package org.apache.fulcrum.yaafi.framework.role;
 
 /*
  * Copyright 2004 Apache Software Foundation
@@ -17,22 +17,24 @@ package org.apache.fulcrum.yaafi.framework.container;
  * limitations under the License.
  */
 
-import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.activity.Initializable;
-import org.apache.avalon.framework.configuration.Reconfigurable;
-import org.apache.avalon.framework.context.Contextualizable;
-import org.apache.avalon.framework.logger.LogEnabled;
-import org.apache.avalon.framework.service.ServiceManager;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
 
 /**
- * Interface exposed by the ServiceContainerImpl
+ * Parses the role configuration file of various Avalon containers.
  * 
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
-public interface ServiceContainer
-	extends LogEnabled, Contextualizable, Initializable, Reconfigurable, Disposable, 
-		ServiceManager, ServiceLifecycleManager
-{    	
-    // nothing to export
+public interface RoleConfigurationParser
+{   
+    /**
+     * Parses a role configuration file.
+     * 
+     * @param roleConfiguration the role configuration file to parse
+     * @return the parsed RoleEntries
+     * @exception ConfigurationException parsing the configuration failesw
+     */
+    public RoleEntry[] parse( Configuration roleConfiguration )
+    	throws ConfigurationException;
 }

@@ -1,4 +1,4 @@
-package org.apache.fulcrum.yaafi.framework.container;
+package org.apache.fulcrum.yaafi.framework.constant;
 
 /*
  * Copyright 2004 Apache Software Foundation
@@ -27,7 +27,7 @@ package org.apache.fulcrum.yaafi.framework.container;
 public interface AvalonYaafiConstants
 {
 	/** The YAAFI Container */
-	String AVALON_CONTAINER_YAAFI = "merlin";
+	String AVALON_CONTAINER_YAAFI = "yaafi";
 
 	/////////////////////////////////////////////////////////////////////////
 	// Merlin keys for Context
