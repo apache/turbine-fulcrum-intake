@@ -56,7 +56,7 @@ package org.apache.fulcrum;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import org.apache.stratum.configuration.Configuration;
+import org.apache.commons.configuration.Configuration;
 import org.apache.log4j.Category;
 
 /**

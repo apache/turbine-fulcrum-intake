@@ -56,7 +56,7 @@ package org.apache.fulcrum;
 
 import org.apache.stratum.lifecycle.Configurable;
 import org.apache.stratum.lifecycle.Initializable;
-import org.apache.stratum.configuration.Configuration;
+import org.apache.commons.configuration.Configuration;
 
 /**
  * A implementation of a <code>ServiceBroker</code> which implements the

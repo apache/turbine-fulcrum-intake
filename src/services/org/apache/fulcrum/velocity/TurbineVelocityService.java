@@ -76,7 +76,7 @@ import org.apache.fulcrum.InitializationException;
 import org.apache.fulcrum.template.TurbineTemplate;
 import org.apache.fulcrum.template.TemplateContext;
 import org.apache.fulcrum.template.BaseTemplateEngineService;
-import org.apache.stratum.configuration.ConfigurationConverter;
+import org.apache.commons.configuration.ConfigurationConverter;
 
 /**
  * This is a Service that can process Velocity templates from within a

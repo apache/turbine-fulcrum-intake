@@ -54,7 +54,7 @@ package org.apache.fulcrum;
  * <http://www.apache.org/>.
  */
 
-import org.apache.stratum.configuration.Configuration;
+import org.apache.commons.configuration.Configuration;
 import org.apache.log4j.Category;
 
 /**

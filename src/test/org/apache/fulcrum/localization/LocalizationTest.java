@@ -61,8 +61,8 @@ import java.util.ResourceBundle;
 
 import org.apache.fulcrum.ServiceManager;
 import org.apache.fulcrum.TurbineServices;
-import org.apache.stratum.configuration.BaseConfiguration;
-import org.apache.stratum.configuration.Configuration;
+import org.apache.commons.configuration.BaseConfiguration;
+import org.apache.commons.configuration.Configuration;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

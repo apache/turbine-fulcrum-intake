@@ -58,7 +58,7 @@ import java.io.IOException;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.apache.stratum.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.fulcrum.Fulcrum;
 import org.apache.fulcrum.ServiceManager;
 import org.apache.fulcrum.TurbineServices;

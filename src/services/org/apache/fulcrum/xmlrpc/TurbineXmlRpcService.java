@@ -75,7 +75,7 @@ import org.apache.xmlrpc.XmlRpcServer;
 import org.apache.xmlrpc.secure.SecureWebServer;
 import org.apache.xmlrpc.secure.SecurityTool;
 
-import org.apache.stratum.configuration.Configuration;
+import org.apache.commons.configuration.Configuration;
 
 /**
  * This is a service which will make an xml-rpc call to a remote server.

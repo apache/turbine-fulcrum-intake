@@ -57,7 +57,7 @@ package org.apache.fulcrum;
 import java.util.List;
 import java.util.Hashtable;
 
-import org.apache.stratum.configuration.Configuration;
+import org.apache.commons.configuration.Configuration;
 import org.apache.log4j.Category;
 
 /**
