@@ -160,9 +160,10 @@ public class DefaultQuartzScheduler implements QuartzScheduler, Configurable, Se
             Trigger trigger = (Trigger) triggersMap.get(key);
             if (trigger instanceof CronTrigger) {
                 if (trigger.getJobGroup() != null & trigger.getJobName() != null) {
-                    logger.debug("Scheduling trigger [" + trigger.getFullName() + "] for  job detail ["
-                            + trigger.getFullJobName() + "] to scheduler");
                     CronTrigger triggerToSchedule = new CronTrigger(trigger.getName(),trigger.getGroup(),trigger.getJobName(),trigger.getJobGroup(),((CronTrigger)trigger).getCronExpression());
+                    logger.debug("Scheduling trigger [" + triggerToSchedule.getFullName() + "] for  job ["
+                            + triggerToSchedule.getFullJobName() + "] using cron " + triggerToSchedule.getCronExpression());
+                    
                     triggerToSchedule.setDescription(trigger.getDescription());
                    // CronTrigger cronTrigger = new CronTrigger("someTriggerCron", Scheduler.DEFAULT_GROUP,
                    //         "simpleJob","DEFAULT_GROUP" ,"* * * * * ?");
