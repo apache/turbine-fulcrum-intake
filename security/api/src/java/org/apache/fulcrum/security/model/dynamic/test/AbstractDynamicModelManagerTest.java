@@ -264,7 +264,6 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
         for (Iterator i = users.iterator(); i.hasNext();)
         {
             User u = (User) i.next();
-            System.out.println(u);
             if (u.equals(user))
             {
                 found = true;
