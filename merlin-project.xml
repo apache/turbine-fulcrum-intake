@@ -148,13 +148,6 @@
     	<version>1.4.0</version> 
 	    <url>http://avalon.apache.org</url> 
     	<type>plugin</type>
-  	</dependency> 
-    <dependency> 
-    	<groupId>avalon-util</groupId> 
-    	<artifactId>avalon-util-plugin</artifactId> 
-    	<version>1.0.0</version> 
-	    <url>http://avalon.apache.org</url> 
-    	<type>plugin</type>
   	</dependency>   
     <dependency> 
     	<groupId>merlin</groupId> 
