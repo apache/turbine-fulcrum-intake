@@ -26,10 +26,10 @@ import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 /**
- * 
+ *
  * Test the NT implementation of the user manager. This test traps some exceptions that can be
  * thrown if there is NO nt dll.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -40,12 +40,12 @@ public class NTBasicModelManagerTest extends BaseUnitTest implements TestConstan
     private static final String USERNAME = "Eric Pugh";
     private static final String DOMAIN = "IQUITOS";
     private static final String PASSWORD = "";
-	private static final String GUESTUSER = DOMAIN + "/" + "Guest";
-	private static final String TESTUSER = DOMAIN + "/" + USERNAME;
+    private static final String GUESTUSER = DOMAIN + "/" + "Guest";
+    private static final String TESTUSER = DOMAIN + "/" + USERNAME;
     private BasicModelManager modelManager;
-	private SecurityService securityService;
-	private UserManager userManager;
-	private User user;
+    private SecurityService securityService;
+    private UserManager userManager;
+    private User user;
 
     public void setUp() throws Exception
     {
@@ -63,7 +63,7 @@ public class NTBasicModelManagerTest extends BaseUnitTest implements TestConstan
     }
     /**
      * Constructor for MemoryPermissionManagerTest.
-     * 
+     *
      * @param arg0
      */
     public NTBasicModelManagerTest(String arg0)
@@ -112,6 +112,9 @@ public class NTBasicModelManagerTest extends BaseUnitTest implements TestConstan
         {
             log.info("Unit test not being run due to missing NT DLL");
         }
+        catch (java.lang.NoClassDefFoundError ncdfe){
+            log.info("Unit test not being run due to missing NT DLL");
+        }
     }
     public void testRevokeUserGroup() throws Exception
     {
@@ -133,6 +136,9 @@ public class NTBasicModelManagerTest extends BaseUnitTest implements TestConstan
         {
             log.info("Unit test not being run due to missing NT DLL");
         }
+        catch (java.lang.NoClassDefFoundError ncdfe){
+            log.info("Unit test not being run due to missing NT DLL");
+        }
     }
-  
+
 }

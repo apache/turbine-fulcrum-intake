@@ -25,10 +25,10 @@ import org.apache.fulcrum.security.util.DataBackendException;
 
 import com.tagish.auth.win32.NTSystem;
 /**
- * 
+ *
  * Test the NT implementation of the user manager. This test traps some exceptions that can be
  * thrown if there is NO nt dll.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -39,8 +39,8 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     private static final String USERNAME = "Eric Pugh";
     private static final String DOMAIN = "IQUITOS";
     private static final String PASSWORD = "";
-	private static final String GUESTUSER = DOMAIN + "/" + "Guest";
-	private static final String TESTUSER = DOMAIN + "/" + USERNAME;
+    private static final String GUESTUSER = DOMAIN + "/" + "Guest";
+    private static final String TESTUSER = DOMAIN + "/" + USERNAME;
 
     public void setUp() throws Exception
     {
@@ -57,7 +57,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     }
     /**
      * Constructor for MemoryPermissionManagerTest.
-     * 
+     *
      * @param arg0
      */
     public NTUserManagerTest(String arg0)
@@ -68,7 +68,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     {
         try
         {
-			user = userManager.getUser(GUESTUSER, "");
+            user = userManager.getUser(GUESTUSER, "");
             user.setPassword("");
             assertTrue(userManager.checkExists(user));
         }
@@ -202,21 +202,21 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         }
     }
     /** ******* ALL BELOW HERE THROW RUNTIME EXCEPTIONS ******** */
-	/*
-	 * Class to test for User retrieve(String, String)
-	 */
-	public void testGetAllUsers() throws Exception
-	{
-		try
-	   {
-		   userManager.getAllUsers();
-		   fail("Should throw runtime exception");
-	   }
-	   catch (RuntimeException re)
-	   {
-		   assertTrue(re.getMessage().equals(ERROR_MSG));
-	   }
-	}    
+    /*
+     * Class to test for User retrieve(String, String)
+     */
+    public void testGetAllUsers() throws Exception
+    {
+        try
+       {
+           userManager.getAllUsers();
+           fail("Should throw runtime exception");
+       }
+       catch (RuntimeException re)
+       {
+           assertTrue(re.getMessage().equals(ERROR_MSG));
+       }
+    }
     /*
      * Class to test for User retrieve(String)
      */
@@ -232,7 +232,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             assertTrue(re.getMessage().equals(ERROR_MSG));
         }
     }
-    
+
     public void testGetUserById() throws Exception
     {
         try
@@ -244,13 +244,14 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         {
             assertTrue(re.getMessage().equals(ERROR_MSG));
         }
-    }    
+    }
     public void testChangePassword() throws Exception
     {
-		user = userManager.getUser(GUESTUSER, "");
-		user.setPassword("");
         try
         {
+            user = userManager.getUser(GUESTUSER, "");
+            user.setPassword("");
+
             userManager.changePassword(user, "", "newPassword");
             fail("Should throw runtime exception");
         }
@@ -258,6 +259,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         {
             log.info("Unit test not being run due to missing NT DLL");
         }
+
         catch (RuntimeException re)
         {
             assertTrue(re.getMessage().equals(ERROR_MSG));
@@ -265,8 +267,8 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     }
     public void testForcePassword() throws Exception
     {
-		user = userManager.getUser(GUESTUSER, "");
-		user.setPassword("");
+        user = userManager.getUser(GUESTUSER, "");
+        user.setPassword("");
         try
         {
             userManager.forcePassword(user, "JC_SUBSET");
@@ -281,7 +283,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             assertTrue(re.getMessage().equals(ERROR_MSG));
         }
     }
-   
+
     public void testSaveUser() throws Exception
     {
         try
@@ -294,7 +296,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             assertTrue(re.getMessage().equals(ERROR_MSG));
         }
     }
-   
+
     public void testRemoveUser() throws Exception
     {
         try
@@ -331,16 +333,28 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             assertTrue(re.getMessage().equals(ERROR_MSG));
         }
     }
+
+    /*
+     * Override parent class, doesn't make sense..
+     */
     public void testCheckExistsWithString() throws Exception
     {
-       
-    }  
-    
+
+    }
+
     /*
-     * Class to test for boolean checkExists(string)
+     * Override parent class, doesn't make sense..
      */
     public void testAddUserTwiceFails() throws Exception
     {
-      
-    }  
+
+    }
+    /*
+     * Override parent class, doesn't make sense..
+     */
+    public void testCheckUserCaseSensitiveExists() throws Exception
+    {
+
+    }
+
 }
