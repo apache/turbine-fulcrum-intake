@@ -57,6 +57,7 @@ package org.apache.fulcrum.template;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
+import java.io.StringWriter;
 import javax.mail.internet.InternetAddress;
 import org.apache.commons.mail.SimpleEmail;
 import org.apache.commons.lang.StringUtils;
@@ -178,6 +179,11 @@ public class TemplateEmail
     private TemplateContext context = null;
 
     /**
+     * The charset
+     */
+    private String charset = null;
+
+    /**
      * Constructor
      */
     public TemplateEmail()
@@ -250,6 +256,18 @@ public class TemplateEmail
         }
     }
 
+
+    /**
+     * The given Unicode string will be charset-encoded using the specified 
+     * charset. The charset is also used to set the "charset" parameter.
+     *
+     * @param charset a <code>String</code> value
+     */
+    public void setCharset(String charset)
+    {
+        this.charset = charset;
+    }
+
     /**
      * To: name, email
      *
@@ -317,6 +335,19 @@ public class TemplateEmail
         return this;
     }
 
+    private List headersList;
+    public TemplateEmail addHeader(String name, String value)
+    {
+        String[] pair = new String[2];
+        pair[0] = name;
+        pair[1] = value;
+        if (headersList == null) 
+        {
+            headersList = new ArrayList(3);
+        }        
+        headersList.add(pair);
+        return this;
+    }
 
     /**
      * Subject.
@@ -403,28 +434,11 @@ public class TemplateEmail
             throw new Exception ("Must set a To:");
         }
 
-        // Process the template.
-        String body = TurbineTemplate.handleRequest(context,template);
-
-        // If the caller desires word-wrapping, do it here
-        if (wordWrap > 0)
-        {
-            body = WordWrapper.wrapText (body,
-                                     System.getProperty("line.separator"),
-                                     wordWrap);
-        }
-
-        SimpleEmail se = new SimpleEmail();
-        se.setFrom(fromEmail, fromName);
-        se.addTo(toEmail, toName);
-        if (ccEmail != null && ccName != null)
-        {
-            se.addCc(ccEmail, ccName);
-        }
-        addReplyTo(se);
-        se.setSubject(subject);
-        se.setMsg(body);
-        se.send();
+        // this method is only supposed to send to one user (additional cc:
+        // users are ok.)
+        toList = null;
+        addTo(toEmail, toName);
+        sendMultiple();
     }
 
     /**
@@ -439,7 +453,9 @@ public class TemplateEmail
         }
 
         // Process the template.
-        String body = TurbineTemplate.handleRequest(context,template);
+        StringWriter sw = new StringWriter();
+        TurbineTemplate.handleRequest(context,template, sw);
+        String body = sw.toString();
 
         // If the caller desires word-wrapping, do it here
         if (wordWrap > 0)
@@ -457,8 +473,23 @@ public class TemplateEmail
             se.setCc(ccList);
         }
         addReplyTo(se);
+        if (charset != null) 
+        {
+            se.setCharset(charset);            
+        }
         se.setSubject(subject);
         se.setMsg(body);
+
+        if (headersList != null) 
+        {
+            Iterator i = headersList.iterator();
+            while (i.hasNext()) 
+            {
+                String[] pair = (String[])i.next();
+                se.addHeader(pair[0], pair[1]);
+            }
+        }
+        
         se.send();
     }
 
