@@ -7,6 +7,9 @@
 
   <body>
     <release version="1.0.7" date="in cvs">
+      <action dev="epugh" type="add" due-to="Ben Gidley">
+        Add test to verify that usernames bob and BOB are treated the same.
+      </action>     
       <action dev="epugh" type="add">
         Properly flesh out Turbine model of security.
       </action> 
@@ -22,12 +25,12 @@
       </action>         
       <action dev="epugh" type="add">
         Expose revokeAll(Group group) to the DynamicModelManager API.  Was already implemented in the Hibernate
-		UserManager.
-      </action> 		
+        UserManager.
+      </action>         
       <action dev="epugh" type="add" due-to="Michael Jones">
         Expose getUserById() to the UserManager API.  Was already implemented in the Hibernate
-		UserManager.
-      </action>  		
+        UserManager.
+      </action>         
       <action dev="epugh" type="add" due-to="Michael Jones">
         In the Dynamic model, allow permissions to know about the sets they are in.  Allows revokeAll(permission)
         to be called.
