@@ -532,6 +532,28 @@
   <target name="clean" description="--> cleans up the build directory">
     <delete dir="${build.dir}"/>
     <delete file="velocity.log"/>
+    <delete dir="${docs.dest}"/>
+    <delete>
+        <fileset dir="${src.dir}/services">
+            <include name="report.turbine.*.generation"/>
+        </fileset>
+    </delete>
+    <delete>
+        <fileset dir="${src.dir}/services/org/apache/fulcrum">
+            <include name="**/BaseTurbine*.java"/>
+            <include name="**/BaseJob*.java"/>
+            <include name="**/JobEntryPeer.java"/>
+            <include name="**/TurbineRolePermission.java"/>
+            <include name="**/TurbineRolePermissionPeer.java"/>
+            <include name="**/TurbineUserGroupRole.java"/>
+            <include name="**/TurbineUserGroupRolePeer.java"/>
+        </fileset>
+    </delete>
+    <delete dir="${src.dir}/services/org/apache/fulcrum/schedule/map"
+            quiet="true"/>
+    <delete dir="${src.dir}/services/org/apache/fulcrum/security/impl/db/entity/map"
+            quiet="true"/>
+
   </target>
 
   <!-- ================================================================== -->
