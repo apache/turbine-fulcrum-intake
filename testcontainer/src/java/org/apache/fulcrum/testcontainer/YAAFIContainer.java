@@ -32,25 +32,25 @@ import org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerService;
  * This is a simple YAAFI based container that can be used in unit test
  * of the fulcrum components.
  *
- * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a> 
+ * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 public class YAAFIContainer extends AbstractLogEnabled implements Container
-{    
+{
 
     /** Component manager */
     private ServiceContainer manager;
-    
+
     /** Configuration file name */
     private String configFileName;
-    
+
     /** Role file name */
     private String roleFileName;
-    
+
     /** Parameters file name */
     private String parametersFileName;
-    
-    
-    /** 
+
+
+    /**
      * Constructor
      */
     public YAAFIContainer()
@@ -59,7 +59,7 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
         this.manager = new ServiceContainerImpl();
         this.enableLogging( new ConsoleLogger( ConsoleLogger.LEVEL_DEBUG ) );
     }
-        
+
     /**
      * Starts up the container and initializes it.
      *
@@ -68,16 +68,16 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
      */
     public void startup(String configFileName, String roleFileName, String parametersFileName )
     {
-        getLogger().debug("Starting container...");        
-        
+        getLogger().debug("Starting container...");
+
         this.configFileName = configFileName;
         this.roleFileName = roleFileName;
         this.parametersFileName = parametersFileName;
-        
-        File configFile = new File(configFileName);        
-        
+
+        File configFile = new File(configFileName);
+
         if (!configFile.exists())
-        {            
+        {
             throw new RuntimeException(
                 "Could not initialize the container because the config file could not be found:" + configFile);
         }
@@ -91,9 +91,9 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
         {
             getLogger().error("Could not initialize the container", e);
             throw new RuntimeException("Could not initialize the container");
-        }    
+        }
     }
-    
+
     // -------------------------------------------------------------
     // Avalon lifecycle interfaces
     // -------------------------------------------------------------
@@ -108,9 +108,10 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
         String absolutePath = new File("").getAbsolutePath();
         context.put(COMPONENT_APP_ROOT, absolutePath);
         context.put(URN_AVALON_HOME, new File( new File("").getAbsolutePath() ) );
-        
+        context.put(URN_AVALON_TEMP, new File( System.getProperty("java.io.tmpdir",absolutePath) ) );
+
         Logger logger = new ConsoleLogger( ConsoleLogger.LEVEL_DEBUG );
-        
+
         this.manager = ServiceManagerFactory.create(
             logger,
             this.roleFileName,
