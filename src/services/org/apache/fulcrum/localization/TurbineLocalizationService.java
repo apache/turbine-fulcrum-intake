@@ -545,12 +545,13 @@ public class TurbineLocalizationService
         if (value == null)
         {
             String loc = locale.toString();
-            category.debug(LocalizationService.SERVICE_NAME +
-                           " noticed missing resource: " +
-                           "bundleName=" + bundleName + ", locale=" + loc +
-                           ", key=" + key);
+            String mesg = LocalizationService.SERVICE_NAME +
+                " noticed missing resource: " +
+                "bundleName=" + bundleName + ", locale=" + loc +
+                ", key=" + key;
+            category.debug(mesg);
             // Text not found in requested or default bundles.
-            throw new MissingResourceException(bundleName, loc, key);
+            throw new MissingResourceException(mesg, bundleName, key);
         }
 
         return value;
@@ -627,8 +628,6 @@ public class TurbineLocalizationService
         messageFormat.setLocale(locale);
         messageFormat.applyPattern(value);
 
-        StringBuffer buf = new StringBuffer();
-        messageFormat.format(args, buf, new FieldPosition(0));
-        return buf.toString();
+        return messageFormat.format(args);
     }
 }
