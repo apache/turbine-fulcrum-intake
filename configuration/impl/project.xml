@@ -21,10 +21,7 @@
     </dependency>
     <dependency>
       <id>commons-digester</id>      
-      <version>1.5</version>
-      <properties>        
-        <war.bundle.jar>true</war.bundle.jar>
-      </properties>            
+      <version>1.5</version>   
     </dependency>
     <dependency>
       <id>commons-logging</id>
@@ -42,17 +39,11 @@
     </dependency> 
     <dependency>
       <id>dom4j</id>
-      <version>1.4</version>
-      <properties>        
-        <war.bundle.jar>true</war.bundle.jar>
-      </properties>            
+      <version>1.4</version> 
     </dependency>
     <dependency>
       <id>commons-beanutils</id>      
-      <version>1.7-dev</version>
-      <properties>        
-        <war.bundle.jar>true</war.bundle.jar>
-      </properties>            
+      <version>1.6.1</version>         
     </dependency>       
 
     <!-- testing -->
