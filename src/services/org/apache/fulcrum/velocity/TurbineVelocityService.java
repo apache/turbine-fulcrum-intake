@@ -70,6 +70,7 @@ import org.apache.velocity.app.event.ReferenceInsertionEventHandler;
 import org.apache.velocity.app.event.NullSetEventHandler;
 import org.apache.velocity.app.event.MethodExceptionEventHandler;
 import org.apache.velocity.context.Context;
+import org.apache.velocity.context.InternalEventContext;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.fulcrum.ServiceException;
 import org.apache.fulcrum.InitializationException;
@@ -279,27 +280,39 @@ public class TurbineVelocityService
     {
         try
         {
-            // need to convert to a VelocityContext because EventCartridges
-            // need that. this sucks because it seems like unnecessary
-            // object creation.
-            VelocityContext velocityContext = new VelocityContext(context);
+            // If the context is not already an instance of
+            // InternalEventContext, wrap it in a VeclocityContext so that
+            // event cartridges will work. Unfortunately there is no interface
+            // that extends both Context and InternalEventContext, so this
+            // is not as clear as it could be.
+
+            Context eventContext;
+
+            if ( context instanceof InternalEventContext )
+            {
+                eventContext = context;
+            }
+            else
+            {
+                eventContext = new VelocityContext( context );
+            }
 
             // Attach the EC to the context
             EventCartridge ec = getEventCartridge();
             if (ec != null && eventCartridgeEnabled)
             {
-                ec.attachToContext(velocityContext);
+                ec.attachToContext(eventContext);
             }
 
             if (encoding != null)
             {
                 // Request scoped encoding first supported by Velocity 1.1.
                 Velocity.mergeTemplate(filename, encoding,
-                                       velocityContext, writer);
+                                       eventContext, writer);
             }
             else
             {
-                Velocity.mergeTemplate(filename, velocityContext, writer);
+                Velocity.mergeTemplate(filename, eventContext, writer);
             }
         }
         catch (Exception e)

@@ -57,18 +57,19 @@ package org.apache.fulcrum.velocity;
 import org.apache.fulcrum.template.TemplateContext;
 
 import org.apache.velocity.context.Context;
+import org.apache.velocity.context.AbstractContext;
 
 /**
- * An adapter for Fulcrum's {@link
- * org.apache.fulcrum.template.TemplateContext}.  Allows for easy
- * processing of TemplateContext objects by Velocity.
+ * An adapter for Fulcrum's {@link TemplateContext}. Allows for easy processing
+ * of TemplateContext objects by Velocity. This class extends
+ * {@link AbstractContext}, so it supports event cartridge handling.
  *
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+ * @author <a href="mailto:james@jamestaylor.org">James Taylor</a>
  * @see org.apache.fulcrum.template.TemplateContext
  * @see org.apache.velocity.context.Context
  */
-public class ContextAdapter
-    implements Context
+public class ContextAdapter extends AbstractContext
 {
     private TemplateContext context;
 
@@ -77,29 +78,55 @@ public class ContextAdapter
         this.context = context;
     }
 
-    public Object put(String key, Object value)
+    /**
+     * @see AbstractContext#internalGet
+     */
+    public Object internalGet( String key )
     {
-        context.put(key, value);
+        return context.get( key );
+    }
+
+    /**
+     * @see AbstractContext#internalPut
+     */
+    public Object internalPut( String key, Object value )
+    {
+        context.put( key, value );
+
         return null;
     }
 
-    public Object get(String key)
+    /**
+     *  determines if there is a value for the
+     *  given key
+     *
+     *  @param key name of value to check
+     *  @return true if non-null value in store
+     */
+    public  boolean internalContainsKey(Object key)
     {
-        return context.get(key);
+        return context.containsKey( key );
     }
 
-    public Object remove(Object key)
+    /**
+     *  returns array of keys
+     *
+     *  @return keys as []
+     */
+    public  Object[] internalGetKeys()
     {
-        return context.remove(key);
+        return context.getKeys();
     }
 
-    public Object[] getKeys()
+    /**
+     *  remove a key/value pair from the
+     *  internal storage
+     *
+     *  @param key name of value to remove
+     *  @return value removed
+     */
+    public  Object internalRemove(Object key)
     {
-        return null;
-    }
-
-    public boolean containsKey(Object key)
-    {
-        return false;
+        return context.remove( key );
     }
 }
