@@ -165,6 +165,18 @@ public abstract class Localization
      * Convenience method to get a ResourceBundle based on name and
      * HTTP Accept-Language header in HttpServletRequest.
      *
+     * @param req HttpServletRequest.
+     * @return A localized ResourceBundle.
+     */
+    public static ResourceBundle getBundle(HttpServletRequest req)
+    {
+        return getService().getBundle(req);
+    }
+
+    /**
+     * Convenience method to get a ResourceBundle based on name and
+     * HTTP Accept-Language header in HttpServletRequest.
+     *
      * @param bundleName Name of bundle.
      * @param req HttpServletRequest.
      * @return A localized ResourceBundle.
