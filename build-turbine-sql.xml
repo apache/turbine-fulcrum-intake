@@ -313,7 +313,7 @@
     <echo message="+------------------------------------------+"/>
 
     <torque-sql
-      contextProperties="${torque.dir}/bin/torque/torque/templates/sql/id-table/turbine.props"
+      contextProperties="${torque.dir}/target/torque/torque/templates/sql/id-table/turbine.props"
       controlTemplate="${idTableControlTemplate}"
       outputDirectory="${outputDirectory}"
       templatePath="${templatePath}"
@@ -338,7 +338,7 @@
     <echo message="+--------------------------------------------+"/>
 
     <torque-sql
-      contextProperties="${torque.dir}/bin/torque/torque/templates/sql/id-table/scheduler.props"
+      contextProperties="${torque.dir}/target/torque/torque/templates/sql/id-table/scheduler.props"
       controlTemplate="${idTableControlTemplate}"
       outputDirectory="${outputDirectory}"
       templatePath="${templatePath}"
@@ -364,7 +364,7 @@
     <!-- This could probably be a simple texen task -->
 
     <torque-sql
-      contextProperties="${torque.dir}/bin/torque/torque/templates/sql/id-table/project.props"
+      contextProperties="${torque.dir}/target/torque/torque/templates/sql/id-table/project.props"
       controlTemplate="${securityControlTemplate}"
       outputDirectory="${outputDirectory}"
       templatePath="${templatePath}"
