@@ -386,69 +386,27 @@ public class TurbineLocalizationService
     }
 
     /**
-     * This method parses the Accept-Language header and attempts to
-     * create a Locale out of it.
+     * Parses the <code>Accept-Language</code> header and attempts to
+     * create a <code>Locale</code> from it.
      *
-     * @param languageHeader The language header (i.e. <code>"en,
-     * es;q=0.8, zh-TW;q=0.1"</code>), or <code>null</code> for the
-     * locale corresponding to the default language and country.
-     * @return A Locale.
+     * @param header The language header (i.e. <code>en, es;q=0.8,
+     * zh-TW;q=0.1</code>), or <code>null</code> for the locale
+     * corresponding to the default language and country.
+     * @return The parsed locale, or a locale corresponding to the
+     * language and country defaults.
      */
-    public Locale getLocale(String languageHeader)
+    public Locale getLocale(String header)
     {
-        Locale locale = null;
-
-        if (StringUtils.isEmpty(languageHeader))
+        if (!StringUtils.isEmpty(header))
         {
-            return new Locale(defaultLanguage, defaultCountry);
+            LocaleTokenizer tok = new LocaleTokenizer(header);
+            if (tok.hasNext())
+            {
+                return (Locale) tok.next();
+            }
         }
 
-        // The HTTP Accept-Header is something like
-        //
-        // "en, es;q=0.8, zh-TW;q=0.1"
-        StringTokenizer tokenizer = new StringTokenizer(languageHeader, ",");
-
-        // while ( tokenizer.hasMoreTokens() )
-        // {
-        String language = tokenizer.nextToken();
-        // This should never be true but just in case
-        // if ( !language.trim().equals("") )
-        return getLocaleForLanguage(language.trim());
-        // }
-    }
-
-    /**
-     * This method creates a Locale from the language.
-     *
-     * @param language A String with the language.
-     * @return A Locale.
-     */
-    private static Locale getLocaleForLanguage(String language)
-    {
-        Locale locale = null;
-        int index;
-
-        // Cut off any q-value that comes after a semi-colon.
-        if ( (index = language.indexOf(';')) != -1 )
-        {
-            language = language.substring(0, index);
-        }
-
-        language = language.trim();
-
-        // Create a Locale from the language.  A dash may separate the
-        // language from the country.
-        if ( (index = language.indexOf('-')) == -1 )
-        {
-            // No dash means no country.
-            locale = new Locale(language, "");
-        }
-        else
-        {
-            locale = new Locale(language.substring(0, index),
-                                language.substring(index + 1));
-        }
-
-        return locale;
+        // Couldn't parse locale.
+        return new Locale(defaultLanguage, defaultCountry);
     }
 }
