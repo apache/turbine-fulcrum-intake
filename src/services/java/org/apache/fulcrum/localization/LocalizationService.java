@@ -54,9 +54,10 @@ package org.apache.fulcrum.localization;
  * <http://www.apache.org/>.
  */
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.fulcrum.Service;
 
 /**
@@ -98,8 +99,7 @@ public interface LocalizationService
      * @param languageHeader A String with the language header.
      * @return A localized ResourceBundle.
      */
-    public ResourceBundle getBundle(String bundleName,
-                                    String languageHeader);
+    public ResourceBundle getBundle(String bundleName, String languageHeader);
 
     /**
      * Convenience method to get a ResourceBundle based on HTTP
@@ -120,8 +120,7 @@ public interface LocalizationService
      * <code>Accept-Language</code> of.
      * @return A localized ResourceBundle.
      */
-    public ResourceBundle getBundle(String bundleName,
-                                    HttpServletRequest req);
+    public ResourceBundle getBundle(String bundleName, HttpServletRequest req);
 
     /**
      * Convenience method to get a ResourceBundle based on name and
@@ -131,25 +130,29 @@ public interface LocalizationService
      * @param locale A Locale.
      * @return A localized ResourceBundle.
      */
-    public ResourceBundle getBundle(String bundleName,
-                                    Locale locale);
+    public ResourceBundle getBundle(String bundleName, Locale locale);
 
     /**
-     * Attempts to pull the "Accept-Language" header out of the
-     * HttpServletRequest object and then parse it.  If the header is
-     * not present, it will return a null Locale.
+     * Attempts to pull the <code>Accept-Language</code> header out of
+     * the <code>HttpServletRequest</code> object and then parse it.
+     * If the header is not present, it will return a
+     * <code>null</code> <code>Locale</code>.
      *
-     * @param req HttpServletRequest.
-     * @return A Locale.
+     * @param req The HTTP request to parse the
+     * <code>Accept-Language</code> of.
+     * @return The parsed locale.
      */
     public Locale getLocale(HttpServletRequest req);
 
     /**
-     * This method parses the Accept-Language header and attempts to
-     * create a Locale out of it.
+     * Parses the <code>Accept-Language</code> header and attempts to
+     * create a <code>Locale</code> from it.
      *
-     * @param languageHeader A String with the language header.
-     * @return A Locale.
+     * @param header The language header (i.e. <code>en, es;q=0.8,
+     * zh-TW;q=0.1</code>), or <code>null</code> for the locale
+     * corresponding to the default language and country.
+     * @return The parsed locale, or a locale corresponding to the
+     * language and country defaults.
      */
     public Locale getLocale(String languageHeader);
 
