@@ -60,12 +60,14 @@ import java.util.Map;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 
+import org.apache.avalon.framework.component.ComponentException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.factory.FactoryService;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.acl.DefaultAccessControlList;
+import org.apache.fulcrum.security.authenticator.Authenticator;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
@@ -93,6 +95,8 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
     private static Log log = LogFactory.getLog(HibernateUserManagerImpl.class);
     /** A factory to construct ACL Objects */
     private FactoryService aclFactoryService = null;
+    /*** out authenticator to use **/
+    private Authenticator authenticator;
     /**
      * Check whether a specified user's account exists.
      *
@@ -152,7 +156,8 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
         try
         {
             session = hibernateService.openSession();
-            users = session.find("from HibernateSimpleUser su where su.name=?", userName.toLowerCase(), Hibernate.STRING);
+            users =
+                session.find("from HibernateSimpleUser su where su.name=?", userName.toLowerCase(), Hibernate.STRING);
         }
         catch (HibernateException e)
         {
@@ -208,20 +213,19 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
     public void authenticate(User user, String password)
         throws PasswordMismatchException, UnknownEntityException, DataBackendException
     {
-        if (!checkExists(user))
+        if (authenticator == null)
         {
-            throw new UnknownEntityException("The account '" + user.getName() + "' does not exist");
+            try
+            {
+                authenticator = (Authenticator) getComponentManager().lookup(Authenticator.ROLE);
+            }
+            catch (ComponentException ce)
+            {
+                throw new DataBackendException(ce.getMessage(), ce);
+            }
         }
-        // log.debug("Supplied Pass: " + password);
-        // log.debug("User Pass: " + user.getPassword());
-        /*
-         * Unix crypt needs the existing, encrypted password text as
-         * salt for checking the supplied password. So we supply it
-         * into the checkPassword routine
-         */
-        if (!password.equals(user.getPassword()))
-        {
-            throw new PasswordMismatchException("The passwords do not match");
+        if (!authenticator.authenticate(user,password)){
+        	throw new PasswordMismatchException("Can not authenticate user.");
         }
     }
     /**
@@ -283,29 +287,6 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
         saveUser(user);
     }
     /**
-     * Creates new user account with specified attributes.
-     *
-     * @param user The object describing account to be created.
-     * @param initialPassword the password for the new account
-     * @throws DataBackendException if there was an error accessing
-     the data backend.
-     * @throws EntityExistsException if the user account already exists.
-     */
-    public void createAccount(User user, String initialPassword) throws EntityExistsException, DataBackendException
-    {
-        if (StringUtils.isEmpty(user.getName()))
-        {
-            throw new DataBackendException("Could not create " + "an user with empty name!");
-        }
-        if (checkExists(user))
-        {
-            throw new EntityExistsException("The account '" + user.getName() + "' already exists");
-        }
-        
-        user.setPassword(initialPassword);
-        addEntity(user);
-    }
-    /**
      * Construct a blank User object.
      *
      * This method calls getUserClass, and then creates a new object using
@@ -364,7 +345,7 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
             if (userExists)
             {
                 ((SimpleUser) user).setGroups(new GroupSet());
-				updateEntity(user);
+                updateEntity(user);
                 return;
             }
         }
@@ -377,8 +358,6 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
         }
         throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
     }
-    
-
     /**
     * Determines if the <code>Group</code> exists in the security system.
     *
@@ -393,69 +372,17 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
         return getGroupManager().checkExists(group);
     }
     /**
-	* Determines if the <code>Role</code> exists in the security system.
-	*
-	* @param role a <code>Role</code> value
-	* @return true if the role exists in the system, false otherwise
-	* @throws DataBackendException when more than one Role with
-	*         the same name exists.
-	* @throws Exception A generic exception.
-	*/
+    * Determines if the <code>Role</code> exists in the security system.
+    *
+    * @param role a <code>Role</code> value
+    * @return true if the role exists in the system, false otherwise
+    * @throws DataBackendException when more than one Role with
+    *         the same name exists.
+    * @throws Exception A generic exception.
+    */
     private boolean checkExists(Role role) throws DataBackendException, Exception
     {
         return getRoleManager().checkExists(role);
-    }
-    /**
-	* This method provides client-side encryption of passwords.
-	*
-	* If <code>secure.passwords</code> are enabled in TurbineResources,
-	* the password will be encrypted, if not, it will be returned unchanged.
-	* The <code>secure.passwords.algorithm</code> property can be used
-	* to chose which digest algorithm should be used for performing the
-	* encryption. <code>SHA</code> is used by default.
-	*
-	* @param password the password to process
-	* @return processed password
-	*/
-    public String encryptPassword(String password)
-    {
-        return encryptPassword(password, null);
-    }
-    /**
-    	* This method provides client-side encryption of passwords.
-    	*
-    	* If <code>secure.passwords</code> are enabled in TurbineResources,
-    	* the password will be encrypted, if not, it will be returned unchanged.
-    	* The <code>secure.passwords.algorithm</code> property can be used
-    	* to chose which digest algorithm should be used for performing the
-    	* encryption. <code>SHA</code> is used by default.
-    	*
-    	* The used algorithms must be prepared to accept null as a
-    	* valid parameter for salt. All algorithms in the Fulcrum Cryptoservice
-    	* accept this.
-    	*
-    	* @param password the password to process
-    	* @param salt     algorithms that needs a salt can provide one here
-    	* @return processed password
-    	*/
-    public String encryptPassword(String password, String salt)
-    {
-        //@todo need to tie into password utils.
-        return password + salt;
-    }
-    /**
-    	* Checks if a supplied password matches the encrypted password
-    	*
-    	* @param checkpw      The clear text password supplied by the user
-    	* @param encpw        The current, encrypted password
-    	*
-    	* @return true if the password matches, else false
-    	*
-    	*/
-    public boolean checkPassword(String checkpw, String encpw)
-    {
-        String result = encryptPassword(checkpw, encpw);
-        return (result == null) ? false : result.equals(encpw);
     }
     /**
      * Construct a new ACL object.
@@ -469,7 +396,7 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
      * @return an object implementing ACL interface.
      * @throws UnknownEntityException if the object could not be instantiated.
      */
-    public AccessControlList getAclInstance(Map roles, Map permissions) throws UnknownEntityException
+    private AccessControlList getAclInstance(Map roles, Map permissions) throws UnknownEntityException
     {
         Object[] objects = { roles, permissions };
         String[] signatures = { Map.class.getName(), Map.class.getName()};
@@ -540,7 +467,16 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
        */
     public void addUser(User user, String password) throws DataBackendException, EntityExistsException
     {
-        createAccount(user, password);
+        if (StringUtils.isEmpty(user.getName()))
+        {
+            throw new DataBackendException("Could not create " + "an user with empty name!");
+        }
+        if (checkExists(user))
+        {
+            throw new EntityExistsException("The account '" + user.getName() + "' already exists");
+        }
+        user.setPassword(password);
+        addEntity(user);
     }
     /**
        * Stores User attributes. The User is required to exist in the system.
@@ -584,7 +520,7 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
             if (groupExists && userExists)
             {
                 ((SimpleUser) user).addGroup(group);
-				updateEntity(user);
+                updateEntity(user);
                 return;
             }
         }

@@ -89,6 +89,13 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
     protected RoleManager roleManager;
     protected GroupManager groupManager;
     /**
+    	 * @return
+    	 */
+    ComponentManager getComponentManager()
+    {
+        return manager;
+    }
+    /**
      * @return
      */
     PermissionManager getPermissionManager() throws DataBackendException
