@@ -74,6 +74,15 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
         user = userManager.getUser("QuietMike");
         assertNotNull(user);
     }
+    
+    public void testGetUserById() throws Exception
+    {
+    	user = userManager.getUserInstance("QuietMike2");
+    	userManager.addUser(user, "bobo");
+        User user2 = userManager.getUserById(user.getId());
+        assertEquals(user.getName(), user2.getName());
+        assertEquals(user.getId(), user2.getId());
+    }    
     /*
      * Class to test for User retrieve(String, String)
      */

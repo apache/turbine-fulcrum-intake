@@ -7,16 +7,27 @@
 
   <body>
     <release version="1.0.6" date="in cvs">
-      <action dev="mmanner" type="add">
+      <action dev="epugh" type="add" due-to="Michael Jones">
+        Expose getUserById() to the UserManager API.  Was already implemented in the Hibernate
+		UserManager.
+      </action>  		
+      <action dev="epugh" type="add" due-to="Michael Jones">
+        In the Dynamic model, allow permissions to know about the sets they are in.  Allows revokeAll(permission)
+        to be called.
+      </action>       
+      <action dev="epugh" type="add" due-to="Michael Jones">
+        When adding objects to SecuritySet, delegate the add to the implement RoleSet/PermissionSet etc.
+      </action>       
+      <action dev="epugh" type="add">
         Merge the fulcrum-security-spi classes into fulcurm-security-api.  The split
         made it too complex to handle unit testing.
-      </action>    	      
+      </action>           
       <action dev="mmanner" type="add">
         Null passwords properly dealt with in TextMatchAuthenticator.
-      </action>    	    	
+      </action>             
       <action dev="mmanner" type="add">
         Change Basic* entity objects to use Set. 
-      </action>    	
+      </action>     
       <action dev="mmanner" type="add">
         Change Dynamic* entity objects to use Set.  Refactored Hibernate implementation of Security to 
         use more efficient deletion when doing oneshot deletes during revokeAll methods.  Added get[Entity]ById()

@@ -15,7 +15,6 @@ package org.apache.fulcrum.security.memory;
  *  limitations under the License.
  */
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -60,40 +59,6 @@ public class MemoryUserManagerImpl
     {
         return MemoryHelper.checkExists(users,userName); 
        
-    }
-    /**
-     * Retrieve a user from persistent storage using username as the
-     * key.
-     *
-     * @param userName the name of the user.
-     * @return an User object.
-     * @exception UnknownEntityException if the user's account does not
-     *            exist in the database.
-     * @exception DataBackendException if there is a problem accessing the
-     *            storage.
-     */
-    public User getUser(String userName)
-        throws UnknownEntityException, DataBackendException
-    {
-        List tempUsers = new ArrayList();
-        for (Iterator i = users.iterator(); i.hasNext();)
-        {
-            User user = (User) i.next();
-            if (user.getName().equalsIgnoreCase(userName))
-            {
-                tempUsers.add(user);
-            }
-        }
-        if (tempUsers.size() > 1)
-        {
-            throw new DataBackendException(
-                "Multiple Users with same username '" + userName + "'");
-        }
-        if (tempUsers.size() == 1)
-        {
-            return (User) tempUsers.get(0);
-        }
-        throw new UnknownEntityException("Unknown user '" + userName + "'");
     }
     
 	/**

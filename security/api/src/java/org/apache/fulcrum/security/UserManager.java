@@ -93,6 +93,19 @@ public interface UserManager extends Component
       *            storage.
       */
     User getUser(String username) throws UnknownEntityException, DataBackendException;
+
+    /**
+     * Retrieve a user from persistent storage using the id as the
+     * key.
+     *
+     * @param id the id of the user.
+     * @return an User object.
+     * @exception UnknownEntityException if the user's record does not
+     *            exist in the database.
+     * @exception DataBackendException if there is a problem accessing the
+     *            storage.
+     */
+   User getUserById(Object id) throws UnknownEntityException, DataBackendException;    
     /**
      * Retrieve a user from persistent storage using username as the
      * key, and authenticate the user. The implementation may chose

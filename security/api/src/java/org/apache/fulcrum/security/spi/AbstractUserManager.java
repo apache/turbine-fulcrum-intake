@@ -94,6 +94,40 @@ public abstract class AbstractUserManager
         authenticate(user, password);
         return user;
     }
+    
+    public User getUser(String name)
+    	throws DataBackendException, UnknownEntityException
+    {
+    	User user = getAllUsers().getUserByName(name);
+    	if (user == null)
+    	{
+    		throw new UnknownEntityException("The specified user does not exist");
+    	}
+    	return user;
+    }    
+    
+    /**
+	* Retrieve a User object with specified Id.
+	*
+	* @param id the id of the User.
+	*
+	* @return an object representing the User with specified id.
+	*
+	* @throws UnknownEntityException if the user does not
+	*            exist in the database.
+	* @throws DataBackendException if there is a problem accessing the
+	*            storage.
+	*/
+    public User getUserById(Object id)
+    	throws DataBackendException, UnknownEntityException
+		{
+    	User user = getAllUsers().getUserById(id);
+    	if (user == null)
+    	{
+    		throw new UnknownEntityException("The specified user does not exist");
+    	}
+    	return user;
+	}    
     /**
      * Authenticate an User with the specified password. If authentication
      * is successful the method returns nothing. If there are any problems,
