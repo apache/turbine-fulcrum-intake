@@ -84,6 +84,7 @@ import org.apache.torque.adapter.DB;
  *
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @version $Id$
+ * @deprecated you should use org.apache.torque.Torque
  */
 public interface DatabaseService extends Service
 {

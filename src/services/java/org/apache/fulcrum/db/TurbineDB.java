@@ -94,6 +94,7 @@ import org.apache.torque.pool.DBConnection;
  *
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @version $Id$
+ * @deprecated you should use org.apache.torque.Torque
  */
 public abstract class TurbineDB
 {

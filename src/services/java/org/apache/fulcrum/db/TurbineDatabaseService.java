@@ -69,6 +69,7 @@ import org.apache.torque.pool.DBConnection;
  *
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @version $Id$
+ * @deprecated you should use org.apache.torque.Torque
  */
 public class TurbineDatabaseService
     extends BaseService
