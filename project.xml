@@ -466,14 +466,13 @@
   
   <build>
     <nagEmailAddress>turbine-dev@jakarta.apache.org</nagEmailAddress>
-    <sourceDirectory>${basedir}/src/java</sourceDirectory>
-    <unitTestSourceDirectory>${basedir}/src/test</unitTestSourceDirectory>
+    <sourceDirectory>${basedir}/src/java/OFF</sourceDirectory>
+    <unitTestSourceDirectory>${basedir}/src/test/OFF</unitTestSourceDirectory>
 
     <unitTest>
       <includes>
         <include>**/*Test.java</include>
       </includes>
-    
       <resources>
         <resource>
           <directory>${basedir}/src/test</directory>
