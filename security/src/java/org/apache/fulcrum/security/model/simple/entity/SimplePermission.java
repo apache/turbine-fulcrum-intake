@@ -12,5 +12,4 @@ import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
 public class SimplePermission extends SecurityEntityImpl implements Permission
 {
 	
-    
 }

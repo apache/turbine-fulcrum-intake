@@ -1,4 +1,3 @@
-
 package org.apache.fulcrum.security.model.simple.entity;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
@@ -13,7 +12,7 @@ import org.apache.fulcrum.security.util.PermissionSet;
  */
 public class SimpleRole extends SecurityEntityImpl implements Role
 {
-	private PermissionSet permissionSet = new PermissionSet();
+    private PermissionSet permissionSet = new PermissionSet();
     /**
      * @return
      */
@@ -21,7 +20,6 @@ public class SimpleRole extends SecurityEntityImpl implements Role
     {
         return permissionSet;
     }
-
     /**
      * @param permissionSet
      */
@@ -29,14 +27,21 @@ public class SimpleRole extends SecurityEntityImpl implements Role
     {
         this.permissionSet = permissionSet;
     }
-
+    
+    /**
+    * This method should only be used by a RoleManager.  Not directly.
+    * @param permission
+    */
     public void addPermission(Permission permission)
     {
         getPermissions().add(permission);
     }
+    /**
+     * This method should only be used by a RoleManager.  Not directly.
+     * @param permission
+     */
     public void removePermission(Permission permission)
     {
         getPermissions().remove(permission);
     }
-    
 }
