@@ -57,6 +57,7 @@ import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
+import org.apache.avalon.framework.thread.ThreadSafe;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.GroupManager;
@@ -75,7 +76,7 @@ import org.apache.fulcrum.security.util.DataBackendException;
  */
 public abstract class AbstractManager
     extends AbstractLogEnabled
-    implements Serviceable, Disposable
+    implements Serviceable, Disposable, ThreadSafe
 {
 
     boolean composed = false;
@@ -184,11 +185,19 @@ public abstract class AbstractManager
     }
     public void dispose()
     {
-
-        manager = null;
-        permissionManager = null;
-        roleManager = null;
-        groupManager = null;
+		release(roleManager);
+		release(permissionManager);
+		release(groupManager);
+		release(userManager);		
+        manager = null;       
+    }
+    
+    protected void release(Object obj){
+        if(obj!=null){
+            manager.release(obj);
+            obj = null;
+        }
+        
     }
 
 
