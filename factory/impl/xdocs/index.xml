@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Factory Component</title>
+    <author email="epugh@upstate.com">Eric PUgh</author>
+  </properties>
+
+  <body>
+
+  <section name="Overview">
+    <p>
+      The Factory Service instantiates objects using specified class loaders. If none 
+      is specified, the default one will be used.  It is written for use in Turbine but 
+      it can be used in any container compatible with Avalon's ECM container.
+    </p>    
+  </section>
+  
+<section name="Configuration">
+
+    <p>
+      First, here is the role configuration.
+    </p>
+
+<source>
+<![CDATA[
+   <role
+        name="org.apache.fulcrum.factory.FactoryService"
+        shorthand="factory"
+        default-class="org.apache.fulcrum.factory.DefaultFactoryService"/>
+]]>
+</source>
+
+  <p>
+    There is configuration values for classloaders, still need to add.
+  </p>
+<source>
+
+<![CDATA[
+    <factory/>
+]]>
+</source>
+
+  </section>
+
+  <section name="Usage">
+    <p>
+    </p>
+  </section>  
+
+</body>
+</document>

@@ -1,0 +1,15 @@
+
+<container name="test">
+
+   <classloader>
+     <classpath>
+       <repository>
+         <resource id="fulcrum:fulcrum-factory-api" version="1.0-alpha-2"/>
+       </repository>
+     </classpath>
+   </classloader>
+
+   <component name="factory" 
+     class="org.apache.fulcrum.factory.DefaultFactoryService"/>
+
+</container>
