@@ -11,43 +11,80 @@
       file="src/java/org/apache/fulcrum/avalon-roles.xml"
       tofile="target/classes/org/apache/fulcrum/avalon-roles.xml"/>
 
+    <!-- Copy the Intake DTD file to the distribution -->
+    <copy file="intake.dtd"
+          tofile="${maven.build.dest}/org/apache/fulcrum/intake/transform/intake.dtd"/>
+
     <!-- Setup where Torque generates the files to. -->
     <copy todir="target/src">
       <fileset dir="src/java"/>
     </copy>
 
-    <!-- Now generate the security service. -->
-    <j:set var="torque.project" value="security"/>
-    <j:set var="torque.schema.om.includes" value="turbine-schema.xml"/>
-    <j:set var="torque.targetPackage" value="${security.package}"/>
-    <filter token="DATABASE_DEFAULT" value="${security.database.name}"/>
-    <filter token="EXTRA_USER_COLUMNS" value="${security.extra.user.columns}"/>
-    <copy
-      file="turbine-schema.xml"
-      tofile="${torque.schema.dir}/turbine-schema.xml"
-      filtering="yes"/>
-    <attainGoal name="torque:om"/>
-
-    <!-- Reset the Torque uptodate check flag. -->
-    <j:set var="torque.internal.om.uptodate" value="${null}"/>
-
-    <!-- Now generate the scheduler service. -->
-    <j:set var="torque.project" value="scheduler"/>
-    <j:set var="torque.schema.om.includes" value="scheduler-schema.xml"/>
-    <j:set var="torque.targetPackage" value="${scheduler.package}"/>
-    <filter token="DATABASE_DEFAULT" value="${scheduler.database.name}"/>
-    <filter token="EXTRA_USER_COLUMNS" value="${scheduler.extra.user.columns}"/>
-    <copy
-      file="scheduler-schema.xml"
-      tofile="${torque.schema.dir}/scheduler-schema.xml"
-      filtering="yes"/>
-    <attainGoal name="torque:om"/>
+    <attainGoal name="scheduler-om"/>
+    <attainGoal name="db-security-om"/>
 
     <!-- Hack for Maven bug when compiling with a clean target. -->
     <j:if test="${sourcesPresent != 'true'}">
       <j:set var="sourcesPresent" value="true"/>
       <path id="maven.compile.src.set" location="target/src"/>
     </j:if>
+
   </preGoal>
+
+  <!-- ================================================== -->
+  <!-- Prepare the OM Sources for Torque                  -->
+  <!-- ================================================== -->
+
+  <goal name="copy-om">
+    <attainGoal name="copy-scheduler-om"/>
+    <attainGoal name="copy-db-security-om"/>
+  </goal>
+
+  <goal name="copy-scheduler-om">
+    <filter token="DATABASE_DEFAULT" value="${scheduler.database.name}"/>
+    <filter token="EXTRA_USER_COLUMNS" value="${scheduler.extra.user.columns}"/>
+    <copy
+      file="src/schema/scheduler-schema.xml"
+      tofile="${torque.schema.dir}/scheduler-schema.xml"
+      filtering="yes"/>
+  </goal>
+
+  <goal name="copy-db-security-om">
+    <filter token="DATABASE_DEFAULT" value="${security.database.name}"/>
+    <filter token="EXTRA_USER_COLUMNS" value="${security.extra.user.columns}"/>
+    <copy
+      file="src/schema/turbine-schema.xml"
+      tofile="${torque.schema.dir}/turbine-schema.xml"
+      filtering="yes"/>
+  </goal>
+
+  <!-- ================================================== -->
+  <!-- Build Peers for the Scheduler                      -->
+  <!-- ================================================== -->
+  <goal name="scheduler-om">
+
+    <attainGoal name="copy-scheduler-om"/>
+
+    <j:set var="torque.project" value="scheduler"/>
+    <j:set var="torque.schema.om.includes" value="scheduler-schema.xml"/>
+    <j:set var="torque.targetPackage" value="${scheduler.package}"/>
+    <attainGoal name="torque:om"/>
+
+  </goal>
+
+  <!-- ================================================== -->
+  <!-- Build Peers for Torque Security                    -->
+  <!-- ================================================== -->
+  <goal name="db-security-om">
+
+    <attainGoal name="copy-db-security-om"/>
+
+    <j:set var="torque.project" value="security"/>
+    <j:set var="torque.schema.om.includes" value="turbine-schema.xml"/>
+    <j:set var="torque.targetPackage" value="${security.package}"/>
+    <attainGoal name="torque:om"/>
+
+  </goal>
+
 
 </project>
