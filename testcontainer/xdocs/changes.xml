@@ -8,6 +8,10 @@
 
   <body>
   	<release version="1.0.4-dev" date="in cvs">       
+      <action dev="epugh" type="add">
+        Add helper "resolve" method that delegates to "lookup" to faciliate
+        using in both Merlin and ECM enviroments.
+      </action>        
       <action dev="epugh" type="add" due-to="Ben Gidley">
         Tweak documentation to be more explicit on where config files
         are pulled from.

@@ -138,6 +138,17 @@ public class BaseUnitTest extends TestCase
         }
         return container.lookup(roleName);
     }
+    
+    /**
+     * Helper method for converting to and from Merlin Unit TestCase.
+     * @param roleName
+     * @return
+     * @throws ComponentException
+     */
+    protected Component resolve(String roleName) throws ComponentException
+    {
+        return lookup(roleName);
+    }    
     /**
 	 * Releases the component
 	 * 
