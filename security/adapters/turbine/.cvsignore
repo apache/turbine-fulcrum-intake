@@ -2,5 +2,3 @@ target
 *.log
 logs
 *.ser
-.classpath
-.project
