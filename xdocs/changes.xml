@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Fulcrum</title>
+    <author email="jvanzyl@apache.com">Jason van Zyl</author>
+    <author email="mpoeschl@marmot.at">Martin Poeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Changes">
+      <p>
+        <ul>
+
+          <!-- template
+          <li>
+            <strong></strong>
+            <ul>
+              <li>
+                <a href="">Reference</a>.
+              </li>
+            </ul>
+          </li>
+          -->
+
+        </ul>
+      </p>
+    </section>
+  </body>
+</document>
