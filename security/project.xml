@@ -3,7 +3,7 @@
   <extend>${basedir}/../project.xml</extend>
   <id>fulcrum-security-site</id>
   <name>Fulcrum Security Site</name>
-  <currentVersion>1.0.6</currentVersion>
+  <currentVersion>1.0.7-dev</currentVersion>
   <package>org.apache.fulcrum.security</package>
 
  <contributors>
