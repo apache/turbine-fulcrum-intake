@@ -53,7 +53,8 @@
       </p>
       <p>
         If you are testing multiple config or role files, then just call <code>setConfigurationFileName()</code>
-        or <code>setRoleFileName()</code> before doing your first lookup.
+        or <code>setRoleFileName()</code> before doing your first lookup. The string you pass in should be prefixed from 
+        the directory the JVM is running in (e.g. src/test/YOUR_CONFIG.xml).
       </p>
 
     </subsection>

@@ -7,7 +7,13 @@
   </properties>
 
   <body>
-  	<release version="1.0-alpha-2" date="in cvs">
+  	<release version="1.0.4-dev" date="in cvs">       
+      <action dev="epugh" type="add" due-to="Ben Gidley">
+        Tweak documentation to be more explicit on where config files
+        are pulled from.
+      </action>
+    </release>     
+  	<release version="1.0-alpha-2" date="in cvs">       
       <action dev="epugh" type="add">
         Add additional context value urn:avalon:home to be more
         Merlin friendly.
