@@ -44,6 +44,7 @@
     <echo message="bsf.jar = ${bsf.jar}"/>
     <echo message="commons-collections.jar = ${commons-collections.jar}"/>
     <echo message="commons-util.jar = ${commons-util.jar}"/>
+    <echo message="dvsl.jar = ${dvsl.jar}"/>
     <echo message="jaf.jar = ${jaf.jar}"/>
     <echo message="javamail.jar = ${javamail.jar}"/>
     <echo message="jdbc.jar = ${jdbc.jar}"/>
@@ -174,6 +175,12 @@
       property="regexp.present"
       classpathref="classpath"
     />
+
+    <available
+      classname="org.apache.tools.dvsl.DVSL"
+      property="dvsl.present"
+      classpathref="classpath"
+    />
   </target>
 
   <!-- ================================================================== -->
@@ -272,6 +279,13 @@
     </antcall>
   </target>
 
+  <target name="check.dvsl" unless="dvsl.present">
+    <antcall target="property-warning">
+      <param name="name" value="dvsl.jar"/>
+      <param name="value" value="${dvsl.jar}"/>
+    </antcall>
+  </target>
+
 <!--
   This is commented out because the inclusion of the .jar file is 
   conditional depending on whether or not it is in your path. This
@@ -329,7 +343,7 @@
         check.velocity,check.log4j,check.torque,check.bsf,
         check.servlet,check.javamail,check.jaf,check.xerces,check.xalan,
         check.xmlrpc,check.commons-collections,check.commons-util,
-        check.regexp,
+        check.regexp,check.dvsl,
         include-email,om">
     
     <!-- We have some static files that should overwrite
