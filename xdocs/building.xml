@@ -6,6 +6,7 @@
     <title>Building Fulcrum</title>
     <author email="pete@kazmier.com">Pete Kazmier</author>
     <author email="quintonm@bellsouth.net">Quinton McCombs</author>
+    <author email="epugh@upstate.com">Eric Pugh</author>
   </properties>
 
   <body>
@@ -25,14 +26,21 @@
         use Maven.
       </p>
       <p>
-        From the root directory of the fuklcrum project (where you checked
+        <strong>Important!</strong>  Currently when you attempt to do a 
+        build, the code in 'src/java' is compiled as well as the individual
+        components.  Make sure to rename 'src' to 'src-OFF' to prevent 
+        this.  This is only until all the code in 'src/java' either is 
+        converted to Avalon components, or discarded.
+      </p>
+      <p>
+        From the root directory of the fulcrum project (where you checked
         out the code to or unpacked a source distribution), simply type 
         'maven' and press enter.  This will start a process that will
         build each component.  After the component is built, it will be 
         installed into you local maven repository.
       </p>
       <p>
-        To build a local copy of the documentation, use 'mave site-all'.
+        To build a local copy of the documentation, use 'maven multiproject'.
         This will build a local copy of the web site in the 'target/docs' 
         directory.
       </p>

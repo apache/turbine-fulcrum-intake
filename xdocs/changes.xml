@@ -8,16 +8,10 @@
 
   <body>
     <release version="Not applicable" date="">
-
-      <action dev="quintonm" type="add">
-        TestContainer component was added.  This is to be used for 
-        testing of the components so that we do not have a dependancy
-        on Plexus.  The test container is based on ECM, which is what
-        Turbine is using.  A base class for unit tests is also included.
-      </action>
-
-      <action dev="quintonm" type="add">
-        XML-RPC component was added.
+      <action dev="epugh" type="add">
+        Build process updated to use 'multiproject' plugin.  Additionally,
+        significantly more components have been converted to being seperate
+        Avalon components.
       </action>
 
       <action dev="quintonm" type="add">
@@ -29,12 +23,7 @@
         for each component.
       </action>
       
-      <action dev="epugh" type="add">
-	Added new HibernateService that uses Hibernate 2.0.  This is 
-	a fully Avalonized service, and thus can be loaded by both 
-	Plexus and ECM.  ECM is used in Turbine, Plexus is used in the 
-	testcase.
-      </action> 
+     
     </release>
 
   </body>

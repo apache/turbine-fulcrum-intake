@@ -8,8 +8,6 @@
     <links>
       <item name="Turbine Home"            href="http://jakarta.apache.org/turbine/"/>
       <item name="Fulcrum"                 href="http://jakarta.apache.org/turbine/fulcrum/"/>
-      <item name="TDK"                     href="http://jakarta.apache.org/turbine/tdk/"/>
-      <item name="JCS"                     href="http://jakarta.apache.org/turbine/jcs/"/>
     </links>
 
     <menu name="Fulcrum">
@@ -31,9 +29,7 @@
       <item name="Security" href="/multiproject/fulcrum-security/index.html"/>
       <item name="XMLRPC" href="/multiproject/fulcrum-xmlrpc/index.html"/>
     </menu>
-    <menu name="Howtos">
-      <item name="Cache Service"          href="/howto/cache-service.html"/>
-      <item name="Crypto Service"         href="/howto/crypto-service.html"/>
+    <menu name="Howtos (old)">
       <item name="Factory Service"        href="/howto/factory-service.html"/>
       <item name="Intake Service"         href="/howto/intake-service.html"/>
       <item name="JSP Service"            href="/howto/jsp-service.html"/>
@@ -42,11 +38,9 @@
       <item name="Naming Service"         href="/howto/naming-service.html"/>
       <item name="Pool Service"           href="/howto/pool-service.html"/>
       <item name="Scheduler Service"      href="/howto/scheduler-service.html"/>
-      <item name="Security Service"       href="/howto/security-service.html"/>
       <item name="Template Service"       href="/howto/template-service.html"/>
       <item name="Upload Service"         href="/howto/upload-service.html"/>
       <item name="Velocity Service"       href="/howto/velocity-service.html"/>
-      <item name="XmlRpc Service"         href="/howto/xmlrpc-service.html"/>
       <item name="XSLT Service"           href="/howto/xslt-service.html"/>
     </menu>
 
