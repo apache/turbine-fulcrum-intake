@@ -793,6 +793,6 @@ public abstract class BaseServiceBroker implements ServiceBroker
 
     public String getRealPath(String path)
     {
-        return getApplicationRoot() + File.separator + path;
+        return new File(getApplicationRoot(), path).getAbsolutePath();
     }
 }
