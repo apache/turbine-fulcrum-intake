@@ -4,3 +4,4 @@ target
 *.log
 *.ser
 junit*.properties
+*pom-snapshot-version

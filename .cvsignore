@@ -6,3 +6,4 @@ maven.log
 .project
 OldSite
 *.patch
+*.ser
