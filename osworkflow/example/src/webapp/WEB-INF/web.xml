@@ -3,7 +3,7 @@
 <web-app>
 	
 	<servlet>
-		<servlet-name>fulcrum-workflow-example</servlet-name>
+		<servlet-name>fulcrum-osworkflow-example</servlet-name>
 		<servlet-class>org.apache.turbine.Turbine</servlet-class>
 		<init-param>
 			<param-name>properties</param-name>
@@ -12,8 +12,8 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>fulcrum-workflow-example</servlet-name>
-		<url-pattern>/servlet/fulcrum-workflow-example/*</url-pattern>
+		<servlet-name>fulcrum-osworkflow-example</servlet-name>
+		<url-pattern>/servlet/fulcrum-osworkflow-example/*</url-pattern>
 	</servlet-mapping>
 	<!--==*************************************************==-->
 	<!--==**======= Other configuration items, not=======**==-->
