@@ -137,7 +137,7 @@ public class DefaultMimeTypeService
     /**
      * Gets the MIME content type for a file as a string.
      *
-     * @param file the file.
+     * @param file The file to look up a MIME type mapping for.
      * @return the MIME type string.
      */
     public String getContentType(File file)
@@ -147,23 +147,25 @@ public class DefaultMimeTypeService
     /**
      * Gets the MIME content type for a named file as a string.
      *
-     * @param name the name of the file.
+     * @param fileName The name of the file to look up a MIME type
+     * mapping for.
      * @return the MIME type string.
      */
-    public String getContentType(String name)
+    public String getContentType(String fileName)
     {
-        return mimeTypeMap.getContentType(name);
+        return mimeTypeMap.getContentType(fileName);
     }
     /**
      * Gets the MIME content type for a file name extension as a string.
      *
-     * @param ext the file name extension.
-     * @param def the default type if none is found.
+     * @param fileName The name of the file to look up a MIME type
+     * mapping for.
+     * @param def The default MIME type to use if no mapping exists.
      * @return the MIME type string.
      */
-    public String getContentType(String ext, String def)
+    public String getContentType(String fileName, String def)
     {
-        return mimeTypeMap.getContentType(ext, def);
+        return mimeTypeMap.getContentType(fileName, def);
     }
     /**
      * Gets the MIME content type for a file.

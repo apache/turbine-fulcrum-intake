@@ -291,40 +291,36 @@ public class MimeTypeMap
      * mapping for.
      * @return The MIME type, or {@link #DEFAULT_TYPE} if unmapped.
      */
-    public String getContentType(String name)
+    public String getContentType(String fileName)
     {
-        String ext = parseFileExtension(name);
-        return ext != null ? getContentType(ext, DEFAULT_TYPE) : DEFAULT_TYPE;
+        return getContentType(fileName, DEFAULT_TYPE);
     }
 
     /**
      * Gets the MIME content type for a file name extension as a string.
      *
-     * @param ext The file name extension.
-     * @param def The default content type to use, if no mapping exists.
+     * @param fileName The name of the file to look up a MIME type
+     * mapping for.
+     * @param def The default MIME type to use if no mapping exists.
      * @return The MIME type, or <code>def</code> if unmapped.
      */
-    public String getContentType(String ext, String def)
+    public String getContentType(String fileName, String def)
     {
-        // ### Why do this when we should already have the file
-        // ### extension?
-        String e = parseFileExtension(ext);
-        if (e != null)
+        String ext = parseFileExtension(fileName);
+        if (ext != null)
         {
-            ext = e;
-        }
-
-        String mimeType;
-        MimeTypeMapper mapper;
-        for (int i = 0; i < mappers.length; i++)
-        {
-            mapper = mappers[i];
-            if (mapper != null)
+            String mimeType;
+            MimeTypeMapper mapper;
+            for (int i = 0; i < mappers.length; i++)
             {
-                mimeType = mapper.getContentType(ext);
-                if (mimeType != null)
+                mapper = mappers[i];
+                if (mapper != null)
                 {
-                    return mimeType;
+                    mimeType = mapper.getContentType(ext);
+                    if (mimeType != null)
+                    {
+                        return mimeType;
+                    }
                 }
             }
         }
