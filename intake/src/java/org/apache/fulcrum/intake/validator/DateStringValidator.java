@@ -88,7 +88,7 @@ import org.apache.fulcrum.intake.IntakeException;
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @author <a href="mailto:Colin.Chalmers@maxware.nl">Colin Chalmers</a>
  * @author <a href="mailto:jh@byteaction.de">J&uuml;rgen Hoffmann</a>
-* @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
+ * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Id$
  */
 public class DateStringValidator
@@ -170,15 +170,15 @@ public class DateStringValidator
             flexible = Boolean.valueOf(constraint.getValue()).booleanValue();
         }
 
-        if (dateFormats.size() == 0 || flexible)
+        if (dateFormats.size() == 0)
         {
             df = DateFormat.getInstance();
-            df.setLenient(true);
+            df.setLenient(flexible);
         }
-
-        if (dateFormats.size() != 0)
+        else
         {
             sdf = new SimpleDateFormat();
+            sdf.setLenient(flexible);
         }
     }
 
