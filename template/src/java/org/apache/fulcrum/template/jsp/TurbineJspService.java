@@ -25,10 +25,13 @@ import java.util.List;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.context.Context;
+import org.apache.avalon.framework.service.ServiceException;
+import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.fulcrum.template.BaseTemplateEngineService;
 import org.apache.fulcrum.template.TemplateContext;
 import org.apache.fulcrum.template.TemplateException;
-import org.apache.fulcrum.template.TemplateServiceFacade;
+import org.apache.fulcrum.template.TemplateService;
 
 /**
  * This is a Service that can process JSP templates from within a Turbine
@@ -54,6 +57,8 @@ public class TurbineJspService
     /** The buffer size for the output stream. */
     private int bufferSize;
 
+    /** The class to handle looking up template names */
+    private TemplateService templateService;
     /**
      * Adds some convenience objects to the request.  For example an instance
      * of JspLink which can be used to generate links to other templates.
@@ -206,7 +211,7 @@ public class TurbineJspService
      */
     public boolean templateExists(String template)
     {
-        return TemplateServiceFacade.templateExists(template, templatePaths);
+        return templateService.templateExists(template, templatePaths);
     }
     /**
      * Searchs for a template in the default.template path[s] and
@@ -232,8 +237,7 @@ public class TurbineJspService
         for (int i = 0; i < relativeTemplatePaths.length; i++)
         {
             testTemplatePath[0] = getRealPath(relativeTemplatePaths[i]);
-            if (TemplateServiceFacade
-                .templateExists(template, testTemplatePath))
+            if (templateService.templateExists(template, testTemplatePath))
             {
                 return relativeTemplatePaths[i] + template;
             }
@@ -295,7 +299,7 @@ public class TurbineJspService
         registerConfiguration(conf, "jsp");
 
         // Use the turbine template service to translate the template paths.
-        templatePaths = TemplateServiceFacade.translateTemplatePaths(rawPaths);
+        templatePaths = templateService.translateTemplatePaths(rawPaths);
 
         // Set relative paths from config.
         // Needed for javax.servlet.RequestDispatcher
@@ -310,4 +314,14 @@ public class TurbineJspService
         }
     }
 
+    // ---------------- Avalon Lifecycle Methods ---------------------
+    /**
+     * Avalon component lifecycle method
+     */
+    public void service(ServiceManager manager) throws ServiceException
+    {
+        super.service(manager);
+        templateService = (TemplateService)manager.lookup(TemplateService.ROLE);
+
+    }
 }

@@ -223,7 +223,7 @@ public abstract class BaseTemplateEngineService
     /**
      * Avalon component lifecycle method
      */
-    public void service(ServiceManager manager)
+    public void service(ServiceManager manager) throws ServiceException
     {
         this.manager = manager;
 

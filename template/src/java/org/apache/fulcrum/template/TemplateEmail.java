@@ -145,6 +145,12 @@ public class TemplateEmail
      * The charset
      */
     private String charset = null;
+    
+    /**
+     * The templateService to use in generating text
+     *
+     */
+    private TemplateService templateService;
 
     /**
      * Constructor
@@ -417,7 +423,7 @@ public class TemplateEmail
 
         // Process the template.
         StringWriter sw = new StringWriter();
-        TemplateServiceFacade.handleRequest(context,template, sw);
+        templateService.handleRequest(context,template, sw);
         String body = sw.toString();
 
         // If the caller desires word-wrapping, do it here
@@ -455,7 +461,16 @@ public class TemplateEmail
         
         se.send();
     }
+    
+    
 
+    /**
+     * A javabean style setter for passing in manually a templateservice
+     * @param templateService The templateService to set.
+     */
+    public void setTemplateService(TemplateService templateService) {
+        this.templateService = templateService;
+    }
     /**
      * if any reply-to email addresses exist, add them to the SimpleEmail
      *

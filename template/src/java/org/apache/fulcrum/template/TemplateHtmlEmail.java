@@ -75,6 +75,12 @@ public class TemplateHtmlEmail
 
     /** The map of embedded files. */
     private Hashtable embmap = null;
+    
+    /**
+     * The templateService to use in generating text
+     *
+     */
+    private TemplateService templateService;    
 
     /**
      * Constructor, sets the TemplateContext object.
@@ -135,13 +141,13 @@ public class TemplateHtmlEmail
         {
             if(htmlTemplate != null)
             {
-                htmlbody = TemplateServiceFacade.handleRequest(
+                htmlbody = templateService.handleRequest(
                     context, htmlTemplate);
             }
             
             if(textTemplate != null)
             {
-                textbody = TemplateServiceFacade.handleRequest(
+                textbody = templateService.handleRequest(
                     context, textTemplate);
             }                    
         }
@@ -210,5 +216,13 @@ public class TemplateHtmlEmail
         String cid = (String)embmap.get(filename);
         return "cid:"+cid;
     }
+    
+    /**
+     * A javabean style setter for passing in manually a templateservice
+     * @param templateService The templateService to set.
+     */
+    public void setTemplateService(TemplateService templateService) {
+        this.templateService = templateService;
+    }    
 }
  
