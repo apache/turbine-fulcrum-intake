@@ -3,7 +3,7 @@
 <project>
 
   <id>fulcrum-configuration-impl</id>
-  <extend>${basedir}/../../project.xml</extend>
+  <extend>${basedir}/../../merlin-project.xml</extend>
   <name>Fulcrum Configuration Impl</name>
   <currentVersion>1.0-alpha-2</currentVersion>
   <package>org.apache.fulcrum.configuration</package>
