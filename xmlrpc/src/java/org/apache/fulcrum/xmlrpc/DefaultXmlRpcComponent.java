@@ -164,7 +164,7 @@ public class DefaultXmlRpcComponent
 
         // Determine if the server is secure or not.
         isSecureServer =
-                configuration.getChild("secureServer").getValueAsBoolean();
+                configuration.getChild("secureServer").getValueAsBoolean(false);
         getLogger().debug("Secure Server: " + isSecureServer);
 
         // Set the XML driver to the correct SAX parser class
@@ -173,7 +173,7 @@ public class DefaultXmlRpcComponent
 
         // Turn on paranoia for the webserver if requested.
         isStateOfParanoia =
-                configuration.getChild("paranoid").getValueAsBoolean();
+                configuration.getChild("paranoid").getValueAsBoolean(false);
         //!! default value
 
         // Check if there are any handlers to register at startup
