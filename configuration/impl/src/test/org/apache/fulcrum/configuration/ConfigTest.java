@@ -83,7 +83,7 @@ public class ConfigTest extends AbstractMerlinTestCase
         super.setUp();
         try
         {
-            config = (Configuration) this.resolve( "test/conf" );
+            config = (Configuration) this.resolve( "/test/config" );
 
         }
         catch (ComponentException e)
