@@ -117,9 +117,9 @@
       <version>1.0-dev</version>
     </dependency>
     <dependency>
-      <id>cryptix32</id>
+      <id>cryptix</id>
       <version>3.2.0</version>
-      <jar>cryptix32.jar</jar>
+      <jar>cryptix-3.2.0.jar</jar>
     </dependency>
     <dependency>
       <id>dom4j</id>
