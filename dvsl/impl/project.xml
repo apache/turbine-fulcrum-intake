@@ -5,7 +5,7 @@
   <id>fulcrum-dvsl-impl</id>
   <extend>${basedir}/../../merlin-project.xml</extend>
   <name>Fulcrum DVSL Implementation</name>
-  <currentVersion>1.0-alpha-4</currentVersion>
+  <currentVersion>1.0.4</currentVersion>
   <package>org.apache.fulcrum.dvsl</package>
 
   <dependencies>

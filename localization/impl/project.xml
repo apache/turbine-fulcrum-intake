@@ -14,7 +14,7 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-localization-api</artifactId>
-      <version>1.0-alpha-4</version>
+      <version>1.0.4</version>
     </dependency>
     <dependency>
       <id>servletapi</id>
