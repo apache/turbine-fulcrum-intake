@@ -56,6 +56,7 @@ package org.apache.fulcrum.velocity;
 
 import java.util.Vector;
 import java.util.Iterator;
+import java.util.Enumeration;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -63,6 +64,10 @@ import java.io.ByteArrayOutputStream;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.apache.velocity.app.event.EventCartridge;
+import org.apache.velocity.app.event.ReferenceInsertionEventHandler;
+import org.apache.velocity.app.event.NullSetEventHandler;
+import org.apache.velocity.app.event.MethodExceptionEventHandler;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.fulcrum.ServiceException;
@@ -91,6 +96,7 @@ import org.apache.fulcrum.template.BaseTemplateEngineService;
  * @author <a href="mailto:jvanzyl@periapt.com">Jason van Zyl</a>
  * @author <a href="mailto:sean@informage.ent">Sean Legassick</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
+ * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
  * @version $Id$
  */
 public class TurbineVelocityService
@@ -119,6 +125,11 @@ public class TurbineVelocityService
     private static final String ABSOLUTE_PREFIX = "file://";
 
     /**
+     * The EventCartridge that is used against all contexts
+     */
+    private static EventCartridge eventCartridge;
+    
+    /**
      * Performs early initialization of this Turbine service.
      */
     public void init()
@@ -127,6 +138,7 @@ public class TurbineVelocityService
         try
         {
             initVelocity();
+            initEventCartridges();
 
             // Register with the template service.
             registerConfiguration("vm");
@@ -227,6 +239,14 @@ public class TurbineVelocityService
     }
 
     /**
+     * Returns the populated event cartridge
+     */
+    public EventCartridge getEventCartridge()
+    {
+        return eventCartridge;
+    }
+
+    /**
      * Processes the request and fill in the template with the values
      * you set in the the supplied Context. Applies the specified
      * character and template encodings.
@@ -256,19 +276,26 @@ public class TurbineVelocityService
             charset = DEFAULT_CHAR_SET;
         }
 
-        OutputStreamWriter writer = null;
+        // need to convert to a VelocityContext because EventCartridges
+        // need that. this sucks because it seems like unnecessary
+        // object creation.
+        VelocityContext vc = new VelocityContext(context);        
 
+        // Attach the EC to the context
+        getEventCartridge().attachToContext(vc);
+
+        OutputStreamWriter writer = null;
         try
         {
             writer = new OutputStreamWriter(output, charset);
             if (encoding != null)
             {
                 // Request scoped encoding first supported by Velocity 1.1.
-                Velocity.mergeTemplate(filename, encoding, context, writer);
+                Velocity.mergeTemplate(filename, encoding, vc, writer);
             }
             else
             {
-                Velocity.mergeTemplate(filename, context, writer);
+                Velocity.mergeTemplate(filename, vc, writer);
             }
         }
         catch (Exception e)
@@ -288,7 +315,6 @@ public class TurbineVelocityService
             {
             }
         }
-
         return charset;
     }
 
@@ -314,6 +340,56 @@ public class TurbineVelocityService
         }
 
         throw new ServiceException(err, e);
+    }
+
+    /**
+     * This method is responsible for initializing the various Velocity
+     * EventCartridges. You just add a configuration like this:
+     * <code>
+     * services.VelocityService.eventCartridge.classes = org.tigris.scarab.util.ReferenceInsertionFilter
+     * </code>
+     * and list out (comma separated) the list of EC's that you want to 
+     * initialize.
+     */
+    private void initEventCartridges()
+        throws InitializationException
+    {
+        eventCartridge = new EventCartridge();
+
+        Vector ecconfig = getConfiguration()
+            .getVector("eventCartridge.classes");
+        Object obj = null;
+        String className = null;
+        for (Enumeration e = ecconfig.elements() ; e.hasMoreElements() ;)
+        {
+            className = (String) e.nextElement();
+            try
+            {
+                obj = Class.forName(className).newInstance();
+
+                if (obj instanceof ReferenceInsertionEventHandler)
+                {
+                    getEventCartridge()
+                        .addEventHandler((ReferenceInsertionEventHandler)obj);
+                }
+                else if (obj instanceof NullSetEventHandler)
+                {
+                    getEventCartridge()
+                        .addEventHandler((NullSetEventHandler)obj);
+                }
+                else if (obj instanceof MethodExceptionEventHandler)
+                {
+                    getEventCartridge()
+                        .addEventHandler((MethodExceptionEventHandler)obj);
+                }
+            }
+            catch (Exception h)
+            {
+                throw new InitializationException(
+                    "Could not initialize EventCartridge: " + 
+                    className, h);
+            }
+        }
     }
 
     /**
