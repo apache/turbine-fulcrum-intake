@@ -132,13 +132,6 @@ public class TurbineGroupPeer
     }
 
     /**
-     * Builds a criteria object based upon an Group object
-     */
-    public static Criteria buildCriteria(Group group) {
-        return BaseTurbineGroupPeer.buildCriteria((TurbineGroup)group);
-    }
-
-    /**
      * Retrieves/assembles a GroupSet of all of the Groups.
      *
      * @param criteria The criteria to use.

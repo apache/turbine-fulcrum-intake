@@ -60,6 +60,7 @@ import java.util.Iterator;
 import org.apache.torque.om.BaseObject;
 import org.apache.torque.om.ObjectKey;
 import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.impl.db.entity.TurbineUser;
 import org.apache.fulcrum.security.impl.db.entity.TurbineUserPeer;
 
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -270,7 +271,7 @@ public class DBUserManager implements UserManager
             throw new UnknownEntityException("The account '" +
                 user.getUserName() + "' does not exist");
         }
-        Criteria criteria = TurbineUserPeer.buildCriteria(user);
+        Criteria criteria = TurbineUserPeer.buildCriteria((TurbineUser)user);
         try
         {
             TurbineUserPeer.doUpdate(criteria);
@@ -402,7 +403,7 @@ public class DBUserManager implements UserManager
         }
         String encrypted = TurbineSecurity.encryptPassword(initialPassword);
         user.setPassword(encrypted);
-        Criteria criteria = TurbineUserPeer.buildCriteria(user);
+        Criteria criteria = TurbineUserPeer.buildCriteria((TurbineUser)user);
         try
         {
             // we can safely assume that BaseObject derivate is used as User

@@ -72,6 +72,9 @@ import org.apache.fulcrum.security.impl.db.entity.TurbineGroup;
 import org.apache.fulcrum.security.impl.db.entity.TurbinePermission;
 import org.apache.fulcrum.security.impl.db.entity.TurbineRole;
 import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.impl.db.entity.TurbineGroup;
+import org.apache.fulcrum.security.impl.db.entity.TurbinePermission;
+import org.apache.fulcrum.security.impl.db.entity.TurbineRole;
 import org.apache.fulcrum.security.impl.db.entity.TurbineGroupPeer;
 import org.apache.fulcrum.security.impl.db.entity.TurbinePermissionPeer;
 import org.apache.fulcrum.security.impl.db.entity.TurbineRolePeer;
@@ -654,7 +657,8 @@ public class DBSecurityService
             groupExists = checkExists(group);
             if(groupExists)
             {
-                Criteria criteria = TurbineGroupPeer.buildCriteria(group);
+                Criteria criteria = TurbineGroupPeer
+                    .buildCriteria((TurbineGroup)group);
                 TurbineGroupPeer.doUpdate(criteria);
                 return;
             }
@@ -683,7 +687,8 @@ public class DBSecurityService
             roleExists = checkExists(role);
             if(roleExists)
             {
-                Criteria criteria = TurbineRolePeer.buildCriteria(role);
+                Criteria criteria = TurbineRolePeer
+                    .buildCriteria((TurbineRole)role);
                 TurbineRolePeer.doUpdate(criteria);
                 return;
             }
@@ -713,7 +718,8 @@ public class DBSecurityService
             permissionExists = checkExists(permission);
             if(permissionExists)
             {
-                Criteria criteria = TurbinePermissionPeer.buildCriteria(permission);
+                Criteria criteria = TurbinePermissionPeer
+                    .buildCriteria((TurbinePermission)permission);
                 TurbinePermissionPeer.doUpdate(criteria);
                 return;
             }
@@ -781,7 +787,8 @@ public class DBSecurityService
             if(!groupExists)
             {
                 // add a row to the table
-                Criteria criteria = TurbineGroupPeer.buildCriteria(group);
+                Criteria criteria = TurbineGroupPeer
+                    .buildCriteria((TurbineGroup)group);
                 TurbineGroupPeer.doInsert(criteria);
                 // try to get the object back using the name as key.
                 criteria = new Criteria();
@@ -835,7 +842,8 @@ public class DBSecurityService
             if(!roleExists)
             {
                 // add a row to the table
-                Criteria criteria = TurbineRolePeer.buildCriteria(role);
+                Criteria criteria = TurbineRolePeer
+                    .buildCriteria((TurbineRole)role);
                 TurbineRolePeer.doInsert(criteria);
                 // try to get the object back using the name as key.
                 criteria = new Criteria();
@@ -887,7 +895,8 @@ public class DBSecurityService
             if(!permissionExists)
             {
                 // add a row to the table
-                Criteria criteria = TurbinePermissionPeer.buildCriteria(permission);
+                Criteria criteria = TurbinePermissionPeer
+                    .buildCriteria((TurbinePermission)permission);
                 TurbinePermissionPeer.doInsert(criteria);
                 // try to get the object back using the name as key.
                 criteria = new Criteria();
@@ -939,7 +948,8 @@ public class DBSecurityService
             groupExists = checkExists(group);
             if(groupExists)
             {
-                Criteria criteria = TurbineGroupPeer.buildCriteria(group);
+                Criteria criteria = TurbineGroupPeer
+                    .buildCriteria((TurbineGroup)group);
                 TurbineGroupPeer.doDelete(criteria);
                 getAllGroups().remove(group);
                 return;
@@ -978,7 +988,8 @@ public class DBSecurityService
             {
                 // revoke all permissions from the role to be deleted
                 revokeAll(role);
-                Criteria criteria = TurbineRolePeer.buildCriteria(role);
+                Criteria criteria = TurbineRolePeer
+                    .buildCriteria((TurbineRole)role);
                 TurbineRolePeer.doDelete(criteria);
                 getAllRoles().remove(role);
                 return;
@@ -1013,7 +1024,8 @@ public class DBSecurityService
             permissionExists = checkExists(permission);
             if(permissionExists)
             {
-                Criteria criteria = TurbinePermissionPeer.buildCriteria(permission);
+                Criteria criteria = TurbinePermissionPeer
+                    .buildCriteria((TurbinePermission)permission);
                 TurbinePermissionPeer.doDelete(criteria);
                 getAllPermissions().remove(permission);
                 return;
@@ -1051,7 +1063,8 @@ public class DBSecurityService
             if(groupExists)
             {
                 ((SecurityEntity)group).setName(name);
-                Criteria criteria = TurbineGroupPeer.buildCriteria(group);
+                Criteria criteria = TurbineGroupPeer
+                    .buildCriteria((TurbineGroup)group);
                 TurbineGroupPeer.doUpdate(criteria);
                 return;
             }
@@ -1087,7 +1100,8 @@ public class DBSecurityService
             if(roleExists)
             {
                 role.setName(name);
-                Criteria criteria = TurbineRolePeer.buildCriteria(role);
+                Criteria criteria = TurbineRolePeer
+                    .buildCriteria((TurbineRole)role);
                 TurbineRolePeer.doUpdate(criteria);
                 return;
             }
@@ -1123,7 +1137,8 @@ public class DBSecurityService
             if(permissionExists)
             {
                 ((SecurityEntity)permission).setName(name);
-                Criteria criteria = TurbinePermissionPeer.buildCriteria(permission);
+                Criteria criteria = TurbinePermissionPeer
+                    .buildCriteria((TurbinePermission)permission);
                 TurbinePermissionPeer.doUpdate(criteria);
                 return;
             }

@@ -85,14 +85,6 @@ public class TurbinePermissionPeer
     public static final String NAME = PERMISSION_NAME;
 
     /**
-     * Builds a criteria object based upon an Permission object
-     */
-    public static Criteria buildCriteria( Permission permission )
-    {
-        return BaseTurbinePermissionPeer.buildCriteria((TurbinePermission)permission);
-    }
-
-    /**
      * Checks if a Permission is defined in the system. The name
      * is used as query criteria.
      *

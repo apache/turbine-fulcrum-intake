@@ -104,16 +104,6 @@ public class TurbineUserPeer
         return userClass;
     }
 
-
-
-    /**
-     * Builds a criteria object based upon an User object
-     */
-    public static Criteria buildCriteria(User user)
-    {
-       return BaseTurbineUserPeer.buildCriteria((TurbineUser)user);
-    }
-
     /**
      * Returns the full name of a column.
      *

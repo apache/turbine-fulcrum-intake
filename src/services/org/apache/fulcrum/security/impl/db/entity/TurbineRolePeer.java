@@ -86,14 +86,6 @@ public class TurbineRolePeer
     public static final String NAME = ROLE_NAME;
 
     /**
-     * Builds a criteria object based upon an Role object
-     */
-    public static Criteria buildCriteria(Role role)
-    {
-        return BaseTurbineRolePeer.buildCriteria((TurbineRole)role);
-    }
-
-    /**
      * Checks if a Role is defined in the system. The name
      * is used as query criteria.
      *
