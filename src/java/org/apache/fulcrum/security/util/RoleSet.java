@@ -136,7 +136,7 @@ public class RoleSet implements Serializable
      */
     public boolean add(RoleSet roleSet)
     {
-        return set.add((Collection) roleSet.set);
+        return set.addAll(roleSet.set);
     }
 
     /**
