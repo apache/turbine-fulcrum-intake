@@ -154,7 +154,7 @@ public interface Service
      * may chose to alter its configuration, therefore they may be
      * different from those returned by ServiceBroker.
      *
-     * @return The Configuration of this Service.
+     * @return The configuration of this <code>Service</code>.
      */
     public ExtendedProperties getConfiguration();
 
