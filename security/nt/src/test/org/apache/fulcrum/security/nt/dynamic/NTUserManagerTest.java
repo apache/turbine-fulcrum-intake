@@ -232,6 +232,19 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             assertTrue(re.getMessage().equals(ERROR_MSG));
         }
     }
+    
+    public void testGetUserById() throws Exception
+    {
+        try
+        {
+            userManager.getUserById(null);
+            fail("Should throw runtime exception");
+        }
+        catch (RuntimeException re)
+        {
+            assertTrue(re.getMessage().equals(ERROR_MSG));
+        }
+    }    
     public void testChangePassword() throws Exception
     {
 		user = userManager.getUser(GUESTUSER, "");
