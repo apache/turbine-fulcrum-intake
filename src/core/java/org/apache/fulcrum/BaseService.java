@@ -71,7 +71,7 @@ import org.apache.velocity.runtime.configuration.Configuration;
  * @author <a href="mailto:leonardr@segfault.org">Leonard Richardson</a>
  * @version $Id$
  */
-public class BaseService 
+public abstract class BaseService 
     implements Service
 {
     /** 
