@@ -249,7 +249,7 @@ public class ServiceContainerImpl
         Configuration currParameters = configuration.getChild(COMPONENT_PARAMETERS_KEY);
 
         this.setParametersLocation(
-            currParameters.getChild(COMPONENT_PARAMETERS_KEY).getValue(
+            currParameters.getChild(COMPONENT_LOCATION_KEY).getValue(
                 COMPONENT_PARAMETERS_VALUE )
                 );
 
