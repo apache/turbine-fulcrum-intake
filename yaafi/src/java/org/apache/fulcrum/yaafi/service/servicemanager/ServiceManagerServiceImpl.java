@@ -122,6 +122,7 @@ public class ServiceManagerServiceImpl
         this.serviceManager = null;
         this.parameters = null;
         this.context = null;
+        ServiceManagerServiceImpl.instance = null;
     }
 
     /////////////////////////////////////////////////////////////////////////
