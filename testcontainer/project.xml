@@ -3,7 +3,7 @@
   <extend>${basedir}/../project.xml</extend>
   <id>fulcrum-testcontainer</id>
   <name>Fulcrum Test Container</name>
-  <currentVersion>1.0-alpha-3</currentVersion>
+  <currentVersion>1.0.3</currentVersion>
 
   <dependencies>
 
