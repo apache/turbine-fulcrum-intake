@@ -54,7 +54,6 @@ package org.apache.fulcrum.security.entity;
  * <http://www.apache.org/>.
  */
 
-import org.apache.fulcrum.security.util.PermissionSet;
 
 /**
  * This class represents a role played by the User associated with the
@@ -67,21 +66,7 @@ import org.apache.fulcrum.security.util.PermissionSet;
  */
 public interface Role extends SecurityEntity
 {
-    /**
-     * Returns the set of Permissions associated with this Role.
-     *
-     * @return A PermissionSet.
-     * @exception Exception A generic exception.
-     */
-    PermissionSet getPermissions()
-        throws Exception;
 
-    /**
-     * Sets the Permissions associated with this Role.
-     *
-     * @param permissionSet A PermissionSet.
-     */
-    void setPermissions(PermissionSet permissionSet);
 
    
 

@@ -10,24 +10,25 @@ import org.apache.fulcrum.security.entity.SecurityEntity;
 /**
  * @author Eric Pugh
  *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * Base class for all objects implementing SecurityEnitity.  This
+ * class automatically lowercases the name.  So the permission "EDIT"
+ * will equal "eDit" and "edit";
  */
 public class SecurityEntityImpl implements SecurityEntity
 {
     private String name;
-    private int id;
+    private long id;
     /**
      * @return
      */
-    public int getId()
+    public long getId()
     {
         return id;
     }
     /**
      * @param id
      */
-    public void setId(int id)
+    public void setId(long id)
     {
         this.id = id;
     }
@@ -43,7 +44,7 @@ public class SecurityEntityImpl implements SecurityEntity
      */
     public void setName(String name)
     {
-        this.name = name;
+        this.name = name.toLowerCase();
     }
     public String toString()
     {

@@ -56,8 +56,7 @@ package org.apache.fulcrum.security.entity;
 
 
 /**
- * This class represents the permissions that a Role has to access
- * certain pages/functions within the system.  The class implements
+ * This class represents the a permissions..  The class implements
  * Comparable so that when Permissions are added to a Set, they will
  * be in alphabetical order by name.
  *
