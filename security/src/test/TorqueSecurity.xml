@@ -1,0 +1,22 @@
+<my-system>
+  <component
+    role="org.apache.fulcrum.security.SecurityService"
+    class="org.apache.fulcrum.security.BaseSecurityService">   
+  </component>  
+  <component
+    role="org.apache.fulcrum.security.UserManager"
+    class="org.apache.fulcrum.security.impl.torque.impl.TorqueUserManagerImpl">   
+  </component>   
+  <component
+    role="org.apache.fulcrum.security.GroupManager"
+    class="org.apache.fulcrum.security.impl.torque.impl.TorqueGroupManagerImpl">   
+  </component>     
+  <component
+    role="org.apache.fulcrum.security.RoleManager"
+    class="org.apache.fulcrum.security.impl.torque.impl.TorqueRoleManagerImpl">   
+  </component>     
+  <component
+    role="org.apache.fulcrum.security.PermissionManager"
+    class="org.apache.fulcrum.security.impl.torque.impl.TorquePermissionManagerImpl">   
+  </component>     
+</my-system>

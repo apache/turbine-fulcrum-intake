@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Security Component</title>
+    <author email="epugh@upstate.com">Eric PUgh</author>
+  </properties>
+
+  <body>
+
+  <section name="Overview">
+    <p>
+      This component attempts to provide a security framework  It is written 
+      for use in Turbine but it has been expanded and can be used in any container compatible 
+      with Avalon's ECM container.
+	  <ul>
+	  	<li>Allow pluggability via Avalon components of various systems</li>
+	  	<li>Solve most common problems in dealing with security</li>
+	  	<li>Not make assumptions about how a security framework should be setup.</li>
+	  </ul>
+    </p>    
+  </section>
+  
+  <section name="Common Security Implementations">
+    <p>
+	  There ae a couple common approaches to security.  Currently this component tries to solve
+	  two common setups for security.
+    </p>    
+    <subsection name="Simple">
+      <p>
+    	For lack of a better name, this one is called Simple.  In it, you have a set of permissions
+    	that are related in a many to many relation ship with a set or roles.  Those roles are related
+    	in a many to many relationship with a set of groups.  A user is in a many to many relationship
+    	with a set of groups.  <i>note: I will try and get a diagram. any suggestions on diagram tools?</i>
+      </p>
+      <p>
+    	The <code>memory</code> package currently implements this security model.  However, if you
+    	change the Manager objects, you could implement the second one, "Turbine".
+      </p>
+    </subsection>
+
+    <subsection name="Turbine">
+      <p>
+		This model is based on what the Turbine application server uses.  In it, permissions are in a
+		many to many relationship with Roles.  However, what makes this different is that instead of roles
+		being related just to groups, there instead is a many to many relationship between users and 
+		groups and roles.  So you pick a user, pick their role, and their group, and that is their permissions.
+		This strikes me as a maintence nightmare, why actually have a group entity?
+		<i>note: I will try and get a diagram. any suggestions on diagram tools?</i>
+      </p>
+      <p>
+    	The <code>torque</code> package currently implements this security model.  <strong>WARNING:
+    	this code hasn't been tested at all.  It only compiles.</strong>	
+      </p>
+    </subsection>
+  </section>  
+  
+<section name="Simple">
+
+    <subsection name="Usage of Simple InMemory component">
+    <p>
+    The InMemory components implement the Simple model.  All data is strictly in memory, and is
+    not persisted.  Therefore when your application stops, all values are lost.  However, this is
+    very useful in unit testing and prototyping using the Security component.  Notice how role,
+    user, group, and permission managers are all Avalon components as well?  This allows you to swap one 
+    component out for another.  Say you wanted to provide your own group manager that checked that
+    a group existed in NT.  You could swap out the MemoryGroupManager implementation for a NTGroupManager,
+    assuming you kept the API the same.
+    </p>
+    </subsection>
+    <subsection name="Configuration">
+    <p>
+    This uses the integrated role and component config XML.  
+    </p>
+    <p>
+<source>
+<![CDATA[
+<my-system>
+  <component
+    role="org.apache.fulcrum.security.SecurityService"
+    class="org.apache.fulcrum.security.BaseSecurityService">   
+  </component>  
+  
+  <component
+    role="org.apache.fulcrum.security.UserManager"
+    class="org.apache.fulcrum.security.impl.memory.MemoryUserManagerImpl">   
+  </component>   
+  <component
+    role="org.apache.fulcrum.security.GroupManager"
+    class="org.apache.fulcrum.security.impl.memory.MemoryGroupManagerImpl">   
+  </component>     
+
+  <component
+    role="org.apache.fulcrum.security.RoleManager"
+    class="org.apache.fulcrum.security.impl.memory.MemoryRoleManagerImpl">   
+  </component>     
+
+  <component
+    role="org.apache.fulcrum.security.PermissionManager"
+    class="org.apache.fulcrum.security.impl.memory.MemoryPermissionManagerImpl">   
+  </component>     
+
+</my-system>
+]]>
+</source>
+	  </p>
+    </subsection>
+
+  </section>
+
+
+
+</body>
+</document>

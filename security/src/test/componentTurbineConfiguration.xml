@@ -1,0 +1,10 @@
+<!-- This configuration file for Avalon components is used for testing the adapter
+classes for Turbine. -->
+<componentConfig>
+    <securityService/>
+    <userManager/>    
+    <groupManager/>    
+    <roleManager/>    
+    <permissionManager/>                
+
+</componentConfig>

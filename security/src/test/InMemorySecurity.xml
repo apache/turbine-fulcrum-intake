@@ -1,0 +1,26 @@
+<my-system>
+  <component
+    role="org.apache.fulcrum.security.SecurityService"
+    class="org.apache.fulcrum.security.BaseSecurityService">   
+  </component>  
+
+  <component
+    role="org.apache.fulcrum.security.UserManager"
+    class="org.apache.fulcrum.security.impl.memory.MemoryUserManagerImpl">   
+  </component>   
+  <component
+    role="org.apache.fulcrum.security.GroupManager"
+    class="org.apache.fulcrum.security.impl.memory.MemoryGroupManagerImpl">   
+  </component>     
+
+  <component
+    role="org.apache.fulcrum.security.RoleManager"
+    class="org.apache.fulcrum.security.impl.memory.MemoryRoleManagerImpl">   
+  </component>     
+
+  <component
+    role="org.apache.fulcrum.security.PermissionManager"
+    class="org.apache.fulcrum.security.impl.memory.MemoryPermissionManagerImpl">   
+  </component>     
+
+</my-system>

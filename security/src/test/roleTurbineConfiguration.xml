@@ -1,0 +1,26 @@
+<!-- This configuration file for Avalon components is used for testing the adapter
+classes for Turbine. -->
+
+<role-list>
+    <role name="org.apache.fulcrum.security.SecurityService"
+          shorthand="securityService"
+          default-class="org.apache.fulcrum.security.BaseSecurityService" />
+          
+    <role name="org.apache.fulcrum.security.UserManager"
+          shorthand="userManager"
+          default-class="org.apache.fulcrum.security.impl.memory.MemoryUserManagerImpl" />
+          
+    <role name="org.apache.fulcrum.security.GroupManager"
+          shorthand="groupManager"
+          default-class="org.apache.fulcrum.security.impl.memory.MemoryGroupManagerImpl" />
+          
+    <role name="org.apache.fulcrum.security.RoleManager"
+          shorthand="roleManager"
+          default-class="org.apache.fulcrum.security.impl.memory.MemoryRoleManagerImpl" />                              
+
+    <role name="org.apache.fulcrum.security.PermissionManager"
+          shorthand="permissionManager"
+          default-class="org.apache.fulcrum.security.impl.memory.MemoryPermissionManagerImpl" />                              
+          
+</role-list> 
+ 
