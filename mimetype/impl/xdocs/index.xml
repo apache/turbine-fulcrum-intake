@@ -3,8 +3,8 @@
 <document>
 
   <properties>
-    <title>Mimetype Component</title>
-    <author email="epugh@upstate.com">Eric PUgh</author>
+    <title>MIME Type Component</title>
+    <author email="epugh@upstate.com">Eric Pugh</author>
   </properties>
 
   <body>
@@ -12,10 +12,12 @@
   <section name="Overview">
     <p>
       The MimeType Service maintains mappings between MIME types and
-      the corresponding file name extensions, and between locales and
-      character encodings. The mappings are typically defined in
-      properties or files located in user's home directory, Java home
-      directory or the current class jar depending on the implementation.
+      the corresponding file name extensions (extremely useful in
+      conjunction with file upload), and between locales and character
+      encodings. The mappings are dependent upon the implementation,
+      and are typically defined in properties or files located in
+      user's home directory, Java home directory, or the current
+      class's JAR.
    </p>
       
     <p>
