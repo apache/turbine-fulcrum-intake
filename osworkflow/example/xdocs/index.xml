@@ -39,8 +39,12 @@
     </p>
   </section>
   
-  <section name="Deployment">
-
+  <section name="Build and Deploy Example">
+	<p>
+	  To run this example, first check the source code out from CVS.  The .war file is not online as it is 10 megabytes, and Maven will
+	  download any of the dependencies that you don't already have!  Also, part of this example is to show a sample project structure
+	  as well.  By downloading/building/ and deploying you get the full lifecycle.
+	</p>
     <p>
       To run this example, run 'maven war' from the fulcrum/osworkflow/example directory.  This will produce the WAR
       file that you need to deploy to your Tomcat webapp.  Make sure the name of the war file is changed to 'fulcrum-osworkflow-example'

@@ -7,6 +7,9 @@
 
   <body>
     <release version="Not applicable" date="">
+      <action dev="ycho" type="add">
+        Tweak documentation with more details on building.  Fix link to CVS.
+      </action> 
    	  <action dev="ycho" type="add">
         Integrated use of WorkflowServiceFacade
       </action>     

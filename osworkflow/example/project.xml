@@ -12,7 +12,10 @@
   <shortDescription>An example application implementing workflow.</shortDescription>
   <description>This is a small example application using the Turbine framework with the Fulcrum OSWorkflow component.  The engine underneath
     is provided by OpenSymphony's OSWorkflow project.</description>
-
+  <repository>
+    <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:jakarta-turbine-fulcrum/osworkflow/example</connection>
+    <url>http://cvs.apache.org/viewcvs/jakarta-turbine-fulcrum/osworkflow/example</url>
+  </repository>
 
   <developers>
     <developer>
