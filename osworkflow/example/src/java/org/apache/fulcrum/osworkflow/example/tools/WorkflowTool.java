@@ -1,4 +1,5 @@
 package org.apache.fulcrum.osworkflow.example.tools;
+
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -53,13 +54,10 @@ package org.apache.fulcrum.osworkflow.example.tools;
  * <http://www.apache.org/>.
  */
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.avalon.framework.component.ComponentException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.osworkflow.WorkflowInstance;
 import org.apache.fulcrum.osworkflow.WorkflowService;
 import org.apache.turbine.om.security.User;
@@ -79,19 +77,20 @@ import com.opensymphony.workflow.WorkflowException;
  */
 public class WorkflowTool implements ApplicationTool
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(WorkflowTool.class);
+
     /** Fulcrum Localization component */
     private WorkflowService workflowService;
-   
+
     /** Turbine rundata object */
-	private RunData data;
-	
-	/** Turbine User object */
-	private User user;	
+    private RunData data;
+
+    /** Turbine User object */
+    private User user;
 
     /**
-     * Lazy load the WorkflowService.
+     * Returns  the WorkflowService.  Lazy loads the WorkflowService if it
+     * hasn't been loaded from Avalon yet.
+     *
      * @return a fulcrum WorkflowService
      */
     public WorkflowService getWorkflowService()
@@ -99,13 +98,21 @@ public class WorkflowTool implements ApplicationTool
         if (workflowService == null)
         {
             AvalonComponentService acs =
-                (AvalonComponentService) TurbineServices.getInstance().getService(AvalonComponentService.SERVICE_NAME);
-                try {
-            workflowService = (WorkflowService)acs.lookup(WorkflowService.ROLE);
-                }
-                catch (ComponentException ce) {
-                    throw new InstantiationException("Problem looking up Localization Service:"+ce.getMessage());
-                }
+                (AvalonComponentService) TurbineServices
+                    .getInstance()
+                    .getService(
+                    AvalonComponentService.SERVICE_NAME);
+            try
+            {
+                workflowService =
+                    (WorkflowService) acs.lookup(WorkflowService.ROLE);
+            }
+            catch (ComponentException ce)
+            {
+                throw new InstantiationException(
+                    "Problem looking up Localization Service:"
+                        + ce.getMessage());
+            }
         }
         return workflowService;
     }
@@ -116,14 +123,13 @@ public class WorkflowTool implements ApplicationTool
     {
         refresh();
     }
-   
-  
+
     /**
      * Initialize the tool with the RunData object.
      */
     public final void init(Object obj)
     {
-		data = (RunData) obj;
+        data = (RunData) obj;
     }
     /**
      * Remove the Turbine RunData object.
@@ -132,65 +138,74 @@ public class WorkflowTool implements ApplicationTool
     {
         data = null;
     }
-   
-   /**
-    * Sets the Turbine User object
-    * @param user  The User object to set
-    */ 
-	public void setUser(User user)
+
+    /**
+     * Sets the Turbine User object
+     * @param user  The User object to set
+     */
+    public void setUser(User user)
     {
-       this.user = user;
+        this.user = user;
     }
 
-   	/**
-   	 * Retrieve the Turbine User object
-   	 * @return Turbine User
-   	 */
+    /**
+     * Retrieve the Turbine User object
+     * @return Turbine User
+     */
     public User getUser()
     {
-       if(user ==null)
-       {
-           user = data.getUser();
-       }
-       return user;
-   }
-    
-    
-    public List retrieveWorkflows(String status) throws WorkflowException{
+        if (user == null)
+        {
+            user = data.getUser();
+        }
+        return user;
+    }
+
+    /**
+     * Returns all workflows that belong the user and have a
+     * certain status specified in the workflow xml file.
+     *
+     * @param status A string like 'Accepted'
+     * @return A list of WorkflowInstance objects
+     * @throws WorkflowException is thrown if there is an error.
+     */
+    public List retrieveWorkflows(String status) throws WorkflowException
+    {
         List workflows = new ArrayList();
-		String caller = getUser().getName();
-        long workflowIds []= getWorkflowService().retrieveWorkflows(caller,status);
+        String caller = getUser().getName();
+        long workflowIds[] =
+            getWorkflowService().retrieveWorkflows(caller, status);
         Workflow workflow = getWorkflowService().retrieveWorkflow(caller);
-        for (int i =0;i<workflowIds.length;i++) {
-            WorkflowInstance workflowInstance = new WorkflowInstance(workflow,workflowIds[i]);
+        for (int i = 0; i < workflowIds.length; i++)
+        {
+            WorkflowInstance workflowInstance =
+                new WorkflowInstance(workflow, workflowIds[i]);
             workflows.add(workflowInstance);
         }
         return workflows;
     }
-    
-	/**
-     * Retrieve Workflow 
+
+    /**
+     * Retrieve Workflow
      *
      * @return Workflow object
-     * @throws WorkflowException 
+     * @throws WorkflowException
      */
-    public Workflow retrieveWorkflow()
-           throws WorkflowException
+    public Workflow retrieveWorkflow() throws WorkflowException
     {
-       return retrieveWorkflow(getUser());
+        return retrieveWorkflow(getUser());
     }
-   
+
     /**
      * Retrieve Workflow of given User
-     * 
-     * @param User
-     * @return Workflow 
-     * @throws WorkflowException 
+     *
+     * @param User A user object to look workflows up for
+     * @return Workflow The workflow for the specified user.
+     * @throws WorkflowException
      */
-    public Workflow retrieveWorkflow(User user)
-           throws WorkflowException
+    public Workflow retrieveWorkflow(User user) throws WorkflowException
     {
-       return getWorkflowService().retrieveWorkflow(user.getName());
-    }    
+        return getWorkflowService().retrieveWorkflow(user.getName());
+    }
 
 }
