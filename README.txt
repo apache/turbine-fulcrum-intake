@@ -20,8 +20,6 @@ instructions on building.  This document is available here:
 
 http://jakarta.apache.org/turbine/maven/getting-started.html
 
-Note: you'll also need to make sure you check out the jakarta-turbine-torque
-repository because the current Fulcrum build uses templates in that
-repository.  Both the jakarta-turbine-fulcrum and jakarta-turbnie-torque
-repositories should be in the same top-level directory.
-
+Note: you'll also need Torque's Maven plugin. It can be installed by
+checking out the jakarta-turbine-torque repository and running the
+command 'maven plugin:install' in the 'src/maven-plugin' directory.
