@@ -73,7 +73,7 @@ import org.apache.velocity.context.Context;
  *
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
- * @author <a href="mailto:jvanzyl@zenplex.com.com">Jason van Zyl</a>
+ * @author <a href="mailto:jvanzyl@zenplex.com">Jason van Zyl</a>
  * @author <a href="mailto:stack@collab.net">Michael Stack</a>
  * @version $Id$
  */
