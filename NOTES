@@ -24,12 +24,6 @@ base64 encoding. There are a number of base64 encoding
 classes in Jakarta, take one of those and get rid of
 this tie.
 
-UploadService
--------------
-
-FileItem extends DataSource in the JAF, I don't think
-this is really necessary.
-
 TemplateService
 ---------------
 
