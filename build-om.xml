@@ -61,7 +61,7 @@
     <torque-om
       contextProperties="default.properties"
       controlTemplate="${OMControlTemplate}"
-      outputDirectory="${build.dir}/src"
+      outputDirectory="${src.dir}/services/java"
       templatePath="${templatePath}"
       outputFile="report.turbine.om.generation"
       targetPackage="${securityPackage}"
@@ -84,7 +84,7 @@
     <torque-om
       contextProperties="default.properties"
       controlTemplate="${OMControlTemplate}"
-      outputDirectory="${build.dir}/src"
+      outputDirectory="${src.dir}/services/java"
       templatePath="${templatePath}"
       outputFile="report.turbine.scheduler.generation"
       targetPackage="${schedulerPackage}"
