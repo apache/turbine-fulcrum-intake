@@ -127,11 +127,13 @@ public abstract class BaseService
      * Returns initialization status.
      *
      * @return True if the service is initialized.
+     * @see org.apache.fulcrum.Service#getInit()
+     * @see org.apache.fulcrum.Service#isInitialized()
      * @deprecated use isInitialized() which uses proper bean semantics.
      */
     public boolean getInit()
     {
-        return isInitialized;
+        return isInitialized();
     }
 
     /**
@@ -144,13 +146,11 @@ public abstract class BaseService
     public String getStatus()
         throws ServiceException
     {
-        return (getInit() ? "Initialized" : "Uninitialized");
+        return (isInitialized() ? "Initialized" : "Uninitialized");
     }
 
     /**
-     * Returns initialization status.
-     *
-     * @return True if the service is initialized.
+     * @see org.apache.fulcrum.Service#isInitialized()
      */
     public boolean isInitialized()
     {

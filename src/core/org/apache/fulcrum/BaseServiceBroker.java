@@ -162,7 +162,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
     protected String applicationRoot;
 
     /**
-     * Default constructor of InitableBorker.
+     * Default constructor, protected as to only be useable by subclasses.
      *
      * This constructor does nothing.
      */
@@ -352,7 +352,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
     {
         Service instance = getServiceInstance(className);
 
-        if (!instance.getInit())
+        if (!instance.isInitialized())
         {
             // this call might result in an indirect recursion
             instance.init();
@@ -360,11 +360,11 @@ public abstract class BaseServiceBroker implements ServiceBroker
     }
 
     /**
-        * Shuts down an <code>Initable</code>.
+        * Shuts down a <code>Service</code>.
         *
         * This method is used to release resources allocated by an
-        * <code>Initable</code>, and return it to its initial (uninitailized)
-        * state.
+        * <code>Service</code>, and return it to its initial
+        * (uninitailized) state.
         *
         * @param className The name of the class to be uninitialized.
         */
@@ -372,11 +372,11 @@ public abstract class BaseServiceBroker implements ServiceBroker
     {
         try
         {
-            Service initable = getServiceInstance(className);
-            if (initable.getInit())
+            Service service = getServiceInstance(className);
+            if (service.isInitialized())
             {
-                initable.shutdown();
-                ((BaseService) initable).setInit(false);
+                service.shutdown();
+                ((BaseService) service).setInit(false);
             }
         }
         catch (InstantiationException e)
@@ -614,11 +614,11 @@ public abstract class BaseServiceBroker implements ServiceBroker
         try
         {
             service = getServiceInstance(name);
-            if (!service.getInit())
+            if (!service.isInitialized())
             {
                 synchronized (service.getClass())
                 {
-                    if (!service.getInit())
+                    if (!service.isInitialized())
                     {
                         notice("Start Initializing service (late): " + name);
                         service.init();
@@ -626,12 +626,14 @@ public abstract class BaseServiceBroker implements ServiceBroker
                     }
                 }
             }
-            if (!service.getInit())
+            if (!service.isInitialized())
             {
-                // this exception will be caught & rethrown by this very method.
-                // getInit() returning false indicates some initialization issue,
-                // which in turn prevents the InitableBroker from passing a
-                // reference to a working instance of the initable to the client.
+                // This exception will be caught & rethrown by this
+                // very method.  isInitialized() returning false
+                // indicates some initialization issue, which in turn
+                // prevents the ServiceBroker from passing a
+                // reference to a working instance of the service to
+                // the client.
                 throw new InitializationException(
                     "init() failed to initialize service " + name);
             }
@@ -652,7 +654,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
      * properties.  The Service must have its name and serviceBroker
      * set by then.  Therefore, before calling
      * Initable.initClass(Object), the class must be instantiated with
-     * InitableBroker.getInitableInstance(), and
+     * ServiceBroker.getServiceInstance(), and
      * Service.setServiceBroker() and Service.setName() must be
      * called.  This calls for two - level accesing the Services
      * instances.
@@ -712,7 +714,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
                         else if (t instanceof ClassCastException)
                         {
                             msg = "Class " + className + 
-                                " doesn't implement Initable.";
+                                " doesn't implement Service interface";
                         }
                         else
                         {

@@ -81,23 +81,27 @@ public interface Service
      * Performs late initialization of an Initable.
      *
      * When your class is being requested from an InitableBroker, it
-     * will call getInit(), and if it returns false, this method will
-     * be invoked.  A typical implementation for classes extending
-     * {@link org.apache.fulcrum.BaseService} will look something like
-     * the following:
+     * will call isInitialized(), and if it returns false, this method
+     * will be invoked.  A typical implementation for classes
+     * extending {@link org.apache.fulcrum.BaseService} will look
+     * something like the following:
      * 
      * <blockquote><code><pre>
-     * try
+     * if (!isInitialized())
      * {
-     *     // Your initialization activities ...
-     *     setInit(true);
-     * }
-     * catch (Exception e)
-     * {
-     *     throw new InitializationException("Something bad happened during " +
-     *                                       Service.SERVICE_NAME +
-     *                                       " initialization: " +
-     *                                       e.getMessage());
+     *     try
+     *     {
+     *         // Your initialization activities ...
+     *         setInit(true);
+     *     }
+     *     catch (Exception e)
+     *     {
+     *         throw new InitializationException("Something bad happened " +
+     *                                           "during " +
+     *                                           Service.SERVICE_NAME +
+     *                                           " initialization: " +
+     *                                           e.getMessage());
+     *     }
      * }
      * </pre></code></blockquote>
      *
@@ -108,22 +112,31 @@ public interface Service
         throws InitializationException;
 
     /**
-     * Returns an <code>Initable</code> to an uninitialized state.
+     * Returns a <code>Service</code> to an uninitialized state.
      *
-     * <p>This method must release all resources allocated by the 
-     * <code>Initable</code> implementation, and resetting its internal state.
-     * You may chose to implement this operation or not. If you support
-     * this operation, getInit() should return false after successful
-     * shutdown of the service.
+     * <p>This method must release all resources allocated by the
+     * <code>Initable</code> implementation, and resetting its
+     * internal state.  You may chose to implement this operation or
+     * not. If you support this operation, {@link #isInitialized()}
+     * should return false after successful shutdown of the service.
      */
-    public void shutdown( );
+    public void shutdown();
 
     /**
      * Returns initialization status of an Initable.
      *
      * @return Initialization status of an Initable.
+     * @see org.apache.fulcrum.Service#isInitialized()
+     * @deprecated use isInitialized() which uses proper bean semantics.
      */
-    public boolean getInit( );
+    public boolean getInit();
+
+    /**
+     * Returns initialization state.
+     *
+     * @return Whether the service has been initialized.
+     */
+    public boolean isInitialized();
 
     /**
      * Provides a Service with a reference to the ServiceBroker that
