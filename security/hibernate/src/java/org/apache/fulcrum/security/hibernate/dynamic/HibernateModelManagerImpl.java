@@ -145,11 +145,8 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
             {
                 ((DynamicRole) role).addPermission(permission);
                 ((DynamicPermission) permission).addRole(role);
-                Session session = getPersistenceHelper().retrieveSession();
-                Transaction transaction = session.beginTransaction();
-                session.update(role);
-                session.update(permission);
-                transaction.commit();
+                getPersistenceHelper().updateEntity(permission);
+                getPersistenceHelper().updateEntity(role);                
                 return;
             }
         }
@@ -186,7 +183,9 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
             if (roleExists && permissionExists)
             {
                 ((DynamicRole) role).removePermission(permission);
-				getPersistenceHelper().updateEntity(role);
+                ((DynamicPermission) permission).removeRole(role);
+                getPersistenceHelper().updateEntity(role);
+                getPersistenceHelper().updateEntity(permission);
                 return;
             }
         }
@@ -268,11 +267,8 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
             {
                 ((DynamicUser) user).addGroup(group);
                 ((DynamicGroup) group).addUser(user);
-                Session session = getPersistenceHelper().retrieveSession();
-                Transaction transaction = session.beginTransaction();
-                session.update(user);
-                session.update(group);
-                transaction.commit();
+                getPersistenceHelper().updateEntity(group);
+                getPersistenceHelper().updateEntity(user);   
                 return;
             }
         }
@@ -391,11 +387,8 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
             {
                 ((DynamicGroup) group).addRole(role);
                 ((DynamicRole) role).addGroup(group);
-                Session session = getPersistenceHelper().retrieveSession();
-                Transaction transaction = session.beginTransaction();
-                session.update(role);
-                session.update(group);
-                transaction.commit();
+                getPersistenceHelper().updateEntity(group);
+                getPersistenceHelper().updateEntity(role);   
                 return;
             }
         }
