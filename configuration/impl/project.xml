@@ -14,10 +14,6 @@
       <artifactId>avalon-framework-api</artifactId>
       <version>4.2.0</version>
       <url>http://avalon.apache.org/framework/</url>
-      <properties>
-        <war.bundle>true</war.bundle>
-        <ear.bundle>true</ear.bundle>
-      </properties>
     </dependency>
 
     <dependency>
