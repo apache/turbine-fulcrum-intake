@@ -59,7 +59,7 @@ package org.apache.fulcrum.security.session;
  * {@link javax.servlet.http.HttpSessionBindingEvent}.
  *
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
-* @version $Id$
+ * @version $Id$
  */
 public interface SessionBindingEvent
 {
