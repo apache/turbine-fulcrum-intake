@@ -55,7 +55,6 @@ package org.apache.fulcrum.security.spi;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.fulcrum.factory.FactoryService;
 import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.authenticator.Authenticator;
@@ -84,8 +83,7 @@ public abstract class AbstractUserManager
 
     /** Logging */
     private static Log log = LogFactory.getLog(AbstractUserManager.class);
-    /** A factory to construct ACL Objects */
-    private FactoryService aclFactoryService = null;
+   
 
 	private ACLFactory aclFactory;
 	private Authenticator authenticator;
