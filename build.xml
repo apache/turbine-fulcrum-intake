@@ -292,21 +292,27 @@
   <!-- P R E P A R E                                                      -->
   <!-- ================================================================== -->
   
+  <target name="create-dirs">
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/classes"/>
+    <mkdir dir="${build.dir}/src"/>
+  </target>
+
   <target name="include-email" if="commons-email.present">
     <copy todir="${build.dir}/src/org" overwrite="no">
+      <fileset dir="${src.dir}/util/java/org"/>
+    </copy>  
+
+    <copy todir="${build.dir}/src/org" overwrite="yes">
       <fileset dir="${src.dir}/util/java/org"/>
     </copy>  
   </target>
   
   <target name="prepare" 
-    depends="init,env,
+    depends="init,env,create-dirs,
         check.velocity,check.log4j,check.torque,check.bsf,check.servlet,
         check.javamail,check.jaf,check.xerces,check.xalan,check.xmlrpc,
         check.commons-collections,check.commons-util,include-email,om">
-    
-    <mkdir dir="${build.dir}"/>
-    <mkdir dir="${build.dir}/classes"/>
-    <mkdir dir="${build.dir}/src"/>
     
     <!-- We have some static files that should overwrite
          The torque generated files so overwrite must be
@@ -314,7 +320,6 @@
     <copy todir="${build.dir}/src/org" overwrite="yes">
       <fileset dir="${src.dir}/core/java/org"/>
       <fileset dir="${src.dir}/services/java/org"/>
-      <fileset dir="${src.dir}/util/java/org"/>
     </copy>
   </target>
 
