@@ -43,14 +43,23 @@ services.CryptoService.classname=org.apache.fulcrum.crypto.TurbineCryptoService
 # -------------------------------------------------------------------
 
 #
-# Uncomment the following line if you want to use UnixCrypt and have
-# compiled the Fulcrum jar in the presence of the cryptix32.jar. 
+# Standard Unix crypt(3) password encryption.
 # 
-#services.CryptoService.algorithm.unix  = org.apache.fulcrum.crypto.provider.UnixCrypt
+services.CryptoService.algorithm.unix  = org.apache.fulcrum.crypto.provider.UnixCrypt
+#
+# This providers allows access to the Java Message Digest encryption algorithms
+#
+services.CryptoService.algorithm.java  = org.apache.fulcrum.crypto.provider.JavaCrypt
 #
 # This is a simple, cleartext "encryption" provider.
 #
 services.CryptoService.algorithm.cleartext  = org.apache.fulcrum.crypto.provider.ClearCrypt
+#
+# Use this provider if you upgrade from Turbine 2.1 to current. It provides bug-to-bug
+# compatibilty for passwords created with the old Security Service. See the javadocs for
+# OldJavaCrypt
+#
+services.CryptoService.algorithm.oldjava  = org.apache.fulcrum.crypto.provider.OldJavaCrypt
 #
 # This is the default crypto provider. It implements the normal Java MessageDigest ciphers
 # You need not to have this, it is the default if no algorithms are given. The default
@@ -133,6 +142,14 @@ href="http://www.cryptix.org/">Cryptix</a>.
 <b>JavaCrypt</b> (org.apache.fulcrum.crypto.provider.JavaCrypt). This is a
 wrapper around the java.security Message Digest functions which give
 you MD5, SHA1 and more algorithms.
+</li>
+<li>
+<b>OldJavaCrypt</b> (org.apache.fulcrum.crypto.provider.OldJavaCrypt). Accessing
+the MessageDigest functions from java.security was buggy in Turbine 2.1, because
+the Security Service didn't pad the base64 values correctly but simply cut them
+off after 20 bytes. If you're stuck with an old database full of passwords and can't
+upgrade, please use this provider to keep going. DO NOT USE THIS PROVIDER FOR NEW
+APPLICATIONS!.
 </li>
 </ol>
 </p>
