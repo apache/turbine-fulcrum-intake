@@ -54,7 +54,7 @@ package org.apache.fulcrum.schedule;
  * <http://www.apache.org/>.
  */
 
-import java.util.Vector;
+import java.util.List;
 import org.apache.fulcrum.Service;
 
 /**
@@ -108,7 +108,7 @@ public interface ScheduleService
     /**
      * List jobs in the queue.  This is used by the scheduler UI.
      *
-     * @return A Vector of jobs.
+     * @return A List of jobs.
      */
-    public Vector listJobs();
+    public List listJobs();
 }

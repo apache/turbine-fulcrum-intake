@@ -55,7 +55,7 @@ package org.apache.fulcrum.security.impl.db.entity;
  */
 
 // JDK classes
-import java.util.Vector;
+import java.util.List;
 import org.apache.fulcrum.security.impl.db.entity.map.TurbineGroupMapBuilder;
 import org.apache.torque.util.BasePeer;
 import org.apache.torque.pool.DBConnection;
@@ -112,8 +112,8 @@ public class TurbineGroupPeer
         Criteria criteria = new Criteria();
         criteria.addSelectColumn(GROUP_ID);
         criteria.add(NAME, ((SecurityEntity)group).getName());
-        Vector results = BasePeer.doSelect(criteria);
-        if(results.size() > 1)
+        List results = BasePeer.doSelect(criteria);
+        if (results.size() > 1)
         {
             throw new DataBackendException("Multiple groups named '" +
                 ((TurbineGroup)group).getName() + "' exist!");
@@ -148,11 +148,11 @@ public class TurbineGroupPeer
      */
     public static GroupSet retrieveSet(Criteria criteria) throws Exception
     {
-        Vector results = doSelect(criteria);
+        List results = doSelect(criteria);
         GroupSet rs = new GroupSet();
         for (int i = 0; i < results.size(); i++)
         {
-            rs.add((Group)results.elementAt(i));
+            rs.add((Group)results.get(i));
         }
         return rs;
     }

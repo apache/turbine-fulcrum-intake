@@ -54,7 +54,7 @@ package org.apache.fulcrum.security.impl.db.entity;
  * <http://www.apache.org/>.
  */
 
-import java.util.Vector;
+import java.util.List;
 import org.apache.torque.TorqueException;
 import org.apache.torque.util.BasePeer;
 import org.apache.torque.pool.DBConnection;
@@ -163,8 +163,8 @@ public class TurbineUserPeer
         Criteria criteria = new Criteria();
         criteria.addSelectColumn(USER_ID);
         criteria.add(TurbineUserPeer.USERNAME, user.getUserName());
-        Vector results = BasePeer.doSelect(criteria);
-        if(results.size() > 1)
+        List results = BasePeer.doSelect(criteria);
+        if (results.size() > 1)
         {
             throw new DataBackendException("Multiple users named '" +
                 user.getUserName() + "' exist!");
@@ -173,12 +173,12 @@ public class TurbineUserPeer
     }
 
     /**
-     * Returns a vector of all User objects.
+     * Returns a List of all User objects.
      *
-     * @return A Vector with all users in the system.
+     * @return A List with all users in the system.
      * @exception Exception, a generic exception.
      */
-    public static Vector selectAllUsers()
+    public static List selectAllUsers()
         throws Exception
     {
         Criteria criteria = new Criteria();
@@ -189,12 +189,12 @@ public class TurbineUserPeer
     }
 
     /**
-     * Returns a vector of all confirmed User objects.
+     * Returns a List of all confirmed User objects.
      *
-     * @return A Vector with all confirmed users in the system.
+     * @return A List with all confirmed users in the system.
      * @exception Exception, a generic exception.
      */
-    public static Vector selectAllConfirmedUsers()
+    public static List selectAllConfirmedUsers()
         throws Exception
     {
         Criteria criteria = new Criteria();

@@ -55,7 +55,6 @@ package org.apache.fulcrum.schedule;
  */
 
 import java.util.List;
-import java.util.Vector;
 import java.util.Iterator;
 import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
@@ -114,7 +113,7 @@ public class TurbineSchedulerService
             mainLoop = new MainLoop();
 
             // Load all from cold storage.
-            Vector jobs  = JobEntryPeer.doSelect(new Criteria());
+            List jobs = JobEntryPeer.doSelect(new Criteria());
 
             if ( jobs != null && jobs.size() > 0 )
             {
@@ -244,9 +243,9 @@ public class TurbineSchedulerService
     /**
      * List jobs in the queue.  This is used by the scheduler UI.
      *
-     * @return A Vector of jobs.
+     * @return A List of jobs.
      */
-    public Vector listJobs()
+    public List listJobs()
     {
         return scheduleQueue.list();
     }

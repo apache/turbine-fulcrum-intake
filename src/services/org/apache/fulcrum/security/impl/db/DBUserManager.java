@@ -54,7 +54,8 @@ package org.apache.fulcrum.security.impl.db;
  * <http://www.apache.org/>.
  */
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Iterator;
 
 import org.apache.torque.om.BaseObject;
@@ -127,7 +128,7 @@ public class DBUserManager implements UserManager
     {
         Criteria criteria = new Criteria();
         criteria.add(TurbineUserPeer.USERNAME, username);
-        Vector users;
+        List users;
         try
         {
             users = TurbineUserPeer.doSelect(criteria);
@@ -161,7 +162,7 @@ public class DBUserManager implements UserManager
     {
         Criteria criteria = new Criteria();
         criteria.add( TurbineUserPeer.USERNAME, username );
-        Vector users;
+        List users;
         try
         {
             users = TurbineUserPeer.doSelect(criteria);
@@ -216,7 +217,7 @@ public class DBUserManager implements UserManager
                 }
             }
         }
-        Vector users = new Vector(0);
+        List users = new ArrayList(0);
         try
         {
             users = TurbineUserPeer.doSelect(criteria);
@@ -266,7 +267,7 @@ public class DBUserManager implements UserManager
     public void store(User user)
         throws UnknownEntityException, DataBackendException
     {
-        if(!accountExists(user))
+        if (!accountExists(user))
         {
             throw new UnknownEntityException("The account '" +
                 user.getUserName() + "' does not exist");
@@ -300,7 +301,7 @@ public class DBUserManager implements UserManager
         throws PasswordMismatchException, UnknownEntityException,
                DataBackendException
     {
-        if(!accountExists(user))
+        if (!accountExists(user))
         {
             throw new UnknownEntityException("The account '" +
                 user.getUserName() + "' does not exist");
@@ -313,7 +314,7 @@ public class DBUserManager implements UserManager
             System.out.println ("User Pass: " + user.getPassword());
             System.out.println ("Encrypted Pass: " + encrypted );
         }
-        if(!user.getPassword().equals(encrypted))
+        if (!user.getPassword().equals(encrypted))
         {
             throw new PasswordMismatchException("The passwords do not match");
         }
@@ -337,12 +338,12 @@ public class DBUserManager implements UserManager
                DataBackendException
     {
         String encrypted = TurbineSecurity.encryptPassword(oldPassword);
-        if(!accountExists(user))
+        if (!accountExists(user))
         {
             throw new UnknownEntityException("The account '" +
                 user.getUserName() + "' does not exist");
         }
-        if(!user.getPassword().equals(encrypted))
+        if (!user.getPassword().equals(encrypted))
         {
             throw new PasswordMismatchException(
                 "The supplied old password for '" + user.getUserName() +
@@ -373,7 +374,7 @@ public class DBUserManager implements UserManager
     public void forcePassword( User user, String password )
         throws UnknownEntityException, DataBackendException
     {
-        if(!accountExists(user))
+        if (!accountExists(user))
         {
             throw new UnknownEntityException("The account '" +
                 user.getUserName() + "' does not exist");
@@ -396,7 +397,7 @@ public class DBUserManager implements UserManager
     public void createAccount( User user, String initialPassword )
         throws EntityExistsException, DataBackendException
     {
-        if(accountExists(user))
+        if (accountExists(user))
         {
             throw new EntityExistsException("The account '" +
                 user.getUserName() + "' already exists");
@@ -429,7 +430,7 @@ public class DBUserManager implements UserManager
     public void removeAccount( User user )
         throws UnknownEntityException, DataBackendException
     {
-        if(!accountExists(user))
+        if (!accountExists(user))
         {
             throw new UnknownEntityException("The account '" +
                 user.getUserName() + "' does not exist");

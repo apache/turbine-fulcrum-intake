@@ -54,7 +54,7 @@ package org.apache.fulcrum.security.impl.db.entity;
  * <http://www.apache.org/>.
  */
 
-import java.util.Vector;
+import java.util.List;
 import org.apache.fulcrum.security.impl.db.entity.map.TurbineRoleMapBuilder;
 import org.apache.fulcrum.security.impl.db.entity.UserPeer;
 import org.apache.torque.om.Persistent;
@@ -101,8 +101,8 @@ public class TurbineRolePeer
         Criteria criteria = new Criteria();
         criteria.addSelectColumn(ROLE_ID);
         criteria.add(NAME, role.getName());
-        Vector results = BasePeer.doSelect(criteria);
-        if(results.size() > 1)
+        List results = BasePeer.doSelect(criteria);
+        if (results.size() > 1)
         {
             throw new DataBackendException("Multiple roles named '" +
                 role.getName() + "' exist!");
@@ -139,11 +139,11 @@ public class TurbineRolePeer
      */
     public static RoleSet retrieveSet(Criteria criteria) throws Exception
     {
-        Vector results = doSelect(criteria);
+        List results = doSelect(criteria);
         RoleSet rs = new RoleSet();
         for (int i=0; i<results.size(); i++)
         {
-            rs.add( (Role)results.elementAt(i) );
+            rs.add( (Role)results.get(i) );
         }
         return rs;
     }

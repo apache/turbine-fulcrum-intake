@@ -151,8 +151,10 @@ public  class TurbinePermission
      */
     public int compareTo(Object obj)
     {
-        if(this.getClass() != obj.getClass())
+        if (this.getClass() != obj.getClass())
+        {
             throw new ClassCastException();
+        }
         String name1 = ((SecurityEntity)obj).getName();
         String name2 = this.getName();
         return name2.compareTo(name1);

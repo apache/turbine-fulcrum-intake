@@ -56,8 +56,10 @@ package org.apache.fulcrum.security.impl.db;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
@@ -140,7 +142,7 @@ public class DBSecurityService
     public AccessControlList getACL( User user )
         throws DataBackendException, UnknownEntityException
     {
-        if(!TurbineSecurity.accountExists(user))
+        if (!TurbineSecurity.accountExists(user))
         {
             throw new UnknownEntityException("The account '" +
                         user.getUserName() + "' does not exist");
@@ -220,7 +222,7 @@ public class DBSecurityService
             userExists=TurbineSecurity.accountExists(user);
             groupExists=checkExists(group);
             roleExists=checkExists(role);
-            if(userExists && groupExists && roleExists)
+            if (userExists && groupExists && roleExists)
             {
                 Criteria criteria = new Criteria();
                 criteria.add(TurbineUserGroupRolePeer.USER_ID,
@@ -241,17 +243,17 @@ public class DBSecurityService
         {
             unlockExclusive();
         }
-        if(!userExists)
+        if (!userExists)
         {
             throw new UnknownEntityException("Unknown user '" +
                 user.getUserName() + "'");
         }
-        if(!groupExists)
+        if (!groupExists)
         {
             throw new UnknownEntityException("Unknown group '" +
                 ((SecurityEntity)group).getName() + "'");
         }
-        if(!roleExists)
+        if (!roleExists)
         {
             throw new UnknownEntityException("Unknown role '" +
                 role.getName() + "'");
@@ -281,7 +283,7 @@ public class DBSecurityService
             userExists=TurbineSecurity.accountExists(user);
             groupExists=checkExists(group);
             roleExists=checkExists(role);
-            if(userExists && groupExists && roleExists)
+            if (userExists && groupExists && roleExists)
             {
                 Criteria criteria = new Criteria();
                 criteria.add(TurbineUserGroupRolePeer.USER_ID,
@@ -302,17 +304,17 @@ public class DBSecurityService
         {
             unlockExclusive();
         }
-        if(!userExists)
+        if (!userExists)
         {
             throw new UnknownEntityException("Unknown user '" +
                     user.getUserName() + "'");
         }
-        if(!groupExists)
+        if (!groupExists)
         {
             throw new UnknownEntityException("Unknown group '" +
                     ((SecurityEntity)group).getName() + "'");
         }
-        if(!roleExists)
+        if (!roleExists)
         {
             throw new UnknownEntityException("Unknown role '" +
                     role.getName() + "'");
@@ -337,7 +339,7 @@ public class DBSecurityService
         {
             lockExclusive();
             userExists=TurbineSecurity.accountExists(user);
-            if(userExists)
+            if (userExists)
             {
                 // The following would not work, due to an annoying misfeature
                 // of Village.
@@ -387,7 +389,7 @@ public class DBSecurityService
             lockExclusive();
             roleExists=checkExists(role);
             permissionExists=checkExists(permission);
-            if(roleExists && permissionExists)
+            if (roleExists && permissionExists)
             {
                 Criteria criteria = new Criteria();
                 criteria.add(TurbineRolePermissionPeer.ROLE_ID,
@@ -406,12 +408,12 @@ public class DBSecurityService
         {
             unlockExclusive();
         }
-        if(!roleExists)
+        if (!roleExists)
         {
             throw new UnknownEntityException("Unknown role '" +
                 role.getName() + "'");
         }
-        if(!permissionExists)
+        if (!permissionExists)
         {
             throw new UnknownEntityException("Unknown permission '" +
                 ((SecurityEntity)permission).getName() + "'");
@@ -437,7 +439,7 @@ public class DBSecurityService
             lockExclusive();
             roleExists=checkExists(role);
             permissionExists=checkExists(permission);
-            if(roleExists && permissionExists)
+            if (roleExists && permissionExists)
             {
                 Criteria criteria = new Criteria();
                 criteria.add(TurbineRolePermissionPeer.ROLE_ID,
@@ -456,12 +458,12 @@ public class DBSecurityService
         {
             unlockExclusive();
         }
-        if(!roleExists)
+        if (!roleExists)
         {
             throw new UnknownEntityException("Unknown role '" +
                 role.getName() + "'");
         }
-        if(!permissionExists)
+        if (!permissionExists)
         {
             throw new UnknownEntityException("Unknown permission '" +
                 ((SecurityEntity)permission).getName() + "'");
@@ -486,7 +488,7 @@ public class DBSecurityService
         {
             lockExclusive();
             roleExists=checkExists(role);
-            if(roleExists)
+            if (roleExists)
             {
                 // The following would not work, due to an annoying misfeature
                 // of Village.
@@ -537,7 +539,7 @@ public class DBSecurityService
             dbCriteria.put(TurbineGroupPeer.getColumnName(key),
                     criteria.get(key));
         }
-        Vector groups = new Vector(0);
+        List groups = new ArrayList(0);
         try
         {
             groups = TurbineGroupPeer.doSelect(criteria);
@@ -566,7 +568,7 @@ public class DBSecurityService
             dbCriteria.put(TurbineRolePeer.getColumnName(key),
                     criteria.get(key));
         }
-        Vector roles = new Vector(0);
+        List roles = new ArrayList(0);
         try
         {
             roles = TurbineRolePeer.doSelect(criteria);
@@ -595,7 +597,7 @@ public class DBSecurityService
             dbCriteria.put(TurbinePermissionPeer.getColumnName(key),
                     criteria.get(key));
         }
-        Vector permissions = new Vector(0);
+        List permissions = new ArrayList(0);
         try
         {
             permissions = TurbinePermissionPeer.doSelect(criteria);
@@ -623,7 +625,7 @@ public class DBSecurityService
         {
             lockShared();
             roleExists = checkExists(role);
-            if(roleExists)
+            if (roleExists)
             {
                 return TurbinePermissionPeer.retrieveSet(role);
             }
@@ -655,7 +657,7 @@ public class DBSecurityService
         try
         {
             groupExists = checkExists(group);
-            if(groupExists)
+            if (groupExists)
             {
                 Criteria criteria = TurbineGroupPeer
                     .buildCriteria((TurbineGroup)group);
@@ -685,7 +687,7 @@ public class DBSecurityService
         try
         {
             roleExists = checkExists(role);
-            if(roleExists)
+            if (roleExists)
             {
                 Criteria criteria = TurbineRolePeer
                     .buildCriteria((TurbineRole)role);
@@ -716,7 +718,7 @@ public class DBSecurityService
         try
         {
             permissionExists = checkExists(permission);
-            if(permissionExists)
+            if (permissionExists)
             {
                 Criteria criteria = TurbinePermissionPeer
                     .buildCriteria((TurbinePermission)permission);
@@ -784,7 +786,7 @@ public class DBSecurityService
         {
             lockExclusive();
             groupExists = checkExists(group);
-            if(!groupExists)
+            if (!groupExists)
             {
                 // add a row to the table
                 Criteria criteria = TurbineGroupPeer
@@ -794,8 +796,8 @@ public class DBSecurityService
                 criteria = new Criteria();
                 criteria.add(TurbineGroupPeer.NAME,
                         ((SecurityEntity)group).getName());
-                Vector results = TurbineGroupPeer.doSelect(criteria);
-                if(results.size() != 1)
+                List results = TurbineGroupPeer.doSelect(criteria);
+                if (results.size() != 1)
                 {
                     throw new DataBackendException(
                         "Internal error - query returned " +
@@ -839,7 +841,7 @@ public class DBSecurityService
         {
             lockExclusive();
             roleExists = checkExists(role);
-            if(!roleExists)
+            if (!roleExists)
             {
                 // add a row to the table
                 Criteria criteria = TurbineRolePeer
@@ -848,8 +850,8 @@ public class DBSecurityService
                 // try to get the object back using the name as key.
                 criteria = new Criteria();
                 criteria.add(TurbineRolePeer.NAME, role.getName());
-                Vector results = TurbineRolePeer.doSelect(criteria);
-                if(results.size() != 1)
+                List results = TurbineRolePeer.doSelect(criteria);
+                if (results.size() != 1)
                 {
                     throw new DataBackendException(
                         "Internal error - query returned " +
@@ -892,7 +894,7 @@ public class DBSecurityService
         {
             lockExclusive();
             permissionExists = checkExists(permission);
-            if(!permissionExists)
+            if (!permissionExists)
             {
                 // add a row to the table
                 Criteria criteria = TurbinePermissionPeer
@@ -902,8 +904,8 @@ public class DBSecurityService
                 criteria = new Criteria();
                 criteria.add(TurbinePermissionPeer.NAME,
                     ((SecurityEntity)permission).getName());
-                Vector results = TurbinePermissionPeer.doSelect(criteria);
-                if(results.size() != 1)
+                List results = TurbinePermissionPeer.doSelect(criteria);
+                if (results.size() != 1)
                 {
                     throw new DataBackendException(
                         "Internal error - query returned " +
@@ -946,7 +948,7 @@ public class DBSecurityService
         {
             lockExclusive();
             groupExists = checkExists(group);
-            if(groupExists)
+            if (groupExists)
             {
                 Criteria criteria = TurbineGroupPeer
                     .buildCriteria((TurbineGroup)group);
@@ -984,7 +986,7 @@ public class DBSecurityService
         {
             lockExclusive();
             roleExists = checkExists(role);
-            if(roleExists)
+            if (roleExists)
             {
                 // revoke all permissions from the role to be deleted
                 revokeAll(role);
@@ -1022,7 +1024,7 @@ public class DBSecurityService
         {
             lockExclusive();
             permissionExists = checkExists(permission);
-            if(permissionExists)
+            if (permissionExists)
             {
                 Criteria criteria = TurbinePermissionPeer
                     .buildCriteria((TurbinePermission)permission);
@@ -1060,7 +1062,7 @@ public class DBSecurityService
         {
             lockExclusive();
             groupExists = checkExists(group);
-            if(groupExists)
+            if (groupExists)
             {
                 ((SecurityEntity)group).setName(name);
                 Criteria criteria = TurbineGroupPeer
@@ -1097,7 +1099,7 @@ public class DBSecurityService
         {
             lockExclusive();
             roleExists = checkExists(role);
-            if(roleExists)
+            if (roleExists)
             {
                 role.setName(name);
                 Criteria criteria = TurbineRolePeer
@@ -1134,7 +1136,7 @@ public class DBSecurityService
         {
             lockExclusive();
             permissionExists = checkExists(permission);
-            if(permissionExists)
+            if (permissionExists)
             {
                 ((SecurityEntity)permission).setName(name);
                 Criteria criteria = TurbinePermissionPeer

@@ -54,6 +54,7 @@ package org.apache.fulcrum.security.impl.db.entity;
  * <http://www.apache.org/>.
  */
 
+import java.util.List;
 import java.util.Vector;
 import java.util.Enumeration;
 import org.apache.fulcrum.security.impl.db.entity.map.TurbinePermissionMapBuilder;
@@ -100,8 +101,8 @@ public class TurbinePermissionPeer
         Criteria criteria = new Criteria();
         criteria.addSelectColumn(PERMISSION_ID);
         criteria.add(NAME, ((SecurityEntity)permission).getName());
-        Vector results = BasePeer.doSelect(criteria);
-        if(results.size() > 1)
+        List results = BasePeer.doSelect(criteria);
+        if (results.size() > 1)
         {
             throw new DataBackendException("Multiple permissions named '" +
                 ((SecurityEntity)permission).getName() + "' exist!");
@@ -143,11 +144,11 @@ public class TurbinePermissionPeer
     public static PermissionSet retrieveSet(Criteria criteria)
         throws Exception
     {
-        Vector results = doSelect(criteria);
+        List results = doSelect(criteria);
         PermissionSet ps = new PermissionSet();
         for (int i=0; i<results.size(); i++)
         {
-            ps.add( (Permission)results.elementAt(i) );
+            ps.add( (Permission)results.get(i) );
         }
         return ps;
     }
