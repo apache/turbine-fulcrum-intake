@@ -72,14 +72,12 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  */
 public class NonPersistentSchedulerServiceTest extends BaseUnitTest
 {
-    
 	private ScheduleService scheduler = null;
 
 	public NonPersistentSchedulerServiceTest(String name)
 	{
 		super(name);
 	}
-       
 
     public static Test suite()
     {
@@ -153,8 +151,7 @@ public class NonPersistentSchedulerServiceTest extends BaseUnitTest
      */
     public void testGetJob() throws Exception
     {
-       
-        	Integer jobId = new Integer(1);
+            Integer jobId = new Integer(1);
             JobEntry je = (JobEntry)scheduler.getJob(jobId);
             assertNotNull("Could not find job, maybe not loaded.",je);
             assertEquals(je.getJobId(), 1);
@@ -164,21 +161,17 @@ public class NonPersistentSchedulerServiceTest extends BaseUnitTest
             assertEquals(je.getDayOfMonth(), -1);
             assertEquals(je.getWeekDay(), -1);
             assertEquals(je.getTask(), SimpleJob.class.getName());
-       
     }
 
-    /** Test to make sure a job actually runs. 
+    /** Test to make sure a job actually runs.
      *
      */
     public void testRunningJob() throws Exception
     {
-        
            int beforeCount = SimpleJob.getCounter();
            Thread.sleep(12000);
            int afterCount = SimpleJob.getCounter();
            assertTrue(beforeCount < afterCount);
-
-        
     }
 
 }

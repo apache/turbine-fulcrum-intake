@@ -258,8 +258,8 @@
     </dependency>
     <dependency>
       <groupId>fulcrum</groupId>
-      <artifactId>fulcrum-localization</artifactId>
-      <version>1.0-alpha-3</version>
+      <artifactId>fulcrum-localization-api</artifactId>
+      <version>1.0-alpha-4</version>
       <url>http://jakarta.apache.org/turbine/fulcrum/</url>
       <properties>
         <war.bundle>true</war.bundle>

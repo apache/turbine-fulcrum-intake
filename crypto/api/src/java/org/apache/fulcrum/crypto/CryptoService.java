@@ -66,7 +66,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public interface CryptoService
 {
-
+    String ROLE = CryptoService.class.getName();
 
   /**
    * Returns a CryptoAlgorithm Object which represents the requested

@@ -63,7 +63,7 @@
     <dependency>
       <groupId>fulcrum</groupId>    
       <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0-alpha-1</version>
+      <version>1.0-alpha-2</version>
     </dependency>    
     <!--dependency>
       <groupId>merlin</groupId>
