@@ -9,6 +9,10 @@
   <body>
     <release version="Not applicable" date="">
      <action dev="epugh" type="add">
+     	Integrate the avalon-meta plugin into the project.xml files so
+     	that this dependency is downloaded.
+     </action>    
+     <action dev="epugh" type="add">
      	Finished updating the conversion process.  All the components
      	that Steve McConnell revamped are integrated and building.
      </action>
