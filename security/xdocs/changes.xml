@@ -6,6 +6,12 @@
   </properties>
 
   <body>
+    <release version="1.0.8" date="">
+      <action dev="epugh" type="add" due-to="Kostyantyn Shchekotykhin">
+        Updated nt impl, turbine and opensymphony adapters to use released versions
+        of memory impl.
+      </action>     
+    </release>    
     <release version="1.0.7" date="2004-11-24">
       <action dev="epugh" type="add" due-to="Ben Gidley">
         Add test to verify that usernames bob and BOB are treated the same.

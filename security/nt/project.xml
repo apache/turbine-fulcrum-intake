@@ -34,7 +34,7 @@
     <dependency>
       <groupId>fulcrum</groupId>    
       <artifactId>fulcrum-security-memory</artifactId>
-      <version>1.0.6-dev</version>
+      <version>1.0.7</version>
     </dependency>      
 
   </dependencies>
