@@ -442,7 +442,8 @@ public class DefaultVelocityService
 
         if (1==2)
         {
-            /*
+            /* ### FIXME: Why is this both setup in a block which
+               ### won't be compiled, and commented out?
             org.apache.commons.configuration.Configuration oldConf =
                 getConfiguration();
 
@@ -477,7 +478,7 @@ public class DefaultVelocityService
                     templatePaths.add(oldConf.getVector(key));
                 }
             }
-*/
+            */
         }
         else
         {
