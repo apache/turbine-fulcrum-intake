@@ -66,7 +66,7 @@ import org.apache.fulcrum.upload.UploadServiceFacade;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 /**
  * DefaultParameterParser is a utility object to handle parsing and
@@ -108,9 +108,9 @@ public class DefaultParameterParser
     private byte[] uploadData = null;
 
     /**
-     * Log4j category
+     * Log4j logger
      */
-    Category category = Category.getInstance(getClass().getName());
+    Logger LOG = Logger.getLogger(getClass().getName());
 
     /**
      * Create a new empty instance of ParameterParser.  Uses the
@@ -206,7 +206,7 @@ public class DefaultParameterParser
                         }
                         catch (UnsupportedEncodingException e)
                         {
-                            category.error(getCharacterEncoding() + 
+                            LOG.error(getCharacterEncoding() + 
                                 "encoding is not supported.  Used the default "
                                 + "when reading form data.");
                             value = item.getString();
@@ -221,7 +221,7 @@ public class DefaultParameterParser
             }
             catch(Exception e)
             {
-                category.error(new Exception("File upload failed", e));
+                LOG.error(new Exception("File upload failed", e));
             }
         }
 

@@ -8,6 +8,9 @@
   <body>
     <release version="1.0.2-dev" date="in CVS">
      <action dev="epugh" type="add">
+        Removed use of old Log4j Category in favor of Logger.
+      </action>           
+     <action dev="epugh" type="add">
         Make gump friendly.
       </action>          
      <action dev="epugh" type="add">
