@@ -306,8 +306,9 @@
     <report>maven-jcoverage-plugin</report>
     <report>maven-simian-plugin</report>
     <report>maven-multiproject-plugin</report>
-    <report>maven-faq-plugin</report>    
+    
  <!--  maven site-all chokes on these.
+ 	<report>maven-faq-plugin</report>    
     <report>maven-linkcheck-plugin</report>
       <report>maven-checkstyle-plugin</report>
     <report>maven-tasklist-plugin</report>
