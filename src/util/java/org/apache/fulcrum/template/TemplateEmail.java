@@ -55,6 +55,7 @@ package org.apache.fulcrum.template;
  */
 
 import java.util.ArrayList;
+import java.util.List;
 import javax.mail.internet.InternetAddress;
 import org.apache.commons.mail.SimpleEmail;
 import org.apache.commons.util.StringUtils;
@@ -152,10 +153,10 @@ public class TemplateEmail
     private String subject = null;
 
     /** The to email list. */
-    private ArrayList toList = null;
+    private List toList = null;
 
     /** The cc list. */
-    private ArrayList ccList = null;
+    private List ccList = null;
 
     /** The column to word-wrap at.  <code>0</code> indicates no wrap. */
     private int wordWrap = 0;
@@ -176,6 +177,7 @@ public class TemplateEmail
      */
     public TemplateEmail()
     {
+        this(null);
     }
 
     /**
@@ -185,7 +187,6 @@ public class TemplateEmail
     {
         this.context = context;
     }
-
 
     /** Add a recipient TO to the email.
      *
@@ -211,12 +212,11 @@ public class TemplateEmail
         }
         catch (Exception e)
         {
-            throw new Exception("cannot add to");
+            throw new Exception("Cannot add 'To' recipient: " + e);
         }
     }
-
  
-     /**
+    /**
      * Add a recipient CC to the email.
      *
      * @param email A String.
@@ -241,11 +241,9 @@ public class TemplateEmail
         }
         catch (Exception e)
         {
-            throw new Exception("cannot add cc");
+            throw new Exception("Cannot add 'CC' recipient: " + e);
         }
     }
-
-
 
     /**
      * To: name, email
@@ -312,8 +310,8 @@ public class TemplateEmail
     }
 
     /**
-     * TemplateService template to execute. Path is relative to the TemplateService
-     * templates directory.
+     * TemplateService template to execute. Path is relative to the
+     * TemplateService templates directory.
      *
      * @param template A String with the template.
      * @return A TemplateEmail (self).
