@@ -84,6 +84,7 @@ public class MimeType
     public static MimeType MESSAGE_HTTP;
     public static MimeType TEXT_CSS;
     public static MimeType TEXT;
+    public static MimeType IMAGE_PNG;
     public static MimeType IMAGE_GIF;
     public static MimeType IMAGE_JPEG;
     public static MimeType IMAGE_WBMP;
@@ -117,6 +118,8 @@ public class MimeType
             new MimeType("text/css");
         TEXT =
             new MimeType("text/*");
+        IMAGE_PNG =
+            new MimeType("image/png");
         IMAGE_GIF =
             new MimeType("image/gif");
         IMAGE_JPEG =
