@@ -5,21 +5,7 @@
   <name>Fulcrum's YAAFI</name>
   <currentVersion>1.0.3-dev</currentVersion>
 
-  <dependencies>
-
-   <dependency>
-      <groupId>avalon-framework</groupId>
-      <artifactId>avalon-framework-api</artifactId>
-      <version>4.2.0</version>
-      <url>http://avalon.apache.org/framework/</url>
-    </dependency>
-
-   <dependency>
-      <groupId>avalon-framework</groupId>
-      <artifactId>avalon-framework-impl</artifactId>
-      <version>4.2.0</version>
-      <url>http://avalon.apache.org/framework/</url>
-    </dependency>   
+  <dependencies> 
 
   </dependencies>
 
