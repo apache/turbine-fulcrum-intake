@@ -54,9 +54,6 @@ package org.apache.fulcrum.yaafi;
  * <http://www.apache.org/>.
  */
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.apache.fulcrum.yaafi.testcontainer.BaseUnitTest;
 
 /**
@@ -77,28 +74,6 @@ public class TestComponentTest extends BaseUnitTest
         super(name);
     }
 
-    /** Common test fixture */
-
-    protected void setUp() throws Exception
-    {
-    }
-
-    protected void tearDown() throws Exception
-    {
-    }
-
-    /**
-     * Add all of our test suites
-     */
-
-    public static Test suite()
-    {
-        TestSuite suite= new TestSuite();
-
-        suite.addTest( new TestComponentTest("testTestComponent") );
-        
-        return suite;
-    }
     
     public void testTestComponent() throws Exception
     {
@@ -108,8 +83,8 @@ public class TestComponentTest extends BaseUnitTest
         
         testComponent.test();
         
-        this.assertEquals( ((TestComponentImpl) testComponent).bar, "BAR" );
-        this.assertEquals( ((TestComponentImpl) testComponent).foo, "FOO" );
-        this.assertNotNull( ((TestComponentImpl) testComponent).appRoot );
+        assertEquals( ((TestComponentImpl) testComponent).bar, "BAR" );
+        assertEquals( ((TestComponentImpl) testComponent).foo, "FOO" );
+        assertNotNull( ((TestComponentImpl) testComponent).appRoot );
     }
 }
