@@ -15,15 +15,16 @@
       for use in Turbine but it has been expanded and can be used in any container compatible 
       with Avalon's ECM container.
 	  <ul>
-	  	<li>Allow pluggability via Avalon components of various systems</li>
+	  	<li>Allow pluggability via Avalon components of various backend providers</li>
+	  	<li>Provide adapters to various other security systems</li>
 	  	<li>Solve most common problems in dealing with security</li>
-	  	<li>Not make assumptions about how a security framework should be setup.</li>
+	  	<li>Not enforce assumptions about how a security framework should be setup.</li>
 	  </ul>
     </p>    
     <subsection name="Matrix">    
       <table>
         <tr>
-        	<th/><th colspan="4">Simple</th><th colspan="4">Turbine</th>
+        	<th/><th colspan="4">Simple Model</th><th colspan="4">Turbine Model</th>
         </tr>
         <tr>
         	<th/><th>User</th><th>Group</th><th>Role</th><th>Permission</th><th>User</th><th>Group</th><th>Role</th><th>Permission</th>
@@ -39,7 +40,7 @@
   
   <section name="Common Security Implementations">
     <p>
-	  There ae a couple common approaches to security.  Currently this component tries to solve
+	  There are a couple common approaches to security.  Currently this component tries to solve
 	  two common setups for security.
     </p>    
     <subsection name="Simple">
@@ -48,6 +49,8 @@
     	that are related in a many to many relation ship with a set or roles.  Those roles are related
     	in a many to many relationship with a set of groups.  A user is in a many to many relationship
     	with a set of groups.  <i>note: I will try and get a diagram. any suggestions on diagram tools?</i>
+    	Also, after seeing some other schemes, maybe a better name would be <i>Complex</i> or <i>Very Flexible</i>
+    	as it is a much more complex approach.
       </p>
       <p>
     	The <code>memory</code> package currently implements this security model.  However, if you
@@ -67,6 +70,18 @@
       <p>
     	The <code>torque</code> package currently implements this security model.  <strong>WARNING:
     	this code hasn't been tested at all.  It only compiles.</strong>	
+      </p>
+    </subsection>
+    <subsection name="UsersAndGroup (OSUser Model)">
+      <p>
+		This model is based on what OSUser implements.  In it, you have users, and groups, and security
+		is based on a user belonging to a group.  Users can belong to multiple groups.  So groups become
+		the equivalent of roles/permissions.  So, when an ACL class asks:  <code>acl.hasRole("someRole")</code>
+		what it is really asking is whether the user is part of a group or not.
+      </p>
+      <p>
+    	<strong>This model has NOT yet been implemented.  If there is interest, it should be very easy to
+    	do.</strong>	
       </p>
     </subsection>
   </section>  
@@ -124,6 +139,40 @@
 
   </section>
 
+<section name="Adapters">
+	<subsection name="Turbine">
+    <p>
+    In <code>org.apache.fulcrum.security.adapter.turbine</code> is an implementation of the Turbine Security Service.
+    This is designed to allow you to run the Fulcrum Security Service, but have Turbine 2.3's be able to query, through
+    the adapter the Fulcrum Security service.
+    </p>
+    </subsection>
+
+	<subsection name="OSUser">
+    <p>
+    In <code>org.apache.fulcrum.security.adapter.osuser</code> is an implementation of the various *Provider classes 
+    required by OSUser.  In order to have OSUser load up these classes, you must add this to your <code>ouser.xml</code> configuration
+    file.
+    </p>
+   <p>
+<source>
+<![CDATA[
+    <!-- Fulcrum providers -->
+    <provider class="org.apache.fulcrum.security.adapter.osuser.FulcrumAccessProvider"/>       
+    <provider class="org.apache.fulcrum.security.adapter.osuser.FulcrumCredentialsProvider"/>
+	<!-- don't have a propertyset provider, so just return a memory one. -->
+    <provider class="com.opensymphony.user.provider.memory.MemoryProfileProvider" />
+]]>
+</source>
+	  </p>    
+	  <p>
+	  	When using the FulcrumAccessProvider and FulcrumCredentialsProvider, you must first pass into them the
+	  	Fulcrum SecurityService class.  They both inherit from BaseFulcrumProvider, so you can just do 
+	  	<code>BaseFulcrumProvider.setSecurityService(securityService)</code> before OSUser calls them for the
+	  	first time.  
+	  </p>
+    </subsection>    
+</section>	
 
 
 </body>
