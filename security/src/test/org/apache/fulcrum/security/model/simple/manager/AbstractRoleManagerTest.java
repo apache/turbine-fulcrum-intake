@@ -21,10 +21,10 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  */
 public abstract class AbstractRoleManagerTest extends BaseUnitTest
 {
-    private Role role;
-    private SimpleRoleManager roleManager;
-    private SecurityService securityService;
-    public abstract void doCustomSetup() throws Exception;
+    protected Role role;
+    protected SimpleRoleManager roleManager;
+    protected SecurityService securityService;
+
     /**
      * Constructor for AbstractRoleManagerTest.
      * @param arg0
@@ -34,25 +34,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
     {
         super(arg0);
     }
-    public void setUp()
-    {
-        try
-        {
-            doCustomSetup();
-            securityService = (SecurityService) lookup(SecurityService.ROLE);
-            roleManager = (SimpleRoleManager)securityService.getRoleManager();
-        }
-        catch (Exception e)
-        {
-            fail(e.toString());
-        }
-    }
-    public void tearDown()
-    {
-        role = null;
-        roleManager = null;
-        securityService = null;
-    }
+   
     /*
      * Class to test for Role getRoleInstance()
      */

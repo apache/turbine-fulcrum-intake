@@ -5,12 +5,12 @@
 package org.apache.fulcrum.security.spi.nt.simple;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.model.simple.entity.SimpleUser;
 import org.apache.fulcrum.security.model.simple.manager.AbstractUserManagerTest;
 import org.apache.fulcrum.security.model.simple.manager.SimpleUserManager;
-
 import com.tagish.auth.win32.NTSystem;
 /**
  * @author Eric Pugh
@@ -30,10 +30,25 @@ public class NTUserManagerTest extends AbstractUserManagerTest
     {
         junit.textui.TestRunner.run(NTUserManagerTest.class);
     }
-    public void doCustomSetup() throws Exception
+    public void setUp()
     {
-        this.setRoleFileName(null);
-        this.setConfigurationFileName("src/test/SimpleNT.xml");
+        try
+        {
+            this.setRoleFileName(null);
+            this.setConfigurationFileName("src/test/SimpleNT.xml");
+            securityService = (SecurityService) lookup(SecurityService.ROLE);
+            userManager = securityService.getUserManager();
+        }
+        catch (Exception e)
+        {
+            fail(e.toString());
+        }
+    }
+    public void tearDown()
+    {
+        user = null;
+        userManager = null;
+        securityService = null;
     }
     /**
     	* Constructor for MemoryPermissionManagerTest.
@@ -278,6 +293,18 @@ public class NTUserManagerTest extends AbstractUserManagerTest
         }
     }
     public void testAddUser() throws Exception
+    {
+        try
+        {
+            user = userManager.getUserInstance("Joe1");
+            userManager.addUser(user, "mc");
+        }
+        catch (RuntimeException re)
+        {
+            assertTrue(re.getMessage().equals(ERROR_MSG));
+        }
+    }
+    public void testRetrieveingUsersByGroup() throws Exception
     {
         try
         {

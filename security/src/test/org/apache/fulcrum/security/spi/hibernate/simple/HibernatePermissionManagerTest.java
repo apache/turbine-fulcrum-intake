@@ -4,7 +4,7 @@
  */
 package org.apache.fulcrum.security.spi.hibernate.simple;
 import net.sf.hibernate.avalon.HibernateService;
-
+import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.simple.manager.AbstractPermissionManagerTest;
 import org.apache.fulcrum.security.spi.hibernate.HibernateHelper;
 /**
@@ -15,12 +15,36 @@ import org.apache.fulcrum.security.spi.hibernate.HibernateHelper;
  */
 public class HibernatePermissionManagerTest extends AbstractPermissionManagerTest
 {
-    public void doCustomSetup() throws Exception
+    public void setUp()
     {
-        this.setRoleFileName(null);
-        this.setConfigurationFileName("src/test/SimpleHibernate.xml");
-        HibernateService hibernateService = (HibernateService) lookup(HibernateService.ROLE);
-        HibernateHelper.exportSchema(hibernateService.getConfiguration());
+        try
+        {
+            this.setRoleFileName(null);
+            this.setConfigurationFileName("src/test/SimpleHibernate.xml");
+            HibernateService hibernateService = (HibernateService) lookup(HibernateService.ROLE);
+            HibernateHelper.exportSchema(hibernateService.getConfiguration());
+            securityService = (SecurityService) lookup(SecurityService.ROLE);
+            permissionManager = securityService.getPermissionManager();
+			((BaseHibernateManager) permissionManager).setHibernateSession(hibernateService.openSession());
+        }
+        catch (Exception e)
+        {
+            fail(e.toString());
+        }
+    }
+    public void tearDown()
+    {
+		try
+		  {
+			  ((BaseHibernateManager) permissionManager).getHibernateSession().close();
+		  }
+		  catch (Exception e)
+		  {
+			  fail(e.getMessage());
+		  }
+        permission = null;
+        permissionManager = null;
+        securityService = null;
     }
     /**
     	   * Constructor for HibernatePermissionManagerTest.

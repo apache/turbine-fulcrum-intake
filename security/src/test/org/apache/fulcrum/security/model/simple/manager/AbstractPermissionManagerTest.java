@@ -20,39 +20,20 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  */
 public abstract class AbstractPermissionManagerTest extends BaseUnitTest
 {
-    private Permission permission;
-    private PermissionManager permissionManager;
-    private SecurityService securityService;
-  
-  	public abstract void doCustomSetup() throws Exception;
+    protected Permission permission;
+    protected PermissionManager permissionManager;
+    protected SecurityService securityService;
+    
     /**
      * Constructor for PermissionManagerTest.
      * @param arg0
      */
     public AbstractPermissionManagerTest(String arg0)
+    
     {
         super(arg0);
     }
-    public void setUp()
-    {
-        try
-        {
-        	doCustomSetup();
-          
-            securityService = (SecurityService) lookup(SecurityService.ROLE);
-            permissionManager = securityService.getPermissionManager();
-        }
-        catch (Exception e)
-        {
-            fail(e.toString());
-        }
-    }
-    public void tearDown()
-    {
-        permission = null;
-        permissionManager = null;
-        securityService = null;
-    }
+  
     /*
      * Class to test for Permission getPermissionInstance()
      */
@@ -86,11 +67,11 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
     }
     public void testGetAllPermissions() throws Exception
     {
-    	int size = permissionManager.getAllPermissions().size();
+        int size = permissionManager.getAllPermissions().size();
         permission = permissionManager.getPermissionInstance("WALK_DOGS");
         permissionManager.addPermission(permission);
         PermissionSet permissionSet = permissionManager.getAllPermissions();
-        assertEquals(size+1, permissionSet.size());
+        assertEquals(size + 1, permissionSet.size());
     }
     public void testRenamePermission() throws Exception
     {
@@ -102,7 +83,6 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
         assertEquals("CLEAN_GROOMING_ROOM".toLowerCase(), permission2.getName());
         assertEquals(size, permissionManager.getAllPermissions().size());
     }
-   
     public void testRemovePermission() throws Exception
     {
         permission = permissionManager.getPermissionInstance("CLEAN_CAT_HOUSE");
@@ -122,7 +102,7 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
     {
         permission = permissionManager.getPermissionInstance("CLEAN_BIG_KENNEL");
         permissionManager.addPermission(permission);
-        assertTrue(permission.getId()>0);
+        assertTrue(permission.getId() > 0);
         permission = permissionManager.getPermissionById(permission.getId());
         assertNotNull(permission);
     }
@@ -137,7 +117,7 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
         permissionManager.addPermission(permission2);
         Role role = securityService.getRoleManager().getRoleInstance("VET_TECH");
         securityService.getRoleManager().addRole(role);
-        ((SimpleRoleManager)securityService.getRoleManager()).grant(role, permission);
+        ((SimpleRoleManager) securityService.getRoleManager()).grant(role, permission);
         PermissionSet permissionSet = permissionManager.getPermissions(role);
         assertEquals(1, permissionSet.size());
         assertTrue(permissionSet.contains(permission));

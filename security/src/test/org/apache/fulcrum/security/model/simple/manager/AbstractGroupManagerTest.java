@@ -14,6 +14,7 @@ import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
+
 /**
  * @author Eric Pugh
  *
@@ -22,30 +23,12 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  */
 public abstract class AbstractGroupManagerTest extends BaseUnitTest
 {
-    private Group group;
-    private GroupManager groupManager;
-    private SecurityService securityService;
-    public abstract void doCustomSetup() throws Exception;
-    public void setUp()
+    protected Group group;
+	protected GroupManager groupManager;
+	protected SecurityService securityService;
+
     
-    {
-        try
-        {
-            doCustomSetup();
-            securityService = (SecurityService) lookup(SecurityService.ROLE);
-            groupManager = securityService.getGroupManager();
-        }
-        catch (Exception e)
-        {
-            fail(e.toString());
-        }
-    }
-    public void tearDown()
-    {
-        group = null;
-        groupManager = null;
-        securityService = null;
-    }
+   
     /**
      * Constructor for AbstractGroupManagerTest.
      * @param arg0
@@ -150,10 +133,10 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         Role role = securityService.getRoleManager().getRoleInstance();
         role.setName("TEST_PERMISSION");
         securityService.getRoleManager().addRole(role);
-        group = groupManager.getGroupInstance("TEST_ROLE");
+        group = groupManager.getGroupInstance("TEST_GROUP");
         groupManager.addGroup(group);
         ((SimpleGroupManager) groupManager).grant(group, role);
-        group = groupManager.getGroupByName("TEST_ROLE");
+        group = groupManager.getGroupByName("TEST_GROUP");
 		assertTrue(((SimpleGroup) group).getRoles().contains(role));
 		assertTrue(((SimpleRole) role).getGroups().contains(group));
 		
@@ -171,4 +154,6 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
 		assertFalse(((SimpleGroup) group).getRoles().contains(role));
 		assertFalse(((SimpleRole) role).getGroups().contains(group));
     }
+    
+	   
 }

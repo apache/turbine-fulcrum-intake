@@ -3,6 +3,7 @@
  *
  */
 package org.apache.fulcrum.security.spi.memory.simple;
+import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.simple.manager.AbstractUserManagerTest;
 /**
  * @author Eric Pugh
@@ -15,10 +16,25 @@ public class MemoryUserManagerTest extends AbstractUserManagerTest
     {
         junit.textui.TestRunner.run(MemoryUserManagerTest.class);
     }
-    public void doCustomSetup()
+    public void setUp()
     {
-        this.setRoleFileName(null);
-        this.setConfigurationFileName("src/test/SimpleMemory.xml");
+        try
+        {
+            this.setRoleFileName(null);
+            this.setConfigurationFileName("src/test/SimpleMemory.xml");
+            securityService = (SecurityService) lookup(SecurityService.ROLE);
+            userManager = securityService.getUserManager();
+        }
+        catch (Exception e)
+        {
+            fail(e.toString());
+        }
+    }
+    public void tearDown()
+    {
+        user = null;
+        userManager = null;
+        securityService = null;
     }
     /**
     	* Constructor for MemoryPermissionManagerTest.

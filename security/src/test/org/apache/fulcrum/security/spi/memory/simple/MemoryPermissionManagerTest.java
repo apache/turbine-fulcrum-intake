@@ -3,6 +3,7 @@
  *
  */
 package org.apache.fulcrum.security.spi.memory.simple;
+import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.simple.manager.AbstractPermissionManagerTest;
 /**
  * @author Eric Pugh
@@ -15,10 +16,25 @@ public class MemoryPermissionManagerTest extends AbstractPermissionManagerTest
     {
         junit.textui.TestRunner.run(MemoryPermissionManagerTest.class);
     }
-    public void doCustomSetup()
+    public void setUp()
     {
-        this.setRoleFileName(null);
-        this.setConfigurationFileName("src/test/SimpleMemory.xml");
+        try
+        {
+            this.setRoleFileName(null);
+            this.setConfigurationFileName("src/test/SimpleMemory.xml");
+            securityService = (SecurityService) lookup(SecurityService.ROLE);
+            permissionManager = securityService.getPermissionManager();
+        }
+        catch (Exception e)
+        {
+            fail(e.toString());
+        }
+    }
+    public void tearDown()
+    {
+        permission = null;
+        permissionManager = null;
+        securityService = null;
     }
     /**
     	* Constructor for MemoryPermissionManagerTest.
