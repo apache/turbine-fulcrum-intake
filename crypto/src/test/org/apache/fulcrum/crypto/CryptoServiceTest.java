@@ -58,7 +58,7 @@ import junit.framework.TestSuite;
 /**
  * Basic testing of the Container
  *
- * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
+* @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public class CryptoServiceTest extends BaseUnitTest
