@@ -61,7 +61,7 @@ import java.util.Hashtable;
 import javax.servlet.http.HttpSessionBindingEvent;
 import org.apache.fulcrum.security.TurbineSecurity;
 import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.session.SessionBindingEvent;
+import org.apache.fulcrum.security.session.SessionBindingEvent;
 
 /**
  * A generic implementation of User interface.

@@ -58,7 +58,7 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.io.Serializable;
 
-import org.apache.fulcrum.session.SessionBindingListener;
+import org.apache.fulcrum.security.session.SessionBindingListener;
 
 /**
  * This interface represents functionality that all users of the
