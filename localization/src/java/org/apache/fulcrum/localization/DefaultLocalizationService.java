@@ -146,8 +146,7 @@ public class DefaultLocalizationService
     }
     public void configure(Configuration conf) throws ConfigurationException
     {
-        Locale jvmDefault = Locale.getDefault();
-        System.out.println("Using parameters");
+        Locale jvmDefault = Locale.getDefault();        
         defaultLanguage =
             conf
                 .getAttribute(
