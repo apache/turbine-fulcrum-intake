@@ -25,5 +25,13 @@ public class HibernateSimpleRole extends SimpleRole
 		return getPermissions().getSet();	
 	}
 	
+	void setHibernateGroups(Set groups){
+			this.getGroups().add(groups);
+		}
+	
+		Set getHibernateGroups(){
+			return getGroups().getSet();	
+		}
+	
 	
 }
