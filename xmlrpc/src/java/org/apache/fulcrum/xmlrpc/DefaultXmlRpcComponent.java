@@ -3,7 +3,7 @@ package org.apache.fulcrum.xmlrpc;
 /* ----------------------------------------------------------------------------
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2000-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2000-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -65,9 +65,11 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
+import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
+
 import org.apache.xmlrpc.WebServer;
 import org.apache.xmlrpc.XmlRpc;
 import org.apache.xmlrpc.XmlRpcClient;
@@ -84,14 +86,18 @@ import java.util.List;
 import java.util.Vector;
 
 /**
+ * Default implementation of the XML RPC component.
+ *
+ * @todo Handle XmlRpc.setDebug(boolean)
  *
  * @author <a href="mailto:jason@zenplex.com">Jason van Zyl</a>
+ * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
- * @todo Handle XmlRpc.setDebug(boolean)
  */
 public class DefaultXmlRpcComponent
-    extends org.apache.plexus.logging.AbstractLogEnabled
-    implements Contextualizable,Configurable, Initializable, Startable, Disposable, Serviceable, XmlRpcComponent
+    extends AbstractLogEnabled
+    implements Contextualizable,Configurable, Initializable, Startable,
+        Disposable, Serviceable, XmlRpcComponent
 {
     /** The service manager for this component. */
     private ServiceManager manager;
@@ -123,8 +129,8 @@ public class DefaultXmlRpcComponent
     /** Message Listeners. */
     private List listeners;
 
-    /** ClassLoader */
-    private ClassLoader classLoader;
+    /** Current working directory */
+    String workingDirectory;
 
     /** Default Constructor. */
     public DefaultXmlRpcComponent()
@@ -140,7 +146,7 @@ public class DefaultXmlRpcComponent
     public void contextualize( Context context )
         throws ContextException
     {
-        classLoader = (ClassLoader) context.get( "common.classloader" );
+        workingDirectory = (String) context.get("ComponentAppRoot");
     }
 
     public void configure(Configuration configuration)
@@ -157,7 +163,8 @@ public class DefaultXmlRpcComponent
         getLogger().debug("Server Port: " + port);
 
         // Determine if the server is secure or not.
-        isSecureServer = configuration.getChild("secureServer").getValueAsBoolean();
+        isSecureServer =
+                configuration.getChild("secureServer").getValueAsBoolean();
         getLogger().debug("Secure Server: " + isSecureServer);
 
         // Set the XML driver to the correct SAX parser class
@@ -165,7 +172,8 @@ public class DefaultXmlRpcComponent
         // "org.apache.xerces.parsers.SAXParser");
 
         // Turn on paranoia for the webserver if requested.
-        isStateOfParanoia = configuration.getChild("paranoid").getValueAsBoolean();
+        isStateOfParanoia =
+                configuration.getChild("paranoid").getValueAsBoolean();
         //!! default value
 
         // Check if there are any handlers to register at startup
@@ -203,7 +211,8 @@ public class DefaultXmlRpcComponent
     void setSystemPropertiesFromConfiguration(Configuration configuration)
         throws ConfigurationException
     {
-        Configuration[] systemProperties = configuration.getChildren("systemProperty");
+        Configuration[] systemProperties =
+                configuration.getChildren("systemProperty");
 
         getLogger().debug("system properties: " + systemProperties.length);
 
@@ -235,9 +244,7 @@ public class DefaultXmlRpcComponent
     public void initialize()
         throws Exception
     {
-        //getLogger().info( "Attempting to start the XML-RPC server." );
-        System.out.println( "Attempting to start the XML-RPC server." );
-
+        getLogger().info( "Attempting to start the XML-RPC server." );
 
             // Need a default value here.
             if (isSecureServer)
@@ -285,7 +292,7 @@ public class DefaultXmlRpcComponent
                     {
                         webserver.denyClient(clientIP);
 
-                        getLogger().info("Accepting client -> " + clientIP);
+                        getLogger().info("Denying client -> " + clientIP);
                     }
                 }
             }
@@ -302,8 +309,8 @@ public class DefaultXmlRpcComponent
     {
         Configuration[] handlers = handlerConfiguration.getChildren("handler");
 
-        getLogger().info( "We have " + handlers.length + " to configure." );
-        System.out.println( "We have " + handlers.length + " to configure." );
+        getLogger().info( "We have " + handlers.length
+                + " handlers to configure." );
 
         for (int i = 0; i < handlers.length; i++)
         {
@@ -347,8 +354,8 @@ public class DefaultXmlRpcComponent
      */
     public void dispose()
     {
-        // Stop the XML RPC server.  org.apache.xmlrpc.WebServer blocks in a call to
-        // ServerSocket.accept() until a socket connection is made.
+        // Stop the XML RPC server.  org.apache.xmlrpc.WebServer blocks in a
+        // call to ServerSocket.accept() until a socket connection is made.
         webserver.shutdown();
         try
         {
@@ -358,8 +365,9 @@ public class DefaultXmlRpcComponent
         catch (Exception notShutdown)
         {
             // Remotely possible we're leaving an open listener socket around.
-            getLogger().warn( "It's possible the xmlrpc server was not shutdown: " +
-                      notShutdown.getMessage());
+            getLogger().warn(
+                    "It's possible the xmlrpc server was not shutdown: "
+                    + notShutdown.getMessage());
         }
     }
 
@@ -410,9 +418,11 @@ public class DefaultXmlRpcComponent
     {
         try
         {
-            Object handler = classLoader.loadClass( handlerClass ).newInstance();
+            Object handler = getClass().getClassLoader().loadClass(
+                    handlerClass ).newInstance();
             webserver.addHandler(handlerName,handler);
-            getLogger().info("registered: " + handlerName + " with class: " + handlerClass);
+            getLogger().info("registered: " + handlerName + " with class: "
+                    + handlerClass);
 
         }
         // those two errors must be passed to the VM
@@ -439,11 +449,13 @@ public class DefaultXmlRpcComponent
      * @param handlerRole The role of the component serving as the handler.
      * @exception Exception If the component could not be looked up.
      */
-    private void registerComponentHandler(String handlerName, String handlerRole)
+    private void registerComponentHandler(String handlerName,
+                                          String handlerRole)
         throws Exception
     {
         registerHandler(handlerName, manager.lookup(handlerRole));
-        getLogger().info("registered: " + handlerName + " with component: " + handlerRole);
+        getLogger().info("registered: " + handlerName + " with component: "
+                + handlerRole);
     }
 
     /**
@@ -481,6 +493,7 @@ public class DefaultXmlRpcComponent
         }
         catch (Exception e)
         {
+            getLogger().error("XML-RPC call failed", e);
             throw new Exception("XML-RPC call failed", e);
         }
     }
@@ -538,7 +551,7 @@ public class DefaultXmlRpcComponent
     /** Message received. */
     public void messageReceived(String message)
     {
-        System.out.println("xmlrpc: message received!");
+        getLogger().debug("message received!");
 
         for (Iterator i = listeners.iterator(); i.hasNext();)
         {
