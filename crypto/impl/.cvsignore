@@ -5,3 +5,4 @@ maven.log
 *.ser
 .classpath
 .project
+junit*.properties
