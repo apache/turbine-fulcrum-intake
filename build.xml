@@ -111,7 +111,7 @@
 -->
 
     <java
-      classname="org.apache.fulcrum.localization.LocalizationServiceTest"
+      classname="org.apache.fulcrum.localization.LocalizationTest"
       fork="yes" failonerror="true">
       <classpath>
         <path refid="test.classpath"/>
