@@ -45,7 +45,6 @@ public class BaseQuartzTestCase extends BaseUnitTest {
 
     
     public void tearDown() {
-        ((DefaultQuartzScheduler)quartz).dispose();
         release(QuartzScheduler.ROLE);
         SimpleJob.reset();
         super.tearDown();
