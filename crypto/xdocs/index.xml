@@ -11,8 +11,13 @@
 
   <section name="Overview">
     <p>
-      This component wraps provides encrypting passwords.  It is written 
-      for use in Turbine but it can be used in any container compatible 
+      The Crypto Service allows an application to request various encryption
+      algorithms provided by the normal Java crypto providers and 3rd party
+      providers such as <a href="http://www.cryptix.org/">Cryptix</a>.
+    </p>
+  
+    <p>
+      It is written for use in Turbine but it can be used in any container compatible 
       with Avalon's ECM container.
     </p>    
   </section>
@@ -41,7 +46,7 @@
 <![CDATA[
     <crypto>
       <algorithm>
-      	<unix>org.apache.fulcrum.crypto.provider.UnixCrypt</unix>
+        <unix>org.apache.fulcrum.crypto.provider.UnixCrypt</unix>
         <clear>org.apache.fulcrum.crypto.provider.ClearCrypt</clear>
         <java>org.apache.fulcrum.crypto.provider.JavaCrypt</java>   
         <oldjava>org.apache.fulcrum.crypto.provider.OldJavaCrypt</oldjava>   
@@ -52,11 +57,95 @@
 </source>
 
   </section>
+  
+<section name="Usage">
 
-  <section name="Usage">
+<p>
+If you want to encrypt a clear text with a MessageDigest Cipher, you can
+do it like this:
+</p>
+
+<source><![CDATA[
+import org.apache.fulcrum.crypto.CryptoAlgorithm;
+import org.apache.fulcrum.crypto.CryptoService;
+
+public class CryptoExample
+{
+    public String doMD5Encryption(String input)
+    {
+        CryptoService cs  = (CryptoService) avalonComponentService.lookup(CryptoService.ROLE);
+        CryptoAlgorithm ca = CryptoService.getCryptoAlgorithm("default");
+
+        ca.setCipher("MD5");
+
+        return ca.encrypt(input);
+    }
+}
+]]></source>
+
+<p>
+To see an example, look at the test case 
+<a href="xref-test/org/apache/fulcrum/crypto/CryptoServiceTest.html">CryptoServiceTest</a>.
+</p>
+
+</section>
+
+  <section name="Default Provider">
+
     <p>
+    In the source code and the example above, there is talk about a
+    "default" provider which is used if no encryption algorithm is
+    specifically requested. The reason for this comes from the first user
+    of the crypto service, the <a href="security-service.html">Security
+    Service</a>. It gives you the ability to select an encryption
+    algorithm like MD5 or SHA1 which is in turn used with the normal java
+    crypto providers. As we just wanted to "add" new algorithms and still
+    be able to use the old java.security names like MD5 and SHA1, we
+    decided to add a "catchall" algorithm to the crypto service.
     </p>
+    <p>
+    If you don't set the default provider explicitly, the
+    org.apache.fulcrum.crypto.provider.JavaCrypt class is used. If you
+    don't set the Cipher of this class explicitly, then SHA is used.
+    </p>
+
   </section>  
+
+  <section name="Included Providers">
+    <p>The following algorithm providers are included in the Cryptoservice:</p>
+
+    <p>
+    <ol>
+    <li>
+    <b>ClearCrypt</b> (org.apache.fulcrum.crypto.provider.ClearCrypt). This is
+    the simplest algorithm which does nothing. It is still useful because
+    you can use the Crypto Service all the time even if you don't want to
+    actually encrypt something. Just request the "cleartext" algorithm.
+    </li>
+    <li>
+    <b>UnixCrypt</b> (org.apache.fulcrum.crypto.provider.UnixCrypt). This is an
+    implementation of the Unix crypt(3) algorithm. Its main use is when
+    you need to access legacy information or databases which already
+    contain crypted passwords. UnixCrypt needs the cryptix32.jar from <a
+    href="http://www.cryptix.org/">Cryptix</a>.
+    </li>
+    <li>
+    <b>JavaCrypt</b> (org.apache.fulcrum.crypto.provider.JavaCrypt).  This is the 
+     default crypto provider. It implements the normal Java MessageDigest ciphers
+     You need not to have this, it is the default if no algorithms are given. The default
+     provider gives you all the Java MessageDigest Ciphers including MD5, and SHA1.
+    </li>
+    <li>
+    <b>OldJavaCrypt</b> (org.apache.fulcrum.crypto.provider.OldJavaCrypt). Accessing
+    the MessageDigest functions from java.security was buggy in Turbine 2.1, because
+    the Security Service didn't pad the base64 values correctly but simply cut them
+    off after 20 bytes. If you're stuck with an old database full of passwords and can't
+    upgrade, please use this provider to keep going. DO NOT USE THIS PROVIDER FOR NEW
+    APPLICATIONS!.
+    </li>
+    </ol>
+    </p>
+  </section>
 
 </body>
 </document>

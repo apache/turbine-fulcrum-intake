@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Fulcrum Crypto</title>
+    <author email="epugh@upstate.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+    <release version="Not applicable" date="">
+      <action dev="epugh" type="add">
+        Integrated howto documentation on main page.
+      </action>
+    </release>
+
+  </body>
+</document>
+
