@@ -123,15 +123,6 @@ public interface Service
     public void shutdown();
 
     /**
-     * Returns initialization status of an Initable.
-     *
-     * @return Initialization status of an Initable.
-     * @see org.apache.fulcrum.Service#isInitialized()
-     * @deprecated use isInitialized() which uses proper bean semantics.
-     */
-    public boolean getInit();
-
-    /**
      * Returns initialization state.
      *
      * @return Whether the service has been initialized.

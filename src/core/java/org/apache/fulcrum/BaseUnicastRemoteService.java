@@ -60,7 +60,7 @@ public class BaseUnicastRemoteService
         isInitialized = value;
     }
     
-    public boolean getInit()
+    public boolean isInitialized()
     {
         return isInitialized;
     }
@@ -106,5 +106,18 @@ public class BaseUnicastRemoteService
     public Category getCategory(String name)
     {
         return null;
+    }
+
+    /**
+     * Returns either <code>Initialized</code> or
+     * <code>Uninitialized</code>, depending upon {@link
+     * org.apache.fulcrum.Service} innitialization state.
+     *
+     * @see org.apache.fulcrum.Service#getStatus()
+     */
+    public String getStatus()
+        throws ServiceException
+    {
+        return (isInitialized() ? "Initialized" : "Uninitialized");
     }
 }
