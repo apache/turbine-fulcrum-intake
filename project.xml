@@ -8,6 +8,9 @@
   <inceptionYear>2000</inceptionYear>
   <package>org.apache.fulcrum</package>
 
+  <!-- Gump integration -->
+  <gumpRepositoryId>jakarta</gumpRepositoryId>
+
   <shortDescription>Services Framework</shortDescription>
 
   <description>
@@ -18,6 +21,13 @@
   <cvsWebUrl>http://cvs.apache.org/viewcvs/jakarta-turbine-fulcrum/</cvsWebUrl>
   <siteAddress>jakarta.apache.org</siteAddress>
   <siteDirectory>/www/jakarta.apache.org/turbine/fulcrum/</siteDirectory>
+
+  <releases>
+    <release>
+      <version>3.0-b1</version>
+      <tag>FULCRUM_3_0_B1</tag>
+    </release>
+  </releases>
 
   <mailingLists>
     <mailingList>
