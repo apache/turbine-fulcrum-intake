@@ -103,14 +103,14 @@ public class LocalizationTest
         assertEquals("Unable to retrieve localized text for locale: fr",
                      s, "[fr] value3");
 
-        s = Localization.getString("BarBundle", new Locale("kr", "KO"),
+        s = Localization.getString("BarBundle", new Locale("ko", "KR"),
                                    "key3");
-        assertEquals("Unable to retrieve localized text for locale: kr-KO",
-                     s, "[kr] value3");
+        assertEquals("Unable to retrieve localized text for locale: ko-KR",
+                     s, "[ko] value3");
 
         try
         {
-            Localization.getString("DoesNotExist", new Locale("kr", ""),
+            Localization.getString("DoesNotExist", new Locale("ko", ""),
                                    "key1");
             fail();
         }
@@ -121,7 +121,7 @@ public class LocalizationTest
 
         // When a locale is used which cannot be produced for a given
         // bundle, fall back to the default locale.
-        s = Localization.getString(null, new Locale("kr", "KO"), "key3");
+        s = Localization.getString(null, new Locale("ko", "KR"), "key3");
         assertEquals("Unable to retrieve localized text for locale: default",
                      s, "value3");
 

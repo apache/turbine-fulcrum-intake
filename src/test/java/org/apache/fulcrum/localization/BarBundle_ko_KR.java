@@ -7,10 +7,10 @@ public class BarBundle_ko_KR extends ListResourceBundle
 {
     private static final Object[][] CONTENTS =
     {
-        { "key1", "[kr] value1" },
-        { "key2", "[kr] value2" },
-        { "key3", "[kr] value3" },
-        { "key4", "[kr] value4" }
+        { "key1", "[ko] value1" },
+        { "key2", "[ko] value2" },
+        { "key3", "[ko] value3" },
+        { "key4", "[ko] value4" }
     };
     
     protected Object[][] getContents()
