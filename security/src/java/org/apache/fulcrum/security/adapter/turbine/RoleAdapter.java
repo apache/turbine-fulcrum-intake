@@ -25,7 +25,7 @@ public class RoleAdapter implements Role
     public RoleAdapter()
     {
         super();
-        role = new org.apache.fulcrum.security.entity.impl.RoleImpl();
+        role = new org.apache.fulcrum.security.model.simple.entity.SimpleRole();
     }
 	public RoleAdapter(org.apache.fulcrum.security.entity.Role role){
 		   this.role=role;

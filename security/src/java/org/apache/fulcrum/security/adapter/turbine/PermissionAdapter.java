@@ -20,7 +20,7 @@ public class PermissionAdapter implements Permission
     public PermissionAdapter()
     {
         super();
-        permission = new org.apache.fulcrum.security.entity.impl.PermissionImpl();
+        permission = new org.apache.fulcrum.security.model.simple.entity.SimplePermission();
     }
     public PermissionAdapter(org.apache.fulcrum.security.entity.Permission permission)
     {

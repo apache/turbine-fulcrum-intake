@@ -26,7 +26,7 @@ public class UserAdapter implements User
     public UserAdapter()
     {
         super();
-        user = new org.apache.fulcrum.security.entity.impl.UserImpl();
+        user = new org.apache.fulcrum.security.model.simple.entity.SimpleUser();
     }
 	public UserAdapter(org.apache.fulcrum.security.entity.User user)
 	   {
@@ -128,12 +128,12 @@ public class UserAdapter implements User
         // TODO Auto-generated method stub
         return null;
     }
-    /* (non-Javadoc)
+    /* Adapter from getUserName to getName!
      * @see org.apache.turbine.om.security.User#getUserName()
      */
     public String getUserName()
     {
-        return user.getUserName();
+        return user.getName();
     }
     /* (non-Javadoc)
      * @see org.apache.turbine.om.security.User#getFirstName()
@@ -259,12 +259,12 @@ public class UserAdapter implements User
     {
         // TODO Auto-generated method stub
     }
-    /* (non-Javadoc)
+    /* Adaper for user name to name.
      * @see org.apache.turbine.om.security.User#setUserName(java.lang.String)
      */
     public void setUserName(String arg0)
     {
-        user.setUserName(arg0);
+        user.setName(arg0);
     }
     /* (non-Javadoc)
      * @see org.apache.turbine.om.security.User#setFirstName(java.lang.String)

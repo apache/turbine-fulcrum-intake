@@ -5,7 +5,9 @@
 package org.apache.fulcrum.security.adapter.turbine;
 import java.util.Iterator;
 import java.util.Map;
-import org.apache.fulcrum.security.acl.DefaultAccessControlList;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.turbine.om.security.Group;
 import org.apache.turbine.om.security.Permission;
 import org.apache.turbine.om.security.Role;
@@ -13,8 +15,6 @@ import org.apache.turbine.util.security.AccessControlList;
 import org.apache.turbine.util.security.GroupSet;
 import org.apache.turbine.util.security.PermissionSet;
 import org.apache.turbine.util.security.RoleSet;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 /**
  * @author Eric Pugh
  *

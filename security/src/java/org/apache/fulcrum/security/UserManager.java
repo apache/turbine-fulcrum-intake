@@ -243,4 +243,8 @@ public interface UserManager extends Component
        */
     public AccessControlList getACL(User user) throws UnknownEntityException;
     
+	
+
+
+    
 }

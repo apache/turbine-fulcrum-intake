@@ -25,7 +25,7 @@ public class GroupAdapter implements Group
     public GroupAdapter()
     {
 		super();
-    	group = new org.apache.fulcrum.security.entity.impl.GroupImpl();
+    	
         
         // TODO Auto-generated constructor stub
     }

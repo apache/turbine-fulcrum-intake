@@ -1,8 +1,8 @@
-package org.apache.fulcrum.security.entity;
+package org.apache.fulcrum.security.model.turbine.manager;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,36 +52,61 @@ package org.apache.fulcrum.security.entity;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-import java.io.Serializable;
+import org.apache.fulcrum.security.UserManager;
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
- * This interface represents the basic functionality of a user.
+ * This User managers adds the Torque Criteria class and listUsers.
  *
- * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
+ * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @version $Id$
  */
-public interface User extends Serializable, SecurityEntity
+public interface TurbineUserManager extends UserManager
 {
     /**
-    * Returns the user's password. This method should not be used by
-    * the application directly, because it's meaning depends upon
-    * the implementation of UserManager that manages this particular
-    * user object. Some implementations will use this attribute for
-    * storing a password encrypted in some way, other will not use
-    * it at all, when user entered password is presented to some external
-    * authority (like NT domain controller) to validate it.
-    * See also {@link org.apache.fulcrum.security.UserManager#authenticate(User,String)}.
-    *
-    * @return A String with the password for the user.
-    */
-    String getPassword();
-   
+	* Constructs an User object to represent an anonymous user of the
+	* application.
+	*
+	* @return An anonymous Turbine User.
+	* @throws UnknownEntityException if the anonymous User object couldn't be
+	*         constructed.
+	*/
+    User getAnonymousUser() throws UnknownEntityException;
     /**
-     * Set password. Application should not use this method
-     * directly, see {@link #getPassword()}.
-     * See also {@link org.apache.fulcrum.security.UserManager#changePassword(User,String,String)}.
+	* Checks whether a passed user object matches the anonymous user pattern
+	* according to the configured user manager
+	*
+	* @param An user object
+	*
+	* @return True if this is an anonymous user
+	*
+	*/
+    boolean isAnonymousUser(User u);
+    /**
+	  * Grant an User a Role in a Group.
+	  *
+	  * @param user the user.
+	  * @param group the group.
+	  * @param role the role.
+	  * @throws DataBackendException if there was an error accessing the data
+	  *         backend.
+	  * @throws UnknownEntityException if user account, group or role is not
+	  *         present.
+	  */
+    void grant(User user, Group group, Role role) throws DataBackendException, UnknownEntityException;
+    /**
+     * Revoke a Role in a Group from an User.
      *
-     * @param password The new password.
+     * @param user the user.
+     * @param group the group.
+     * @param role the role.
+     * @throws DataBackendException if there was an error accessing the data
+     *         backend.
+     * @throws UnknownEntityException if user account, group or role is not
+     *         present.
      */
-    void setPassword(String password);
-    
+    void revoke(User user, Group group, Role role) throws DataBackendException, UnknownEntityException;
 }

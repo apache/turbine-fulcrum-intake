@@ -78,7 +78,10 @@ import org.apache.turbine.util.security.PermissionSet;
 import org.apache.turbine.util.security.RoleSet;
 /**
  * An implementation of SecurityService that adapts it to work with
- * Fulcrum Security.
+ * Fulcrum Security.  This adapter currently uses the "Simple" model of 
+ * security.  However, it should actually use the "Turbine" model of 
+ * security.  I didn't do that because I don't quite understand some of
+ * the reasons behind the "Turbine" model.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
