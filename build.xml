@@ -19,6 +19,7 @@
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${jndi.jar}"/>
     <pathelement location="${xalan.jar}"/>
+    <pathelement location="${xerces.jar}"/>
     <pathelement location="${xmlrpc.jar}"/>
     <pathelement location="${torque.jar}"/>
     <pathelement location="${village.jar}"/>
