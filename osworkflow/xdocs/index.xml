@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Workflow Component</title>
+    <author email="epugh@upstate.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+
+  <section name="Overview">
+    <p>
+      The Workflow component allows access to a workflow process based on the OpenSymphony
+      OSWorkflow libary.
+    </p>
+  
+    <p>
+      It is written for use in any container compatible with Avalon's ECM container.
+    </p>    
+  </section>
+  
+<section name="Configuration">
+
+    <p>
+      First, here is the role configuration.
+    </p>
+
+<source>
+<![CDATA[
+  <role
+    name="org.apache.fulcrum.workflow.WorkflowService"
+    shorthand="workflow"
+    default-class="org.apache.fulcrum.workflow.DefaultWorkflowService"/>
+]]>
+</source>
+
+  <p>
+    Configuration is currently not required as we use OSWorkflows defaults for finding everything right now.
+<source>
+
+<![CDATA[
+    <workflow>      
+    </workflow>
+]]>
+</source>
+
+  </section>
+  
+<section name="Usage">
+  <p>
+  To use the workflow service, look at the included Example application.
+  </p>
+
+  </section>
+
+</body>
+</document>
