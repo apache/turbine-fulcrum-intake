@@ -31,6 +31,9 @@ servlet.jar
 javamail.jar
 jaf.jar
 
+Alternately, you can set the property lib.repo to the directory acting
+as a repository holding the JARs named by default.properties.
+
 These are paths to all the JARs that are required for building
 all the services. Soon there will be a mini build for each of
 the individual services: each service can state it's 
