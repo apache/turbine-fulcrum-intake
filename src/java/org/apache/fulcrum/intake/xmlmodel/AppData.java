@@ -85,22 +85,7 @@ public class AppData
      */
     public void loadFromXML (Attributes attrib)
     {
-        String basePkg = attrib.getValue("basePackage");
-        if ( basePkg == null )
-        {
-            setBasePackage("");
-        }
-        else
-        {
-            if ( basePkg.charAt(basePkg.length()-1) != '.' )
-            {
-                setBasePackage(basePkg + '.');
-            }
-            else
-            {
-                setBasePackage(basePkg);
-            }
-        }
+        setBasePackage(basePkg);
     }
 
     /**
@@ -178,6 +163,18 @@ public class AppData
      */
     public void setBasePackage(String  v)
     {
+        if (v != null)
+        {
+            int len = v.length();
+            if (len > 0 && v.chatAt(len - 1) != '.')
+            {
+                v += '.';
+            }
+        }
+        else
+        {
+            v = "";
+        }
         this.basePackage = v;
     }
 
@@ -189,7 +186,13 @@ public class AppData
     {
         StringBuffer result = new StringBuffer();
 
-        result.append ("<input-data>\n");
+        result.append ("<input-data");
+        String basePackage = getBasePackage();
+        if (basePackage != null && basePackage.length() > 0)
+        {
+            result.append(" basePackage=\"").append(basePackage).append('"');
+        }
+        result.append(">\n");
         for (Iterator iter = inputs.iterator() ; iter.hasNext() ;)
         {
             result.append (iter.next());
