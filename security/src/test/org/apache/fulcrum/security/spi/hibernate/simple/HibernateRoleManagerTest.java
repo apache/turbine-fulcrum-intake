@@ -77,7 +77,6 @@ public class HibernateRoleManagerTest extends AbstractRoleManagerTest
             HibernateHelper.exportSchema(hibernateService.getConfiguration());
             securityService = (SecurityService) lookup(SecurityService.ROLE);
             roleManager = (RoleManager) securityService.getRoleManager();
-			((BaseHibernateManager) roleManager).setHibernateSession(hibernateService.openSession());
         }
         catch (Exception e)
         {

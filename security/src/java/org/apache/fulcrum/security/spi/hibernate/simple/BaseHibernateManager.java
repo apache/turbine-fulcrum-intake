@@ -74,20 +74,7 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
     protected RoleManager roleManager;
     protected GroupManager groupManager;
     protected UserManager userManager;
-    /**
-	 * @return
-	 */
-    public Session getHibernateSession()
-    {
-        return session;
-    }
-    /**
-	 * @param session
-	 */
-    public void setHibernateSession(Session session)
-    {
-        this.session = session;
-    }
+   
     /**
 	 * @return
 	 */
@@ -106,11 +93,6 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
             try
             {
                 userManager = (UserManager) manager.lookup(UserManager.ROLE);
-                ((BaseHibernateManager) userManager).setHibernateSession(retrieveSession());
-            }
-            catch (HibernateException he)
-            {
-                throw new DataBackendException(he.getMessage(), he);
             }
             catch (ComponentException ce)
             {
@@ -128,12 +110,7 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
         {
             try
             {
-                permissionManager = (PermissionManager) manager.lookup(PermissionManager.ROLE);
-                ((BaseHibernateManager) permissionManager).setHibernateSession(retrieveSession());
-            }
-            catch (HibernateException he)
-            {
-                throw new DataBackendException(he.getMessage(), he);
+                permissionManager = (PermissionManager) manager.lookup(PermissionManager.ROLE);         
             }
             catch (ComponentException ce)
             {
@@ -152,11 +129,6 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
             try
             {
                 roleManager = (RoleManager) manager.lookup(RoleManager.ROLE);
-                ((BaseHibernateManager) roleManager).setHibernateSession(retrieveSession());
-            }
-            catch (HibernateException he)
-            {
-                throw new DataBackendException(he.getMessage(), he);
             }
             catch (ComponentException ce)
             {
@@ -175,11 +147,6 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
             try
             {
                 groupManager = (GroupManager) manager.lookup(GroupManager.ROLE);
-                ((BaseHibernateManager) groupManager).setHibernateSession(retrieveSession());
-            }
-            catch (HibernateException he)
-            {
-                throw new DataBackendException(he.getMessage(), he);
             }
             catch (ComponentException ce)
             {
@@ -311,7 +278,14 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
         }
         return;
     }
-    protected Session retrieveSession() throws HibernateException
+    
+    /**
+     * Returns a hibernate session that has been opened if it was null or not
+     * connected or not open.
+     * @return An Open hibernate session.
+     * @throws HibernateException
+     */
+    public Session retrieveSession() throws HibernateException
     {
         if (session == null || (!session.isConnected() && !session.isOpen()))
         {

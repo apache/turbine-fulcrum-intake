@@ -76,8 +76,6 @@ public class HibernateUserManagerTest extends AbstractUserManagerTest
             HibernateHelper.exportSchema(hibernateService.getConfiguration());
             securityService = (SecurityService) lookup(SecurityService.ROLE);
             userManager = securityService.getUserManager();
-
-            ((BaseHibernateManager) userManager).setHibernateSession(hibernateService.openSession());
         }
         catch (Exception e)
         {

@@ -76,7 +76,6 @@ public class HibernateGroupManagerTest extends AbstractGroupManagerTest
             HibernateHelper.exportSchema(hibernateService.getConfiguration());
             securityService = (SecurityService) lookup(SecurityService.ROLE);
             groupManager = securityService.getGroupManager();
-			((BaseHibernateManager) groupManager).setHibernateSession(hibernateService.openSession());
         }
         catch (Exception e)
         {
