@@ -5,4 +5,23 @@
   xmlns:deploy="deploy"
   >
 
+
+<goal name="fulcrum:build" description="Build Fulcrum.">
+    <maven:reactor basedir="${basedir}"
+      includes="**/project.xml"
+      excludes="target/**,project.xml,**/new1/**,**/proposals/**"
+      goals="jar:install"
+      banner="Installing:"
+      ignoreFailures="false" />
+  </goal>
+
+  <goal name="fulcrum:clean" description="Build Fulcrum." prereqs="clean">
+    <maven:reactor basedir="${basedir}"
+      includes="**/project.xml"
+      excludes="target/**,project.xml"
+      goals="clean:clean"
+      banner="Installing:"
+      ignoreFailures="false" />
+  </goal>
+
 </project>

@@ -45,12 +45,6 @@
   </mailingLists>
   <developers>
     <developer>
-      <name>Scott Eade</name>
-      <id>seade</id>
-      <email>seade@backstagetech.com.au</email>
-      <organization>Backstage Technologies Pty. Ltd.</organization>
-    </developer>
-    <developer>
       <name>Geir Magnusson Jr.</name>
       <id>geirm</id>
       <email>geirm@optonline.net</email>
@@ -258,11 +252,44 @@
     <sourceDirectory>${basedir}/src/java/</sourceDirectory>
     <unitTestSourceDirectory>${basedir}/src/test/</unitTestSourceDirectory>
     <unitTest>
-          <includes>
-            <include>**/*Test.java</include>
+      <includes>
+        <include>**/*Test.*</include>
+        <include>**/*TestCase.*</include>
       </includes>
+      <excludes>
+        <include>**/Abstract*.*</include>
+      </excludes>
+      <resources>
+        <resource>
+          <directory>${basedir}/src/java</directory>
+          <includes>
+            <include>**/*.x*</include>
+          </includes>
+        </resource>
+        <resource>
+          <directory>${basedir}/conf</directory>
+          <targetPath>BLOCK-INF</targetPath>
+          <includes>
+            <include>block.xml</include>
+          </includes>
+        </resource>
+      </resources>      
     </unitTest>
- 
+    <resources>
+       <resource>
+         <directory>${basedir}/conf</directory>
+         <targetPath>BLOCK-INF</targetPath>
+         <includes>
+           <include>block.xml</include>
+         </includes>
+       </resource>
+       <resource>
+         <directory>${basedir}/src/java</directory>
+         <includes>
+           <include>**/*.x*</include>
+         </includes>
+       </resource>
+    </resources>
   </build>
  
   <reports>
