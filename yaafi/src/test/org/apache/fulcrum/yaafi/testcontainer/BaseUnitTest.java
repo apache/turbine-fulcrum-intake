@@ -33,8 +33,6 @@ import org.apache.avalon.framework.service.ServiceException;
  */
 public abstract class BaseUnitTest extends TestCase
 {
-    /** Key used in the context for defining the application root */
-    public static String COMPONENT_APP_ROOT = Container.COMPONENT_APP_ROOT;
     /** YaffiContainer for the components */
     private Container container;
     /** Setup our default configurationFileName */

@@ -1,9 +1,5 @@
 package org.apache.fulcrum.yaafi.framework.util;
 
-import org.apache.avalon.framework.context.Context;
-import org.apache.avalon.framework.context.ContextException;
-import org.apache.avalon.framework.context.DefaultContext;
-
 /*
  * Copyright 2004 Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
@@ -20,6 +16,10 @@ import org.apache.avalon.framework.context.DefaultContext;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import org.apache.avalon.framework.context.Context;
+import org.apache.avalon.framework.context.ContextException;
+import org.apache.avalon.framework.context.DefaultContext;
 
 /**
  * Helper for manipulating the Avalon context. The default implementation

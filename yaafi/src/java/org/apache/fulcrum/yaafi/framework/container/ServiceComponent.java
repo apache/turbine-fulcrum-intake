@@ -36,7 +36,9 @@ import org.apache.avalon.framework.service.Serviceable;
  */
 
 public interface ServiceComponent
-	extends Configurable, Initializable, Startable, Suspendable, Reconfigurable, Disposable, Serviceable, Contextualizable, Parameterizable, LogEnabled, Executable
+	extends Configurable, Initializable, Startable, Suspendable, 
+		Reconfigurable, Disposable, Serviceable, Contextualizable, 
+		Parameterizable, LogEnabled, Executable
 {
     /**
      * Create an instance of the service class
@@ -77,5 +79,15 @@ public interface ServiceComponent
      * @return Returns the shorthand.
      */
     public String getShorthand();
+    
+    /**
+     * @return the human-readable description of the service
+     */
+    public String getDescription();
+    
+    /**
+     * @return the type of component
+     */
+    public String getComponentType();
 
 }

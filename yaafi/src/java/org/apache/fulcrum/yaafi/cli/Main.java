@@ -22,7 +22,8 @@ import org.apache.avalon.framework.logger.Logger;
 import org.apache.fulcrum.yaafi.framework.container.ServiceConstants;
 import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
 import org.apache.fulcrum.yaafi.framework.container.ServiceContainerImpl;
-import org.apache.fulcrum.yaafi.framework.factory.ServiceManagerFactory;
+import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
+import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerConfiguration;
 
 
 /**
@@ -99,14 +100,18 @@ public class Main
     
     protected void initialize() throws Exception
     {
+        ServiceContainerConfiguration config = new ServiceContainerConfiguration();
+        
         // intialize the service manager
         
-        this.manager = ServiceManagerFactory.create(
-            new ConsoleLogger(),
-            this.componentRoleValue,
-            this.componentConfigValue,
-            this.componentParametersValue
-            );            
+        config.setLogger( new ConsoleLogger() );
+        config.setComponentRolesLocation( this.componentRoleValue );
+        config.setComponentConfigurationLocation( this.componentConfigValue );
+        config.setParametersLocation( this.componentParametersValue );
+        
+        this.manager = ServiceContainerFactory.create(
+            config
+            );
              
         // initialize shutdown hoook of JVM
         

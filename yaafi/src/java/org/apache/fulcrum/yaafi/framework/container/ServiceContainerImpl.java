@@ -18,7 +18,9 @@ package org.apache.fulcrum.yaafi.framework.container;
  */
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
@@ -32,10 +34,10 @@ import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.DefaultContext;
 import org.apache.avalon.framework.logger.Logger;
-import org.apache.avalon.framework.parameters.ParameterException;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.service.ServiceException;
-import org.apache.fulcrum.yaafi.framework.util.AvalonContextHelper;
+import org.apache.fulcrum.jce.crypto.CryptoStreamFactoryImpl;
+import org.apache.fulcrum.yaafi.framework.util.AvalonToYaafiContextMapper;
 import org.apache.fulcrum.yaafi.framework.util.InputStreamLocator;
 
 /**
@@ -50,11 +52,20 @@ public class ServiceContainerImpl
     /** The role configuration file to be used */
     private String componentRolesLocation = COMPONENT_ROLE_VALUE;
 
+    /** is the component role file encrypted? */
+    private boolean isComponentRolesEncrypted;
+
 	/** The service configuration file to be used */
 	private String componentConfigurationLocation = COMPONENT_CONFIG_VALUE;
 
+    /** is the component configuration file encrypted? */
+    private boolean isComponentConfigurationEncrypted;
+	
 	/** The parameters file to be used */
 	private String parametersLocation = COMPONENT_PARAMETERS_VALUE;
+
+    /** is the parameters file encrypted? */
+    private boolean isParametersEncrypted;
 
 	/** The application directory aka the current woring directory */
 	private File applicationRootDir;
@@ -77,14 +88,20 @@ public class ServiceContainerImpl
 	/** The Avalon service configuration loaded by this class */
 	private Configuration serviceConfiguration;
 
+	/** The Avalon context passed to the implementation */
+	private Context callerContext;
+
 	/** The default Avalon context passed to the services */
 	private Context context;
 
 	/** The default Avalon parameters */
 	private Parameters parameters;
 	
-	/** Is this instance initialized */
+	/** Is this instance already disposed? */
 	private boolean isDisposed;
+	
+	/** The type of container where YAAFI is embedded */
+	private String containerType;
 
     /////////////////////////////////////////////////////////////////////////
     // Service Manager Lifecycle
@@ -97,9 +114,14 @@ public class ServiceContainerImpl
     {
         super();
 
-        this.componentRolesLocation 		= COMPONENT_ROLE_VALUE;
+        this.containerType = COMPONENT_CONTAINERTYPE_VALUE;
+        this.componentRolesLocation = COMPONENT_ROLE_VALUE;
         this.componentConfigurationLocation = COMPONENT_CONFIG_VALUE;
-        this.parametersLocation 			= COMPONENT_PARAMETERS_VALUE;
+        this.parametersLocation = COMPONENT_PARAMETERS_VALUE;
+        
+        this.isComponentConfigurationEncrypted = false;
+        this.isComponentRolesEncrypted = false;
+        this.isParametersEncrypted = false;
         
         this.isDisposed			= false;
         this.applicationRootDir = new File( new File("").getAbsolutePath() );
@@ -107,7 +129,6 @@ public class ServiceContainerImpl
         this.serviceList		= new ArrayList();
         this.serviceMap			= new Hashtable();
     }
-
     
     /**
      * @see org.apache.avalon.framework.logger.LogEnabled#enableLogging(org.apache.avalon.framework.logger.Logger)
@@ -116,26 +137,105 @@ public class ServiceContainerImpl
     {
         this.logger = logger;
     }
-    
+
+    /** 
+     * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
+     */
+    public void contextualize(Context context) throws ContextException
+    {
+        // Argghhh - I need to to parse the Configuration before I can map the Context
+        this.callerContext = context;
+    }    
+        
     /**
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
     public void configure(Configuration configuration) throws ConfigurationException
-    {        
+    {
+        // retrieve the container type
+        
+        Configuration containerTypeConfiguration = configuration.getChild(CONTAINERTYPE_CONFIG_KEY);
+
+        if( containerTypeConfiguration != null )
+        {
+            this.setContainerType(
+                containerTypeConfiguration.getValue( COMPONENT_CONTAINERTYPE_VALUE )
+                );
+        }
+        
+        this.getLogger().debug( "Using the following container type : " + this.getContainerType() );
+        
+        // process the caller-suppied context here
+        
+        try
+        {
+            // instantiate a mapper using the existing context - it might
+            // contain application specific entries we are not aware of
+            
+            AvalonToYaafiContextMapper mapper = new AvalonToYaafiContextMapper(
+                this.getTempRootDir(),
+                this.callerContext
+                );
+            
+            // do the magic mapping
+            
+            this.context = mapper.mapFrom( 
+                this.callerContext,
+                this.getContainerType()
+                );
+
+            // don't keep a reference of the caller-supplide context
+            
+            this.callerContext = null;        
+        }
+        catch( ContextException e )
+        {
+            String msg = "Failed to parse the caller-supplied context";
+            this.getLogger().error( msg, e );
+            throw new ConfigurationException( msg );
+        }        
+        
+        // evaluate componentRoles
+        
+        Configuration currComponentRoles = configuration.getChild(COMPONENT_ROLE_KEYS);
+        
         this.setComponentRolesLocation(
-            configuration.getChild(COMPONENT_ROLE_KEYS).getValue( 
+            currComponentRoles.getChild(COMPONENT_LOCATION_KEY).getValue( 
                 COMPONENT_ROLE_VALUE )
                 );
 
+        this.setComponentRolesEncrypted(
+            currComponentRoles.getChild(COMPONENT_ISENCRYPTED_KEY).getValueAsBoolean( 
+                false )               
+                );
+        
+        // evaluate componentConfiguraion
+        
+        Configuration currComponentConfiguration = configuration.getChild(COMPONENT_CONFIG_KEY);
+            
         this.setComponentConfigurationLocation(
-            configuration.getChild(COMPONENT_CONFIG_KEY).getValue(
+            currComponentConfiguration.getChild(COMPONENT_LOCATION_KEY).getValue( 
                 COMPONENT_CONFIG_VALUE )
-            	);
+                );
+
+        this.setComponentConfigurationEncrypted(
+            currComponentConfiguration.getChild(COMPONENT_ISENCRYPTED_KEY).getValueAsBoolean( 
+                false )               
+                );
+        
+        // evaluate parameters        
+
+        Configuration currParameters = configuration.getChild(COMPONENT_PARAMETERS_KEY);
 
         this.setParametersLocation(
-            configuration.getChild( COMPONENT_PARAMETERS_KEY).getValue(
-                COMPONENT_PARAMETERS_VALUE )
-            	);
+            currParameters.getChild(COMPONENT_LOCATION_KEY).getValue( 
+                COMPONENT_CONFIG_VALUE )
+                );
+
+        this.setParametersEncrypted(
+            currParameters.getChild(COMPONENT_ISENCRYPTED_KEY).getValueAsBoolean( 
+                false )               
+                );        
     }
 
     /**
@@ -159,8 +259,10 @@ public class ServiceContainerImpl
 
 		// get the configuration files
 
-		this.serviceConfiguration 	= loadConfiguration(this.componentConfigurationLocation);
-		this.roleConfiguration 		= loadConfiguration(this.componentRolesLocation);
+		this.roleConfiguration = loadConfiguration(
+		    this.componentRolesLocation,
+		    this.isComponentRolesEncrypted()
+		    );
 
 		if( this.roleConfiguration == null )
 		{
@@ -168,20 +270,20 @@ public class ServiceContainerImpl
 			this.getLogger().error( msg );
 			throw new ConfigurationException( msg );
 		}
-		
-		// create a default context
 
-		if( this.context == null )
-		{
-		    this.getLogger().debug("Creating a DefaultContext");
-		    this.context = this.createDefaultContext();
-		}
-
+		this.serviceConfiguration = loadConfiguration(
+		    this.componentConfigurationLocation,
+		    this.isComponentConfigurationEncrypted()
+		    );		    
+		    		
 		// create the default parameters
 
 		if( this.parameters == null )
 		{
-		    this.parameters = this.loadParameters( this.parametersLocation );
+		    this.parameters = this.loadParameters( 
+		        this.parametersLocation,
+		        this.isParametersEncrypted()
+		        );
 		}
 
 		// create the service implementaion instances
@@ -207,115 +309,6 @@ public class ServiceContainerImpl
 		this.getLogger().debug( "Service Framework is up and running");
     }
 
-    /**
-     * 
-     * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
-     */
-    public void contextualize(Context context) throws ContextException
-    {
-        Object entry = null;
-        File currApplicationRootDir = null;
-        File currTempRootDir = null;
-        boolean contextHasHomeEntry = false;
-        boolean contextHasTempEntry = false;
-        Context currContext = context;
-        
-        // 1) set the application directory
-        
-        // 1.1) check for URN_AVALON_HOME
-         
-        if( AvalonContextHelper.isInContext( currContext, URN_AVALON_HOME ) )
-        { 
-            contextHasHomeEntry = true;
-            entry = currContext.get( URN_AVALON_HOME );
-            
-            // handle Fulcrum behaviour which passes a String
-            
-            if( entry instanceof String )
-            {
-                String dirName = (String) entry;
-                
-                if( dirName.length() == 0 )
-                {
-                    currApplicationRootDir = new File( new File(dirName).getAbsolutePath() ); 
-                }
-                else
-                {
-                    currApplicationRootDir = new File( dirName );   
-                }
-            }
-            
-            // handle Merlin behaviour which passes a File
-            
-            if( entry instanceof File )
-            {
-                currApplicationRootDir = (File) currContext.get( URN_AVALON_HOME );    
-            }
-        }
-        
-        // 1.2) if we found a value for URN_AVALON_HOME overwrite our default
-        
-        if( currApplicationRootDir != null )
-        {
-            this.setApplicationRootDir( currApplicationRootDir );
-        }
-             
-        // 2) set the temporary directory
-        
-        // 2.1) check for URN_AVALON_TEMP
-        
-        if( AvalonContextHelper.isInContext( context, URN_AVALON_TEMP ) )
-        {
-            contextHasTempEntry = true;
-            entry = currContext.get( URN_AVALON_TEMP );
-            
-            if( entry instanceof String )
-            {
-                currTempRootDir = new File( (String) entry );   
-            }
-            
-            if( entry instanceof File )
-            {
-                currTempRootDir = (File) currContext.get( URN_AVALON_TEMP );    
-            }
-        }        
-
-        // 2.2) if we found a value for URN_AVALON_TEMP overwrite our default
-        
-        if( currTempRootDir != null )
-        {
-            this.setTempRootDir( currTempRootDir );
-        }
-                
-        // 3) E.g. Phoenix does not provide a value for URN_AVALON_HOME/URN_AVALON_TEMP
-        //    which breaks the Merlin services .... :-(
-
-        // 3.1) add en entry for URN_AVALON_HOME 
-        
-        if( contextHasHomeEntry == false )
-        {
-            currContext = AvalonContextHelper.addToContext( 
-                currContext,
-                URN_AVALON_HOME,
-                this.getApplicationRootDir()
-                );                
-        }
-        
-        // 3.2) add en entry for URN_AVALON_HOME 
-        
-        if( contextHasTempEntry == false )
-        {
-            currContext = AvalonContextHelper.addToContext( 
-                currContext,
-                URN_AVALON_TEMP,
-                this.getTempRootDir()
-                );                
-        }
-        
-        // 4) set our context finally
-        
-        this.context = currContext;
-    }
     
     /**
      * Disposes the service container implementation.
@@ -324,9 +317,15 @@ public class ServiceContainerImpl
      */
     public synchronized void dispose()
     {
-        if( this.isDisposed ) return;
+        if( this.isDisposed )
+        {
+            return;
+        }
         
-        this.getLogger().info("Disposing all services");
+        if( this.getLogger() != null )
+        {
+            this.getLogger().info("Disposing all services");
+        }
         
         // decommision all servcies
         
@@ -346,11 +345,15 @@ public class ServiceContainerImpl
         this.parameters						= null;
         
         this.isDisposed = true;
-        this.getLogger().debug( "All services are disposed" );
+
+        if( this.getLogger() != null )
+        {
+            this.getLogger().debug( "All services are disposed" );
+        }
     }
 
     /**
-     * Reconfiguring the services. I'm not sure hopw to implement this properly since
+     * Reconfiguring the services. I'm not sure how to implement this properly since
      * the Avalon docs is vague on this subject. For now we suspend, reconfigure and
      * resume the services in the correct order.
      * 
@@ -508,7 +511,7 @@ public class ServiceContainerImpl
 	/**
 	 * @param string The location of the component configuration file
 	 */
-	protected void setComponentConfigurationLocation(String string)
+	private void setComponentConfigurationLocation(String string)
 	{
 		this.componentConfigurationLocation = string;
 	}
@@ -516,7 +519,7 @@ public class ServiceContainerImpl
 	/**
 	 * @param string The location of the component role file
 	 */
-	protected void setComponentRolesLocation(String string)
+	private void setComponentRolesLocation(String string)
 	{
 		this.componentRolesLocation = string;
 	}
@@ -524,7 +527,7 @@ public class ServiceContainerImpl
 	/**
 	 * @param string The location of the parameters file
 	 */
-	protected void setParametersLocation(String string)
+	private void setParametersLocation(String string)
 	{
 		this.parametersLocation = string;
 	}
@@ -532,7 +535,7 @@ public class ServiceContainerImpl
     /**
      * @return The logger of the service containe
      */
-    protected Logger getLogger()
+	private Logger getLogger()
     {
         return this.logger;
     }
@@ -540,7 +543,7 @@ public class ServiceContainerImpl
     /**
      * @return Returns the serviceMap.
      */
-    protected Hashtable getServiceMap()
+	private Hashtable getServiceMap()
     {
         return this.serviceMap;
     }
@@ -552,8 +555,8 @@ public class ServiceContainerImpl
      * 
      * @param serviceComponent The service component to incarnate 
      */
-    protected void incarnate( ServiceComponent serviceComponent )
-    	throws ContextException, ServiceException, ConfigurationException, ParameterException, Exception
+	private void incarnate( ServiceComponent serviceComponent )
+    	throws Exception
     {        
         this.getLogger().debug( "Incarnating the service " + serviceComponent.getShorthand() );
      
@@ -584,8 +587,7 @@ public class ServiceContainerImpl
      * 
      * @param serviceComponent The service component to decommision 
      */
-    
-    protected void decommision( ServiceComponent serviceComponent )
+	private void decommision( ServiceComponent serviceComponent )
     {
         this.getLogger().debug( "Decommisioning the service " + serviceComponent.getShorthand() );
         
@@ -614,7 +616,7 @@ public class ServiceContainerImpl
      * Incarnation of a list of services
      */
     private void incarnate(List serviceList)
-    	throws ContextException, ServiceException, ConfigurationException, ParameterException, Exception
+    	throws Exception
     {
         ServiceComponent serviceComponent = null;
 
@@ -717,11 +719,13 @@ public class ServiceContainerImpl
 
     /**
      * Load a configuration file either from a file or using the class loader.
-     * @param location The location as a file
+     * @param location the location of the file
+     * @param isEncrypted  is the configuration encryped
      * @return The loaded configuration
      * @throws Exception Something went wrong
      */
-    private Configuration loadConfiguration( String location ) throws Exception
+    private Configuration loadConfiguration( String location, boolean isEncrypted ) 
+    	throws Exception
     {
 		Configuration result = null;
 		InputStreamLocator locator = this.createInputStreamLocator();
@@ -730,37 +734,49 @@ public class ServiceContainerImpl
 
 		if( is != null )
 		{
-			result = builder.build( is );
+		    try
+		    {		        
+		        if( isEncrypted )
+		        {
+		            is = this.getDecryptingInputStream( is );
+		        }
+		        
+		        result = builder.build( is );
+		    }
+		    catch ( Exception e )
+		    {
+		        String msg = "Unable to parse the following file : " + location;
+		        this.getLogger().error( msg , e );
+		        throw e;
+		    }
 		}
 
 		return result;
     }
-
+    
 	/**
 	 * Load the parameters
 	 * @param location The location as a file
+	 * @param isEncrypted is the file encrypted
 	 * @return The loaded configuration
 	 * @throws Exception Something went wrong
 	 */
-	private Parameters loadParameters( String location ) throws Exception
+	private Parameters loadParameters( String location, boolean isEncrypted ) throws Exception
 	{
 	    InputStreamLocator locator = this.createInputStreamLocator();
 		InputStream is = locator.locate( location );
-		Configuration conf = null;
 		Parameters result = new Parameters();
 
 		if( is != null )
 		{
-			if( location.endsWith(".xml") )
-			{
-				result = Parameters.fromConfiguration( conf );
-			}
-			else
-			{
-				Properties props = new Properties();
-				props.load( is );
-				result = Parameters.fromProperties( props );
-			}
+	        if( isEncrypted )
+	        {	            
+	            is = this.getDecryptingInputStream( is );
+	        }
+
+			Properties props = new Properties();
+			props.load( is );
+			result = Parameters.fromProperties( props );
 		}
 
 		return result;
@@ -819,28 +835,7 @@ public class ServiceContainerImpl
         
         return result;
 	}
-	
-	/**
-	 * Create a default context. The context contains the following entries
-	 * <ul>
-	 *   <li>urn:avalon:home</li> 
-	 *   <li>urn:avalon:temp</li>
-	 *   <li>componentAppRoot</li>
-	 * </ul>
-	 * 
-	 * @return a DefaultContext
-	 */
-	private DefaultContext createDefaultContext()
-	{
-		DefaultContext result = new DefaultContext();
-
-		result.put( ServiceConstants.URN_AVALON_HOME, this.getApplicationRootDir() );
-		result.put( ServiceConstants.URN_AVALON_TEMP, this.getTempRootDir() );
-		result.put( ServiceConstants.COMPONENT_APP_ROOT, this.getApplicationRootDir().getAbsolutePath() );
-		
-		return result;
-	}
-		
+			
     /**
      * @param applicationRootDir The applicationRootDir to set.
      */
@@ -899,5 +894,85 @@ public class ServiceContainerImpl
     private File getTempRootDir()
     {
         return tempRootDir;
+    }
+
+    /**
+     * @return Returns the isComponentConfigurationEncrypted.
+     */
+    private boolean isComponentConfigurationEncrypted()
+    {
+        return isComponentConfigurationEncrypted;
+    }
+    
+    /**
+     * @param isComponentConfigurationEncrypted The isComponentConfigurationEncrypted to set.
+     */
+    private void setComponentConfigurationEncrypted(
+        boolean isComponentConfigurationEncrypted)
+    {
+        this.isComponentConfigurationEncrypted = isComponentConfigurationEncrypted;
+    }
+    
+    /**
+     * @return Returns the isComponentRolesEncrypted.
+     */
+    private boolean isComponentRolesEncrypted()
+    {
+        return isComponentRolesEncrypted;
+    }
+    
+    /**
+     * @param isComponentRolesEncrypted The isComponentRolesEncrypted to set.
+     */
+    private void setComponentRolesEncrypted(boolean isComponentRolesEncrypted)
+    {
+        this.isComponentRolesEncrypted = isComponentRolesEncrypted;
+    }
+    
+    /**
+     * @return Returns the isParametersEncrypted.
+     */
+    private boolean isParametersEncrypted()
+    {
+        return isParametersEncrypted;
+    }
+    
+    /**
+     * @param isParametersEncrypted The isParametersEncrypted to set.
+     */
+    private void setParametersEncrypted(boolean isParametersEncrypted)
+    {
+        this.isParametersEncrypted = isParametersEncrypted;
+    }
+    
+    /**
+     * Create a decrypting input stream using the default password.
+     * 
+     * @param is
+     * @return
+     * @throws IOException
+     * @throws GeneralSecurityException
+     */
+    private InputStream getDecryptingInputStream( InputStream is )
+    	throws IOException, GeneralSecurityException
+    {
+        InputStream result = is;        
+        result = CryptoStreamFactoryImpl.getInstance().getInputStream(is);    
+        return result;
+    }
+    
+    /**
+     * @return Returns the containerType.
+     */
+    private String getContainerType()
+    {
+        return containerType;
+    }
+    /**
+     * @param containerType The containerType to set.
+     */
+    private void setContainerType(String containerType)
+    {
+        this.containerType = containerType;
     }
 }

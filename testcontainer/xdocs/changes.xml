@@ -7,9 +7,15 @@
   </properties>
 
   <body>
- 	<release version="1.0.5" date="">    
-    </release>	
-  	<release version="1.0.4" date="2004-11-24">    
+    <release version="1.0.5-dev" date="as in CVS">    
+      <action dev="sgoeschl" type="change">
+        Changed the implementation wo work with fulcrum-yaafi 1.0.4-dev
+        since the initalization changed.
+      </action>             
+    </release>     
+    <release version="1.0.5" date="">    
+    </release>  
+    <release version="1.0.4" date="2004-11-24">    
       <action dev="epugh" type="add">
         By default use Yaafi as the Test container, but you can swap to ECM for
         more "real" testing if required by doing <code>containerType=CONTAINER_ECM;</code>.
@@ -23,13 +29,13 @@
         are pulled from.
       </action>
     </release>     
-  	<release version="1.0-alpha-2" date="in cvs">       
+    <release version="1.0-alpha-2" date="in cvs">       
       <action dev="epugh" type="add">
         Add additional context value urn:avalon:home to be more
         Merlin friendly.
       </action>
     </release>  
-  	<release version="1.0-alpha-2" date="02-13-2004">
+    <release version="1.0-alpha-2" date="02-13-2004">
       <action dev="epugh" type="add">
         allow setup method of subclasses to throw exceptions if they want..
       </action>

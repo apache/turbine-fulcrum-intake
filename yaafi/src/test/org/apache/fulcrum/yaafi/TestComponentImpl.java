@@ -43,7 +43,12 @@ public class TestComponentImpl
         extends AbstractLogEnabled
         implements Initializable, Configurable, Parameterizable, Disposable, TestComponent, Contextualizable
 {
-    public File appRoot;
+    public File urnAvaloneHome;
+    public File urnAvaloneTemp;
+    public String urnAvalonPartition;
+    public String urnAvalonName;
+    public ClassLoader urnAvalonClassLoader;
+    
     public String foo;
     public String bar;
     public static boolean decomissioned;
@@ -57,8 +62,11 @@ public class TestComponentImpl
 
     public void contextualize(Context context) throws ContextException
     {
-        this.appRoot = (File) context.get( "urn:avalon:home" );
-        this.componentName = (String) context.get( "urn:avalon:name" );
+        this.urnAvaloneHome = (File) context.get( "urn:avalon:home" );
+        this.urnAvaloneTemp = (File) context.get( "urn:avalon:temp" );
+        this.urnAvalonName = (String) context.get( "urn:avalon:name" );
+        this.urnAvalonPartition = (String) context.get( "urn:avalon:partition" );
+        this.urnAvalonClassLoader = (ClassLoader) context.get( "urn:avalon:classloader" );
     }
 
     public void configure(Configuration configuration) throws ConfigurationException
@@ -81,8 +89,10 @@ public class TestComponentImpl
     {
         setupLogger(this, "TestComponent");
         getLogger().debug("TestComponent.test() was called");
-        getLogger().debug("componentAppRoot = " + this.appRoot.getAbsolutePath());
-        getLogger().debug("componentName = " + this.componentName);
+        getLogger().debug("urnAvaloneHome = " + this.urnAvaloneHome.toString());
+        getLogger().debug("urnAvaloneTemp = " + this.urnAvaloneTemp.toString());
+        getLogger().debug("urnAvalonPartition = " + this.urnAvalonPartition);
+        getLogger().debug("urnAvalonName = " + this.urnAvalonName);
         getLogger().debug("foo = " + this.foo );
         getLogger().debug("bar = " + this.bar );
     }

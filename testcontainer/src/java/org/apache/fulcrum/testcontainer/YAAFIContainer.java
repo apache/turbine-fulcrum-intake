@@ -16,16 +16,17 @@ package org.apache.fulcrum.testcontainer;
  */
 import java.io.File;
 
+import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.component.ComponentException;
-import org.apache.avalon.framework.context.DefaultContext;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.logger.ConsoleLogger;
-import org.apache.avalon.framework.logger.Logger;
+import org.apache.avalon.framework.service.ServiceException;
 import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
-import org.apache.fulcrum.yaafi.framework.container.ServiceContainerImpl;
-import org.apache.fulcrum.yaafi.framework.factory.ServiceManagerFactory;
-import org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerService;
+import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerConfiguration;
+import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
+
 
 
 /**
@@ -36,19 +37,11 @@ import org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerService;
  */
 public class YAAFIContainer extends AbstractLogEnabled implements Container
 {
+    /** The YAAFI configuration */
+    private ServiceContainerConfiguration config;
 
     /** Component manager */
     private ServiceContainer manager;
-
-    /** Configuration file name */
-    private String configFileName;
-
-    /** Role file name */
-    private String roleFileName;
-
-    /** Parameters file name */
-    private String parametersFileName;
-
 
     /**
      * Constructor
@@ -56,8 +49,8 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
     public YAAFIContainer()
     {
         // org.apache.log4j.BasicConfigurator.configure();
-        this.manager = new ServiceContainerImpl();
         this.enableLogging( new ConsoleLogger( ConsoleLogger.LEVEL_DEBUG ) );
+        this.config = new ServiceContainerConfiguration();
     }
 
     /**
@@ -66,13 +59,17 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
      * @param configFileName Name of the component configuration file
      * @param roleFileName Name of the role configuration file
      */
-    public void startup(String configFileName, String roleFileName, String parametersFileName )
+    public void startup(
+        String configFileName,
+        String roleFileName,
+        String parametersFileName )
     {
         getLogger().debug("Starting container...");
 
-        this.configFileName = configFileName;
-        this.roleFileName = roleFileName;
-        this.parametersFileName = parametersFileName;
+        this.config.setComponentConfigurationLocation( configFileName );
+        this.config.setComponentRolesLocation( roleFileName );
+        this.config.setParametersLocation( parametersFileName );
+        this.config.setLogger( new ConsoleLogger( ConsoleLogger.LEVEL_DEBUG ) );
 
         File configFile = new File(configFileName);
 
@@ -97,6 +94,7 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
     // -------------------------------------------------------------
     // Avalon lifecycle interfaces
     // -------------------------------------------------------------
+
     /**
      * Initializes the container
      *
@@ -104,20 +102,8 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
      */
     public void initialize() throws Exception
     {
-        DefaultContext context = new DefaultContext();
-        String absolutePath = new File("").getAbsolutePath();
-        context.put(COMPONENT_APP_ROOT, absolutePath);
-        context.put(URN_AVALON_HOME, new File( new File("").getAbsolutePath() ) );
-        context.put(URN_AVALON_TEMP, new File( System.getProperty("java.io.tmpdir",absolutePath) ) );
-
-        Logger logger = new ConsoleLogger( ConsoleLogger.LEVEL_DEBUG );
-
-        this.manager = ServiceManagerFactory.create(
-            logger,
-            this.roleFileName,
-            this.configFileName,
-            this.parametersFileName,
-            context
+        this.manager = ServiceContainerFactory.create(
+            this.config
             );
     }
 
@@ -127,9 +113,13 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
     public void dispose()
     {
         getLogger().debug("Disposing of container...");
-        this.manager.dispose();
+        if( this.manager != null )
+        {
+            this.manager.dispose();
+        }
         getLogger().info("YaffiContainer has been disposed.");
     }
+
     /**
      * Returns an instance of the named component
      *
@@ -140,7 +130,6 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
     {
         try
         {
-            //return ServiceManagerService.getServiceManager().lookup(roleName);
             return this.manager.lookup(roleName);
         }
         catch( Exception e )
@@ -149,6 +138,7 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
             throw new ComponentException(roleName,msg,e);
         }
     }
+
     /**
      * Releases the component implementing the Component interface. This
      * interface is depracted but still around in Fulcrum
@@ -157,8 +147,9 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
      */
     public void release(Component component)
     {
-        ServiceManagerService.getServiceManager().release(component);
+        this.manager.release(component);
     }
+
     /**
      * Releases the component
      *
@@ -166,7 +157,6 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
      */
     public void release(Object component)
     {
-        //ServiceManagerService.getServiceManager().release(component);
         this.manager.release(component);
     }
 }

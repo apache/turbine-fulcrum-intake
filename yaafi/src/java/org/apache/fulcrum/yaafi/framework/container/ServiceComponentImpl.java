@@ -71,10 +71,13 @@ public class ServiceComponentImpl
     /** A description for the service if any */
     private String description;
     
+    /** The type of component´, e.g. "merlin", "phoenix" or "fortress*/
+    private String componentType;
+    
     /**
      * Constructor
      * @param configuration The configuration to obtain the meta informations
-     * @param clazzName The logger of the service container
+     * @param logger The logger of the service container
      */
     public ServiceComponentImpl( Configuration configuration, Logger logger )
     	throws ConfigurationException
@@ -90,6 +93,7 @@ public class ServiceComponentImpl
 	        this.logger			= logger;
 	        this.isEarlyInit 	= configuration.getAttributeAsBoolean("early-init",true);
 	        this.description	= configuration.getAttribute("description",null);
+	        this.componentType	= configuration.getAttribute("component-type","merlin");
         }
         else
         {
@@ -99,6 +103,7 @@ public class ServiceComponentImpl
 	        this.logger			= logger;
 	        this.isEarlyInit 	= configuration.getAttributeAsBoolean("early-init",true);
 	        this.description	= configuration.getAttribute("description",null);
+	        this.componentType	= configuration.getAttribute("component-type","merlin");
         }
     }
 	
@@ -208,7 +213,7 @@ public class ServiceComponentImpl
 			{
 				String msg = "Servicing the following service failed : " + this.getShorthand();
 				this.getLogger().error(msg,t);
-				throw new RuntimeException(msg);
+				throw new ServiceException(this.getShorthand(),msg,t);
 			}
 		}
 	}
@@ -244,7 +249,7 @@ public class ServiceComponentImpl
     }
 
     /**
-     * @see org.apache.avalon.framework.parameters.Parameterizable#parameterize(org.apache.avalon.framework.parameters.Parameters)
+     * @see org.apache.avalon.framework.parameters.Parameterizable#parameterize(org.apache.avalon.framework.parameters.CryptoParameters)
      */
     public void parameterize(Parameters parameters) throws ParameterException
     {
@@ -589,6 +594,23 @@ public class ServiceComponentImpl
     public void setDescription(String description)
     {
         this.description = description;
+    }
+    
+    
+    /**
+     * @return Returns the componentType.
+     */
+    public String getComponentType()
+    {
+        return componentType;
+    }
+    
+    /**
+     * @param componentType The componentType to set.
+     */
+    public void setComponentType(String componentType)
+    {
+        this.componentType = componentType;
     }
     
     /////////////////////////////////////////////////////////////////////////

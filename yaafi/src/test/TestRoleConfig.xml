@@ -2,21 +2,31 @@
 
 <role-list>
   <role
-        default-class="org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerService"
-        early-init="true"
-    />    
-    <role
-        name="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyService"
-        shorthand="SystemPropertyService"
-        default-class="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyServiceImpl"
-        early-init="true"
-        description="Copies name/value pairs into the SystemProperties"
-    />    
-    <role
-        name="org.apache.fulcrum.yaafi.TestComponent"
-        shorthand="test"
-        default-class="org.apache.fulcrum.yaafi.TestComponentImpl"
-        early-init="false"
-        description="A simple test component"
-    />        
+    default-class="org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerService"
+    early-init="true"
+    component-type="merlin"
+  />    
+  <role
+    name="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyService"
+    shorthand="SystemPropertyService"
+    default-class="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyServiceImpl"
+    early-init="true"
+    component-type="merlin"
+    description="Copies name/value pairs into the SystemProperties"
+  />   
+  <role
+    name="org.apache.fulcrum.yaafi.service.reconfiguration.ReconfigurationService"
+    shorthand="ReconfigurationService"
+    default-class="org.apache.fulcrum.yaafi.service.reconfiguration.ReconfigurationServiceImpl"
+    early-init="true"
+    description="Monitors the componentConfiguration.xml to reconfigure YAAFI"
+  />   
+  <role
+    name="org.apache.fulcrum.yaafi.TestComponent"
+    shorthand="test"
+    default-class="org.apache.fulcrum.yaafi.TestComponentImpl"
+    early-init="false"
+    component-type="merlin"
+    description="A simple test component"
+  />        
 </role-list>

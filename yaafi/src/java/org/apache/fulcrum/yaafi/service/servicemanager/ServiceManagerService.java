@@ -39,7 +39,7 @@ import org.apache.avalon.framework.service.Serviceable;
  *   <li>Logger instance
  *   <li>ServiceManager instance
  * 	 <li>Context instance
- *   <li>Parameters instance
+ *   <li>CryptoParameters instance
  * </ul>
  * 
  *  @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
@@ -119,13 +119,13 @@ public class ServiceManagerService
     }
     
     /**
-     * @see org.apache.avalon.framework.parameters.Parameterizable#parameterize(org.apache.avalon.framework.parameters.Parameters)
+     * @see org.apache.avalon.framework.parameters.Parameterizable#parameterize(org.apache.avalon.framework.parameters.CryptoParameters)
      */
     public void parameterize(Parameters parameters) throws ParameterException
     {
         if( ServiceManagerService.parameters == null  )
         {
-	        this.getLogger().debug( "Storing the Parameters instance" );
+	        this.getLogger().debug( "Storing the CryptoParameters instance" );
 	        ServiceManagerService.parameters = parameters;
         }
     }

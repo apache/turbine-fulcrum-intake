@@ -49,7 +49,12 @@ public class TestComponentTest extends BaseUnitTest
         
         assertEquals( ((TestComponentImpl) testComponent).bar, "BAR" );
         assertEquals( ((TestComponentImpl) testComponent).foo, "FOO" );
-        assertNotNull( ((TestComponentImpl) testComponent).appRoot );
+        
+        assertNotNull( ((TestComponentImpl) testComponent).urnAvalonClassLoader );
+        assertNotNull( ((TestComponentImpl) testComponent).urnAvaloneHome );
+        assertNotNull( ((TestComponentImpl) testComponent).urnAvaloneTemp );
+        assertNotNull( ((TestComponentImpl) testComponent).urnAvalonName );
+        assertNotNull( ((TestComponentImpl) testComponent).urnAvalonPartition );
     }
     
     /**

@@ -78,7 +78,7 @@ public abstract class BaseServiceImpl
     }
 
     /**
-     * @see org.apache.avalon.framework.parameters.Parameterizable#parameterize(org.apache.avalon.framework.parameters.Parameters)
+     * @see org.apache.avalon.framework.parameters.Parameterizable#parameterize(org.apache.avalon.framework.parameters.CryptoParameters)
      */
     public void parameterize(Parameters parameters) throws ParameterException
     {

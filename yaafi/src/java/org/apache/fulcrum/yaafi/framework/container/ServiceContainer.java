@@ -20,6 +20,7 @@ package org.apache.fulcrum.yaafi.framework.container;
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Reconfigurable;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.LogEnabled;
 import org.apache.avalon.framework.service.ServiceException;
@@ -32,7 +33,7 @@ import org.apache.avalon.framework.service.ServiceManager;
  */
 
 public interface ServiceContainer
-	extends  LogEnabled, Contextualizable, Configurable, Initializable, Disposable, ServiceManager
+	extends  LogEnabled, Contextualizable, Configurable, Initializable, Reconfigurable, Disposable, ServiceManager
 {    	
     /**
      * Decommision the given service by calling Startable.stop() 
@@ -45,7 +46,6 @@ public interface ServiceContainer
      *     
      * @param name the name of the service
      * @exception ServiceException the service was not found
-     * @exception Exception an exception occured during processing
      */
     void decommision( String name )
     	throws ServiceException;
