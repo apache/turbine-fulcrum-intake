@@ -70,7 +70,7 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  */
 public class LocalizationTest extends BaseUnitTest
 {
-    
+
     private LocalizationService ls = null;
     public LocalizationTest(String name)
     {
@@ -80,7 +80,7 @@ public class LocalizationTest extends BaseUnitTest
     {
         return new TestSuite(LocalizationTest.class);
     }
-    public void setUp()
+    public void setUp()  throws Exception
     {
         super.setUp();
         try

@@ -65,7 +65,7 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  * CacheTest
  *
  * @author <a href="paulsp@apache.org">Paul Spencer</a>
- * @author <a href="epugh@upstate.com">Eric Pugh</a> 
+ * @author <a href="epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public class MimetypeTest extends BaseUnitTest
@@ -102,7 +102,7 @@ public class MimetypeTest extends BaseUnitTest
         // All methods starting with "test" will be executed in the test suite.
         return new TestSuite(MimetypeTest.class);
     }
-    protected void setUp()
+    protected void setUp() throws Exception
     {
         super.setUp();
         try

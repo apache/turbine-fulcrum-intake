@@ -17,47 +17,47 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
 public class IntakeServiceTest extends BaseUnitTest {
-	private IntakeService intakeService = null;
-	/**
-	  * Defines the testcase name for JUnit.
-	  *
-	  * @param name the testcase's name.
-	  */
-	public IntakeServiceTest(String name) {
-		super(name);
-	}
-	public static void main(String[] args) {
-		junit.textui.TestRunner.run(IntakeServiceTest.class);
-	}
-	protected void setUp() {
-		super.setUp();
-		File appData = new File("target/appData.ser");
-		if(appData.exists()){
-			appData.delete();
-		}
-		try {
-			intakeService = (IntakeService) this.lookup(IntakeService.ROLE);
-		} catch (ComponentException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-	}
-	public void testBasicConfigLoads() throws Exception {
-		assertNotNull(intakeService);
-		File file = new File("target/appData.ser");
-		assertTrue(
-			"Make sure serialized data file exists:" + file,
-			file.exists());
-		Group group = intakeService.getGroup("LoginGroup");
-		assertNotNull(group);
-		assertEquals("loginGroupKey", group.getGID());
-		assertEquals("LoginGroup", group.getIntakeGroupName());
+  private IntakeService intakeService = null;
+  /**
+    * Defines the testcase name for JUnit.
+    *
+    * @param name the testcase's name.
+    */
+  public IntakeServiceTest(String name) {
+    super(name);
+  }
+  public static void main(String[] args) {
+    junit.textui.TestRunner.run(IntakeServiceTest.class);
+  }
+  protected void setUp()  throws Exception{
+    super.setUp();
+    File appData = new File("target/appData.ser");
+    if(appData.exists()){
+      appData.delete();
+    }
+    try {
+      intakeService = (IntakeService) this.lookup(IntakeService.ROLE);
+    } catch (ComponentException e) {
+      e.printStackTrace();
+      fail(e.getMessage());
+    }
+  }
+  public void testBasicConfigLoads() throws Exception {
+    assertNotNull(intakeService);
+    File file = new File("target/appData.ser");
+    assertTrue(
+      "Make sure serialized data file exists:" + file,
+      file.exists());
+    Group group = intakeService.getGroup("LoginGroup");
+    assertNotNull(group);
+    assertEquals("loginGroupKey", group.getGID());
+    assertEquals("LoginGroup", group.getIntakeGroupName());
 
-		Group group2 = intakeService.getGroup("AnotherGroup");
-		assertNotNull(group2);
-		assertEquals("anotherGroupKey", group2.getGID());
-		assertEquals("AnotherGroup", group2.getIntakeGroupName());
+    Group group2 = intakeService.getGroup("AnotherGroup");
+    assertNotNull(group2);
+    assertEquals("anotherGroupKey", group2.getGID());
+    assertEquals("AnotherGroup", group2.getIntakeGroupName());
 
-	}
+  }
 
 }

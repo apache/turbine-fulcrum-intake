@@ -105,7 +105,7 @@ public class WorkflowServiceTest extends BaseUnitTest
         // All methods starting with "test" will be executed in the test suite.
         return new TestSuite(WorkflowServiceTest.class);
     }
-    protected void setUp()
+    protected void setUp()  throws Exception
     {
         super.setUp();
         try
@@ -153,11 +153,11 @@ public class WorkflowServiceTest extends BaseUnitTest
 
     /** Retrives a workflow based on the caller */
     public void testRetrieveWorkflow() throws Exception
-    {       
+    {
         Workflow wf = workflowService.retrieveWorkflow("caller");
         assertNotNull(wf);
     }
-    
+
     public void testRetrieveWorkflows(String caller, String status) throws Exception
     {
         Workflow wf = workflowService.retrieveWorkflow("caller");
@@ -167,7 +167,7 @@ public class WorkflowServiceTest extends BaseUnitTest
         assertEquals(2,workflowIds.length);
         assertEquals(workflowId,workflowIds[0]);
         assertEquals(workflowId2,workflowIds[1]);
-           
-    }    
+
+    }
 }
 

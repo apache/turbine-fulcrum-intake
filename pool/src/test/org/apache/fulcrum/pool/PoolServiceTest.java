@@ -17,10 +17,10 @@ public class PoolServiceTest extends BaseUnitTest
 {
     private PoolService poolService = null;
     /**
-    	* Defines the testcase name for JUnit.
-    	*
-    	* @param name the testcase's name.
-    	*/
+      * Defines the testcase name for JUnit.
+      *
+      * @param name the testcase's name.
+      */
     public PoolServiceTest(String name)
     {
         super(name);
@@ -29,7 +29,7 @@ public class PoolServiceTest extends BaseUnitTest
     {
         junit.textui.TestRunner.run(PoolServiceTest.class);
     }
-    protected void setUp()
+    protected void setUp()  throws Exception
     {
         super.setUp();
         try

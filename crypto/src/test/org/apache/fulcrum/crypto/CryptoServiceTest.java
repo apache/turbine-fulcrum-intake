@@ -88,7 +88,7 @@ public class CryptoServiceTest extends BaseUnitTest
     {
         assertTrue(true);
     }
-    public void setUp()
+    public void setUp() throws Exception
     {
         super.setUp();
         try
@@ -110,15 +110,15 @@ public class CryptoServiceTest extends BaseUnitTest
         {
             CryptoAlgorithm ca = sc.getCryptoAlgorithm("unix");
             /*
-            	* Test predefined Seed
-            	*/
+              * Test predefined Seed
+              */
             ca.setSeed(preDefinedSeed);
             String output = ca.encrypt(preDefinedInput);
             assertEquals("Encryption failed ", preDefinedResult, output);
             /*
-            	* Test random Seed
-            	*
-            	*/
+              * Test random Seed
+              *
+              */
             ca.setSeed(null);
             String result = ca.encrypt(preDefinedInput);
             ca.setSeed(result);

@@ -25,7 +25,7 @@ public class FactoryServiceTest extends BaseUnitTest
     {
         junit.textui.TestRunner.run(FactoryServiceTest.class);
     }
-    protected void setUp()
+    protected void setUp() throws Exception
     {
         super.setUp();
         try
@@ -105,7 +105,7 @@ public class FactoryServiceTest extends BaseUnitTest
         Class[] results = factoryService.getSignature(StringBuffer.class, params, signature);
         assertEquals(1, results.length);
         assertTrue(results[0].equals(String.class));
-        
+
         Integer sourceValueInteger = new Integer(10);
         params[0] = sourceValueInteger;
         signature[0] = "java.lang.Integer";

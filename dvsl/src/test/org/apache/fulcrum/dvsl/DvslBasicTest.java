@@ -63,29 +63,29 @@ public class DvslBasicTest extends BaseUnitTest
 {
     private String dvsl = "#match(\"element\")Hello from element! $node.value()#end";
     private String input = "<?xml version=\"1.0\"?><document><element>Foo</element></document>";
-    
-	private DvslService dvslService = null;
+
+  private DvslService dvslService = null;
     public DvslBasicTest(String name)
     {
         super(name);
     }
-	public void setUp()
-	 {
-		 super.setUp();
-		 try
-		 {
-			dvslService = (DvslService) this.lookup(DvslService.ROLE);
-		 }
-		 catch (ComponentException e)
-		 {
-			 e.printStackTrace();
-			 fail(e.getMessage());
-		 }
-		 //        this.release(sc);
-	 }
+  public void setUp() throws Exception
+   {
+     super.setUp();
+     try
+     {
+      dvslService = (DvslService) this.lookup(DvslService.ROLE);
+     }
+     catch (ComponentException e)
+     {
+       e.printStackTrace();
+       fail(e.getMessage());
+     }
+     //        this.release(sc);
+   }
     public void testSelection() throws Exception
     {
-     
+
         /*
          *  register the stylesheet
          */
@@ -94,8 +94,8 @@ public class DvslBasicTest extends BaseUnitTest
          *  render the document
          */
         StringWriter sw = new StringWriter();
-		dvslService.transform("style", new StringReader(input), sw);
-		assertEquals("Hello from element! Foo",sw.toString());
-        
+    dvslService.transform("style", new StringReader(input), sw);
+    assertEquals("Hello from element! Foo",sw.toString());
+
     }
 }
