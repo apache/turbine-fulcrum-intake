@@ -164,7 +164,7 @@ public class TurbineUserPeer
     {
         Criteria criteria = new Criteria();
         criteria.addSelectColumn(USER_ID);
-        criteria.add(User.USERNAME, user.getUserName());
+        criteria.add(TurbineUserPeer.USERNAME, user.getUserName());
         Vector results = BasePeer.doSelect(criteria);
         if(results.size() > 1)
         {
