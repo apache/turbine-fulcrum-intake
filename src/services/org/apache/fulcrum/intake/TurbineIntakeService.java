@@ -384,7 +384,7 @@ public class TurbineIntakeService
      */
     public int getSize(String name)
     {
-        return keyedPool.numActive(name) + keyedPool.numIdle(name);
+        return keyedPool.getNumActive(name) + keyedPool.getNumIdle(name);
     }
 
     /**
