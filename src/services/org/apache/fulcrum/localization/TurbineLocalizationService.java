@@ -62,6 +62,7 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.util.StringUtils;
+import org.apache.log4j.Category;
 import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
 
@@ -104,16 +105,21 @@ public class TurbineLocalizationService
     private static HashMap bundles = null;
 
     /** The name of the default bundle to use. */
-    private static String defaultBundle = null;
+    private String defaultBundle = null;
 
     /** The name of the default language to use. */
-    private static String defaultLanguage = null;
+    private String defaultLanguage = null;
 
     /** The name of the default country to use. */
-    private static String defaultCountry = null;
+    private String defaultCountry = null;
 
     /**
-     * Constructor.
+     * Log4J logging category.
+     */
+    private Category category = Category.getInstance(getClass().getName());
+
+    /**
+     * Creates a new instance.
      */
     public TurbineLocalizationService()
     {
@@ -331,6 +337,11 @@ public class TurbineLocalizationService
         if ( !StringUtils.isValid(locale.getCountry()) &&
              defaultLanguage.equals(locale.getLanguage()) )
         {
+            /*
+            category.debug("Requested language '" + locale.getLanguage() +
+                           "' matches default: Attempting to guess bundle " +
+                           "using default country '" + defaultCountry + '\'');
+            */
             Locale withDefaultCountry = new Locale(locale.getLanguage(),
                                                    defaultCountry);
             rb = (ResourceBundle) bundlesByLocale.get(withDefaultCountry);
