@@ -54,6 +54,8 @@ package org.apache.fulcrum;
  * <http://www.apache.org/>.
  */
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
@@ -786,14 +788,36 @@ public abstract class BaseServiceBroker implements ServiceBroker
         if (loggingEnabled)
         {
             category.info(t);
-            //!! The stack trace is not making it into
-            // the log which isn't good.
+            category.info(stackTrace(t));
         }
         else
         {
             System.out.println("ERROR: " + t.getMessage());
             t.printStackTrace();
         }            
+    }
+
+    /**
+     * Returns the output of printStackTrace as a String.
+     *
+     * @param e The source to extract a stack trace from.
+     * @return The extracted stack trace.
+     */
+    public String stackTrace(Throwable e)
+    {
+        String trace = null;
+        try
+        {
+            // And show the Error Screen.
+            ByteArrayOutputStream buf = new ByteArrayOutputStream();
+            e.printStackTrace( new PrintWriter(buf, true) );
+            trace = buf.toString();
+        }
+        catch (Exception f)
+        {
+            // Do nothing.
+        }
+        return trace;
     }
 
     /**
