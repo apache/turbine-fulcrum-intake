@@ -6,7 +6,10 @@
   </properties>
 
   <body>
-    <release version="Not applicable" date="">
+    <release version="1.0-alpha-3" date="in CVS">
+     <action dev="epugh" type="add">
+        Added CacheServiceFacade class.
+      </action>
       <action dev="epugh" type="add">
         Integrated howto documentation on main page.
       </action>
