@@ -74,6 +74,14 @@
     name="security-om"
     prereqs="init-taskdef">
 
+<echo>
++--------------------------------------------------------------------
+|
+| G E N E R A T I N G  S E C U R I T Y  S O U R C E S
+|
++--------------------------------------------------------------------
+</echo>
+
     <filter token="DATABASE_DEFAULT" value="${security.database.name}"/>
     <!-- is there a way to load this from an xml file? -->
     <filter token="EXTRA_USER_COLUMNS" value="${security.extra.user.columns}"/>
@@ -99,6 +107,14 @@
   <goal
     name="scheduler-om"
     prereqs="init-taskdef">
+
+<echo>
++--------------------------------------------------------------------
+|
+| G E N E R A T I N G  S C H E D U L E R  S O U R C E S
+|
++--------------------------------------------------------------------
+</echo>
 
     <filter token="DATABASE_DEFAULT" value="${scheduler.database.name}"/>
     <copy
