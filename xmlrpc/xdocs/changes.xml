@@ -8,6 +8,9 @@
 
   <body>
     <release version="Not applicable" date="">
+      <action dev="ronald" type="fix">
+        Change Server component to unregister handlers on dispose() method.  Prevents shutdown errors.
+      </action>       	
       <action dev="ronald" type="add">
         Add merlin meta info generation.  Refactor common code between server and
         client.

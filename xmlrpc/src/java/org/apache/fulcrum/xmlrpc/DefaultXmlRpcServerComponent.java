@@ -60,7 +60,6 @@ import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Startable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
@@ -173,6 +172,7 @@ public class DefaultXmlRpcServerComponent
     public void start()
         throws Exception
     {
+        getLogger().debug( "Starting the XML-RPC server." );
         webserver.start();
     }
 
@@ -184,7 +184,7 @@ public class DefaultXmlRpcServerComponent
     {
         super.initialize();
 
-        getLogger().info( "Attempting to start the XML-RPC server." );
+        getLogger().info( "Attempting to initialize the XML-RPC server." );
 
         // Need a default value here.
         if (isSecureServer)
@@ -277,9 +277,14 @@ public class DefaultXmlRpcServerComponent
         }
     }
 
+    /**
+     * Shuts down this service, stopping running threads.
+     */
     public void stop()
         throws Exception
     {
+        getLogger().debug( "Stopping the XML-RPC server." );
+
         // Stop the XML RPC server.  org.apache.xmlrpc.WebServer blocks in a
         // call to ServerSocket.accept() until a socket connection is made.
         webserver.shutdown();
@@ -302,10 +307,20 @@ public class DefaultXmlRpcServerComponent
     // ------------------------------------------------------------------------
 
     /**
-     * Shuts down this service, stopping running threads.
+     * Unregisters all handlers and disposes of the server.
      */
     public void dispose()
     {
+        Configuration[] handlers = handlerConfiguration.getChildren("handler");
+        for (int i = 0; i < handlers.length; i++)
+        {
+            Configuration c = handlers[i];
+            if (c.getName().equals("handler"))
+            {
+                unregisterHandler(c.getChild("name").getValue(""));
+            }
+        }
+
         webserver = null;
     }
 

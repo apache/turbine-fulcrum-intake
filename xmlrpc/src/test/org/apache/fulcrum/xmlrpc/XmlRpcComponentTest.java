@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.Vector;
 
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.component.ComponentException;
 
 import junit.framework.TestSuite;
@@ -54,6 +55,8 @@ public class XmlRpcComponentTest extends BaseUnitTest
             e.printStackTrace();
             fail("Could not lookup component");
         }
+
+        release((Component) xmlrpc);
     }
 
     public void testHandler() throws Exception
@@ -97,5 +100,8 @@ public class XmlRpcComponentTest extends BaseUnitTest
         result = (String) rpcClient.executeRpc(server, "ClassHandler.echo",
                 params);
         assertEquals(result, testMessage);
+
+        release((Component) rpcClient);
+        release((Component) xmlrpc);
     }
 }
