@@ -1,3 +1,9 @@
+<!--
+
+  WARNING: This file is generated! Do not edit by hand!
+  
+-->
+
 <project name="maven" default="jar" basedir=".">
 
   <target
@@ -28,5 +34,9 @@
     />
 
   </target>
+
+  
+  <nag from="turbine-dev@jakarta.apache.org" to="turbine-dev@jakarta.apache.org"/>
+
   
 </project>
