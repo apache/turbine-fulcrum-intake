@@ -52,6 +52,7 @@
         <item name="Pool API"              href="/fulcrum-pool-api/index.html"/>
         <item name="Pool Impl"             href="/fulcrum-pool-impl/index.html"/>      
       </item>
+      <item name="Quartz"                href="/fulcrum-quartz/index.html"/>
       <item name="Security"              href="/sites/security.html" collapse="true">
         <item name="Site"                  href="/fulcrum-security-site/index.html"/>      
         <item name="Security API"          href="/fulcrum-security-api/index.html"/>
