@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Building Fulcrum</title>
+    <author email="pete@kazmier.com">Pete Kazmier</author>
+  </properties>
+
+  <body>
+
+    <section name="Building Fulcrum">
+      <p>
+        Building Fulcrum from CVS is now very easy because it has been
+        Maven-enabled.  Before you begin, you'll need to check out the
+        <code>jakarta-turbine-fulcrum</code> CVS repository (if you are
+        not familiar with the Jakarta CVS repositories, please refer to
+        the <a href="/site/cvsindex.html">documentation</a>).  In
+        addition, you'll also have to check out the
+        <code>jakarta-turbine-torque</code> repository because the
+        current build process references templates in that source
+        directory.  Note: both repositories should be checked out in the
+        same top-level directory.
+      </p>
+      <p>
+        Please refer to the Maven <a
+        href="http://jakarta.apache.org/turbine/maven/getting-started.html">Getting
+        Started</a> document for instructions on how to build the
+        project using Maven.
+      </p>
+    </section>
+  </body>
+</document>
+
