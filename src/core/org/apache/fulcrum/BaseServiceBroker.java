@@ -563,11 +563,22 @@ public abstract class BaseServiceBroker
      */
     public synchronized void shutdownService(String name)
     {
-        String className = (String) mapping.get(name);
-
-        if (className != null)
+        try
         {
-            shutdownClass(className);
+            Service service = getServiceInstance(name);
+            if (service.isInitialized())
+            {
+                service.shutdown();
+                ((BaseService) service).setInit(false);
+            }
+        }
+        catch (InstantiationException e)
+        {
+            // Shutdown of a nonexistent class was requested.
+            // This does not hurt anything, so we log the error and continue.
+            error(new ServiceException(
+                "Shutdown of a nonexistent service " + name +
+                    " was requested", e));
         }
     }
 
