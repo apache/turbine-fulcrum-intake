@@ -1,57 +1,19 @@
 package org.apache.fulcrum.intake;
 
-/* ====================================================================
- * The Apache Software License, Version 1.1
+/*
+ * Copyright 2001-2004 The Apache Software Foundation.
  *
- * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
- * reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *
- * 3. The end-user documentation included with the redistribution,
- *    if any, must include the following acknowledgment:
- *       "This product includes software developed by the
- *        Apache Software Foundation (http://www.apache.org/)."
- *    Alternately, this acknowledgment may appear in the software itself,
- *    if and wherever such third-party acknowledgments normally appear.
- *
- * 4. The names "Apache" and "Apache Software Foundation" and
- *    "Apache Turbine" must not be used to endorse or promote products
- *    derived from this software without prior written permission. For
- *    written permission, please contact apache@apache.org.
- *
- * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without
- *    prior written permission of the Apache Software Foundation.
- *
- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
- * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
- * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 import java.beans.IntrospectionException;
@@ -74,9 +36,6 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.apache.avalon.framework.activity.Initializable;
-import org.apache.avalon.framework.service.ServiceException;
-import org.apache.avalon.framework.service.ServiceManager;
-import org.apache.avalon.framework.service.Serviceable;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
@@ -84,8 +43,9 @@ import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.avalon.framework.service.ServiceException;
+import org.apache.avalon.framework.service.ServiceManager;
+import org.apache.avalon.framework.service.Serviceable;
 import org.apache.commons.pool.KeyedObjectPool;
 import org.apache.commons.pool.KeyedPoolableObjectFactory;
 import org.apache.commons.pool.impl.StackKeyedObjectPool;
@@ -94,6 +54,7 @@ import org.apache.fulcrum.intake.transform.XmlToAppData;
 import org.apache.fulcrum.intake.xmlmodel.AppData;
 import org.apache.fulcrum.intake.xmlmodel.XmlGroup;
 import org.apache.fulcrum.localization.LocalizationService;
+import org.apache.turbine.services.InitializationException;
 /**
  * This service provides access to input processing objects based
  * on an XML specification.
@@ -131,9 +92,6 @@ public class IntakeServiceImpl
 
     /** AppData -> keyed Pools Map */
     private Map keyedPools;
-
-    /** Used for logging */
-    private static Log log = LogFactory.getLog(IntakeServiceImpl.class);
 
     /** The Avalon Context */
     private Context context = null;
@@ -211,7 +169,7 @@ public class IntakeServiceImpl
      *          or null if the map could not be loaded.
      */
     private Map loadSerialized(String serialDataPath, long timeStamp) {
-        log.debug(
+        getLogger().debug(
             "Entered loadSerialized("
                 + serialDataPath
                 + ", "
@@ -225,12 +183,12 @@ public class IntakeServiceImpl
         File serialDataFile = new File(serialDataPath);
 
         if (!serialDataFile.exists()) {
-            log.info("No serialized file found, parsing XML");
+            getLogger().info("No serialized file found, parsing XML");
             return null;
         }
 
         if (serialDataFile.lastModified() <= timeStamp) {
-            log.info("serialized file too old, parsing XML");
+            getLogger().info("serialized file too old, parsing XML");
             return null;
         }
 
@@ -246,13 +204,13 @@ public class IntakeServiceImpl
                 serialData = (Map) o;
             } else {
                 // Maybe an old file from intake. Ignore it and try to delete
-                log.info("serialized object is not an intake map, ignoring");
+                getLogger().info("serialized object is not an intake map, ignoring");
                 in.close();
                 in = null;
                 serialDataFile.delete(); // Try to delete the file lying around
             }
         } catch (Exception e) {
-            log.error("Serialized File could not be read.", e);
+            getLogger().error("Serialized File could not be read.", e);
 
             // We got a corrupt file for some reason.
             // Null out serialData to be sure
@@ -265,11 +223,11 @@ public class IntakeServiceImpl
                     in.close();
                 }
             } catch (Exception e) {
-                log.error("Exception while closing file", e);
+                getLogger().error("Exception while closing file", e);
             }
         }
 
-        log.info("Loaded serialized map object, ignoring XML");
+        getLogger().info("Loaded serialized map object, ignoring XML");
         return serialData;
     }
 
@@ -284,7 +242,7 @@ public class IntakeServiceImpl
      */
     private void saveSerialized(String serialDataPath, Map appDataElements) {
 
-        log.debug(
+        getLogger().debug(
             "Entered saveSerialized(" + serialDataPath + ", appDataElements)");
 
         if (serialDataPath == null) {
@@ -297,7 +255,7 @@ public class IntakeServiceImpl
             serialData.createNewFile();
             serialData.delete();
         } catch (Exception e) {
-            log.info(
+            getLogger().info(
                 "Could not create serialized file "
                     + serialDataPath
                     + ", not serializing the XML data");
@@ -320,9 +278,9 @@ public class IntakeServiceImpl
             ObjectInputStream pin = new ObjectInputStream(in);
             Map dummy = (Map) pin.readObject();
 
-            log.debug("Serializing successful");
+            getLogger().debug("Serializing successful");
         } catch (Exception e) {
-            log.info(
+            getLogger().info(
                 "Could not write serialized file to "
                     + serialDataPath
                     + ", not serializing the XML data");
@@ -335,7 +293,7 @@ public class IntakeServiceImpl
                     in.close();
                 }
             } catch (Exception e) {
-                log.error("Exception while closing file", e);
+                getLogger().error("Exception while closing file", e);
             }
         }
     }
@@ -480,7 +438,7 @@ public class IntakeServiceImpl
                 setter = pd.getWriteMethod();
                 settersForClassName.put(propName, setter);
                 if (setter == null) {
-                    log.error(
+                    getLogger().error(
                         "Intake: setter for '"
                             + propName
                             + "' in class '"
@@ -535,7 +493,7 @@ public class IntakeServiceImpl
                 getter = pd.getReadMethod();
                 gettersForClassName.put(propName, getter);
                 if (getter == null) {
-                    log.error(
+                    getLogger().error(
                         "Intake: getter for '"
                             + propName
                             + "' in class '"
@@ -599,7 +557,7 @@ public class IntakeServiceImpl
             serialDataPath = null;
         }
 
-        log.debug("Path for serializing: " + serialDataPath);
+        getLogger().debug("Path for serializing: " + serialDataPath);
 
         groupNames = new HashMap();
         groupKeyMap = new HashMap();
@@ -610,11 +568,11 @@ public class IntakeServiceImpl
 
         if (xmlPathes == null) {
             String LOAD_ERROR =
-                "No pathes for XML files were specified. "
+                "No paths for XML files were specified. "
                     + "Check that the property exists in "
                     + "TurbineResources.props and were loaded.";
 
-            log.error(LOAD_ERROR);
+            getLogger().error(LOAD_ERROR);
             throw new ConfigurationException(LOAD_ERROR);
         }
 
@@ -627,18 +585,18 @@ public class IntakeServiceImpl
             String xmlPath = (String) it.next();
             File xmlFile = new File( applicationRoot, xmlPath).getAbsoluteFile();
 
-            log.debug("Path for XML File: " + xmlFile);
+            getLogger().debug("Path for XML File: " + xmlFile);
 
             if (!xmlFile.canRead()) {
                 String READ_ERR = "Could not read input file with path " + xmlPath +".  Looking for file " + xmlFile;
 
-                log.error(READ_ERR);
+                getLogger().error(READ_ERR);
                 throw new ConfigurationException(READ_ERR);
             }
 
             xmlFiles.add(xmlFile.toString());
 
-            log.debug("Added " + xmlPath + " as File to parse");
+            getLogger().debug("Added " + xmlPath + " as File to parse");
 
             // Get the timestamp of the youngest file to be compared with
             // a serialized file. If it is younger than the serialized file,
@@ -654,7 +612,7 @@ public class IntakeServiceImpl
         if (serializedMap != null) {
             // Use the serialized data as XML groups. Don't parse.
             appDataElements = serializedMap;
-            log.debug("Using the serialized map");
+            getLogger().debug("Using the serialized map");
         } else {
             // Parse all the given XML files
             appDataElements = new HashMap();
@@ -663,12 +621,12 @@ public class IntakeServiceImpl
                 String xmlPath = (String) it.next();
                 AppData appData = null;
 
-                log.debug("Now parsing: " + xmlPath);
+                getLogger().debug("Now parsing: " + xmlPath);
                 try {
                     XmlToAppData xmlApp = new XmlToAppData();
                     appData = xmlApp.parseFile(xmlPath);
                 } catch (Exception e) {
-                    log.error("Could not parse XML file " + xmlPath, e);
+                    getLogger().error("Could not parse XML file " + xmlPath, e);
 
                     throw new ConfigurationException(
                         "Could not parse XML file " + xmlPath,
@@ -676,7 +634,7 @@ public class IntakeServiceImpl
                 }
 
                 appDataElements.put(appData, xmlPath);
-                log.debug("Saving appData for " + xmlPath);
+                getLogger().debug("Saving appData for " + xmlPath);
             }
 
             saveSerialized(serialDataPath, appDataElements);
@@ -701,7 +659,7 @@ public class IntakeServiceImpl
                         registerGroup(groupName, g, appData, true);
 
                     if (!registerUnqualified) {
-                        log.info(
+                        getLogger().info(
                             "Ignored redefinition of Group "
                                 + groupName
                                 + " or Key "
@@ -722,7 +680,7 @@ public class IntakeServiceImpl
                             g,
                             appData,
                             !registerUnqualified)) {
-                            log.error(
+                            getLogger().error(
                                 "Could not register fully qualified name "
                                     + qualifiedName
                                     + ", maybe two XML files have the same prefix. Ignoring it.");
@@ -758,12 +716,16 @@ public class IntakeServiceImpl
      */
     public void initialize() throws Exception {
         Intake.setIntakeService(this);
-        if (log.isInfoEnabled())
+        if (getLogger().isInfoEnabled())
         {
-            log.info("Intake Service is Initialized now..");
+            getLogger().info("Intake Service is Initialized now..");
         }
     }
 
+    /**
+     * @see org.apache.avalon.framework.context.Contextualizable
+     * @avalon.entry key="urn:avalon:home" type="java.io.File"
+     */
     public void contextualize(Context context) throws ContextException {
           this.context = context;
           this.applicationRoot = context.get( "urn:avalon:home" ).toString();
