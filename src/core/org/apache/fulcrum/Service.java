@@ -81,7 +81,23 @@ public interface Service
      *
      * When your class is being requested from an InitableBroker, it
      * will call getInit(), and if it returns false, this method will
-     * be invoked.
+     * be invoked.  A typical implementation will look something like
+     * the following:
+     * 
+     * <blockquote><code><pre>
+     * try
+     * {
+     *     // Your initialization activities ...
+     *     setInit(true);
+     * }
+     * catch (Exception e)
+     * {
+     *     throw new InitializationException("Something bad happened during " +
+     *                                       Service.SERVICE_NAME +
+     *                                       " initialization: " +
+     *                                       e.getMessage());
+     * }
+     * </pre></code></blockquote>
      *
      * @exception InitializationException, if initialization of this
      * class was not successful.
