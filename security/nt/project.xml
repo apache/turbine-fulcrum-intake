@@ -12,14 +12,9 @@
     </dependency>      
     <dependency>
       <groupId>fulcrum</groupId>   
-      <artifactId>fulcrum-crypto-api</artifactId>
-      <version>1.0.4</version>
-    </dependency>
-    <dependency>
-      <groupId>fulcrum</groupId>   
-      <artifactId>fulcrum-crypto-impl</artifactId>
-      <version>1.0.4</version>
-    </dependency>  
+      <artifactId>fulcrum-crypto</artifactId>
+      <version>1.0.5-dev</version>
+    </dependency> 
 
     <dependency>
       <groupId>cryptix</groupId>
