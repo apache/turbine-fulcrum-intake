@@ -59,6 +59,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.File;
 import java.util.Map;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
@@ -100,7 +101,10 @@ public class TurbineUploadService
 {
     protected Object component;
     private boolean automatic;
-     
+
+    private int sizeThreshold;
+    private int sizeMax;
+
     /**
      * Initializes the service.
      *
@@ -134,13 +138,15 @@ public class TurbineUploadService
             UploadService.AUTOMATIC_KEY,
             UploadService.AUTOMATIC_DEFAULT);
 
-        upload.setSizeMax( getConfiguration().getInt(
+        sizeMax = getConfiguration().getInt(
             UploadService.SIZE_MAX_KEY,
-            UploadService.SIZE_MAX_DEFAULT) );
+            UploadService.SIZE_MAX_DEFAULT);
+        upload.setSizeMax(sizeMax);
 
-        upload.setSizeThreshold( getConfiguration().getInt(
+        sizeThreshold = getConfiguration().getInt(
             UploadService.SIZE_THRESHOLD_KEY,
-            UploadService.SIZE_THRESHOLD_DEFAULT) );
+            UploadService.SIZE_THRESHOLD_DEFAULT);
+        upload.setSizeThreshold(sizeThreshold);
 
         upload.setRepositoryPath( getConfiguration().getString(
             UploadService.REPOSITORY_KEY,
@@ -211,7 +217,35 @@ public class TurbineUploadService
         try
         {
             return (ArrayList)
-                ((FileUpload)getComponent()).parseRequest(req, path);
+                ((FileUpload)getComponent())
+                .parseRequest(req, sizeThreshold, sizeMax, path);
+        }
+        catch (FileUploadException e)
+        {
+            throw new ServiceException(e);
+        }
+    }
+
+
+    /**
+     * <p>Parses a <a href="http://rf.cx/rfc1867.html">RFC 1867</a>
+     * compliant <code>multipart/form-data</code> stream.</p>
+     *
+     * @param req The servlet request to be parsed.
+     * @param sizeThreshold the max size in bytes to be stored in memory
+     * @param sizeMax the maximum allowed upload size in bytes
+     * @param path The location where the files should be stored.
+     * @exception ServiceException Problems reading/parsing the
+     * request or storing the uploaded file(s).
+     */
+    public List parseRequest(HttpServletRequest req, int sizeThreshold,
+                                  int sizeMax, String path)
+            throws ServiceException
+    {
+        try
+        {
+            return ((FileUpload)getComponent())
+                .parseRequest(req, sizeThreshold, sizeMax, path);
         }
         catch (FileUploadException e)
         {
