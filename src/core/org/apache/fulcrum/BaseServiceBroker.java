@@ -67,6 +67,7 @@ import java.util.Stack;
 import org.apache.fulcrum.ServiceException;
 import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
+import org.apache.log4j.helpers.NullEnumeration
 
 // NOTE:
 // initClass is taking the name of the service now not
@@ -170,22 +171,23 @@ public abstract class BaseServiceBroker
     /**
      * Determine whether log4j has already been configured.
      *
-     * @return boolean is log4j configured
+     * @return boolean Whether log4j is configured.
      */
     protected boolean isLoggingConfigured() 
     {
         // This is a note from Ceki, taken from a message on the log4j
         // user list:
         //
-        // Having defined categories does not necessarily mean configuration. 
-        // Remember that most categories are created outside the configuration file. 
-        // What you want to check for is the existence of appenders. The correct 
-        // procedure is to first check for appenders in the root category and if that 
-        // returns no appenders to check in other categories. 
+        // Having defined categories does not necessarily mean
+        // configuration. Remember that most categories are created
+        // outside the configuration file. What you want to check for
+        // is the existence of appenders. The correct procedure is to
+        // first check for appenders in the root category and if that
+        // returns no appenders to check in other categories.
         
         Enumeration enum = Category.getRoot().getAllAppenders();
              
-        if(!(enum instanceof org.apache.log4j.helpers.NullEnumeration))
+        if (!(enum instanceof NullEnumeration))
         {
             return true;
         } 
@@ -195,7 +197,7 @@ public abstract class BaseServiceBroker
             while(cats.hasMoreElements()) 
             {
                 Category c = (Category) cats.nextElement();
-                if(!(c.getAllAppenders() instanceof org.apache.log4j.helpers.NullEnumeration))
+                if (!(c.getAllAppenders() instanceof NullEnumeration))
                 {
                     return true;
                 }                     
