@@ -64,27 +64,26 @@ import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
 
 /**
- * This class is the single point of access to all localization
+ * <p>This class is the single point of access to all localization
  * resources.  It caches different ResourceBundles for different
- * Locales.
+ * Locales.</p>
  *
- * <p>
+ * <p>Usage example:</p>
+ * 
+ * <blockquote><code><pre>
+ * LocalizationService ls = (LocalizationService) TurbineServices
+ *     .getInstance().getService(LocalizationService.SERVICE_NAME);
+ * </pre></code></blockquote>
  *
- * Usage example:<br>
- * LocalizationService ls =<br>
- *     (LocalizationService)TurbineServices<br>
- *         .getInstance()<br>
- *         .getService(LocalizationService.SERVICE_NAME);<br>
+ * <p>Then call one of four methods to retrieve a ResourceBundle:
  *
- * <p>
- *
- * Then call one of four methods to retrieve a ResourceBundle:
- *
- * <br>
- * - getBundle("MyBundleName")<br>
- * - getBundle("MyBundleName", httpAcceptLanguageHeader)<br>
- * - getBundle("MyBundleName", HttpServletRequest)<br>
- * - getBundle("MyBundleName", Locale)<br>
+ * <ul>
+ * <li>getBundle("MyBundleName")</li>
+ * <li>getBundle("MyBundleName", httpAcceptLanguageHeader)</li>
+ * <li>etBundle("MyBundleName", HttpServletRequest)</li>
+ * <li>getBundle("MyBundleName", Locale)</li>
+ * <li>etc.</li>
+ * </ul></p>
  *
  * @author <a href="mailto:jm@mediaphil.de">Jonas Maurus</a>
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
