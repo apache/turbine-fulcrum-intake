@@ -7,6 +7,10 @@
 
   <body>
     <release version="1.0.5" date="">
+      <action dev="epugh" type="remove">
+      	Remove Localization, it was a facade that shouldn't be here.
+        Facade's of this nature are specific to the user...
+      </action>        
       <action dev="epugh" type="update">
       	Tweak dependencies to build under gump.
       </action>          

@@ -183,7 +183,6 @@ public class DefaultLocalizationService
     {
         // initBundleNames(null);
         defaultLocale = new Locale(defaultLanguage, defaultCountry);
-        Localization.setLocalizationService(this);
         if (getLogger().isInfoEnabled())
         {
             getLogger().info("Localization Service is Initialized now..");
