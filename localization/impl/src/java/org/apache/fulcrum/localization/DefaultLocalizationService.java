@@ -190,7 +190,7 @@ public class DefaultLocalizationService
         Localization.setLocalizationService(this);
         if (log.isInfoEnabled())
         {
-            log.info("OSWorkflow Service is Initialized now..");
+            log.info("Localization Service is Initialized now..");
         }
     }
     /**
