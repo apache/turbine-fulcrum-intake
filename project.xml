@@ -235,10 +235,10 @@
     <unitTest>
       <includes>
         <include>**/*Test.*</include>
-        <include>**/*TestCase.*</include>
       </includes>
       <excludes>
         <exclude>**/Abstract*.*</exclude>
+        <exclude>**/*TestCase.*</exclude>
       </excludes>
       <resources>
         <resource>
@@ -246,24 +246,10 @@
           <includes>
             <include>**/*.x*</include>
           </includes>
-        </resource>
-        <resource>
-          <directory>${basedir}/conf</directory>
-          <targetPath>BLOCK-INF</targetPath>
-          <includes>
-            <include>block.xml</include>
-          </includes>
-        </resource>
+        </resource>       
       </resources>      
     </unitTest>
-    <resources>
-       <resource>
-         <directory>${basedir}/conf</directory>
-         <targetPath>BLOCK-INF</targetPath>
-         <includes>
-           <include>block.xml</include>
-         </includes>
-       </resource>
+    <resources>      
        <resource>
          <directory>${basedir}/src/java</directory>
          <includes>
