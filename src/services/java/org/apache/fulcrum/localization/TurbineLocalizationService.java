@@ -210,8 +210,7 @@ public class TurbineLocalizationService
      * @param languageHeader A String with the language header.
      * @return A localized ResourceBundle.
      */
-    public ResourceBundle getBundle(String bundleName,
-                                    String languageHeader)
+    public ResourceBundle getBundle(String bundleName, String languageHeader)
     {
         return getBundle(bundleName, getLocale(languageHeader));
     }
