@@ -137,7 +137,7 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
         permissionManager.addPermission(permission2);
         Role role = securityService.getRoleManager().getRoleInstance("VET_TECH");
         securityService.getRoleManager().addRole(role);
-        securityService.getRoleManager().grant(role, permission);
+        ((SimpleRoleManager)securityService.getRoleManager()).grant(role, permission);
         PermissionSet permissionSet = permissionManager.getPermissions(role);
         assertEquals(1, permissionSet.size());
         assertTrue(permissionSet.contains(permission));

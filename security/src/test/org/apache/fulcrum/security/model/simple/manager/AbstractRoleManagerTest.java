@@ -5,7 +5,6 @@
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
 package org.apache.fulcrum.security.model.simple.manager;
-import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
@@ -22,7 +21,7 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
 public abstract class AbstractRoleManagerTest extends BaseUnitTest
 {
     private Role role;
-    private RoleManager roleManager;
+    private SimpleRoleManager roleManager;
     private SecurityService securityService;
     public abstract void doCustomSetup() throws Exception;
     /**
@@ -40,7 +39,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         {
             doCustomSetup();
             securityService = (SecurityService) lookup(SecurityService.ROLE);
-            roleManager = securityService.getRoleManager();
+            roleManager = (SimpleRoleManager)securityService.getRoleManager();
         }
         catch (Exception e)
         {
@@ -91,7 +90,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         securityService.getPermissionManager().addPermission(permission);
         role = roleManager.getRoleInstance("RECEPTIONIST");
         roleManager.addRole(role);
-        roleManager.grant(role, permission);
+		((SimpleRoleManager)roleManager).grant(role, permission);
         role = roleManager.getRoleById(role.getId());
         PermissionSet permissions = securityService.getPermissionManager().getPermissions(role);
         assertEquals(1, permissions.size());

@@ -28,4 +28,8 @@
     class="net.sf.hibernate.avalon.HibernateServiceImpl">   
   </component>
 
+   <component
+    role="org.apache.fulcrum.security.authenticator.Authenticator"
+    class="org.apache.fulcrum.security.authenticator.TextMatchAuthenticator">   
+  </component> 
 </my-system>

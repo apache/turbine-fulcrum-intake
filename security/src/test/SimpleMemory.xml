@@ -22,5 +22,10 @@
     role="org.apache.fulcrum.security.PermissionManager"
     class="org.apache.fulcrum.security.spi.memory.simple.MemoryPermissionManagerImpl">   
   </component>     
+  
+   <component
+    role="org.apache.fulcrum.security.authenticator.Authenticator"
+    class="org.apache.fulcrum.security.authenticator.TextMatchAuthenticator">   
+  </component> 
 
 </my-system>

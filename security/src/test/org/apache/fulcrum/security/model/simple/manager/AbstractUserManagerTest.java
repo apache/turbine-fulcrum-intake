@@ -22,15 +22,16 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  */
 public abstract class AbstractUserManagerTest extends BaseUnitTest
 {
-    private User user;
-    private UserManager userManager;
-    private SecurityService securityService;
-	public abstract void doCustomSetup() throws Exception;
+    protected User user;
+	protected UserManager userManager;
+	protected SecurityService securityService;
+    public abstract void doCustomSetup() throws Exception;
     /**
      * Constructor for AbstractUserManagerTest.
      * @param arg0
      */
     public AbstractUserManagerTest(String arg0)
+    
     {
         super(arg0);
     }
@@ -151,23 +152,19 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
     }
     public void testRevokeAll() throws Exception
     {
-        if (userManager instanceof SimpleUserManager)
-        {
-            Group group = securityService.getGroupManager().getGroupInstance();
-            group.setName("TEST_REVOKEALL");
-            securityService.getGroupManager().addGroup(group);
-            Group group2 = securityService.getGroupManager().getGroupInstance();
-            group2.setName("TEST_REVOKEALL2");
-            securityService.getGroupManager().addGroup(group2);
-            user = userManager.getUserInstance("Clint2");
-            userManager.addUser(user, "clint");
-            ((SimpleUserManager) userManager).grant(user, group);
-            ((SimpleUserManager) userManager).grant(user, group2);
-            userManager.revokeAll(user);
-            assertEquals(0, ((SimpleUser) user).getGroups().size());
-        }
+        Group group = securityService.getGroupManager().getGroupInstance();
+        group.setName("TEST_REVOKEALL");
+        securityService.getGroupManager().addGroup(group);
+        Group group2 = securityService.getGroupManager().getGroupInstance();
+        group2.setName("TEST_REVOKEALL2");
+        securityService.getGroupManager().addGroup(group2);
+        user = userManager.getUserInstance("Clint2");
+        userManager.addUser(user, "clint");
+        ((SimpleUserManager) userManager).grant(user, group);
+        ((SimpleUserManager) userManager).grant(user, group2);
+        userManager.revokeAll(user);
+        assertEquals(0, ((SimpleUser) user).getGroups().size());
     }
-    
     /**
      * Need to figure out if save is something we want..  
      * right now it just bloes up if you actually cahnge anything.
@@ -179,65 +176,37 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
         user = userManager.getUserInstance("Kate");
         userManager.addUser(user, "katiedid");
         user = userManager.getUser(user.getName());
-        
-       // user.setName("Katherine");
+        // user.setName("Katherine");
         userManager.saveUser(user);
         assertEquals("kate", userManager.getUser(user.getName()).getName());
     }
     public void testGrantUserGroup() throws Exception
     {
-        if (userManager instanceof SimpleUserManager)
-        {
-            Group group = securityService.getGroupManager().getGroupInstance();
-            group.setName("TEST_GROUP");
-            securityService.getGroupManager().addGroup(group);
-            user = userManager.getUserInstance("Clint");
-            userManager.addUser(user, "clint");
-            ((SimpleUserManager) userManager).grant(user, group);
-            assertTrue(((SimpleUser) user).getGroups().contains(group));
-        }
+        Group group = securityService.getGroupManager().getGroupInstance();
+        group.setName("TEST_GROUP");
+        securityService.getGroupManager().addGroup(group);
+        user = userManager.getUserInstance("Clint");
+        userManager.addUser(user, "clint");
+        ((SimpleUserManager) userManager).grant(user, group);
+        assertTrue(((SimpleUser) user).getGroups().contains(group));
     }
     public void testRevokeUserGroup() throws Exception
     {
-        if (userManager instanceof SimpleUserManager)
-        {
-            Group group = securityService.getGroupManager().getGroupInstance();
-            group.setName("TEST_REVOKE");
-            securityService.getGroupManager().addGroup(group);
-            user = userManager.getUserInstance("Lima");
-            userManager.addUser(user, "pet");
-            ((SimpleUserManager) userManager).revoke(user, group);
-            assertFalse(((SimpleUser) user).getGroups().contains(group));
-        }
+        Group group = securityService.getGroupManager().getGroupInstance();
+        group.setName("TEST_REVOKE");
+        securityService.getGroupManager().addGroup(group);
+        user = userManager.getUserInstance("Lima");
+        userManager.addUser(user, "pet");
+        ((SimpleUserManager) userManager).revoke(user, group);
+        assertFalse(((SimpleUser) user).getGroups().contains(group));
     }
-    /*
-     * Class to test for String encryptPassword(String)
-     */
-    public void testEncryptPasswordString() throws Exception
-    {
-    }
-    /*
-     * Class to test for String encryptPassword(String, String)
-     */
-    public void testEncryptPasswordStringString() throws Exception
-    {
-    }
-    public void testCheckPassword() throws Exception
-    {
-    }
-    public void testGetAclClass() throws Exception
-    {
-    }
-    public void testGetAclInstance() throws Exception
-    {
-    }
+
     public void testGetACL() throws Exception
     {
-		user = userManager.getUserInstance("Tony");
-		userManager.addUser(user, "california");
-    	AccessControlList acl = userManager.getACL(user);
-    	assertNotNull(acl);
-    	
+        user = userManager.getUserInstance("Tony");
+        userManager.addUser(user, "california");
+        AccessControlList acl = userManager.getACL(user);
+        assertNotNull(acl);
     }
     public void testRemoveUser() throws Exception
     {

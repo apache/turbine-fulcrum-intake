@@ -94,7 +94,7 @@ public class StartingSecurityServicesTest extends BaseUnitTest
     public void testStartingInMemorySecurity() throws Exception
     {
         this.setRoleFileName(null);
-        this.setConfigurationFileName("src/test/InMemorySecurity.xml");
+        this.setConfigurationFileName("src/test/SimpleMemory.xml");
         securityService = (SecurityService) lookup(SecurityService.ROLE);
         assertNotNull(securityService.getUserManager());
         assertNotNull(securityService.getRoleManager());

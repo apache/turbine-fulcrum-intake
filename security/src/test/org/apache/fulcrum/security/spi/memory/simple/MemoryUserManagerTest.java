@@ -18,7 +18,7 @@ public class MemoryUserManagerTest extends AbstractUserManagerTest
     public void doCustomSetup()
     {
         this.setRoleFileName(null);
-        this.setConfigurationFileName("src/test/InMemorySecurity.xml");
+        this.setConfigurationFileName("src/test/SimpleMemory.xml");
     }
     /**
     	* Constructor for MemoryPermissionManagerTest.
