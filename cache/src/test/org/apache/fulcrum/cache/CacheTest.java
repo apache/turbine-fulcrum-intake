@@ -405,10 +405,13 @@ public class CacheTest extends BaseUnitTest
     public void testRefreshableTimeToLive() throws Exception
     {
         String skipTestsProperty = System.getProperty(SKIP_TESTS_KEY,"false");
-        LOG.info("What is the skipTestsProperty:" + skipTestsProperty);
+        LOG.info("What is the value of the skipTestsProperty:" + skipTestsProperty);
         if(Boolean.getBoolean(skipTestsProperty)==true){
-            LOG.warn("Skipping testRefreshableTimeToLive tests due to property " + SKIP_TESTS_KEY + " being true.");
+            LOG.warn("Skipping testRefreshableTimeToLive test due to property " + SKIP_TESTS_KEY + " being true.");
             return;
+        }
+        else {
+            LOG.warn("Running testRefreshableTimeToLive test due to property " + SKIP_TESTS_KEY + " being false.");
         }
 
         String testString = new String("This is a test");
