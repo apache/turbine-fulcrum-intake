@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<componentConfig>
+  <PBEService>
+    <cryptoAlgorithm>PBEWithMD5AndDES</cryptoAlgorithm>
+    <cryptoSalt>4463657541544141</cryptoSalt>
+    <cyrptoCount>20</cyrptoCount>
+    <cryptoProvider></cryptoProvider>
+    <passwordCount>20</passwordCount>
+  </PBEService>
+</componentConfig>

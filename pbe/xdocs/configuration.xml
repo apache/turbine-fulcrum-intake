@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Fulcrum PBE Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+  <body>
+    <section name="Configuration">
+
+      <subsection name="Role Configuration">
+        <source><![CDATA[
+<role
+    name="org.apache.fulcrum.pbe.PBEService"
+    shorthand="PBEService"
+    default-class="org.apache.fulcrum.pbe.PBEServiceImpl"
+    early-init="true"
+    component-type="merlin"
+    description="Provides Password Based Encyrption using JCA/JCE"
+/>    
+          ]]></source>
+      </subsection>
+
+      <subsection name="Component Configuration">
+        <p>
+          The configuration parameters are basically used to make
+          the service compatible with existing applications using
+          password based encryption.
+        </p>
+        <table>
+          <tr>
+            <th>Item</th>
+            <th>Datatype</th>
+            <th>Optional</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>cryptoAlgorithm</td>
+            <td>String</td>
+            <td>Y</td>
+            <td>
+              Defines the JCE provider to be used. Depending
+              on your environement you leave it empty to get
+              an appropriate implementation automatically or
+              use "SunJCE" or "BC"
+            </td>
+          </tr>
+          <tr>
+            <td>cryptoSalt</td>
+            <td>String</td>
+            <td>Y</td>
+            <td>
+              Contains the hex-encoded salt for PBE
+            </td>
+          </tr>
+          <tr>
+            <td>cyrptoCount</td>
+            <td>int</td>
+            <td>Y</td>
+            <td>
+              Defines the count for PBEParameterSpec
+            </td>
+          </tr>
+          <tr>
+            <td>passwordCount</td>
+            <td>int</td>
+            <td>Y</td>
+            <td>
+              Defines the number of SHA-1 invocations to 
+              create the password. Changing this value creates
+              completely different passwords. 
+            </td>
+          </tr>          
+        </table>
+      </subsection>
+      
+      <subsection name="Component Configuration Example">
+        <source><![CDATA[
+  <PBEService>
+    <cryptoAlgorithm>PBEWithMD5AndDES</cryptoAlgorithm>
+    <cryptoSalt>4463657541544141</cryptoSalt>
+    <cyrptoCount>20</cyrptoCount>
+    <cryptoProvider></cryptoProvider>
+    <passwordCount>40</passwordCount>
+  </PBEService>
+        ]]></source>
+      </subsection>
+      
+    </section>
+  </body>
+</document>

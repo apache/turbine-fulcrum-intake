@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Fulcrum PBE Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Overview">    
+    
+      <p>
+        The PBEService (Password Based Encryption Service) supports encryption
+        and decryption of resources using JCA (Java Crypto Architecture)
+        and JCE (Java Crpyto Extension) providing        
+        <ul>
+          <li>method to create more or less secure passwords</li>
+          <li>creation of cipher streams for transparent encryption/decryption</li>
+          <li>generic encryption/decryption methods</li>
+        </ul>          
+      </p>
+
+      <p>
+        The implementation uses PBEWithMD5AndTripleDES and was inspired
+        by Pankaj Kumar and his excellent book 
+        <a href="http://www.j2ee-security.net/">J2EE Security</a>.
+      </p>
+       
+
+      <p>
+        The implementation depends directly on the YAAFI libraries since
+        the actual implementation is found there. 
+      </p>
+      
+    </section>
+
+  </body>
+
+</document>
