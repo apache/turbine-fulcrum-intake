@@ -12,13 +12,13 @@
       excludes="proposals/**,target/**,project.xml"
       goals="jar:install"
       banner="Installing:"
-      ignoreFailures="false" />
+      ignoreFailures="true" />
   </goal>
 
   <goal name="fulcrum:clean" description="Clean all Fulcrum components" prereqs="clean">
     <maven:reactor basedir="${basedir}"
       includes="**/project.xml"
-      excludes="proposlas/**,target/**,project.xml"
+      excludes="proposals/**,target/**,project.xml"
       goals="clean:clean"
       banner="Cleaning:"
       ignoreFailures="false" />
