@@ -62,7 +62,8 @@ import java.util.StringTokenizer;
 import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.fulcrum.pool.Recyclable;
-import org.apache.fulcrum.upload.UploadServiceFacade;
+import org.apache.fulcrum.upload.UploadService;
+import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 import org.apache.commons.fileupload.FileItem;
@@ -107,7 +108,11 @@ public class DefaultParameterParser
      * The raw data of a file upload.
      */
     private byte[] uploadData = null;
-
+    
+    /**
+     * The upload service component to use
+     */
+    private UploadService uploadService;
     /**
      * Logger to use
      */
@@ -191,7 +196,7 @@ public class DefaultParameterParser
         {
             try
             {
-                ArrayList items = UploadServiceFacade.parseRequest(req);
+                ArrayList items = uploadService.parseRequest(req,getRepository());
                 Iterator i = items.iterator();
 
                 while (i.hasNext())
@@ -368,14 +373,23 @@ public class DefaultParameterParser
         }
     }
     
+    /**
+     * <p> Retrieves the value of the <code>repository</code> property of
+     * {@link org.apache.fulcrum.upload.UploadService}.
+     *
+     * @return The repository.
+     */
+    public String getRepository()
+    {
+        return uploadService.getFileUpload().getRepositoryPath();
+    }    
     // ---------------- Avalon Lifecycle Methods ---------------------    
     /**
      * Avalon component lifecycle method
      */
-    public void service( ServiceManager manager) {        
+    public void service( ServiceManager manager) throws ServiceException{        
         
-        // force a lookup of UploadService
-        // I don't know if this is needed or not...
+        uploadService = (UploadService)manager.lookup(UploadService.class.getName());
         
     }      
 }
