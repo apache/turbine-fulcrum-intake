@@ -7,6 +7,20 @@
 
   <body>
     <release version="1.0.4-dev" date="as in CVS">
+      <action dev="sgoeschl" type="fix">
+        Removed $Id$ CVS macro since it makes maintainance difficult
+      </action>
+      <action dev="sgoeschl" type="fix">
+        Removed obsolete email address
+      </action>
+      <action dev="sgoeschl" type="fix">
+        Fixed wrong default values for parameters file if no value was
+        defined.
+      </action>
+      <action dev="sgoeschl" type="fix">
+        Fixed bug in ServiceManagerService - the static field was not
+        reset during a dispose() leading to a NPE in the second invocation.
+      </action>
       <action dev="sgoeschl" type="add">
         Transparent decryption of configuration files
       </action>
