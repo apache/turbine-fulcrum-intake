@@ -29,8 +29,10 @@
         <pathelement location="${torque.jar}"/>
         <pathelement location="${xerces.jar}"/>
         <pathelement location="${commons-collections.jar}"/>
+        <pathelement location="${commons-configuration.jar}"/>
         <pathelement location="${commons-lang.jar}"/>
         <pathelement location="${stratum.jar}"/>
+        <pathelement location="${village.jar}"/>
       </classpath>
     </taskdef>
   </target>
