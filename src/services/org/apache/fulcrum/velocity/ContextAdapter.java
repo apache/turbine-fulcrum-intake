@@ -97,11 +97,7 @@ public class ContextAdapter extends AbstractContext
     }
 
     /**
-     *  determines if there is a value for the
-     *  given key
-     *
-     *  @param key name of value to check
-     *  @return true if non-null value in store
+     * @see AbstractContext#internalContainsKey
      */
     public  boolean internalContainsKey(Object key)
     {
@@ -109,9 +105,7 @@ public class ContextAdapter extends AbstractContext
     }
 
     /**
-     *  returns array of keys
-     *
-     *  @return keys as []
+     * @see AbstractContext#internalGetKeys
      */
     public  Object[] internalGetKeys()
     {
@@ -119,11 +113,7 @@ public class ContextAdapter extends AbstractContext
     }
 
     /**
-     *  remove a key/value pair from the
-     *  internal storage
-     *
-     *  @param key name of value to remove
-     *  @return value removed
+     * @see AbstractContext#internalRemove
      */
     public  Object internalRemove(Object key)
     {
