@@ -57,7 +57,6 @@ package org.apache.fulcrum.security.entity;
 import java.util.Date;
 import java.util.Hashtable;
 import java.io.Serializable;
-import javax.servlet.http.HttpSessionBindingListener;
 
 import org.apache.fulcrum.session.SessionBindingListener;
 
