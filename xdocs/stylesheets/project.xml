@@ -25,6 +25,7 @@
 
     <menu name="Howtos">
       <item name="Cache Service"          href="/howto/cache-service.html"/>
+      <item name="Crypto Service"         href="/howto/crypto-service.html"/>
       <item name="Factory Service"        href="/howto/factory-service.html"/>
       <item name="Intake Service"         href="/howto/intake-service.html"/>
       <item name="JSP Service"            href="/howto/jsp-service.html"/>
