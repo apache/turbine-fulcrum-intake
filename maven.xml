@@ -14,11 +14,11 @@
   <!-- the sources for the security service and the scheduler.            -->
   <!-- ================================================================== -->
 
-  <!-- <preGoal name="compile" -->
-  <goal name="compile-pre-goal"
-    prereqs="check-om"
+  <preGoal name="java:compile">
 
-    description="--> generates the Turbine OM/Peer classes">
+    <attainGoal name="check-om"/>
+
+    omGenerated: ${omGenerated}
 
     <j:if test="${omGenerated == 'true'}">
 
@@ -36,7 +36,7 @@
     
     </j:if>
     
-  </goal>
+  </preGoal>
 
   <!-- ================================================================== -->
   <!-- C H E C K  O M                                                     -->
@@ -51,6 +51,8 @@
       value="${maven.prepareSourceDirectory}/report.turbine.om.generation"
     />
 
+    omStatusFile:  ${omStatusFile}
+
     <uptodate
       property="omGenerated"
       targetfile="${omStatusFile}">
@@ -59,6 +61,9 @@
         includes="turbine-schema.xml"
       />
     </uptodate>
+    
+    omGenerated: ${omGenerated}
+    
   </goal>
 
   <goal
