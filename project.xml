@@ -236,7 +236,7 @@
     </dependency>
 
     <dependency>
-      <name>xerces</name>
+      <name>xml-xerces</name>
       <type>required</type>
       <version>2.0.0</version>
       <jar>xercesImpl-2.0.0.jar</jar>
