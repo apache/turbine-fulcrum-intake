@@ -1,0 +1,381 @@
+<?xml version="1.0"?>
+
+<document>
+ <properties>
+  <title>Fulcrum Services - DB Security Service</title>
+  <author email="hps@intermeta.de">Henning P. Schmiedehausen</author>
+ </properties>
+
+<body>
+
+<section name="DB Security Service">
+
+<p>
+This is an implementation of a Security Service which uses <a
+href="http://jakarta.apache.org/turbine/torque/">Torque</a> generated
+peers to access the required security information.
+</p>
+
+<p>
+Older versions of the Security Service used hard coded Peers to access
+the security information. The current version can access arbitrary peers
+to retrieve the information and can be adapted to a pre-existing schema and
+use peer classes from outside Fulcrum. 
+</p>
+
+</section>
+
+<section name="Using the supplied Peer classes">
+
+<p>
+When you start with the Security Service, you should use the Fulcrum
+supplied Peer classes to familiarize yourself with the workings of the
+DB Security Service. Once you understand how the peer classes are
+accessed, you can customize to your own Peer classes. Fulcrum supplies
+the following peer classes and objects to retrieve data:
+
+<table>
+<tr>
+<th>Object type</th>
+<th>Function</th>
+<th>Class</th>
+</tr>
+<tr>
+<td rowspan="3">User</td>
+<td>Implementation</td>
+<td>org.apache.fulcrum.impl.db.DBUser</td>
+</tr>
+<tr>
+<td>Peer</td>
+<td>org.apache.fulcrum.impl.db.entity.TurbineUserPeer</td>
+</tr>
+<tr>
+<td>Persistent object</td>
+<td>org.apache.fulcrum.impl.db.entity.TurbineUser</td>
+</tr>
+<tr>
+<td rowspan="3">Group</td>
+<td>Implementation</td>
+<td>org.apache.fulcrum.impl.db.DBGroup</td>
+</tr>
+<tr>
+<td>Peer</td>
+<td>org.apache.fulcrum.impl.db.entity.TurbineGroupPeer</td>
+</tr>
+<tr>
+<td>Persistent object</td>
+<td>org.apache.fulcrum.impl.db.entity.TurbineGroup</td>
+</tr>
+<tr>
+<td rowspan="3">Role</td>
+<td>Implementation</td>
+<td>org.apache.fulcrum.impl.db.DBRole</td>
+</tr>
+<tr>
+<td>Peer</td>
+<td>org.apache.fulcrum.impl.db.entity.TurbineRolePeer</td>
+</tr>
+<tr>
+<td>Persistent object</td>
+<td>org.apache.fulcrum.impl.db.entity.TurbineRole</td>
+</tr>
+<tr>
+<td rowspan="3">Permission</td>
+<td>Implementation</td>
+<td>org.apache.fulcrum.impl.db.DBPermission</td>
+</tr>
+<tr>
+<td>Peer</td>
+<td>org.apache.fulcrum.impl.db.entity.TurbinePermissionPeer</td>
+</tr>
+<tr>
+<td>Persistent object</td>
+<td>org.apache.fulcrum.impl.db.entity.TurbinePermission</td>
+</tr>
+</table>
+
+If you retrieve objects from the DB Security Service, you will always
+get the object classes in the "Implementation" rows. The DB Security
+Service will use the peers described in the "Peer" rows and internally
+the implementation objects will use the objects from the "Persistent"
+rows. As you will see later, you can reconfigure the "Peer" and
+"Persistent" objects.
+</p>
+
+</section>
+
+<section name="Fulcrum supplied table schema">
+<p>
+The Peers and objects supplied with the DB Security Service were generated
+from a Torque Schema. Its definition is <a href="db-security-schema.html">shown here</a>.
+</p>
+<p>
+Fulcrum uses the following configuration for accessing the Torque
+schema. If you just want to use the default Peers, you don't need any
+of the following configuration, these are the defaults:
+</p>
+<source><![CDATA[
+
+# This is the Peer class used to access the user peer (org.apache.fulcrum.security.impl.db.entity.TurbineUserPeer)
+service.SecurityService.db.userPeer.class = org.apache.fulcrum.security.impl.db.entity.TurbineUserPeer
+
+# The columns in the peer used to retrieve information. These are the names of the constants
+# in the configured peer
+service.SecurityService.db.userPeer.column.name       = LOGIN_NAME
+service.SecurityService.db.userPeer.column.id         = USER_ID
+service.SecurityService.db.userPeer.column.password   = PASSWORD_VALUE
+service.SecurityService.db.userPeer.column.firstname  = FIRST_NAME
+service.SecurityService.db.userPeer.column.lastname   = LAST_NAME
+service.SecurityService.db.userPeer.column.email      = EMAIL
+service.SecurityService.db.userPeer.column.confirm    = CONFIRM_VALUE
+service.SecurityService.db.userPeer.column.createdate = CREATED
+service.SecurityService.db.userPeer.column.lastlogin  = LAST_LOGIN
+service.SecurityService.db.userPeer.column.objectdata = OBJECTDATA
+
+# These are the objects returned by the configured user peer (org.apache.fulcrum.security.impl.db.entity.TurbineUser)
+service.SecurityService.db.user.class = org.apache.fulcrum.security.impl.db.entity.TurbineUser
+
+# These bean properties are queried from the returned object to retrieve the 
+# information
+service.SecurityService.db.user.property.name         = UserName
+service.SecurityService.db.user.property.id           = UserId
+service.SecurityService.db.user.property.password     = Password
+service.SecurityService.db.user.property.firstname    = FirstName
+service.SecurityService.db.user.property.lastname     = LastName
+service.SecurityService.db.user.property.email        = Email
+service.SecurityService.db.user.property.confirm      = Confirmed
+service.SecurityService.db.user.property.createdate   = CreateDate
+service.SecurityService.db.user.property.lastlogin    = LastLogin
+service.SecurityService.db.user.property.objectdata   = Objectdata
+
+# This is the Peer class used to access the Group Peer (org.apache.fulcrum.security.impl.db.entity.TurbineGroupPeer)
+service.SecurityService.db.groupPeer.class = org.apache.fulcrum.security.impl.db.entity.TurbineGroupPeer
+
+# The columns in the peer used to retrieve information. These are the names of the constants
+# in the configured peer
+service.SecurityService.db.groupPeer.column.name      = GROUP_NAME
+service.SecurityService.db.groupPeer.column.id        = GROUP_ID
+
+# These are the objects returned by the configured group peer (org.apache.fulcrum.security.impl.db.entity.TurbineGroup)
+service.SecurityService.db.group.class = org.apache.fulcrum.security.impl.db.entity.TurbineGroup
+
+# These bean properties are queried from the returned object to retrieve the 
+# information
+service.SecurityService.db.group.property.name        = Name
+service.SecurityService.db.group.property.id          = GroupId
+
+# This is the Peer class used to access the Role Peer (org.apache.fulcrum.security.impl.db.entity.TurbineRolePeer)
+service.SecurityService.db.rolePeer.class = org.apache.fulcrum.security.impl.db.entity.TurbineRolePeer
+
+# The columns in the peer used to retrieve information. These are the names of the constants
+# in the configured peer
+service.SecurityService.db.rolePeer.column.name       = ROLE_NAME
+service.SecurityService.db.rolePeer.column.id         = ROLE_ID
+
+# These are the objects returned by the configured role peer (org.apache.fulcrum.security.impl.db.entity.TurbineRole)
+service.SecurityService.db.role.class = org.apache.fulcrum.security.impl.db.entity.TurbineRole
+
+# These bean properties are queried from the returned object to retrieve the 
+# information
+service.SecurityService.db.role.property.name         = Name
+service.SecurityService.db.role.property.id           = RoleId
+
+# This is the Peer class used to access the Permission Peer (org.apache.fulcrum.security.impl.db.entity.TurbinePermissionPeer)
+service.SecurityService.db.permissionPeer.class = org.apache.fulcrum.security.impl.db.entity.TurbinePermissionPeer
+
+# The columns in the peer used to retrieve information. These are the names of the constants
+# in the configured peer
+service.SecurityService.db.permissionPeer.column.name = PERMISSION_NAME
+service.SecurityService.db.permissionPeer.column.id   = PERMISSION_ID
+
+# These are the objects returned by the configured permission peer (org.apache.fulcrum.security.impl.db.entity.TurbinePermission)
+service.SecurityService.db.permission.class = org.apache.fulcrum.security.impl.db.entity.TurbinePermission
+
+# These bean properties are queried from the returned object to retrieve the 
+# information
+service.SecurityService.db.permission.property.name   = Name
+service.SecurityService.db.permission.property.id     = PermissionId
+]]></source>
+<p>
+The column names and the bean properties do not always match, because
+you can change the name of the bean property with the javaName
+attribute in the Torque XML file.
+</p>
+<p>
+If you omit the class definition of the object classes
+(<i>db.user.class</i>, <i>db.group.class</i>, <i>db.role.class</i>,
+<i>db.permission.class</i>), the bean property OMClass in the peer is
+consulted which should return the default class that this peer
+returns.
+</p>
+</section>
+
+<section name="Configuring DB Security Service to use your own peer classes">
+<p>
+The most interesting application for this is to extend some of the tables
+with more columns for additional data. In this example, the User table gets
+extended by two more columns called "TELEPHONE" and "FAX". 
+</p>
+<p>
+At first we create a new torque schema:
+</p>
+<source><![CDATA[
+  <table name="CUSTOM_USER" idMethod="idbroker">
+    <column name="USER_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="LOGIN_NAME" required="true" size="64" type="VARCHAR" javaName="UserName"/>
+    <column name="PASSWORD_VALUE" required="true" size="16" type="VARCHAR" javaName="Password"/>
+    <column name="FIRST_NAME" required="true" size="64" type="VARCHAR"/>
+    <column name="LAST_NAME" required="true" size="64" type="VARCHAR"/>
+    <column name="EMAIL" size="64" type="VARCHAR"/>
+    <column name="CONFIRM_VALUE" size="16" type="VARCHAR" javaName="Confirmed"/>
+    <column name="MODIFIED" type="TIMESTAMP"/>
+    <column name="CREATED" type="TIMESTAMP" javaName="CreateDate"/>
+    <column name="LAST_LOGIN" type="TIMESTAMP"/>
+    <column name="OBJECTDATA" type="VARBINARY"/>
+
+    <column name="TELEPHONE" size="32" type="VARCHAR" javaName="Phone" />
+    <column name="FAX" size="32" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="LOGIN_NAME"/>
+    </unique>        
+]]></source>
+<p>
+Note a few things:
+<ul>
+<li>This schema is the same as the TURBINE_USER schema from Fulcrum with the addition of
+two columns. This is especially important with regard to the "javaName" attributes which configure
+the name of the property for this column in the persistent objects.</li>
+<li>The "TELEPHONE" column has its property name set to "Phone".</li>
+</ul>
+</p>
+<p>
+The Torque schema now gets translated into two java classes:
+<i>CustomUserPeer</i> for accessing the tables and <i>CustomUser</i> as objects
+returned by the Peer.
+</p>
+<p>
+Now we configure the DB Security Service to for using this peer as UserPeer:
+</p>
+<source><![CDATA[
+# This is the Peer class used to access the user peer (org.apache.fulcrum.security.impl.db.entity.TurbineUserPeer)
+service.SecurityService.db.userPeer.class = CustomUserPeer
+]]></source>
+<p>
+Please note that we neither configure any column or property
+properties nor do we configure
+<i>service.SecurityService.db.user.class</i>.  So the DB Security
+Service will query the <i>CustomPeer</i> for the class of the returned
+objects.  Now Fulcrum uses your supplied Custom User Peer for querying
+User information. However you can't access your custom columns
+(yet)...
+</p>
+<p>
+Accessing your custom columns can be done in two ways. A simple and a complex:
+</p>
+<p>
+The simple way:
+</p>
+<source><![CDATA[
+   User user = TurbineSecurity.getUser("test");
+
+   String phone = ((CustomObject)(((DBUser)user).getPersistentObj())).getPhone();
+
+   /*  Better readable: */
+
+   User          u2 = TurbineSecurity.getUser("test2");
+   DBUser      dbu2 = (DBUser)u2;
+   CustomObject cuo = (CustomObject)u2.getPersistentObj();
+   String fax       = cup.getFax();
+]]></source>
+<p>
+Ugly, isn't it? If you get a class cast exception somewhere on the
+way, don't worry. Then you misconfigured either the DB Security
+Service (CCE when doing dbu2 = (DBUser)u2) or the peer (CCE when doing
+cuo = (CustomObject)u2.getPersistentObj()).
+</p>
+<p>
+The elegant way:
+</p>
+<source><![CDATA[
+public class CustomUser extends DBUser
+{
+  public String getPhone()
+  {
+    return ((CustomPeer)getPersistentObj()).getPhone();
+  }
+
+  public void setPhone(String phone)
+  {
+    ((CustomPeer)getPersistentObj()).setPhone(phone);
+  }
+
+  public String getFax()
+  {
+    return ((CustomPeer)getPersistentObj()).getFax();
+  }
+
+  public void setFax(String fax)
+  {
+    ((CustomPeer)getPersistentObj()).setFax(fax);
+  }
+}
+
+Fulcrum.properties:
+
+services.SecurityService.user.class=CustomUser
+
+And then:
+
+CustomUser cu = (CustomUser)TurbineSecurity.getUser("test");
+String phone = cu.getPhone();
+]]></source>
+
+</section>
+
+<section name="Advanced customization">
+
+<p>
+Consider the following schema:
+</p>
+<source><![CDATA[
+<table name="CUSTOM_ROLE" idMethod="idbroker">
+  <column name="CUSTOM_ID"    required="true" primaryKey="true" type="INTEGER"/>
+  <column name="NAME_OF_ROLE" required="true" size="64" type="VARCHAR"/>
+
+  <unique>
+      <unique-column name="NAME_OF_ROLE"/>
+  </unique>
+  
+</table>
+]]></source>
+<p>
+If you want to use this as the role peer, you can configure the DB Security Service like this:
+</p>
+<source><![CDATA[
+service.SecurityService.db.rolePeer.class = CustomRolePeer
+
+# The columns in the peer used to retrieve information. These are the names of the constants
+# in the configured peer
+service.SecurityService.db.rolePeer.column.name       = NAME_OF_ROLE
+service.SecurityService.db.rolePeer.column.id         = CUSTOM_ID
+
+# These are the objects returned by the configured role peer (org.apache.fulcrum.security.impl.db.entity.TurbineRole)
+service.SecurityService.db.role.class = CustomRole
+
+# These bean properties are queried from the returned object to retrieve the 
+# information
+service.SecurityService.db.role.property.name         = NameOfRole
+service.SecurityService.db.role.property.id           = CustomId
+
+]]></source>
+<p>
+Of course you must assure that the necessary foreign key relations in
+the database are still valid. With some databases, e.g. MySQL this is
+not a big concern, because they don't support foreign keys at all.
+</p>
+
+</section>
+
+</body>
+</document>

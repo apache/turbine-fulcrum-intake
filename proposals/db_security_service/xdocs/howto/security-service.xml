@@ -1,0 +1,249 @@
+<?xml version="1.0"?>
+
+<document>
+ <properties>
+  <title>Fulcrum Services - Security Service</title>
+  <author email="jvanzyl@apache.org">Jason van Zyl</author>
+  <author email="hps@intermeta.de">Henning P. Schmiedehausen</author>
+ </properties>
+
+<body>
+
+<section name="Security Service">
+
+<p>
+The Security Service is for authenticating users and assigning them roles
+and permissions in groups. 
+</p>
+
+<p>
+The Security Service needs a back-end which provides the security
+information. Fulcrum provides you with the following back-ends:
+<ul>
+<li>
+<a href="db-security-service.html">DBSecurityService</a> A Security
+Service backend which uses <a
+href="http://jakarta.apache.org/turbine/torque/">Torque</a> peers to
+query security information from a database. Its implementation is in
+the <i>org.apache.fulcrum.security.impl.db package</i>. If you want to
+use this Security Service (it is the default), you must use
+<i>org.apache.fulcrum.security.impl.db.DBSecurityService</i> as your
+<i>services.SecurityService.classname</i> property. See the configuration
+example below.
+</li>
+</ul>
+</p>
+
+</section>
+
+<section name="Configuration">
+
+<source><![CDATA[
+# -------------------------------------------------------------------
+#
+#  S E R V I C E S
+#
+# -------------------------------------------------------------------
+# Classes for Turbine Services should be defined here.
+# Format: services.[name].classname=[implementing class]
+#
+# To specify properties of a service use the following syntax:
+# service.[name].[property]=[value]
+
+#
+# Here you specify, which Security Service is used. This example
+# uses the Database (DB) Security Service. There is no default.
+
+services.SecurityService.classname = org.apache.fulcrum.security.impl.db.DBSecurityService
+.
+.
+.
+
+# -------------------------------------------------------------------
+#
+#  S E C U R I T Y  S E R V I C E
+#
+# -------------------------------------------------------------------
+
+#
+# This is the class that implements the UserManager interface to
+# manage User objects. Default is the UserManager from the
+# DBSecurityService. 
+#
+# Adjust this setting if you change the Setting of the SecurityService class (see above).
+#
+
+# Default: org.apache.fulcrum.security.impl.db.DBUserManager
+services.SecurityService.user.manager = org.apache.fulcrum.security.impl.db.DBUserManager
+
+#
+# The implementation classes used to implement the
+# User, Group, Role and Permission interfaces. These are
+# Security Service specific. Default are the implementation classes
+# from the DBSecurityService. I
+#
+# Adjust these settings if you change the Setting of the SecurityService class (see above).
+
+# Default: org.apache.fulcrum.security.impl.db.DBUser
+services.SecurityService.user.class=org.apache.fulcrum.security.impl.db.DBUser
+# Default: org.apache.fulcrum.security.impl.db.DBGroup
+services.SecurityService.group.class=org.apache.fulcrum.security.impl.db.DBGroup
+# Default: org.apache.fulcrum.security.impl.db.DBURole
+services.SecurityService.role.class=org.apache.fulcrum.security.impl.db.DBRole
+# Default: org.apache.fulcrum.security.impl.db.DBPermission
+services.SecurityService.permission.class=org.apache.fulcrum.security.impl.db.DBPermission
+
+
+#
+# This is the class that implements the ACL interface.
+# You want to override this setting only if you want your ACL
+# implementation to provide application specific addtional
+# functionality.
+#
+
+# Default: org.apache.fulcrum.security.impl.TurbineAccessControlList
+services.SecurityService.acl.class = org.apache.fulcrum.security.impl.TurbineAccessControlList
+
+#
+# This is used by the SecurityService to make the password checking
+# secure. When enabled, passwords are transformed by a one-way
+# function into a sequence of bytes that is base64 encoded.
+# It is impossible to guess the plain-text form of the password
+# from the representation. When user logs in, the entered password
+# is transformed the same way and then compared with stored value.
+#
+
+# Default: false
+services.SecurityService.secure.passwords = true
+
+#
+# This property lets you choose what digest algorithm will be used
+# for encrypting passwords. Check documentation of your JRE for
+# available algorithms.
+#
+
+# Default: SHA
+services.SecurityService.secure.passwords.algorithm = SHA
+
+]]></source>
+
+</section>
+
+<section name="User Manager">
+
+<p>
+To access user specific data and information, each Security Service
+must provide an UserManager class. It is service specific and must be
+configured in Fulcrum.properties with the
+<i>service.SecurityService.user.manager</i> property. The UserManager
+allows access to various properties of an Fulcrum User object, can
+change password, authenticate users to the Security service and
+manages the Fulcrum user objects.
+</p>
+
+</section>
+
+<section name="Security Objects">
+<p>
+The Fulcrum Security Service allows you to configure the various
+objects used to implement the User, Group, Role and Permission
+interfaces. These objects are typically service specific, so you
+should consult the documentation to the Security Service
+implementation, which objects should be used. The default are the
+object classes from the <a href="db-security-service.html">DB Security
+Service</a>:
+
+<table>
+<tr>
+<th>Object type</th>
+<th>Property</th>
+<th>Class</th>
+</tr>
+<tr>
+<td>User</td>
+<td>service.SecurityService.user.class</td>
+<td>org.apache.fulcrum.security.impl.db.DBUser</td>
+</tr>
+<tr>
+<td>Group</td>
+<td>service.SecurityService.group.class</td>
+<td>org.apache.fulcrum.security.impl.db.DBGroup</td>
+</tr>
+<tr>
+<td>Role</td>
+<td>service.SecurityService.role.class</td>
+<td>org.apache.fulcrum.security.impl.db.DBRole</td>
+</tr>
+<tr>
+<td>Permission</td>
+<td>service.SecurityService.permission.class</td>
+<td>org.apache.fulcrum.security.impl.db.DBPermission</td>
+</tr>
+</table>
+</p>
+</section>
+
+<section name="Access Control List">
+<p>
+The Fulcrum security system is built on Access Control Lists
+(ACL). There is a default implementation included with the security
+service. If, for any reason, you need a different ACL implementation,
+you can change it with the <i>services.SecurityService.acl.class</i>
+property in Fulcrum.properties. If you provide a different class here,
+it must implement the
+<i>org.apache.fulcrum.security.util.AccessControlList</i> interface.
+</p>
+
+<p>
+Warning! In earlier versions of the Security Service,
+<i>org.apache.fulcrum.security.util.AccessControlList</i> was not an
+interface but a class and the implementation wasn't configurable. If
+you upgrade to this version of Fulcrum from an earlier version and get
+"IncompatibleClassChange" exceptions regarding to the
+AccessControlList class, then you need to recompile your application
+(there is no need to <b>rewrite</b> it, but you must <b>recompile</b>
+it).
+</p>
+
+</section>
+
+<section name="Password security">
+
+<p>
+The Security service can handle encrypted passwords in the back-end to
+authenticate users by using the <a href="crypto-service.html">Crypto
+Service</a>. It can use all algorithms provided by the Crypto Service.
+
+If you don't need encrypted passwords, you can either set the
+<i>services.SecurityService.secure.passwords</i> property to false which
+completely bypasses the password security system or you can use the
+"cleartext" setting from the Crypto Service:
+</p>
+<source><![CDATA[
+services.CryptoService.classname=org.apache.fulcrum.crypto.TurbineCryptoService
+services.SecurityService.classname = org.apache.fulcrum.security.impl.db.DBSecurityService
+
+.
+.
+.
+
+services.CryptoService.algorithm.cleartext  = org.apache.fulcrum.crypto.provider.ClearCrypt
+
+.
+.
+.
+
+services.SecurityService.secure.passwords = true
+services.SecurityService.secure.passwords.algorithm = cleartext
+
+]]></source>
+<p>
+If you use a legacy database and need the Unix crypt algorithm, you
+should check the "unix" algorithm, for normal use there is SHA or
+MD5. Cleartext should only be used for debugging or if you're forced
+to use clear passwords inside your database.
+</p>
+</section>
+
+</body>
+</document>

@@ -1,0 +1,19 @@
+This is a complete rewrite of the DB Security Service.
+
+Complete Docs are in xdocs/howto
+
+Installation: 
+
+- checkout jakarta-turbine-fulcrum from the CVS
+
+- rm -rf jakarta-turbine-fulcrum/src/java/org/apache/fulcrum/security
+
+- cp -av src xdocs test jakarta-turbine-fulcrum
+
+- ant maven:clean
+- ant
+- ant maven:docs
+
+Documentation is in security-service.xml, db-security-service.xml and
+db-security-schema.xml
+

@@ -1,0 +1,580 @@
+package org.apache.fulcrum.security.impl.db;
+
+/* ====================================================================
+ * The Apache Software License, Version 1.1
+ *
+ * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ *
+ * 3. The end-user documentation included with the redistribution,
+ *    if any, must include the following acknowledgment:
+ *       "This product includes software developed by the
+ *        Apache Software Foundation (http://www.apache.org/)."
+ *    Alternately, this acknowledgment may appear in the software itself,
+ *    if and wherever such third-party acknowledgments normally appear.
+ *
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
+ *    written permission, please contact apache@apache.org.
+ *
+ * 5. Products derived from this software may not be called "Apache",
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
+ *    prior written permission of the Apache Software Foundation.
+ *
+ * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
+ * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+ * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ * ====================================================================
+ *
+ * This software consists of voluntary contributions made by many
+ * individuals on behalf of the Apache Software Foundation.  For more
+ * information on the Apache Software Foundation, please see
+ * <http://www.apache.org/>.
+ */
+
+import java.beans.PropertyDescriptor;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.fulcrum.InitializationException;
+
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.Role;
+
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.GroupSet;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+
+import org.apache.commons.configuration.Configuration;
+
+import org.apache.torque.TorqueException;
+
+import org.apache.torque.om.Persistent;
+
+import org.apache.torque.util.BasePeer;
+import org.apache.torque.util.Criteria;
+
+/**
+ * This class capsulates all direct Peer access for the Group entities.
+ * It allows the exchange of the default Fulcrum supplied TurbineGroupPeer
+ * class against a custom class.
+ *
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
+ * @version $Id$
+ *
+ */
+
+public class GroupPeerManager
+    implements GroupPeerManagerConstants
+{
+    /** The class of the Peer the DBSecurityService uses */
+    private static Class groupPeerClass = null;
+
+    /** The class name of the objects returned by the configured peer. */
+    private static Class groupObject = null;
+
+    /** The name of the Table used for Group Object queries  */
+    private static String tableName = null;
+
+    /** The name of the column used as "Name" Column */
+    private static String nameColumn = null;
+
+    /** The name of the column used as "Id" Column */
+    private static String idColumn = null;
+
+    /** The "Name" property descriptor */
+    private static PropertyDescriptor namePropDesc = null;
+
+    /** The "Id" property descriptor */
+    private static PropertyDescriptor idPropDesc = null;
+
+    /**
+     * Initializes the GroupPeerManager, loading the class object for the 
+     * Peer used to retrieve Group objects
+     *
+     * @exception InitializationException A problem occured during initialization
+     */
+
+    public static void init(Configuration conf)
+        throws InitializationException
+    {
+        String groupPeerClassName = conf.getString(GROUP_PEER_CLASS_KEY, 
+                                                   GROUP_PEER_CLASS_DEFAULT);
+        String groupObjectName = null;
+
+        try
+        {
+            groupPeerClass = Class.forName(groupPeerClassName);
+
+            tableName  = (String)groupPeerClass.getField("TABLE_NAME").get(null);
+
+            //
+            // We have either an user configured Object class or we use the default
+            // as supplied by the Peer class
+            //
+            groupObject = getPersistenceClass(); // Default from Peer, can be overridden
+            
+            groupObjectName = (String)conf
+                .getString(GROUP_CLASS_KEY,
+                           groupObject.getName());
+            
+            groupObject = Class.forName(groupObjectName); // Maybe the user set a new value...
+
+            /* If any of the following Field queries fails, the group subsystem is unusable. So check
+             * this right here at init time, which saves us much time and hassle if it fails...
+             */
+
+            nameColumn       = (String)groupPeerClass.getField((String)conf
+                                                               .getString(GROUP_NAME_COLUMN_KEY,
+                                                                          GROUP_NAME_COLUMN_DEFAULT)
+                                                               ).get(null);
+
+            idColumn         = (String)groupPeerClass.getField((String)conf
+                                                               .getString(GROUP_ID_COLUMN_KEY,
+                                                                          GROUP_ID_COLUMN_DEFAULT)  
+                                                               ).get(null);
+
+
+            namePropDesc       = new PropertyDescriptor((String)conf.getString(GROUP_NAME_PROPERTY_KEY,
+                                                                               GROUP_NAME_PROPERTY_DEFAULT),
+                                                        groupObject);
+
+            idPropDesc         = new PropertyDescriptor((String)conf.getString(GROUP_ID_PROPERTY_KEY,
+                                                                               GROUP_ID_PROPERTY_DEFAULT),
+                                                        groupObject);
+
+        }
+        catch(Exception e)
+        {
+            if(groupPeerClassName == null || groupPeerClass == null)
+            {
+                throw new InitializationException(
+                    "Could not find GroupPeer class ("+ groupPeerClassName+ ")", e);
+            }
+            if(tableName == null)
+            {
+                throw new InitializationException(
+                    "Failed to get the table name from the Peer object",e);
+            }
+            if(groupObject == null || groupObjectName == null)
+            {
+                throw new InitializationException(
+                    "Failed to get the object type from the Peer object",e);
+            }
+
+            if(nameColumn == null || namePropDesc == null)
+            {
+                throw new InitializationException(
+                    "GroupPeer " + groupPeerClassName + " has no name column information!",e);
+            }
+            if(idColumn == null || idPropDesc == null)
+            {
+                throw new InitializationException(
+                    "GroupPeer " + groupPeerClassName + " has no id column information!",e);
+            }
+        }
+    }
+
+    /**
+     * Get the name of this table.
+     *
+     * @return A String with the name of the table.
+     */
+    public static String getTableName()
+    {
+        return tableName;
+    }
+
+    /**
+     * Returns the fully qualified name of the Column to
+     * use as the Name Column for a group
+     *
+     * @return A String containing the column name
+     */
+    public static String getNameColumn()
+    {
+        return nameColumn;
+    }
+
+    /**
+     * Returns the fully qualified name of the Column to
+     * use as the Id Column for a group
+     *
+     * @return A String containing the column id
+     */
+    public static String getIdColumn()
+        throws Exception
+    {
+        return idColumn;
+    }
+
+    /**
+     * Returns the full name of a column.
+     *
+     * @return A String with the full name of the column.
+     */
+    public static String getColumnName(String name)
+    {
+        StringBuffer sb = new StringBuffer();
+        sb.append(getTableName());
+        sb.append(".");
+        sb.append(name);
+        return sb.toString();
+    }
+
+    /**
+     * Returns a new, empty object for the underlying peer.
+     * Used to create a new underlying object
+     *
+     * @return A new object which is compatible to the Peer
+     *         and can be used as a User object
+     *
+     */
+
+    public static Persistent newPersistentInstance()
+    {
+        Persistent obj;
+        try
+        {
+            obj = (Persistent)groupObject.newInstance();
+        }
+        catch(Exception e)
+        {
+            obj = null; // FIXME ? 
+        }
+        return obj;
+    }
+
+    /**
+     * Retrieves/assembles a GroupSet of all of the Groups.
+     *
+     * @return A set of all the Groups in the system 
+     * @exception Exception, a generic exception.
+     */
+    public static GroupSet retrieveSet()
+        throws Exception
+    {
+        return retrieveSet(new Criteria());
+    }
+
+    /**
+     * Retrieves/assembles a GroupSet based on the Criteria passed in
+     * 
+     * @param criteria A criteria containing a pre-assembled set of criterias
+     *                 for the GroupSet
+     *
+     * @return A Set of groups which fulfil the required criterias
+     * 
+     * @exception Exception A generic exception
+     *        
+     */
+    public static GroupSet retrieveSet(Criteria criteria) 
+        throws Exception
+    {
+        List results = doSelect(criteria);
+        GroupSet rs = new GroupSet();
+        for (int i = 0; i < results.size(); i++)
+        {
+            rs.add((Group)results.get(i));
+        }
+        return rs;
+    }
+
+    /**
+     * Checks if a Group is defined in the system. The name
+     * is used as query criteria.
+     *
+     * @param group The Group to be checked.
+     * @return <code>true</code> if given Group exists in the system.
+     * @throws DataBackendException when more than one Group with
+     *         the same name exists.
+     * @throws Exception, a generic exception.
+     */
+    public static boolean checkExists(Group group)
+        throws DataBackendException, Exception
+    {
+        Criteria criteria = new Criteria();
+
+        criteria.addSelectColumn(getIdColumn());
+
+        criteria.add(getNameColumn(), group.getName());
+
+        List results = BasePeer.doSelect(criteria);
+
+        if (results.size() > 1)
+        {
+            throw new DataBackendException("Multiple groups named '" +
+                                           group.getName() + "' exist!");
+        }
+
+        return (results.size() == 1);
+    }
+
+    /*
+     * ========================================================================
+     *
+     * WARNING! Do not read on if you have a weak stomach. What follows here
+     * are some abominations thanks to the braindead static peers of Torque 
+     * and the rigidity of Java....
+     *
+     * ========================================================================
+     *
+     */
+
+    /**
+     * Calls buildCriteria(Group group) in the configured GroupPeer. If you get
+     * a ClassCastException in this routine, you put a Group object into this
+     * method which can't be cast into an object for the DBSecurityService. This is a
+     * configuration error most of the time.
+     *
+     * @param group An object which implements the Group interface
+     *
+     * @return A criteria for the supplied group object 
+     */
+
+    public static Criteria buildCriteria(Group group)
+    {
+        Criteria crit;
+
+        try
+        {
+            Class[] clazz = new Class[] { groupObject };
+            Object[] params = new Object[] { ((DBGroup)group).getPersistentObj() };
+
+            crit =  (Criteria)groupPeerClass
+                .getMethod("buildCriteria", clazz)
+                .invoke(null, params);
+        }
+        catch(Exception e)
+        {
+            crit = null;
+        }
+
+        return crit;
+    }
+
+    /**
+     * Invokes doUpdate(Criteria c) on the configured Peer Object
+     *
+     * @param criteria  A Criteria Object
+     *
+     * @exception TorqueException A problem occured.
+     */
+
+    public static void doUpdate(Criteria criteria)
+        throws TorqueException
+    {
+        try
+        {
+            Class[] clazz = new Class[] { Class.forName("org.apache.torque.util.Criteria") };
+            Object[] params = new Object[] { criteria };
+
+            groupPeerClass
+                .getMethod("doUpdate", clazz)
+                .invoke(null, params);
+        }
+        catch(Exception e)
+        {
+            throw new TorqueException("doUpdate failed", e);
+        }
+    }
+
+    /**
+     * Invokes doInsert(Criteria c) on the configured Peer Object
+     *
+     * @param criteria  A Criteria Object
+     *
+     * @exception TorqueException A problem occured.
+     */
+
+    public static void doInsert(Criteria criteria)
+        throws TorqueException
+    {
+        try
+        {
+            Class[] clazz = new Class[] { Class.forName("org.apache.torque.util.Criteria") };
+            Object[] params = new Object[] { criteria };
+
+            groupPeerClass
+                .getMethod("doInsert", clazz)
+                .invoke(null, params);
+        }
+        catch(Exception e)
+        {
+            throw new TorqueException("doInsert failed", e);
+        }
+    }
+
+    /**
+     * Invokes doSelect(Criteria c) on the configured Peer Object
+     *
+     * @param criteria  A Criteria Object
+     *
+     * return A List of Group Objects selected by the Criteria
+     *
+     * @exception TorqueException A problem occured.
+     */
+    public static List doSelect(Criteria criteria)
+        throws TorqueException
+    {
+        List list;
+
+        try
+        {
+            Class[] clazz = new Class[] { Class.forName("org.apache.torque.util.Criteria") };
+            Object[] params = new Object[] { criteria };
+
+            list = (List)groupPeerClass
+                .getMethod("doSelect", clazz)
+                .invoke(null, params);
+        }
+        catch(Exception e)
+        {
+            throw new TorqueException("doSelect failed", e);
+        }
+        List newList = new ArrayList(list.size());
+
+        //
+        // Wrap the returned Objects into DBGroups.
+        //
+        for(Iterator it = list.iterator(); it.hasNext(); )
+        {
+            DBGroup dr = new DBGroup((Persistent)it.next());
+            newList.add(dr);
+        }
+
+        return newList;
+    }
+
+    /**
+     * Invokes doDelete(Criteria c) on the configured Peer Object
+     *
+     * @param criteria  A Criteria Object
+     *
+     * @exception TorqueException A problem occured.
+     */
+    public static void doDelete(Criteria criteria)
+        throws TorqueException
+    {
+        try
+        {
+            Class[] clazz = new Class[] { Class.forName("org.apache.torque.util.Criteria") };
+            Object[] params = new Object[] { criteria };
+
+            groupPeerClass
+                .getMethod("doDelete", clazz)
+                .invoke(null, params);
+        }
+        catch(Exception e)
+        {
+            throw new TorqueException("doDelete failed", e);
+        }
+    }
+
+    /**
+     * Invokes setName(String s) on the supplied base object
+     *
+     * @param obj The object to use for setting the name
+     * @param name The Name to set
+     *
+     * @exception TorqueException A problem occured.
+     */
+    public static void setGroupName(Persistent obj, String name)
+    {
+        try
+        {
+            Object[] params = new Object[] { name };
+            namePropDesc.getWriteMethod().invoke(obj, params);
+        }
+        catch(ClassCastException cce)
+        {
+            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a Group Object!");
+        }
+        catch(Exception e)
+        {
+            // Not much we can do; setName returns no exception
+        }
+    }
+
+    /**
+     * Invokes getName() on the supplied base object
+     *
+     * @param obj The object to use for getting the name
+     *
+     * @return A string containing the name
+     *
+     * @exception TorqueException A problem occured.
+     */
+    public static String getGroupName(Persistent obj)
+    {
+        String name = null;
+        try
+        {
+            name = (String)namePropDesc
+                .getReadMethod()
+                .invoke(obj, new Object[] {});
+        }
+        catch(ClassCastException cce)
+        {
+            throw new RuntimeException(obj.getClass().getName()+" does not seem to be a Group Object!");
+        }
+        catch(Exception e)
+        {
+            // see setGroupName
+        }
+        return name;
+    }
+
+    /**
+     * Returns the Class of the configured Object class
+     * from the peer
+     *
+     * @return The class of the objects returned by the configured peer
+     *
+     */
+
+    private static Class getPersistenceClass()
+    {
+        Class persistenceClass = null;
+
+        try
+        {
+            Object[] params = new Object[0];
+
+            persistenceClass =  (Class)groupPeerClass
+                .getMethod("getOMClass", null)
+                .invoke(null, params);
+        }
+        catch(Exception e)
+        {
+            persistenceClass = null;
+        }
+
+        return persistenceClass;
+    }
+}
+
