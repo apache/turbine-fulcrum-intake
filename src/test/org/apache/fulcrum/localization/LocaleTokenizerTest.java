@@ -56,39 +56,51 @@ package org.apache.fulcrum.localization;
 
 import java.util.Locale;
 
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 /**
- * TODO: Turn into a JUnit test
+ * Test case for the locale tokenizer.
  *
  * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
+ * @author <a href="mailto:jason@zenplex.com">Jason van Zyl</a>
  * @version $Id$
  */
 public class LocaleTokenizerTest
+    extends TestCase
 {
     private static final String HEADER = "en, es;q=0.8, zh-TW;q=0.1";
 
-    public static void main(String[] argv)
-        throws Exception
+    public LocaleTokenizerTest(String name)
     {
-        LocaleTokenizer tok = new LocaleTokenizer(HEADER);
-        Locale locale = (Locale) tok.next();
-        assertEquals("Either wrong language or order parsing: " + locale,
-                     locale.getLanguage(), "en");
-        locale = (Locale) tok.next();
-        assertEquals("Either wrong language or order parsing: " + locale,
-                     locale.getLanguage(), "es");
-        locale = (Locale) tok.next();
-        assertEquals("Either wrong country or order parsing: " + locale,
-                     locale.getCountry(), "TW");
-        System.out.println(locale.getClass().getName() + " test passed");
+        super(name);
+    }        
+    
+    public static Test suite()
+    {
+        return new TestSuite(LocaleTokenizerTest.class);
     }
-
-    private static void assertEquals(String msg, String value, String expected)
-        throws Exception
+                    
+    public void testLocaleTokenizer()
     {
-        if (!expected.equals(value))
+        try
         {
-            throw new Exception("Assertion failure [" + value + " != " +
-                                expected + "]: " + msg);
+            LocaleTokenizer tok = new LocaleTokenizer(HEADER);
+            Locale locale = (Locale) tok.next();
+            assertEquals("Either wrong language or order parsing: " + locale,
+                         locale.getLanguage(), "en");
+            locale = (Locale) tok.next();
+            assertEquals("Either wrong language or order parsing: " + locale,
+                         locale.getLanguage(), "es");
+            locale = (Locale) tok.next();
+            assertEquals("Either wrong country or order parsing: " + locale,
+                         locale.getCountry(), "TW");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
         }
     }
 }
