@@ -13,83 +13,83 @@
   <property file="project.properties" />
 
   <!-- maven:start -->
-  
+
   <!-- ================================================================== -->
   <!-- D E L E G A T O R S                                                -->
   <!-- ================================================================== -->
-        
-  <target 
+
+  <target
     name="maven:site">
     <ant antfile="${maven.home}/build-docs.xml" target="site"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:update-jars">
     <ant antfile="${maven.home}/build-maven.xml" target="update-jars"/>
   </target>
 
-  <target 
+  <target
     name="maven:jar">
     <ant antfile="${maven.home}/build-maven.xml" target="jar"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:install-jar">
     <ant antfile="${maven.home}/build-maven.xml" target="install-jar"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:env">
     <ant antfile="${maven.home}/build-maven.xml" target="env"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:docs">
     <ant antfile="${maven.home}/build-docs.xml" target="docs"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:test">
     <ant antfile="${maven.home}/build-test.xml" target="test"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:clean" depends="clean">
     <ant antfile="${maven.home}/build-maven.xml" target="clean"/>
   </target>
-        
-  <target  
+
+  <target
     name="maven:metrics">
     <ant antfile="${maven.home}/build-metrics.xml" target="metrics"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:dist"
     depends="maven:compile">
     <ant antfile="${maven.home}/build-maven.xml" target="dist"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:deploy-site">
     <ant antfile="${maven.home}/build-docs.xml" target="deploy-site"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:gump-descriptor">
     <ant antfile="${maven.home}/build-maven.xml" target="gump-descriptor"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:javadocs">
     <ant antfile="${maven.home}/build-docs.xml" target="javadocs"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:compile">
     <ant antfile="${maven.home}/build-maven.xml" target="compile"/>
   </target>
 
-  <target 
+  <target
     name="maven:init">
     <ant antfile="${maven.home}/build-maven.xml" target="init"/>
   </target>
@@ -103,17 +103,17 @@
   <!-- this will soon be moved into the security services build. -->
 
   <target name="check-om">
-    
-    <property 
+
+    <property
       name="omStatusFile"
       value="${maven.prepareSourceDirectory}/report.turbine.om.generation"
     />
-    
+
     <uptodate
       property="omGenerated"
       targetfile="${omStatusFile}">
-      <srcfiles 
-        dir="." 
+      <srcfiles
+        dir="."
         includes="turbine-schema.xml"
       />
     </uptodate>
@@ -125,9 +125,9 @@
   <!-- Generate Turbine SQL schema for supported DBs                    -->
   <!-- ================================================================ -->
 
-  <target 
+  <target
     name="init">
-    
+
     <taskdef
       name="create-classpath"
       classname="org.apache.maven.ant.CreateClasspath">
@@ -135,7 +135,7 @@
         <pathelement location="${lib.repo}/maven.jar"/>
       </classpath>
     </taskdef>
-    
+
     <create-classpath
       listFile="jars.list"
       reference="classpath"
@@ -149,28 +149,26 @@
 
   </target>
 
-  <target 
+  <target
     name="om"
     depends="check-om"
     unless="omGenerated"
     description="--> generates the Turbine OM/Peer classes">
-    
-    <!-- 
+
+    <!--
     We could create a fileset in the project to manage this
     but we should really only have one source directory.
     -->
-    
+
     <copy todir="${maven.prepareSourceDirectory}" overwrite="yes">
-      <fileset dir="src/core"/>
-      <fileset dir="src/services"/>
-      <fileset dir="src/util"/>
+      <fileset dir="src/java"/>
     </copy>
 
     <antcall target="security-om"/>
     <antcall target="scheduler-om"/>
   </target>
 
-  <target 
+  <target
     name="security-om"
     depends="init">
 
@@ -182,21 +180,21 @@
       file="${schemaDirectory}/turbine-schema.xml"
       filtering="yes"
     />
-    
+
     <torque-om
       contextProperties="project.properties"
       controlTemplate="${OMControlTemplate}"
       outputDirectory="${maven.prepareSourceDirectory}"
-      templatePath="${templatePath}"
+      useClasspath="true"
       outputFile="report.turbine.om.generation"
       targetPackage="${securityPackage}"
       xmlFile="${maven.prepareSourceDirectory}/turbine-schema.xml"
       targetDatabase="${database}"
     />
-    
+
   </target>
 
-  <target 
+  <target
     name="scheduler-om"
     depends="init">
 
@@ -206,12 +204,12 @@
       file="${schemaDirectory}/scheduler-schema.xml"
       filtering="yes"
     />
-    
+
     <torque-om
       contextProperties="project.properties"
       controlTemplate="${OMControlTemplate}"
       outputDirectory="${maven.prepareSourceDirectory}"
-      templatePath="${templatePath}"
+      useClasspath="true"
       outputFile="report.turbine.scheduler.generation"
       targetPackage="${schedulerPackage}"
       xmlFile="${maven.prepareSourceDirectory}/scheduler-schema.xml"
