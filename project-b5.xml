@@ -125,12 +125,17 @@
       <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
+      <id>commons-logging</id>
+      <version>1.0</version>
+      <url>http://jakarta.apache.org/commons/</url>
+    </dependency>
+    <dependency>
       <id>commons-pool</id>
       <version>1.0</version>
     </dependency>
     <dependency>
       <id>commons-util</id>
-      <version>1.0-rc2-dev</version>
+      <version>1.0-rc2-dev.20020814.045411</version>
     </dependency>
     <dependency>
       <id>cryptix</id>
@@ -150,8 +155,12 @@
       <version>1.2.1</version>
     </dependency>
     <dependency>
+      <id>junit</id>
+      <version>3.7</version>
+    </dependency>
+    <dependency>
       <id>log4j</id>
-      <version>1.2.6</version>
+      <version>1.2.4</version>
     </dependency>
     <dependency>
       <id>javamail</id>
@@ -174,7 +183,7 @@
     </dependency>
     <dependency>
       <id>torque</id>
-      <version>SNAPSHOT</version>
+      <version>3.0-b4-dev.20020813.103521</version>
       <url>http://jakarta.apache.org/turbine/torque/</url>
     </dependency>
     <dependency>
@@ -184,7 +193,7 @@
     </dependency>
     <dependency>
       <id>velocity-dvsl</id>
-      <version>0.44</version>
+      <version>0.45</version>
       <url>http://jakarta.apache.org/velocity/dvsl/</url>
     </dependency>
     <dependency>
@@ -216,7 +225,7 @@
   </dependencies>
   <build>
     <nagEmailAddress>turbine-dev@jakarta.apache.org</nagEmailAddress>
-    <sourceDirectory>src/java</sourceDirectory>
+    <sourceDirectory>target/src</sourceDirectory>
     <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
     <aspectSourceDirectories/>
     
