@@ -11,10 +11,10 @@
 
     <section name="Building Fulcrum">
       <p>
-        Building Fulcrum from CVS is fairly straightforward.  have been
-        made to the Fulcrum build process to simplify the acquisition of
-        jar dependencies.  The entire build process is now a four-step
-        process.
+        Building Fulcrum from CVS is fairly straightforward.  Changes
+        have been made to the Fulcrum build process to simplify the
+        acquisition of jar dependencies.  The entire build process is
+        now a four-step process.
       </p>
       <p>
         The first step of the process is to obtain the source.  Checkout
