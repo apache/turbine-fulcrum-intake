@@ -63,11 +63,7 @@ public class StartingSecurityServicesTest extends BaseUnitTest
     {
         super(name);
     }
-    public void setUp()
-    {
-        super.setUp();
-        //        this.release(sc);
-    }
+
     public void testStartingTorqueSecurity() throws Exception
     {
         this.setRoleFileName(null);

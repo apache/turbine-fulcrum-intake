@@ -58,11 +58,11 @@ import org.apache.fulcrum.security.model.simple.entity.SimpleUser;
 
 import junit.framework.TestCase;
 
+
 /**
- * @author Eric Pugh
  *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
+ * @version $Id$
  */
 public class TextMatchAuthenticatorTest extends TestCase
 {

@@ -56,7 +56,6 @@ package org.apache.fulcrum.security.acl;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.avalon.framework.component.ComponentException;
 import org.apache.fulcrum.factory.FactoryService;
 import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.PermissionManager;
@@ -103,11 +102,10 @@ public class AccessControlListTest extends BaseUnitTest
     {
         junit.textui.TestRunner.run(AccessControlListTest.class);
     }
-    protected void setUp()
+    protected void setUp() throws Exception
     {
         super.setUp();
-        try
-        {
+       
             this.setRoleFileName(null);
             this.setConfigurationFileName("src/test/AccessControlList.xml");
             factoryService = (FactoryService) this.lookup(FactoryService.ROLE);
@@ -117,12 +115,7 @@ public class AccessControlListTest extends BaseUnitTest
             roleManager =  securityService.getRoleManager();
             permissionManager = securityService.getPermissionManager();
             modelManager = (SimpleModelManager)securityService.getModelManager();
-        }
-        catch (ComponentException e)
-        {
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
+        
     }
     /*
      * Class to test for Object getInstance(String, Object[], String[])

@@ -66,7 +66,7 @@ public abstract class AbstractSimpleModelManagerTest extends BaseUnitTest
     protected UserManager userManager;
     protected SecurityService securityService;
 
-    public void setUp()
+    public void setUp() throws Exception
     {
         super.setUp();
         roleManager = securityService.getRoleManager();
