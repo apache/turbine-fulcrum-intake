@@ -7,11 +7,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>avalon-framework</groupId>
-      <artifactId>avalon-framework-api</artifactId>
-      <version>4.2.0</version>
-    </dependency>  
-    <dependency>
       <groupId>turbine</groupId>    
       <artifactId>turbine</artifactId>
       <version>2.3</version>
@@ -24,15 +19,32 @@
     
     <dependency>
       <groupId>fulcrum</groupId>    
+      <artifactId>fulcrum-localization-impl</artifactId>
+      <version>1.0.4</version>
+    </dependency>
+        
+    <dependency>
+      <groupId>fulcrum</groupId>    
       <artifactId>fulcrum-factory-api</artifactId>
       <version>1.0.3-dev</version>
-    </dependency>  
+    </dependency>     
+    
+    <dependency>
+      <groupId>fulcrum</groupId>    
+      <artifactId>fulcrum-factory-impl</artifactId>
+      <version>1.0.2</version>
+    </dependency>    
     
     <dependency>
       <groupId>commons-fileupload</groupId>    
       <artifactId>commons-fileupload</artifactId>
       <version>1.0</version>
     </dependency>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.0</version>
+    </dependency>     
     <dependency>
       <groupId>commons-logging</groupId>    
       <artifactId>commons-logging</artifactId>
@@ -48,11 +60,7 @@
       <artifactId>oro</artifactId>
       <version>2.0.7</version>
     </dependency>    
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.0</version>
-    </dependency> 
+
 
     <!-- Needed for compilation -->
     <dependency>
@@ -61,18 +69,6 @@
       <version>2.3</version>
     </dependency>
 
-    <!-- Needed so that the reactor runs in the correct order -->
-    <dependency>
-      <groupId>fulcrum</groupId>    
-      <artifactId>fulcrum-localization-impl</artifactId>
-      <version>1.0.4</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>fulcrum</groupId>    
-      <artifactId>fulcrum-factory-impl</artifactId>
-      <version>1.0.2</version>
-    </dependency>
 
     <!--  Needed only for testing -->
     <dependency>
