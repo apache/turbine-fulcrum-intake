@@ -50,7 +50,6 @@
       value="${maven.prepareSourceDirectory}/report.turbine.om.generation"
     />
 
-    <mkdir dir="target/src"/>
     <j:set var="omGenerated" value="false"/>
     
     <uptodate
