@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <project>
-  <extend>${basedir}/../../merlin-project.xml</extend>
+  <extend>${basedir}/../../project.xml</extend>
   <id>fulcrum-mimetype-impl</id>
   <name>Fulcrum Mimetype Component</name>
   <currentVersion>1.0.4</currentVersion>
@@ -9,7 +9,7 @@
     <dependency>
       <groupId>avalon-framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
-      <version>4.1.5</version>
+      <version>4.2.0</version>
     </dependency>
     <dependency>
       <groupId>fulcrum</groupId>
@@ -17,6 +17,12 @@
       <version>1.0.4</version>
     </dependency>
 
+    <!--  Needed only for testing -->
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-testcontainer</artifactId>
+      <version>1.0.4-dev</version>
+    </dependency>
   </dependencies>
 
 </project>

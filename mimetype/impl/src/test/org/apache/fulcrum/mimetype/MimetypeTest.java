@@ -56,7 +56,7 @@ package org.apache.fulcrum.mimetype;
 import java.io.File;
 import java.util.Locale;
 
-import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
+import org.apache.fulcrum.testcontainer.BaseUnitTest;
 import org.apache.fulcrum.mimetype.util.MimeType;
 import org.apache.fulcrum.mimetype.util.MimeTypeMapperTest;
 
@@ -69,7 +69,7 @@ import org.apache.fulcrum.mimetype.util.MimeTypeMapperTest;
  * @author Daniel Rall
  * @version $Id$
  */
-public class MimetypeTest extends AbstractMerlinTestCase
+public class MimetypeTest extends BaseUnitTest
 {
     private MimeTypeService mimeTypeService = null;
 
@@ -86,14 +86,8 @@ public class MimetypeTest extends AbstractMerlinTestCase
     public void setUp() throws Exception
     {
         super.setUp();
-        try
-        {
-            mimeTypeService = (MimeTypeService) resolve("/test/mimetype");
-        }
-        catch (Throwable e)
-        {
-            fail(e.getMessage());
-        }
+        mimeTypeService = (MimeTypeService) resolve(MimeTypeService.class.getName());
+
         mimeTypeService.setContentType(MimeTypeMapperTest.MIME_TYPE + ' ' +
                                        MimeTypeMapperTest.KNOWN_EXTENSIONS);
     }
