@@ -1,4 +1,4 @@
-package org.apache.fulcrum.security.spi.passive;
+package org.apache.fulcrum.security.spi.passive.turbine;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -57,7 +57,7 @@ package org.apache.fulcrum.security.spi.passive;
 import java.util.List;
 
 import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.spi.torque.impl.TorqueUserManagerImpl;
+import org.apache.fulcrum.security.spi.torque.turbine.impl.TorqueUserManagerImpl;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
