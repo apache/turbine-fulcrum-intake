@@ -142,7 +142,7 @@
       <name>commons-fileupload</name>
       <type>required</type>
       <version>1.0</version>
-      <jar>commons-lang-1.0-dev.jar</jar>
+      <jar>commons-fileupload-1.0-dev.jar</jar>
     </dependency>
 
     <dependency>
