@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Workflow Example Application</title>
+    <author email="epugh@upstate.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+
+  <section name="Overview">
+    <p>
+      This is a small example application using the Turbine framework with the Fulcrum Workflow component. 
+
+    </p>
+  
+    <p>
+      It provides a similar demonstration using the Turbine framework to the example application included in
+      the OpenSymphony OSWorkflow distriubution.  This includes demostrating running BeanShell and BSF scripts, 
+      user authenctication etc..
+    </p>
+    <p>
+      It leverages the Turbine user by storing the user information in runData.getUser() object.  The persistence 
+      mechanism is in memory, but it is very easy to swap in the JDBC persistence engine for OSWorkflow and use the
+      same demo.
+    </p>
+    
+    <p>
+      In this distribution is a little workflow pull tool that is used in the .vm templates as $workflow that allows
+      easy access to some commonly used functions of the workflow service.
+    </p>
+    
+    <p>
+      Feedback is warmly appreciated!
+    </p>
+  </section>
+  
+  <section name="Deployment">
+
+    <p>
+      To run this example, run 'maven war' from the [fulcrum]/workflow/example directory.  This will produce the WAR
+      file that you need to deploy to your Tomcat webapp.  Make sure the name of the war file is changed to 'fulcrum-workflow-example'
+      as the internal links expect that name.
+    </p>
+
+  </section>
+
+</body>
+</document>

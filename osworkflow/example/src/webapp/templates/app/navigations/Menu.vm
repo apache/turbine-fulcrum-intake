@@ -1,0 +1,31 @@
+
+
+<div id="helptext" class="toolgroup">
+
+
+<div class="label"><strong>Workflow Tools</strong></div>
+<div class="body">
+  <div>
+  <A href="$link.setAction("WorkflowAction").addPathInfo("eventSubmit_doSetupuser", "foo")">Setup User</A>
+  </div>
+  <div>
+  <A href="$link.setAction("WorkflowAction").addPathInfo("eventSubmit_doNew", "foo")">Create New</A>
+  </div>
+  <div>
+  <A href="$link.setAction("Index")">View Mine</A>
+  </div>  
+</div>
+</div>
+</div>
+
+<div id="helptext" class="toolgroup">
+
+
+<div class="label"><strong>How do I...?</strong></div>
+<div class="body">
+  <div>
+  <A href="http://jakarta.apache.org/turbine/fulcrum/workflow">Get Help</A>
+  </div>
+</div>
+</div>
+</div>

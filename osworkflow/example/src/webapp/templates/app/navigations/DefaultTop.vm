@@ -1,0 +1,37 @@
+<form name="navigationbar" method="post" action="$link.setAction("NavigationBar")">
+ <div id="banner">
+  <table border="0" cellspacing="0" cellpadding="8" width="100%">
+  <tr>
+  <td>
+  <a href="$link.setPage("Index.vm")"><img src="$staticLink.setPath("/images/logo.gif")" alt="Scarab" width="118" height="23" border="0" /></a>
+  </td>
+  <td valign="center">
+                #if($environment.equals("TEST")||$environment.equals("DEV"))
+                    ( $environment ) 
+                #end
+  </td>
+  <td>
+  <div align="right" id="login">
+   #if ($data.User.hasLoggedIn())
+   <div>
+    $l10n.LoggedIn <strong class="username">$!data.User.FirstName $!data.User.LastName</strong>
+   </div>
+   #end
+   <div>
+    #if ($data.User.hasLoggedIn())
+    $link.omitModule().omitIssueType().setPage("Login.vm").setAction("Logout").setLabel("$l10n.Logout")
+    #else
+    $link.omitModule().omitIssueType().setPage("Login.vm").setLabel("$l10n.Login")
+    #end
+   </div>
+  </div>
+  </td>
+  </tr>
+  </table>
+ </div>
+
+
+
+           
+</form>
+$page.getTitle()

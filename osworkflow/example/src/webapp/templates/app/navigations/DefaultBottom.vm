@@ -1,0 +1,11 @@
+<div id="footer">
+<table border="0" cellspacing="0" cellpadding="4">
+    <tr>
+        <td>
+            &copy; 2003 <a href="http://jakarta.apache.org">Apache</a> | 
+            <a href="http://jakarta.apache.org/turbine/fulcrum/workflow">[help]</a> |
+
+        </td>
+   </tr>
+</table>
+</div>

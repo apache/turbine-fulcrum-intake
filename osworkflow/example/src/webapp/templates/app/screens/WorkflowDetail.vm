@@ -1,0 +1,66 @@
+$page.setTitle("Workflow Detail View")
+
+
+<div  class="app">
+
+<h3>Workflow Instance $wf.id</h3>
+<form name="main" method="post" action="WorkflowAction">
+<div class="axial">
+<table cellpadding="3" cellspacing="2" border="0">
+<tr><th>Type</th><td>$wf.workflowName</td></tr>
+#foreach($action in $wf.getAllAvailableActions())
+<tr><th>$action.name</th><td><a href="$link.setAction("WorkflowAction").addPathInfo("eventSubmit_doAction", "foo").addPathInfo("id", $wf.id).addPathInfo("actionId", $action.getId())">$wf.getWorkflowDescriptor().getAction($action.getId()).getName()</A></td></tr>
+#end
+</table>
+</div>
+<div class="functnbar2">
+&nbsp;
+</div>
+
+<h3>Steps</h3>
+<form name="main" method="post" action="WorkflowAction">
+<div class="axial">
+<table cellpadding="3" cellspacing="2" border="0">
+<tr>
+<th>Step</th>
+    <th>Action</th>
+    <th>Status</th>
+    <th>Owner</th>
+    <th>Start Date</th>
+    <th>Finish Date</th>
+    <th>Previous</th>
+</tr>
+#foreach($step in $wf.getCurrentSteps())
+<tr>
+ <th>$wf.getWorkflowDescriptor().getStep($step.getStepId()).getName() ($step.getId())</th>
+ <td>$!wf.getWorkflowDescriptor().getAction($step.getActionId()).getName()</td>
+ <td>$step.getStatus()</td>
+ <td>$step.getOwner()</td>
+ <td>$step.getStartDate() </td>
+ <td>$!step.getFinishDate()</td>
+ </td>
+</tr>
+#end
+
+#foreach($step in $wf.historySteps)
+<tr>
+ <th>$wf.getWorkflowDescriptor().getStep($step.getStepId()).getName() ($step.getId())</th>
+ <td>$!wf.getWorkflowDescriptor().getAction($step.getActionId()).getName()</td>
+ <td>$step.getStatus()</td>
+ <td>$step.getOwner()</td>
+ <td>$step.getStartDate() </td>
+ <td>$!step.getFinishDate()</td>
+ </td>
+</tr>
+#end
+</table>
+</div>
+<div class="functnbar2">
+&nbsp;
+</div>
+
+</form>
+
+
+
+                

@@ -1,0 +1,79 @@
+<html>
+ <head>
+  <link rel="stylesheet" type="text/css" href="$content.getURI("style/tigris.css")"/>
+ </head>
+ 
+<body marginwidth="0" marginheight="0" class="composite" 
+        #foreach( $attributeName in $page.BodyAttributes.keySet() )
+          $attributeName = "$page.BodyAttributes.get($attributeName)"
+        #end  
+>
+
+
+<form name="navigationbar" method="post" action="$link.setAction("NavigationBar")">
+ <div id="banner">
+  <table border="0" cellspacing="0" cellpadding="8" width="100%">
+  <tr>
+  <td valign="middle">
+&nbsp;
+  </td>
+  <td valign="center">
+    
+    
+  </td>
+  <td>
+  <div align="right" id="login">
+  
+   <div>
+  
+   </div>
+  </div>
+  </td>
+  </tr>
+  </table>
+ </div>       
+</form>
+
+<div id="breadcrumbs"><table border="0" cellspacing="0" cellpadding="4" width="100%"><tr><td> 
+
+<a href="$link.setAction("Index")">Workflow Example Home</a> > 
+$page.title
+
+</td></tr></table></div>
+
+
+
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+    
+    <tr>
+        <td colspan=3 height="2"><img src="$content.getURI("images/spacer.gif")" width="17" height="2" alt="" border="0"></td>
+    </tr>
+    
+    <tr>
+        <TD width="15%" valign="top">
+            $navigation.setTemplate("/Menu.vm")
+        </td>
+        <TD width="5">
+            <img src="$content.getURI("images/spacer.gif")" width="5" height="1" alt="" border="0">
+        </td>
+        <TD width="100%" valign="top" align="left">
+        
+            $navigation.setTemplate("/Messages.vm")
+ 
+      <div id="bodycol">
+      <div id="apphead"><h2>$page.title</h2></div>
+      </div>
+
+      $screen_placeholder
+      
+        </TD>
+    </TR>
+ </table>
+ 
+            $navigation.setTemplate("/DefaultBottom.vm")
+
+
+</body>
+</html>
+    

@@ -1,0 +1,6 @@
+<role-list>
+ <role
+    name="org.apache.fulcrum.workflow.WorkflowService"
+    shorthand="workflow"
+    default-class="org.apache.fulcrum.workflow.DefaultWorkflowService"/>   
+</role-list>

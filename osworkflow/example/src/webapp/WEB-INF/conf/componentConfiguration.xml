@@ -1,0 +1,7 @@
+
+<my-system>
+  <component
+    role="org.apache.fulcrum.workflow.WorkflowService"
+    class="org.apache.fulcrum.workflow.DefaultWorkflowService">
+  </component>
+</my-system>

@@ -1,0 +1,286 @@
+#* ------------------------------------------------------------------
+#
+# Macros that are used for displaying input forms.
+#
+*# ------------------------------------------------------------------
+
+#macro (text $text)
+  <span class="text">
+    $text
+  </span>
+#end
+
+#macro (formLabel $label)
+  <td class="formLabel">
+    <b>
+      $label
+    </b>
+  </td>
+#end
+
+#macro (formTableTextField $name $value $size $id)
+  <td class="formValue">
+    <input type="text" size="$size" name="$name~$id" value="$value">
+  </td>
+#end
+
+#macro (formTextField $name $value $size)
+  <td class="formValue">
+    <input type="text" size="$size" name="$name" value="$!value">
+  </td>
+#end
+
+#macro (textField $name $value $size)
+  <span class="text">
+    <input type="text" size="$size" name="$name" value="$!value">
+  <span>
+#end
+
+#macro (listBox $list)
+  <span class="text">
+    $list
+  </span>
+#end
+
+#macro (formPasswordCell $label $name $value)
+  <td class="formLabel">
+    <b>
+        $label
+    </b>
+  </td>
+  <td class="formValue">
+      <input type="password" size="30" name="$name" value="$value">
+  </td>
+#end
+
+#macro (formCell $label $name $value)
+  #formLabel($label)
+  #formTextField($name $value 15)
+#end
+
+#macro (fileUploadField $name)
+  <td class="formValue">
+      <input type="file" size="30" name="$name">
+  </td>
+#end
+
+#macro (fileUpload $label $name)
+  #formLabel($label)
+  #fileUploadField($name)
+#end
+
+#macro (formCheckBox $label $name $checked)
+  <td class="formLabel">
+    <b>
+        $label
+    </b>
+  </td>
+  <td class="formValue">
+    <input type="checkbox" name="$name" #if($checked)checked=1#end/>
+  </td>
+#end
+
+#macro (formListBox $label $list)
+  <td class="formLabel">
+    <b>
+        $label
+    </b>
+  </td>
+  <td class="formValue">
+    $list
+  </td>
+#end
+
+#* ------------------------------------------------------------------
+#
+# Macros that are used for displaying information in tables.
+#
+*# ------------------------------------------------------------------
+
+#macro (headerCell $body)
+  <td class="formLabel">
+    <b>
+        $body
+    </b>
+  </td>
+#end
+
+#macro (entryCell $body)
+  <td class="formValue">
+      $body &nbsp;
+  </td>
+#end
+
+#* ------------------------------------------------------------------
+#
+# Macros that simplify showing columnar data
+#
+*# ------------------------------------------------------------------
+
+#macro(flatTable $columns $entries)
+  <table cellspacing="1" cellpadding="1">
+    <tr>
+      #foreach ($column in $columns)
+        #headerCell ($column)
+      #end
+    </tr>
+
+    #foreach ($entry in $entries)
+    <tr>
+
+      #foreach ($column in $columns)
+          #entryCell($!entry.getByName("${column.toString()}"))
+      #end
+      <td><a href="$link.setPage("FormTemplate.vm").addPathInfo("templateid", $entry.TemplateId)">Edit</a></td>
+    </tr>
+    #end
+  </table>
+#end
+
+
+
+#macro (formTable $columns $entry)
+    <TABLE BORDER=0>
+       <tr>
+           #foreach ($column in $columns)
+             #headerCell ($column)
+           #end
+       </tr>
+       <TR>
+         #foreach ($column in $columns)
+           <TD>
+              #textField($column $entry.getByName("${column}") 12)
+           </TD>
+         #end
+      </TR>
+  </TABLE>
+#end
+
+
+
+#* ------------------------------------------------------------------
+#
+# Macros that simplify creating boxes
+#
+*# ------------------------------------------------------------------
+
+#macro(portletBegin $title)
+  <table cellpadding="0" cellspacing="0" border="1" width="500">
+    <tr>
+      <td background="$content.getURI("images/portletHeadingBkrnd.gif")" height="21" width="100%" align=right class="portletHeadingArea">
+          <div align=left class="portletHeading">&nbsp;$title</div>
+      </td>
+    </tr>
+
+#end
+
+
+#macro(portletStretchBegin $title $id)
+  <table cellpadding="0" cellspacing="0" border="1">
+    <tr>
+      <td>
+        <div id=Out${id}>
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tr>
+            <td background="$content.getURI("images/portletHeadingBkrnd_left.gif")" height="21" width="358" align=right class="portletHeadingArea">
+              <div align=left class="portletHeading">&nbsp;$title</div>
+            </td>
+            <td background="$content.getURI("images/portletHeadingBkrnd_middle.gif")" height="21"  align=right><img src="$content.getURI("images/trans.gif")" width=100% height=21></td><td background="$content.getURI("images/portletHeadingBkrnd_right.gif")" height="21" width="24" align=right><img src="$content.getURI("images/trans.gif")" width=24 height=21 id="Out${id}" class="Outline" style="cursor: hand"></td>
+          </tr>
+        </table>
+        </div>
+      </td>
+    </tr>
+#end
+
+#macro(portletMaxWidthBegin $title)
+  <table cellpadding="0" cellspacing="0" border="1" width="500">
+    <tr>
+      <td background="$content.getURI("images/portletHeadingBkrnd.gif")" height="21" width="100%" align=right class="portletHeadingArea">
+          <div align=left class="portletHeading">&nbsp;$title</div>
+      </td>
+   </tr>
+#end
+
+#macro(portletSectionBegin $image $message)
+  <tr align="left" valign="top">
+    <td class="portletTextArea"><br>
+      <div class="portletText">
+        <p>
+        <div class="portletTextHeading"><img src="$content.getURI("images/${image}Graphic.gif")" align="absmiddle">&nbsp;&nbsp;$message</div>
+        <br>
+        <div class="portletHeading">
+#end
+
+#macro(portletStretchSectionBegin $image $message $id)
+  <tr align="left" valign="top">
+    <td colspan="2" class="portletTextArea"><br>
+      <div id=Out${id}d >
+      <div class="portletText">
+        <p>
+        <div class="portletTextHeading"><img src="$content.getURI("images/${image}Graphic.gif")" align="absmiddle">&nbsp;&nbsp;$message</div>
+        <br>
+        <div class="portletHeading">
+#end
+
+#macro(portletSectionEnd)
+    <p></p>
+
+      </div>
+    </td>
+  </tr>
+#end
+
+#macro(portletStretchSectionEnd)
+    <p></p>
+
+      </div>
+      </div>
+    </td>
+  </tr>
+#end
+
+
+#macro(portletEnd)
+  </table>
+#end
+
+#macro(portletStretchEnd)
+    </div>
+  </table>
+#end
+
+
+
+
+#macro (tdCheckBox $name $checked)
+  <td class="formLabel" align=center>
+    <input type="checkbox" name="$name" #if($checked)checked=1#end/>
+  </td>
+#end
+
+#* Used on DetailDisplay for now *#
+
+#macro (table2ColFieldRow $name $value)
+    <tr>
+  <td align=right width=150 class="statusHeader">
+    $name:
+  </td>
+    <td width=10>&nbsp;</td>
+    <td class="statusHeading">
+        $!value
+        </td>
+    </tr>
+#end
+
+   
+#macro( formRowText $title $name $value )
+<tr>
+ <th>$title</th>
+ <td>
+<input type="text" value="$!value" name="$name">        
+ </td>
+</tr>
+#end
+ 
+

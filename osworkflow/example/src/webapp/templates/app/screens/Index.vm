@@ -1,0 +1,63 @@
+$page.setTitle("Workflow Example")
+
+<div  class="app">
+This is a demonstration of using Turbine's integrated user as a OSWorkflow user.  Make sure to <A href="$link.setAction("WorkflowAction").addPathInfo("eventSubmit_doSetupuser", "foo")">setup</A> first!
+<h3>Current Workflows</h3>
+<form name="main" method="post" action="WorkflowAction">
+<div class="axial">
+<table cellpadding="3" cellspacing="2" border="0">
+<tr>
+<th>Instance Id</th><th>Name</th><th># of Available Actions</th><th># of Current Steps</th><th># of History Steps</th>
+</tr>
+#foreach($wf in $workflow.retrieveWorkflows("Underway"))
+<tr>
+ <th><a href="$link.setAction("WorkflowAction").addPathInfo("eventSubmit_doViewdetail", "foo").addPathInfo("id", $wf.id)">$wf.id</A></th>
+ <td>$wf.workflowName</td>
+ <td>$wf.getAllAvailableActions().size()</td>
+ <td>$wf.currentSteps.size()</td>
+ <td>$wf.historySteps.size()</td>
+ </td>
+</tr>
+#end
+</table>
+</div>
+<div class="functnbar2">
+&nbsp;
+<input type="submit" value="Create New"  style="width:200" name="eventSubmit_doNew">        
+</div>
+
+<h3>Completed Workflows</h3>
+<form name="main" method="post" action="WorkflowAction">
+<div class="axial">
+<table cellpadding="3" cellspacing="2" border="0">
+<tr>
+<th>Instance Id</th><th>Name</th><th># of Available Actions</th><th># of Current Steps</th><th># of History Steps</th>
+</tr>
+#foreach($wf in $workflow.retrieveWorkflows("Finished"))
+<tr>
+ <th><a href="$link.setAction("WorkflowAction").addPathInfo("eventSubmit_doViewdetail", "foo").addPathInfo("id", $wf.id)">$wf.id</A></th>
+ <td>$wf.workflowName</td>
+ <td>$wf.getAllAvailableActions().size()</td>
+ <td>$wf.currentSteps.size()</td>
+ <td>$wf.historySteps.size()</td>
+ </td>
+</tr>
+#end
+</table>
+</div>
+<div class="functnbar2">
+&nbsp;
+</div>
+
+<h3>Workflow Process Image</h3>
+ This is the example workflow you will be stepping through.<br/>
+ <img src="$content.getURI("/images/example.png")" alt="Example" width="315" height="590" border="0" />
+ 
+<div class="functnbar2">
+&nbsp;
+</div>
+</form>
+
+
+
+                
