@@ -104,7 +104,7 @@ public class StringField extends Field
                     valid_flag = false;
                     this.message = message;                
                 }
-                else if (ss.length == 0)
+                else
                 {
                     boolean set = false;
                     for (int i=0; i<ss.length; i++) 
