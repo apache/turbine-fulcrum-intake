@@ -62,8 +62,8 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.fulcrum.ServiceException;
 import org.apache.fulcrum.pool.Recyclable;
-import org.apache.fulcrum.upload.FileItem;
 import org.apache.fulcrum.upload.TurbineUpload;
+import org.apache.commons.fileupload.FileItem;
 import org.apache.log4j.Category;
 
 /**

@@ -55,7 +55,7 @@ package org.apache.fulcrum.util.parser;
  */
 
 import javax.servlet.http.HttpServletRequest;
-import org.apache.fulcrum.upload.FileItem;
+import org.apache.commons.fileupload.FileItem;
 
 /**
  * ParameterParser is an interface to a utility to handle parsing and

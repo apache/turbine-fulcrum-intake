@@ -59,6 +59,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.fulcrum.InstantiationException;
 import org.apache.fulcrum.TurbineServices;
 import org.apache.fulcrum.ServiceException;
+import org.apache.commons.fileupload.FileUpload;
 
 /**
  * <p> This is a facade class for {@link UploadService}.
@@ -86,31 +87,25 @@ public abstract class TurbineUpload
             getService(UploadService.SERVICE_NAME);
     }
 
+    private static FileUpload getComponent()
+    {
+        return (FileUpload)((UploadService)getService()).getComponent();
+    }
+
     /**
      * <p> Retrieves the value of 'automatic' property of {@link
      * UploadService}.
      *
      * @return The value of 'automatic' property of {@link
      * UploadService}.
+     * @deprecated This is left over from coupling with
+     * ParameterParser.  ParameterParser (and any other use of the
+     * service) should determine for itself whether to call the
+     * parseRequest method and not ask the service.
      */
     public static boolean getAutomatic()
     {
-        UploadService upload = null;
-        try
-        {
-            upload = getService();
-        }
-        catch(org.apache.fulcrum.InstantiationException ie)
-        {
-            // If the service couldn't be instantiated, it obviously
-            // can't be used for automatic uploading.
-            return false;
-        }
-
-        boolean auto = upload.getConfiguration().getBoolean(
-            UploadService.AUTOMATIC_KEY,UploadService.AUTOMATIC_DEFAULT);
-
-        return auto;
+        return getService().getAutomatic();
     }
 
     /**
@@ -122,7 +117,7 @@ public abstract class TurbineUpload
      */
     public static int getSizeMax()
     {
-        return getService().getSizeMax();
+        return getComponent().getSizeMax();
     }
 
     /**
@@ -133,7 +128,7 @@ public abstract class TurbineUpload
      */
     public static int getSizeThreshold()
     {
-        return getService().getSizeThreshold();
+        return getComponent().getSizeThreshold();
     }
 
     /**
@@ -144,7 +139,7 @@ public abstract class TurbineUpload
      */
     public static String getRepository()
     {
-        return getService().getRepository();
+        return getComponent().getRepositoryPath();
     }
 
     /**
@@ -162,7 +157,8 @@ public abstract class TurbineUpload
     public static ArrayList parseRequest( HttpServletRequest req )
         throws ServiceException
     {
-        return getService().parseRequest(req, getService().getRepository());
+        return getService()
+            .parseRequest(req, getComponent().getRepositoryPath());
     }
 
     /**
@@ -184,10 +180,5 @@ public abstract class TurbineUpload
         throws ServiceException
     {
         return getService().parseRequest(req, path);
-    }
-
-    public static String getUniqueId()
-    {
-        return getService().getUniqueId();
     }
 }

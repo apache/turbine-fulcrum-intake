@@ -16,6 +16,7 @@
     <pathelement location="${commons-email.jar}"/>
     <pathelement location="${commons-lang.jar}"/>
     <pathelement location="${commons-codec.jar}"/>
+    <pathelement location="${commons-fileupload.jar}"/>
     <pathelement location="${jaf.jar}"/>
     <pathelement location="${javamail.jar}"/>
     <pathelement location="${jdbc.jar}"/>
@@ -207,6 +208,12 @@
     />
 
     <available
+      classname="org.apache.commons.fileupload.FileUpload"
+      property="commons-fileupload.present"
+      classpathref="classpath"
+    />
+
+    <available
       classname="org.apache.commons.mail.SimpleEmail"
       property="commons-email.present"
       classpathref="classpath"
@@ -327,6 +334,13 @@
     </antcall>
   </target>
 
+  <target name="check.commons-fileupload" unless="commons-fileupload.present">
+    <antcall target="property-warning">
+      <param name="name" value="commons-fileupload.jar"/>
+      <param name="value" value="${commons-fileupload.jar}"/>
+    </antcall>
+  </target>
+
   <target name="check.regexp" unless="regexp.present">
     <antcall target="property-warning">
       <param name="name" value="regexp.jar"/>
@@ -406,7 +420,7 @@
         check.servlet,check.javamail,check.jaf,check.xerces,check.xalan,
         check.xmlrpc,check.commons-collections,check.commons-lang,
         check.commons-codec,check.regexp,check.dvsl,check.dom4j,
-        include-email,om">
+        check.commons-fileupload,include-email,om">
 
     <!-- We have some static files that should overwrite
          The torque generated files so overwrite must be

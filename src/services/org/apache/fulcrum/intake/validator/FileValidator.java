@@ -57,7 +57,7 @@ package org.apache.fulcrum.intake.validator;
 import java.util.Map;
 import org.apache.regexp.RE;
 import org.apache.fulcrum.ServiceException;
-import org.apache.fulcrum.upload.FileItem;
+import org.apache.commons.fileupload.FileItem;
 
 /**
  * A validator that will compare a testValue against the following

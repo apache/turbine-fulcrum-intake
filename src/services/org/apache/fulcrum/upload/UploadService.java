@@ -195,6 +195,19 @@ public interface UploadService
             throws ServiceException;
 
     /**
+     * <p> Retrieves the value of <code>automatic</code> property of the
+     * {@link org.apache.fulcrum.upload.UploadService}.
+     * Used to determine whether the parseRequest method should be
+     * called automatically.  
+     * 
+     * @deprecated This is left over from coupling with
+     * ParameterParser.  ParameterParser (and any other use of the
+     * service) should determine for itself whether to call the
+     * parseRequest method and not ask the service.
+     */
+    public boolean getAutomatic();
+
+    /**
      * <p> Retrieves the value of <code>size.max</code> property of the
      * {@link org.apache.fulcrum.upload.UploadService}.
      *
@@ -218,5 +231,5 @@ public interface UploadService
      */
     public String getRepository();
 
-    public String getUniqueId();
+    public Object getComponent();
 }

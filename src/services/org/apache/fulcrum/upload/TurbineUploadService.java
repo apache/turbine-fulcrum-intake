@@ -57,6 +57,7 @@ package org.apache.fulcrum.upload;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.File;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,6 +68,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.ServiceException;
+import org.apache.fulcrum.InitializationException;
+
+import org.apache.commons.fileupload.FileUpload;
+import org.apache.commons.fileupload.FileUploadException;
 
 /**
  * <p> This class is an implementation of {@link UploadService}.
@@ -90,294 +95,127 @@ import org.apache.fulcrum.ServiceException;
  * @version $Id$
  */
 public class TurbineUploadService
-    extends BaseUploadService
+    extends BaseService
+    implements UploadService
 {
+    protected Object component;
+    private boolean automatic;
+     
     /**
-     * @see org.apache.fulcrum.upload.UploadService
+     * Initializes the service.
+     *
+     * This method processes the repository path, to make it relative to the
+     * web application root, if neccessary
+     */
+    public void init() throws InitializationException
+    {
+        String repoPath = getConfiguration().getString(
+            UploadService.REPOSITORY_KEY,
+            UploadService.REPOSITORY_DEFAULT);
+
+        // test for the existence of the path within the webapp directory.
+        // if it does not exist, assume the path was to be used as is.
+        String testPath = getRealPath(repoPath);
+        File testDir = new File(testPath);
+        if ( testDir.exists() ) 
+        {
+            repoPath = testPath;
+        }
+
+        getConfiguration().setProperty(UploadService.REPOSITORY_KEY, repoPath);
+
+        getCategory().debug(
+            "Upload Service: REPOSITORY_KEY => " + repoPath);
+
+        FileUpload upload = new FileUpload();
+
+        // remove this when getAutomatic() is removed.
+        automatic = getConfiguration().getBoolean(
+            UploadService.AUTOMATIC_KEY,
+            UploadService.AUTOMATIC_DEFAULT);
+
+        upload.setSizeMax( getConfiguration().getInt(
+            UploadService.SIZE_MAX_KEY,
+            UploadService.SIZE_MAX_DEFAULT) );
+
+        upload.setSizeThreshold( getConfiguration().getInt(
+            UploadService.SIZE_THRESHOLD_KEY,
+            UploadService.SIZE_THRESHOLD_DEFAULT) );
+
+        upload.setRepositoryPath( getConfiguration().getString(
+            UploadService.REPOSITORY_KEY,
+            UploadService.REPOSITORY_DEFAULT) );
+
+        component = upload;
+        setInit(true);
+    }
+
+    public Object getComponent()
+    {
+        return component;
+    }
+
+
+    /**
+     * Used to determine whether the parseRequest method should be
+     * called automatically.  
+     * 
+     * @deprecated This is left over from coupling with
+     * ParameterParser.  ParameterParser (and any other use of the
+     * service) should determine for itself whether to call the
+     * parseRequest method and not ask the service.
+     */
+    public boolean getAutomatic() 
+    {
+        return automatic;
+    }
+    
+    /**
+     * The maximum allowed upload size
+     */
+    public int getSizeMax() 
+    {
+        return ((FileUpload)getComponent()).getSizeMax();
+    }
+    
+
+    /**
+     * The threshold beyond which files are written directly to disk.
+     */
+    public int getSizeThreshold()
+    {
+        return ((FileUpload)getComponent()).getSizeThreshold();
+    }
+
+    /**
+     * The location used to temporarily store files that are larger
+     * than the size threshold.
+     */
+    public String getRepository()
+    {
+        return ((FileUpload)getComponent()).getRepositoryPath();
+    }
+
+    /**
+     * <p>Parses a <a href="http://rf.cx/rfc1867.html">RFC 1867</a>
+     * compliant <code>multipart/form-data</code> stream.</p>
+     *
+     * @param req The servlet request to be parsed.
+     * @param path The location where the files should be stored.
+     * @exception ServiceException Problems reading/parsing the
+     * request or storing the uploaded file(s).
      */
     public ArrayList parseRequest(HttpServletRequest req, String path)
-        throws ServiceException
+            throws ServiceException
     {
-        ArrayList items = new ArrayList();
-        String contentType = req.getHeader(CONTENT_TYPE);
-
-        if(!contentType.startsWith(MULTIPART_FORM_DATA))
-        {
-            throw new ServiceException("the request doesn't contain a " +
-                MULTIPART_FORM_DATA + " stream");
-        }
-        int requestSize = req.getContentLength();
-
-        if(requestSize == -1)
-        {
-            throw new ServiceException("the request was rejected because " +
-                "it's size is unknown");
-        }
-
-        if(requestSize > TurbineUpload.getSizeMax())
-        {
-            throw new ServiceException("the request was rejected because " +
-                "it's size exceeds allowed range");
-        }
-
         try
         {
-            byte[] boundary = contentType.substring(
-                contentType.indexOf("boundary=")+9).getBytes();
-
-            InputStream input = (InputStream)req.getInputStream();
-
-            MultipartStream multi = new MultipartStream(input, boundary);
-            boolean nextPart = multi.skipPreamble();
-            while(nextPart)
-            {
-                Map headers = parseHeaders(multi.readHeaders());
-                String fieldName = getFieldName(headers);
-                if (fieldName != null)
-                {
-                    String subContentType = getHeader(headers, CONTENT_TYPE);
-                    if (subContentType != null && subContentType
-                                                .startsWith(MULTIPART_MIXED))
-                    {
-                        // Multiple files.
-                        byte[] subBoundary =
-                            subContentType.substring(
-                                subContentType
-                                .indexOf("boundary=")+9).getBytes();
-                        multi.setBoundary(subBoundary);
-                        boolean nextSubPart = multi.skipPreamble();
-                        while (nextSubPart)
-                        {
-                            headers = parseHeaders(multi.readHeaders());
-                            if (getFileName(headers) != null)
-                            {
-                                FileItem item = createItem(path, headers,
-                                                           requestSize);
-                                OutputStream os = item.getOutputStream();
-                                try
-                                {
-                                    multi.readBodyData(os);
-                                }
-                                finally
-                                {
-                                    os.close();
-                                }
-                                item.setFieldName(getFieldName(headers));
-                                items.add(item);
-                            }
-                            else
-                            {
-                                // Ignore anything but files inside
-                                // multipart/mixed.
-                                multi.discardBodyData();
-                            }
-                            nextSubPart = multi.readBoundary();
-                        }
-                        multi.setBoundary(boundary);
-                    }
-                    else
-                    {
-                        if (getFileName(headers) != null)
-                        {
-                            // A single file.
-                            FileItem item = createItem(path, headers,
-                                                       requestSize);
-                            OutputStream os = item.getOutputStream();
-                            try
-                            {
-                                multi.readBodyData(os);
-                            }
-                            finally
-                            {
-                                os.close();
-                            }
-                            item.setFieldName(getFieldName(headers));
-                            items.add(item);
-                        }
-                        else
-                        {
-                            // A form field.
-                            FileItem item = createItem(path, headers,
-                                                       requestSize);
-                            OutputStream os = item.getOutputStream();
-                            try
-                            {
-                                multi.readBodyData(os);
-                            }
-                            finally
-                            {
-                                os.close();
-                            }
-                            item.setFieldName(getFieldName(headers));
-                            item.setIsFormField(true);
-                            items.add(item);
-                        }
-                    }
-                }
-                else
-                {
-                    // Skip this part.
-                    multi.discardBodyData();
-                }
-                nextPart = multi.readBoundary();
-            }
+            return (ArrayList)
+                ((FileUpload)getComponent()).parseRequest(req, path);
         }
-        catch(IOException e)
+        catch (FileUploadException e)
         {
-            throw new ServiceException(
-                "Processing of " + MULTIPART_FORM_DATA +
-                    " request failed", e);
+            throw new ServiceException(e);
         }
-
-        return items;
-    }
-
-    /**
-     * <p> Retrieves file name from <code>Content-disposition</code> header.
-     *
-     * @param headers The HTTP request headers.
-     * @return A the file name for the current <code>encapsulation</code>.
-     */
-    protected String getFileName(Map headers)
-    {
-        String fileName = null;
-        String cd = getHeader(headers, CONTENT_DISPOSITION);
-        if(cd.startsWith(FORM_DATA) || cd.startsWith("attachment"))
-        {
-            int start = cd.indexOf("filename=\"");
-            int end = cd.indexOf('"', start + 10);
-            if(start != -1 && end != -1 && (start + 10) != end)
-            {
-                String str = cd.substring(start + 10, end).trim();
-                if (str.length() > 0)
-                {
-                    fileName = str;
-                }
-            }
-        }
-        return fileName;
-    }
-
-    /**
-     * <p> Retrieves field name from <code>Content-disposition</code> header.
-     *
-     * @param headers The HTTP request headers.
-     * @return The field name for the current <code>encapsulation</code>.
-     */
-    protected String getFieldName(Map headers)
-    {
-        String fieldName = null;
-        String cd = getHeader(headers, CONTENT_DISPOSITION);
-        if(cd != null && cd.startsWith(FORM_DATA))
-        {
-            int start = cd.indexOf("name=\"");
-            int end = cd.indexOf('"', start + 6);
-            if(start != -1 && end != -1)
-            {
-                fieldName = cd.substring(start + 6, end);
-            }
-        }
-        return fieldName;
-    }
-
-    /**
-     * <p> Creates a new instance of {@link
-     * org.apache.fulcrum.upload.FileItem}.
-     *
-     * @param path The path for the FileItem.
-     * @param headers The HTTP request headers.
-     * @param requestSize The size of the request.
-     * @return A newly created <code>FileItem</code>.
-     */
-    protected FileItem createItem( String path,
-                                   Map headers,
-                                   int requestSize )
-    {
-        return DefaultFileItem.newInstance(path,
-                                     getFileName(headers),
-                                     getHeader(headers, CONTENT_TYPE),
-                                     requestSize);
-    }
-
-    /**
-     * <p> Parses the <code>header-part</code> and returns as key/value
-     * pairs.
-     *
-     * <p> If there are multiple headers of the same names, the name
-     * will map to a comma-separated list containing the values.
-     *
-     * @param headerPart The <code>header-part</code> of the current
-     * <code>encapsulation</code>.
-     * @return The parsed HTTP request headers.
-     */
-    protected Map parseHeaders( String headerPart )
-    {
-        Map headers = new HashMap();
-        char buffer[] = new char[MAX_HEADER_SIZE];
-        boolean done = false;
-        int j = 0;
-        int i;
-        String header, headerName, headerValue;
-        try
-        {
-            while (!done)
-            {
-                i=0;
-                // Copy a single line of characters into the buffer,
-                // omitting trailing CRLF.
-                while (i<2 || buffer[i-2] != '\r' || buffer[i-1] != '\n')
-                {
-                    buffer[i++] = headerPart.charAt(j++);
-                }
-                header = new String(buffer, 0, i-2);
-                if (header.equals(""))
-                {
-                    done = true;
-                }
-                else
-                {
-                    if (header.indexOf(':') == -1)
-                    {
-                        // This header line is malformed, skip it.
-                        continue;
-                    }
-                    headerName = header.substring(0, header.indexOf(':'))
-                        .trim().toLowerCase();
-                    headerValue =
-                        header.substring(header.indexOf(':') + 1).trim();
-                    if (getHeader(headers, headerName) != null)
-                    {
-                        // More that one heder of that name exists,
-                        // append to the list.
-                        headers.put(headerName,
-                                    getHeader(headers, headerName) + ',' +
-                                    headerValue);
-                    }
-                    else
-                    {
-                        headers.put(headerName, headerValue);
-                    }
-                }
-            }
-        }
-        catch(IndexOutOfBoundsException e)
-        {
-            // Headers were malformed. continue with all that was
-            // parsed.
-        }
-        return headers;
-    }
-
-    /**
-     * <p> Returns a header with specified name.
-     *
-     * @param headers The HTTP request headers.
-     * @param name The name of the header to fetch.
-     * @return The value of specified header, or a comma-separated
-     * list if there were multiple headers of that name.
-     */
-    protected final String getHeader( Map headers, String name )
-    {
-        return (String)headers.get(name.toLowerCase());
     }
 }

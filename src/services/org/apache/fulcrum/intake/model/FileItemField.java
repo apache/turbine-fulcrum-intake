@@ -64,8 +64,8 @@ import org.apache.fulcrum.intake.validator.FileValidator;
 // import org.apache.fulcrum.intake.validator.InitableByConstraintMap;
 import org.apache.fulcrum.intake.validator.ValidationException;
 import org.apache.fulcrum.intake.validator.Constraint;
-import org.apache.fulcrum.upload.FileItem;
 import org.apache.fulcrum.ServiceException;
+import org.apache.commons.fileupload.FileItem;
 
 /**
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
