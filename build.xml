@@ -12,6 +12,7 @@
   <!-- Construct compile classpath -->
   <path id="classpath">
     <pathelement location="${bsf.jar}"/>
+    <pathelement location="${commons-configuration.jar}"/>
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-email.jar}"/>
     <pathelement location="${commons-lang.jar}"/>
