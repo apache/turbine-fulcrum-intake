@@ -45,7 +45,7 @@ public abstract class AbstractManager
     /** Logging */
     private static Log log = LogFactory.getLog(AbstractManager.class);
 
-    private ServiceManager manager = null;
+    protected ServiceManager manager = null;
     protected PermissionManager permissionManager;
     protected RoleManager roleManager;
     protected GroupManager groupManager;

@@ -7,6 +7,9 @@
 
   <body>
     <release version="1.0.6" date="in cvs">
+      <action dev="epugh" type="add" due-to="Peter Courcoux">
+        Make serviceManager in AbstractManager class protected to facilitate extension.
+      </action>         
       <action dev="epugh" type="add">
         Expose revokeAll(Group group) to the DynamicModelManager API.  Was already implemented in the Hibernate
 		UserManager.
