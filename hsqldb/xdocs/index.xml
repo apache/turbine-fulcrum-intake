@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>HSQLDB Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+  <section name="Overview">
+    <p>
+     This service starts a HSQLDB server instance with a single database.
+   </p>      
+  </section>
+  
+<section name="Configuration">
+
+    <p>
+      First, here is the role configuration.
+    </p>
+
+    <source>
+    <![CDATA[
+      <role
+          name="org.apache.fulcrum.hsqldb.HSQLService"
+          default-class="org.apache.fulcrum.hsqldb.HSQLServiceImpl"
+          shorthand="HSQLService" 
+       />            
+    ]]>
+    </source>
+
+      <p>
+        And here is the configuration:
+      </p>
+    <source>
+
+    <![CDATA[
+        <HSQLService database="./src/test/test" dbname="test" trace="true" silent="false" port="9001"/>
+    ]]>
+    </source>
+
+  </section>
+
+  <section name="Usage">
+    
+    <p>
+      Please look at unit test how to access the HSQLDB server.
+    </p>
+
+  </section> 
+
+</body>
+</document>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Fulcrum HSQLDB Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+    <release version="1.0.0" date="as in CVS">
+     <action dev="epugh" type="update">
+        Add additional tests submitted by Peter Tillemans in Scarab version of
+        this service.
+      </action>        
+     <action dev="goeschsi" type="update">
+        Initial release
+      </action>      
+    </release>    
+  </body>
+</document>
+
