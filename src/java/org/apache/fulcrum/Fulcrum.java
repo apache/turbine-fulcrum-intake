@@ -56,6 +56,7 @@ package org.apache.fulcrum;
 
 import org.apache.stratum.lifecycle.Configurable;
 import org.apache.stratum.lifecycle.Initializable;
+import org.apache.stratum.lifecycle.Disposable;
 import org.apache.commons.configuration.Configuration;
 
 /**
@@ -64,10 +65,13 @@ import org.apache.commons.configuration.Configuration;
  *
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @author <a href="mailto:ericATdobbse.net">Eric Dobbs</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
 public class Fulcrum
-        implements Configurable, Initializable
+    implements Configurable, 
+               Initializable,
+               Disposable
 {
     private static ServiceManager ts = TurbineServices.getInstance();
 
@@ -87,6 +91,14 @@ public class Fulcrum
     public void configure(Configuration configuration)
     {
         ts.setConfiguration(configuration);
+    }
+
+    /**
+     * shutdown fulcrum, lifecycle style
+     */
+    public void dispose()
+    {
+        shutdownServices();
     }
 
     /**
