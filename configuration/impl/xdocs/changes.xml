@@ -6,16 +6,20 @@
   </properties>
 
   <body>
-  	<release version="1.0-alpha-2" date="">
-	  <action dev="epugh" type="fix">
+    <release version="1.0.2" date="">
+      <action dev="epugh" type="update">
+        Upgrade unit tests to use merlin and merlin-unit-3.3.0
+      </action>     
+      <action dev="epugh" type="fix">
         Added ThreadSafe marker interface so we have a singleton under ECM.
-      </action>   
+      </action>  
+    </release>
     <release version="1.0-alpha-1" date="">
-	  <action dev="epugh" type="update">
+      <action dev="epugh" type="update">
         Integrated Stephen McConnell's refactoring.  Removed
         API project as the API is provided by the Commons-Configuration
         Configuration.java class.
-      </action>    	
+      </action>     
       <action dev="epugh" type="add">
         Initial creation of project.
       </action>
