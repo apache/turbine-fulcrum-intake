@@ -1,5 +1,12 @@
 <project name="Turbine SQL" default="main" basedir=".">
 
+  <!-- Allow any user specific values to override the defaults -->
+  <property file="${user.home}/build.properties" />
+
+  <!-- Set default values for the build -->
+  <property file="build.properties" />
+ 
+
   <!-- ================================================================ -->
   <!-- I N I T  T A R G E T                                             -->
   <!-- ================================================================ -->
@@ -39,7 +46,7 @@
     <torque-om
       contextProperties="build.properties"
       controlTemplate="${OMControlTemplate}"
-      outputDirectory="${build.src}"
+      outputDirectory="${build.dir}/src"
       templatePath="${templatePath}"
       outputFile="report.turbine.om.generation"
       targetPackage="${securityPackage}"
@@ -55,7 +62,7 @@
     <torque-om
       contextProperties="build.properties"
       controlTemplate="${OMControlTemplate}"
-      outputDirectory="${build.src}"
+      outputDirectory="${build.dir}/src"
       templatePath="${templatePath}"
       outputFile="report.turbine.scheduler.generation"
       targetPackage="${schedulerPackage}"

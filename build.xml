@@ -12,6 +12,17 @@
   <path id="classpath">
     <pathelement location="${velocity.jar}"/>
     <pathelement location="${log4j.jar}"/>
+    <pathelement location="${bsf.jar}"/>
+    <pathelement location="${torque.jar}"/>
+    <pathelement location="${servlet.jar}"/>
+    <pathelement location="${jndi.jar}"/>
+    <pathelement location="${xmlrpc.jar}"/>
+    <pathelement location="${xalan.jar}"/>
+    <pathelement location="${torque.jar}"/>
+    <pathelement location="${village.jar}"/>
+    <pathelement location="${jdbc.jar}"/>
+    <pathelement location="${javamail.jar}"/>
+    <pathelement location="${jaf.jar}"/>
   </path>
 
   <!-- ================================================================== -->
@@ -117,16 +128,19 @@
   <!-- ================================================================== -->
   
   <target name="prepare" 
-    depends="init,check.velocity,check.log4j,env">
+    depends="init,check.velocity,check.log4j,om,env">
     
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}/classes"/>
     <mkdir dir="${build.dir}/src"/>
-
-    <filter token="VERSION" value="${version}"/>
-
-    <copy todir="${build.dir}/src/org" filtering="yes">
+    
+    <!-- We have some static files that should overwrite
+         The torque generated files so overwrite must be
+         set to 'yes'. -->
+    
+    <copy todir="${build.dir}/src/org" overwrite="yes">
       <fileset dir="${src.dir}/core/java/org"/>
+      <fileset dir="${src.dir}/services/java/org"/>
     </copy>
   </target>
 
@@ -143,7 +157,7 @@
       optimize="${optimize}">
       <classpath refid="classpath"/>
     </javac>
-  
+
     <!-- copy database.dtd to the right place -->
     <copy file="${src.dir}/dtd/database.dtd"
       todir="${build.dir}/classes/org/apache/turbine/torque/engine/database/transform"/>
