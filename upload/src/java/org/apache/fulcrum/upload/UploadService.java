@@ -58,6 +58,7 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.DiskFileUpload;
+import org.apache.commons.fileupload.FileUploadException;
 
 /**
  * <p> This service handles parsing <code>multipart/form-data</code>
@@ -195,7 +196,7 @@ public interface UploadService
      * request or storing the uploaded file(s).
      */
     public ArrayList parseRequest(HttpServletRequest req, String path)
-            throws Exception;
+            throws FileUploadException;
 
     /**
      * <p> Retrieves the value of <code>size.max</code> property of the

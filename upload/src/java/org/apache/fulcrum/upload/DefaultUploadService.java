@@ -60,7 +60,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
@@ -96,7 +95,7 @@ import org.apache.commons.fileupload.FileUploadException;
  */
 public class DefaultUploadService
     extends AbstractLogEnabled
-    implements UploadService, Initializable,Configurable, Disposable, Contextualizable, Serviceable
+    implements UploadService, Initializable,Configurable, Contextualizable, Serviceable
 {
     protected DiskFileUpload fileUpload;
 
@@ -148,22 +147,17 @@ public class DefaultUploadService
      *
      * @param req The servlet request to be parsed.
      * @param path The location where the files should be stored.
-     * @exception ServiceException Problems reading/parsing the
+     * @exception FileUploadException Problems reading/parsing the
      * request or storing the uploaded file(s).
      */
     public ArrayList parseRequest(HttpServletRequest req, String path)
-            throws Exception
+            throws FileUploadException
     {
-        try
-        {
-            return (ArrayList)
-                (getFileUpload())
-                .parseRequest(req, sizeThreshold, sizeMax, path);
-        }
-        catch (FileUploadException e)
-        {
-            throw new Exception(e);
-        }
+       
+        return (ArrayList)
+            (getFileUpload())
+            .parseRequest(req, sizeThreshold, sizeMax, path);
+       
     }
 
 
@@ -175,22 +169,17 @@ public class DefaultUploadService
      * @param sizeThreshold the max size in bytes to be stored in memory
      * @param sizeMax the maximum allowed upload size in bytes
      * @param path The location where the files should be stored.
-     * @exception ServiceException Problems reading/parsing the
+     * @exception FileUploadException Problems reading/parsing the
      * request or storing the uploaded file(s).
      */
     public List parseRequest(HttpServletRequest req, int sizeThreshold,
                                   int sizeMax, String path)
-            throws Exception
+            throws FileUploadException
     {
-        try
-        {
-            return getFileUpload()
-                .parseRequest(req, sizeThreshold, sizeMax, path);
-        }
-        catch (FileUploadException e)
-        {
-            throw new Exception(e);
-        }
+       
+        return getFileUpload()
+            .parseRequest(req, sizeThreshold, sizeMax, path);
+   
     }
 
     /**
@@ -284,13 +273,6 @@ public class DefaultUploadService
     public void service( ServiceManager manager) {
 
         UploadServiceFacade.setUploadService(this);
-
-    }
-    /**
-     * Avalon component lifecycle method
-     */
-    public void dispose()
-    {
 
     }
 

@@ -59,6 +59,7 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.DiskFileUpload;
+import org.apache.commons.fileupload.FileUploadException;
 
 /**
  * <p> This is a facade class for {@link UploadService}.
@@ -140,11 +141,11 @@ public class UploadServiceFacade
      * @param req The servlet request to be parsed.
      * @param params The ParameterParser instance to insert form
      * fields into.
-     * @exception ServiceException If there are problems reading/parsing
+     * @exception FileUploadException If there are problems reading/parsing
      * the request or storing files.
      */
     public static ArrayList parseRequest( HttpServletRequest req )
-        throws Exception
+        throws FileUploadException
     {
         return uploadService.parseRequest(req, getFileUpload().getRepositoryPath());
     }
@@ -160,12 +161,12 @@ public class UploadServiceFacade
      * @param params The ParameterParser instance to insert form
      * fields into.
      * @param path The location where the files should be stored.
-     * @exception ServiceException If there are problems reading/parsing
+     * @exception FileUploadException If there are problems reading/parsing
      * the request or storing files.
      */
     public static ArrayList parseRequest( HttpServletRequest req,
                                      String path )
-        throws Exception
+        throws FileUploadException
     {
         return getService().parseRequest(req, path);
     }
