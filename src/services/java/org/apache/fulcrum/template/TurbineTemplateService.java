@@ -161,12 +161,12 @@ public class TurbineTemplateService
     }
 
     /**
-     * Delegates to the appropriate {@link
-     * org.apache.fulcrum.template.TemplateEngineService} to
-     * check the existance of the specified template.
+     * Looks for the specified template file in each of the specified paths.
      *
-     * @param template The template to check for the existance of.
+     * @param template The template file to check for the existance of.
      * @param templatePaths The paths to check for the template.
+     *
+     * @return true if a match is found in one of the supplied paths, or false.
      */
     public boolean templateExists(String template,
                                   String[] templatePaths)
@@ -181,10 +181,30 @@ public class TurbineTemplateService
         return false;
     }
 
+    /**
+     * Determine if a template exists. Delegates to the appropriate {@link 
+     * org.apache.fulcrum.template.TemplateEngineService} to check the 
+     * existance of the specified template. If no template engine service is
+     * found for the template, false is returned.
+     * 
+     * @param template The template file to check for the existence of.
+     *
+     * @return true if there is a template engine service registered for the
+     *         given template, and it reports that the template exists, 
+     *         otherwise false.
+     */
     public boolean templateExists(String template)
     {
         TemplateEngineService tes = getTemplateEngineService(template);
-        return tes.templateExists(template);
+
+        if (tes != null)
+        {
+            return tes.templateExists(template);
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /**
