@@ -24,6 +24,15 @@ public class InputStreamLocator
 
     /**
      * Constructor
+     */
+    public InputStreamLocator()
+    {
+        this.rootDir = new File( new File("").getAbsolutePath() );
+        this.logger = new NullLogger();
+    }    
+
+    /**
+     * Constructor
      * 
      * @param rootDir the root directory to start the search     */
     public InputStreamLocator( File rootDir )
