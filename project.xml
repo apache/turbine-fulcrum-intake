@@ -240,15 +240,12 @@
     </dependency>
     <dependency>
       <id>xerces</id>
-      <type>required</type>
       <version>2.0.2</version>
-      <jar>xercesImpl-2.0.2.jar</jar>
       <url>http://xml.apache.org/xerces2-j/index.html</url>
     </dependency>
     <dependency>
       <id>xml-apis</id>
-      <type>required</type>
-      <version>2.0.2</version>
+      <version>1.0.b2</version>
       <url>http://xml.apache.org/xerces2-j/index.html</url>
     </dependency>
     <dependency>
