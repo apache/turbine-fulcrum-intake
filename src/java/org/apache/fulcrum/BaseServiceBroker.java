@@ -330,6 +330,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
                 && ("." + keyParts[2]).equals(CLASSNAME_SUFFIX))
             {
                 String serviceKey = keyParts[1];
+                notice ("Added Mapping for Service: " + serviceKey);
 
                 if (! mapping.containsKey(serviceKey))
                 {
