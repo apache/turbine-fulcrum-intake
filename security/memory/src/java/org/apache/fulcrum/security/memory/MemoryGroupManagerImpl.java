@@ -53,7 +53,6 @@ package org.apache.fulcrum.security.memory;
  * <http://www.apache.org/>.
  */
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -62,6 +61,7 @@ import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.spi.AbstractGroupManager;
 import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
@@ -80,12 +80,9 @@ public class MemoryGroupManagerImpl
     private static Log log = LogFactory.getLog(MemoryGroupManagerImpl.class);
     private static List groups = new ArrayList();
 
-
     /** Our Unique ID counter */
     private static int uniqueId = 0;
 
-
-   
     /**
     	 * Retrieves all groups defined in the system.
     	 *
@@ -169,7 +166,7 @@ public class MemoryGroupManagerImpl
         {
         }
     }
-
+    
     /**
      * Determines if the <code>Group</code> exists in the security system.
      *
@@ -179,30 +176,10 @@ public class MemoryGroupManagerImpl
      *         the same name exists.
      * @throws Exception A generic exception.
      */
-    public boolean checkExists(Group group) throws DataBackendException
-    {
-        try
-        {
-            boolean exists = false;
-            for (Iterator i = groups.iterator(); i.hasNext();)
-            {
-                Group g = (Group) i.next();
-                if (g.getName().equalsIgnoreCase(group.getName()) | g.getId()
-                    == group.getId())
-                {
-                    exists = true;
-                }
-            }
-            return exists;
-            //return groups.contains(group);
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException(
-                "Problem checking if groups exists",
-                e);
-        }
-    }
+    public boolean checkExists(String groupName) throws DataBackendException
+    {     
+        return MemoryHelper.checkExists(groups,groupName);      
+    }    
     /**
     	* Creates a new group with specified attributes.
     	*
@@ -216,17 +193,11 @@ public class MemoryGroupManagerImpl
         throws DataBackendException
     {
         
-            group.setId(getUniqueId());
+            group.setId(MemoryHelper.getUniqueId());
             groups.add(group);
             // return the object with correct id
             return group;
        
     }
-
-    private Integer getUniqueId()
-    {
-        return new Integer(++uniqueId);
-    }
-
     
 }

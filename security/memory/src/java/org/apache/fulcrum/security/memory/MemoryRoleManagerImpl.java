@@ -53,7 +53,6 @@ package org.apache.fulcrum.security.memory;
  * <http://www.apache.org/>.
  */
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -61,6 +60,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.spi.AbstractRoleManager;
 import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
@@ -114,29 +114,19 @@ public class MemoryRoleManagerImpl extends AbstractRoleManager
         }
         throw new UnknownEntityException("Unknown role '" + role + "'");
     }
+    
     /**
-      * Determines if the <code>Role</code> exists in the security system.
-      *
-      * @param role a <code>Role</code> value
-      * @return true if the role exists in the system, false otherwise
-      * @throws DataBackendException when more than one Role with
-      *         the same name exists.
-      * @throws Exception A generic exception.
-      */
-    public boolean checkExists(Role role) throws DataBackendException
+     * Determines if the <code>Role</code> exists in the security system.
+     * 
+     * @param permission a <code>String</code> value
+     * @return true if the role exists in the system, false otherwise
+     * @throws DataBackendException when more than one Role with the same name exists.
+     * @throws Exception A generic exception.
+     */
+    public boolean checkExists(String roleName)
     {
-        boolean exists = false;
-        for (Iterator i = roles.iterator(); i.hasNext();)
-        {
-            Role r = (Role) i.next();
-            if (r.getName().equalsIgnoreCase(role.getName()) | r.getId()
-                == role.getId())
-            {
-                exists = true;
-            }
-        }
-        return exists;
-    }
+        return MemoryHelper.checkExists(roles,roleName); 
+    }      
     /**
     		 * Retrieves all roles defined in the system.
     		 *
@@ -162,7 +152,7 @@ public class MemoryRoleManagerImpl extends AbstractRoleManager
         throws DataBackendException
     {
 
-        role.setId(getUniqueId());
+        role.setId(MemoryHelper.getUniqueId());
         roles.add(role);
         // add the role to system-wide cache
         getAllRoles().add(role);
@@ -203,8 +193,4 @@ public class MemoryRoleManagerImpl extends AbstractRoleManager
         throw new UnknownEntityException("Unknown role '" + role + "'");
     }
    
-    private Object getUniqueId()
-    {
-        return new Integer(++uniqueId);
-    }
 }

@@ -1,4 +1,10 @@
-package org.apache.fulcrum.security.memory.dynamic;
+package org.apache.fulcrum.security.memory;
+
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.fulcrum.security.entity.SecurityEntity;
+
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -52,46 +58,36 @@ package org.apache.fulcrum.security.memory.dynamic;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- import org.apache.fulcrum.security.SecurityService;
-import org.apache.fulcrum.security.model.test.AbstractPermissionManagerTest;
+
 /**
- * @author Eric Pugh
  *
- * Test the memory implementation of the Simple model..
+ * This implementation keeps all objects in memory.  This is mostly meant to help
+ * with testing and prototyping of ideas.
+ *
+ * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
+ * @version $Id$
  */
-public class MemoryPermissionManagerTest extends AbstractPermissionManagerTest
+public class MemoryHelper
 {
-    public static void main(String[] args)
+
+    /** Our Unique ID counter */
+    private static int uniqueId = 0;
+   
+    public static Integer getUniqueId()
     {
-        junit.textui.TestRunner.run(MemoryPermissionManagerTest.class);
+        return new Integer(++uniqueId);
     }
-    public void setUp()
-    {
-        
-        try
+    
+    public static boolean checkExists(List securityEntities, String name){
+        boolean exists = false;
+        for (Iterator i = securityEntities.iterator(); i.hasNext();)
         {
-            this.setRoleFileName(null);
-            this.setConfigurationFileName("src/test/DynamicMemory.xml");
-            securityService = (SecurityService) lookup(SecurityService.ROLE);
-            permissionManager = securityService.getPermissionManager();
+            SecurityEntity securityEntity = (SecurityEntity) i.next();
+            if (securityEntity.getName().equalsIgnoreCase(name))
+            {
+                exists = true;
+            }
         }
-        catch (Exception e)
-        {
-            fail(e.toString());
-        }
-    }
-    public void tearDown()
-    {
-        permission = null;
-        permissionManager = null;
-        securityService = null;
-    }
-    /**
-    	* Constructor for MemoryPermissionManagerTest.
-    	* @param arg0
-    	*/
-    public MemoryPermissionManagerTest(String arg0)
-    {
-        super(arg0);
+        return exists;        
     }
 }

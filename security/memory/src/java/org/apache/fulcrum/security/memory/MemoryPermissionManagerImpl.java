@@ -53,7 +53,6 @@ package org.apache.fulcrum.security.memory;
  * <http://www.apache.org/>.
  */
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -61,6 +60,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.spi.AbstractPermissionManager;
 import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
@@ -128,29 +128,20 @@ public class MemoryPermissionManagerImpl extends AbstractPermissionManager
         throw new UnknownEntityException(
             "Unknown permission '" + permission + "'");
     }
+    
     /**
      * Determines if the <code>Permission</code> exists in the security system.
      * 
-     * @param permission a <code>Permission</code> value
+     * @param permission a <code>String</code> value
      * @return true if the permission exists in the system, false otherwise
      * @throws DataBackendException when more than one Permission with the same name exists.
      * @throws Exception A generic exception.
      */
-    public boolean checkExists(Permission permission)
+    public boolean checkExists(String permissionName)
         throws DataBackendException
     {
-        boolean exists = false;
-        for (Iterator i = permissions.iterator(); i.hasNext();)
-        {
-            Permission p = (Permission) i.next();
-            if (p.getName().equalsIgnoreCase(permission.getName()) | p.getId()
-                == permission.getId())
-            {
-                exists = true;
-            }
-        }
-        return exists;
-    }
+       return MemoryHelper.checkExists(permissions,permissionName);
+    }    
 
     /**
      * Removes a Permission from the system.
@@ -196,15 +187,10 @@ public class MemoryPermissionManagerImpl extends AbstractPermissionManager
         throws DataBackendException
     {
 
-        permission.setId(getUniqueId());
+        permission.setId(MemoryHelper.getUniqueId());
         permissions.add(permission);
         return permission;
 
     }
-   
 
-    private Integer getUniqueId()
-    {
-        return new Integer(++uniqueId);
-    }
 }

@@ -61,6 +61,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.spi.AbstractUserManager;
 import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.UserSet;
 
@@ -83,31 +84,6 @@ public class MemoryUserManagerImpl
     /** Our Unique ID counter */
     private static int uniqueId = 0;
 
-
-    /**
-     * Check whether a specified user's account exists.
-     *
-     * The login name is used for looking up the account.
-     *
-     * @param user The user to be checked.
-     * @return true if the specified account exists
-     * @throws DataBackendException if there was an error accessing
-     *         the data backend.
-     */
-    public boolean checkExists(User user) throws DataBackendException
-    {
-        boolean exists = false;
-        for (Iterator i = users.iterator(); i.hasNext();)
-        {
-            User u = (User) i.next();
-            if (u.getName().equalsIgnoreCase(user.getName()) | u.getId()
-                == user.getId())
-            {
-                exists = true;
-            }
-        }
-        return exists;
-    }
     /**
      * Check whether a specified user's account exists.
      *
@@ -120,21 +96,8 @@ public class MemoryUserManagerImpl
      */
     public boolean checkExists(String userName) throws DataBackendException
     {
-        List tempUsers = new ArrayList();
-        for (Iterator i = users.iterator(); i.hasNext();)
-        {
-            User user = (User) i.next();
-            if (user.getName().equalsIgnoreCase(userName))
-            {
-                tempUsers.add(user);
-            }
-        }
-        if (tempUsers.size() > 1)
-        {
-            throw new DataBackendException(
-                "Multiple Users with same username '" + userName + "'");
-        }
-        return (tempUsers.size() == 1);
+        return MemoryHelper.checkExists(users,userName); 
+       
     }
     /**
      * Retrieve a user from persistent storage using username as the
@@ -209,7 +172,7 @@ public class MemoryUserManagerImpl
     {
        
             users.remove(user);
-            user.setId(getUniqueId());
+            user.setId(MemoryHelper.getUniqueId());
             users.add(user);
             return user;
         
@@ -236,11 +199,5 @@ public class MemoryUserManagerImpl
         {
             throw new UnknownEntityException("Unknown user '" + user + "'");
         }
-    }
-
-  
-    private Object getUniqueId()
-    {
-        return new Integer(++uniqueId);
     }
 }
