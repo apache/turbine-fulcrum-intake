@@ -359,6 +359,13 @@
   <!-- ================================================================== -->
   
   <target name="jar" depends="compile" description="--> generates the fulcrum.jar">
+    
+    <!-- copy intake.dtd to the right place -->
+    <copy 
+      file="intake.dtd"
+      todir="${build.dir}/classes/org/apache/fulcrum/intake/transform"
+    />
+    
     <jar jarfile="${build.dir}/${final.name}.jar"
          basedir="${build.dir}/classes"
          excludes="**/package.html"/>

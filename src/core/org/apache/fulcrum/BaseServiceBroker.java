@@ -94,7 +94,8 @@ import org.apache.log4j.Category;
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @version $Id$
  */
-public abstract class BaseServiceBroker implements ServiceBroker
+public abstract class BaseServiceBroker 
+    implements ServiceBroker
 {
     /**
      * Mapping of Service names to class names.
