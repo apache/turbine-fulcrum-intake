@@ -13,7 +13,7 @@
 
     <menu name="Overview">
       <item name="Main"                 href="/index.html"/>
-      <item name="Main"                 href="/howto.html"/>      
+      <item name="Howto"                 href="/howto.html"/>      
     </menu>
   </body>
 </project>
