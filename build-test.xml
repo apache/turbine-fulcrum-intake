@@ -60,7 +60,6 @@
       </batchtest>
     </junit>
 
-
     <java
       classname="org.apache.fulcrum.localization.LocalizationTest"
       fork="yes" failonerror="true">
@@ -70,7 +69,13 @@
         <pathelement location="${build.dir}/test"/>
       </classpath>
     </java>
-  
+
+    <java
+      classname="org.apache.torque.test.FulcrumRunner">
+      <arg value="${rttest.dir}/Fulcrum.properties"/>
+      <classpath refid="classpath"/>
+    </java>
+
   </target>
 
   <!-- ================================================================== -->
@@ -81,15 +86,16 @@
     name="compile-test"
     description="==> compiles the test source code">
     
-    <ant antfile="build.xml" target="clean"/>
     <ant antfile="build.xml" target="compile"/>
     
-    <javac srcdir="${test.dir}"
+    <javac
       destdir="${build.dest}"
       excludes="**/package.html"
       debug="${debug}"
       deprecation="${deprecation}"
       optimize="${optimize}">
+      <src path="${test.dir}"/>
+      <src path="${rttest.dir}"/>
       <classpath refid="classpath"/>
       <classpath>
         <pathelement path="${build.dest}"/>
