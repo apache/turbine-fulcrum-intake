@@ -96,6 +96,10 @@ cheers,
               Although, I guess you would only have a single GroupManager per app?  I could see have <code>o.a.f.s.spi.memory.simple.UserManager</code>
               as well as <code>o.a.f.s.spi.nt.simple.GroupManager</code>.  But not two GroupManagers.
             </li>
+            <li>
+              Lastly, should it be o.a.f.s.spi.hibernate.simple and o.a.f.s.spi.memory.simple or should it be o.a.f.s.spi.simple.hibernate and o.a.f.s.spi.simple.memory?
+              With all the spi types together, like hibernate or memory, it might be cleaner sharing code between the packags.
+            </li>
             
             <li>
               Related, should the interfaces like <code>SimpleGroupManager</code> extends <code>GroupManager</code>?  Or should they instead
