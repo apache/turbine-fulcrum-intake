@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>DVSL Component</title>
+    <author email="epugh@upstate.com">Eric PUgh</author>
+  </properties>
+
+  <body>
+
+  <section name="Overview">
+    <p>
+      This component wraps provides XSL using Velocity DVSL of strings.  It is written 
+      for use in Turbine but it can be used in any container compatible 
+      with Avalon's ECM container.
+    </p>    
+  </section>
+  
+<section name="Configuration">
+
+    <p>
+      First, here is the role configuration.
+    </p>
+
+<source>
+<![CDATA[
+       <role
+        name="org.apache.fulcrum.dvsl.DvslService"
+        shorthand="dvsl"
+        default-class="org.apache.fulcrum.dvsl.DefaultDvslService"/>
+]]>
+</source>
+
+  <p>
+    There is no configuration for this component.
+  </p>
+<source>
+
+<![CDATA[
+    <dvsl/>
+]]>
+</source>
+
+  </section>
+
+  <section name="Usage">
+    <p>
+    </p>
+  </section>  
+
+</body>
+</document>
