@@ -81,7 +81,6 @@ public class TurbineDatabaseService
         throws InitializationException
     {
         Torque.setConfiguration(getConfiguration());
-        Torque.setCategory(getCategory());
 
         try
         {
