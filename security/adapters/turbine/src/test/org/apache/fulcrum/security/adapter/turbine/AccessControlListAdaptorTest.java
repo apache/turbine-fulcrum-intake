@@ -54,11 +54,6 @@ package org.apache.fulcrum.security.adapter.turbine;
  */
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
-
-import javax.servlet.ServletConfig;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.fulcrum.security.BaseSecurityService;
 import org.apache.fulcrum.security.entity.Group;
@@ -66,27 +61,14 @@ import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
-
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
-import org.apache.turbine.modules.actions.sessionvalidator.DefaultSessionValidator;
-import org.apache.turbine.modules.actions.sessionvalidator.SessionValidator;
 import org.apache.turbine.om.security.User;
-import org.apache.turbine.services.ServiceManager;
-import org.apache.turbine.services.TurbineServices;
-import org.apache.turbine.services.avaloncomponent.AvalonComponentService;
-import org.apache.turbine.services.rundata.RunDataService;
-import org.apache.turbine.services.security.SecurityService;
 import org.apache.turbine.services.security.TurbineSecurity;
-import org.apache.turbine.util.RunData;
-import org.apache.turbine.util.TurbineConfig;
 import org.apache.turbine.util.security.AccessControlList;
 import org.apache.turbine.util.security.GroupSet;
 import org.apache.turbine.util.security.PermissionSet;
 import org.apache.turbine.util.security.RoleSet;
 
-import com.mockobjects.servlet.MockHttpServletResponse;
 import com.mockobjects.servlet.MockHttpSession;
-import com.mockobjects.servlet.MockServletConfig;
 
 /**
  * Test that we can load up a fulcrum ACL in Turbine, without Turbine
@@ -96,37 +78,50 @@ import com.mockobjects.servlet.MockServletConfig;
  * @version $Id$
  */
 
-public class AccessControlListAdaptorTest extends BaseUnitTest
+public class AccessControlListAdaptorTest
+    extends AbstractAccessControlListAdaptorTest
 {
-    private static final String PREFIX = "services." + SecurityService.SERVICE_NAME + '.';
+
+    public String getTRProps(){
+        return "AdapterTestTurbineResources.properties";
+    }
+   
     public AccessControlListAdaptorTest(String name) throws Exception
     {
         super(name);
     }
+
     public void testSwappingACL() throws Exception
     {
-        TurbineConfig tc = new TurbineConfig(".", "/src/test/AdapterTestTurbineResources.properties");
-        tc.initialize();
+
         Class aclClass = TurbineSecurity.getService().getAclClass();
-        if (!aclClass.getName().equals(AccessControlListAdapter.class.getName()))
+        if (!aclClass
+            .getName()
+            .equals(AccessControlListAdapter.class.getName()))
         {
-            fail("ACL Class is " + aclClass.getName() + ", expected was " + AccessControlListAdapter.class.getName());
+            fail(
+                "ACL Class is "
+                    + aclClass.getName()
+                    + ", expected was "
+                    + AccessControlListAdapter.class.getName());
         }
         Map roles = new HashMap();
         Map permissions = new HashMap();
-        AccessControlList acl = TurbineSecurity.getService().getAclInstance(roles, permissions);
+        AccessControlList acl =
+            TurbineSecurity.getService().getAclInstance(roles, permissions);
         if (acl == null)
         {
-            fail("Security Service failed to deliver a " + aclClass.getName() + " Object");
+            fail(
+                "Security Service failed to deliver a "
+                    + aclClass.getName()
+                    + " Object");
         }
         assertTrue(acl instanceof AccessControlList);
         assertTrue(acl instanceof AccessControlListAdapter);
     }
     public void testGettingUserFromRunData() throws Exception
     {
-        TurbineConfig tc = new TurbineConfig(".", "/src/test/AdapterTestTurbineResources.properties");
-        tc.initialize();
-        MockHttpSession session = new MockHttpSession();
+
         session.setupGetAttribute(User.SESSION_KEY, null);
         User turbineUser = getUserFromRunData(session);
         assertNotNull(turbineUser);
@@ -134,46 +129,62 @@ public class AccessControlListAdaptorTest extends BaseUnitTest
     }
     public void testUsingAvalonComponents() throws Exception
     {
-        TurbineConfig tc = new TurbineConfig(".", "/src/test/AdapterTestTurbineResources.properties");
-        tc.initialize();
-        AvalonComponentService acs =
-            (AvalonComponentService) TurbineServices.getInstance().getService(AvalonComponentService.SERVICE_NAME);
-        BaseSecurityService securityService = (BaseSecurityService) acs.lookup(BaseSecurityService.ROLE);
-        Group fulcrumGroup = securityService.getGroupManager().getGroupInstance("TEST_REVOKEALL");
+
+        BaseSecurityService securityService =
+            (BaseSecurityService) acs.lookup(BaseSecurityService.ROLE);
+        Group fulcrumGroup =
+            securityService.getGroupManager().getGroupInstance(
+                "TEST_REVOKEALL");
         securityService.getGroupManager().addGroup(fulcrumGroup);
-        Group fulcrumGroup2 = securityService.getGroupManager().getGroupInstance("TEST_REVOKEALL2");
+        Group fulcrumGroup2 =
+            securityService.getGroupManager().getGroupInstance(
+                "TEST_REVOKEALL2");
         securityService.getGroupManager().addGroup(fulcrumGroup2);
-        Role fulcrumRole = securityService.getRoleManager().getRoleInstance("role1");
-        Role fulcrumRole2 = securityService.getRoleManager().getRoleInstance("role2");
+        Role fulcrumRole =
+            securityService.getRoleManager().getRoleInstance("role1");
+        Role fulcrumRole2 =
+            securityService.getRoleManager().getRoleInstance("role2");
         securityService.getRoleManager().addRole(fulcrumRole);
         securityService.getRoleManager().addRole(fulcrumRole2);
-        Permission fulcrumPermission = securityService.getPermissionManager().getPermissionInstance("perm1");
-        Permission fulcrumPermission2 = securityService.getPermissionManager().getPermissionInstance("perm2");
-        Permission fulcrumPermission3 = securityService.getPermissionManager().getPermissionInstance("perm3");
+        Permission fulcrumPermission =
+            securityService.getPermissionManager().getPermissionInstance(
+                "perm1");
+        Permission fulcrumPermission2 =
+            securityService.getPermissionManager().getPermissionInstance(
+                "perm2");
+        Permission fulcrumPermission3 =
+            securityService.getPermissionManager().getPermissionInstance(
+                "perm3");
         securityService.getPermissionManager().addPermission(fulcrumPermission);
-        securityService.getPermissionManager().addPermission(fulcrumPermission2);
-        securityService.getPermissionManager().addPermission(fulcrumPermission3);
-        DynamicModelManager modelManager = (DynamicModelManager)securityService.getModelManager();
-		modelManager.grant(fulcrumRole, fulcrumPermission);
-		modelManager.grant(fulcrumRole2, fulcrumPermission2);
-		modelManager.grant(fulcrumRole2, fulcrumPermission3);
-		modelManager.grant(fulcrumGroup, fulcrumRole);
-		modelManager.grant(fulcrumGroup, fulcrumRole2);
-		modelManager.grant(fulcrumGroup2, fulcrumRole2);
+        securityService.getPermissionManager().addPermission(
+            fulcrumPermission2);
+        securityService.getPermissionManager().addPermission(
+            fulcrumPermission3);
+        DynamicModelManager modelManager =
+            (DynamicModelManager) securityService.getModelManager();
+        modelManager.grant(fulcrumRole, fulcrumPermission);
+        modelManager.grant(fulcrumRole2, fulcrumPermission2);
+        modelManager.grant(fulcrumRole2, fulcrumPermission3);
+        modelManager.grant(fulcrumGroup, fulcrumRole);
+        modelManager.grant(fulcrumGroup, fulcrumRole2);
+        modelManager.grant(fulcrumGroup2, fulcrumRole2);
         org.apache.fulcrum.security.entity.User fulcrumUser =
             securityService.getUserManager().getUserInstance("Jeannie");
-        fulcrumUser = securityService.getUserManager().addUser(fulcrumUser, "wyatt");
-		modelManager.grant(fulcrumUser, fulcrumGroup);
-		modelManager.grant(fulcrumUser, fulcrumGroup2);
+        fulcrumUser =
+            securityService.getUserManager().addUser(fulcrumUser, "wyatt");
+        modelManager.grant(fulcrumUser, fulcrumGroup);
+        modelManager.grant(fulcrumUser, fulcrumGroup2);
         assertEquals(2, ((DynamicUser) fulcrumUser).getGroups().size());
         GroupSet groupSet = TurbineSecurity.getService().getAllGroups();
         assertEquals(2, groupSet.size());
         RoleSet roleSet = TurbineSecurity.getService().getAllRoles();
         assertEquals(2, roleSet.size());
-        PermissionSet permissionSet = TurbineSecurity.getService().getAllPermissions();
+        PermissionSet permissionSet =
+            TurbineSecurity.getService().getAllPermissions();
         assertEquals(3, permissionSet.size());
         User turbineUser = TurbineSecurity.getService().getUser("Jeannie");
-        AccessControlList acl = TurbineSecurity.getService().getACL(turbineUser);
+        AccessControlList acl =
+            TurbineSecurity.getService().getACL(turbineUser);
         assertNotNull(acl);
         assertEquals(3, acl.getPermissions().size());
         MockHttpSession session = new MockHttpSession();
@@ -182,34 +193,40 @@ public class AccessControlListAdaptorTest extends BaseUnitTest
         assertNotNull(turbineUser);
         assertFalse(TurbineSecurity.getService().isAnonymousUser(turbineUser));
     }
-    private User getUserFromRunData(HttpSession session) throws Exception
+
+    public void testHasRole() throws Exception
     {
-        RunDataService rds = (RunDataService) TurbineServices.getInstance().getService(RunDataService.SERVICE_NAME);
-        BetterMockHttpServletRequest request = new BetterMockHttpServletRequest();
-        request.setupServerName("bob");
-        request.setupGetProtocol("http");
-        request.setupScheme("scheme");
-        request.setupPathInfo("damn");
-        request.setupGetServletPath("damn2");
-        request.setupGetContextPath("wow");
-        request.setupGetContentType("html/text");
-        request.setupAddHeader("Content-type", "html/text");
-        Vector v = new Vector();
-        request.setupGetParameterNames(v.elements());
-        request.setSession(session);
-        HttpServletResponse response = new MockHttpServletResponse();
-        ServletConfig config = new MockServletConfig();
-        RunData rd = rds.getRunData(request, response, config);
-        SessionValidator sessionValidator = new DefaultSessionValidator();
-        sessionValidator.doPerform(rd);
-        User turbineUser = rd.getUser();
+
+        BaseSecurityService securityService =
+            (BaseSecurityService) acs.lookup(BaseSecurityService.ROLE);
+        Group fulcrumGroup =
+            securityService.getGroupManager().getGroupInstance("TEST_GROUP");
+        Role fulcrumRole =
+            securityService.getRoleManager().getRoleInstance("TEST_ROLE");
+        org.apache.fulcrum.security.entity.User fulcrumUser =
+            securityService.getUserManager().getUserInstance("Mike");
+
+        securityService.getGroupManager().addGroup(fulcrumGroup);
+        securityService.getRoleManager().addRole(fulcrumRole);
+        fulcrumUser =
+            securityService.getUserManager().addUser(fulcrumUser, "wyatt");
+
+        DynamicModelManager modelManager =
+            (DynamicModelManager) securityService.getModelManager();
+        modelManager.grant(fulcrumGroup, fulcrumRole);
+        modelManager.grant(fulcrumUser, fulcrumGroup);
+
+        User turbineUser = TurbineSecurity.getService().getUser("Mike");
+
+        MockHttpSession session = new MockHttpSession();
+        session.setupGetAttribute(User.SESSION_KEY, turbineUser);
+        turbineUser = getUserFromRunData(session);
         assertNotNull(turbineUser);
-        return turbineUser;
+        assertFalse(TurbineSecurity.getService().isAnonymousUser(turbineUser));
+        AccessControlList acl =
+            TurbineSecurity.getService().getACL(turbineUser);
+        assertTrue(acl.hasRole("TEST_ROLE"));
+
     }
-    public void tearDown()
-    {
-        ServiceManager serviceManager = TurbineServices.getInstance();
-        serviceManager.shutdownService(SecurityService.SERVICE_NAME);
-        serviceManager.shutdownServices();
-    }
+
 }

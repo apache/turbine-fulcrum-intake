@@ -52,65 +52,98 @@ package org.apache.fulcrum.security.adapter.turbine;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+import java.util.Vector;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.turbine.modules.actions.sessionvalidator.DefaultSessionValidator;
+import org.apache.turbine.modules.actions.sessionvalidator.SessionValidator;
 import org.apache.turbine.om.security.User;
 import org.apache.turbine.services.ServiceManager;
 import org.apache.turbine.services.TurbineServices;
+import org.apache.turbine.services.avaloncomponent.AvalonComponentService;
+import org.apache.turbine.services.rundata.RunDataService;
 import org.apache.turbine.services.security.SecurityService;
-import org.apache.turbine.services.security.TurbineSecurity;
+import org.apache.turbine.util.RunData;
 import org.apache.turbine.util.TurbineConfig;
 
+import com.mockobjects.servlet.MockHttpServletResponse;
+import com.mockobjects.servlet.MockHttpSession;
+import com.mockobjects.servlet.MockServletConfig;
+
 /**
- * Test that the SecurityServiceAdapter works properly.
+ * Test that we can load up a fulcrum ACL in Turbine, without Turbine
+ * knowing that anything has changed.
  * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 
-public class SecurityServiceAdaptorTest extends BaseUnitTest
+public abstract class AbstractAccessControlListAdaptorTest extends BaseUnitTest
 {
-    private static final String PREFIX =
+    protected static final String PREFIX =
         "services." + SecurityService.SERVICE_NAME + '.';
-    public SecurityServiceAdaptorTest(String name) throws Exception
+	protected TurbineConfig tc;
+	protected MockHttpSession session;
+	protected AvalonComponentService acs;
+	
+	public abstract String getTRProps();
+    public AbstractAccessControlListAdaptorTest(String name) throws Exception
     {
         super(name);
     }
-
-    public void setUp() throws Exception
-    {
-        super.setUp();
-        TurbineConfig tc =
-            new TurbineConfig(
-                ".",
-                "/src/test/AdapterTestTurbineResources.properties");
-        tc.initialize();
-    }
-    public void testAccountExists() throws Exception
-    {
-
-        User user = new org.apache.turbine.om.security.TurbineUser();
-        user.setAccessCounter(5);
-        assertFalse(TurbineSecurity.getService().accountExists(user));
-
-    }
     
-	public void testCreateUser() throws Exception
-	{
+	public void setUp() throws Exception
+	 {
+	    super.setUp();
+		 tc =
+			 new TurbineConfig(
+				 ".",
+				 "/src/test/"+getTRProps());
+		 tc.initialize();
+		 session = new MockHttpSession();
+		 acs =
+			 (AvalonComponentService) TurbineServices.getInstance().getService(
+				 AvalonComponentService.SERVICE_NAME);
+	 }    
+   
+	protected User getUserFromRunData(HttpSession session) throws Exception
+    {
+        RunDataService rds =
+            (RunDataService) TurbineServices.getInstance().getService(
+                RunDataService.SERVICE_NAME);
+        BetterMockHttpServletRequest request =
+            new BetterMockHttpServletRequest();
+        request.setupServerName("bob");
+        request.setupGetProtocol("http");
+        request.setupScheme("scheme");
+        request.setupPathInfo("damn");
+        request.setupGetServletPath("damn2");
+        request.setupGetContextPath("wow");
+        request.setupGetContentType("html/text");
+        request.setupAddHeader("Content-type", "html/text");
+        Vector v = new Vector();
+        request.setupGetParameterNames(v.elements());
+        request.setSession(session);
+        HttpServletResponse response = new MockHttpServletResponse();
+        ServletConfig config = new MockServletConfig();
+        RunData rd = rds.getRunData(request, response, config);
+        SessionValidator sessionValidator = new DefaultSessionValidator();
+        sessionValidator.doPerform(rd);
+        User turbineUser = rd.getUser();
+        assertNotNull(turbineUser);
+        return turbineUser;
+    }
 
-		User user = new org.apache.turbine.om.security.TurbineUser();
-		user.setAccessCounter(5);
-		user.setName("ringo");
-		TurbineSecurity.getService().addUser(user,"fakepasswrod");
-		assertTrue(TurbineSecurity.getService().accountExists(user));
-
-	}    
-
+   
     public void tearDown()
     {
+        super.tearDown();
         ServiceManager serviceManager = TurbineServices.getInstance();
         serviceManager.shutdownService(SecurityService.SERVICE_NAME);
         serviceManager.shutdownServices();
     }
-    
-    
 }

@@ -52,65 +52,69 @@ package org.apache.fulcrum.security.adapter.turbine;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.security.BaseSecurityService;
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.model.basic.BasicModelManager;
 import org.apache.turbine.om.security.User;
-import org.apache.turbine.services.ServiceManager;
-import org.apache.turbine.services.TurbineServices;
-import org.apache.turbine.services.security.SecurityService;
 import org.apache.turbine.services.security.TurbineSecurity;
-import org.apache.turbine.util.TurbineConfig;
+import org.apache.turbine.util.security.AccessControlList;
+
+import com.mockobjects.servlet.MockHttpSession;
 
 /**
- * Test that the SecurityServiceAdapter works properly.
+ * Test that we can load up a fulcrum ACL in Turbine, without Turbine
+ * knowing that anything has changed.
  * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 
-public class SecurityServiceAdaptorTest extends BaseUnitTest
+public class AccessControlListAdaptorBasicModelTest
+    extends AbstractAccessControlListAdaptorTest
 {
-    private static final String PREFIX =
-        "services." + SecurityService.SERVICE_NAME + '.';
-    public SecurityServiceAdaptorTest(String name) throws Exception
+	public String getTRProps(){
+		return "AdapterTestTurbineResourcesBasicModel.properties";
+	}
+	
+    public AccessControlListAdaptorBasicModelTest(String name) throws Exception
     {
         super(name);
     }
 
-    public void setUp() throws Exception
-    {
-        super.setUp();
-        TurbineConfig tc =
-            new TurbineConfig(
-                ".",
-                "/src/test/AdapterTestTurbineResources.properties");
-        tc.initialize();
-    }
-    public void testAccountExists() throws Exception
+    public void testHasRoleBasic() throws Exception
     {
 
-        User user = new org.apache.turbine.om.security.TurbineUser();
-        user.setAccessCounter(5);
-        assertFalse(TurbineSecurity.getService().accountExists(user));
+        BaseSecurityService securityService =
+            (BaseSecurityService) acs.lookup(BaseSecurityService.ROLE);
+        Group fulcrumGroup =
+            securityService.getGroupManager().getGroupInstance(
+                "TEST_GROUP_BASIC_MODEL");
+
+        org.apache.fulcrum.security.entity.User fulcrumUser =
+            securityService.getUserManager().getUserInstance("MikeFitz");
+
+        securityService.getGroupManager().addGroup(fulcrumGroup);
+
+        fulcrumUser =
+            securityService.getUserManager().addUser(fulcrumUser, "relana");
+        System.out.println(
+            securityService.getModelManager().getClass().getName());
+        BasicModelManager modelManager =
+            (BasicModelManager) securityService.getModelManager();
+
+        modelManager.grant(fulcrumUser, fulcrumGroup);
+
+        User turbineUser = TurbineSecurity.getService().getUser("MikeFitz");
+
+        MockHttpSession session = new MockHttpSession();
+        session.setupGetAttribute(User.SESSION_KEY, turbineUser);
+        turbineUser = getUserFromRunData(session);
+        assertNotNull(turbineUser);
+        assertFalse(TurbineSecurity.getService().isAnonymousUser(turbineUser));
+        AccessControlList acl =
+            TurbineSecurity.getService().getACL(turbineUser);
+        assertTrue(acl.hasRole("TEST_GROUP_BASIC_MODEL"));
 
     }
-    
-	public void testCreateUser() throws Exception
-	{
 
-		User user = new org.apache.turbine.om.security.TurbineUser();
-		user.setAccessCounter(5);
-		user.setName("ringo");
-		TurbineSecurity.getService().addUser(user,"fakepasswrod");
-		assertTrue(TurbineSecurity.getService().accountExists(user));
-
-	}    
-
-    public void tearDown()
-    {
-        ServiceManager serviceManager = TurbineServices.getInstance();
-        serviceManager.shutdownService(SecurityService.SERVICE_NAME);
-        serviceManager.shutdownServices();
-    }
-    
-    
 }
