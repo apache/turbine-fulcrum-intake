@@ -68,9 +68,10 @@ import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.thread.ThreadSafe;
 /**
  * An implementation of CryptoService that uses either supplied crypto
- * Algorithms (provided in Fulcrum.properties) or tries to get them via
+ * Algorithms (provided in the component config xml file) or tries to get them via
  * the normal java mechanisms if this fails.
  *
+ * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  *
