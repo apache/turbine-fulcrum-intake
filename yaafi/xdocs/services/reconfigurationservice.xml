@@ -10,13 +10,13 @@
 
     <section name="Overview">
       <p>
-        This service uses a background thread to monitor the Component Configuration 
-        File. If a change is detected the Avalon container is reconfigured.
+        This service uses a background thread to monitor a list of configuration
+        files. A resource is loaded by using a resource name and an InputStreamLocator. 
+        The a SHA-1 hashcode is derived and compared to the previous hashcode.
+        If a change is detected either the whole container or a list of 
+        services are reconfigured. This service allows reconfiguration 
+        support without using client/server communication.
       </p>
-      <p>
-        This service allows reconfiguration support without using client/server
-        communication.
-      </p>            
     </section>
     
     <section name="Configuration">
@@ -29,17 +29,33 @@
     shorthand="ReconfigurationService"
     default-class="org.apache.fulcrum.yaafi.service.reconfiguration.ReconfigurationServiceImpl"
     early-init="true"
-    description="Monitors the componentConfiguration.xml to reconfigure YAAFI"
+    description="Monitors configuration files to reconfigure YAAFI"
   />   
           ]]>
         </source>
       </subsection>
 
-      <subsection name="Component Configuration">
+      <subsection name="Example Component Configuration">
+        <p>
+          The following configuration checks every 5 seconds
+          if the files have changed. Changing "TestComponentConfig"
+          triggers the reconfiguration of the container whereas a change
+          of "TestParameters.properties" would reconfigure the two
+          listed services.          
+        </p>
         <source>
           <![CDATA[
   <ReconfigurationService interval="5000">
-    <location>./src/test/TestComponentConfig.xml</location>
+    <entry>
+      <location>./src/test/TestComponentConfig.xml</location> 
+    </entry>
+    <entry>
+      <location>./src/test/TestParameters.properties</location>
+      <services>
+        <service name="org.apache.fulcrum.yaafi.TestComponent"/>
+        <service name="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyService"/>
+      </services> 
+    </entry>    
   </ReconfigurationService>
           ]]>
         </source>

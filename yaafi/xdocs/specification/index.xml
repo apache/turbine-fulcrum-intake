@@ -19,6 +19,7 @@
             <li><a href="role.html">Role Configuration</a></li>
             <li><a href="component.html">Component Configuration</a></li>
             <li><a href="context.html">Avalon Context</a></li>
+            <li><a href="lifecycle.html">YAAFI Service Lifecycle</a></li>
         </ul>
       </p>
             

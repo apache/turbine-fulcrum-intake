@@ -9,7 +9,7 @@
 
   <body>
 
-    <section name="Avalon Context">
+    <section name="YAAFI Avalon Context">
 
       <p>
         The components are initialized with an Avalon Context if the implementation
@@ -58,6 +58,15 @@
               Define the Merlin component classloader.
             </td>
           </tr>
+          <tr>
+            <td>componentAppRoot</td>
+            <td>String</td>
+            <td>
+              The fully qualified name of the Merlin application root. This
+              entry exists only for backward compatibilty with existing
+              Fulcrum services and will be removed as soon as possible.
+            </td>
+          </tr>
         </table>
       </subsection>
 
@@ -87,7 +96,10 @@
             <td>urn:avalon:classloader</td>
             <td>sun.misc.Launcher$AppClassLoader@e80a59</td>
           </tr>
-
+          <tr>
+            <td>componentAppRoot</td>
+            <td>W:\work\it20one\service\it20one-service-framework</td>
+          </tr>
         </table>            
 
       </subsection>

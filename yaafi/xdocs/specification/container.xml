@@ -25,6 +25,16 @@
             <th>Description</th>
           </tr>
           <tr>
+            <td>containerType</td>
+            <td>String</td>
+            <td>Y</td>
+            <td>
+              The type of Avalon container where YAAFI is instantiated, 
+              either "phoenix", "fortress" or "merlin". If no value is 
+              defined then <b>merlin</b> will be used.          
+            </td>
+          </tr>
+          <tr>
             <td>containerClazzName</td>
             <td>String</td>
             <td>Y</td>
@@ -79,6 +89,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <fulcrum-yaafi>
+  <containerType>phoenix</containerType
   <containerClazzName>org.apache.fulcrum.yaafi.framework.container.ServiceContainerImpl</containerClazzName>
   <componentRoles>
     <location>./src/test/TestRoleConfig.xml</location>

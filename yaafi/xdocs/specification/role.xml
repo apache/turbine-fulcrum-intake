@@ -58,7 +58,25 @@
             <td>Y</td>
             <td>
               Shall the service implementation class be instantiated
-              during startup of the container or on demand?
+              during startup of the container or on demand? If no 
+              value is defined then <b>true</b> will be used.
+            </td>
+          </tr>
+          <tr>
+            <td>role@componentType</td>
+            <td>String</td>
+            <td>Y</td>
+            <td>
+              The type of component whereas we currently support "avalon" only
+            </td>
+          </tr>
+          <tr>
+            <td>role@componentFlavour</td>
+            <td>String</td>
+            <td>Y</td>
+            <td>
+              The flavour for the given component type either "phoenix", "fortress",
+              "merlin", "yaafi". If no value is defined then <b>yaffi</b> will be used.
             </td>
           </tr>
           <tr>
@@ -83,6 +101,7 @@
     shorthand="SystemPropertyService"
     default-class="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyServiceImpl"
     early-init="true"
+    component-type="merlin"
     description="Copies name/value pairs into the SystemProperties"
   />   
 </role-list>          

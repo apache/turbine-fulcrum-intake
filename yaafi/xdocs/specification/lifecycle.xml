@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Specification</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="YAAFI Lifecycle Contract">
+
+      <p>
+        The following contract is fulfilled by the Avalon YAAFI Container 
+      </p>
+      
+      <subsection name="Early Initialization">
+        <p>
+          If a service component is defined as "early-init" the instance
+          of the service component will be incarnated during startup of the
+          container.
+        </p>      
+      </subsection>
+
+      <subsection name="Lazy Initialization">
+        <p>
+          If a service component is initialized lazily the 
+          implementation class is loaded but incarnation takes 
+          place during the first invocation of ServiceManager.lookup().
+        </p>      
+        <p>
+          An invocation of ServiceManager.hasService() will not incarnate
+          a service component instance.
+        </p>      
+      </subsection>
+
+      <subsection name="Decommisioning">
+        <p>
+          The decommisioning of a service component instance result
+          in exactly the same state as using a lazily initialized service
+          component. I.e. the implementation class is loaded but no
+          instance exists
+        </p>      
+      </subsection>
+      
+    </section>
+
+  </body>
+
+</document>
