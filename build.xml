@@ -392,11 +392,11 @@
 
   <target name="include-email" if="commons-email.present">
     <copy todir="${build.dir}/src/org" overwrite="no">
-      <fileset dir="${src.dir}/util/java/org"/>
+      <fileset dir="${src.dir}/util/org"/>
     </copy>
 
     <copy todir="${build.dir}/src/org" overwrite="yes">
-      <fileset dir="${src.dir}/util/java/org"/>
+      <fileset dir="${src.dir}/util/org"/>
     </copy>
   </target>
 
@@ -412,8 +412,8 @@
          The torque generated files so overwrite must be
          set to 'yes'. -->
     <copy todir="${build.dir}/src/org" overwrite="yes">
-      <fileset dir="${src.dir}/core/java/org"/>
-      <fileset dir="${src.dir}/services/java/org"/>
+      <fileset dir="${src.dir}/core/org"/>
+      <fileset dir="${src.dir}/services/org"/>
     </copy>
   </target>
 
