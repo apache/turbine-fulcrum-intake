@@ -1,31 +1,25 @@
 <?xml version="1.0"?>
 <project>
-  <extend>${basedir}/../../project.xml</extend>
+  <extend>${basedir}/../project.xml</extend>
   <id>fulcrum-security-hibernate</id>
   <name>Fulcrum Security Hibernate Impl</name>
-  <currentVersion>1.0-alpha-6</currentVersion>
-  <package>org.apache.fulcrum.security</package>
+  <currentVersion>1.0.6</currentVersion>
 
   <dependencies>
     <dependency>
       <groupId>fulcrum</groupId>   
       <artifactId>fulcrum-security-api</artifactId>
-      <version>1.0-alpha-6</version>
-    </dependency>  
-    <dependency>
-      <groupId>fulcrum</groupId>   
-      <artifactId>fulcrum-security-spi</artifactId>
-      <version>1.0-alpha-6</version>
-    </dependency>      
+      <version>1.0.6</version>
+    </dependency>   
     <dependency>
       <groupId>fulcrum</groupId>   
       <artifactId>fulcrum-crypto-api</artifactId>
-      <version>1.0-alpha-4</version>
+      <version>1.0.4</version>
     </dependency>
     <dependency>
       <groupId>fulcrum</groupId>   
       <artifactId>fulcrum-crypto-impl</artifactId>
-      <version>1.0-alpha-4</version>
+      <version>1.0.4</version>
     </dependency>  
 
     <dependency>
@@ -105,17 +99,9 @@
        <version>1.4</version>
        <url>http://www.dom4j.org/</url>
     </dependency>                 
-
-    <!-- testing -->
-    <dependency>
-      <groupId>fulcrum</groupId>    
-      <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0-alpha-2</version>
-    </dependency>    
+ 
   </dependencies>
   <build>
-    <nagEmailAddress>turbine-dev@jakarta.apache.org</nagEmailAddress>
-
     <sourceDirectory>${basedir}/src/java/</sourceDirectory>
     <unitTestSourceDirectory>${basedir}/src/test/</unitTestSourceDirectory>
     <unitTest>
