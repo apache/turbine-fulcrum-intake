@@ -58,6 +58,7 @@ import java.io.OutputStream;
 import java.io.Writer;
 import org.apache.fulcrum.ServiceException;
 import org.apache.fulcrum.TurbineServices;
+import org.apache.fulcrum.template.TemplateContext;
 
 /**
  * This is a simple static accessor to common TemplateService tasks such as
