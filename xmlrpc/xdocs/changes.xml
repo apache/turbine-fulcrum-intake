@@ -8,6 +8,10 @@
 
   <body>
     <release version="Not applicable" date="">
+      <action dev="ronald" type="add">
+        creates a list of dependencies (all optional), called handler.0 through
+		handler.9, instead of just handler. 
+      </action>       	
       <action dev="ronald" type="fix">
         Change Server component to unregister handlers on dispose() method.  Prevents shutdown errors.
       </action>       	

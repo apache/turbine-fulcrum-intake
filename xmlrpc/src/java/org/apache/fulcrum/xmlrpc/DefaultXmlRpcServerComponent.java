@@ -79,6 +79,17 @@ import java.net.Socket;
  *
  * @avalon.component version="1.0" name="xmlrpc-server" lifestyle="singleton"
  * @avalon.service   version="1.0" type="org.apache.fulcrum.xmlrpc.XmlRpcServerComponent"
+ * @avalon.dependency key="handler.0" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
+ * @avalon.dependency key="handler.1" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
+ * @avalon.dependency key="handler.2" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
+ * @avalon.dependency key="handler.3" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
+ * @avalon.dependency key="handler.4" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
+ * @avalon.dependency key="handler.5" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
+ * @avalon.dependency key="handler.6" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
+ * @avalon.dependency key="handler.7" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
+ * @avalon.dependency key="handler.8" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
+ * @avalon.dependency key="handler.9" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
+ * 
  * @author <a href="mailto:jason@zenplex.com">Jason van Zyl</a>
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
