@@ -30,3 +30,53 @@ rid of all the set/getCategory crap in the service framework.
 /src/org/apache/fulcrum/intake/validator/IntegerValidator.java
 /src/org/apache/fulcrum/intake/Intake.java
 /src/org/apache/fulcrum/xmlrpc/util/FileTransfer.java
+
+
+ComponentLoader
+---------------
+
+Create a ComponentLoader in Stratum (in a 'loader' package) to be used
+by Turbine and Fulcrum and Torque.  It's job is to load components
+(some of which might also be services) and call their lifecycle
+methods.
+
+The ComponentLoader will enable someone to extend any arbitrary class,
+implement the lifecycle interfaces, and use it as a component in the
+Turbine family.
+
+This trick will be immediately useful to enable turbine users to
+migrate their Turbine 2.1 services to Fulcrum.  There are a few
+services which should be changed to components, and this trick should
+facilitate that migration as well.
+
+FIXME: Still need a better idea about what makes a service different
+from a component, including examples to illustrate the differences.
+
+For now we will just load Fulcrum and it can use it's current
+configuration file.
+
+Other 2.1->Fulcrum migration plans:
+
+jason can swap all the imports with the transformer in maven and then
+people will probably have to poke around for a couple minutes.
+
+
+Other implementation goals:
+
+*tons* of debug logging and *tons* of testing.  There's a crude
+diagram here: http://www.apache.org/~jvanzyl/diagrams/fulcrum.jpg
+
+leave the code that is there alone as much as possible and extend the
+BaseServiceBroker and implement the required lifecycle interfaces:
+'public class Fulcrum extends BaseServiceBroker implements
+Configurable, Initializable'.  We don't want the lifecycle interfaces
+applied directly to the service broker.
+
+
+Longer-term plans:
+
+let the ComponentLoader reload components without stopping the server.
+It will have its own classloader eventually (probably borrowing the
+webapp classloader code from catalina).  We can look for a
+configuration.xml in a standard place in the jar or look at the
+manifest and use that to configure the component.
