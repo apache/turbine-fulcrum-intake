@@ -85,37 +85,37 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class Localization
 {
-	
-	/** Static instance of the LocalizationService.  */
-	private static LocalizationService localizationService;
 
-	/**
-	 * Return whether the localization service has been initialized
-	 * or not.
-	 * @return
-	 */
-	public static boolean isInitialized(){
-		return (!(localizationService==null));
-	}
-	/**
-	 * Utility method for accessing the service
-	 * implementation
-	 *
-	 * @return a LocalizationService implementation instance
-	 */
-	private static LocalizationService getService()
-	{
-		if(localizationService==null){
-			throw new RuntimeException("Localization Service has not been started yet.");
-		}
-		return localizationService;
-	}
-	static void setLocalizationService(LocalizationService service)
-	{
-		localizationService = service;
-	}
+    /** Static instance of the LocalizationService.  */
+    private static LocalizationService localizationService;
 
-	
+    /**
+     * Return whether the localization service has been initialized
+     * or not.
+     * @return
+     */
+    public static boolean isInitialized(){
+        return (!(localizationService==null));
+    }
+    /**
+     * Utility method for accessing the service
+     * implementation
+     *
+     * @return a LocalizationService implementation instance
+     */
+    private static LocalizationService getService()
+    {
+        if(localizationService==null){
+            throw new RuntimeException("Localization Service has not been started yet.");
+        }
+        return localizationService;
+    }
+    static void setLocalizationService(LocalizationService service)
+    {
+        localizationService = service;
+    }
+
+
     /**
      * Fetches the localized text from the specified bundle, ignoring
      * any default bundles.
@@ -292,5 +292,30 @@ public class Localization
         return getService().getDefaultBundleName();
     }
 
+   /**
+     * @see LocalizationService#format(String, Locale, String, Object)
+     */
+    public static String format(String bundleName, Locale locale,
+                                String key, Object arg1)
+    {
+        return getService().format(bundleName, locale, key, arg1);
+    }
 
+    /**
+     * @see LocalizationService#format(String, Locale, String, Object, Object)
+     */
+    public static String format(String bundleName, Locale locale,
+                                String key, Object arg1, Object arg2)
+    {
+        return getService().format(bundleName, locale, key, arg1, arg2);
+    }
+
+    /**
+     * @see LocalizationService#format(String, Locale, String, Object[])
+     */
+    public static String format(String bundleName, Locale locale,
+                                String key, Object[] args)
+    {
+        return getService().format(bundleName, locale, key, args);
+    }
  }
