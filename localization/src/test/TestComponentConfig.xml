@@ -1,9 +1,0 @@
-<componentConfig>
-    <localization>
-      <bundles>
-        <bundle>org.apache.fulcrum.localization.BarBundle</bundle>
-        <bundle>org.apache.fulcrum.localization.FooBundle</bundle>
-        <bundle>org.apache.fulcrum.localization.MissingBundle</bundle>        
-      </bundles>
-    </localization>
-</componentConfig>
