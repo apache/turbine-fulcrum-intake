@@ -412,8 +412,19 @@ public class DefaultFileItem
     {
         if (inMemory())
         {
-            FileWriter writer = new FileWriter(file);
-            writer.write(getString());
+            FileWriter writer = null;
+            try
+            {
+                writer = new FileWriter(file);
+                writer.write(getString());
+            }
+            finally
+            {
+                if (writer != null)
+                {
+                    writer.close();
+                }
+            }
         }
         else if (storeLocation != null)
         {
