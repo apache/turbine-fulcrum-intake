@@ -102,6 +102,12 @@ public class TurbineLocalizationService
     implements LocalizationService
 {
     /**
+     * The value to pass to <code>MessageFormat</code> if a
+     * <code>null</code> reference is passed to <code>format()</code>.
+     */
+    private static final Object[] NO_ARGS = new Object[0];
+
+    /**
      * Bundle name keys a HashMap of the ResourceBundles in this
      * service (which is in turn keyed by Locale).
      */
@@ -488,6 +494,10 @@ public class TurbineLocalizationService
                          String key, Object[] args)
     {
         String value = getBundle(bundleName, locale).getString(key);
+        if (args == null)
+        {
+            args = NO_ARGS;
+        }
         return MessageFormat.format(value, args);
     }
 }
