@@ -209,7 +209,6 @@ public class Intake
         }
     }
 
-
     /**
      * Inner class to present a nice interface to the template designer
      */
@@ -284,13 +283,19 @@ public class Intake
         }
     }
 
-
+    /**
+     * get a specific group
+     */
     public Object get(String groupName)
         throws Exception
     {
         return pullMap.get(groupName);
     }
 
+    /**
+     * Loops through all of the Groups and checks to see if
+     * the data within the Group is valid.
+     */
     public boolean isAllValid()
     {
         boolean allValid = true;
@@ -303,12 +308,27 @@ public class Intake
         return allValid;
     }
 
+    /**
+     * Get a specific group by name and key.
+     */
     public Group get(String groupName, String key)
         throws Exception
     {
+        if (groupName == null)
+        {
+            throw new Exception ("Intake.get: groupName == null");
+        }
+        if (key == null)
+        {
+            throw new Exception ("Intake.get: key == null");
+        }
         return ((PullHelper)get(groupName)).setKey(key);
     }
 
+    /**
+     * Get a specific group by name and key. Also specify
+     * whether or not you want to create a new group.
+     */
     public Group get(String groupName, String key, boolean create)
         throws Exception
     {
