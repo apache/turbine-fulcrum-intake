@@ -138,7 +138,16 @@ public class TurbineIntakeService
     public void init()
         throws InitializationException
     {
-        String xmlPath = getConfiguration().getString(XML_PATH);
+        String xmlPath = getConfiguration()
+            .getString(XML_PATH, XML_PATH_DEFAULT);
+        String appDataPath = getConfiguration()
+            .getString(SERIAL_XML, SERIAL_XML_DEFAULT);
+        
+        String SERIALIZED_ERROR_MSG = 
+            "Intake initialization could not be serialized " +
+            "because writing to " + appDataPath + " was not " +
+            "allowed.  This will require that the xml file be " +
+            "parsed when restarting the application.";
 
         if ( xmlPath == null )
         {
@@ -149,15 +158,48 @@ public class TurbineIntakeService
             throw new InitializationException(pathError);
         }
 
-        //!! need a constant
-        String appDataPath = "WEB-INF/appData.ser";
-        try
+        File serialAppData = null;
+        File xmlFile = null;
+        xmlFile = new File(xmlPath);
+        if ( !xmlFile.canRead() ) 
         {
             // If possible, transform paths to be webapp root relative.
             xmlPath = getRealPath(xmlPath);
+            xmlFile = new File(xmlPath);
+            if ( !xmlFile.canRead() ) 
+            {
+                String pathError =
+                    "Could not read input file.  Even tried relative to"
+                    + " webapp root.";
+                getCategory().error(pathError);
+                throw new InitializationException(pathError);
+            }
+        }
+
+        serialAppData = new File(appDataPath);
+        try
+        {
+            serialAppData.createNewFile();
+            serialAppData.delete();
+        }
+        catch (Exception e)
+        {
+            // If possible, transform paths to be webapp root relative.
             appDataPath = getRealPath(appDataPath);
-            File serialAppData = new File(appDataPath);
-            File xmlFile = new File(xmlPath);
+            serialAppData = new File(appDataPath);
+            try
+            {
+                serialAppData.createNewFile();
+                serialAppData.delete();
+            }
+            catch (Exception ee)
+            {
+                getCategory().info(SERIALIZED_ERROR_MSG);
+            }
+        }
+
+        try
+        {
             if ( serialAppData.exists()
                  && serialAppData.lastModified() > xmlFile.lastModified() )
             {

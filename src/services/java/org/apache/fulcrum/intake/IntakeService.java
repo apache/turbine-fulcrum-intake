@@ -88,6 +88,23 @@ public interface IntakeService
     public static final String XML_PATH = "xml.path";
 
     /**
+     * The default location of the xml specification.
+     */
+    public static final String XML_PATH_DEFAULT = "WEB-INF/conf/intake.xml";
+
+    /**
+     * The property specifying the location where a serialized version of 
+     * the xml specification can be written for faster restarts..
+     */
+    public static final String SERIAL_XML = "serialize.path";
+
+    /**
+     * The default location where a serialized version of 
+     * the xml specification can be written for faster restarts..
+     */
+    public static final String SERIAL_XML_DEFAULT = "WEB-INF/appData.ser";
+
+    /**
      * The default pool capacity.
      */
     public static final int DEFAULT_POOL_CAPACITY = 1024;
