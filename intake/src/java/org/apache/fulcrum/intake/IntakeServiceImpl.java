@@ -625,12 +625,12 @@ public class IntakeServiceImpl
         for (Iterator it = xmlPathes.iterator(); it.hasNext();) {
             // Files are webapp.root relative
             String xmlPath = (String) it.next();
-            File xmlFile = new File( applicationRoot, xmlPath);
+            File xmlFile = new File( applicationRoot, xmlPath).getAbsoluteFile();
 
             log.debug("Path for XML File: " + xmlFile);
 
             if (!xmlFile.canRead()) {
-                String READ_ERR = "Could not read input file " + xmlPath;
+                String READ_ERR = "Could not read input file with path " + xmlPath +".  Looking for file " + xmlFile;
 
                 log.error(READ_ERR);
                 throw new ConfigurationException(READ_ERR);
