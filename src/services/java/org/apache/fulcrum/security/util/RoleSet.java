@@ -245,4 +245,19 @@ public class RoleSet implements Serializable
     {
         return set.size();
     }
+
+    /**
+     * list of role names in this set
+     */
+    public String toString()
+    {
+        StringBuffer sbuf = new StringBuffer(12*size());
+        Iterator i = set.iterator();
+        while ( i.hasNext() ) 
+        {
+            sbuf.append(((Role)i.next()).getName())
+                .append(", ");
+        }
+        return sbuf.toString();
+    }
 }
