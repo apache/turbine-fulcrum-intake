@@ -3,7 +3,7 @@ package org.apache.fulcrum.xmlrpc;
 /* ----------------------------------------------------------------------------
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2000-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2000-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,7 +57,11 @@ package org.apache.fulcrum.xmlrpc;
  */
 
 /**
+ * Message listener interface.
  *
+ * @author <a href="mailto:jvanzyl@periapt.com">Jason van Zyl</a>
+ * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
+ * @version $Id$
  */
 public interface XmlRpcMessageListener
 {
