@@ -61,6 +61,7 @@ import java.security.NoSuchAlgorithmException;
 
 import org.apache.fulcrum.InitializationException;
 import org.apache.fulcrum.factory.FactoryService;
+import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.TurbineServices;
 
 import org.apache.commons.configuration.Configuration;
@@ -76,7 +77,8 @@ import org.apache.commons.configuration.Configuration;
  */
 
 public class TurbineCryptoService 
-    extends BaseCryptoService
+    extends BaseService
+    implements CryptoService
 {
     /** Key Prefix for our algorithms */
     private static final String ALGORITHM = "algorithm"; 
