@@ -61,10 +61,24 @@ package org.apache.fulcrum.security.entity;
  * on the Roles in the Group that they are assigned.
  *
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
+ * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @version $Id$
  */
+
 public interface SecurityEntity
 {
+    /**
+     * Get the Name of the SecurityEntity.
+     *
+     * @return The Name of the SecurityEntity.
+     */
     public String getName();
+
+    /**
+     * Set the Name of the SecurityEntity.
+     *
+     * @param name Name of the SecurityEntity.
+     */    public String getName();
     public void setName(String name);
 }
