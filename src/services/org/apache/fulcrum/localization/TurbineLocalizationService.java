@@ -54,6 +54,7 @@ package org.apache.fulcrum.localization;
  * <http://www.apache.org/>.
  */
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -93,6 +94,7 @@ import org.apache.fulcrum.InitializationException;
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
  * @author <a href="mailto:novalidemail@foo.com">Frank Y. Kim</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
+ * @author <a href="mailto:leonardr@collab.net">Leonard Richardson</a>
  * @version $Id$
  */
 public class TurbineLocalizationService
@@ -387,7 +389,8 @@ public class TurbineLocalizationService
     /**
      * Retrieves the bundle using the
      * <code>ResourceBundle.getBundle(String, Locale)</code> method,
-     * ignoring <code>MissingResourceException</code>.
+     * returning <code>null</code> instead of throwing
+     * <code>MissingResourceException</code>.
      */
     private final ResourceBundle getBundleIgnoreException(String bundleName,
                                                           Locale locale)
@@ -436,5 +439,55 @@ public class TurbineLocalizationService
 
         // Couldn't parse locale.
         return defaultLocale;
+    }
+
+    /**
+     * Formats a localized value using the provided object.
+     *
+     * @param bundleName The bundle in which to look for the localizable text.
+     * @param locale The locale for which to format the text.
+     * @param key The identifier for the localized text to retrieve,
+     * @param arg1 The object to use as {0} when formatting the localized text.
+     * @return Formatted localized text.
+     * @see #format(String, Object[])
+     */
+    public String format(String bundleName, Locale locale, 
+                         String key, Object arg1)
+    {
+        return format(bundleName, locale, key, new Object[] { arg1 });
+    }
+
+    /**
+     * Formats a localized value using the provided objects.
+     *
+     * @param bundleName The bundle in which to look for the localizable text.
+     * @param locale The locale for which to format the text.
+     * @param key The identifier for the localized text to retrieve,
+     * @param arg1 The object to use as {0} when formatting the localized text.
+     * @param arg2 The object to use as {1} when formatting the localized text.
+     * @return Formatted localized text.
+     * @see #format(String, Object[])
+     */
+    public String format(String bundleName, Locale locale,
+                         String key, Object arg1, Object arg2)
+    {
+        return format(bundleName, locale, key, new Object[] { arg1, arg2 });
+    }
+
+    /**
+     * Formats a localized value using the provided objects.
+     *
+     * @param bundleName The bundle in which to look for the localizable text.
+     * @param locale The locale for which to format the text.
+     * @param key The identifier for the localized text to retrieve,
+     * @param args The objects to use as {0}, {1}, etc. when
+     *             formatting the localized text.
+     * @return Formatted localized text.
+     */
+    public String format(String bundleName, Locale locale,
+                         String key, Object[] args)
+    {
+        String value = getBundle(bundleName, locale).getString(key);
+        return MessageFormat.format(value, args);
     }
 }
