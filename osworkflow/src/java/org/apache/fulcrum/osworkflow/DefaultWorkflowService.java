@@ -55,6 +55,7 @@ package org.apache.fulcrum.osworkflow;
  */
 import java.util.Iterator;
 import java.util.List;
+
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.configuration.Configurable;
@@ -62,6 +63,9 @@ import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.thread.ThreadSafe;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.opensymphony.workflow.Workflow;
 import com.opensymphony.workflow.WorkflowException;
 import com.opensymphony.workflow.basic.BasicWorkflow;
@@ -79,6 +83,9 @@ public class DefaultWorkflowService
     extends AbstractLogEnabled
     implements WorkflowService, Configurable, Initializable, Disposable, ThreadSafe
 {
+	
+	/** The log. */
+	private static Log log = LogFactory.getLog(DefaultWorkflowService.class);
     /**
      * For a specific caller and status, return all the workflows.
      *
@@ -136,6 +143,11 @@ public class DefaultWorkflowService
      */
     public void initialize() throws Exception
     {
+		WorkflowServiceFacade.setWorkflowService(this);
+		if (log.isInfoEnabled())
+        {
+            log.info("OSWorkflow Service is Initialized now..");
+        }
     }
 
     /**

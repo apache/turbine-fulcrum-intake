@@ -6,7 +6,10 @@
   </properties>
 
   <body>
-    <release version="Not applicable" date="">
+    <release version="in cvs" date="">
+      <action dev="ycho" type="add">
+        New WorkflowServiceFacade.
+      </action>
       <action dev="epugh" type="update">
 		Changed name of project from workflow to osworkflow to clarify this isn't the
 		end all and be all workflow tool, but rather just an implementation of the 
