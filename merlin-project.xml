@@ -137,10 +137,24 @@
     <dependency> 
     	<groupId>avalon-meta</groupId> 
     	<artifactId>avalon-meta-plugin</artifactId> 
-    	<version>1.3.2</version> 
+    	<version>1.4.0</version> 
 	    <url>http://avalon.apache.org</url> 
     	<type>plugin</type>
   	</dependency> 
+    <dependency> 
+    	<groupId>avalon-util</groupId> 
+    	<artifactId>avalon-util-plugin</artifactId> 
+    	<version>1.0.0</version> 
+	    <url>http://avalon.apache.org</url> 
+    	<type>plugin</type>
+  	</dependency>   
+    <dependency> 
+    	<groupId>merlin</groupId> 
+    	<artifactId>merlin-plugin</artifactId> 
+    	<version>3.3.0</version> 
+	    <url>http://avalon.apache.org</url> 
+    	<type>plugin</type>
+  	</dependency>   		
   
   </dependencies>
 
