@@ -1,19 +1,14 @@
 <?xml version="1.0"?>
 <document>
   <properties>
-    <title>Fulcrum Pool Impl</title>
+    <title>Fulcrum Pool API</title>
     <author email="epugh@opensourceconnections.com">Eric Pugh</author>
   </properties>
 
   <body>
     <release version="1.0.3" date="in cvs">
       <action dev="epugh" type="update">
-      	Clean up dependencies.  Use TestContainer.
-      </action>           
-    </release>     
-    <release version="1.0.2" date="in cvs">
-      <action dev="epugh" type="update">
-      	Update to use Merlin 3.3.0
+      	Bump versions, clean up dependencies
       </action>           
     </release>   
   </body>

@@ -5,7 +5,7 @@
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
 package org.apache.fulcrum.pool;
-import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
+import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
  * @author Eric Pugh
@@ -14,7 +14,7 @@ import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class PoolServiceTest extends AbstractMerlinTestCase
+public class PoolServiceTest extends BaseUnitTest
 {
     private PoolService poolService = null;
     /**
@@ -30,14 +30,8 @@ public class PoolServiceTest extends AbstractMerlinTestCase
     public void setUp() throws Exception
     {
         super.setUp();
-        try
-        {
-            poolService = (PoolService) this.resolve( "/test/pool" );
-        }
-        catch (Throwable e)
-        {
-            fail(e.getMessage());
-        }
+
+        poolService = (PoolService) this.resolve( PoolService.class.getName() );
     }
   
     /*
