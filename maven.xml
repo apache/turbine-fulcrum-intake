@@ -1,148 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <project
+  default="java:jar"
   xmlns:j="jelly:core"
-  xmlns:m="maven">
-
-  <postGoal name="java:compile">
-    <copy
-      file="src/java/org/apache/fulcrum/avalon-roles.xml"
-      tofile="target/classes/org/apache/fulcrum/avalon-roles.xml"
-    />
-  </postGoal>
-
-  <!-- ================================================================== -->
-  <!-- T O R Q U E  G E N E R A T I O N  P R E  G O A L                   --> 
-  <!-- ================================================================== -->
-  <!-- This preGoal is executed before the the compilation goal so that   -->
-  <!-- the sources for the security service and the scheduler.            -->
-  <!-- ================================================================== -->
+  xmlns:m="jelly:maven">
 
   <preGoal name="java:compile">
+    <!-- Make sure avalon-roles.xml gets in the distribution. -->
+    <copy
+      file="src/java/org/apache/fulcrum/avalon-roles.xml"
+      tofile="target/classes/org/apache/fulcrum/avalon-roles.xml"/>
 
-    <attainGoal name="check-om"/>
-
-    <path id="maven.compile.src.set">
-      <pathelement location="${pom.build.SourceDirectory}"/>
-    </path>
-
-    <j:if test="${omGenerated != 'true'}">
-
-    <echo>Generating sources ...</echo>
-
-    <!--
-    We could create a fileset in the project to manage this
-    but we should really only have one source directory.
-    -->
-
-    <copy todir="${maven.prepareSourceDirectory}" overwrite="yes">
+    <!-- Setup where Torque generates the files to. -->
+    <copy todir="target/src" overwrite="yes">
       <fileset dir="src/java"/>
     </copy>
 
-    <attainGoal name="security-om"/>
-    <attainGoal name="scheduler-om"/>
-    
-    </j:if>
-    
-  </preGoal>
-
-  <!-- ================================================================== -->
-  <!-- C H E C K  O M                                                     -->
-  <!-- ================================================================== -->
-
-  <!-- this will soon be moved into the security services build. -->
-
-  <goal name="check-om">
-
-    <property
-      name="omStatusFile"
-      value="${maven.prepareSourceDirectory}/report.turbine.om.generation"
-    />
-
-    <j:set var="omGenerated" value="false"/>
-    
-    <uptodate
-      property="omGenerated"
-      targetfile="${omStatusFile}">
-      <srcfiles
-        dir="."
-        includes="turbine-schema.xml"
-      />
-    </uptodate>
-    
-  </goal>
-
-  <goal
-    name="init-taskdef">
-
-    <taskdef name="torque-om"
-      classname="org.apache.torque.task.TorqueDataModelTask">
-      <classpath refid="maven.dependency.classpath"/>
-    </taskdef>
-
-  </goal>
-
-  <goal
-    name="security-om"
-    prereqs="init-taskdef">
-
-<echo>
-+--------------------------------------------------------------------
-|
-| G E N E R A T I N G  S E C U R I T Y  S O U R C E S
-|
-+--------------------------------------------------------------------
-</echo>
-
+    <!-- Now generate the security service. -->
+    <j:set var="torque.schema.om.includes" value="turbine-schema.xml"/>
+    <j:set var="torque.targetPackage" value="${security.package}"/>
     <filter token="DATABASE_DEFAULT" value="${security.database.name}"/>
-    <!-- is there a way to load this from an xml file? -->
     <filter token="EXTRA_USER_COLUMNS" value="${security.extra.user.columns}"/>
     <copy
-      todir="${maven.prepareSourceDirectory}"
-      file="${schemaDirectory}/turbine-schema.xml"
+      file="turbine-schema.xml"
+      tofile="${torque.schema.dir}/turbine-schema.xml"
       filtering="yes"
-    />
+      overwrite="yes"/>
+    <attainGoal name="torque:om"/>
 
-    <torque-om
-      contextProperties="project.properties"
-      controlTemplate="${OMControlTemplate}"
-      outputDirectory="${maven.prepareSourceDirectory}"
-      useClasspath="true"
-      outputFile="report.turbine.om.generation"
-      targetPackage="${securityPackage}"
-      xmlFile="${maven.prepareSourceDirectory}/turbine-schema.xml"
-      targetDatabase="${database}"
-    />
-
-  </goal>
-
-  <goal
-    name="scheduler-om"
-    prereqs="init-taskdef">
-
-<echo>
-+--------------------------------------------------------------------
-|
-| G E N E R A T I N G  S C H E D U L E R  S O U R C E S
-|
-+--------------------------------------------------------------------
-</echo>
-
+    <!-- Now generate the scheduler service. -->
+    <j:set var="torque.schema.om.includes" value="scheduler-schema.xml"/>
+    <j:set var="torque.targetPackage" value="${scheduler.package}"/>
     <filter token="DATABASE_DEFAULT" value="${scheduler.database.name}"/>
     <copy
-      todir="${maven.prepareSourceDirectory}"
-      file="${schemaDirectory}/scheduler-schema.xml"
+      file="scheduler-schema.xml"
+      tofile="${torque.schema.dir}/scheduler-schema.xml"
       filtering="yes"
-    />
+      overwrite="yes"/>
+    <attainGoal name="torque:om"/>
 
-    <torque-om
-      contextProperties="project.properties"
-      controlTemplate="${OMControlTemplate}"
-      outputDirectory="${maven.prepareSourceDirectory}"
-      useClasspath="true"
-      outputFile="report.turbine.scheduler.generation"
-      targetPackage="${schedulerPackage}"
-      xmlFile="${maven.prepareSourceDirectory}/scheduler-schema.xml"
-    />
-
-  </goal>
+    <j:set var="sourcesPresent" value="true"/>
+    <path id="maven.compile.src.set" location="target/src"/>
+  </preGoal>
 
 </project>
