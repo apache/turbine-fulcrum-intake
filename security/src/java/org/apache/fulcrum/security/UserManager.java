@@ -67,6 +67,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * storage and putting them into the {@link org.apache.fulcrum.security.entity.User} objects,
  * saving those data to the permanent storage, and authenticating users.
  *
+ * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @version $Id$
  */

@@ -52,10 +52,8 @@ package org.apache.fulcrum.security.spi.nt.simple;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.security.auth.login.LoginException;
@@ -88,9 +86,8 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 
 import com.tagish.auth.win32.NTSystem;
 /**
- * This implementation persists to a database via Hibernate.
+ * This implementation attempts to manager users against NT.
  *
- * @todo Need to load up Crypto component and actually encrypt passwords!
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -98,8 +95,6 @@ public class NTUserManagerImpl extends AbstractLogEnabled implements SimpleUserM
 {
     /** Logging */
     private static Log log = LogFactory.getLog(NTUserManagerImpl.class);
-    // Store our users in here so we aren't constantly hitting NT.
-    private static List users = new ArrayList();
     boolean composed = false;
     protected ComponentManager manager = null;
     protected PermissionManager permissionManager;
@@ -182,29 +177,18 @@ public class NTUserManagerImpl extends AbstractLogEnabled implements SimpleUserM
     public boolean checkExists(User user) throws DataBackendException
     {
         boolean exists = false;
-        for (Iterator i = users.iterator(); i.hasNext();)
+        try
         {
-            User u = (User) i.next();
-            if (u.getName().equalsIgnoreCase(user.getName()))
-            {
-                exists = true;
-            }
+            authenticate(user, user.getPassword());
+            exists = true;
         }
-        if (!exists)
+        catch (PasswordMismatchException pme)
         {
-            try
-            {
-                authenticate(user, user.getPassword());
-                exists = true;
-            }
-            catch (PasswordMismatchException pme)
-            {
-                exists = false;
-            }
-            catch (UnknownEntityException uee)
-            {
-                exists = false;
-            }
+            exists = false;
+        }
+        catch (UnknownEntityException uee)
+        {
+            exists = false;
         }
         return exists;
     }
@@ -278,21 +262,6 @@ public class NTUserManagerImpl extends AbstractLogEnabled implements SimpleUserM
     public void authenticate(User user, String password)
         throws PasswordMismatchException, UnknownEntityException, DataBackendException
     {
-        // Make sure he hasn't been logged in already
-        User u = null;
-        for (Iterator i = users.iterator(); i.hasNext();)
-        {
-            u = (User) i.next();
-            if (u.getName().equals(user.getName()))
-            {
-                break;
-            }
-        }
-        if (u != null)
-        {
-            users.remove(u);
-        }
-        // check NT...
         NTSystem ntSystem = new NTSystem();
         char passwordArray[] = password.toCharArray();
         try
@@ -308,16 +277,15 @@ public class NTUserManagerImpl extends AbstractLogEnabled implements SimpleUserM
             String groups[] = ntSystem.getGroupNames(false);
             for (int i = 0; i < groups.length; i++)
             {
-            	// Note how it populates groups?  This
-            	// should maybe delegate a call to the
-            	// group manager to look for groups it
-            	// knows about instead.
+                // Note how it populates groups?  This
+                // should maybe delegate a call to the
+                // group manager to look for groups it
+                // knows about instead.
                 Group group = new SimpleGroup();
                 group.setName(groups[i]);
                 group.setId(groups[i]);
                 ((SimpleUser) user).addGroup(group);
             }
-            users.add(user);
             ntSystem.logoff();
         }
         catch (LoginException le)
@@ -567,13 +535,7 @@ public class NTUserManagerImpl extends AbstractLogEnabled implements SimpleUserM
     {
         throw new RuntimeException("Not supported by NT User Manager");
     }
-    /**
-    Clears the cache of all users..
-    */
-    public void clearCachedUsers()
-    {
-        users.clear();
-    }
+
     /**
       * Avalon component lifecycle method
       */

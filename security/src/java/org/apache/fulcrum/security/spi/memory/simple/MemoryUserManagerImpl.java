@@ -83,6 +83,7 @@ import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+
 /**
  * This implementation keeps all objects in memory.  This is mostly meant to help
  * with testing and prototyping of ideas.

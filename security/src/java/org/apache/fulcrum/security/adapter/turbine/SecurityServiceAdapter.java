@@ -76,6 +76,7 @@ import org.apache.turbine.util.security.EntityExistsException;
 import org.apache.turbine.util.security.GroupSet;
 import org.apache.turbine.util.security.PermissionSet;
 import org.apache.turbine.util.security.RoleSet;
+
 /**
  * An implementation of SecurityService that adapts it to work with
  * Fulcrum Security.  This adapter currently uses the "Simple" model of 

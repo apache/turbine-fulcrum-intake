@@ -69,8 +69,8 @@ import org.apache.fulcrum.crypto.CryptoService;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.DataBackendException;
 /**
- * This class decorates any calls to authenticate a  user, and also
- * authenticates against NT.  
+ * This class authenticates using the Fulcrum Crypto service a user and
+ * their password
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$

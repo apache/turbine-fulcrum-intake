@@ -1,7 +1,5 @@
 package org.apache.fulcrum.security.spi.torque.turbine.peermanagers;
 
-import org.apache.fulcrum.security.spi.torque.turbine.peer.PermissionPeer;
-
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -55,6 +53,7 @@ import org.apache.fulcrum.security.spi.torque.turbine.peer.PermissionPeer;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+import org.apache.fulcrum.security.spi.torque.turbine.peer.PermissionPeer;
 
 
 /**

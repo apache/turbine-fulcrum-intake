@@ -67,8 +67,8 @@ import org.apache.fulcrum.security.util.DataBackendException;
 
 import com.tagish.auth.win32.NTSystem;
 /**
- * This class decorates any calls to authenticate a  user, and also
- * authenticates against NT.  
+ * This class authenticates a user against NT.  Requires some
+ * extra libraries.  
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$

@@ -65,6 +65,12 @@ import org.apache.fulcrum.security.spi.torque.turbine.TorquePermissionManager;
 import org.apache.fulcrum.security.spi.torque.turbine.TorqueRoleManager;
 import org.apache.fulcrum.security.spi.torque.turbine.TorqueUserManager;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
+
+/**
+* @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
+ * @version $Id$
+*/
+
 public class StartingSecurityServicesTest extends BaseUnitTest
 {
     private SecurityService securityService = null;

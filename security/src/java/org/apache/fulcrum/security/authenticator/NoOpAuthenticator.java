@@ -58,8 +58,8 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.DataBackendException;
 /**
- * This class decorates any calls to authenticate a  user, and also
- * authenticates against NT.  
+ * This class authenticates by returning TRUE always.  Regardless of the 
+ * user and password data.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$

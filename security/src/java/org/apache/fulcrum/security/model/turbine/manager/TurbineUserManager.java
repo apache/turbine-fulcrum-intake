@@ -58,10 +58,12 @@ import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+
 /**
- * This User managers adds the Torque Criteria class and listUsers.
+ * This interface describes the methods that glue the "turbine"
+ * model together.
  *
- * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
+ * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public interface TurbineUserManager extends UserManager

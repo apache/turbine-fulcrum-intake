@@ -1,7 +1,5 @@
 package org.apache.fulcrum.security.spi.torque.turbine.peermanagers;
 
-import org.apache.fulcrum.security.spi.torque.turbine.peer.RolePeer;
-
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -57,6 +55,7 @@ import org.apache.fulcrum.security.spi.torque.turbine.peer.RolePeer;
  */
 
 
+import org.apache.fulcrum.security.spi.torque.turbine.peer.RolePeer;
 /**
  * Constants for configuring the various columns and bean properties
  * for the used peer.

@@ -84,7 +84,6 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
  * This implementation persists to a database via Hibernate.
  *
- * @todo Need to load up Crypto component and actually encrypt passwords!
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */

@@ -1,7 +1,5 @@
 package org.apache.fulcrum.security.spi.torque.turbine.peermanagers;
 
-import org.apache.fulcrum.security.spi.torque.turbine.peer.GroupPeer;
-
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -56,6 +54,7 @@ import org.apache.fulcrum.security.spi.torque.turbine.peer.GroupPeer;
  * <http://www.apache.org/>.
  */
 
+import org.apache.fulcrum.security.spi.torque.turbine.peer.GroupPeer;
 
 /**
  * Constants for configuring the various columns and bean properties

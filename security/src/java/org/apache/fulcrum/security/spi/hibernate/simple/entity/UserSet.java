@@ -63,6 +63,8 @@ import org.apache.fulcrum.security.util.SecuritySet;
 
 /**
  * This class represents a set of Users.  It is based on UserSet.
+ * Hibernate doesn't return the right kind of set, so this is used to
+ * force the type of set.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$

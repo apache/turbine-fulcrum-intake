@@ -73,6 +73,7 @@ import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+
 /**
  * This implementation keeps all objects in memory.  This is mostly meant to help
  * with testing and prototyping of ideas.

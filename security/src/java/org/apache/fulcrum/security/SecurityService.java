@@ -57,32 +57,20 @@ import org.apache.avalon.framework.component.Component;
  * The Security Service manages Users, Groups Roles and Permissions in the
  * system.
  *
- * The task performed by the security service include creation and removal of
- * accounts, groups, roles, and permissions; assigning users roles in groups;
- * assigning roles specific permissions and construction of objects
- * representing these logical entities.
+ * The task performed by the security service include providing access to the
+ * various types of managers.
  *
  * <p> Because of pluggable nature of the Services, it is possible to create
  * multiple implementations of SecurityService, for example employing database
  * and directory server as the data backend.<br>
  *
- * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
- * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
- * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
+ * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public interface SecurityService extends Component
 {
     String ROLE = SecurityService.class.getName();
-    /** the key within services's properties for secure passwords flag (secure.passwords) */
-    public static final String SECURE_PASSWORDS_KEY = "secure.passwords";
-    /** the value of secure passwords flag (false) */
-    public static final String SECURE_PASSWORDS_DEFAULT = "false";
-    /** the key within services's properties for secure passwords algorithm (secure.passwords.algorithm) */
-    public static final String SECURE_PASSWORDS_ALGORITHM_KEY = "secure.passwords.algorithm";
-    /** the default algorithm for password encryption (SHA) */
-    public static final String SECURE_PASSWORDS_ALGORITHM_DEFAULT = "SHA";
-   
+  
     /**
      * Returns the configured UserManager.
      *
@@ -90,23 +78,11 @@ public interface SecurityService extends Component
      */
     UserManager getUserManager();
     /**
-     * Configure a new user Manager.
-     *
-     * @param userManager An UserManager object
-     */
-   // void setUserManager(UserManager userManager);
-    /**
       * Returns the configured GroupManager.
       *
       * @return An UserManager object
       */
     GroupManager getGroupManager();
-    /**
-     * Configure a new group Manager.
-     *
-     * @param userManager An GroupManager object
-     */
-    //void setGroupManager(GroupManager userManager);
     /**
       * Returns the configured RoleManager.
       *
@@ -114,21 +90,10 @@ public interface SecurityService extends Component
       */
     RoleManager getRoleManager();
     /**
-     * Configure a new role Manager.
-     *
-     * @param roleManager An RoleManager object
-     */
-   // void setRoleManager(RoleManager roleManager);
-    /**
     	 * Returns the configured PermissionManager.
     	 *
     	 * @return An PermissionManager object
     	 */
     PermissionManager getPermissionManager();
-    /**
-    	* Configure a new role Manager.
-    	*
-    	* @param -ermissionManager An PermissionManager object
-    	*/
-   // void setPermissionManager(PermissionManager permissionManager);
+
 }

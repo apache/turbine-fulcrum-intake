@@ -71,7 +71,8 @@ import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
  *
- * This implementation persists to a database via Hibernate.
+ * This base implementation persists to a database via Hibernate.  it
+ * provides methods shared by all Hibernate SPI managers.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$

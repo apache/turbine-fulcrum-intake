@@ -1,7 +1,4 @@
 package org.apache.fulcrum.security.spi.torque.turbine.impl;
-import org.apache.avalon.framework.activity.Initializable;
-import org.apache.avalon.framework.logger.AbstractLogEnabled;
-import org.apache.avalon.framework.thread.ThreadSafe;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -55,6 +52,10 @@ import org.apache.avalon.framework.thread.ThreadSafe;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.framework.thread.ThreadSafe;
 /**
  * Factor out the ThreadLockingStuff...
  *
