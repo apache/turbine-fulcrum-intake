@@ -54,9 +54,16 @@ package org.apache.fulcrum.security.adapter.osuser;
  */
 import java.util.Properties;
 
+import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.component.Component;
+import org.apache.avalon.framework.component.ComponentException;
+import org.apache.avalon.framework.component.ComponentManager;
+import org.apache.avalon.framework.component.Composable;
+import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.SecurityService;
+import org.apache.fulcrum.security.util.DataBackendException;
 
 import com.opensymphony.user.Entity.Accessor;
 import com.opensymphony.user.provider.UserProvider;
@@ -70,13 +77,14 @@ import com.opensymphony.user.provider.UserProvider;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public abstract class BaseFulcrumProvider implements UserProvider
+public abstract class BaseFulcrumProvider extends AbstractLogEnabled implements UserProvider,Composable, Disposable,Component
 {
-
+	/** Component Manager to query for the SecurityService through */
+	protected ComponentManager manager = null;
 	/** Logging */
 	private static Log log = LogFactory.getLog(BaseFulcrumProvider.class);
 	/** Our Fulcrum Security Service to use */
-	protected SecurityService securityService;
+	private SecurityService securityService;
 
 	/*
 	 * Does nothing for now.
@@ -144,6 +152,27 @@ public abstract class BaseFulcrumProvider implements UserProvider
 	}
 
 	/**
+	  * Lazy loads the SecurityService.
+	  * 
+	  * @return
+	  */
+	 SecurityService getSecurityService() throws DataBackendException
+	 {
+		 if (securityService == null)
+		 {
+			 try
+			 {
+				securityService = (SecurityService) manager.lookup(SecurityService.ROLE);
+			 }
+			 catch (ComponentException ce)
+			 {
+				 throw new DataBackendException(ce.getMessage(), ce);
+			 }
+		 }
+		 return securityService;
+	 }
+	
+	/**
 	 * The Fulcrum Security Service that will back the Fulcrum
 	 * providers.
 	 * 
@@ -155,4 +184,17 @@ public abstract class BaseFulcrumProvider implements UserProvider
 		this.securityService = securityService;
 	}
 
+	/**
+	  * Avalon component lifecycle method
+	  */
+	public void compose(ComponentManager manager) throws ComponentException
+	{
+		this.manager = manager;
+	}
+	public void dispose()
+	{
+		manager = null;
+		securityService = null;
+		
+	}
 }
