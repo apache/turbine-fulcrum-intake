@@ -6,7 +6,12 @@
   </properties>
 
   <body>
-    <release version="Not applicable" date="">
+    <release version="1.0-alpha-4" date="">
+      <action dev="epugh" type="add">
+        Implementing the merlinized code.
+      </action>
+    </release>  	
+    <release version="1.0-alpha-3" date="11-18-2003">
       <action dev="epugh" type="add">
         Integrated howto documentation on main page.
       </action>
