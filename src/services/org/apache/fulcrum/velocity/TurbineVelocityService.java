@@ -62,9 +62,8 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.io.OutputStreamWriter;
 import java.io.ByteArrayOutputStream;
-import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
+import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.app.event.EventCartridge;
 import org.apache.velocity.app.event.ReferenceInsertionEventHandler;
 import org.apache.velocity.app.event.NullSetEventHandler;
@@ -74,7 +73,6 @@ import org.apache.velocity.context.InternalEventContext;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.fulcrum.ServiceException;
 import org.apache.fulcrum.InitializationException;
-import org.apache.fulcrum.template.TurbineTemplate;
 import org.apache.fulcrum.template.TemplateContext;
 import org.apache.fulcrum.template.BaseTemplateEngineService;
 import org.apache.commons.configuration.ConfigurationConverter;
@@ -101,6 +99,7 @@ import org.apache.commons.configuration.ConfigurationConverter;
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
+ * @author <a href="mailto:james@jamestaylor.org">James Taylor</a>
  * @version $Id$
  */
 public class TurbineVelocityService
@@ -138,6 +137,11 @@ public class TurbineVelocityService
      * Can be used to turn off EC processing.
      */
     private boolean eventCartridgeEnabled = true;
+
+    /**
+     * The VelocityEngine used by the service to merge templates
+     */
+    private VelocityEngine velocityEngine = new VelocityEngine();
 
     /**
      * Performs early initialization of this Turbine service.
@@ -249,8 +253,7 @@ public class TurbineVelocityService
     }
 
     /**
-     * @see org.apache.fulcrum.template.TemplateEngineService#handleRequest(
-     * Context, String, Writer)
+     * @see BaseTemplateEngineService#handleRequest(TemplateContext, String, Writer)
      */
     public void handleRequest(TemplateContext context,
                                        String template, Writer writer)
@@ -260,8 +263,7 @@ public class TurbineVelocityService
     }
 
     /**
-     * @see org.apache.fulcrum.velocity.VelocityService#handleRequest(Context,
-     * String, Writer)
+     * @see VelocityService#handleRequest(Context, String, Writer)
      */
     public void handleRequest(Context context, String filename,
                               Writer writer)
@@ -271,8 +273,7 @@ public class TurbineVelocityService
     }
 
     /**
-     * @see org.apache.fulcrum.velocity.VelocityService#handleRequest(Context,
-     * String, Writer, String)
+     * @see VelocityService#handleRequest(Context, String, Writer, String)
      */
     public void handleRequest(Context context, String filename,
                               Writer writer, String encoding)
@@ -307,12 +308,12 @@ public class TurbineVelocityService
             if (encoding != null)
             {
                 // Request scoped encoding first supported by Velocity 1.1.
-                Velocity.mergeTemplate(filename, encoding,
-                                       eventContext, writer);
+                velocityEngine.mergeTemplate(filename, encoding,
+                                             eventContext, writer);
             }
             else
             {
-                Velocity.mergeTemplate(filename, eventContext, writer);
+                velocityEngine.mergeTemplate(filename, eventContext, writer);
             }
         }
         catch (Exception e)
@@ -347,7 +348,7 @@ public class TurbineVelocityService
      * @param context A context to use when evaluating the specified
      * template.
      * @param filename The file name of the template.
-     * @param out The stream to which we will write the processed
+     * @param output The stream to which we will write the processed
      * template as a String.
      * @return The character set applied to the resulting text.
      *
@@ -494,11 +495,11 @@ public class TurbineVelocityService
         // Now we have to perform a couple of path translations
         // for our log file and template paths.
         String path = getRealPath(
-            getConfiguration().getString(Velocity.RUNTIME_LOG, null));
+            getConfiguration().getString(VelocityEngine.RUNTIME_LOG, null));
 
         if (path != null && path.length() > 0)
         {
-            getConfiguration().setProperty(Velocity.RUNTIME_LOG, path);
+            getConfiguration().setProperty(VelocityEngine.RUNTIME_LOG, path);
         }
         else
         {
@@ -534,7 +535,7 @@ public class TurbineVelocityService
             paths = getConfiguration().getVector(key,null);
             if (paths != null)
             {
-                Velocity.clearProperty(key);
+                velocityEngine.clearProperty(key);
                 getConfiguration().clearProperty(key);
 
                 for (Iterator j = paths.iterator(); j.hasNext();)
@@ -576,9 +577,10 @@ public class TurbineVelocityService
 
         try
         {
-            Velocity.setExtendedProperties(ConfigurationConverter
+            velocityEngine.setExtendedProperties(ConfigurationConverter
                     .getExtendedProperties(getConfiguration()));
-            Velocity.init();
+
+            velocityEngine.init();
         }
         catch(Exception e)
         {
@@ -600,6 +602,6 @@ public class TurbineVelocityService
      */
     public boolean templateExists(String template)
     {
-        return Velocity.templateExists(template);
+        return velocityEngine.templateExists(template);
     }
 }
