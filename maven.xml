@@ -1,90 +1,142 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<project
-  default="java:jar"
+<project 
+  default="build"
   xmlns:j="jelly:core"
-  xmlns:m="jelly:maven">
+  xmlns:maven="jelly:maven"
+  xmlns:deploy="deploy"
+  xmlns:velocity="jelly:org.apache.commons.jelly.tags.velocity.VelocityTagLibrary">
 
-  <preGoal name="java:compile">
-    <!-- Make sure avalon-roles.xml gets in the distribution. -->
-    <copy
-      file="src/java/org/apache/fulcrum/avalon-roles.xml"
-      tofile="target/classes/org/apache/fulcrum/avalon-roles.xml"/>
+  <!--
+   |
+   | Build all the Fulcrum components.
+   |
+   -->
 
-    <!-- Copy the Intake DTD file to the distribution -->
-    <copy file="src/dtd/intake.dtd"
-          tofile="${maven.build.dest}/org/apache/fulcrum/intake/transform/intake.dtd"/>
-
-    <!-- Setup where Torque generates the files to. -->
-    <copy todir="target/src">
-      <fileset dir="src/java"/>
-    </copy>
-
-    <attainGoal name="scheduler-om"/>
-    <attainGoal name="db-security-om"/>
-
-    <!-- Hack for Maven bug when compiling with a clean target. -->
-    <j:if test="${sourcesPresent != 'true'}">
-      <j:set var="sourcesPresent" value="true"/>
-      <path id="maven.compile.src.set" location="target/src"/>
-    </j:if>
-
-  </preGoal>
-
-  <!-- ================================================== -->
-  <!-- Prepare the OM Sources for Torque                  -->
-  <!-- ================================================== -->
-
-  <goal name="copy-om">
-    <attainGoal name="copy-scheduler-om"/>
-    <attainGoal name="copy-db-security-om"/>
-  </goal>
-
-  <goal name="copy-scheduler-om">
-    <filter token="DATABASE_DEFAULT" value="${scheduler.database.name}"/>
-    <filter token="EXTRA_USER_COLUMNS" value="${scheduler.extra.user.columns}"/>
-    <copy
-      file="src/schema/scheduler-schema.xml"
-      tofile="${torque.schema.dir}/scheduler-schema.xml"
-      filtering="yes"/>
-  </goal>
-
-  <goal name="copy-db-security-om">
-    <filter token="DATABASE_DEFAULT" value="${security.database.name}"/>
-    <filter token="EXTRA_USER_COLUMNS" value="${security.extra.user.columns}"/>
-    <copy
-      file="src/schema/turbine-schema.xml"
-      tofile="${torque.schema.dir}/turbine-schema.xml"
-      filtering="yes"/>
-  </goal>
-
-  <!-- ================================================== -->
-  <!-- Build Peers for the Scheduler                      -->
-  <!-- ================================================== -->
-  <goal name="scheduler-om">
-
-    <attainGoal name="copy-scheduler-om"/>
-
-    <j:set var="torque.project" value="scheduler"/>
-    <j:set var="torque.schema.om.includes" value="scheduler-schema.xml"/>
-    <j:set var="torque.targetPackage" value="${scheduler.package}"/>
-    <attainGoal name="torque:om"/>
-
-  </goal>
-
-  <!-- ================================================== -->
-  <!-- Build Peers for Torque Security                    -->
-  <!-- ================================================== -->
-  <goal name="db-security-om">
-
-    <attainGoal name="copy-db-security-om"/>
-
-    <j:set var="torque.project" value="security"/>
-    <j:set var="torque.schema.om.includes" value="turbine-schema.xml"/>
-    <j:set var="torque.targetPackage" value="${security.package}"/>
-    <attainGoal name="torque:om"/>
+  <goal name="build">
+    
+    <maven:reactor
+      basedir="${basedir}"
+      includes="*/project.xml"
+      excludes="axis/*,summit/*"
+      goals="clean,java:jar,jar:install"
+      banner="Building"
+      ignoreFailures="false"
+    />
 
   </goal>
 
 
+  <!--
+   |
+   | Build docs for all the Fulcrum components.
+   |
+   -->
+
+  <goal name="site-all">
+    
+    <maven:reactor
+      basedir="${basedir}"
+      includes="*/project.xml"
+      excludes="jcs/*"
+      goals="site:generate"
+      banner="Building"
+      ignoreFailures="false"
+    />
+   </goal>
+  <!--
+   |
+   | Deploy docs for all the Fulcrum components.
+   |
+   -->
+
+  <goal name="site-deploy-all">
+    
+    <maven:reactor
+      basedir="${basedir}"
+      includes="*/project.xml"
+      excludes="jcs/*"
+      goals="site:deploy"
+      banner="Building"
+      ignoreFailures="false"
+    />
+   </goal>
+
+  <!--
+   |
+   | Deploy all the Fulcrum components and their POMs 
+   | to the central repository.
+   |
+   -->
+
+  <goal name="deploy-poms">
+    
+    <maven:reactor
+      basedir="${basedir}"
+      includes="*/project.xml"
+      excludes="jcs/*"
+      goals="pom:deploy"
+      banner="Building"
+      ignoreFailures="false"
+    />
+  </goal>
+
+  <goal name="install-poms">
+    
+    <maven:reactor
+      basedir="${basedir}"
+      includes="*/project.xml"
+      excludes="jcs/*"
+      goals="pom:install"
+      banner="Building"
+      ignoreFailures="false"
+    />
+  </goal>
+
+  <goal name="deploy-components">
+    
+    <maven:reactor
+      basedir="${basedir}"
+      includes="*/project.xml"
+      excludes="jcs/*"
+      goals="jar:deploy"
+      banner="Building"
+      ignoreFailures="false"
+    />
+  </goal>
+
+  <!--
+   |
+   | Create the list of components available for the 
+   | Plexus plugin to use when aiding users in creating runtimes.
+   |
+   -->
+  
+  <goal name="component-manifest">
+    
+    <maven:reactor
+      basedir="${basedir}"
+      includes="*/project.xml"
+      excludes="jcs/*"
+      banner="Building"
+      ignoreFailures="false"
+      postProcessing="true"
+    />
+
+    <velocity:merge 
+      name="${plexus.component.manifest}"
+      basedir="${basedir}"
+      template="component-manifest.vm"
+    />
+
+  </goal>
+
+  <goal name="deploy-component-manifest" prereqs="component-manifest">
+
+    <deploy:artifact
+      artifact="${plexus.component.manifest}"
+      assureDirectoryCommand="mkdir -p"
+    />
+    
+  </goal>
+  
+  
 </project>
