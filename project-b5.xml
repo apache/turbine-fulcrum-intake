@@ -135,7 +135,7 @@
     </dependency>
     <dependency>
       <id>commons-util</id>
-      <version>1.0-rc2-dev.20020814.045411</version>
+      <version>SNAPSHOT</version>
     </dependency>
     <dependency>
       <id>cryptix</id>
@@ -183,7 +183,7 @@
     </dependency>
     <dependency>
       <id>torque</id>
-      <version>3.0-b4-dev.20020813.103521</version>
+      <version>SNAPSHOT</version>
       <url>http://jakarta.apache.org/turbine/torque/</url>
     </dependency>
     <dependency>
