@@ -10,7 +10,7 @@
       <item name="Fulcrum"
             href="http://jakarta.apache.org/turbine/fulcrum/"/>
       <item name="Fulcrum Workflow"
-            href="http://jakarta.apache.org/turbine/fulcrum/workflow"/>            
+            href="http://jakarta.apache.org/turbine/fulcrum/multiproject/fulcrum-workflow/"/>            
     </links>
 
     <menu name="Overview">
