@@ -27,7 +27,7 @@ public class PoolServiceTest extends AbstractMerlinTestCase
         super(name);
     }
    
-    public void setUp()
+    public void setUp() throws Exception
     {
         super.setUp();
         try
