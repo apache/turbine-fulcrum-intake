@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Fulcrum Pool Impl</title>
+    <author email="epugh@opensourceconnections.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+    <release version="1.0.2" date="in cvs">
+      <action dev="epugh" type="update">
+      	Update to use Merlin 3.3.0
+      </action>           
+    </release>   
+  </body>
+</document>
+
