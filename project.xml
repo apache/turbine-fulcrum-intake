@@ -121,6 +121,13 @@
     </dependency>
 
     <dependency>
+      <name>commons-pool</name>
+      <type>required</type>
+      <version>0.1</version>
+      <jar>commons-pool.jar</jar>
+    </dependency>
+
+    <dependency>
       <name>commons-fileupload</name>
       <type>required</type>
       <version>1.0</version>

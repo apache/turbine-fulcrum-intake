@@ -153,25 +153,7 @@ public interface IntakeService
      * @param instance the object instance to recycle.
      * @return true if the instance was accepted.
      */
-    public boolean releaseGroup(Group instance);
-
-    /**
-     * Gets the capacity of the pool for a named group.
-     *
-     * @param groupName the name of the group.
-     * @throws Exception if groupName is null
-     */
-    public int getCapacity(String groupName) throws Exception;
-
-    /**
-     * Sets the capacity of the pool for a named group.
-     * Note that the pool will be cleared after the change.
-     *
-     * @param groupName the name of the group.
-     * @param capacity the new capacity.
-     */
-    public void setCapacity(String groupName,
-                            int capacity);
+    public void releaseGroup(Group instance);
 
     /**
      * Gets the current size of the pool for a named group.
@@ -179,18 +161,6 @@ public interface IntakeService
      * @param groupName the name of the group.
      */
     public int getSize(String groupName);
-
-    /**
-     * Clears instances of a named group from the pool.
-     *
-     * @param groupName the name of the group.
-     */
-    public void clearPool(String groupName);
-
-    /**
-     * Clears all instances from the pool.
-     */
-    public void clearPool();
 
     /**
      * Names of all the defined groups.

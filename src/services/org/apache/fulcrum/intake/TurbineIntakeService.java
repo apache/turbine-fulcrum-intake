@@ -71,6 +71,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 //import org.apache.turbine.om.OMTool;
+import org.apache.commons.pool.KeyedPoolableObjectFactory;
+import org.apache.commons.pool.KeyedObjectPool;
+import org.apache.commons.pool.impl.StackKeyedObjectPool;
 import org.apache.fulcrum.intake.model.Group;
 import org.apache.fulcrum.intake.transform.XmlToAppData;
 import org.apache.fulcrum.intake.xmlmodel.AppData;
@@ -114,10 +117,8 @@ public class TurbineIntakeService
     /** The top element of the object tree */
     private AppData appData;
 
-    /**
-     * The pool repository, one pool for each class.
-     */
-    private HashMap poolRepository = new HashMap();
+    /** pools Group objects */
+    KeyedObjectPool keyedPool;
 
     // a couple integers for a switch statement
     private static final int GETTER = 0;
@@ -236,6 +237,7 @@ public class TurbineIntakeService
             // omTool = new OMTool();
             String pkg = appData.getBasePackage();
 
+            int maxPooledGroups = 0;
             List glist = appData.getGroups();
             for ( int i=glist.size()-1; i>=0; i-- )
             {
@@ -244,7 +246,9 @@ public class TurbineIntakeService
                 groupNames[i] = groupName;
                 groupKeyMap.put(groupName, g.getKey());
                 groupNameMap.put(g.getKey(), groupName);
-
+                maxPooledGroups = 
+                    Math.max(maxPooledGroups, 
+                             Integer.parseInt(g.getPoolCapacity()));
                 List classNames = g.getMapToObjects();
                 Iterator iter2 = classNames.iterator();
                 while (iter2.hasNext())
@@ -256,6 +260,17 @@ public class TurbineIntakeService
                         setterMap.put(className, new HashMap());
                     }
                 }
+            }
+
+            KeyedPoolableObjectFactory factory = null;
+            try
+            {
+                factory = new Group.GroupFactory(appData);
+                keyedPool = new StackKeyedObjectPool(factory, maxPooledGroups);
+       }
+            catch (Exception e)
+            {
+                throw new ServiceException(e);
             }
 
             setInit(true);
@@ -314,95 +329,6 @@ public class TurbineIntakeService
     }
 
     /**
-     * An inner class for group specific pools.
-     */
-    private class PoolBuffer
-    {
-        /**
-         * A buffer for class instances.
-         */
-        private BoundedBuffer pool;
-
-        /**
-         * A cache for recycling methods.
-         */
-        private HashMap recyclers;
-
-        /**
-         * Contructs a new pool buffer with a specific capacity.
-         *
-         * @param capacity a capacity.
-         */
-        public PoolBuffer(int capacity)
-        {
-            pool = new BoundedBuffer(capacity);
-        }
-
-        /**
-         * Polls for an instance from the pool.
-         *
-         * @return an instance or null.
-         */
-        public Group poll()
-            throws ServiceException
-        {
-            Group instance = (Group)pool.poll();
-            if ((instance != null) &&
-                (instance instanceof Recyclable))
-            {
-                try
-                {
-                    ((Recyclable) instance).recycle();
-                }
-                catch (Exception x)
-                {
-                    throw new ServiceException("Recycling failed for " +
-                        instance.getClass().getName(),x);
-                }
-            }
-            return instance;
-        }
-
-        /**
-         * Offers an instance to the pool.
-         *
-         * @param instance an instance.
-         */
-        public boolean offer(Group instance)
-        {
-            try
-            {
-                ((Recyclable) instance).dispose();
-            }
-            catch (Exception x)
-            {
-                return false;
-            }
-            return pool.offer(instance);
-        }
-
-        /**
-         * Returns the capacity of the pool.
-         *
-         * @return the capacity.
-         */
-        public int capacity()
-        {
-            return pool.capacity();
-        }
-
-        /**
-         * Returns the size of the pool.
-         *
-         * @return the size.
-         */
-        public int size()
-        {
-            return pool.size();
-        }
-    }
-
-    /**
      * Gets an instance of a named group either from the pool
      * or by calling the Factory Service if the pool is empty.
      *
@@ -413,24 +339,21 @@ public class TurbineIntakeService
     public Group getGroup(String groupName)
             throws ServiceException
     {
+        Group group = null;
         if (groupName == null)
         {
             throw new ServiceException (
                 "Intake TurbineIntakeService.getGroup(groupName) is null");
         }
-        Group instance = (Group)pollInstance(groupName);
-        if ( instance == null )
+        try
         {
-            try
-            {
-                instance = new Group(appData.getGroup(groupName));
-            }
-            catch (Exception e)
-            {
-                throw new ServiceException(e);
-            }
+            group = (Group)keyedPool.borrowObject(groupName);
         }
-        return instance;
+        catch (Exception e)
+        {
+            new ServiceException(e);
+        }
+        return group;
     }
 
 
@@ -440,72 +363,25 @@ public class TurbineIntakeService
      * @param instance the object instance to recycle.
      * @return true if the instance was accepted.
      */
-    public boolean releaseGroup(Group instance)
+    public void releaseGroup(Group instance)
     {
         if (instance != null)
         {
-            HashMap repository = poolRepository;
             String name = instance.getIntakeGroupName();
-            PoolBuffer pool = (PoolBuffer) repository.get(name);
-            if (pool == null)
-            {
-                pool = new PoolBuffer(instance.getPoolCapacity());
-                repository = (HashMap) repository.clone();
-                repository.put(name,pool);
-                poolRepository = repository;
-            }
-            return pool.offer(instance);
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    /**
-     * Gets the capacity of the pool for a named group.
-     *
-     * @param name the name of the class.
-     */
-    public int getCapacity(String name)
-        throws Exception
-    {
-        int capacity = DEFAULT_POOL_CAPACITY;
-        PoolBuffer pool = (PoolBuffer) poolRepository.get(name);
-        if ( pool == null )
-        {
             try
             {
-                capacity = Integer
-                    .parseInt(appData.getGroup(name).getPoolCapacity());
+                keyedPool.returnObject(name, instance);
             }
-            catch (NumberFormatException nfe)
+            catch (Exception e)
             {
-                // Ignored
+                new ServiceException(e);
             }
+            //return true;
         }
         else
         {
-            capacity = pool.capacity();
+            //return false;
         }
-        return capacity;
-    }
-
-    /**
-     * Sets the capacity of the pool for a group.
-     * Note that the pool will be cleared after the change.
-     *
-     * @param name the name of the group.
-     * @param capacity the new capacity.
-     */
-    public void setCapacity(String name,
-                            int capacity)
-    {
-        HashMap repository = poolRepository;
-        repository = repository != null ?
-            (HashMap) repository.clone() : new HashMap();
-        repository.put(name,new PoolBuffer(capacity));
-        poolRepository = repository;
     }
 
     /**
@@ -515,53 +391,7 @@ public class TurbineIntakeService
      */
     public int getSize(String name)
     {
-        PoolBuffer pool = (PoolBuffer) poolRepository.get(name);
-        return pool != null ? pool.size() : 0;
-    }
-
-    /**
-     * Clears instances of a group from the pool.
-     *
-     * @param name the name of the group.
-     */
-    public void clearPool(String name)
-    {
-        throw new Error("Not implemented");
-        /* FIXME!! We need to worry about objects that are checked out
-
-        HashMap repository = poolRepository;
-        if (repository.get(name) != null)
-        {
-            repository = (HashMap) repository.clone();
-            repository.remove(name);
-            poolRepository = repository;
-        }
-        */
-    }
-
-    /**
-     * Clears all instances from the pool.
-     */
-    public void clearPool()
-    {
-        throw new Error("Not implemented");
-        /* FIXME!! We need to worry about objects that are checked out
-        poolRepository = new HashMap();
-        */
-    }
-
-    /**
-     * Polls and recycles an object of the named group from the pool.
-     *
-     * @param groupName the name of the group.
-     * @return the object or null.
-     * @throws ServiceException if recycling fails.
-     */
-    private Object pollInstance(String groupName)
-        throws ServiceException
-    {
-        PoolBuffer pool = (PoolBuffer) poolRepository.get(groupName);
-        return pool != null ? pool.poll() : null;
+        return keyedPool.numActive(name) + keyedPool.numIdle(name);
     }
 
     /**

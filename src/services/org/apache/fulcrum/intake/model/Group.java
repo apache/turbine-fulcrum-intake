@@ -60,8 +60,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.apache.commons.pool.BaseKeyedPoolableObjectFactory;
 import org.apache.fulcrum.intake.Retrievable;
 import org.apache.fulcrum.intake.TurbineIntake;
+import org.apache.fulcrum.intake.xmlmodel.AppData;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 import org.apache.fulcrum.intake.xmlmodel.XmlGroup;
 import org.apache.fulcrum.util.parser.ValueParser;
@@ -71,7 +73,6 @@ import org.apache.log4j.Category;
 
 /** Holds a group of Fields */
 public class Group
-    implements Recyclable
 {
     public static final String EMPTY = "";
 
@@ -520,50 +521,44 @@ public class Group
         }
     }
 
-    // ****************** Recyclable implementation ************************
+    // ********** PoolableObjectFactory implementation ******************
 
-    private boolean disposed;
-
-    /**
-     * Recycles the object for a new client. Recycle methods with
-     * parameters must be added to implementing object and they will be
-     * automatically called by pool implementations when the object is
-     * taken from the pool for a new client. The parameters must
-     * correspond to the parameters of the constructors of the object.
-     * For new objects, constructors can call their corresponding recycle
-     * methods whenever applicable.
-     * The recycle methods must call their super.
-     */
-    public void recycle()
+    public static class GroupFactory
+        extends BaseKeyedPoolableObjectFactory 
     {
-        disposed = false;
-    }
+        private AppData appData;
 
-    /**
-     * Disposes the object after use. The method is called
-     * when the object is returned to its pool.
-     * The dispose method must call its super.
-     */
-    public void dispose()
-    {
-        oid = null;
-        pp = null;
-        for (int i=fieldsArray.length-1; i>=0; i--)
+        public GroupFactory(AppData appData)
         {
-            fieldsArray[i].dispose();
+            this.appData = appData;
         }
-        isDeclared = false;
 
-        disposed = true;
-    }
-
-    /**
-     * Checks whether the recyclable has been disposed.
-     * @return true, if the recyclable is disposed.
-     */
-    public boolean isDisposed()
-    {
-        return disposed;
+        /**
+         * Creates an instance that can be returned by the pool.
+         * @return an instance that can be returned by the pool.
+         */
+        public Object makeObject(Object key) 
+            throws Exception
+        {
+            return new Group(appData.getGroup((String)key));
+        }
+        
+        /**
+         * Uninitialize an instance to be returned to the pool.
+         * @param obj the instance to be passivated
+         */
+        public void passivateObject(Object key, Object obj) 
+            throws Exception
+        {
+            Group group = (Group)obj;
+            group.oid = null;
+            group.pp = null;
+            for (int i=group.fieldsArray.length-1; i>=0; i--)
+            {
+                group.fieldsArray[i].dispose();
+            }
+            group.isDeclared = false;
+        }
     }
 }
 

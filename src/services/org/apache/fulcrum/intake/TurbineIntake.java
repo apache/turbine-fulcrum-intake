@@ -130,32 +130,9 @@ public abstract class TurbineIntake
      * @param instance the object instance to recycle.
      * @return true if the instance was accepted.
      */
-    public static boolean releaseGroup(Group instance)
+    public static void releaseGroup(Group instance)
     {
-        return getService().releaseGroup(instance);
-    }
-
-    /**
-     * Gets the capacity of the pool for a named group.
-     *
-     * @param groupName the name of the group.
-     */
-    public static int getCapacity(String groupName)
-        throws Exception
-    {
-        return getService().getCapacity(groupName);
-    }
-
-    /**
-     * Sets the capacity of the pool for a named group.
-     * Note that the pool will be cleared after the change.
-     *
-     * @param groupName the name of the group.
-     * @param capacity the new capacity.
-     */
-    public static void setCapacity(String groupName, int capacity)
-    {
-        getService().setCapacity(groupName, capacity);
+        getService().releaseGroup(instance);
     }
 
     /**
@@ -166,24 +143,6 @@ public abstract class TurbineIntake
     public static int getSize(String groupName)
     {
         return getService().getSize(groupName);
-    }
-
-    /**
-     * Clears instances of a named group from the pool.
-     *
-     * @param groupName the name of the group.
-     */
-    public static void clearPool(String groupName)
-    {
-        getService().clearPool(groupName);
-    }
-
-    /**
-     * Clears all instances from the pool.
-     */
-    public static void clearPool()
-    {
-        getService().clearPool();
     }
 
     /**

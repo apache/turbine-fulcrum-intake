@@ -16,6 +16,7 @@
     <pathelement location="${commons-email.jar}"/>
     <pathelement location="${commons-lang.jar}"/>
     <pathelement location="${commons-codec.jar}"/>
+    <pathelement location="${commons-pool.jar}"/>
     <pathelement location="${commons-fileupload.jar}"/>
     <pathelement location="${jaf.jar}"/>
     <pathelement location="${javamail.jar}"/>
@@ -80,6 +81,8 @@
     <echo message="commons-collections.jar = ${commons-collections.jar}"/>
     <echo message="commons-lang.jar = ${commons-lang.jar}"/>
     <echo message="commons-codec.jar = ${commons-codec.jar}"/>
+    <echo message="commons-pool.jar = ${commons-pool.jar}"/>
+    <echo message="commons-fileupload.jar = ${commons-fileupload.jar}"/>
     <echo message="dom4j.jar = ${dom4j.jar}"/>
     <echo message="dvsl.jar = ${dvsl.jar}"/>
     <echo message="jaf.jar = ${jaf.jar}"/>
@@ -204,6 +207,12 @@
     <available
       classname="org.apache.commons.codec.base64.Base64"
       property="commons-codec.present"
+      classpathref="classpath"
+    />
+
+    <available
+      classname="org.apache.commons.pool.KeyedObjectPool"
+      property="commons-pool.present"
       classpathref="classpath"
     />
 
@@ -334,6 +343,13 @@
     </antcall>
   </target>
 
+  <target name="check.commons-pool" unless="commons-pool.present">
+    <antcall target="property-warning">
+      <param name="name" value="commons-pool.jar"/>
+      <param name="value" value="${commons-pool.jar}"/>
+    </antcall>
+  </target>
+
   <target name="check.commons-fileupload" unless="commons-fileupload.present">
     <antcall target="property-warning">
       <param name="name" value="commons-fileupload.jar"/>
@@ -420,7 +436,7 @@
         check.servlet,check.javamail,check.jaf,check.xerces,check.xalan,
         check.xmlrpc,check.commons-collections,check.commons-lang,
         check.commons-codec,check.regexp,check.dvsl,check.dom4j,
-        check.commons-fileupload,include-email,om">
+        check.commons-fileupload,check.commons-pool,include-email,om">
 
     <!-- We have some static files that should overwrite
          The torque generated files so overwrite must be
