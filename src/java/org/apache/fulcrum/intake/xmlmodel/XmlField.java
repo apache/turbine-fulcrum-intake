@@ -61,6 +61,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.apache.commons.lang.StringUtils;
+import org.apache.fulcrum.intake.validator.DefaultValidator;
 import org.xml.sax.Attributes;
 
 /**
@@ -74,7 +75,7 @@ public class XmlField
     implements Serializable
 {
     private static final String DEFAULT_VALIDATOR =
-        "org.apache.fulcrum.intake.validatore.DefaultValidator";
+        DefaultValidator.class.getName();
 
     private String baseClass;
     private String name;
