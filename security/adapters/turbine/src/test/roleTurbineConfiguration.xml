@@ -24,7 +24,7 @@ classes for Turbine. -->
 
     <role name="org.apache.fulcrum.security.ModelManager"
           shorthand="modelManager"
-          default-class="org.apache.fulcrum.security.memory.turbine.MemoryTurbineModelManagerImpl" />                              
+          default-class="org.apache.fulcrum.security.memory.dynamic.MemoryModelManagerImpl" />                              
 
     <role name="org.apache.fulcrum.security.model.ACLFactory"
           shorthand="aclFactory"
