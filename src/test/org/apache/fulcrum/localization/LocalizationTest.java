@@ -103,7 +103,7 @@ public class LocalizationTest
             cfg.setProperty(PREFIX + "classname",
                             TurbineLocalizationService.class.getName());
             cfg.setProperty(PREFIX + "locale.default.bundles",
-                            "FooBundle,MissingBundle,BarBundle");
+                            "org.apache.fulcrum.localization.FooBundle,org.apache.fulcrum.localization.MissingBundle,org.apache.fulcrum.localization.BarBundle");
             cfg.setProperty(PREFIX + "locale.default.language", "en");
             cfg.setProperty(PREFIX + "locale.default.country", "US");
 
@@ -118,7 +118,7 @@ public class LocalizationTest
             assertEquals("Unable to retrieve localized text for locale: en-US",s, "value2");
             s = Localization.getString(null, new Locale("fr", "US"), "key3");
             assertEquals("Unable to retrieve localized text for locale: fr",s, "[fr] value3");
-            s = Localization.getString("BarBundle", new Locale("ko", "KR"),"key3");
+            s = Localization.getString("org.apache.fulcrum.localization.BarBundle", new Locale("ko", "KR"),"key3");
             assertEquals("Unable to retrieve localized text for locale: ko-KR",s, "[ko] value3");
 
             try

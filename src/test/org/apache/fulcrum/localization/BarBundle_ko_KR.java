@@ -1,3 +1,5 @@
+package org.apache.fulcrum.localization;
+
 import java.util.ListResourceBundle;
 
 /**
