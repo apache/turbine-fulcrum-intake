@@ -1,0 +1,3 @@
+<componentConfig>
+    <config configurationPath="src/test/configuration.xml"/>
+</componentConfig>

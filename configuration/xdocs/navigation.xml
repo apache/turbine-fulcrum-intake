@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+  name="Configuration"
+  href="http://jakarta.apache.org/turbine/fulcrum/configuration/">
+
+  <body>
+    <links>
+      <item name="Commons Configuration"
+            href="http://jakarta.apache.org/commons/sandbox/configuration/"/>
+      <item name="Fulcrum"
+            href="http://jakarta.apache.org/turbine/fulcrum/"/>
+    </links>
+
+    <menu name="Overview">
+      <item name="Main"                 href="/index.html"/>
+    </menu>
+  </body>
+</project>

@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Configuration Component</title>
+    <author email="epugh@upstate.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+
+  <section name="Overview">
+    <p>
+      The configuration component allows an application to load up arbitrary configuration data
+      that is backed by multiple datasources.
+    </p>
+    <p>
+      It is backed by Commons Configuration for accessing data and implements the Configuration
+      API.
+    </p>
+    <p>
+      It is written for use in any container compatible 
+      with Avalon's ECM container.
+    </p>    
+  </section>
+  
+<section name="Configuration">
+
+    <p>
+      First, here is the role configuration.
+    </p>
+
+<source>
+<![CDATA[
+  <role
+    name="org.apache.fulcrum.configuration.Config"
+    shorthand="config"
+    default-class="org.apache.fulcrum.configuration.DefaultConfigurationService"/>
+]]>
+</source>
+
+  <p>
+    Now comes the basic configuration of the component.  Here will will
+    configure the various encryption providers
+  </p>
+<source>
+
+<![CDATA[
+    <config configurationPath="src/test/configuration.xml"/>
+]]>
+</source>
+
+  </section>
+  
+<section name="Usage">
+
+<p>
+The configurationPath is the location of the file read in by the ConfigurationFactory.
+This then returns your Configuration object.
+</p>
+
+<p>
+To see an example, look at the test case 
+<a href="xref-test/org/apache/fulcrum/configuration/ConfigTest.html">ConfigTest</a>.
+</p>
+
+</section>
+
+</body>
+</document>
