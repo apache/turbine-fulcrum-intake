@@ -381,6 +381,10 @@ public class TurbineVelocityService
                         }
                         path = "jar:file:" + getRealPath(path) + entry;
                     }
+                    else if (path.startsWith("absolute:"))
+                    {
+                        path = path.substring ("absolute:".length(), path.length());
+                    }
                     else if (!path.startsWith("jar:"))
                     {
                         // But we don't translate remote jar URLs.
