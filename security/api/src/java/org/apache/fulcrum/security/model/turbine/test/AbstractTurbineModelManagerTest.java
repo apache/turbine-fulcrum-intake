@@ -46,4 +46,12 @@ public abstract class AbstractTurbineModelManagerTest extends AbstractDynamicMod
 		assertNotNull(global);
 		assertEquals(global.getName(),TurbineModelManager.GLOBAL_GROUP_NAME);
 	}
+	
+	
+	/**
+	 * Not needed in Turbine model
+	 */
+	public void testAddRemoveDelegate() throws Exception {
+		//NOOP
+	}
 }

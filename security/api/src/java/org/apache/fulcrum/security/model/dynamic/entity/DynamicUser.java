@@ -15,6 +15,7 @@ package org.apache.fulcrum.security.model.dynamic.entity;
  *  limitations under the License.
  */
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.fulcrum.security.entity.Group;
@@ -26,6 +27,10 @@ import org.apache.fulcrum.security.util.GroupSet;
  * Represents the "simple" model where permissions are related to roles,
  * roles are related to groups and groups are related to users,
  * all in many to many relationships.
+ * 
+ * Users have a set of delegates and delegatee's. 
+ * If user A has B in their delegates - B assumes A's groups,roles and permissions
+ * If user C has D in their delegatees - C assumes D's groups,roles and permissions
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
@@ -34,8 +39,33 @@ public class DynamicUser extends SecurityEntityImpl implements User
 {
     private String password;
     private Set groupSet = new GroupSet();
+    private Set delegators = new HashSet();
+    private Set delegatees = new HashSet();
 
-
+	/**
+	 * @return Returns the delegatees.
+	 */
+	public Set getDelegatees() {
+		return delegatees;
+	}
+	/**
+	 * @param delegatees The delegatees to set.
+	 */
+	public void setDelegatees(Set delegatees) {
+		this.delegatees = delegatees;
+	}
+	/**
+	 * @return Returns the delegators.
+	 */
+	public Set getDelegators() {
+		return delegators;
+	}
+	/**
+	 * @param delegates The delegators to set.
+	 */
+	public void setDelegators(Set delegates) {
+		this.delegators = delegates;
+	}
     /**
      * @return
      */

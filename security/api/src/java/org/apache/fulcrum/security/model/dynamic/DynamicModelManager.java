@@ -24,9 +24,10 @@ import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
- * Describes all the relationships between entities in the "Simple" model.
+ * Describes all the relationships between entities in the "Dynamic" model.
  * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
+ * @author <a href="mailto:ben@gidley.co.uk">Ben Gidley</a>
  * @version $Id$
  */
 public interface DynamicModelManager extends ModelManager
@@ -133,5 +134,19 @@ public interface DynamicModelManager extends ModelManager
 	 * @throws DataBackendException if there was an error accessing the data backend.
 	 * @throws UnknownEntityException if the Group is not present.
 	 */
-    void revokeAll(Group group) throws DataBackendException, UnknownEntityException;    
+    void revokeAll(Group group) throws DataBackendException, UnknownEntityException;
+    
+    /**
+     * Allow B to assumes A's roles, groups and permissions
+     * @param delegator A
+     * @param delegatee B
+     */
+    void addDelegate(User delegator, User delegatee) throws DataBackendException, UnknownEntityException;
+    
+    /**
+     * Stop A having B's roles, groups and permissions
+     * @param delegate A
+     * @param delegatee B
+     */
+    void removeDelegate(User delegator, User delegatee) throws DataBackendException, UnknownEntityException;;
 }

@@ -8,6 +8,15 @@
 
  <contributors>
     <contributor>
+      <name>Ben Gidley</name>
+      <id>bgidley</id>
+      <email>ben.gidley@anite.com</email>
+      <organization>Anite</organization>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </contributor> 
+    <contributor>
       <name>Michael Jones</name>
       <id>mjones</id>
       <email>michael.jones@anite.com</email>

@@ -7,6 +7,11 @@
 
   <body>
     <release version="1.0.6" date="in cvs">
+      <action dev="epugh" type="add" due-to="Ben Gidley">
+        Add to the dynamic model the ability to add delegators for users.  A user can have
+        0..n delegatees who can assume the roles and permissions of the user.
+        Also cleanup of docs.
+      </action>         
       <action dev="epugh" type="add" due-to="Peter Courcoux">
         Make serviceManager in AbstractManager class protected to facilitate extension.
       </action>         

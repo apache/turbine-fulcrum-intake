@@ -50,17 +50,39 @@
       </set>        
     </class>   
 
-    <class name="org.apache.fulcrum.security.model.dynamic.entity.DynamicUser" table="HIBUSER" >
-      <id name="id" type="long" column="HIBUSER_ID" unsaved-value="0">
-           <generator class="native"/>
-        </id>
-      <property name="name" column="USERNAME" type="string"/>      
-      <property name="password" column="PASSWORD" type="string"/>            
-      
-    <set name="groupsAsSet" lazy="true" table="HIBUSER_GROUP" inverse="true" cascade="none">
-        <key column="USER_ID"/>
-        <many-to-many class="org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup" column="GROUP_ID"/> 
-      </set>
-    </class>    
+	<class name="org.apache.fulcrum.security.model.dynamic.entity.DynamicUser" 
+		table="HIBUSER" >
+		<id name="id" type="long" column="HIBUSER_ID" unsaved-value="0">
+			<generator class="native"/>
+		</id>
+		<property name="name" column="USERNAME" type="string"/>
+		<property name="password" column="PASSWORD" type="string"/>
+		<set name="groupsAsSet" lazy="true" table="HIBUSER_GROUP" 
+			inverse="true" cascade="none">
+			<key column="USER_ID"/>
+			<many-to-many 
+				class="org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup" 
+				column="GROUP_ID"/>
+		</set>
+		<set name="delegators" 
+			lazy="true" 
+			table="HIBUSER_DELEGATES" 
+			cascade="save-update">
+			<key column="DELEGATOR_USER_ID"/>
+			<many-to-many 
+				class="org.apache.fulcrum.security.model.dynamic.entity.DynamicUser" 
+				column="DELEGATEE_USER_ID"/>
+		</set>
+		<set name="delegatees" 
+			lazy="true" 
+			table="HIBUSER_DELEGATES" 
+			cascade="save-update"
+			inverse="true">
+			<key column="DELEGATEE_USER_ID"/>
+			<many-to-many 
+				class="org.apache.fulcrum.security.model.dynamic.entity.DynamicUser" 
+				column="DELEGATOR_USER_ID"/>
+		</set>
+	</class>
     
   </hibernate-mapping>

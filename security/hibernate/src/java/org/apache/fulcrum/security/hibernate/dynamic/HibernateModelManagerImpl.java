@@ -311,6 +311,26 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
 		return persistenceHelper;
 	}    
  
-    
- 
+	/* (non-Javadoc)
+	 * @see org.apache.fulcrum.security.model.dynamic.DynamicModelManager#addDelegate(org.apache.fulcrum.security.entity.User, org.apache.fulcrum.security.entity.User)
+	 */
+	public void addDelegate(User delegator, User delegatee)
+			throws DataBackendException, UnknownEntityException {
+	
+		super.addDelegate(delegator, delegatee);
+		getPersistenceHelper().updateEntity(delegator);
+		getPersistenceHelper().updateEntity(delegatee);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.apache.fulcrum.security.model.dynamic.DynamicModelManager#removeDelegate(org.apache.fulcrum.security.entity.User, org.apache.fulcrum.security.entity.User)
+	 */
+	public void removeDelegate(User delegator, User delegatee)
+			throws DataBackendException, UnknownEntityException {
+	
+		super.removeDelegate(delegator, delegatee);
+		
+		getPersistenceHelper().updateEntity(delegator);
+		getPersistenceHelper().updateEntity(delegatee);
+	}
 }

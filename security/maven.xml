@@ -7,5 +7,25 @@
   <preGoal name="site">
     <ant:copy file="${basedir}/incl_nav.xml" todir="target" failonerror="false"/>
   </preGoal>
+  
+  <!-- Added to top level build gets subprojects -->
+  <preGoal name="jar:install">
+    <maven:reactor basedir="${basedir}"
+      includes="**/project.xml"
+      excludes="proposals/**,target/**,project.xml"
+      goals="jar:install"
+      banner="Installing:"
+      ignoreFailures="true" />
+    </preGoal>
+    
+      <!-- Added to top level build gets subprojects -->
+  <preGoal name="clean:clean">
+    <maven:reactor basedir="${basedir}"
+      includes="**/project.xml"
+      excludes="proposals/**,target/**,project.xml"
+      goals="clean:clean"
+      banner="Installing:"
+      ignoreFailures="true" />
+    </preGoal>
 
 </project>
