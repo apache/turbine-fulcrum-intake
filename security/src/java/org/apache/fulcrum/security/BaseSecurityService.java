@@ -82,7 +82,6 @@ public class BaseSecurityService
     // management of Groups/Role/Permissions
     
     // temporary storage of the classnames prior to initialization
-    String userManagerClassName;
     String userClassName;
     String groupClassName;
     String permissionClassName;
@@ -167,7 +166,6 @@ public class BaseSecurityService
     public void initialize() throws Exception
     {
       
-        userManagerClassName = null;
         userClassName = null;
         groupClassName = null;
         permissionClassName = null;
