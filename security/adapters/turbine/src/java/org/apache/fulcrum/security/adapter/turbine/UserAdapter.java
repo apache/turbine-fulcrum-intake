@@ -59,6 +59,7 @@ import java.util.Hashtable;
 import javax.servlet.http.HttpSessionBindingEvent;
 
 import org.apache.fulcrum.security.entity.SecurityEntity;
+import org.apache.turbine.om.security.TurbineUser;
 import org.apache.turbine.om.security.User;
 
 /**
@@ -69,11 +70,19 @@ import org.apache.turbine.om.security.User;
  */
 public class UserAdapter extends BaseAdapter implements User
 {
+    
+  /*
+   *  turbineUser object to delegate extra methods that the fulcrum user
+   * doesn't support
+   */    
+  private TurbineUser turbineUser;
 
-	public UserAdapter(org.apache.fulcrum.security.entity.User user)
-	   {
-		   super((SecurityEntity)user);
-	   }
+
+  public UserAdapter(org.apache.fulcrum.security.entity.User user)
+     {
+       super((SecurityEntity)user);
+       turbineUser = new TurbineUser();
+     }
     /* Does Nothing.
      * @see org.apache.turbine.om.security.User#getAccessCounter()
      */
@@ -109,7 +118,7 @@ public class UserAdapter extends BaseAdapter implements User
     {
         return null;
     }
-    /* Does Nothing.
+    /* 
      * @see org.apache.turbine.om.security.User#getPassword()
      */
     public String getPassword()
@@ -140,29 +149,29 @@ public class UserAdapter extends BaseAdapter implements User
 
         return null;
     }
-    /* Does Nothing.
+    /* 
      * @see org.apache.turbine.om.security.User#getTempStorage()
      */
     public Hashtable getTempStorage()
     {
 
-        return null;
+        return turbineUser.getTempStorage();
     }
-    /* Does Nothing.
+    /* 
      * @see org.apache.turbine.om.security.User#getTemp(java.lang.String)
      */
     public Object getTemp(String arg0)
     {
 
-        return null;
+		return turbineUser.getTemp(arg0);
     }
-    /* Does Nothing.
+    /* 
      * @see org.apache.turbine.om.security.User#getTemp(java.lang.String, java.lang.Object)
      */
     public Object getTemp(String arg0, Object arg1)
     {
 
-        return null;
+        return turbineUser.getTemp(arg0,arg1);
     }
     /* Adapter from getUserName to getName!
      * @see org.apache.turbine.om.security.User#getUserName()
@@ -195,20 +204,19 @@ public class UserAdapter extends BaseAdapter implements User
 
         return null;
     }
-    /* Does Nothing.
+    /* 
      * @see org.apache.turbine.om.security.User#setHasLoggedIn(java.lang.Boolean)
      */
     public void setHasLoggedIn(Boolean arg0)
     {
-
+		turbineUser.setHasLoggedIn(arg0);
     }
-    /* Does Nothing.
+    /* 
      * @see org.apache.turbine.om.security.User#hasLoggedIn()
      */
     public boolean hasLoggedIn()
     {
-
-        return false;
+		return turbineUser.hasLoggedIn();
     }
     /* Does Nothing.
      * @see org.apache.turbine.om.security.User#incrementAccessCounter()
@@ -224,13 +232,12 @@ public class UserAdapter extends BaseAdapter implements User
     {
 
     }
-    /* Does Nothing.
+    /* 
      * @see org.apache.turbine.om.security.User#removeTemp(java.lang.String)
      */
     public Object removeTemp(String arg0)
     {
-
-        return null;
+        return turbineUser.removeTemp(arg0);
     }
     /* Does Nothing.
      * @see org.apache.turbine.om.security.User#setAccessCounter(int)
@@ -260,12 +267,12 @@ public class UserAdapter extends BaseAdapter implements User
     {
 
     }
-    /* Does Nothing.
+    /* 
      * @see org.apache.turbine.om.security.User#setPassword(java.lang.String)
      */
     public void setPassword(String arg0)
     {
-		((org.apache.fulcrum.security.entity.User)entity).setPassword(arg0);
+        ((org.apache.fulcrum.security.entity.User)entity).setPassword(arg0);
     }
     /* Does Nothing.
      * @see org.apache.turbine.om.security.User#setPerm(java.lang.String, java.lang.Object)
@@ -281,26 +288,26 @@ public class UserAdapter extends BaseAdapter implements User
     {
 
     }
-    /* Does Nothing.
+    /* 
      * @see org.apache.turbine.om.security.User#setTempStorage(java.util.Hashtable)
      */
     public void setTempStorage(Hashtable arg0)
     {
-
+		turbineUser.setTempStorage(arg0);
     }
-    /* Does Nothing.
+    /* D
      * @see org.apache.turbine.om.security.User#setTemp(java.lang.String, java.lang.Object)
      */
     public void setTemp(String arg0, Object arg1)
     {
-
+		turbineUser.setTemp(arg0,arg1);
     }
     /* Adaper for user name to name.
      * @see org.apache.turbine.om.security.User#setUserName(java.lang.String)
      */
     public void setUserName(String arg0)
     {
-		setName(arg0);
+        setName(arg0);
     }
     /* Does Nothing.
      * @see org.apache.turbine.om.security.User#setFirstName(java.lang.String)
