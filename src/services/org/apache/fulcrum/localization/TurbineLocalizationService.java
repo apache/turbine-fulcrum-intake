@@ -55,6 +55,7 @@ package org.apache.fulcrum.localization;
  */
 
 import java.text.MessageFormat;
+import java.text.FieldPosition;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -498,6 +499,17 @@ public class TurbineLocalizationService
         {
             args = NO_ARGS;
         }
-        return MessageFormat.format(value, args);
+        // FIXME : after switching to JDK 1.4, it will be possible to clean
+        // this up by providing the Locale along with the string in the
+        // constructor to MessageFormat.  Until 1.4, the following workaround
+        // is required for constructing the format with the appropriate locale:
+        MessageFormat messageFormat = new MessageFormat("");
+        messageFormat.setLocale(locale);
+        messageFormat.applyPattern(value);
+
+        StringBuffer buff = new StringBuffer();
+
+        messageFormat.format(args, buff, new FieldPosition(0));
+        return buff.toString();
     }
 }
