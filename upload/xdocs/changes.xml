@@ -6,6 +6,11 @@
   </properties>
 
   <body>
+    <release version="1.0.3-dev" date="in CVS">
+     <action dev="epugh" type="update">
+        Clean up dependencies list.
+      </action>      
+    </release>    
     <release version="1.0-alpha-2" date="in CVS">
      <action dev="epugh" type="add">
         Initial conversion to Avalon component.
