@@ -493,11 +493,11 @@ public class DBSecurityService
                 // criteria.add(RolePermissionPeer.ROLE_ID, role.getPrimaryKey());
                 // RolePermissionPeer.doDelete(criteria);
 
-                int id = ((TurbineRole)role).getPrimaryKeyAsInt();
+                ObjectKey key = ((TurbineRole)role).getPrimaryKey();
                 TurbineRolePermissionPeer.deleteAll(
                         TurbineRolePermissionPeer.TABLE_NAME,
                         TurbineRolePermissionPeer.ROLE_ID,
-                        id);
+                        ((BigDecimal) key.getValue()).intValue());
                 return;
             }
         }
