@@ -69,24 +69,15 @@ import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
 import org.apache.log4j.helpers.NullEnumeration;
 
-// NOTE:
-// initClass is taking the name of the service now not
-// the name of the class. not sure why this is necessary
-// yet.
-
 /**
- * A generic implementation of a <code>ServiceBroker</code>.
- *
- * Functionality that <code>ServiceBroker</code> provides:
+ * A generic implementation of a <code>ServiceBroker</code> which
+ * provides:
  *
  * <ul>
- *
  * <li>Maintaining service name to class name mapping, allowing
  * plugable service implementations.</li>
- *
  * <li>Providing <code>Services</code> with a configuration based on
  * system wide configuration mechanism.</li>
- *
  * </ul>
  *
  * @author <a href="mailto:burton@apache.org">Kevin Burton</a>
@@ -255,9 +246,8 @@ public abstract class BaseServiceBroker
         // 2. Logging category has been set.
         // 3. Make sure the application root has been set.
 
-        //!! We should make some service framework exceptions
-        //   to throw in the event these requirements
-        //   aren't satisfied.
+        // FIXME: Make some service framework exceptions to throw in
+        // the event these requirements aren't satisfied.
 
         // Check to see if a parent application has already
         // configured the logging.
@@ -349,55 +339,6 @@ public abstract class BaseServiceBroker
     }
 
     /**
-     * Performs early initialization of an Service class.
-     *
-     * @param className The name of the class to be initailized.
-     * @param data An Object to be used for initialization activities.
-     * @exception InitializationException Initialization was not successful.
-     */
-    public void initClass(String className)
-        throws InitializationException
-    {
-        Service instance = getServiceInstance(className);
-
-        if (!instance.isInitialized())
-        {
-            // this call might result in an indirect recursion
-            instance.init();
-        }
-    }
-
-    /**
-        * Shuts down a <code>Service</code>.
-        *
-        * This method is used to release resources allocated by an
-        * <code>Service</code>, and return it to its initial
-        * (uninitailized) state.
-        *
-        * @param className The name of the class to be uninitialized.
-        */
-    public void shutdownClass(String className)
-    {
-        try
-        {
-            Service service = getServiceInstance(className);
-            if (service.isInitialized())
-            {
-                service.shutdown();
-                ((BaseService) service).setInit(false);
-            }
-        }
-        catch (InstantiationException e)
-        {
-            // Shutdown of a nonexistent class was requested.
-            // This does not hurt anything, so we log the error and continue.
-            error(new ServiceException(
-                "Shutdown of a nonexistent class " + className +
-                    " was requested", e));
-        }
-    }
-
-    /**
      * Determines whether a service is registered in the configured
      * <code>TurbineResources.properties</code>.
      *
@@ -432,7 +373,8 @@ public abstract class BaseServiceBroker
     }
 
     /**
-     * Performs early initialization of specified service.
+     * Performs early initialization of the specified
+     * <code>Service</code> implementation.
      *
      * @param name The name of the service (generally the
      * <code>SERVICE_NAME</code> constant of the service's interface
@@ -440,28 +382,28 @@ public abstract class BaseServiceBroker
      * @param data An object to use for initialization activities.
      * @exception InitializationException Initilaization of this
      * service was not successful.
+     * @see org.apache.fulcrum.Service#init()
      */
     public synchronized void initService(String name)
         throws InitializationException
     {
-        String className = (String) mapping.get(name);
+        // Calling getServiceInstance(name) assures that the Service
+        // implementation has its name and broker reference set before
+        // initialization.
+        Service instance = getServiceInstance(name);
 
-        if (className == null || className.trim().length() == 0)
+        if (!instance.isInitialized())
         {
-            throw new InitializationException(
-                "ServiceBroker: initialization of unknown service " +
-                    name + " requested.");
+            // this call might result in an indirect recursion
+            instance.init();
         }
-
-        initClass(name);
     }
 
     /**
      * Performs early initialization of all services.  Failed early
      * initialization of a Service may be non-fatal to the system,
-     * thuss the exceptions are logged and then discarded.
-     *
-     * @param data An Object to use for initialization activities.
+     * thus any exceptions are logged and the initialization process
+     * continues.
      */
     public void initServices()
     {
@@ -489,17 +431,17 @@ public abstract class BaseServiceBroker
         throws InstantiationException, InitializationException
     {
         Iterator names = getServiceNames();
-        // throw exceptions
         if (report)
         {
+            // Throw exceptions
             while (names.hasNext())
             {
                 doInitService((String) names.next());
             }
         }
-        // eat exceptions
         else
         {
+            // Eat exceptions
             while (names.hasNext())
             {
                 try
@@ -522,63 +464,51 @@ public abstract class BaseServiceBroker
     }
 
     /**
-     * Internal utility method for use in initServices()
+     * Internal utility method for use in {@link #initServices(boolean)}
      * to prevent duplication of code.
      */
     private void doInitService(String name)
-        throws InstantiationException,
-               InitializationException
+        throws InstantiationException, InitializationException
     {
-        /*
-         * We only want to start up services that have their
-         * earlyInit flag set. Don't waste resources if we
-         * don't have to.
-         */
-        if (getConfiguration(name).getBoolean("earlyInit", false) == false)
+        // Only start up services that have their earlyInit flag set.
+        if (getConfiguration(name).getBoolean("earlyInit", false))
         {
-            return;
+            notice("Start Initializing service (early): " + name);
+            initService(name);
+            notice("Finish Initializing service (early): " + name);
         }
-
-        notice("Start Initializing service (early): " + name);
-
-        // Make sure the service has it's name and broker
-        // reference set before initialization.
-        getServiceInstance(name);
-
-        /*
-         * We are using the name of the service now.
-         */
-        initClass(name);
-
-        notice("Finish Initializing service (early): " + name);
     }
 
     /**
-     * Shuts down a <code>Service</code>.
+     * Shuts down a <code>Service</code>, releasing resources
+     * allocated by an <code>Service</code>, and returns it to its
+     * initial (uninitialized) state.
      *
-     * This method is used to release resources allocated by a
-     * Service, and return it to its initial (uninitailized) state.
-     *
-     * @param name The name of the <code>Service</code> to be uninitialized.
+     * @param name The name of the <code>Service</code> to be
+     * uninitialized.
+     * @see org.apache.fulcrum.Service#shutdown()
      */
     public synchronized void shutdownService(String name)
     {
         try
         {
             Service service = getServiceInstance(name);
-            if (service.isInitialized())
+            if (service != null && service.isInitialized())
             {
                 service.shutdown();
-                ((BaseService) service).setInit(false);
+                if (service.isInitialized() && service instanceof BaseService)
+                {
+                    // BaseService::shutdown() does this by default,
+                    // but could've been overriden poorly.
+                    ((BaseService) service).setInit(false);
+                }
             }
         }
         catch (InstantiationException e)
         {
-            // Shutdown of a nonexistent class was requested.
-            // This does not hurt anything, so we log the error and continue.
-            error(new ServiceException(
-                "Shutdown of a nonexistent service " + name +
-                    " was requested", e));
+            // Assuming harmless -- log the error and continue.
+            error(new ServiceException("Shutdown of a nonexistent Service '" +
+                                       name + "' was requested", e));
         }
     }
 
@@ -665,20 +595,18 @@ public abstract class BaseServiceBroker
     }
 
     /**
-     * Retrieves an instance of a Service without triggering late
-     * initialization.
+     * <p>Retrieves an instance of a Service without triggering late
+     * initialization.</p>
      *
-     * Early initialization of a Service can require access to Service
-     * properties.  The Service must have its name and serviceBroker
-     * set by then.  Therefore, before calling
-     * Initable.initClass(Object), the class must be instantiated with
-     * ServiceBroker.getServiceInstance(), and
-     * Service.setServiceBroker() and Service.setName() must be
-     * called.  This calls for two - level accesing the Services
-     * instances.
+     * <p>Early initialization of a Service can require access to
+     * Service properties.  The Service must have its name and
+     * ServiceBroker set by then (the class must be instantiated with
+     * {@link #getServiceInstance(String)}, and {@link
+     * org.apache.fulcrum.Service#setServiceBroker()} and {@link
+     * org.apache.fulcrum.Service#setName()} must've been called).</p>
      *
      * @param name The name of the service requested.
-     * @exception InstantiationException, if the service is unknown or
+     * @exception InstantiationException The service is unknown or
      * can't be initialized.
      */
     protected Service getServiceInstance(String name)
@@ -690,10 +618,10 @@ public abstract class BaseServiceBroker
         {
             String className = mapping.getString(name);
 
-            if (className == null)
+            if (className == null || className.length() == 0)
             {
                 throw new InstantiationException(
-                    "ServiceBroker: unknown service " + name + " requested");
+                    "ServiceBroker: Unknown Service '" + name + "' requested");
             }
             try
             {
@@ -732,7 +660,7 @@ public abstract class BaseServiceBroker
                         else if (t instanceof ClassCastException)
                         {
                             msg = "Class " + className +
-                                " doesn't implement Service interface";
+                                " doesn't implement the Service interface";
                         }
                         else
                         {
@@ -745,7 +673,7 @@ public abstract class BaseServiceBroker
             }
             catch (ClassCastException e)
             {
-                throw new InstantiationException("ServiceBroker: class "
+                throw new InstantiationException("ServiceBroker: Class "
                     + className + " does not implement Service interface.", e);
             }
             catch (InstantiationException e)
