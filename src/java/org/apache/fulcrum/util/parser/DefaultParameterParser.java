@@ -59,6 +59,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
+import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.fulcrum.ServiceException;
 import org.apache.fulcrum.pool.Recyclable;
@@ -198,7 +199,19 @@ public class DefaultParameterParser
 
                     if (item.isFormField())
                     {
-                        append(item.getFieldName(), new String(item.get()));
+                        String value = null;
+                        try
+                        {
+                            value = item.getString(getCharacterEncoding());
+                        }
+                        catch (UnsupportedEncodingException e)
+                        {
+                            category.error(getCharacterEncoding() + 
+                                "encoding is not supported.  Used the default "
+                                + "when reading form data.");
+                            value = item.getString();
+                        }
+                        append(item.getFieldName(), value);
                     }
                     else
                     {
