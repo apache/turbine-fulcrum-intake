@@ -7,6 +7,12 @@
 
   <body>
     <release version="1.0.3" date="">
+      <action dev="goeschsi" type="add">
+        Added a little bi of documentation
+      </action>
+      <action dev="goeschsi" type="fix">
+        Fixed most of the Eclipse complaints about coding conventions
+      </action>        
       <action dev="epugh" type="fix" due-to="Siegfried Goeschl">
         Container was missing call to decomission objects, therefore
         Disposeable interface never working.
