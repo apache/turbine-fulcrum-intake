@@ -217,8 +217,13 @@ public class DateStringValidator
 
     public String format(Date date)
     {
-        sdf.applyPattern((String)dateFormats.get(0));
-        return sdf.format(date);                
+        String s = null;
+        if (date != null) 
+        {
+            sdf.applyPattern((String)dateFormats.get(0));
+            s= sdf.format(date);        
+        }
+        return s;
     }
 
 

@@ -142,7 +142,11 @@ public class DateStringField extends Field
     {
         String s = null;
         Object value = getValue();
-        if (value instanceof String) 
+        if (value == null) 
+        {
+            s = "";
+        }
+        else if (value instanceof String) 
         {
             s = (String)value;
         }
