@@ -108,6 +108,7 @@ public class BaseValueParser
      * Random access storage for parameter data.
      */
     protected Hashtable parameters = new Hashtable();
+
     /**
      * The character encoding to use when converting to byte arrays
      */
