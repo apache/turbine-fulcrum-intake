@@ -122,7 +122,6 @@ public class TemplateHtmlEmail
     public TemplateHtmlEmail(TemplateContext context)
         throws MessagingException
     {
-        super.init();
         this.context = context;
         embmap = new Hashtable();
     }
