@@ -347,13 +347,21 @@ public class DefaultParameterParser
     {
         return uploadService.getFileUpload().getRepositoryPath();
     }    
+    
+    public void setUploadService(UploadService uploadService){
+        this.uploadService = uploadService;
+    }
+    
+    public UploadService getUploadService(){
+        return uploadService;
+    }
     // ---------------- Avalon Lifecycle Methods ---------------------    
     /**
      * Avalon component lifecycle method
      */
     public void service( ServiceManager manager) throws ServiceException{        
         
-        uploadService = (UploadService)manager.lookup(UploadService.class.getName());
+        setUploadService((UploadService)manager.lookup(UploadService.class.getName()));
         
     }      
 }

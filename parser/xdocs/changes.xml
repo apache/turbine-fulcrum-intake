@@ -1,12 +1,18 @@
 <?xml version="1.0"?>
 <document>
   <properties>
-    <title>Fulcrum BSF</title>
+    <title>Fulcrum Parser</title>
     <author email="epugh@opensourceconnections.com">Eric Pugh</author>
   </properties>
 
   <body>
     <release version="1.0.2-dev" date="in CVS">
+     <action dev="epugh" type="add">
+        Add javabean get/set for dependent upload service to DefaultParameterParser.
+      </action>        
+     <action dev="epugh" type="add">
+        Basic unit test verifying that the default parser starts up.
+      </action>              
      <action dev="epugh" type="add">
         Change to commons-logger to be more friendly to who ever
         uses this code.

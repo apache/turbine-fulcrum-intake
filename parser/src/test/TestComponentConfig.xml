@@ -1,3 +1,5 @@
 <componentConfig>
-    <cache cacheInitialSize="20" cacheCheckFrequency="5"/>
+    <parser/>
+    
+    <upload repository="target" sizeMax="1048576" sizeThreshold="10240"/>
 </componentConfig>
