@@ -1,5 +1,6 @@
 package org.apache.fulcrum.schedule;
 import org.apache.fulcrum.factory.FactoryService;
+import org.apache.fulcrum.ServiceManager;
 import org.apache.fulcrum.TurbineServices;
 
 /* ====================================================================
@@ -107,11 +108,21 @@ public class WorkerThread
                 // loader does. This right here requires the
                 // getTask() method to return a class name.
                 String className = je.getTask();
-                FactoryService factoryService = (FactoryService)
-                    TurbineServices.getInstance().getService
-                    (FactoryService.SERVICE_NAME);
-                ScheduledJob sc = (ScheduledJob)
-                    factoryService.getInstance(className);
+
+                //If a FactoryService is registered, use it. Otherwise,
+                //instantiate the ScheduledJob directly.
+                ScheduledJob sc = null;
+                ServiceManager services = TurbineServices.getInstance();
+                if (services.isRegistered(FactoryService.SERVICE_NAME))
+                {
+                    FactoryService factoryService = (FactoryService)
+                        services.getService(FactoryService.SERVICE_NAME);
+                    sc = (ScheduledJob)factoryService.getInstance(className);
+                }
+                else
+                {
+                    sc = (ScheduledJob)Class.forName(className).newInstance();
+                }
                 sc.execute(je);
             }
         }
