@@ -1,0 +1,33 @@
+<my-system>
+  <component
+    role="org.apache.fulcrum.security.SecurityService"
+    class="org.apache.fulcrum.security.BaseSecurityService">   
+  </component>  
+
+  <component
+    role="org.apache.fulcrum.security.UserManager"
+    class="org.apache.fulcrum.security.memory.MemoryUserManagerImpl">   
+    <className>org.apache.fulcrum.security.model.basic.entity.BasicUser</className>
+  </component>   
+  <component
+    role="org.apache.fulcrum.security.GroupManager"
+    class="org.apache.fulcrum.security.memory.MemoryGroupManagerImpl">   
+    <className>org.apache.fulcrum.security.model.basic.entity.BasicGroup</className>
+  </component>     
+
+  <component
+    role="org.apache.fulcrum.security.ModelManager"
+    class="org.apache.fulcrum.security.memory.basic.MemoryModelManagerImpl">   
+  </component> 
+  
+  <component
+    role="org.apache.fulcrum.security.authenticator.Authenticator"
+    class="org.apache.fulcrum.security.authenticator.TextMatchAuthenticator">   
+  </component> 
+
+  <component
+    role="org.apache.fulcrum.security.model.ACLFactory"
+    class="org.apache.fulcrum.security.model.basic.BasicACLFactory">   
+  </component>   
+  
+</my-system>

@@ -1,0 +1,20 @@
+
+<container name="test">
+   <classloader>
+     <classpath>
+       <repository>
+         <resource id="fulcrum:fulcrum-crypto-api" version="1.0-alpha-4"/>
+         <resource id="fulcrum:fulcrum-crypto-impl" version="1.0-alpha-4"/>
+		 <resource id="fulcrum:fulcrum-factory-api" version="1.0-alpha-2"/>
+         <resource id="fulcrum:fulcrum-factory-impl" version="1.0-alpha-2"/>
+       </repository>
+     </classpath>
+   </classloader>
+
+   <component name="factory" class="org.apache.fulcrum.factory.DefaultFactoryService"/>   
+
+   <component name="crypto" class="org.apache.fulcrum.crypto.DefaultCryptoService"/>
+<!--   
+   <component name="authenticator" class="org.apache.fulcrum.security.authenticator.CryptoAuthenticator"/>
+   -->
+</container>

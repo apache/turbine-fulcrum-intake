@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<project>
+  <extend>${basedir}/../../project.xml</extend>
+  <id>fulcrum-security-hibernate</id>
+  <name>Fulcrum Security Hibernate Impl</name>
+  <currentVersion>1.0-alpha-4</currentVersion>
+  <package>org.apache.fulcrum.security</package>
+
+  <dependencies>
+    <dependency>
+      <groupId>fulcrum</groupId>   
+      <artifactId>fulcrum-security-api</artifactId>
+      <version>1.0-alpha-4</version>
+    </dependency>  
+    <dependency>
+      <groupId>fulcrum</groupId>   
+      <artifactId>fulcrum-security-spi</artifactId>
+      <version>1.0-alpha-4</version>
+    </dependency>      
+    <dependency>
+      <groupId>fulcrum</groupId>   
+      <artifactId>fulcrum-crypto</artifactId>
+      <version>1.0-alpha-3</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>fulcrum</groupId>    
+      <artifactId>fulcrum-factory</artifactId>
+      <version>1.0-alpha-1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>avalon-framework</groupId>
+      <artifactId>avalon-framework-api</artifactId>
+      <version>4.1.5</version>
+    </dependency> 
+    
+    <dependency>
+      <id>commons-logging</id>
+      <version>1.0.3</version>
+    </dependency>      
+    <dependency>
+      <id>commons-lang</id>
+      <version>2.0</version>
+    </dependency>  
+    <dependency>
+      <id>cryptix</id>
+      <version>3.2.0</version>
+      <url>http://www.cryptix.org/</url>
+    </dependency>    
+    
+<!-- Needed for the Hibernate SPI -->
+     <dependency>
+       <id>commons-beanutils</id>
+       <version>1.6.1</version>
+     </dependency>
+     <dependency>
+       <groupId>mckoi</groupId>      
+       <artifactId>mckoidb</artifactId>             
+       <version>1.0.2</version>
+     </dependency>    
+     <dependency>
+       <id>hsqldb</id>      
+       <version>1.7.1</version>
+     </dependency>    
+     <dependency>
+       <id>hibernate</id>      
+       <version>2.0.3</version>
+     </dependency>          
+    <dependency>
+      <groupId>hibernate</groupId>
+      <artifactId>hibernate-avalon-api</artifactId>
+      <version>0.4-dev</version>           
+    </dependency> 
+    <dependency>
+      <groupId>hibernate</groupId>
+      <artifactId>hibernate-avalon-impl</artifactId>
+      <version>0.4-dev</version>          
+    </dependency>                 
+     <dependency>
+       <id>odmg</id>      
+       <version>3.0</version>
+     </dependency>                  
+     <dependency>
+       <id>bcel</id>      
+       <version>5.0</version>
+     </dependency>                      
+     <dependency>
+       <id>dom4j</id>      
+       <version>1.4</version>
+       <url>http://www.dom4j.org/</url>
+     </dependency>       
+     <dependency>
+       <id>cglib</id>      
+       <version>rc2-1.0</version>
+     </dependency>           
+
+    <!-- testing -->
+    <dependency>
+      <groupId>fulcrum</groupId>    
+      <artifactId>fulcrum-testcontainer</artifactId>
+      <version>1.0-alpha-1</version>
+    </dependency>    
+    <!--dependency>
+      <groupId>merlin</groupId>
+      <artifactId>merlin-unit</artifactId>
+      <version>3.2.3-dev</version>
+    </dependency-->
+  </dependencies>
+
+
+</project>
+
