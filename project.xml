@@ -70,7 +70,7 @@
       <email>mpoeschl@marmot.at</email>
       <organization>Tucana</organization>
     </developer>
-	<developer>
+  <developer>
       <name>Eric Pugh</name>
       <id>epugh</id>
       <email>epugh@upstate.com</email>
@@ -180,7 +180,8 @@
 
     <dependency>
       <id>log4j</id>
-      <version>1.2.6</version>
+      <version>1.2.8</version>
+      <url>http://jakarta.apache.org/log4j/</url>
     </dependency>
 
     <dependency>
@@ -293,7 +294,7 @@
     </dependency>
     <dependency>
       <id>cglib</id>
-	  <jar>cglib.jar</jar>
+    <jar>cglib.jar</jar>
       <url>http://cglib.sf.net/</url>
     </dependency>
     <dependency>
@@ -463,44 +464,15 @@
     </dependency>
   </dependencies>
   -->
-  
-  <build>
+ 
+ <build>
     <nagEmailAddress>turbine-dev@jakarta.apache.org</nagEmailAddress>
-    <sourceDirectory>${basedir}/src/java/OFF</sourceDirectory>
-    <unitTestSourceDirectory>${basedir}/src/test/OFF</unitTestSourceDirectory>
 
-    <unitTest>
-      <includes>
-        <include>**/*Test.java</include>
-      </includes>
-      <resources>
-        <resource>
-          <directory>${basedir}/src/test</directory>
-          <includes>
-            <include>**/*.xml</include>
-            <include>**/*.xsd</include>
-            <include>**/*.vm</include>
-          </includes>
-        </resource>
-      </resources>
-    </unitTest>
-
-    <resources>
-      <resource>
-       <directory>${basedir}/src/test</directory>
-        <includes>
-          <include>**/*.properties</include>
-          <include>**/avalon-roles.xml</include>
-        </includes>
-      <excludes>
-        <exclude>**/hibernate.cfg.xml</exclude>
-      </excludes>
-      </resource>
-    </resources>
-    
-
+    <sourceDirectory>${basedir}/src/java/</sourceDirectory>
+    <unitTestSourceDirectory>${basedir}/src/test/</unitTestSourceDirectory>
+ 
   </build>
-  
+ 
   <reports>
   
     <report>maven-jdepend-plugin</report>

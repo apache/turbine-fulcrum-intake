@@ -1,5 +1,5 @@
 <project 
-  default="build"
+  default="multiproject:artifact"
   xmlns:j="jelly:core"
   xmlns:maven="jelly:maven"
   xmlns:deploy="deploy"
