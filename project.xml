@@ -16,7 +16,7 @@
   <description>Fulcrum is a services framework.</description>
   <url>http://jakarta.apache.org/turbine/fulcrum/</url>
   <cvsWebUrl>http://cvs.apache.org/viewcvs/jakarta-turbine-fulcrum/</cvsWebUrl>
-  <issueTrackingUrl>http://nagoya.apache.org/scarab/servlet/scarab/</issueTrackingUrl>
+  <issueTrackingUrl>http://issues.apache.org/scarab/servlet/scarab/</issueTrackingUrl>
   <siteAddress>jakarta.apache.org</siteAddress>
   <siteDirectory>/www/jakarta.apache.org/turbine/fulcrum/</siteDirectory>
   <releases>
@@ -30,13 +30,13 @@
       <name>Turbine User List</name>
       <subscribe>turbine-user-subscribe@jakarta.apache.org</subscribe>
       <unsubscribe>turbine-user-unsubscribe@jakarta.apache.org</unsubscribe>
-      <archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listName=turbine-user@jakarta.apache.org</archive>
+      <archive>http://archives.apache.org/eyebrowse/SummarizeList?listName=turbine-user@jakarta.apache.org</archive>
     </mailingList>
     <mailingList>
       <name>Turbine Developer List</name>
       <subscribe>mailto:turbine-dev-subscribe@jakarta.apache.org</subscribe>
       <unsubscribe>mailto:turbine-dev-unsubscribe@jakarta.apache.org</unsubscribe>
-      <archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listName=turbine-dev@jakarta.apache.org</archive>
+      <archive>http://archives.apache.org/eyebrowse/SummarizeList?listName=turbine-dev@jakarta.apache.org</archive>
     </mailingList>
   </mailingLists>
   <developers>
@@ -216,6 +216,7 @@
       <version>2.0.0</version>
       <jar>xercesImpl-2.0.0.jar</jar>
     </dependency>
+    <!-- Packaged EntityResolver conflicts with the one in Xerces 1.4.4 -->
     <dependency>
       <name>xml-apis</name>
       <type>required</type>
