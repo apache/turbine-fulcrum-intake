@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Fulcrum Factory API</title>
+    <author email="epugh@opensourceconnections.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+    <release version="1.0.3" date="in cvs">
+      <action dev="epugh" type="update">
+      	Bump versions, clean up dependencies
+      </action>           
+    </release>   
+  </body>
+</document>
+
