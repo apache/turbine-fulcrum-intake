@@ -46,7 +46,7 @@
   <target name="security-om" depends="init">
 
     <torque-om
-      contextProperties="build.properties"
+      contextProperties="default.properties"
       controlTemplate="${OMControlTemplate}"
       outputDirectory="${build.dir}/src"
       templatePath="${templatePath}"
@@ -62,7 +62,7 @@
   <target name="scheduler-om" depends="init">
 
     <torque-om
-      contextProperties="build.properties"
+      contextProperties="default.properties"
       controlTemplate="${OMControlTemplate}"
       outputDirectory="${build.dir}/src"
       templatePath="${templatePath}"
