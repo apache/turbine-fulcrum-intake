@@ -183,17 +183,15 @@ public interface UploadService
     public static final int SIZE_THRESHOLD_DEFAULT = 10240;
 
     /**
-     * <p> This method performs parsing the request, and storing the
-     * acquired information in apropriate places.
+     * <p>Parses a <a href="http://rf.cx/rfc1867.html">RFC 1867</a>
+     * compliant <code>multipart/form-data</code> stream.</p>
      *
      * @param req The servlet request to be parsed.
-     * @param params The ParameterParser instance to insert form
-     * fields into.
      * @param path The location where the files should be stored.
-     * @exception IOException, if there are problems reading/parsing
-     * the request or storing files.
+     * @exception ServiceException Problems reading/parsing the
+     * request or storing the uploaded file(s).
      */
-    public ArrayList parseRequest( HttpServletRequest req, String path )
+    public ArrayList parseRequest(HttpServletRequest req, String path)
             throws ServiceException;
 
     /**
