@@ -12,7 +12,7 @@
       tofile="target/classes/org/apache/fulcrum/avalon-roles.xml"/>
 
     <!-- Copy the Intake DTD file to the distribution -->
-    <copy file="intake.dtd"
+    <copy file="src/dtd/intake.dtd"
           tofile="${maven.build.dest}/org/apache/fulcrum/intake/transform/intake.dtd"/>
 
     <!-- Setup where Torque generates the files to. -->
