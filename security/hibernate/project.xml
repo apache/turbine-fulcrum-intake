@@ -84,10 +84,10 @@
       <version>0.4</version>    
       <url>http://hibernate.org/101.html</url>        
     </dependency>                 
-     <dependency>
+    <dependency>
        <id>odmg</id>      
        <version>3.0</version>
-     </dependency>                  
+    </dependency>                  
     <dependency>
       <groupId>hibernate</groupId>      
       <artifactId>hibernate-cglib</artifactId>            
@@ -100,11 +100,11 @@
       <version>hib2.1</version>
       <url>http://www.hibernate.org</url> 
     </dependency>                                 
-     <dependency>
+    <dependency>
        <id>dom4j</id>      
        <version>1.4</version>
        <url>http://www.dom4j.org/</url>
-     </dependency>                 
+    </dependency>                 
 
     <!-- testing -->
     <dependency>
@@ -112,11 +112,6 @@
       <artifactId>fulcrum-testcontainer</artifactId>
       <version>1.0-alpha-2</version>
     </dependency>    
-    <!--dependency>
-      <groupId>merlin</groupId>
-      <artifactId>merlin-unit</artifactId>
-      <version>3.2.3-dev</version>
-    </dependency-->
   </dependencies>
   <build>
     <nagEmailAddress>turbine-dev@jakarta.apache.org</nagEmailAddress>

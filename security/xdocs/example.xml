@@ -61,16 +61,16 @@
     </subsection>
     <subsection name="Dynamic">
     <ul>
-    <li>Declare a group of "managers for project A"<li>
-    <li>Declare a group of "developers for project A"<li>
-    <li>Declare a group of "observers for project A"<li>
-    <li>Declare a group of "managers for project B"<li>
-    <li>Declare a group of "developers for project B"<li>
-    <li>Declare a group of "observers for project B"<li>
+    <li>Declare a group of "managers for project A"</li>
+    <li>Declare a group of "developers for project A"</li>
+    <li>Declare a group of "observers for project A"</li>
+    <li>Declare a group of "managers for project B"</li>
+    <li>Declare a group of "developers for project B"</li>
+    <li>Declare a group of "observers for project B"</li>
     <li>Declare four permissions. One for each operation.</li>
     <li>Declare three roles. Manager, Developer and Observer</li>
     <li>Declare another three groups. One for each role.</li>
-    <li>Declare another two roles. One for each
+    <li>Declare another two roles. One for each</li>
     <li>Create users for Salma, Britney, Demi, Cameron, Madona and Barbara</li>
     <li>Make Salma, Britney, Demi and Cameron part of group "project A".</li>
     <li>Make Demi, Madona, Britney and Barbara part of group "project B".</li>
@@ -79,7 +79,7 @@
     </subsection>
     <subsection name="Basic">
     <ul>
-    <li>Declare two groups. One for each project</li>li>
+    <li>Declare two groups. One for each project</li>
     <li>Create users for Salma, Britney, Demi, Cameron, Madona and Barbara</li>
     <li>Make Salma, Britney, Demi and Cameron part of group "project A".</li>
     <li>Make Demi, Madona, Britney and Barbara part of group "project B".</li>
