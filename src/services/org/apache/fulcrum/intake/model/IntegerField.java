@@ -90,13 +90,24 @@ public class IntegerField extends Field
             int[] ival = new int[ss.length];
             for (int i=0; i<ss.length; i++)
             {
-                ival[i] = Integer.parseInt(ss[i]);
+                if (ss[i] != null && ss[i].length() > 0) 
+                {
+                    ival[i] = Integer.parseInt(ss[i]);
+                }
             }
             setTestValue(ival);
         }
         else
         {
-            setTestValue(new Integer(pp.getString(getKey())));
+            String s = pp.getString(getKey());
+            if (s != null && s.length() > 0) 
+            {
+                setTestValue(new Integer(s));
+            }
+            else 
+            {
+                set_flag = false;
+            }
         }
     }
 }

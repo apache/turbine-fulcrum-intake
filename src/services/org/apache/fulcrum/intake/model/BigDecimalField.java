@@ -92,13 +92,24 @@ public class BigDecimalField extends Field
             BigDecimal[] values = new BigDecimal[inputs.length];
             for (int i = 0; i < inputs.length; i++)
             {
-                values[i] = canonicalizeDecimalInput(inputs[i]);
+                if (inputs[i] != null && inputs[i].length() > 0) 
+                {
+                    values[i] = canonicalizeDecimalInput(inputs[i]);
+                }
             }
             setTestValue(values);
         }
         else
         {
-            setTestValue( canonicalizeDecimalInput(pp.getString(getKey())) );
+            String s = pp.getString(getKey());
+            if (s != null && s.length() > 0) 
+            {
+                setTestValue(canonicalizeDecimalInput(s));
+            }
+            else 
+            {
+                set_flag = false;
+            }
         }
     }
 

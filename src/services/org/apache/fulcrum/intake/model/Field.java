@@ -468,7 +468,7 @@ public abstract class Field
             // this definition of not set might need refined.  But
             // not sure the situation will arise.
             if ( stringValues.length == 0 || 
-                 (stringValues.length == 1 && stringValues[0].length() == 0) )
+                 (stringValues.length == 1 && stringValues[0] == null) )
             {
                 set_flag = false;
             }
@@ -499,11 +499,6 @@ public abstract class Field
         else
         {
             stringValue = pp.getString(getKey());
-            if ( stringValue.length() == 0 )
-            {
-                set_flag = false;
-            }
-
             if ( validator != null )
             {            
                 // set the test value as a String which might be replaced by
@@ -679,7 +674,7 @@ public abstract class Field
             throw new ServiceException(
                 "Attempted to assign an invalid input.");
         }
-        if (isSet())
+        if (isSet() && getTestValue() != null)
         {
             try
             {

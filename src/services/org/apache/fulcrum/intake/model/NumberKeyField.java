@@ -95,14 +95,26 @@ public class NumberKeyField extends BigDecimalField
             NumberKey[] values = new NumberKey[inputs.length];
             for (int i = 0; i < inputs.length; i++)
             {
-                values[i] = new NumberKey(canonicalizeDecimalInput(inputs[i]));
+                if (inputs[i] != null && inputs[i].length() > 0) 
+                {
+                    values[i] = new NumberKey(
+                        canonicalizeDecimalInput(inputs[i]));
+                }
             }
             setTestValue(values);
         }
         else
         {
-            BigDecimal bd = canonicalizeDecimalInput( pp.getString(getKey()) );
-            setTestValue( new NumberKey(bd) );
+            String s = pp.getString(getKey());
+            if (s != null && s.length() > 0) 
+            {
+                BigDecimal bd = canonicalizeDecimalInput(s);
+                setTestValue( new NumberKey(bd) );
+            }
+            else 
+            {
+                set_flag = false;
+            }
         }
     }
 }

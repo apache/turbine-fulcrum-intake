@@ -105,7 +105,7 @@ public class FloatField extends Field
      */
     protected String getDefaultValidator()
     {
-        return "org.apache.turbine.services.intake.validator.NumberValidator";
+        return "org.apache.fulcrum.intake.validator.NumberValidator";
     }
 
     /**
@@ -119,13 +119,24 @@ public class FloatField extends Field
             float[] ival = new float[ss.length];
             for (int i=0; i<ss.length; i++)
             {
-                ival[i] = Float.parseFloat(ss[i]);
+                if (ss[i] != null && ss[i].length() > 0) 
+                {
+                    ival[i] = Float.parseFloat(ss[i]);
+                }
             }
             setTestValue(ival);
         }
         else
         {
-            setTestValue(new Float(pp.getString(getKey())));
+            String s = pp.getString(getKey());
+            if (s != null && s.length() > 0) 
+            {
+                setTestValue(new Float(s));
+            }
+            else 
+            {
+                set_flag = false;
+            }
         }
     }
 }
