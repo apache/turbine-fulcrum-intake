@@ -5,7 +5,10 @@
   <name>jakarta-turbine-fulcrum</name>
   <id>fulcrum</id>
   <currentVersion>3.0-b2-dev</currentVersion>
-  <organization>Apache Software Foundation</organization>
+  <organization>
+    <name>Apache Software Foundation</name>
+    <url>http://jakarta.apache.org/</url>
+  </organization>
   <inceptionYear>2000</inceptionYear>
   <package>org.apache.fulcrum</package>
   <gumpRepositoryId>jakarta</gumpRepositoryId>
