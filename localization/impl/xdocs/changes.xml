@@ -8,6 +8,10 @@
   <body>
     <release version="1.0.4" date="">
       <action dev="epugh" type="update">
+      	Use inherited getLogger() instead of Log in classes
+      	extending AbstractLogEnabled.
+      </action>     
+      <action dev="epugh" type="update">
       	Update to use Merlin 3.3.0
       </action>    
       <action dev="epugh" type="add">

@@ -67,8 +67,6 @@ import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * <p>This class is the single point of access to all localization
@@ -107,8 +105,6 @@ public class DefaultLocalizationService
     extends AbstractLogEnabled
     implements LocalizationService, Configurable, Initializable
 {
-    /** The log. */
-    private static Log log = LogFactory.getLog(DefaultLocalizationService.class);
     /** Key Prefix for our bundles */
     private static final String BUNDLES = "bundles";
     /**
@@ -188,9 +184,9 @@ public class DefaultLocalizationService
         // initBundleNames(null);
         defaultLocale = new Locale(defaultLanguage, defaultCountry);
         Localization.setLocalizationService(this);
-        if (log.isInfoEnabled())
+        if (getLogger().isInfoEnabled())
         {
-            log.info("Localization Service is Initialized now..");
+            getLogger().info("Localization Service is Initialized now..");
         }
     }
     /**
@@ -566,7 +562,7 @@ public class DefaultLocalizationService
                     + loc
                     + ", key="
                     + key;
-            log.debug(mesg);
+            getLogger().debug(mesg);
             // Text not found in requested or default bundles.
             throw new MissingResourceException(mesg, bundleName, key);
         }
