@@ -70,10 +70,8 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
 public abstract class AbstractGroupManagerTest extends BaseUnitTest
 {
     protected Group group;
-	protected GroupManager groupManager;
-	protected SecurityService securityService;
-
-
+    protected GroupManager groupManager;
+    protected SecurityService securityService;
 
     /**
      * Constructor for AbstractGroupManagerTest.
@@ -136,8 +134,8 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         group = groupManager.getGroupInstance("CLEAN_KENNEL_K");
         groupManager.addGroup(group);
         int size = groupManager.getAllGroups().size();
-		assertEquals(0,((SimpleGroup)group).getUsers().size());
-		assertEquals(0,((SimpleGroup)group).getRoles().size());
+        assertEquals(0, ((SimpleGroup) group).getUsers().size());
+        assertEquals(0, ((SimpleGroup) group).getRoles().size());
         groupManager.removeGroup(group);
         try
         {
@@ -176,7 +174,5 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         assertNotNull(group.getId());
         assertNotNull(groupManager.getGroupById(group.getId()));
     }
-   
-
 
 }
