@@ -103,7 +103,7 @@ public class TurbineLocalizationService
      * Bundle name keys a HashMap of the ResourceBundles in this
      * service (which is in turn keyed by Locale).
      */
-    private static HashMap bundles = null;
+    private HashMap bundles = null;
 
     /** The name of the default bundle to use. */
     private String defaultBundle = null;
