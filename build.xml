@@ -437,7 +437,9 @@
       property="jdom.present"
       classname="org.jdom.JDOMException">
       <classpath>
-        <pathelement location="${jakarta.site2}/lib/${jdom.jar}"/>
+         <fileset dir="${jakarta.site2}/lib">
+           <include name="*.jar"/>
+         </fileset>
       </classpath>
     </available>
   </target>
