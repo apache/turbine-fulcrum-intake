@@ -1,0 +1,16 @@
+
+<container name="test">
+
+   <classloader>
+     <classpath>
+       <repository>
+         <resource id="fulcrum:fulcrum-localization-api" version="1.0-alpha-4"/>
+       </repository>
+     </classpath>
+   </classloader>
+
+   <component name="localizer" 
+     class="org.apache.fulcrum.localization.DefaultLocalizationService" 
+     activation="false"/>
+
+</container>

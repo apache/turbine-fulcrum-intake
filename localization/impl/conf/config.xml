@@ -1,0 +1,15 @@
+
+<targets>
+
+  <target path="/test/localizer">
+    <categories priority="INFO"/>
+    <configuration>
+      <bundles>
+        <bundle>org.apache.fulcrum.localization.BarBundle</bundle>
+        <bundle>org.apache.fulcrum.localization.FooBundle</bundle>
+        <bundle>org.apache.fulcrum.localization.MissingBundle</bundle>        
+      </bundles>
+    </configuration>
+  </target>
+
+</targets>

@@ -6,7 +6,12 @@
   </properties>
 
   <body>
-    <release version="in cvs" date="">
+    <release version="1.0-alpha-4" date="">
+      <action dev="epugh" type="add">
+		Merlinized code with input from Stephen
+      </action>
+    </release>  	
+    <release version="1.0-alpha-3" date="">
       <action dev="epugh" type="add">
         New Localization class that is a facade to the underlying service.
       </action>
