@@ -3,3 +3,5 @@ maven.log
 *.log
 *.merlin
 *.ser
+.classpath
+.project
