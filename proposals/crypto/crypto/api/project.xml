@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<project>
+
+  <pomVersion>3</pomVersion>
+  <groupId>fulcrum</groupId>
+  <id>fulcrum-crypto-api</id>
+  <!--<extend>${basedir}/../project.xml</extend>-->
+  <name>Fulcrum Crypto Component API</name>
+  <currentVersion>1.0-alpha-3</currentVersion>
+  <package>org.apache.fulcrum</package>
+
+  <build>
+    <sourceDirectory>${basedir}/src/java/</sourceDirectory>
+  </build>
+ 
+</project>
+
