@@ -74,7 +74,7 @@ public class TurbineDatabaseService
     implements DatabaseService
 {
     /**
-     * Initializes the service.
+     * Initializes the service by setting up Torque.
      */
     public void init()
         throws InitializationException
