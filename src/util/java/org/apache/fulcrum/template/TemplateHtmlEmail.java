@@ -62,12 +62,12 @@ import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.MultiPartEmail;
 
 /**
- * This is a simple class for sending html email from within Velocity.
- * Essentially, the bodies (text and html) of the email are a Velocity
- * Context objects.  The beauty of this is that you can send email
- * from within your Velocity template or from your business logic in
- * your Java code.  The body of the email is just a Velocity template
- * so you can use all the template functionality of Velocity within
+ * This is a simple class for sending html email from within the TemplateService.
+ * Essentially, the bodies (text and html) of the email are a TemplateService
+ * TemplateContext objects.  The beauty of this is that you can send email
+ * from within your TemplateService template or from your business logic in
+ * your Java code.  The body of the email is just a TemplateService template
+ * so you can use all the template functionality of your TemplateService within
  * your emails!
  *
  * <p>This class allows you to send HTML email with embedded content
@@ -78,20 +78,12 @@ import org.apache.commons.mail.MultiPartEmail;
  *                              context.put("mail", theMessage);</code>
  *
  *
- * <p>The templates should be located under your Template turbine
+ * <p>The templates should be located under your TemplateService template
  * directory.
  *
  * <p>This class extends the HtmlEmail class.  Thus, it uses the
- * JavaMail API and also depends on having the mail.server property
- * set in the TurbineResources.properties file.  If you want to use
- * this class outside of Turbine for general processing that is also
- * possible by making sure to set the path to the
- * TurbineResources.properties.  See the
- * TurbineResourceService.setPropertiesFileName() method for more
- * information.
- *
- * <p>This class is basically a conversion of the WebMacroHtmlEmail
- * written by Regis Koenig
+ * JavaMail API and also depends on having the mail.host property
+ * set in the System.getProperties().
  *
  * @author <a href="mailto:A.Schild@aarboard.ch">Andre Schild</a>
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
