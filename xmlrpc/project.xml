@@ -52,7 +52,7 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
-      <version>1.0.3</version>
+      <version>1.0.4-dev</version>
     </dependency> 
 
     <dependency>

@@ -52,7 +52,7 @@
       <version>1.2.8</version>
       <url>http://jakarta.apache.org/log4j/</url>
     </dependency>   
-	
+  
     <!--  Needed only for testing -->
     <dependency>
       <groupId>fulcrum</groupId>
@@ -63,16 +63,16 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
-      <version>1.0.3</version>
+      <version>1.0.4-dev</version>
     </dependency>
-	
-	<!-- Needed for Gump -->
+  
+  <!-- Needed for Gump -->
     <dependency>
       <groupId>avalon-logkit</groupId>
       <artifactId>avalon-logkit</artifactId>
       <version>2.0.0</version>
       <url>http://avalon.apache.org</url>
-    </dependency> 	
+    </dependency>   
 
   </dependencies>
 
