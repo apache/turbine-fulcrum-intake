@@ -84,7 +84,7 @@ public class TurbineGlobalCacheService
                Runnable
 {
     /** The cache. **/
-    private Hashtable cache = null;
+    protected Hashtable cache = null;
 
     /**
      * Default cacheCheckFrequency value.
