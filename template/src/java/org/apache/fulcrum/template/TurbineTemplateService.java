@@ -27,8 +27,6 @@ import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
-import org.apache.avalon.framework.service.ServiceManager;
-import org.apache.avalon.framework.service.Serviceable;
 import org.apache.avalon.framework.thread.ThreadSafe;
 
 /**
@@ -73,7 +71,7 @@ import org.apache.avalon.framework.thread.ThreadSafe;
  */
 public class TurbineTemplateService
     extends AbstractLogEnabled
-    implements TemplateService, Contextualizable, ThreadSafe, Serviceable
+    implements TemplateService, Contextualizable, ThreadSafe
 {
     /**
      * The default file extension used as a registry key when a
@@ -265,12 +263,5 @@ public class TurbineTemplateService
         this.applicationRoot = context.get( "urn:avalon:home" ).toString();
     }    
     
-    /**
-     * Avalon component lifecycle method
-     */
-    public void service(ServiceManager manager)
-    {
-        TemplateServiceFacade.setTemplateService(this);
-    }
     
 }

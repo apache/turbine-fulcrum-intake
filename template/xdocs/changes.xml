@@ -7,6 +7,9 @@
 
   <body>
     <release version="1.0-alpha-2" date="in CVS">
+     <action dev="epugh" type="remove">
+        Remove facade class, this is implementation specific.
+      </action>          
      <action dev="epugh" type="add">
         Initial conversion to Avalon component.
       </action>      
