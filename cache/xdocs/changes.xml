@@ -6,7 +6,10 @@
   </properties>
 
   <body>
-    <release version="1.0-alpha-4" date="">
+    <release version="1.0.4" date="">
+     <action dev="epugh" type="update">
+        Remove extra dependencies.
+      </action>        
       <action dev="epugh" type="add">
 		Added patch from Peter Courcoux adding new methods,
 		getKeys() and getCachedObjects() together with 
