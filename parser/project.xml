@@ -23,27 +23,16 @@
       <version>1.0.3</version>
       <url>http://jakarta.apache.org/commons/logging/index.html</url>
     </dependency>     
-  
-    <dependency>
-      <groupId>fulcrum</groupId>
-      <artifactId>fulcrum-pool-api</artifactId>
-      <version>1.0.3-dev</version>
-    </dependency>
     
     <dependency>
       <groupId>fulcrum</groupId>
-      <artifactId>fulcrum-pool-impl</artifactId>
+      <artifactId>fulcrum-pool</artifactId>
       <version>1.0.3-dev</version>
     </dependency>     
-    <dependency>
-      <groupId>fulcrum</groupId>
-      <artifactId>fulcrum-factory-api</artifactId>
-      <version>1.0.3-dev</version>
-    </dependency>
     
     <dependency>
       <groupId>fulcrum</groupId>
-      <artifactId>fulcrum-factory-impl</artifactId>
+      <artifactId>fulcrum-factory</artifactId>
       <version>1.0.3-dev</version>
     </dependency>      
  
