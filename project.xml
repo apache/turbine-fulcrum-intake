@@ -18,7 +18,7 @@
   <gumpRepositoryId>jakarta</gumpRepositoryId>
   <shortDescription>Component Repository</shortDescription>
   <description>Fulcrum is a component repository for Turbine.</description>
-  <url>http://jakarta.apache.org/turbine/fulcrum/</url>
+  <url>http://jakarta.apache.org/turbine/fulcrum/${pom.artifactId}/</url>
   <issueTrackingUrl>http://issues.apache.org/scarab/servlet/scarab/</issueTrackingUrl>
   <siteAddress>jakarta.apache.org</siteAddress>
   <siteDirectory>/www/jakarta.apache.org/turbine/fulcrum/</siteDirectory>
@@ -493,7 +493,7 @@
     
  <!--  maven site-all chokes on these.
     <report>maven-linkcheck-plugin</report>
-    <report>maven-checkstyle-plugin</report>   
+      <report>maven-checkstyle-plugin</report>
     <report>maven-tasklist-plugin</report>
     -->
     
