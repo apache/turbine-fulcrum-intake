@@ -151,6 +151,22 @@ public class Intake
         }
     }
 
+    public void addGroupsToParameters(ValueParser vp)
+    {
+        Iterator i = groups.values().iterator();
+        while ( i.hasNext() )
+        {
+            Group group = (Group)i.next();
+            if ( !declaredGroups.containsKey(group.getIntakeGroupName()) )
+            {
+                declaredGroups.put(group.getIntakeGroupName(), null);
+                vp.add("intake-grp", group.getGID());
+            }
+            vp.add(group.getGID(), group.getOID());
+        }
+        declaredGroups.clear();
+    }
+
     /**
      * A convenience method to write out the hidden form fields
      * that notify intake of the relevant groups.  It should be used
@@ -286,10 +302,10 @@ public class Intake
     /**
      * get a specific group
      */
-    public Object get(String groupName)
+    public PullHelper get(String groupName)
         throws Exception
     {
-        return pullMap.get(groupName);
+        return (PullHelper)pullMap.get(groupName);
     }
 
     /**
