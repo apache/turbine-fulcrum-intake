@@ -82,10 +82,12 @@ public class TestComponentImpl
     public File appRoot;
     public String foo;
     public String bar;
+    public static boolean decomissioned;
 
     public void initialize() throws Exception
     {
         getLogger().debug("initialize() was called");
+        decomissioned = false;
     }
 
     public void contextualize(Context context) throws ContextException
@@ -106,6 +108,7 @@ public class TestComponentImpl
     public void dispose()
     {
         getLogger().debug("dispose() was called");
+        TestComponentImpl.decomissioned=true;
     }
 
     public void test()

@@ -122,18 +122,18 @@ public class ServiceContainerImpl
     public void configure(Configuration configuration) throws ConfigurationException
     {        
         this.setComponentRolesLocation(
-            configuration.getChild(this.COMPONENT_ROLE_KEYS).getValue( 
-                this.COMPONENT_ROLE_VALUE )
+            configuration.getChild(COMPONENT_ROLE_KEYS).getValue( 
+                COMPONENT_ROLE_VALUE )
                 );
 
         this.setComponentConfigurationLocation(
-            configuration.getChild(this.COMPONENT_CONFIG_KEY).getValue(
-                this.COMPONENT_CONFIG_VALUE )
+            configuration.getChild(COMPONENT_CONFIG_KEY).getValue(
+                COMPONENT_CONFIG_VALUE )
             	);
 
         this.setParametersLocation(
-            configuration.getChild( this.COMPONENT_PARAMETERS_KEY).getValue(
-                this.COMPONENT_PARAMETERS_VALUE )
+            configuration.getChild( COMPONENT_PARAMETERS_KEY).getValue(
+                COMPONENT_PARAMETERS_VALUE )
             	);
     }
 
@@ -220,9 +220,9 @@ public class ServiceContainerImpl
         // check for URN_AVALON_HOME - according to the Merlin Spec it is a file 
         // but Fulcrum passes in a string ... :-(
          
-        if( this.isInContext( context, this.URN_AVALON_HOME ) )
+        if( this.isInContext( context, URN_AVALON_HOME ) )
         { 
-            entry = context.get( this.URN_AVALON_HOME );
+            entry = context.get( URN_AVALON_HOME );
             
             if( entry instanceof String )
             {
@@ -240,7 +240,7 @@ public class ServiceContainerImpl
             
             if( entry instanceof File )
             {
-                currApplicationRootDir = (File) context.get( this.URN_AVALON_HOME );    
+                currApplicationRootDir = (File) context.get( URN_AVALON_HOME );    
             }
         }
         
@@ -251,9 +251,9 @@ public class ServiceContainerImpl
                 
         // check for URN_AVALON_TEMP
         
-        if( this.isInContext( context, this.URN_AVALON_TEMP ) )
+        if( this.isInContext( context, URN_AVALON_TEMP ) )
         {
-            entry = context.get( this.URN_AVALON_TEMP );
+            entry = context.get( URN_AVALON_TEMP );
             
             if( entry instanceof String )
             {
@@ -262,7 +262,7 @@ public class ServiceContainerImpl
             
             if( entry instanceof File )
             {
-                currTempRootDir = (File) context.get( this.URN_AVALON_TEMP );    
+                currTempRootDir = (File) context.get( URN_AVALON_TEMP );    
             }
         }        
 
@@ -533,7 +533,7 @@ public class ServiceContainerImpl
         for( int i=serviceList.size()-1; i>=0; i-- )
         {
             serviceComponent = (ServiceComponent) this.getServiceList().get(i);
-
+            this.decommision( serviceComponent );
         }
     }
         

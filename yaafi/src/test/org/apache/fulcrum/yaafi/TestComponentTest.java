@@ -87,4 +87,19 @@ public class TestComponentTest extends BaseUnitTest
         assertEquals( ((TestComponentImpl) testComponent).foo, "FOO" );
         assertNotNull( ((TestComponentImpl) testComponent).appRoot );
     }
+    
+    /**
+     * Verify bug fix for not calling dispose method of components
+     * @throws Exception
+     */
+    public void testTestComponentDecomissioned() throws Exception
+    {
+        TestComponent testComponent = (TestComponent) this.lookup( 
+            TestComponent.ROLE 
+            );
+        assertFalse( TestComponentImpl.decomissioned );
+        tearDown();  //only way to work
+       //this.release((Object)testComponent);
+       assertTrue( TestComponentImpl.decomissioned );
+    }    
 }
