@@ -3,19 +3,31 @@
  <properties>
   <title>Fulcrum</title>
   <author email="jvanzyl@apache.org">Jason van Zyl</author>
+  <author email="quintonm@bellsouth.net">Quinton McCombs</author>
  </properties>
 
  <body>
 
  <section name="What is Fulcrum?">
    <p>
-     Fulcrum is a services framework.
+     Fulcrum was originally created as part of the Turbine 3 effort.  The idea
+     was to be able to decouple the services from Turbine 2 allowing them to be
+     used on both projects.  
    </p>
    <p>
-     Fulcrum was developed as part of the Turbine Framework. It is now
-     decoupled and can be used by itself. Starting with version 2.2 Turbine
-     will be able to use the decoupled Fulcrum to replace some of the services
-     that are currently coupled to Turbine.
+     Fulcrum is currently evolving into a component repository for Turbine.  
+     Each service is being converted into a stand alone component that can
+     be released independently of the other components.  This will allow the 
+     Turbine project to to release components as they change instead of having
+     to release everything at once.
+   </p>
+ </section>
+ 
+ <section name="Container compatibility">
+   <p>
+     All components are compatible if Avalon's ECM container.  Any dependancies 
+     on other components, system properties, or context elements is clearly 
+     documentmented in the docs for each component.
    </p>
  </section>
 
