@@ -494,7 +494,7 @@
     <uptodate 
       property="omGenerated"
       targetfile="${omStatusFile}">
-      <srcfiles dir="${turbine.conf.dir}/master" includes="turbine-schema.xml"/>
+      <srcfiles dir="${schemaDirectory}" includes="turbine-schema.xml"/>
     </uptodate>
   </target>
 
