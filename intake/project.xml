@@ -13,27 +13,15 @@
     </dependency>
     <dependency>
       <groupId>fulcrum</groupId>    
-      <artifactId>fulcrum-localization-api</artifactId>
-      <version>1.0.5-dev</version>
+      <artifactId>fulcrum-localization</artifactId>
+      <version>1.0.5</version>
     </dependency>   
-    
-    <dependency>
-      <groupId>fulcrum</groupId>    
-      <artifactId>fulcrum-localization-impl</artifactId>
-      <version>1.0.4</version>
-    </dependency>
         
     <dependency>
       <groupId>fulcrum</groupId>    
-      <artifactId>fulcrum-factory-api</artifactId>
-      <version>1.0.3-dev</version>
-    </dependency>     
-    
-    <dependency>
-      <groupId>fulcrum</groupId>    
-      <artifactId>fulcrum-factory-impl</artifactId>
-      <version>1.0.2</version>
-    </dependency>    
+      <artifactId>fulcrum-factory</artifactId>
+      <version>1.0.3</version>
+    </dependency>         
     
     <dependency>
       <groupId>commons-fileupload</groupId>    
@@ -74,13 +62,13 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0.4-dev</version>
+      <version>1.0.4</version>
     </dependency>
     
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
-      <version>1.0.3-dev</version>
+      <version>1.0.3</version>
     </dependency>     
   </dependencies>
 
