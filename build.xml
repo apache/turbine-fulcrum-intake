@@ -12,6 +12,7 @@
   <path id="classpath">
     <pathelement location="${velocity.jar}"/>
     <pathelement location="${log4j.jar}"/>
+    <pathelement location="${xerces.jar}"/>
     <pathelement location="${bsf.jar}"/>
     <pathelement location="${torque.jar}"/>
     <pathelement location="${servlet.jar}"/>
