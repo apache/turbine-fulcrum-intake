@@ -27,7 +27,7 @@ public class PoolServiceTest extends AbstractMerlinTestCase
         super(name);
     }
    
-    public void setUp() throws Exception
+    public void setUp()
     {
         super.setUp();
         try
@@ -39,45 +39,7 @@ public class PoolServiceTest extends AbstractMerlinTestCase
             fail(e.getMessage());
         }
     }
-
-    /*
-     * Class to test for Object getInstance(String)
-     * @todo Some sort of compile error prevents this..
-     */
-    public void testGetInstanceString() throws PoolException
-    {
-        //Object object = poolService.getInstance("java.lang.StringBuffer");
-        //assertTrue(object instanceof StringBuffer);
-         
-    }
-    /*
-     * Class to test for Object getInstance(String, ClassLoader)
-     */
-    public void testGetInstanceStringClassLoader()
-    {
-         
-    }
-    /*
-     * Class to test for Object getInstance(String, Object[], String[])
-     */
-    public void testGetInstanceStringObjectArrayStringArray()
-    {
-         
-    }
-
-    /*
-     * Class to test for Object getInstance(String, ClassLoader, Object[], String[])
-     */
-    public void testGetInstanceStringClassLoaderObjectArrayStringArray()
-    {
-         
-    }
-
-    public void testIsLoaderSupported()
-    {
-         
-    }
-
+  
     /*
      * Class to test for Object getInstance(Class)
      */
@@ -86,14 +48,7 @@ public class PoolServiceTest extends AbstractMerlinTestCase
         Object object = poolService.getInstance(StringBuffer.class);
         assertTrue(object instanceof StringBuffer);
         
-    }
-    /*
-     * Class to test for Object getInstance(Class, Object[], String[])
-     */
-    public void testGetInstanceClassObjectArrayStringArray()
-    {
-         
-    }
+    }   
 
     public void testPutInstance()
     {
