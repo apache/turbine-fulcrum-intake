@@ -204,8 +204,6 @@
       <version>2.1.0</version>
     </dependency>
   
-    -->
-  
   </dependencies>
   <build>
     <nagEmailAddress>turbine-dev@jakarta.apache.org</nagEmailAddress>
