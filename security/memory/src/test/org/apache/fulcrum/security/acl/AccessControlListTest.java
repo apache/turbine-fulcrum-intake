@@ -56,7 +56,6 @@ package org.apache.fulcrum.security.acl;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.fulcrum.factory.FactoryService;
 import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.PermissionManager;
 import org.apache.fulcrum.security.RoleManager;
@@ -66,13 +65,11 @@ import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
-
 import org.apache.fulcrum.security.model.dynamic.DynamicAccessControlList;
 import org.apache.fulcrum.security.model.dynamic.DynamicAccessControlListImpl;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
-
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.RoleSet;
@@ -86,11 +83,11 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  */
 public class AccessControlListTest extends BaseUnitTest
 {
-    private FactoryService factoryService = null;
+
     private UserManager userManager;
     private GroupManager groupManager;
-	private RoleManager roleManager;
-	private DynamicModelManager modelManager;
+    private RoleManager roleManager;
+    private DynamicModelManager modelManager;
     private PermissionManager permissionManager;
     private DynamicAccessControlList acl;
     private static int counter = 1;
@@ -111,33 +108,22 @@ public class AccessControlListTest extends BaseUnitTest
     public void setUp() throws Exception
     {
         super.setUp();
-       
-            this.setRoleFileName(null);
-            this.setConfigurationFileName("src/test/AccessControlList.xml");
-            factoryService = (FactoryService) this.lookup(FactoryService.ROLE);
-            SecurityService securityService = (SecurityService) lookup(SecurityService.ROLE);
-            userManager =  securityService.getUserManager();
-            groupManager =  securityService.getGroupManager();
-            roleManager =  securityService.getRoleManager();
-            permissionManager = securityService.getPermissionManager();
-            modelManager = (DynamicModelManager)securityService.getModelManager();
-        
+
+        this.setRoleFileName(null);
+        this.setConfigurationFileName("src/test/AccessControlList.xml");
+
+        SecurityService securityService =
+            (SecurityService) lookup(SecurityService.ROLE);
+        userManager = securityService.getUserManager();
+        groupManager = securityService.getGroupManager();
+        roleManager = securityService.getRoleManager();
+        permissionManager = securityService.getPermissionManager();
+        modelManager = (DynamicModelManager) securityService.getModelManager();
+
     }
-    /*
-     * Class to test for Object getInstance(String, Object[], String[])
-     */
-    public void testGetInstanceStringObjectArrayStringArray() throws Exception
-    {
-        Object params[] = new Object[1];
-        String sourceValu = "testing";
-        params[0] = sourceValu;
-        String signature[] = new String[1];
-        signature[0] = "java.lang.String";
-        Object object = factoryService.getInstance("java.lang.StringBuffer", params, signature);
-        assertTrue(object instanceof StringBuffer);
-        assertEquals(sourceValu, object.toString());
-    }
-    public void testCreatingDefaultAccessControlListViaFactory() throws Exception
+
+    public void testCreatingDefaultAccessControlListViaFactory()
+        throws Exception
     {
         Group group = getGroup();
         Role role = getRole();
@@ -145,8 +131,8 @@ public class AccessControlListTest extends BaseUnitTest
         user = userManager.getUserInstance("User 1");
         userManager.addUser(user, "secretpassword");
         modelManager.grant(user, group);
-		modelManager.grant(group, role);
-		modelManager.grant(role, permission);
+        modelManager.grant(group, role);
+        modelManager.grant(role, permission);
         RoleSet roleSet = new RoleSet();
         PermissionSet permissionSet = new PermissionSet();
         roleSet.add(role);
@@ -155,15 +141,12 @@ public class AccessControlListTest extends BaseUnitTest
         Map permissionSets = new HashMap();
         roleSets.put(group, roleSet);
         permissionSets.put(role, permissionSet);
-        Object params[] = new Object[2];
-        params[0] = roleSets;
-        params[1] = permissionSets;
-        String signature[] = new String[2];
-        signature[0] = "java.util.Map";
-        signature[1] = "java.util.Map";
-        Object object =
-            factoryService.getInstance(DynamicAccessControlListImpl.class.getName(), params, signature);
-        assertTrue(object instanceof DynamicAccessControlListImpl);
+        AccessControlList acl = userManager.getACL(user);
+        assertTrue(acl instanceof DynamicAccessControlList);
+        DynamicAccessControlList dacl = (DynamicAccessControlList) acl;
+        assertTrue(dacl.hasRole(role));
+        assertTrue(dacl.hasPermission(permission));
+
     }
     public void testGetRolesGroup() throws Exception
     {
@@ -171,8 +154,8 @@ public class AccessControlListTest extends BaseUnitTest
         Role role = getRole();
         Role role2 = getRole();
         Role role3 = getRole();
-		modelManager.grant(group, role);
-		modelManager.grant(group, role2);
+        modelManager.grant(group, role);
+        modelManager.grant(group, role2);
         Map roleSets = new HashMap();
         Map permissionSets = new HashMap();
         roleSets.put(group, ((DynamicGroup) group).getRoles());
@@ -192,10 +175,10 @@ public class AccessControlListTest extends BaseUnitTest
         Role role = getRole();
         Role role2 = getRole();
         Role role3 = getRole();
-		modelManager.grant(group, role);
-		modelManager.grant(group, role2);
-		modelManager.grant(group2, role2);
-		modelManager.grant(group2, role3);
+        modelManager.grant(group, role);
+        modelManager.grant(group, role2);
+        modelManager.grant(group2, role2);
+        modelManager.grant(group2, role3);
         Map roleSets = new HashMap();
         Map permissionSets = new HashMap();
         roleSets.put(group, ((DynamicGroup) group).getRoles());
@@ -220,14 +203,14 @@ public class AccessControlListTest extends BaseUnitTest
         Permission permission = getPermission();
         Permission permission2 = getPermission();
         Permission permission3 = getPermission();
-		modelManager.grant(group, role);
-		modelManager.grant(group, role2);
-		modelManager.grant(group2, role3);
-		modelManager.grant(role, permission);
-		modelManager.grant(role, permission2);
-		modelManager.grant(role, permission3);
-		modelManager.grant(role2, permission2);
-		modelManager.grant(role2, permission3);
+        modelManager.grant(group, role);
+        modelManager.grant(group, role2);
+        modelManager.grant(group2, role3);
+        modelManager.grant(role, permission);
+        modelManager.grant(role, permission2);
+        modelManager.grant(role, permission3);
+        modelManager.grant(role2, permission2);
+        modelManager.grant(role2, permission3);
         Map roleSets = new HashMap();
         Map permissionSets = new HashMap();
         roleSets.put(group, ((DynamicGroup) group).getRoles());
@@ -254,14 +237,14 @@ public class AccessControlListTest extends BaseUnitTest
         Permission permission = getPermission();
         Permission permission2 = getPermission();
         Permission permission3 = getPermission();
-		modelManager.grant(group, role);
-		modelManager.grant(group, role2);
-		modelManager.grant(group2, role3);
-		modelManager.grant(role, permission);
-		modelManager.grant(role, permission2);
-		modelManager.grant(role, permission3);
-		modelManager.grant(role2, permission2);
-		modelManager.grant(role2, permission3);
+        modelManager.grant(group, role);
+        modelManager.grant(group, role2);
+        modelManager.grant(group2, role3);
+        modelManager.grant(role, permission);
+        modelManager.grant(role, permission2);
+        modelManager.grant(role, permission3);
+        modelManager.grant(role2, permission2);
+        modelManager.grant(role2, permission3);
         Map roleSets = new HashMap();
         Map permissionSets = new HashMap();
         roleSets.put(group, ((DynamicGroup) group).getRoles());
@@ -283,10 +266,10 @@ public class AccessControlListTest extends BaseUnitTest
         Role role = getRole();
         Role role2 = getRole();
         Role role3 = getRole();
-		modelManager.grant(group, role);
-		modelManager.grant(group, role2);
-		modelManager.grant(group2, role);
-		modelManager.grant(group2, role3);
+        modelManager.grant(group, role);
+        modelManager.grant(group, role2);
+        modelManager.grant(group2, role);
+        modelManager.grant(group2, role3);
         Map roleSets = new HashMap();
         Map permissionSets = new HashMap();
         roleSets.put(group, ((DynamicGroup) group).getRoles());
@@ -310,10 +293,10 @@ public class AccessControlListTest extends BaseUnitTest
         Role role = getRole();
         Role role2 = getRole();
         Role role3 = getRole();
-		modelManager.grant(group, role);
-		modelManager.grant(group, role2);
-		modelManager.grant(group2, role);
-		modelManager.grant(group2, role3);
+        modelManager.grant(group, role);
+        modelManager.grant(group, role2);
+        modelManager.grant(group2, role);
+        modelManager.grant(group2, role3);
         Map roleSets = new HashMap();
         Map permissionSets = new HashMap();
         roleSets.put(group, ((DynamicGroup) group).getRoles());
@@ -340,10 +323,10 @@ public class AccessControlListTest extends BaseUnitTest
         Role role = getRole();
         Role role2 = getRole();
         Role role3 = getRole();
-		modelManager.grant(group, role);
-		modelManager.grant(group, role2);
-		modelManager.grant(group2, role);
-		modelManager.grant(group2, role3);
+        modelManager.grant(group, role);
+        modelManager.grant(group, role2);
+        modelManager.grant(group2, role);
+        modelManager.grant(group2, role3);
         Map roleSets = new HashMap();
         Map permissionSets = new HashMap();
         roleSets.put(group, ((DynamicGroup) group).getRoles());
@@ -371,15 +354,15 @@ public class AccessControlListTest extends BaseUnitTest
         Permission permission2 = getPermission();
         Permission permission3 = getPermission();
         Permission permission4 = getPermission();
-		modelManager.grant(group, role);
-		modelManager.grant(group, role2);
-		modelManager.grant(group2, role3);
-		modelManager.grant(role, permission);
-		modelManager.grant(role, permission2);
-		modelManager.grant(role, permission3);
-		modelManager.grant(role2, permission2);
-		modelManager.grant(role2, permission3);
-		modelManager.grant(role3, permission4);
+        modelManager.grant(group, role);
+        modelManager.grant(group, role2);
+        modelManager.grant(group2, role3);
+        modelManager.grant(role, permission);
+        modelManager.grant(role, permission2);
+        modelManager.grant(role, permission3);
+        modelManager.grant(role2, permission2);
+        modelManager.grant(role2, permission3);
+        modelManager.grant(role3, permission4);
         Map roleSets = new HashMap();
         Map permissionSets = new HashMap();
         roleSets.put(group, ((DynamicGroup) group).getRoles());
@@ -412,17 +395,17 @@ public class AccessControlListTest extends BaseUnitTest
         Permission permission3 = getPermission();
         Permission permission4 = getPermission();
         Permission permission5 = getPermission();
-		modelManager.grant(group, role);
-		modelManager.grant(group, role2);
-		modelManager.grant(group2, role3);
-		modelManager.grant(group3, role4);
-		modelManager.grant(role, permission);
-		modelManager.grant(role, permission2);
-		modelManager.grant(role, permission3);
-		modelManager.grant(role2, permission2);
-		modelManager.grant(role2, permission3);
-		modelManager.grant(role3, permission4);
-		modelManager.grant(role4, permission5);
+        modelManager.grant(group, role);
+        modelManager.grant(group, role2);
+        modelManager.grant(group2, role3);
+        modelManager.grant(group3, role4);
+        modelManager.grant(role, permission);
+        modelManager.grant(role, permission2);
+        modelManager.grant(role, permission3);
+        modelManager.grant(role2, permission2);
+        modelManager.grant(role2, permission3);
+        modelManager.grant(role3, permission4);
+        modelManager.grant(role4, permission5);
         Map roleSets = new HashMap();
         Map permissionSets = new HashMap();
         roleSets.put(group, ((DynamicGroup) group).getRoles());
@@ -458,17 +441,17 @@ public class AccessControlListTest extends BaseUnitTest
         Permission permission3 = getPermission();
         Permission permission4 = getPermission();
         Permission permission5 = getPermission();
-		modelManager.grant(group, role);
-		modelManager.grant(group, role2);
-		modelManager.grant(group2, role3);
-		modelManager.grant(group3, role4);
-		modelManager.grant(role, permission);
-		modelManager.grant(role, permission2);
-		modelManager.grant(role, permission3);
-		modelManager.grant(role2, permission2);
-		modelManager.grant(role2, permission3);
-		modelManager.grant(role3, permission4);
-		modelManager.grant(role4, permission5);
+        modelManager.grant(group, role);
+        modelManager.grant(group, role2);
+        modelManager.grant(group2, role3);
+        modelManager.grant(group3, role4);
+        modelManager.grant(role, permission);
+        modelManager.grant(role, permission2);
+        modelManager.grant(role, permission3);
+        modelManager.grant(role2, permission2);
+        modelManager.grant(role2, permission3);
+        modelManager.grant(role3, permission4);
+        modelManager.grant(role4, permission5);
         Map roleSets = new HashMap();
         Map permissionSets = new HashMap();
         roleSets.put(group, ((DynamicGroup) group).getRoles());
@@ -504,7 +487,8 @@ public class AccessControlListTest extends BaseUnitTest
     }
     private Permission getPermission() throws Exception
     {
-        Permission permission = permissionManager.getPermissionInstance("Permission " + getId());
+        Permission permission =
+            permissionManager.getPermissionInstance("Permission " + getId());
         permissionManager.addPermission(permission);
         return permission;
     }
