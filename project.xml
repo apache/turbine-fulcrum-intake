@@ -65,6 +65,11 @@
       <email>mpoeschl@marmot.at</email>
       <organization>Tucana</organization>
     </developer>
+	<developer>
+      <name>Eric Pugh</name>
+      <id>epugh</id>
+      <email>epugh@upstate.com</email>
+    </developer>    
     <developer>
       <name>Daniel Rall</name>
       <id>dlr</id>
@@ -101,7 +106,7 @@
     </dependency>
      <dependency>
       <id>avalon-framework</id>
-      <version>4.0</version>
+      <version>4.1.4</version>
       <url>http://jakarta.apache.org/avalon</url>
     </dependency>
     <dependency>
@@ -111,17 +116,22 @@
     </dependency>
     <dependency>
       <id>excalibur-component</id>
+      <version>1.1</version>
+      <url>http://jakarta.apache.org/avalon</url>
+    </dependency>
+    <dependency>
+      <id>excalibur-instrument</id>
       <version>1.0</version>
       <url>http://jakarta.apache.org/avalon</url>
     </dependency>
     <dependency>
       <id>excalibur-logger</id>
-      <version>1.0</version>
+      <version>1.0.1</version>
       <url>http://jakarta.apache.org/avalon</url>
     </dependency>
     <dependency>
       <id>excalibur-pool</id>
-      <version>1.0</version>
+      <version>1.2</version>
       <url>http://jakarta.apache.org/avalon</url>
     </dependency>
     <dependency>
@@ -144,25 +154,28 @@
     </dependency>
     <dependency>
       <id>commons-email</id>
-      <version>0.1-dev</version>
+      <version>20030310.165926</version>
+      <url>http://jakarta.apache.org/commons/sandbox/email</url>
     </dependency>
     <dependency>
       <id>commons-fileupload</id>
-      <version>1.0-dev</version>
+      <version>1.0-beta-1</version>
+      <url>http://jakarta.apache.org/commons/fileupload/index.html</url>
     </dependency>
     <dependency>
       <id>commons-lang</id>
       <version>1.0.1</version>
-      <url>http://jakarta.apache.org/commons/</url>
+      <url>http://jakarta.apache.org/commons/lang.html</url>
     </dependency>
     <dependency>
       <id>commons-logging</id>
       <version>1.0.2</version>
-      <url>http://jakarta.apache.org/commons/</url>
+      <url>http://jakarta.apache.org/commons/logging.html</url>
     </dependency>
     <dependency>
       <id>commons-pool</id>
-      <version>1.0</version>
+      <version>1.0.1</version>
+      <url>http://jakarta.apache.org/commons/pool.html</url>
     </dependency>
     <dependency>
       <id>commons-util</id>
@@ -171,6 +184,7 @@
     <dependency>
       <id>cryptix</id>
       <version>3.2.0</version>
+      <url>http://www.cryptix.org/</url>
     </dependency>
     <dependency>
       <id>dom4j</id>
@@ -180,18 +194,22 @@
     <dependency>
       <id>jdbc</id>
       <version>2.0</version>
+      <url>http://java.sun.com/products/jdbc/download.html#spec</url>
     </dependency>
     <dependency>
       <id>jndi</id>
       <version>1.2.1</version>
+      <url>http://java.sun.com/products/jndi/</url>
     </dependency>
     <dependency>
       <id>junit</id>
       <version>3.8.1</version>
+      <url>http://www.junit.org/</url>
     </dependency>
     <dependency>
       <id>log4j</id>
       <version>1.2.7</version>
+      <url>http://jakarta.apache.org/log4j/</url>
     </dependency>
     <dependency>
       <id>javamail</id>
@@ -210,7 +228,8 @@
     </dependency>
     <dependency>
       <id>servletapi</id>
-      <version>2.2</version>
+      <version>2.3</version>
+      <url>http://java.sun.com/products/servlet/</url>
     </dependency>
     <dependency>
       <id>stratum</id>
@@ -234,26 +253,28 @@
     </dependency>
     <dependency>
       <id>village</id>
-      <version>1.5.3</version>
+      <version>2.0-dev-20021111</version>
       <url>http://share.whichever.com/index.php?SCREEN=village</url>
     </dependency>
     <dependency>
       <id>xalan</id>
       <version>2.1.0</version>
+      <url>http://xml.apache.org/xalan-j/</url>
     </dependency>
     <dependency>
-      <id>xerces</id>
+	  <id>xerces:xercesImpl</id>
       <version>2.0.2</version>
-      <url>http://xml.apache.org/xerces2-j/index.html</url>
+      <url>http://xml.apache.org/xerces2-j/</url>
     </dependency>
     <dependency>
-      <id>xml-apis</id>
-      <version>1.0.b2</version>
-      <url>http://xml.apache.org/xerces2-j/index.html</url>
+      <id>xerces:xmlParserAPIs</id>
+      <version>2.0.2</version>
+      <url>http://xml.apache.org/xerces2-j/</url>
     </dependency>
     <dependency>
       <id>xmlrpc</id>
       <version>1.2-a1</version>
+      <url>http://xml.apache.org/xmlrpc/</url>
     </dependency>
   </dependencies>
   <build>
