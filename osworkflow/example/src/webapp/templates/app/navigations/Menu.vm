@@ -6,8 +6,11 @@
 <div class="label"><strong>Workflow Tools</strong></div>
 <div class="body">
   <div>
-  <A href="$link.setAction("WorkflowAction").addPathInfo("eventSubmit_doSetupuser", "foo")">Setup User</A>
+  <A href="$link.setAction("WorkflowAction").addPathInfo("eventSubmit_doSetupuser", "foo")">Setup Permissions</A>
   </div>
+  <div>
+  <A href="$link.setAction("WorkflowAction").addPathInfo("eventSubmit_doLogin", "foo")">Login</A>
+  </div>  
   <div>
   <A href="$link.setAction("WorkflowAction").addPathInfo("eventSubmit_doNew", "foo")">Create New</A>
   </div>

@@ -36,8 +36,24 @@ public class WorkflowAction extends VelocityAction
         System.out.println("Doperform called");
         data.setScreenTemplate("Index.vm");
     }
+    
+	/**
+		 *  This sets logs you in as user "test"
+		 *
+		 * @param  data           Current RunData information
+		 * @param  context        Context to populate
+		 * @exception  Exception  Thrown on error
+		 */
+		public void doLogin(RunData data, Context context) throws Exception
+		{
+			data.getUser().setName("test");
+	
+        
+			data.getMessages().setMessage("", "INFO", "You are logged in as user test!");
+		}
+    
     /**
-     *  This guy deals with actions related to workflows.
+     *  This sets up the user "test/test"
      *
      * @param  data           Current RunData information
      * @param  context        Context to populate
@@ -45,7 +61,7 @@ public class WorkflowAction extends VelocityAction
      */
     public void doSetupuser(RunData data, Context context) throws Exception
     {
-        System.out.println("Doperform called");
+	
         data.setScreenTemplate("Index.vm");
         UserManager um = UserManager.getInstance();
         User test = um.createUser("test");
@@ -56,9 +72,11 @@ public class WorkflowAction extends VelocityAction
         test.addToGroup(foos);
         test.addToGroup(bars);
         test.addToGroup(bazs);
-        data.getUser().setName("test");
-        data.getMessages().setMessage("", "INFO", "User test/test is setup!");
+        
+        data.getMessages().setMessage("", "INFO", "User test/test is setup in system.  Don't forget to login!");
     }
+    
+    
     /**
      *  Create a new Workflow
      *

@@ -138,8 +138,9 @@ public class WorkflowTool implements ApplicationTool
     
     public List retrieveWorkflows(String status) throws WorkflowException{
         List workflows = new ArrayList();
-        long workflowIds []= getWorkflowService().retrieveWorkflows(user.getName(),status);
-        Workflow workflow = getWorkflowService().retrieveWorkflow(user.getName());
+        String caller = user.getName();
+        long workflowIds []= getWorkflowService().retrieveWorkflows(caller,status);
+        Workflow workflow = getWorkflowService().retrieveWorkflow(caller);
         for (int i =0;i<workflowIds.length;i++) {
             WorkflowInstance workflowInstance = new WorkflowInstance(workflow,workflowIds[i]);
             workflows.add(workflowInstance);

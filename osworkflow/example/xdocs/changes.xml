@@ -7,6 +7,10 @@
 
   <body>
     <release version="Not applicable" date="">
+      <action dev="epugh" type="fix">
+        Fixed bug with multiple users trying to access the system.  Broke the setup
+        process into two steps, setup and login.  Thanks to Tom Herrick.
+      </action>    	
       <action dev="epugh" type="add">
         Initial work on the Example Application
       </action>
