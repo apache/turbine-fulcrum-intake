@@ -251,12 +251,4 @@ public abstract class BaseService
     {
         return getServiceBroker().getCategory();
     }
-
-    /**
-     * @see org.apache.fulcrum.Service#getCategory(String name)
-     */
-    public Category getCategory(String name)
-    {
-        return getServiceBroker().getCategory(name);
-    }
 }

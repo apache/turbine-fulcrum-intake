@@ -169,13 +169,6 @@ public interface Service
     public Category getCategory();
 
     /**
-     * Gets the named logger.
-     *
-     * @param name The name of the logger.
-     */
-    public Category getCategory(String name);
-
-    /**
      * Returns text describing the status of this Service instance.
      *
      * @return Text describing service status.

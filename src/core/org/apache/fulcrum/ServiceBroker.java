@@ -208,14 +208,4 @@ public interface ServiceBroker
      * @return Category default log4j category.
      */
     public Category getCategory();
-
-    /**
-     * Get a log4j category by name.
-     *
-     * @param String name of category
-     * @return Category named category
-     */
-    public Category getCategory(String name);
-
-    public void setCategoryTable(Hashtable categoryTable);
 }

@@ -100,12 +100,4 @@ public interface ServiceManager
      * @param String application root
      */
     public void setApplicationRoot(String applicationRoot);
-
-    /**
-     * Set the log4j Category that will be used for
-     * logging.
-     *
-     * @param Category
-     */
-    public void setCategory(Category category);
 }

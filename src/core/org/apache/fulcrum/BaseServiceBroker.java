@@ -149,9 +149,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
      * has provided for logging. If a Category is not set
      * than all messages are sent to stout.
      */
-    protected Category category;
-
-    protected Hashtable categoryTable;
+    protected Category category = Category.getInstance(getClass().getName());
 
     /**
      * Application root path as set by the
@@ -192,46 +190,16 @@ public abstract class BaseServiceBroker implements ServiceBroker
     }
 
     /**
-     * Set the log4j Category that will be used for
-     * logging.
-     *
-     * @param Category
-     */
-    public void setCategory(Category category)
-    {
-        this.category = category;
-        loggingEnabled = true;
-    }
-
-    /**
-     * Get the log4j Category used for logging.
+     * Get the log4j Category used for logging. Used now
+     * internally by services that have yet to implement the
+     * Category c = Category.getInstance(getClass().getName());
+     * methodology.
      *
      * @return Category
      */
     public Category getCategory()
     {
         return category;
-    }
-
-    /**
-     * Get a log4j Category by name.
-     *
-     * @param name log4j category to return
-     * @return Category log4j category
-     */
-    public Category getCategory(String name)
-    {
-        return Category.getInstance(name);
-    }
-
-    public void setCategoryTable(Hashtable categoryTable)
-    {
-        this.categoryTable = categoryTable;
-    }
-
-    public Hashtable getCategoryTable()
-    {
-        return categoryTable;
     }
 
     /**
@@ -253,9 +221,6 @@ public abstract class BaseServiceBroker implements ServiceBroker
         // Create the mapping between service names
         // and their classes.
         initMapping();
-
-        Log.setCategory(getCategory());
-        Log.setCategoryTable(getCategoryTable());
 
         // Start services that have their 'earlyInit'
         // property set to 'true'.
