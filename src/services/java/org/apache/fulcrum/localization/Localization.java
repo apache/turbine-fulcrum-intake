@@ -263,7 +263,7 @@ public abstract class Localization
     }
 
     /**
-     * Gets the LocalizationService implementation.
+     * Gets the <code>LocalizationService</code> implementation.
      *
      * @return the LocalizationService implementation.
      */
