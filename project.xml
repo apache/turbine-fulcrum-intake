@@ -5,7 +5,6 @@
   <name>jakarta-turbine-fulcrum</name>
   <groupId>fulcrum</groupId>
   <id>fulcrum</id>
-  <currentVersion>1.0-alpha-3</currentVersion>
   <organization>
     <name>Apache Software Foundation</name>
     <url>http://jakarta.apache.org/</url>
