@@ -391,10 +391,10 @@
       <report>maven-jxr-plugin</report>    
       <report>maven-junit-report-plugin</report>
       <report>maven-pmd-plugin</report>
-      
+      <report>maven-checkstyle-plugin</report> 
    <!--  maven site-all chokes on these.
       <report>maven-linkcheck-plugin</report>
-      <report>maven-checkstyle-plugin</report>   
+        
       <report>maven-tasklist-plugin</report>
       -->
       
