@@ -258,6 +258,22 @@ public abstract class Localization
     }
 
     /**
+     * @see LocalizationService#getDefaultCountry()
+     */
+    public static String getDefaultCountry()
+    {
+        return getService().getDefaultCountry();
+    }
+
+    /**
+     * @see LocalizationService#getDefaultLanguage()
+     */
+    public static String getDefaultLanguage()
+    {
+        return getService().getDefaultLanguage();
+    }
+
+    /**
      * Gets the <code>LocalizationService</code> implementation.
      *
      * @return the LocalizationService implementation.
