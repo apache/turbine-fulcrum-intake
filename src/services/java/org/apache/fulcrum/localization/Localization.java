@@ -229,7 +229,7 @@ public abstract class Localization
      *
      * @return the LocalizationService implementation.
      */
-    protected static LocalizationService getService()
+    protected static final LocalizationService getService()
     {
         return (LocalizationService) TurbineServices.getInstance()
                 .getService(LocalizationService.SERVICE_NAME);
