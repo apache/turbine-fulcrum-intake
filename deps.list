@@ -2,6 +2,7 @@
 bsf.jar
 commons-collections.jar
 commons-email-0.1-dev.jar
+commons-fileupload-1.0-dev.jar
 commons-lang-0.1-dev.jar
 commons-codec.jar
 commons-pool.jar

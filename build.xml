@@ -15,6 +15,7 @@
     <pathelement location="${commons-configuration.jar}"/>
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-email.jar}"/>
+    <pathelement location="${commons-fileupload.jar}"/>
     <pathelement location="${commons-lang.jar}"/>
     <pathelement location="${commons-codec.jar}"/>
     <pathelement location="${commons-pool.jar}"/>
