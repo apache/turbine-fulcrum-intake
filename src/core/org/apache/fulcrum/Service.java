@@ -81,7 +81,8 @@ public interface Service
      *
      * When your class is being requested from an InitableBroker, it
      * will call getInit(), and if it returns false, this method will
-     * be invoked.  A typical implementation will look something like
+     * be invoked.  A typical implementation for classes extending
+     * {@link org.apache.fulcrum.BaseService} will look something like
      * the following:
      * 
      * <blockquote><code><pre>
@@ -152,9 +153,20 @@ public interface Service
      */
     public Configuration getConfiguration();    
 
+    /**
+     * Given a relative paths, gets the real path.
+     */
     public String getRealPath(String path);
 
+    /**
+     * Gets the default logger for this service.
+     */
     public Category getCategory();
 
+    /**
+     * Gets the named logger.
+     *
+     * @param name The name of the logger.
+     */
     public Category getCategory(String name);
 }
