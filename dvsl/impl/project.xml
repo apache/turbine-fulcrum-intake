@@ -13,7 +13,7 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-dvsl-api</artifactId>
-      <version>1.0-alpha-4</version>
+      <version>1.0.4</version>
     </dependency>
     <dependency>
       <groupId>avalon-framework</groupId>
@@ -42,14 +42,6 @@
       <id>logkit</id>
       <version>1.0.1</version>
       <url>http://avalon.apache.org/logkit/</url>
-    </dependency>
-
-    <!-- testing -->
-
-    <dependency>
-      <groupId>merlin</groupId>
-      <artifactId>merlin-unit</artifactId>
-      <version>3.2.10</version>
     </dependency>
 
   </dependencies>
