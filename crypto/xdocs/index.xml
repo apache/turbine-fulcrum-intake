@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Crypto Component</title>
+    <author email="epugh@upstate.com">Eric PUgh</author>
+  </properties>
+
+  <body>
+
+  <section name="Overview">
+    <p>
+      This component wraps provides encrypting passwords.  It is written 
+      for use in Turbine but it can be used in any container compatible 
+      with Avalon's ECM container.
+    </p>    
+  </section>
+  
+<section name="Configuration">
+
+    <p>
+      First, here is the role configuration.
+    </p>
+
+<source>
+<![CDATA[
+  <role
+    name="org.apache.fulcrum.crypto.CryptoService"
+    shorthand="crypto"
+    default-class="org.apache.fulcrum.crypto.DefaultCryptoService"/>
+]]>
+</source>
+
+  <p>
+    Now comes the basic configuration of the component.  Here will will
+    configure the various encryption providers
+  </p>
+<source>
+
+<![CDATA[
+    <crypto>
+      <algorithm>
+      	<unix>org.apache.fulcrum.crypto.provider.UnixCrypt</unix>
+        <clear>org.apache.fulcrum.crypto.provider.ClearCrypt</clear>
+        <java>org.apache.fulcrum.crypto.provider.JavaCrypt</java>   
+        <oldjava>org.apache.fulcrum.crypto.provider.OldJavaCrypt</oldjava>   
+                      
+      </algorithm>
+    </crypto>
+]]>
+</source>
+
+  </section>
+
+  <section name="Usage">
+    <p>
+    </p>
+  </section>  
+
+</body>
+</document>
