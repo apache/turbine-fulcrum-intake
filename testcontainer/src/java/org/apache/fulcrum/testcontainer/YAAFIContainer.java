@@ -35,15 +35,7 @@ import org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerService;
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a> 
  */
 public class YAAFIContainer extends AbstractLogEnabled implements Container
-{
-	/** Key used in the context for defining the application root */
-    public static String COMPONENT_APP_ROOT = "componentAppRoot";
-
-    /** Alternate Merlin Friendly Key used in the context for defining the application root */
-    public static String URN_AVALON_HOME = "urn:avalon:home";    
-
-    /** Alternate Merlin Friendly Key used in the context for defining the application root */
-    public static String URN_AVALON_TEMP = "urn:avalon:temp";    
+{    
 
     /** Component manager */
     private ServiceContainer manager;
@@ -147,7 +139,8 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
     {
         try
         {
-            return ServiceManagerService.getServiceManager().lookup(roleName);
+            //return ServiceManagerService.getServiceManager().lookup(roleName);
+            return this.manager.lookup(roleName);
         }
         catch( Exception e )
         {
@@ -172,6 +165,7 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
      */
     public void release(Object component)
     {
-        ServiceManagerService.getServiceManager().release(component);
+        //ServiceManagerService.getServiceManager().release(component);
+        this.manager.release(component);
     }
 }

@@ -55,12 +55,12 @@ package org.apache.fulcrum.dvsl;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
+import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
  * @author <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>
  */
-public class DvslBasicTest extends AbstractMerlinTestCase
+public class DvslBasicTest extends BaseUnitTest
 {
     private String dvsl = "#match(\"element\")Hello from element! $node.value()#end";
     private String input = "<?xml version=\"1.0\"?><document><element>Foo</element></document>";
@@ -76,7 +76,7 @@ public class DvslBasicTest extends AbstractMerlinTestCase
          super.setUp();
          try
          {
-           dvslService = (DvslService) this.resolve( "/test/dvsl" );
+           dvslService = (DvslService) this.resolve( DvslService.class.getName() );
          }
          catch (Throwable e)
          {

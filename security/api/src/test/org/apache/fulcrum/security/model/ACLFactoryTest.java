@@ -39,16 +39,11 @@ public class ACLFactoryTest extends BaseUnitTest
         super(arg0);
     }
 
-    public void setUp() throws Exception
-    {
-        super.setUp();
-
-    }
 
     public void testCreatingDynamicACL() throws Exception
     {
-        this.setRoleFileName(null);
-        this.setConfigurationFileName("src/test/DynamicACL.xml");
+        this.setRoleFileName("src/test/DynamicACLRoleConfig.xml");
+        this.setConfigurationFileName("src/test/ACLComponentConfig.xml");
 
         ACLFactory factory = (ACLFactory) lookup(ACLFactory.ROLE);
         DynamicUser user = new DynamicUser();
@@ -75,8 +70,8 @@ public class ACLFactoryTest extends BaseUnitTest
 
     public void testCreatingBasicACL() throws Exception
     {
-        this.setRoleFileName(null);
-        this.setConfigurationFileName("src/test/BasicACL.xml");
+        this.setRoleFileName("src/test/BasicACLRoleConfig.xml");
+        this.setConfigurationFileName("src/test/ACLComponentConfig.xml");
 
         ACLFactory factory = (ACLFactory) lookup(ACLFactory.ROLE);
         BasicUser user = new BasicUser();

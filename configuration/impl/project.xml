@@ -9,12 +9,6 @@
   <package>org.apache.fulcrum.configuration</package>
 
   <dependencies>
-  <dependency>
-      <groupId>avalon-framework</groupId>
-      <artifactId>avalon-framework-api</artifactId>
-      <version>4.2.0</version>
-      <url>http://avalon.apache.org/framework/</url>
-    </dependency>
 
     <dependency>
       <groupId>commons-beanutils</groupId>      
@@ -60,7 +54,13 @@
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
       <version>1.0.4-dev</version>
-    </dependency>     
+    </dependency>
+    
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-yaafi</artifactId>
+      <version>1.0.3-dev</version>
+    </dependency>    
 
   </dependencies>
 

@@ -39,10 +39,10 @@ public class StartingSecurityServicesTest extends BaseUnitTest
     }
     public void testStartingDynamicModel() throws Exception
     {
-
-        this.setConfigurationFileName("src/test/DynamicMemory.xml");
+        this.setRoleFileName("src/test/DynamicMemoryRoleConfig.xml");
+        this.setConfigurationFileName("src/test/DynamicMemoryComponentConfig.xml");
         securityService = (SecurityService) lookup(SecurityService.ROLE);
-        assertTrue(
+        assertTrue(securityService.getClass().getName(),
             securityService.getUserManager() instanceof MemoryUserManagerImpl);
         assertTrue(
             securityService.getRoleManager() instanceof MemoryRoleManagerImpl);
@@ -58,8 +58,9 @@ public class StartingSecurityServicesTest extends BaseUnitTest
 
     public void testStartingTurbineModel() throws Exception
     {
-
-        this.setConfigurationFileName("src/test/TurbineMemory.xml");
+        this.setRoleFileName("src/test/TurbineMemoryRoleConfig.xml");
+        this.setConfigurationFileName("src/test/TurbineMemoryComponentConfig.xml");
+        
         securityService = (SecurityService) lookup(SecurityService.ROLE);
         assertTrue(
             securityService.getUserManager()
@@ -84,7 +85,9 @@ public class StartingSecurityServicesTest extends BaseUnitTest
     public void testStartingBasicModel() throws Exception
     {
 
-        this.setConfigurationFileName("src/test/BasicMemory.xml");
+
+        this.setRoleFileName("src/test/BasicMemoryRoleConfig.xml");
+        this.setConfigurationFileName("src/test/BasicMemoryComponentConfig.xml");
         securityService = (SecurityService) lookup(SecurityService.ROLE);
         assertTrue(
             securityService.getUserManager() instanceof MemoryUserManagerImpl);
@@ -97,8 +100,8 @@ public class StartingSecurityServicesTest extends BaseUnitTest
 
     public void testLazyLoadingOfServices() throws Exception
     {
-        this.setRoleFileName(null);
-        this.setConfigurationFileName("src/test/LazyLoadServices.xml");
+        this.setRoleFileName("src/test/LazyLoadRoleConfig.xml");
+        this.setConfigurationFileName("src/test/LazyLoadComponentConfig.xml");
         securityService = (SecurityService) lookup(SecurityService.ROLE);
         assertTrue(
             securityService.getUserManager() instanceof MemoryUserManagerImpl);

@@ -35,12 +35,7 @@ import org.apache.avalon.framework.logger.AbstractLogEnabled;
  */
 public class ECMContainer extends AbstractLogEnabled implements Container
 {
-	/** Key used in the context for defining the application root */
-    public static String COMPONENT_APP_ROOT = "componentAppRoot";
-
-    /** Alternate Merlin Friendly Key used in the context for 
-     * defining the application root */
-    public static String URN_AVALON_HOME = "urn:avalon:home";    
+  
     
     /** Component manager */
     private ExcaliburComponentManager manager = new ExcaliburComponentManager();

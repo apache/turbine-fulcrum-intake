@@ -30,8 +30,8 @@ public class HibernateExtendedUserGroupManagerTest extends AbstractGroupManagerT
     {
         try
         {
-this.setRoleFileName(null);
-            this.setConfigurationFileName("src/test/ExtendedUserHibernate.xml");
+            this.setRoleFileName("src/test/DynamicHibernateRoleConfig.xml");
+            this.setConfigurationFileName("src/test/DynamicHibernateExtendedUserComponentConfig.xml");
             HibernateService hibernateService = (HibernateService) lookup(HibernateService.ROLE);
             HibernateHelper.exportSchema(hibernateService.getConfiguration());
             securityService = (SecurityService) lookup(SecurityService.ROLE);

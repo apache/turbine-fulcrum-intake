@@ -1,0 +1,7 @@
+<my-system>
+    <securityService/>
+      <userManager><className>org.apache.fulcrum.security.model.basic.entity.BasicUser</className></userManager> 
+      <groupManager><className>org.apache.fulcrum.security.model.basic.entity.BasicGroup</className></groupManager>    
+  
+  
+</my-system>

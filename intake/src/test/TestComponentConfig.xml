@@ -1,0 +1,17 @@
+<componentConfig>
+
+    <factory/>    
+    <localization>
+      <bundles>
+        <bundle>org.apache.fulcrum.localization.BarBundle</bundle>
+        <bundle>org.apache.fulcrum.localization.FooBundle</bundle>      
+      </bundles>
+    </localization>   
+    <intake>
+       <serialDataPath>target/appData.ser</serialDataPath>
+       <xmlPaths>
+      	<xmlPath>src/test/intake1.xml</xmlPath>
+      	<xmlPath>src/test/intake2.xml</xmlPath>
+       </xmlPaths>        
+    </intake>       
+</componentConfig>

@@ -49,8 +49,8 @@ public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConst
 
     public void setUp() throws Exception
     {
-        this.setRoleFileName(null);
-        this.setConfigurationFileName("src/test/DynamicNT.xml");
+        this.setRoleFileName("src/test/DynamicNTRoleConfig.xml");
+        this.setConfigurationFileName("src/test/DynamicNTComponentConfig.xml");
         securityService = (SecurityService) lookup(SecurityService.ROLE);
         userManager = securityService.getUserManager();
         modelManager = (DynamicModelManager) securityService.getModelManager();

@@ -67,13 +67,6 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
         modelManager = (TurbineModelManager) securityService.getModelManager();
     }
 
-    public void tearDown() {
-        this.release(roleManager);
-        this.release(userManager);
-        this.release(groupManager);
-        this.release(permissionManager);
-        this.release(modelManager);
-    }   
     /**
      * Constructor for AbstractTurbineModelManagerTest.
      * @param arg0

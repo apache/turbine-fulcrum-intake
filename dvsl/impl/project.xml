@@ -3,7 +3,7 @@
 <project>
 
   <id>fulcrum-dvsl-impl</id>
-  <extend>${basedir}/../../merlin-project.xml</extend>
+  <extend>${basedir}/../../project.xml</extend>
   <name>Fulcrum DVSL Implementation</name>
   <currentVersion>1.0.4</currentVersion>
   <package>org.apache.fulcrum.dvsl</package>
@@ -13,13 +13,19 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-dvsl-api</artifactId>
-      <version>1.0.4</version>
+      <version>1.0.5-dev</version>
     </dependency> 
     <dependency>
       <groupId>velocity-dvsl</groupId>
       <artifactId>velocity-dvsl</artifactId>
       <version>0.45</version>
     </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.8</version>
+      <url>http://jakarta.apache.org/log4j/</url>
+    </dependency>   
     <dependency>
       <groupId>dom4j</groupId>
       <artifactId>dom4j</artifactId>
@@ -36,11 +42,18 @@
       <version>3.1</version>
       <url>http://jakarta.apache.org/commons/collections.html</url>
     </dependency>
+
+    <!--  Needed only for testing -->
     <dependency>
-      <groupId>logkit</groupId>
-      <artifactId>logkit</artifactId>
-      <version>1.0.1</version>
-      <url>http://avalon.apache.org/logkit/</url>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-testcontainer</artifactId>
+      <version>1.0.4-dev</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-yaafi</artifactId>
+      <version>1.0.3-dev</version>
     </dependency>
 
   </dependencies>

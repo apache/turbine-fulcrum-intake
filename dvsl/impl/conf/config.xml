@@ -1,8 +1,0 @@
-
-<targets>
-
-  <target path="/test/dvsl">
-    <categories priority="INFO"/>
-  </target>
-
-</targets>

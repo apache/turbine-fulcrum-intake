@@ -1,0 +1,39 @@
+<!-- This configuration file for Avalon components is used for testing the TestComponent -->
+<role-list>
+    <role
+        name="org.apache.fulcrum.security.SecurityService"
+        shorthand="securityService"
+        default-class="org.apache.fulcrum.security.BaseSecurityService"/>
+    <role
+        name="org.apache.fulcrum.security.UserManager"
+        shorthand="userManager"
+        early-init="true"
+        default-class="org.apache.fulcrum.security.hibernate.HibernateUserManagerImpl"/>
+    <role
+        name="org.apache.fulcrum.security.GroupManager"
+        shorthand="groupManager"
+        default-class="org.apache.fulcrum.security.hibernate.HibernateGroupManagerImpl"/>
+    <role
+        name="org.apache.fulcrum.security.ModelManager"
+        shorthand="modelManager"
+        default-class="org.apache.fulcrum.security.hibernate.basic.HibernateModelManagerImpl"/>                                
+    <role
+        name="org.apache.fulcrum.security.authenticator.Authenticator"
+        shorthand="authenticator"
+        default-class="org.apache.fulcrum.security.authenticator.TextMatchAuthenticator"/>                                
+    <role
+        name="org.apache.fulcrum.security.model.ACLFactory"
+        shorthand="aclFactory"
+        default-class="org.apache.fulcrum.security.model.basic.BasicACLFactory"/>                                
+
+    <role
+        name="org.apache.fulcrum.security.hibernate.PersistenceHelper"
+        shorthand="persistenceHelper"
+        default-class="org.apache.fulcrum.security.hibernate.PersistenceHelperHibernateServiceImpl"/>                                
+
+    <role
+        name="net.sf.hibernate.avalon.HibernateService"
+        shorthand="hibernateService"
+        default-class="net.sf.hibernate.avalon.HibernateServiceImpl"/>                                
+</role-list>
+ 

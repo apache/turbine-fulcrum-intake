@@ -56,8 +56,8 @@ public class OSUserAdapterTest extends BaseUnitTest
     {
         try
         {
-            this.setRoleFileName(null);
-            this.setConfigurationFileName("src/test/OSUserAvalonConf.xml");
+            this.setRoleFileName("src/test/DynamicMemoryRoleConfig.xml");
+            this.setConfigurationFileName("src/test/DynamicMemoryComponentConfig.xml");
             securityService = (SecurityService) lookup(SecurityService.ROLE);
             BaseFulcrumProvider.setSecurityService(securityService);
 

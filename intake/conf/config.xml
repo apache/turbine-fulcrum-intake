@@ -1,8 +1,0 @@
-
-<targets>
-
-  <target path="/test/intake">
-    <categories priority="DEBUG"/>
-  </target>
-
-</targets>

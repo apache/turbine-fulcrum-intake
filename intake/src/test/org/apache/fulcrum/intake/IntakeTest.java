@@ -16,7 +16,7 @@ package org.apache.fulcrum.intake;
  * limitations under the License.
  */
 
-import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
+import org.apache.fulcrum.testcontainer.BaseUnitTest;
 import org.apache.fulcrum.intake.model.Group;
 /**
  * Test the facade class for the service
@@ -24,7 +24,7 @@ import org.apache.fulcrum.intake.model.Group;
  * @author <a href="epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class IntakeTest extends AbstractMerlinTestCase
+public class IntakeTest extends BaseUnitTest
 {
     /**
      * Defines the testcase name for JUnit.
@@ -53,7 +53,7 @@ public class IntakeTest extends AbstractMerlinTestCase
     public void testFacadeConfigured() throws Exception
     {
         // this.lookup causes the workflow service to be configured.
-        IntakeService is = (IntakeService) this.resolve( "/test/intake" );
+        IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
         Group group = is.getGroup("LoginGroup");
         assertNotNull(group);
         assertTrue(Intake.isInitialized());

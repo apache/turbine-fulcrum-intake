@@ -19,7 +19,7 @@ package org.apache.fulcrum.intake;
 import java.io.File;
 
 import org.apache.fulcrum.intake.model.Group;
-import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
+import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
  * @author Eric Pugh
@@ -27,7 +27,7 @@ import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class IntakeServiceTest extends AbstractMerlinTestCase
+public class IntakeServiceTest extends BaseUnitTest
 {
     private static final File BASEDIR = new File( System.getProperty( "basedir" ));
 
@@ -50,7 +50,7 @@ public class IntakeServiceTest extends AbstractMerlinTestCase
             appData.delete();
         }
         try {
-            intakeService = (IntakeService) this.resolve( "/test/intake" );
+            intakeService = (IntakeService) this.resolve( IntakeService.class.getName() );
         } catch (Throwable e) {
             fail(e.getMessage());
         }

@@ -49,8 +49,8 @@ public class NTBasicModelManagerTest extends BaseUnitTest implements TestConstan
 
     public void setUp() throws Exception
     {
-        this.setRoleFileName(null);
-        this.setConfigurationFileName("src/test/BasicNT.xml");
+        this.setRoleFileName("src/test/BasicNTRoleConfig.xml");
+        this.setConfigurationFileName("src/test/BasicNTComponentConfig.xml");
         securityService = (SecurityService) lookup(SecurityService.ROLE);
         userManager = securityService.getUserManager();
         modelManager = (BasicModelManager) securityService.getModelManager();

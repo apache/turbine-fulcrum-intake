@@ -33,6 +33,11 @@
       <version>2.0</version>
     </dependency>  
     <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.1</version>
+    </dependency>      
+    <dependency>
       <groupId>cryptix</groupId>
       <artifactId>cryptix</artifactId>
       <version>3.2.0</version>

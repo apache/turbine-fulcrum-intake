@@ -34,8 +34,8 @@ public class HibernateBasicModelManagerTest extends AbstractModelManagerTest
     public void setUp() throws Exception
     {
 
-        this.setRoleFileName(null);
-        this.setConfigurationFileName("src/test/BasicHibernate.xml");
+        this.setRoleFileName("src/test/BasicHibernateRoleConfig.xml");
+        this.setConfigurationFileName("src/test/BasicHibernateComponentConfig.xml");
         HibernateService hibernateService =
             (HibernateService) lookup(HibernateService.ROLE);
         HibernateHelper.exportSchema(hibernateService.getConfiguration());

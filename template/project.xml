@@ -6,7 +6,18 @@
   <currentVersion>1.0.1</currentVersion>
 
   <dependencies>
-      
+     <dependency>
+      <groupId>commons-configuration</groupId>
+      <artifactId>commons-configuration</artifactId>
+      <version>1.0</version>
+      <url>http://jakarta.apache.org/commons/configuration</url>
+    </dependency>     
+     <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.1</version>
+      <url>http://jakarta.apache.org/commons/collections</url>
+    </dependency>     
     <dependency>
       <groupId>commons-email</groupId>
       <artifactId>commons-email</artifactId>
@@ -45,8 +56,14 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0.3</version>
+      <version>1.0.4-dev</version>
     </dependency>
+    
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-yaafi</artifactId>
+      <version>1.0.3-dev</version>
+    </dependency>  
 
 
   </dependencies>

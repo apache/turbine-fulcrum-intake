@@ -1,8 +1,0 @@
-
-<targets>
-
-  <target path="/crypto/crypto">
-    <categories priority="DEBUG"/>
-  </target>
-
-</targets>

@@ -38,12 +38,19 @@
       <artifactId>commons-logging</artifactId>
       <version>1.0.3</version>
     </dependency>   
-    <!-- testing -->
+
+    <!--  Needed only for testing -->
     <dependency>
-      <groupId>fulcrum</groupId>    
+      <groupId>fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0.3</version>
-    </dependency>    
+      <version>1.0.4-dev</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-yaafi</artifactId>
+      <version>1.0.3-dev</version>
+    </dependency>     
   </dependencies>
   <resources>
     <resource>

@@ -38,8 +38,8 @@ public class StartingSecurityServicesTest extends BaseUnitTest
    
     public void testStartingHibernateSecurity() throws Exception
     {
-        this.setRoleFileName(null);
-        this.setConfigurationFileName("src/test/DynamicHibernate.xml");
+        this.setRoleFileName("src/test/DynamicHibernateRoleConfig.xml");
+        this.setConfigurationFileName("src/test/DynamicHibernateComponentConfig.xml");
         securityService = (SecurityService) lookup(SecurityService.ROLE);
         assertTrue(securityService.getUserManager() instanceof HibernateUserManagerImpl);
         assertTrue(securityService.getRoleManager() instanceof HibernateRoleManagerImpl);

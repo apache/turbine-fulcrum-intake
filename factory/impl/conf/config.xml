@@ -1,8 +1,0 @@
-
-<targets>
-
-  <target path="/test/factory">
-    <categories priority="INFO"/>
-  </target>
-
-</targets>

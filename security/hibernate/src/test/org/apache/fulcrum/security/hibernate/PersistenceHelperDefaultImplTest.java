@@ -38,8 +38,8 @@ public class PersistenceHelperDefaultImplTest extends BaseUnitTest
 
     public void testPassingInExternalHibernateService() throws Exception
     {
-        this.setRoleFileName(null);
-        this.setConfigurationFileName("src/test/PersistenceHelperDefaultImpl.xml");
+        this.setRoleFileName("src/test/PersistenceHelperDefaultImplRoleConfig.xml");
+        this.setConfigurationFileName("src/test/PersistenceHelperDefaultImplComponentConfig.xml");
        
 		SecurityService securityService = (SecurityService) lookup(SecurityService.ROLE);
 		HibernateGroupManagerImpl groupManager = (HibernateGroupManagerImpl)securityService.getGroupManager();

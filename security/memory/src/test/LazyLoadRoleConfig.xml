@@ -1,0 +1,18 @@
+<!-- This configuration file for Avalon components is used for testing the TestComponent -->
+<role-list>
+    <role
+        name="org.apache.fulcrum.security.SecurityService"
+        shorthand="securityService"
+        default-class="org.apache.fulcrum.security.BaseSecurityService"/>
+    <role
+        name="org.apache.fulcrum.security.UserManager"
+        shorthand="userManager"
+        early-init="true"
+        default-class="org.apache.fulcrum.security.memory.MemoryUserManagerImpl"/>
+    <role
+        name="org.apache.fulcrum.security.GroupManager"
+        shorthand="groupManager"
+        default-class="org.apache.fulcrum.security.memory.MemoryGroupManagerImpl"/>
+   
+</role-list>
+ 

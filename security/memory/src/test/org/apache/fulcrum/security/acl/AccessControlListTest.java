@@ -70,8 +70,8 @@ public class AccessControlListTest extends BaseUnitTest
     {
         super.setUp();
 
-        this.setRoleFileName(null);
-        this.setConfigurationFileName("src/test/AccessControlList.xml");
+        this.setRoleFileName("src/test/DynamicMemoryRoleConfig.xml");
+        this.setConfigurationFileName("src/test/DynamicMemoryComponentConfig.xml");
 
         SecurityService securityService =
             (SecurityService) lookup(SecurityService.ROLE);

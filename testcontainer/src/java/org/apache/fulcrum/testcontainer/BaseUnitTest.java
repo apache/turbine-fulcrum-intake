@@ -32,7 +32,7 @@ public class BaseUnitTest extends TestCase
     public static final String CONTAINER_ECM="CONTAINER_ECM";
     public static final String CONTAINER_YAAFI="CONTAINER_YAAFI";
     /** Key used in the context for defining the application root */
-    public static String COMPONENT_APP_ROOT = ECMContainer.COMPONENT_APP_ROOT;
+    public static String COMPONENT_APP_ROOT = Container.COMPONENT_APP_ROOT;
 
     /** Pick the default container to be Yaafi **/
     public static String containerType = CONTAINER_YAAFI;
@@ -42,7 +42,8 @@ public class BaseUnitTest extends TestCase
     private String configurationFileName = "src/test/TestComponentConfig.xml";
     /** Setup our default roleFileName */
     private String roleFileName = "src/test/TestRoleConfig.xml";
-
+    /** Setup our default parameterFileName */
+    private String parameterFileName = null;
     
     /**
 	 * Gets the configuration file name for the container should use for this test. By default it
@@ -106,6 +107,15 @@ public class BaseUnitTest extends TestCase
         return roleFileName;
     }
     /**
+     * Gets the parameter file name for the container should use for this test.
+     * 
+     * @return The filename of the role configuration file
+     */
+    protected String getParameterFileName()
+    {
+        return parameterFileName;
+    }    
+    /**
 	 * Returns an instance of the named component. Starts the container if it hasn't been started.
 	 * 
 	 * @param roleName Name of the role the component fills.
@@ -115,8 +125,13 @@ public class BaseUnitTest extends TestCase
     {
         if (container == null)
         {
-            container = new ECMContainer();
-            container.startup(getConfigurationFileName(), getRoleFileName(),null);
+            if(containerType.equals(CONTAINER_ECM)){
+                container = new ECMContainer();
+            }
+            else {
+                container = new YAAFIContainer();
+            }
+            container.startup(getConfigurationFileName(), getRoleFileName(),getParameterFileName());
         }
         return container.lookup(roleName);
     }

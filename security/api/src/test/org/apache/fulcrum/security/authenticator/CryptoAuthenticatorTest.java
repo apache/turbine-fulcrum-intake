@@ -40,8 +40,8 @@ public class CryptoAuthenticatorTest extends BaseUnitTest
     {
         try
         {
-            this.setRoleFileName(null);
-            this.setConfigurationFileName("src/test/CryptoAuthenticator.xml");
+            this.setRoleFileName("src/test/CryptoRoleConfig.xml");
+            this.setConfigurationFileName("src/test/CryptoComponentConfig.xml");
         }
         catch (Exception e)
         {

@@ -1,9 +1,0 @@
-
-<targets>
-
-  <target path="/test/config">
-    <categories priority="INFO"/>
-    <configuration configurationPath="../../../src/test/configuration.xml"/>
-  </target>
-
-</targets>

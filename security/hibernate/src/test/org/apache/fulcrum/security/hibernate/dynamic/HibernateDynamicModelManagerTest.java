@@ -39,8 +39,8 @@ public class HibernateDynamicModelManagerTest
     {
         try
         {
-            this.setRoleFileName(null);
-            this.setConfigurationFileName("src/test/DynamicHibernate.xml");
+            this.setRoleFileName("src/test/DynamicHibernateRoleConfig.xml");
+            this.setConfigurationFileName("src/test/DynamicHibernateComponentConfig.xml");
             HibernateService hibernateService =
                 (HibernateService) lookup(HibernateService.ROLE);
             HibernateHelper.exportSchema(hibernateService.getConfiguration());

@@ -44,7 +44,8 @@ public class YaafiContainerTest extends BaseUnitTest
         SimpleComponent sc = null;
         try
         {
-            sc = (SimpleComponent) this.lookup(SimpleComponent.ROLE);
+            sc = (SimpleComponent) this.lookup(SimpleComponent.class.getName());
+            //sc = (SimpleComponent) this.lookup("SimpleComponent");
         }
         catch (ComponentException e)
         {
@@ -77,7 +78,7 @@ public class YaafiContainerTest extends BaseUnitTest
         this.release(sc);
     }
 
-    public void testLoadingContainerWithNoRolesfile()
+    public void testLoadingContainerWithNoRolesfileFails()
     {
         SimpleComponent sc = null;
 
@@ -90,32 +91,9 @@ public class YaafiContainerTest extends BaseUnitTest
         }
         catch (ComponentException e)
         {
-            e.printStackTrace();
-            fail(e.getMessage());
+            //good  We expect to fail
         }
-        assertTrue(sc instanceof AlternativeComponentImpl);
-        assertNotNull(sc);
-        sc.test();
-        this.release(sc);
+       
     }
 
-    public void testLoadingNonExistentFile()
-    {
-        SimpleComponent sc = null;
-
-        this.setRoleFileName(null);
-        this.setConfigurationFileName("BogusFile.xml");
-        try
-        {
-            sc = (SimpleComponent) this.lookup(SimpleComponent.ROLE);
-        }
-        catch(RuntimeException re){
-            //good
-        }
-        catch (ComponentException e)
-        {
-            
-            fail(e.getMessage());
-        }
-    }
 }

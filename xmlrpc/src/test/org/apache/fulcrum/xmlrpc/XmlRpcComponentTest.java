@@ -4,8 +4,6 @@ import java.net.URL;
 import java.util.Vector;
 
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
-import org.apache.avalon.framework.component.Component;
-import org.apache.avalon.framework.component.ComponentException;
 
 import junit.framework.TestSuite;
 
@@ -27,63 +25,34 @@ public class XmlRpcComponentTest extends BaseUnitTest
         super(testName);
     }
 
-    /**
-     * Factory method for creating a TestSuite for this class.
-     *
-     * @return the test suite
-     */
-    public static TestSuite suite()
-    {
-        TestSuite suite = new TestSuite(XmlRpcComponentTest.class);
-        return suite;
-    }
 
     public void testInitialize()
     {
         assertTrue(true);
     }
 
-    public void OFFtestLookup()
+    public void OFFtestLookup() throws Exception
     {
         XmlRpcServerComponent xmlrpc = null;
-        try
-        {
-            xmlrpc = (XmlRpcServerComponent) lookup(XmlRpcServerComponent.ROLE);
-        }
-        catch (ComponentException e)
-        {
-            e.printStackTrace();
-            fail("Could not lookup component");
-        }
+        xmlrpc = (XmlRpcServerComponent) lookup(XmlRpcServerComponent.ROLE);
+        
+        
 
-        release((Component) xmlrpc);
+        release(xmlrpc);
     }
 
     public void testHandler() throws Exception
     {
         // start the xml-rpc server
         XmlRpcServerComponent xmlrpc = null;
-        try
-        {
-            xmlrpc = (XmlRpcServerComponent) lookup(XmlRpcServerComponent.ROLE);
-        }
-        catch (ComponentException e)
-        {
-            e.printStackTrace();
-            fail("Could not lookup component");
-        }
+        xmlrpc = (XmlRpcServerComponent) lookup(XmlRpcServerComponent.ROLE);
+       
 
         // create the client
         XmlRpcClientComponent rpcClient = null;
-        try
-        {
-            rpcClient = (XmlRpcClientComponent) lookup(XmlRpcClientComponent.ROLE);
-        }
-        catch (ComponentException e)
-        {
-            e.printStackTrace();
-            fail("Could not lookup component");
-        }
+       
+        rpcClient = (XmlRpcClientComponent) lookup(XmlRpcClientComponent.ROLE);
+       
         URL server = new URL("http://localhost:12345/RPC2");
 
         // setup param from rpc call
@@ -101,7 +70,7 @@ public class XmlRpcComponentTest extends BaseUnitTest
                 params);
         assertEquals(result, testMessage);
 
-        release((Component) rpcClient);
-        release((Component) xmlrpc);
+        release( rpcClient);
+        release( xmlrpc);
     }
 }

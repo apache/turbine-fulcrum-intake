@@ -53,10 +53,6 @@
  */
 package org.apache.fulcrum.cache;
 // Cactus and Junit imports
-import junit.awtui.TestRunner;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 
@@ -77,27 +73,7 @@ public class CacheServiceFacadeTest extends BaseUnitTest
     {
         super(name);
     }
-    /**
-     * Start the tests.
-     *
-     * @param args the arguments. Not used
-     */
-    public static void main(String args[])
-    {
-        TestRunner.main(
-            new String[] { CacheServiceFacadeTest.class.getName()});
-    }
-    /**
-     * Creates the test suite.
-     *
-     * @return a test suite (<code>TestSuite</code>) that includes all methods
-     *         starting with "test"
-     */
-    public static Test suite()
-    {
-        // All methods starting with "test" will be executed in the test suite.
-        return new TestSuite(CacheServiceFacadeTest.class);
-    }
+
 
     public void testWorkflowFacadeNotConfigured() throws Exception
     {

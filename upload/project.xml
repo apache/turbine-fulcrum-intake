@@ -22,12 +22,18 @@
       <url>http://java.sun.com/products/servlet/</url>
     </dependency>    
         
-    <!-- Needed only for testing -->
+    <!--  Needed only for testing -->
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0.3</version>
+      <version>1.0.4-dev</version>
     </dependency>
+    
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-yaafi</artifactId>
+      <version>1.0.3-dev</version>
+    </dependency> 
 
   </dependencies>
 

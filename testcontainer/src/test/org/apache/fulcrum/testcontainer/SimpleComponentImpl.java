@@ -16,6 +16,8 @@ package org.apache.fulcrum.testcontainer;
  * limitations under the License.
  */
 
+import java.io.File;
+
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.activity.Disposable;
@@ -56,7 +58,12 @@ public class SimpleComponentImpl
     public void contextualize(Context context) throws ContextException
     {
         appRoot = (String) context.get("componentAppRoot");
-        appRoot2 = (String) context.get("urn:avalon:home");
+        if (context.get("urn:avalon:home") instanceof File){
+            appRoot2 = ((File)(context.get("urn:avalon:home"))).toString();
+        }
+        else {
+            appRoot2 = (String)context.get("urn:avalon:home");
+        }
     }
     /**
      * @return Returns the appRoot.

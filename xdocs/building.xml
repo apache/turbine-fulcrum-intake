@@ -26,21 +26,6 @@
         use Maven.
       </p>      
       <p>
-        By default, the build will attempt to install the Avalon Meta and Merlin 
-        plugins for Maven.  Depending on your version of Maven, your milage
-        may vary.  If it doesn't work the you will need to install the Avalon Meta plugin
-        and Merlin plugin's for Maven by hand.  You can do this by:
-<source><![CDATA[
-
-$ maven plugin:download -DartifactId=avalon-meta-plugin -DgroupId=avalon-meta -Dversion=1.3.2
-
-$ maven plugin:download -DartifactId=merlin-plugin -DgroupId=merlin -Dversion=3.2.5
-
-]]></source>
-		You should check the Ibiblio site or the Avalon site for the latest and greatest
-		plugins to use.
-      </p>
-      <p>
         From the root directory of the Fulcrum project (where you checked
         out the code to or unpacked a source distribution), simply type 
         'maven fulcrum:build' and press enter.  This will start a process that will
@@ -54,13 +39,6 @@ $ maven plugin:download -DartifactId=merlin-plugin -DgroupId=merlin -Dversion=3.
         build them individually.
       </p>      
        <subsection name="Current Build Issues">
-        <p>
-          <strong>Important!</strong>  Currently when you attempt to do a 
-          build, the code in 'src/java' is compiled as well as the individual
-          components.  Make sure to rename 'src' to 'src-OFF' to prevent 
-          this.  This is only until all the code in 'src/java' either is 
-          converted to Avalon components, or discarded.
-        </p>
         <p>
           <strong>Missing JARS!</strong>  There are some jar files that you must manually
           install due to licensing restrictions.  Javamail.jar will need to be downloaded.

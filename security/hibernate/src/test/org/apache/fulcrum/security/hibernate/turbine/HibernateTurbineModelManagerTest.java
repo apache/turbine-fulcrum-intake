@@ -42,8 +42,8 @@ public class HibernateTurbineModelManagerTest
 
         try
         {
-            this.setRoleFileName(null);
-            this.setConfigurationFileName("src/test/TurbineHibernate.xml");
+            this.setRoleFileName("src/test/TurbineHibernateRoleConfig.xml");
+            this.setConfigurationFileName("src/test/TurbineHibernateComponentConfig.xml");
             HibernateService hibernateService =
                 (HibernateService) lookup(HibernateService.ROLE);
             HibernateHelper.exportSchema(hibernateService.getConfiguration());

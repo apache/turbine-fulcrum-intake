@@ -3,5 +3,6 @@
     <role
         name="org.apache.fulcrum.testcontainer.SimpleComponent"
         shorthand="SimpleComponent"
+        early-init="true"
         default-class="org.apache.fulcrum.testcontainer.SimpleComponentImpl"/>
 </role-list>

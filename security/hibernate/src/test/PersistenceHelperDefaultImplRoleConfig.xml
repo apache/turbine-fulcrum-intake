@@ -1,0 +1,25 @@
+<!-- This configuration file for Avalon components is used for testing the TestComponent -->
+<role-list>
+    <role
+        name="org.apache.fulcrum.security.SecurityService"
+        shorthand="securityService"
+        default-class="org.apache.fulcrum.security.BaseSecurityService"/>
+   
+    <role
+        name="org.apache.fulcrum.security.GroupManager"
+        shorthand="groupManager"
+        default-class="org.apache.fulcrum.security.hibernate.HibernateGroupManagerImpl"/>
+
+    <role
+        name="org.apache.fulcrum.security.ModelManager"
+        shorthand="modelManager"
+        default-class="org.apache.fulcrum.security.hibernate.dynamic.HibernateModelManagerImpl"/>                                   
+
+    <role
+        name="org.apache.fulcrum.security.hibernate.PersistenceHelper"
+        shorthand="persistenceHelper"
+        default-class="org.apache.fulcrum.security.hibernate.PersistenceHelperDefaultImpl"/>                                
+
+    
+</role-list>
+ 
