@@ -53,10 +53,7 @@ package org.apache.fulcrum.crypto;
  * <http://www.apache.org/>.
  */
 
-import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
-import org.apache.avalon.util.exception.ExceptionHelper;
-
-import junit.framework.TestSuite;
+import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
  * Basic testing of the Container
@@ -65,7 +62,7 @@ import junit.framework.TestSuite;
  * @author <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>
  * @version $Id$
  */
-public class CryptoServiceTest extends AbstractMerlinTestCase
+public class CryptoServiceTest extends BaseUnitTest
 {
     private CryptoService sc = null;
     private static final String preDefinedInput = "Oeltanks";
@@ -80,153 +77,86 @@ public class CryptoServiceTest extends AbstractMerlinTestCase
         super(testName);
     }
 
-    /**
-     * Factory method for creating a TestSuite for this class.
-     *
-     * @return the test suite
-     */
-    public static TestSuite suite()
-    {
-        TestSuite suite = new TestSuite(CryptoServiceTest.class);
-        return suite;
-    }
 
     public void setUp() throws Exception
     {
         super.setUp();
-        try
-        {
-            sc = (CryptoService) this.resolve( "crypto" );
-        }
-        catch ( Exception e)
-        {
-            final String error = 
-			ExceptionHelper.packException( e.getMessage(), e, true );
-            fail( error );
-        }
+        sc = (CryptoService) this.lookup( CryptoService.ROLE );
+      
     }
 
-    public void testUnixCrypt()
+    public void testUnixCrypt() throws Exception
     {
         String preDefinedSeed = "z5";
         String preDefinedResult = "z5EQaXpuu059c";
-        try
-        {
-            CryptoAlgorithm ca = sc.getCryptoAlgorithm("unix");
-            /*
-           	* Test predefined Seed
-           	*/
-            ca.setSeed(preDefinedSeed);
-            String output = ca.encrypt(preDefinedInput);
-            assertEquals("Encryption failed ", preDefinedResult, output);
-            /*
-           	* Test random Seed
-           	*
-           	*/
-            ca.setSeed(null);
-            String result = ca.encrypt(preDefinedInput);
-            ca.setSeed(result);
-            output = ca.encrypt(preDefinedInput);
-            assertEquals("Encryption failed ", output, result);
+       
+        CryptoAlgorithm ca = sc.getCryptoAlgorithm("unix");
+        /*
+       	* Test predefined Seed
+       	*/
+        ca.setSeed(preDefinedSeed);
+        String output = ca.encrypt(preDefinedInput);
+        assertEquals("Encryption failed ", preDefinedResult, output);
+        /*
+       	* Test random Seed
+       	*
+       	*/
+        ca.setSeed(null);
+        String result = ca.encrypt(preDefinedInput);
+        ca.setSeed(result);
+        output = ca.encrypt(preDefinedInput);
+        assertEquals("Encryption failed ", output, result);
             
-        }
-        catch (Exception e)
-        {
-            final String error = 
-			ExceptionHelper.packException( e.getMessage(), e, true );
-            fail();
-        }
+       
+       
     }
 
-    public void testClearCrypt()
+    public void testClearCrypt() throws Exception
     {
         String preDefinedResult = "Oeltanks";
-        try
-        {
-            CryptoAlgorithm ca = sc.getCryptoAlgorithm("clear");
-            String output = ca.encrypt(preDefinedInput);
-            assertEquals("Encryption failed ", preDefinedResult, output);
-           
-        }
-        catch (Exception e)
-        {
-            final String error = 
-			ExceptionHelper.packException( e.getMessage(), e, true );
-            fail();
-        }
+        
+        CryptoAlgorithm ca = sc.getCryptoAlgorithm("clear");
+        String output = ca.encrypt(preDefinedInput);
+        assertEquals("Encryption failed ", preDefinedResult, output);
+       
     }
 
-    public void testOldJavaCryptMd5()
+    public void testOldJavaCryptMd5() throws Exception
     {
         String preDefinedResult = "XSop0mncK19Ii2r2CUe2";
-        try
-        {
-            CryptoAlgorithm ca = sc.getCryptoAlgorithm("oldjava");
-            ca.setCipher("MD5");
-            String output = ca.encrypt(preDefinedInput);
-            assertEquals("MD5 Encryption failed ", preDefinedResult, output);
+        
+        CryptoAlgorithm ca = sc.getCryptoAlgorithm("oldjava");
+        ca.setCipher("MD5");
+        String output = ca.encrypt(preDefinedInput);
+        assertEquals("MD5 Encryption failed ", preDefinedResult, output);
             
-        }
-        catch (Exception e)
-        {
-            final String error = 
-			ExceptionHelper.packException( e.getMessage(), e, true );
-            fail();
-        }
     }
-    public void testOldJavaCryptSha1()
+    public void testOldJavaCryptSha1() throws Exception
     {
         String preDefinedResult = "uVDiJHaavRYX8oWt5ctkaa7j";
-        try
-        {
-            CryptoAlgorithm ca = sc.getCryptoAlgorithm("oldjava");
-            ca.setCipher("SHA1");
-            String output = ca.encrypt(preDefinedInput);
-            assertEquals("SHA1 Encryption failed ", preDefinedResult, output);
-            
-        }
-        catch (Exception e)
-        {
-            final String error = 
-			ExceptionHelper.packException( e.getMessage(), e, true );
-            fail();
-        }
+       
+        CryptoAlgorithm ca = sc.getCryptoAlgorithm("oldjava");
+        ca.setCipher("SHA1");
+        String output = ca.encrypt(preDefinedInput);
+        assertEquals("SHA1 Encryption failed ", preDefinedResult, output);
+                  
     }
-    public void testJavaCryptMd5()
+    public void testJavaCryptMd5() throws Exception
     {
         String preDefinedResult = "XSop0mncK19Ii2r2CUe29w==";
-        try
-        {
-            CryptoAlgorithm ca = sc.getCryptoAlgorithm("java");
-            ca.setCipher("MD5");
-            String output = ca.encrypt(preDefinedInput);
-            assertEquals("MD5 Encryption failed ", preDefinedResult, output);
-           
-        }
-        catch (Exception e)
-        {
-            final String error = 
-			ExceptionHelper.packException( e.getMessage(), e, true );
-            fail();
-        }
+        CryptoAlgorithm ca = sc.getCryptoAlgorithm("java");
+        ca.setCipher("MD5");
+        String output = ca.encrypt(preDefinedInput);
+        assertEquals("MD5 Encryption failed ", preDefinedResult, output);
     }
 
-    public void testJavaCryptSha1()
+    public void testJavaCryptSha1() throws Exception
     {
         String preDefinedResult = "uVDiJHaavRYX8oWt5ctkaa7j1cw=";
-        try
-        {
-            CryptoAlgorithm ca = sc.getCryptoAlgorithm("java");
-            ca.setCipher("SHA1");
-            String output = ca.encrypt(preDefinedInput);
-            assertEquals("SHA1 Encryption failed ", preDefinedResult, output);
-            
-        }
-        catch (Exception e)
-        {
-            final String error = 
-			ExceptionHelper.packException( e.getMessage(), e, true );
-            fail();
-        }
+        CryptoAlgorithm ca = sc.getCryptoAlgorithm("java");
+        ca.setCipher("SHA1");
+        String output = ca.encrypt(preDefinedInput);
+        assertEquals("SHA1 Encryption failed ", preDefinedResult, output);
+
     }
 }
