@@ -99,16 +99,16 @@
     </developer>
   </developers>
   <dependencies>
-    <dependency>
-      <id>jaf:activation</id>
-      <version>1.0.2</version>
-      <url>http://java.sun.com/products/javabeans/glasgow/jaf.html</url>
-    </dependency>
      <dependency>
       <id>avalon-framework</id>
       <version>4.1.4</version>
       <url>http://jakarta.apache.org/avalon</url>
     </dependency>
+    <dependency>
+      <id>classworlds</id>
+      <version>1.0-beta-5</version>
+      <url>http://classworlds.werken.com/</url>
+    </dependency>    
     <dependency>
       <id>excalibur-collections</id>
       <version>1.0</version>
@@ -192,6 +192,11 @@
       <url>http://www.dom4j.org/</url>
     </dependency>
     <dependency>
+      <id>hsqldb</id>
+      <version>1.7.1</version>
+      <url>http://hsqldb.sourceforge.net/</url>
+    </dependency>
+    <dependency>
       <id>jdbc</id>
       <version>2.0</version>
       <url>http://java.sun.com/products/jdbc/download.html#spec</url>
@@ -201,16 +206,23 @@
       <version>1.2.1</version>
       <url>http://java.sun.com/products/jndi/</url>
     </dependency>
+    <!--
     <dependency>
       <id>junit</id>
       <version>3.8.1</version>
       <url>http://www.junit.org/</url>
     </dependency>
+    -->
     <dependency>
       <id>log4j</id>
       <version>1.2.7</version>
       <url>http://jakarta.apache.org/log4j/</url>
     </dependency>
+    <dependency>
+      <id>jaf:activation</id>
+      <version>1.0.2</version>
+      <url>http://java.sun.com/products/javabeans/glasgow/jaf.html</url>
+    </dependency>    
     <dependency>
       <id>javamail</id>
       <version>1.3</version>
@@ -220,6 +232,11 @@
       <id>logkit</id>
       <version>1.0.1</version>
       <url>http://jakarta.apache.org/avalon</url>
+    </dependency>
+     <dependency>
+      <id>plexus</id>
+      <version>0.3</version>
+      <url>http://plexus.werken.com/</url>
     </dependency>
     <dependency>
       <id>regexp</id>
@@ -276,6 +293,27 @@
       <version>1.2-a1</version>
       <url>http://xml.apache.org/xmlrpc/</url>
     </dependency>
+    <dependency>
+      <id>hibernate</id>      
+      <version>1.2.4</version>
+      <properties>        
+      <war.bundle.jar>true</war.bundle.jar>
+      </properties>
+    </dependency>              
+    <dependency>
+      <id>odmg</id>      
+      <version>3.0</version>
+      <properties>        
+      <war.bundle.jar>true</war.bundle.jar>
+      </properties>
+    </dependency>                  
+    <dependency>
+      <id>jcs</id>      
+      <version>hibernate</version>
+      <properties>        
+      <war.bundle.jar>true</war.bundle.jar>
+      </properties>
+    </dependency>         
   </dependencies>
   <build>
     <nagEmailAddress>turbine-dev@jakarta.apache.org</nagEmailAddress>
@@ -290,26 +328,52 @@
       <excludes>
         <exclude>**/XmlRpcTest.java</exclude>
       </excludes>
+	  <resources>
+        <resource>
+          <directory>src/test/org/apache/fulcrum/db/</directory> 
+          <targetPath>org/apache/fulcrum/db/</targetPath> 
+          <includes>
+            <include>**/*.*</include> 
+          </includes>
+        </resource>
+      </resources>
     </unitTest>
 
     <resources>
       <includes>
         <include>**/avalon-roles.xml</include>
       </includes>
+      <includes>
+        <include>**/hibernate.properties</include>
+      </includes>
+      <resource>
+        <directory>src/test</directory>
+        <targetPath>/</targetPath>
+        <includes>
+          <include>**/hibernate.properties</include>
+        </includes>
+      </resource>  
     </resources>
+
 
     <jars/>
   </build>
   <reports>
+  <!--
     <report>maven-jdepend-plugin</report>
+    -->
     <report>maven-checkstyle-plugin</report>
     <report>maven-changelog-plugin</report>
     <report>maven-developer-activity-plugin</report>
     <report>maven-file-activity-plugin</report>
     <report>maven-javadoc-plugin</report>
     <report>maven-jxr-plugin</report>
+    <!--
     <report>maven-junit-report-plugin</report>
+    <report>maven-linkcheck-plugin</report>
+    -->
     <report>maven-tasklist-plugin</report>
+    
 
   </reports>
 
