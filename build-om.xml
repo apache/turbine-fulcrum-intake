@@ -25,6 +25,7 @@
         <pathelement location="${velocity.jar}"/>
         <pathelement location="${torque.jar}"/>
         <pathelement location="${xerces.jar}"/>
+        <pathelement location="${commons-util.jar}"/>
       </classpath>
     </taskdef>
   </target>
