@@ -203,10 +203,9 @@ public class FileHandler
              * velocity ContentResource class.
              */
 
-            StringWriter sw = new StringWriter();
+            sw = new StringWriter();
 
-            BufferedReader reader = new BufferedReader(
-                new InputStreamReader(
+            reader = new BufferedReader(new InputStreamReader(
                     new FileInputStream(file)));
 
             char buf[] = new char[1024];
@@ -236,7 +235,7 @@ public class FileHandler
             }
             catch (Exception e)
             {
- 
+
             }
         }
     }
