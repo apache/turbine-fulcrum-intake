@@ -32,8 +32,8 @@ public class MemoryGroupManagerTest extends AbstractGroupManagerTest
    {
 	   try
 	   {
-	       this.setRoleFileName(null);
-		   this.setConfigurationFileName("src/test/DynamicMemory.xml");
+           this.setRoleFileName("src/test/DynamicMemoryRoleConfig.xml");
+           this.setConfigurationFileName("src/test/DynamicMemoryComponentConfig.xml");
 		   securityService = (SecurityService) lookup(SecurityService.ROLE);
 		   groupManager = securityService.getGroupManager();
 	   }

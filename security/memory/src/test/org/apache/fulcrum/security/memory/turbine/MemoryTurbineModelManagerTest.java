@@ -37,8 +37,8 @@ public class MemoryTurbineModelManagerTest
     public void setUp() throws Exception
     {
 
-        this.setRoleFileName(null);
-        this.setConfigurationFileName("src/test/TurbineMemory.xml");
+        this.setRoleFileName("src/test/TurbineMemoryRoleConfig.xml");
+        this.setConfigurationFileName("src/test/TurbineMemoryComponentConfig.xml");
         securityService = (SecurityService) lookup(SecurityService.ROLE);
         super.setUp();
 

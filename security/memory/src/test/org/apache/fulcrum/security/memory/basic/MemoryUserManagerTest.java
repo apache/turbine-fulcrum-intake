@@ -24,16 +24,13 @@ import org.apache.fulcrum.security.model.test.AbstractUserManagerTest;
  */
 public class MemoryUserManagerTest extends AbstractUserManagerTest
 {
-    public static void main(String[] args)
-    {
-        junit.textui.TestRunner.run(MemoryUserManagerTest.class);
-    }
+
     public void setUp()
     {
         try
         {
-			this.setRoleFileName(null);
-			this.setConfigurationFileName("src/test/BasicMemory.xml");
+            this.setRoleFileName("src/test/BasicMemoryRoleConfig.xml");
+			this.setConfigurationFileName("src/test/BasicMemoryComponentConfig.xml");
 			securityService = (SecurityService) lookup(SecurityService.ROLE);
             userManager = securityService.getUserManager();
         }

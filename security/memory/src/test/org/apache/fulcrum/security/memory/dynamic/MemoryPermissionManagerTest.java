@@ -23,17 +23,13 @@ import org.apache.fulcrum.security.model.test.AbstractPermissionManagerTest;
  */
 public class MemoryPermissionManagerTest extends AbstractPermissionManagerTest
 {
-    public static void main(String[] args)
-    {
-        junit.textui.TestRunner.run(MemoryPermissionManagerTest.class);
-    }
+
     public void setUp()
-    {
-        
+    {        
         try
         {
-            this.setRoleFileName(null);
-            this.setConfigurationFileName("src/test/DynamicMemory.xml");
+            this.setRoleFileName("src/test/DynamicMemoryRoleConfig.xml");
+            this.setConfigurationFileName("src/test/DynamicMemoryComponentConfig.xml");
             securityService = (SecurityService) lookup(SecurityService.ROLE);
             permissionManager = securityService.getPermissionManager();
         }

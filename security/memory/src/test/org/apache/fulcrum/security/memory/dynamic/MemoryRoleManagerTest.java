@@ -25,16 +25,13 @@ import org.apache.fulcrum.security.model.test.AbstractRoleManagerTest;
  */
 public class MemoryRoleManagerTest extends AbstractRoleManagerTest
 {
-    public static void main(String[] args)
-    {
-        junit.textui.TestRunner.run(MemoryRoleManagerTest.class);
-    }
+
     public void setUp()
     {
         try
         {
-			this.setRoleFileName(null);
-			this.setConfigurationFileName("src/test/DynamicMemory.xml");
+            this.setRoleFileName("src/test/DynamicMemoryRoleConfig.xml");
+            this.setConfigurationFileName("src/test/DynamicMemoryComponentConfig.xml");
 			securityService = (SecurityService) lookup(SecurityService.ROLE);
             roleManager = (RoleManager) securityService.getRoleManager();
         }
