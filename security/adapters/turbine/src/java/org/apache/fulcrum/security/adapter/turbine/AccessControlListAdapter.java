@@ -58,6 +58,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.fulcrum.security.model.basic.BasicAccessControlList;
 import org.apache.fulcrum.security.model.dynamic.DynamicAccessControlList;
 import org.apache.turbine.om.security.Group;
 import org.apache.turbine.om.security.Permission;
@@ -77,7 +78,7 @@ import org.apache.turbine.util.security.RoleSet;
 public class AccessControlListAdapter implements AccessControlList
 {
     private static Log log = LogFactory.getLog(AccessControlListAdapter.class);
-    private DynamicAccessControlList acl;
+    private org.apache.fulcrum.security.acl.AccessControlList acl;
     /**
      *
      */
@@ -85,7 +86,7 @@ public class AccessControlListAdapter implements AccessControlList
     {
         super();
     }
-    public AccessControlListAdapter(DynamicAccessControlList acl)
+    public AccessControlListAdapter(org.apache.fulcrum.security.acl.AccessControlList acl)
     {
         super();
         this.acl = acl;
@@ -120,8 +121,11 @@ public class AccessControlListAdapter implements AccessControlList
      */
     public PermissionSet getPermissions()
     {
+        if (!(acl instanceof DynamicAccessControlList)){
+			throw new RuntimeException("ACL doesn't support this opperation");
+        }
         PermissionSet turbinePS = new PermissionSet();
-        org.apache.fulcrum.security.util.PermissionSet fulcrumPS = acl.getPermissions();
+        org.apache.fulcrum.security.util.PermissionSet fulcrumPS = ((DynamicAccessControlList)acl).getPermissions();
         for (Iterator i = fulcrumPS.iterator(); i.hasNext();)
         {
             org.apache.fulcrum.security.entity.Permission fulcrumPermission =
@@ -166,11 +170,18 @@ public class AccessControlListAdapter implements AccessControlList
     {
 		throw new RuntimeException("Unsupported operation");
     }
-    /* (non-Javadoc)
+    /* For a DynamicACL, checks the role.  But, for a BasicACL, it maps
+     * roles onto BasicGroup's.
      * @see org.apache.turbine.util.security.AccessControlList#hasRole(java.lang.String)
      */
-    public boolean hasRole(String arg0)
+    public boolean hasRole(String roleName)
     {
+		if (acl instanceof DynamicAccessControlList){
+			return ((DynamicAccessControlList)acl).hasRole(roleName);
+		}
+		else if (acl instanceof BasicAccessControlList){
+		    return ((BasicAccessControlList)acl).hasGroup(roleName);
+		}
 		throw new RuntimeException("Unsupported operation");
     }
     /* (non-Javadoc)
