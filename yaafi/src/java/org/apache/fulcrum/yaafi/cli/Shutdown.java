@@ -18,7 +18,6 @@ package org.apache.fulcrum.yaafi.cli;
  */
 
 import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.logger.Logger;
 
 /**
  * This class process the shutdown notification from the JVM.
@@ -30,26 +29,21 @@ public class Shutdown implements Runnable
 {
     /** The service manager tobe disposed */
     private Disposable disposable;
-
-    /** The logger to use */
-    private Logger logger;
-
+    
     /**
      * Constructor
      * @param disposable The service manager to be disposed
      */
-    public Shutdown( Disposable disposable, Logger logger )
+    public Shutdown( Disposable disposable )
     {
         this.disposable = disposable;
-        this.logger     = logger;
     }
 
     /**
      * @see java.lang.Runnable#run()
      */
     public void run()
-    {
-        this.logger.debug("The JVM is shutting down");
+    {        
         this.disposable.dispose();
         this.disposable = null;
     }
