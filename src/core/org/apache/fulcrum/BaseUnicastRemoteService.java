@@ -56,7 +56,7 @@ package org.apache.fulcrum;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import org.apache.commons.collections.ExtendedProperties;
+import org.apache.stratum.configuration.Configuration;
 import org.apache.log4j.Category;
 
 /**
@@ -67,12 +67,13 @@ import org.apache.log4j.Category;
  * implementation is a RMI server object.
  *
  * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
+ * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  */
 public class BaseUnicastRemoteService
     extends UnicastRemoteObject
     implements Service
 {
-    protected ExtendedProperties configuration;
+    protected Configuration configuration;
     private boolean isInitialized;
     private String name;
     private ServiceBroker serviceBroker;
@@ -90,7 +91,7 @@ public class BaseUnicastRemoteService
      *
      * @return The configuration of this service.
      */
-    public ExtendedProperties getConfiguration()
+    public Configuration getConfiguration()
     {
         if (name == null)
         {

@@ -76,6 +76,7 @@ import org.apache.fulcrum.InitializationException;
 import org.apache.fulcrum.template.TurbineTemplate;
 import org.apache.fulcrum.template.TemplateContext;
 import org.apache.fulcrum.template.BaseTemplateEngineService;
+import org.apache.stratum.configuration.ConfigurationConverter;
 
 /**
  * This is a Service that can process Velocity templates from within a
@@ -98,6 +99,7 @@ import org.apache.fulcrum.template.BaseTemplateEngineService;
  * @author <a href="mailto:sean@informage.ent">Sean Legassick</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
+ * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
 public class TurbineVelocityService
@@ -129,7 +131,7 @@ public class TurbineVelocityService
      * The EventCartridge that is used against all contexts
      */
     private EventCartridge eventCartridge;
-    
+
     /**
      * Performs early initialization of this Turbine service.
      */
@@ -243,7 +245,7 @@ public class TurbineVelocityService
      * @see org.apache.fulcrum.template.TemplateEngineService#handleRequest(
      * Context, String, Writer)
      */
-    public void handleRequest(TemplateContext context, 
+    public void handleRequest(TemplateContext context,
                                        String template, Writer writer)
         throws ServiceException
     {
@@ -274,15 +276,15 @@ public class TurbineVelocityService
             // need to convert to a VelocityContext because EventCartridges
             // need that. this sucks because it seems like unnecessary
             // object creation.
-            VelocityContext velocityContext = new VelocityContext(context);        
-    
+            VelocityContext velocityContext = new VelocityContext(context);
+
             // Attach the EC to the context
             getEventCartridge().attachToContext(velocityContext);
 
             if (encoding != null)
             {
                 // Request scoped encoding first supported by Velocity 1.1.
-                Velocity.mergeTemplate(filename, encoding, 
+                Velocity.mergeTemplate(filename, encoding,
                                        velocityContext, writer);
             }
             else
@@ -393,7 +395,7 @@ public class TurbineVelocityService
      * <code>
      * services.VelocityService.eventCartridge.classes = org.tigris.scarab.util.ReferenceInsertionFilter
      * </code>
-     * and list out (comma separated) the list of EC's that you want to 
+     * and list out (comma separated) the list of EC's that you want to
      * initialize.
      */
     private void initEventCartridges()
@@ -435,13 +437,13 @@ public class TurbineVelocityService
                     result = getEventCartridge()
                         .addEventHandler((MethodExceptionEventHandler)obj);
                 }
-                getCategory().info("Added EventCartridge: " + 
+                getCategory().info("Added EventCartridge: " +
                     obj.getClass().getName() + " : " + result);
             }
             catch (Exception h)
             {
                 throw new InitializationException(
-                    "Could not initialize EventCartridge: " + 
+                    "Could not initialize EventCartridge: " +
                     className, h);
             }
         }
@@ -541,7 +543,8 @@ public class TurbineVelocityService
 
         try
         {
-            Velocity.setExtendedProperties(getConfiguration());
+            Velocity.setExtendedProperties(ConfigurationConverter
+                    .getExtendedProperties(getConfiguration()));
             Velocity.init();
         }
         catch(Exception e)

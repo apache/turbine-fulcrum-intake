@@ -3,7 +3,7 @@ package org.apache.fulcrum;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,7 +54,7 @@ package org.apache.fulcrum;
  * <http://www.apache.org/>.
  */
 
-import org.apache.commons.collections.ExtendedProperties;
+import org.apache.stratum.configuration.Configuration;
 import org.apache.log4j.Category;
 
 /**
@@ -68,6 +68,7 @@ import org.apache.log4j.Category;
  * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
  * @author <a href="mailto:leonardr@collab.net">Leonard Richardson</a>
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+ * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
 public interface Service
@@ -108,8 +109,7 @@ public interface Service
      * @exception InitializationException, if initialization of this
      * class was not successful.
      */
-    public void init( )
-        throws InitializationException;
+    public void init( ) throws InitializationException;
 
     /**
      * Returns a <code>Service</code> to an uninitialized state.
@@ -156,7 +156,7 @@ public interface Service
      *
      * @return The configuration of this <code>Service</code>.
      */
-    public ExtendedProperties getConfiguration();
+    public Configuration getConfiguration();
 
     /**
      * Given a relative paths, gets the real path.
@@ -173,6 +173,5 @@ public interface Service
      *
      * @return Text describing service status.
      */
-    public String getStatus()
-        throws ServiceException;
+    public String getStatus() throws ServiceException;
 }

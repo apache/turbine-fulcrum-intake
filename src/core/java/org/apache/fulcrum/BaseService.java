@@ -3,7 +3,7 @@ package org.apache.fulcrum;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,10 +54,9 @@ package org.apache.fulcrum;
  * <http://www.apache.org/>.
  */
 
-import java.util.Properties;
 import java.util.List;
 
-import org.apache.commons.collections.ExtendedProperties;
+import org.apache.stratum.configuration.Configuration;
 import org.apache.log4j.Category;
 
 /**
@@ -68,10 +67,10 @@ import org.apache.log4j.Category;
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:leonardr@segfault.org">Leonard Richardson</a>
+ * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
-public abstract class BaseService
-    implements Service
+public abstract class BaseService implements Service
 {
     /**
      * Initialization status of this class.
@@ -84,16 +83,9 @@ public abstract class BaseService
     protected ServiceBroker serviceBroker;
 
     /**
-     * The properties of this service. These will
-     * soon go away. We will use a Configuration
-     * interface.
-     */
-    protected Properties properties;
-
-    /**
      * Configuration for this service.
      */
-    protected ExtendedProperties configuration;
+    protected Configuration configuration;
 
     /**
      * The name of this Service.
@@ -108,8 +100,7 @@ public abstract class BaseService
      * @see org.apache.fulcrum.Service#init()
      * @see org.apache.fulcrum.BaseService#setInit(boolean value)
      */
-    public abstract void init()
-        throws InitializationException;
+    public abstract void init() throws InitializationException;
 
     /**
      * Returns an Initable to uninitialized state.
@@ -141,8 +132,7 @@ public abstract class BaseService
      *
      * @see org.apache.fulcrum.Service#getStatus()
      */
-    public String getStatus()
-        throws ServiceException
+    public String getStatus() throws ServiceException
     {
         return (isInitialized() ? "Initialized" : "Uninitialized");
     }
@@ -192,7 +182,7 @@ public abstract class BaseService
      *
      * @param broker The ServiceBroker that instantiated this object.
      */
-    public void setServiceBroker( ServiceBroker broker )
+    public void setServiceBroker(ServiceBroker broker)
     {
         this.serviceBroker = broker;
     }
@@ -212,7 +202,7 @@ public abstract class BaseService
      *
      * @return The Configuration of this Service.
      */
-    public ExtendedProperties getConfiguration()
+    public Configuration getConfiguration()
     {
         if (name == null)
         {

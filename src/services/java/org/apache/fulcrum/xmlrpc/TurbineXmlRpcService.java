@@ -75,11 +75,10 @@ import org.apache.xmlrpc.XmlRpcServer;
 import org.apache.xmlrpc.secure.SecureWebServer;
 import org.apache.xmlrpc.secure.SecurityTool;
 
-import org.apache.commons.collections.ExtendedProperties;
+import org.apache.stratum.configuration.Configuration;
 
 /**
- * This is a service which will make an xml-rpc call to a remote
- * server.
+ * This is a service which will make an xml-rpc call to a remote server.
  *
  * Here's an example of how it would be done:
  * <blockquote><code><pre>
@@ -99,6 +98,7 @@ import org.apache.commons.collections.ExtendedProperties;
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @author <a href="mailto:jvanzyl@periapt.com">Jason van Zyl</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
+ * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
 public class TurbineXmlRpcService
@@ -136,7 +136,7 @@ public class TurbineXmlRpcService
                     // and the URL https connection handler that is
                     // used in XmlRpcClient.
 
-                    ExtendedProperties secureServerOptions =
+                    Configuration secureServerOptions =
                         getConfiguration().subset("secure.server.option");
 
                     Iterator i = secureServerOptions.getKeys();

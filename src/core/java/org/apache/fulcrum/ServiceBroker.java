@@ -3,7 +3,7 @@ package org.apache.fulcrum;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,7 +57,7 @@ package org.apache.fulcrum;
 import java.util.List;
 import java.util.Hashtable;
 
-import org.apache.commons.collections.ExtendedProperties;
+import org.apache.stratum.configuration.Configuration;
 import org.apache.log4j.Category;
 
 /**
@@ -81,6 +81,7 @@ import org.apache.log4j.Category;
  * @author <a href="mailto:krzewski@e-point.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+ * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
 public interface ServiceBroker
@@ -141,7 +142,7 @@ public interface ServiceBroker
      * @param name The name of the service.
      * @return Configuration of the requested service.
      */
-    public ExtendedProperties getConfiguration( String name );
+    public Configuration getConfiguration( String name );
 
     /**
      * Set an object for use in the services.

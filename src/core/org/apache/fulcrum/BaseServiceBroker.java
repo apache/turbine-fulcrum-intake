@@ -3,7 +3,7 @@ package org.apache.fulcrum;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -67,7 +67,8 @@ import java.util.Properties;
 import java.util.Stack;
 
 import org.apache.fulcrum.ServiceException;
-import org.apache.commons.collections.ExtendedProperties;
+import org.apache.stratum.configuration.BaseConfiguration;
+import org.apache.stratum.configuration.Configuration;
 import org.apache.log4j.Category;
 import org.apache.log4j.helpers.NullEnumeration;
 
@@ -86,15 +87,15 @@ import org.apache.log4j.helpers.NullEnumeration;
  * @author <a href="mailto:krzewski@e-point.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+ * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
-public abstract class BaseServiceBroker 
-    implements ServiceBroker
+public abstract class BaseServiceBroker implements ServiceBroker
 {
     /**
      * Mapping of Service names to class names.
      */
-    protected ExtendedProperties mapping = new ExtendedProperties();
+    protected Configuration mapping = (Configuration) new BaseConfiguration();
 
     /**
      * A repository of Service instances.
@@ -106,7 +107,7 @@ public abstract class BaseServiceBroker
      * The configuration should be set by the application
      * in which the services framework is running.
      */
-    protected ExtendedProperties configuration;
+    protected Configuration configuration;
 
     /**
      * A prefix for <code>Service</code> properties in
@@ -160,13 +161,13 @@ public abstract class BaseServiceBroker
     protected BaseServiceBroker()
     {
     }
-    
+
     /**
      * Determine whether log4j has already been configured.
      *
      * @return boolean Whether log4j is configured.
      */
-    protected boolean isLoggingConfigured() 
+    protected boolean isLoggingConfigured()
     {
         // This is a note from Ceki, taken from a message on the log4j
         // user list:
@@ -177,28 +178,28 @@ public abstract class BaseServiceBroker
         // is the existence of appenders. The correct procedure is to
         // first check for appenders in the root category and if that
         // returns no appenders to check in other categories.
-        
+
         Enumeration enum = Category.getRoot().getAllAppenders();
-             
+
         if (!(enum instanceof NullEnumeration))
         {
             return true;
-        } 
-        else 
-        { 
+        }
+        else
+        {
             Enumeration cats =  Category.getCurrentCategories();
-            while(cats.hasMoreElements()) 
+            while(cats.hasMoreElements())
             {
                 Category c = (Category) cats.nextElement();
                 if (!(c.getAllAppenders() instanceof NullEnumeration))
                 {
                     return true;
-                }                     
+                }
             }
         }
-             
+
         return false;
-    } 
+    }
 
     /**
      * Set the configuration object for the services broker.
@@ -208,7 +209,7 @@ public abstract class BaseServiceBroker
      *
      * @param configuration Broker configuration.
      */
-    public void setConfiguration(ExtendedProperties configuration)
+    public void setConfiguration(Configuration configuration)
     {
         this.configuration = configuration;
     }
@@ -218,7 +219,7 @@ public abstract class BaseServiceBroker
      *
      * @return Broker configuration.
      */
-    public ExtendedProperties getConfiguration()
+    public Configuration getConfiguration()
     {
         return configuration;
     }
@@ -239,8 +240,7 @@ public abstract class BaseServiceBroker
     /**
      * Initialize this service manager.
      */
-    public void init()
-        throws InitializationException
+    public void init() throws InitializationException
     {
         // Check:
         //
@@ -696,7 +696,7 @@ public abstract class BaseServiceBroker
      *
      * @param name The name of the service.
      */
-    public ExtendedProperties getConfiguration( String name )
+    public Configuration getConfiguration( String name )
     {
         return configuration.subset(SERVICE_PREFIX + name);
     }

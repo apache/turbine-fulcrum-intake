@@ -3,7 +3,7 @@ package org.apache.fulcrum;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,7 +54,7 @@ package org.apache.fulcrum;
  * <http://www.apache.org/>.
  */
 
-import org.apache.commons.collections.ExtendedProperties;
+import org.apache.stratum.configuration.Configuration;
 import org.apache.log4j.Category;
 
 /**
@@ -66,23 +66,22 @@ import org.apache.log4j.Category;
  * of the manager.
  *
  * @author <a href="mailto:ilkka.priha@simsoft.fi">Ilkka Priha</a>
+ * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
-public interface ServiceManager
-    extends ServiceBroker
+public interface ServiceManager extends ServiceBroker
 {
     /**
      * Initialize this service manager.
      */
-    public void init()
-        throws InitializationException;
+    public void init() throws InitializationException;
 
     /**
      * Get the configuration for this service manager.
      *
      * @return Manager configuration.
      */
-    public ExtendedProperties getConfiguration();
+    public Configuration getConfiguration();
 
     /**
      * Set the configuration object for the services broker.
@@ -92,7 +91,7 @@ public interface ServiceManager
      *
      * @param configuration Manager configuration.
      */
-    public void setConfiguration(ExtendedProperties configuration);
+    public void setConfiguration(Configuration configuration);
 
     /**
      * Set the application root.
