@@ -62,9 +62,6 @@ import org.apache.avalon.framework.activity.Startable;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.context.Context;
-import org.apache.avalon.framework.context.ContextException;
-import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
@@ -96,7 +93,7 @@ import java.util.Vector;
  */
 public class DefaultXmlRpcComponent
     extends AbstractLogEnabled
-    implements Contextualizable,Configurable, Initializable, Startable,
+    implements Configurable, Initializable, Startable,
         Disposable, Serviceable, XmlRpcComponent
 {
     /** The service manager for this component. */
@@ -129,9 +126,6 @@ public class DefaultXmlRpcComponent
     /** Message Listeners. */
     private List listeners;
 
-    /** Current working directory */
-    String workingDirectory;
-
     /** Default Constructor. */
     public DefaultXmlRpcComponent()
     {
@@ -139,15 +133,8 @@ public class DefaultXmlRpcComponent
     }
 
     // ----------------------------------------------------------------------
-    // Lifecylce Management
+    // Lifecycle Management
     // ----------------------------------------------------------------------
-
-    /** @see Contextualizable#contextualize */
-    public void contextualize( Context context )
-        throws ContextException
-    {
-        workingDirectory = (String) context.get("ComponentAppRoot");
-    }
 
     public void configure(Configuration configuration)
         throws ConfigurationException
@@ -236,6 +223,7 @@ public class DefaultXmlRpcComponent
     public void start()
         throws Exception
     {
+        webserver.start();
     }
 
     /**
@@ -342,18 +330,6 @@ public class DefaultXmlRpcComponent
     public void stop()
         throws Exception
     {
-        dispose();
-    }
-
-    // ------------------------------------------------------------------------
-    // D I S P O S A B L E
-    // ------------------------------------------------------------------------
-
-    /**
-     * Shuts down this service, stopping running threads.
-     */
-    public void dispose()
-    {
         // Stop the XML RPC server.  org.apache.xmlrpc.WebServer blocks in a
         // call to ServerSocket.accept() until a socket connection is made.
         webserver.shutdown();
@@ -369,6 +345,18 @@ public class DefaultXmlRpcComponent
                     "It's possible the xmlrpc server was not shutdown: "
                     + notShutdown.getMessage());
         }
+    }
+
+    // ------------------------------------------------------------------------
+    // D I S P O S A B L E
+    // ------------------------------------------------------------------------
+
+    /**
+     * Shuts down this service, stopping running threads.
+     */
+    public void dispose()
+    {
+        webserver = null;
     }
 
     // ------------------------------------------------------------------------
