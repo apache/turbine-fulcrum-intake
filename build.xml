@@ -37,15 +37,21 @@
     <echo message="java.home = ${java.home}"/>
     <echo message="user.home = ${user.home}"/>
     <echo message="lib.repo = ${lib.repo}"/>
+
     <echo message="velocity.jar = ${velocity.jar}"/>
     <echo message="log4j.jar = ${log4j.jar}"/>
-    <echo message="torque.jar = ${torque.jar}"/>
+    <echo message="xerces.jar = ${xerces.jar}"/>
     <echo message="bsf.jar = ${bsf.jar}"/>
+    <echo message="torque.jar = ${torque.jar}"/>
     <echo message="servlet.jar = ${servlet.jar}"/>
-    <echo message="javamail.jar = ${javamail.jar}"/>
-    <echo message="jaf.jar = ${jaf.jar}"/>
+    <echo message="jndi.jar = ${jndi.jar}"/>
     <echo message="xalan.jar = ${xalan.jar}"/>
     <echo message="xmlrpc.jar = ${xmlrpc.jar}"/>
+    <echo message="torque.jar = ${torque.jar}"/>
+    <echo message="village.jar = ${village.jar}"/>
+    <echo message="jdbc.jar = ${jdbc.jar}"/>
+    <echo message="javamail.jar = ${javamail.jar}"/>
+    <echo message="jaf.jar = ${jaf.jar}"/>
     <echo message="commons-collections.jar = ${commons-collections.jar}"/>
     <echo message="commons-util.jar = ${commons-util.jar}"/>
     <echo message="[optional] commons-email.jar = ${commons-email.jar}"/>
