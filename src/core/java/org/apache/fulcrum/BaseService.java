@@ -126,7 +126,6 @@ public abstract class BaseService
      * Returns initialization status.
      *
      * @return True if the service is initialized.
-     * @see org.apache.fulcrum.Service#getInit()
      * @see org.apache.fulcrum.Service#isInitialized()
      * @deprecated use isInitialized() which uses proper bean semantics.
      */
@@ -229,7 +228,7 @@ public abstract class BaseService
     }
 
     /**
-     * @see org.apache.fulcrum.ServiceBroker#getServiceObject()
+     * @see org.apache.fulcrum.ServiceBroker#getServiceObject(String)
      */
     public Object getServiceObject(String name)
     {
@@ -237,7 +236,7 @@ public abstract class BaseService
     }
 
     /**
-     * @see org.apache.fulcrum.Service#getRealPath()
+     * @see org.apache.fulcrum.ServiceBroker#getRealPath(String)
      */
     public String getRealPath(String path)
     {

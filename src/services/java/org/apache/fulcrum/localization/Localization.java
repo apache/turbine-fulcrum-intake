@@ -105,7 +105,7 @@ public abstract class Localization
     }
 
     /**
-     * @see org.apache.fulcrum.localization.LocalizationService#getString(String, Locale, String)
+     * @see LocalizationService#getString(String, Locale, String)
      */
     public static String getString(Locale locale, String key)
     {
@@ -116,7 +116,7 @@ public abstract class Localization
      * Fetches the localized text from the specified bundle, ignoring
      * any default bundles.
      *
-     * @see org.apache.fulcrum.localization.LocalizationService#getString(String, Locale, String)
+     * @see LocalizationService#getString(String, Locale, String)
      */
     public static String getString(String bundleName, Locale locale,
                                    String key)
@@ -125,7 +125,13 @@ public abstract class Localization
     }
 
     /**
-     * @see org.apache.fulcrum.localization.LocalizationService#getString(HttpServletRequest, String)
+     * Convenience method that pulls a localized string off the
+     * LocalizationService using the ResourceBundle based on HTTP
+     * Accept-Language header in HttpServletRequest.
+     *
+     * @param req The HTTP request to parse the <code>Accept-Language</code> of.
+     * @param key Name of string.
+     * @return A localized string.
      */
     public static String getString(HttpServletRequest req, String key)
     {
@@ -216,7 +222,7 @@ public abstract class Localization
      * This method sets the name of the default bundle.
      *
      * @param defaultBundle Name of default bundle.
-     * @see org.apache.fulcrum.localization.LocalizationService#setBundle(String)
+     * @see LocalizationService#setBundle(String)
      */
     public static void setBundle(String defaultBundle)
     {
@@ -224,7 +230,7 @@ public abstract class Localization
     }
 
     /**
-     * @see org.apache.fulcrum.localization.LocalizationService#getLocale(HttpServletRequest)
+     * @see LocalizationService#getLocale(HttpServletRequest)
      */
     public static Locale getLocale(HttpServletRequest req)
     {
@@ -244,7 +250,7 @@ public abstract class Localization
     }
 
     /**
-     * @see org.apache.fulcrum.localization.LocalizationService#getDefaultBundleName()
+     * @see LocalizationService#getDefaultBundleName()
      */
     public static String getDefaultBundleName()
     {
@@ -263,7 +269,7 @@ public abstract class Localization
     }
 
     /**
-     * @see org.apache.fulcrum.localization.LocalizationServie#format(String, Locale, String, Object)
+     * @see LocalizationService#format(String, Locale, String, Object)
      */
     public static String format(String bundleName, Locale locale,
                                 String key, Object arg1)
@@ -272,7 +278,7 @@ public abstract class Localization
     }
 
     /**
-     * @see org.apache.fulcrum.localization.LocalizationServie#format(String, Locale, String, Object, Object)
+     * @see LocalizationService#format(String, Locale, String, Object, Object)
      */
     public static String format(String bundleName, Locale locale,
                                 String key, Object arg1, Object arg2)
@@ -281,7 +287,7 @@ public abstract class Localization
     }
 
     /**
-     * @see org.apache.fulcrum.localization.LocalizationServie#format(String, Locale, String, Object[])
+     * @see LocalizationService#format(String, Locale, String, Object[])
      */
     public static String format(String bundleName, Locale locale,
                                 String key, Object[] args)

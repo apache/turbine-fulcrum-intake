@@ -223,9 +223,9 @@ public interface LocalizationService
      * @param key The identifier for the localized text to retrieve,
      * @param arg1 The object to use as {0} when formatting the localized text.
      * @return Formatted localized text.
-     * @see #format(String, Object[])
+     * @see #format(String, Locale, String, Object[])
      */
-    public String format(String bundleName, Locale locale, 
+    public String format(String bundleName, Locale locale,
                          String key, Object arg1);
 
     /**
@@ -237,9 +237,9 @@ public interface LocalizationService
      * @param arg1 The object to use as {0} when formatting the localized text.
      * @param arg2 The object to use as {1} when formatting the localized text.
      * @return Formatted localized text.
-     * @see #format(String, Object[])
+     * @see #format(String, Locale, String, Object[])
      */
-    public String format(String bundleName, Locale locale, 
+    public String format(String bundleName, Locale locale,
                          String key, Object arg1, Object arg2);
 
     /**
@@ -252,6 +252,6 @@ public interface LocalizationService
      *             formatting the localized text.
      * @return Formatted localized text.
      */
-    public String format(String bundleName, Locale locale, 
+    public String format(String bundleName, Locale locale,
                          String key, Object[] args);
 }

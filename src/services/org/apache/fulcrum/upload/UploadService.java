@@ -127,8 +127,8 @@ public interface UploadService
      * multipart request will be performed automaticaly by {@link
      * org.apache.fulcrum.util.parser.ParameterParser}.  Otherwise, an {@link
      * org.apache.turbine.modules.Action} may decide to to parse the
-     * request by calling {@link #parseRequest(HttpServletRequest,
-     * ParameterParser, String) parseRequest} manually.
+     * request by calling {@link #parseRequest(HttpServletRequest, String)
+     * parseRequest} manually.
      */
     public static final boolean AUTOMATIC_DEFAULT = false;
 
@@ -194,8 +194,7 @@ public interface UploadService
      * the request or storing files.
      */
     public ArrayList parseRequest( HttpServletRequest req, String path )
-
-throws ServiceException;
+            throws ServiceException;
 
     /**
      * <p> Retrieves the value of <code>size.max</code> property of the

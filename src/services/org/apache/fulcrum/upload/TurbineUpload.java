@@ -150,8 +150,8 @@ public abstract class TurbineUpload
     /**
      * <p> Performs parsing the request and storing files and form
      * fields.  Default file repository is used.  This method is
-     * called by the {@link ParameterParser} if automatic upload is
-     * enabled.
+     * called by the {@link org.apache.fulcrum.util.parser.ParameterParser} if
+     * automatic upload is enabled.
      *
      * @param req The servlet request to be parsed.
      * @param params The ParameterParser instance to insert form
