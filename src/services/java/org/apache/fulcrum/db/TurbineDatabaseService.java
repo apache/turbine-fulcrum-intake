@@ -66,7 +66,7 @@ import org.apache.torque.pool.DBConnection;
 /**
  * Turbine's default implementation of {@link DatabaseService}.
  *
- * @author <a href="mailto:jvanzyl@periapt.com">Jason van Zyl</a>
+ * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @version $Id$
  */
 public class TurbineDatabaseService
