@@ -170,14 +170,21 @@ public class TurbineIntakeService
             {
                 XmlToAppData xmlApp = new XmlToAppData();
                 appData = xmlApp.parseFile(xmlPath);
-
+                OutputStream out = null;
+                InputStream in = null;
                 try
                 {
-                    OutputStream out = new FileOutputStream(serialAppData);
+                    // write the appData file out
+                    out = new FileOutputStream(serialAppData);
                     ObjectOutputStream p = new ObjectOutputStream(out);
                     p.writeObject(appData);
                     p.flush();
-                    out.close();
+
+                    // read the file back in. for some reason on OSX 10.1
+                    // this is necessary.
+                    in = new FileInputStream(serialAppData);
+                    ObjectInputStream pin = new ObjectInputStream(in);
+                    appData = (AppData)pin.readObject();
                 }
                 catch (Exception e)
                 {
@@ -186,6 +193,17 @@ public class TurbineIntakeService
                         "because writing to " + appDataPath + " was not " +
                         "allowed.  This will require that the xml file be " +
                         "parsed when restarting the application.");
+                }
+                finally
+                {
+                    if (out != null)
+                    {
+                        out.close();
+                    }
+                    if (in != null)
+                    {
+                        in.close();
+                    }
                 }
             }
 
