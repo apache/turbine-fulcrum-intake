@@ -99,6 +99,10 @@ public class BaseUnitTest extends TestCase
 	 */
     protected void tearDown()
     {
+        if (container != null)
+        {
+            container.dispose();
+        }
         container = null;
     }
     /**
