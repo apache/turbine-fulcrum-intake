@@ -203,7 +203,7 @@ public class XmlField
      */
     public String getName()
     {
-        return StringUtils.removeUnderScores(name);
+        return StringUtils.replace(name, "_", "");
     }
 
     /**
