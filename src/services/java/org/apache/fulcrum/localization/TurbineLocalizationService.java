@@ -115,7 +115,7 @@ public class TurbineLocalizationService
     private HashMap bundles = null;
 
     /** The name of the default bundle to use. */
-    private String defaultBundle = null;
+    private String[] bundleNames = null;
 
     /**
      * The name of the default locale to use (includes language and
@@ -124,7 +124,7 @@ public class TurbineLocalizationService
     private Locale defaultLocale = null;
 
     /** The name of the default language to use. */
-    private String defaultLanguage = null;
+    private String defaultLanguage;
 
     /** The name of the default country to use. */
     private String defaultCountry = null;
@@ -139,6 +139,7 @@ public class TurbineLocalizationService
      */
     public TurbineLocalizationService()
     {
+        bundles = new HashMap();
     }
 
     /**
@@ -147,8 +148,8 @@ public class TurbineLocalizationService
     public void init()
         throws InitializationException
     {
-        bundles = new HashMap();
-        defaultBundle = getConfiguration().getString("locale.default.bundle");
+        initBundleNames(null);
+
         Locale jvmDefault = Locale.getDefault();
         defaultLanguage = getConfiguration()
             .getString("locale.default.language",
@@ -157,7 +158,41 @@ public class TurbineLocalizationService
             .getString("locale.default.country",
                        jvmDefault.getCountry()).trim();
         defaultLocale = new Locale(defaultLanguage, defaultCountry);
+
         setInit(true);
+    }
+
+    /**
+     * Initialize list of default bundle names.
+     *
+     * @param names Ignored.
+     */
+    protected void initBundleNames(String[] ignored)
+    {
+        //System.err.println("cfg=" + getConfiguration());
+        bundleNames =
+            getConfiguration().getStringArray("locale.default.bundles");
+        String name = getConfiguration().getString("locale.default.bundle");
+        if (name != null && name.length() > 0)
+        {
+            // Using old-style single bundle name property.
+            if (bundleNames == null || bundleNames.length <= 0)
+            {
+                bundleNames = new String[] { name };
+            }
+            else
+            {
+                // Prepend "default" bundle name.
+                String[] array = new String[bundleNames.length + 1];
+                array[0] = name;
+                System.arraycopy(bundleNames, 0, array, 1, bundleNames.length);
+                bundleNames = array;
+            }
+        }
+        if (bundleNames == null)
+        {
+            bundleNames = new String[0];
+        }
     }
 
     /**
@@ -177,33 +212,31 @@ public class TurbineLocalizationService
     }
 
     /**
-     * Retrieves the name of the default bundle (as specified in the
-     * config file).
+     * @see org.apache.fulcrum.localization.LocalizationService#getDefaultBundleName()
      */
     public String getDefaultBundleName()
     {
-        return defaultBundle;
+        return (bundleNames.length > 0 ? bundleNames[0] : "");
     }
 
     /**
-     * This method returns a ResourceBundle given the bundle named by
-     * the value of this service's <code>locale.default.bundle</code>
-     * property (generally <code>"DEFAULT"</code>), and the default
-     * Locale information supplied in TurbineProperties.
-     *
-     * @return A localized ResourceBundle.
+     * @see org.apache.fulcrum.localization.LocalizationService#getBundleNames()
+     */
+    public String[] getBundleNames()
+    {
+        return (String []) bundleNames.clone();
+    }
+
+    /**
+     * @see org.apache.fulcrum.localization.LocalizationService#getBundle()
      */
     public ResourceBundle getBundle()
     {
-        return getBundle(defaultBundle, (Locale) null);
+        return getBundle(getDefaultBundleName(), (Locale) null);
     }
 
     /**
-     * This method returns a ResourceBundle given the bundle name and
-     * the default Locale information supplied in TurbineProperties.
-     *
-     * @param bundleName Name of bundle.
-     * @return A localized ResourceBundle.
+     * @see org.apache.fulcrum.localization.LocalizationService#getBundle(String)
      */
     public ResourceBundle getBundle(String bundleName)
     {
@@ -234,7 +267,7 @@ public class TurbineLocalizationService
      */
     public ResourceBundle getBundle(HttpServletRequest req)
     {
-        return getBundle(defaultBundle, getLocale(req));
+        return getBundle(getDefaultBundleName(), getLocale(req));
     }
 
     /**
@@ -265,7 +298,8 @@ public class TurbineLocalizationService
     public ResourceBundle getBundle(String bundleName, Locale locale)
     {
         // Assure usable inputs.
-        bundleName = (bundleName == null ? defaultBundle : bundleName.trim());
+        bundleName = (bundleName == null ? getDefaultBundleName() :
+                      bundleName.trim());
         if (locale == null)
         {
             locale = getLocale((String) null);
@@ -318,7 +352,7 @@ public class TurbineLocalizationService
             }
             catch (MissingResourceException e)
             {
-                rb = findClosestBundle(bundleName, locale, bundlesByLocale);
+                rb = findBundleByLocale(bundleName, locale, bundlesByLocale);
                 if (rb == null)
                 {
                     throw (MissingResourceException) e.fillInStackTrace();
@@ -353,8 +387,8 @@ public class TurbineLocalizationService
      * <p>Since we're really just guessing at possible bundles to use,
      * we don't ever throw <code>MissingResourceException</code>.</p>
      */
-    private ResourceBundle findClosestBundle(String bundleName, Locale locale,
-                                             Map bundlesByLocale)
+    private ResourceBundle findBundleByLocale(String bundleName, Locale locale,
+                                              Map bundlesByLocale)
     {
         ResourceBundle rb = null;
         if ( !StringUtils.isValid(locale.getCountry()) &&
@@ -413,13 +447,27 @@ public class TurbineLocalizationService
     }
 
     /**
-     * This method sets the name of the defaultBundle.
+     * This method sets the name of the first bundle in the search
+     * list (the "default" bundle).
      *
      * @param defaultBundle Name of default bundle.
      */
     public void setBundle(String defaultBundle)
     {
-        this.defaultBundle = defaultBundle;
+        if (bundleNames.length > 0)
+        {
+            bundleNames[0] = defaultBundle;
+        }
+        else
+        {
+            synchronized (this)
+            {
+                if (bundleNames.length <= 0)
+                {
+                    bundleNames = new String[] { defaultBundle };
+                }
+            }
+        }
     }
 
     /**
@@ -449,6 +497,69 @@ public class TurbineLocalizationService
     }
 
     /**
+     * @exception MissingResourceException Specified key cannot be matched.
+     * @see org.apache.fulcrum.localization.LocalizationService#getString(String, Locale, String)
+     */
+    public String getString(String bundleName, Locale locale, String key)
+    {
+        String value = null;
+
+        // Look for text in requested bundle.
+        ResourceBundle rb = getBundle(bundleName, locale);
+        value = getStringOrNull(rb, key);
+
+        // Look for text in list of default bundles.
+        if (value == null && bundleNames.length > 0)
+        {
+            String name;
+            for (int i = 0; i < bundleNames.length; i++)
+            {
+                name = bundleNames[i];
+                //System.out.println("getString(): name=" + name +
+                //                   ", locale=" + locale + ", i=" + i);
+                if (!name.equals(bundleName))
+                {
+                    rb = getBundle(name, locale);
+                    value = getStringOrNull(rb, key);
+                    if (value != null)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (value == null)
+        {
+            // Text not found in requested or default bundles.
+            throw new MissingResourceException(bundleName, locale.toString(),
+                                               key);
+        }
+
+        return value;
+    }
+
+    /**
+     * Gets localized text from a bundle if it's there.  Otherwise,
+     * returns <code>null</code> (ignoring a possible
+     * <code>MissingResourceException</code>).
+     */
+    protected final String getStringOrNull(ResourceBundle rb, String key)
+    {
+        if (rb != null)
+        {
+            try
+            {
+                return rb.getString(key);
+            }
+            catch (MissingResourceException ignored)
+            {
+            }
+        }
+        return null;
+    }
+
+    /**
      * @see org.apache.fulcrum.localization.LocalizationService#format(String, Locale, String, Object)
      */
     public String format(String bundleName, Locale locale, 
@@ -472,7 +583,7 @@ public class TurbineLocalizationService
     public String format(String bundleName, Locale locale,
                          String key, Object[] args)
     {
-        String value = getBundle(bundleName, locale).getString(key);
+        String value = getString(bundleName, locale, key);
         if (args == null)
         {
             args = NO_ARGS;
