@@ -4,7 +4,9 @@ F U L C R U M
 
 Fulcrum is a collection of components originally part of the Jakarta Turbine
 project that are suitable for use in any environment.  They are designed to
-be used within any Avalon compatible container.
+be used within any Avalon-compatible container.
+
+
 --------------------------------------------------------------------------
 B U I L D I N G
 --------------------------------------------------------------------------
