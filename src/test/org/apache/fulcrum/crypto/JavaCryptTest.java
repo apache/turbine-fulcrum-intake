@@ -149,7 +149,7 @@ public class JavaCryptTest
 
         if(!output.equals(md5result))
         {
-            fail("MD5 Encryption failed, expected "+sha1result+", got "+output);
+            fail("MD5 Encryption failed, expected "+md5result+", got "+output);
         }
 
         ca.setCipher("SHA1");
