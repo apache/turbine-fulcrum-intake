@@ -42,6 +42,11 @@ I think Intake is pretty much bound to Turbine and doesn't
 look like it can be a general validation service. With the
 separate service builds this won't be a problem.
 
+PullService
+-----------
+
+RunData can be removed from this service as well.
+
 ---
 
 Overall even if there are a some coupling issues most of the
