@@ -69,6 +69,7 @@ import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.acl.DefaultAccessControlList;
+import org.apache.fulcrum.security.authenticator.Authenticator;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
@@ -95,7 +96,6 @@ public class MemoryUserManagerImpl extends AbstractLogEnabled implements SimpleU
     /** Logging */
     private static Log log = LogFactory.getLog(MemoryUserManagerImpl.class);
     private static List users = new ArrayList();
-    
     /** A factory to construct ACL Objects */
     private FactoryService aclFactoryService = null;
     private ComponentManager manager = null;
@@ -105,6 +105,8 @@ public class MemoryUserManagerImpl extends AbstractLogEnabled implements SimpleU
     private RoleManager roleManager;
     /** Our Unique ID counter */
     private static int uniqueId = 0;
+    
+    private Authenticator authenticator;
     /**
      * @return
      */
@@ -119,7 +121,7 @@ public class MemoryUserManagerImpl extends AbstractLogEnabled implements SimpleU
     /**
     	* @return
     	*/
-	private RoleManager getRoleManager() throws ComponentException
+    private RoleManager getRoleManager() throws ComponentException
     {
         if (roleManager == null)
         {
@@ -249,21 +251,20 @@ public class MemoryUserManagerImpl extends AbstractLogEnabled implements SimpleU
     public void authenticate(User user, String password)
         throws PasswordMismatchException, UnknownEntityException, DataBackendException
     {
-        if (!checkExists(user))
-        {
-            throw new UnknownEntityException("The account '" + user.getName() + "' does not exist");
-        }
-        // log.debug("Supplied Pass: " + password);
-        // log.debug("User Pass: " + user.getPassword());
-        /*
-         * Unix crypt needs the existing, encrypted password text as
-         * salt for checking the supplied password. So we supply it
-         * into the checkPassword routine
-         */
-        if (!password.equals(user.getPassword()))
-        {
-            throw new PasswordMismatchException("The passwords do not match");
-        }
+		if (authenticator == null)
+	{
+		try
+		{
+			authenticator = (Authenticator) manager.lookup(Authenticator.ROLE);
+		}
+		catch (ComponentException ce)
+		{
+			throw new DataBackendException(ce.getMessage(), ce);
+		}
+	}
+	if (!authenticator.authenticate(user,password)){
+		throw new PasswordMismatchException("Can not authenticate user.");
+	}
     }
     /**
      * Change the password for an User. The user must have supplied the
@@ -322,37 +323,6 @@ public class MemoryUserManagerImpl extends AbstractLogEnabled implements SimpleU
         // password being 'reverted' to the old value if the user data
         // is lost somehow before it is saved at session's expiry.
         saveUser(user);
-    }
-    /**
-     * Creates new user account with specified attributes.
-     *
-     * @param user The object describing account to be created.
-     * @param initialPassword the password for the new account
-     * @throws DataBackendException if there was an error accessing
-     the data backend.
-     * @throws EntityExistsException if the user account already exists.
-     */
-    public void createAccount(User user, String initialPassword) throws EntityExistsException, DataBackendException
-    {
-        if (StringUtils.isEmpty(user.getName()))
-        {
-            throw new DataBackendException("Could not create " + "an user with empty name!");
-        }
-        if (checkExists(user))
-        {
-            throw new EntityExistsException("The account '" + user.getName() + "' already exists");
-        }
-        user.setPassword(initialPassword);
-        try
-        {
-            users.remove(user);
-            user.setId(getUniqueId());
-            users.add(user);
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("Failed to create account '" + user.getName() + "'", e);
-        }
     }
     /**
      * Construct a blank User object.
@@ -557,59 +527,6 @@ public class MemoryUserManagerImpl extends AbstractLogEnabled implements SimpleU
         return getRoleManager().checkExists(role);
     }
     /**
-    	* This method provides client-side encryption of passwords.
-    	*
-    	* If <code>secure.passwords</code> are enabled in TurbineResources,
-    	* the password will be encrypted, if not, it will be returned unchanged.
-    	* The <code>secure.passwords.algorithm</code> property can be used
-    	* to chose which digest algorithm should be used for performing the
-    	* encryption. <code>SHA</code> is used by default.
-    	*
-    	* @param password the password to process
-    	* @return processed password
-    	*/
-    public String encryptPassword(String password)
-    {
-        return encryptPassword(password, null);
-    }
-    /**
-    	* This method provides client-side encryption of passwords.
-    	*
-    	* If <code>secure.passwords</code> are enabled in TurbineResources,
-    	* the password will be encrypted, if not, it will be returned unchanged.
-    	* The <code>secure.passwords.algorithm</code> property can be used
-    	* to chose which digest algorithm should be used for performing the
-    	* encryption. <code>SHA</code> is used by default.
-    	*
-    	* The used algorithms must be prepared to accept null as a
-    	* valid parameter for salt. All algorithms in the Fulcrum Cryptoservice
-    	* accept this.
-    	*
-    	* @param password the password to process
-    	* @param salt     algorithms that needs a salt can provide one here
-    	* @return processed password
-    	*/
-    public String encryptPassword(String password, String salt)
-    {
-        //@todo need to tie into password utils.
-        return password + salt;
-    }
-    /**
-    	* Checks if a supplied password matches the encrypted password
-    	*
-    	* @param checkpw      The clear text password supplied by the user
-    	* @param encpw        The current, encrypted password
-    	*
-    	* @return true if the password matches, else false
-    	*
-    	*/
-    public boolean checkPassword(String checkpw, String encpw)
-    {
-        String result = encryptPassword(checkpw, encpw);
-        return (result == null) ? false : result.equals(encpw);
-    }
-   
-    /**
      * Construct a new ACL object.
      *
      * This constructs a new ACL object from the configured class and
@@ -621,20 +538,20 @@ public class MemoryUserManagerImpl extends AbstractLogEnabled implements SimpleU
      * @return an object implementing ACL interface.
      * @throws UnknownEntityException if the object could not be instantiated.
      */
-    public AccessControlList getAclInstance(Map roles, Map permissions) throws UnknownEntityException
+    private AccessControlList getAclInstance(Map roles, Map permissions) throws UnknownEntityException
     {
         Object[] objects = { roles, permissions };
         String[] signatures = { Map.class.getName(), Map.class.getName()};
         AccessControlList accessControlList;
         try
         {
-        	/*
-        	 * 
-        	 @todo I think this is overkill for now..
+            /*
+             * 
+             @todo I think this is overkill for now..
             accessControlList =
                 (AccessControlList) aclFactoryService.getInstance(aclClass.getName(), objects, signatures);
                 */
-                accessControlList = new DefaultAccessControlList(roles,permissions);
+            accessControlList = new DefaultAccessControlList(roles, permissions);
         }
         catch (Exception e)
         {
@@ -692,7 +609,25 @@ public class MemoryUserManagerImpl extends AbstractLogEnabled implements SimpleU
        */
     public void addUser(User user, String password) throws DataBackendException, EntityExistsException
     {
-        createAccount(user, password);
+        if (StringUtils.isEmpty(user.getName()))
+        {
+            throw new DataBackendException("Could not create " + "an user with empty name!");
+        }
+        if (checkExists(user))
+        {
+            throw new EntityExistsException("The account '" + user.getName() + "' already exists");
+        }
+        user.setPassword(password);
+        try
+        {
+            users.remove(user);
+            user.setId(getUniqueId());
+            users.add(user);
+        }
+        catch (Exception e)
+        {
+            throw new DataBackendException("Failed to create account '" + user.getName() + "'", e);
+        }
     }
     /**
        * Stores User attributes. The User is required to exist in the system.

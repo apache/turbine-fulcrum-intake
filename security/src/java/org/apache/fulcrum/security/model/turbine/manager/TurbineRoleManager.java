@@ -1,4 +1,4 @@
-package org.apache.fulcrum.security.model.simple.manager;
+package org.apache.fulcrum.security.model.turbine.manager;
 import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
@@ -8,7 +8,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @author Eric Pugh
  *
  */
-public interface SimpleRoleManager extends RoleManager
+public interface TurbineRoleManager extends RoleManager
 {
     /**
      * Puts a permission in a role

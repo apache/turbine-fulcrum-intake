@@ -53,7 +53,6 @@ package org.apache.fulcrum.security;
  * <http://www.apache.org/>.
  */
 import org.apache.avalon.framework.component.Component;
-import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
@@ -168,26 +167,7 @@ public interface RoleManager extends Component
     	* @throws UnknownEntityException if the role does not exist.
     	*/
     void renameRole(Role role, String name) throws DataBackendException, UnknownEntityException;
-    /**
-	 * Grants a Role a Permission
-	 *
-	 * @param role the Role.
-	 * @param permission the Permission.
-	 * @throws DataBackendException if there was an error accessing the data
-	 *         backend.
-	 * @throws UnknownEntityException if role or permission is not present.
-	 */
-    void grant(Role role, Permission permission) throws DataBackendException, UnknownEntityException;
-    /**
-     * Revokes a Permission from a Role.
-     *
-     * @param role the Role.
-     * @param permission the Permission.
-     * @throws DataBackendException if there was an error accessing the data
-     *         backend.
-     * @throws UnknownEntityException if role or permission is not present.
-     */
-    void revoke(Role role, Permission permission) throws DataBackendException, UnknownEntityException;
+ 
     /**
     		   * Determines if the <code>Role</code> exists in the security system.
     		   *
