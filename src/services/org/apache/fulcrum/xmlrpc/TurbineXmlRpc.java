@@ -380,4 +380,20 @@ public abstract class TurbineXmlRpc
     {
         getService().denyClient(address);
     }
+
+    /**
+     * @see org.apache.fulcrum.Service#getRealPath(String)
+     */
+    public static String getRealPath(String path)
+    {
+        return getService().getRealPath(path);
+    }
+
+    /**
+     * Gets the named property.
+     */
+    public static String getProperty(String property)
+    {
+        return getService().getConfiguration().getString(property);
+    }
 }

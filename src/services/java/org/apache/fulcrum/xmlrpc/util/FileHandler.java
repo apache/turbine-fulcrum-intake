@@ -61,10 +61,10 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.StringWriter;
-
 import javax.mail.internet.MimeUtility;
-import org.apache.fulcrum.TurbineServices;
-import org.apache.fulcrum.xmlrpc.XmlRpcService;
+
+import org.apache.fulcrum.xmlrpc.TurbineXmlRpc;
+import org.apache.log4j.Category;
 
 /**
  * A Handler for use with the XML-RPC service that will deal
@@ -93,15 +93,17 @@ import org.apache.fulcrum.xmlrpc.XmlRpcService;
  */
 public class FileHandler
 {
-    protected XmlRpcService service;
+    /**
+     * The logger.
+     */
+    private static Category category =
+        Category.getInstance(FileHandler.class.getName());
 
     /**
      * Default Constructor
      */
     public FileHandler()
     {
-        service =  (XmlRpcService)TurbineServices.getInstance()
-            .getService(XmlRpcService.SERVICE_NAME);
     }
 
     /**
@@ -189,9 +191,9 @@ public class FileHandler
     public String readFileContents(String targetLocationProperty,
                                    String fileName)
     {
-        String file = service.getRealPath(
-            service.getConfiguration().getString(targetLocationProperty) +
-                "/" + fileName);
+        String file = TurbineXmlRpc.getRealPath(
+            TurbineXmlRpc.getProperty(targetLocationProperty) +
+                '/' + fileName);
 
         StringWriter sw = null;
         BufferedReader reader = null;
@@ -220,10 +222,8 @@ public class FileHandler
         }
         catch (IOException ioe)
         {
-            service.getCategory().error(
-                "[FileHandler] Unable to encode the contents " +
-                "of the request file.", ioe);
-
+            category.error("Unable to encode the contents of the request file",
+                           ioe);
             return null;
         }
         finally
@@ -233,9 +233,8 @@ public class FileHandler
                 sw.close();
                 reader.close();
             }
-            catch (Exception e)
+            catch (Exception ignored)
             {
-
             }
         }
     }
@@ -251,9 +250,8 @@ public class FileHandler
          */
 
         File targetLocation = new File(
-            service.getRealPath(
-                service.getConfiguration().getString(
-                    targetLocationProperty)));
+            TurbineXmlRpc.getRealPath(
+                TurbineXmlRpc.getProperty(targetLocationProperty)));
 
         if (targetLocation.exists() == false)
         {
@@ -265,16 +263,16 @@ public class FileHandler
 
             if (targetLocation.mkdirs() == false)
             {
-                service.getCategory().error(
-                    "[FileHandler] Could not create target location: " +
+                category.error(
+                    "Could not create target location: " +
                     targetLocation + ". Cannot transfer file from client.");
 
                 return false;
             }
             else
             {
-                service.getCategory().info(
-                    "[FileHandler] Creating target location:" + targetLocation +
+                category.info(
+                    "Creating target location: " + targetLocation +
                     " in order to complete file transfer from client.");
             }
         }
@@ -302,8 +300,8 @@ public class FileHandler
         }
         catch (IOException ioe)
         {
-            service.getCategory().error(
-                "[FileHandler] Could not write the decoded file " +
+            category.error(
+                "Could not write the decoded file " +
                 "contents to disk for the following reason.", ioe);
 
             return false;
@@ -328,8 +326,8 @@ public class FileHandler
          */
 
         File sourceFile = new File(
-            service.getRealPath(
-                service.getConfiguration().getString(sourceLocationProperty) +
+            TurbineXmlRpc.getRealPath(
+                TurbineXmlRpc.getProperty(sourceLocationProperty) +
                     "/" + sourceFileName));
 
         if (sourceFile.exists())
