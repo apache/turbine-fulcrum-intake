@@ -1,0 +1,111 @@
+<project
+  xmlns:j="jelly:core"
+  xmlns:m="maven">
+
+  <taskdef name="torque-om"
+    classname="org.apache.torque.task.TorqueDataModelTask">
+    <classpath refid="maven.dependency.classpath"/>
+  </taskdef>
+
+  <!-- ================================================================== -->
+  <!-- T O R Q U E  G E N E R A T I O N  P R E  G O A L                   --> 
+  <!-- ================================================================== -->
+  <!-- This preGoal is executed before the the compilation goal so that   -->
+  <!-- the sources for the security service and the scheduler.            -->
+  <!-- ================================================================== -->
+
+  <!-- <preGoal name="compile" -->
+  <goal name="compile-pre-goal"
+    prereqs="check-om"
+
+    description="--> generates the Turbine OM/Peer classes">
+
+    <j:if test="${omGenerated == 'true'}">
+
+    <!--
+    We could create a fileset in the project to manage this
+    but we should really only have one source directory.
+    -->
+
+    <copy todir="${maven.prepareSourceDirectory}" overwrite="yes">
+      <fileset dir="src/java"/>
+    </copy>
+
+    <attainGoal name="security-om"/>
+    <attainGoal name="scheduler-om"/>
+    
+    </j:if>
+    
+  </goal>
+
+  <!-- ================================================================== -->
+  <!-- C H E C K  O M                                                     -->
+  <!-- ================================================================== -->
+
+  <!-- this will soon be moved into the security services build. -->
+
+  <goal name="check-om">
+
+    <property
+      name="omStatusFile"
+      value="${maven.prepareSourceDirectory}/report.turbine.om.generation"
+    />
+
+    <uptodate
+      property="omGenerated"
+      targetfile="${omStatusFile}">
+      <srcfiles
+        dir="."
+        includes="turbine-schema.xml"
+      />
+    </uptodate>
+  </goal>
+
+  <goal
+    name="security-om">
+
+    <filter token="DATABASE_DEFAULT" value="${security.database.name}"/>
+    <!-- is there a way to load this from an xml file? -->
+    <filter token="EXTRA_USER_COLUMNS" value="${security.extra.user.columns}"/>
+    <copy
+      todir="${maven.prepareSourceDirectory}"
+      file="${schemaDirectory}/turbine-schema.xml"
+      filtering="yes"
+    />
+
+    <torque-om
+      contextProperties="project.properties"
+      controlTemplate="${OMControlTemplate}"
+      outputDirectory="${maven.prepareSourceDirectory}"
+      useClasspath="true"
+      outputFile="report.turbine.om.generation"
+      targetPackage="${securityPackage}"
+      xmlFile="${maven.prepareSourceDirectory}/turbine-schema.xml"
+      targetDatabase="${database}"
+    />
+
+  </goal>
+
+  <goal
+    name="scheduler-om">
+
+    <filter token="DATABASE_DEFAULT" value="${scheduler.database.name}"/>
+    <copy
+      todir="${maven.prepareSourceDirectory}"
+      file="${schemaDirectory}/scheduler-schema.xml"
+      filtering="yes"
+    />
+
+    <torque-om
+      contextProperties="project.properties"
+      controlTemplate="${OMControlTemplate}"
+      outputDirectory="${maven.prepareSourceDirectory}"
+      useClasspath="true"
+      outputFile="report.turbine.scheduler.generation"
+      targetPackage="${schedulerPackage}"
+      xmlFile="${maven.prepareSourceDirectory}/scheduler-schema.xml"
+    />
+
+  </goal>
+
+</project>
