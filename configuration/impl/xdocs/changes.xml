@@ -6,6 +6,11 @@
   </properties>
 
   <body>
+    <release version="1.0.3" date="">
+      <action dev="epugh" type="update">
+        Upgrade to commons-configuration-1.0
+      </action>     
+    </release>
     <release version="1.0.2" date="">
       <action dev="epugh" type="update">
         Upgrade unit tests to use merlin and merlin-unit-3.3.0

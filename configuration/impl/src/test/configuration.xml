@@ -4,8 +4,7 @@
   <properties 
      className="org.apache.commons.configuration.PropertiesConfiguration" 
      fileName="../../../src/test/org/test.properties"/>
-  <dom4j 
-     className="org.apache.commons.configuration.DOM4JConfiguration" 
+  <xml       
      fileName="../../../src/test/org/test.xml"/>
 </configuration>
 

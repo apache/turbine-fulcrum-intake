@@ -5,7 +5,7 @@
   <id>fulcrum-configuration-impl</id>
   <extend>${basedir}/../../merlin-project.xml</extend>
   <name>Fulcrum Configuration Impl</name>
-  <currentVersion>1.0.2</currentVersion>
+  <currentVersion>1.0.3-dev</currentVersion>
   <package>org.apache.fulcrum.configuration</package>
 
   <dependencies>
@@ -15,9 +15,10 @@
       <version>4.1.5</version>
     </dependency>
     <dependency>
-      <id>commons-configuration</id>
-      <version>20030706.202021</version>
-      <url>http://jakarta.apache.org/commons/sandbox/configuration/index.html</url>
+      <groupId>commons-configuration</groupId>
+      <artifactId>commons-configuration</artifactId>      
+      <version>1.0</version>
+      <url>http://jakarta.apache.org/commons/configuration/index.html</url>
     </dependency>
     <dependency>
       <id>commons-digester</id>      
@@ -30,7 +31,7 @@
     </dependency>
     <dependency>
       <id>commons-collections</id>
-      <version>2.1</version>
+      <version>3.1</version>
       <url>http://jakarta.apache.org/commons/collections.html</url>
     </dependency>
     <dependency>
@@ -43,7 +44,7 @@
     </dependency>
     <dependency>
       <id>commons-beanutils</id>      
-      <version>1.6.1</version>         
+      <version>1.7.0</version>         
     </dependency>       
 
   </dependencies>
