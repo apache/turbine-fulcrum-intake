@@ -93,6 +93,15 @@ public class SecuritySetTest extends TestCase
 		assertEquals(2, array3.length);
     }
 
+    public void testAdd() throws Exception
+    {
+        GroupSet securitySet = (GroupSet)getTestData();
+        Group g = new DynamicGroup();
+        g.setName("Michael");
+        g.setId("Michael");
+        assertTrue(securitySet.add(g));
+    }    
+    
     private SecuritySet getTestData()
     {
         SecuritySet securitySet = new GroupSet();
@@ -110,5 +119,6 @@ public class SecuritySetTest extends TestCase
 
         return securitySet;
     }
-
+    
+ 
 }

@@ -67,11 +67,30 @@ public class PermissionSet
      */
     public boolean add(Permission permission)
     {
-        boolean res = contains(permission);
-        //nameMap.put(permission.getName(), permission);
-        idMap.put(permission.getId(), permission);
-        return res;
+        if (contains(permission)){
+            return false;            
+        }
+        else {
+            idMap.put(permission.getId(), permission);
+            return true;
+        }
     }
+    
+    /**
+     * Adds a Permission to this PermissionSet.
+     *
+     * @param obj A Permission.
+     * @return True if Permission was added; false if PermissionSet already
+     * contained the Permission.
+     */
+    public boolean add(Object obj) {
+        if(obj instanceof Permission){
+            return add((Permission)obj);
+        }
+        else {
+            throw new ClassCastException("Object passed to add to PermissionSet is not of type Permission");
+        }
+    }      
 
     /**
      * Adds the Permissions in a Collection to this PermissionSet.

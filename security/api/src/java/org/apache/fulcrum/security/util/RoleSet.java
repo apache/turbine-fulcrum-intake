@@ -67,10 +67,29 @@ public class RoleSet
      */
     public boolean add(Role role)
     {
-        boolean res = contains(role);
-        //nameMap.put(role.getName(), role);
-        idMap.put(role.getId(), role);
-        return res;
+        if (contains(role)){
+            return false;            
+        }
+        else {
+            idMap.put(role.getId(), role);
+            return true;
+        }
+    }
+    
+    /**
+     * Adds a Role to this RoleSet.
+     *
+     * @param obj A Role.
+     * @return True if Role was added; false if RoleSet already
+     * contained the Role.
+     */
+    public boolean add(Object obj) {
+        if(obj instanceof Role){
+            return add((Role)obj);
+        }
+        else {
+            throw new ClassCastException("Object passed to add to RoleSet is not of type Role");
+        }
     }
 
     /**
@@ -206,4 +225,6 @@ public class RoleSet
 
         return sb.toString();
     }
+
+
 }

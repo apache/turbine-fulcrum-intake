@@ -54,6 +54,15 @@ public abstract class SecuritySet implements Serializable, Set
         //nameMap = new TreeMap();
         idMap = new TreeMap();
     }
+    
+    /*
+	 * To enable the typesafe handling, make this abstract
+	 * and rely on the implementing classes like RoleSet to
+	 * properly cast the Object type.
+	 * 
+	 * @see java.util.Collection#add(java.lang.Object)
+	 */
+    public abstract boolean add(Object o);    
     /**
 	 * Returns a set of security objects in this object.
 	 * 
@@ -210,15 +219,7 @@ public abstract class SecuritySet implements Serializable, Set
     {
         return getSet().toArray();
     }
-    /*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.Collection#add(java.lang.Object)
-	 */
-    public boolean add(Object o)
-    {
-        throw new RuntimeException("not implemented");
-    }
+    
     /*
 	 * (non-Javadoc)
 	 * 

@@ -67,11 +67,30 @@ public class GroupSet
      */
     public boolean add(Group group)
     {
-        boolean res = contains(group);
-        //nameMap.put(group.getName(), group);
-        idMap.put(group.getId(), group);
-        return res;
+        if (contains(group)){
+            return false;            
+        }
+        else {
+            idMap.put(group.getId(), group);
+            return true;
+        }
     }
+    
+    /**
+     * Adds a Group to this GroupSet.
+     *
+     * @param obj A Group.
+     * @return True if Group was added; false if GroupSet already
+     * contained the Group.
+     */
+    public boolean add(Object obj) {
+        if(obj instanceof Group){
+            return add((Group)obj);
+        }
+        else {
+            throw new ClassCastException("Object passed to add to GroupSet is not of type Group");
+        }
+    }    
 		
     /**
      * Adds the Groups in a Collection to this GroupSet.

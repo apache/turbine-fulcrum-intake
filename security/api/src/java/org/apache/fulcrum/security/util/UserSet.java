@@ -63,11 +63,30 @@ public class UserSet
      */
     public boolean add(User user)
     {
-        boolean res = contains(user);
-        //nameMap.put(user.getName(), user);
-        idMap.put(user.getId(), user);
-        return res;
+        if (contains(user)){
+            return false;            
+        }
+        else {
+            idMap.put(user.getId(), user);
+            return true;
+        }
     }
+    
+    /**
+     * Adds a User to this UserSet.
+     *
+     * @param obj A User.
+     * @return True if User was added; false if UserSet already
+     * contained the User.
+     */
+    public boolean add(Object obj) {
+        if(obj instanceof User){
+            return add((User)obj);
+        }
+        else {
+            throw new ClassCastException("Object passed to add to UserSet is not of type User");
+        }
+    }     
 
     /**
      * Adds the Users in a Collection to this UserSet.
