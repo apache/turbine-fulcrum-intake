@@ -56,6 +56,7 @@ package org.apache.fulcrum.template;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 import javax.mail.internet.InternetAddress;
 import org.apache.commons.mail.SimpleEmail;
 import org.apache.commons.lang.StringUtils;
@@ -158,6 +159,9 @@ public class TemplateEmail
 
     /** The cc list. */
     private List ccList = null;
+
+    /** The cc list. */
+    private List replyToList = null;
 
     /** The column to word-wrap at.  <code>0</code> indicates no wrap. */
     private int wordWrap = 0;
@@ -291,6 +295,29 @@ public class TemplateEmail
         return (this);
     }
 
+
+    /**
+     * Add a reply to address to the email.
+     *
+     * @param email A String.
+     * @param name A String.
+     * @return An Email.
+     * @exception MessagingException.
+     */
+    public TemplateEmail addReplyTo( String name, String email) 
+    {
+        String[] emailName = new String[2];
+        emailName[0] = email;
+        emailName[1] = name;
+        if (replyToList == null) 
+        {
+            replyToList = new ArrayList(3);
+        }        
+        replyToList.add(emailName);
+        return this;
+    }
+
+
     /**
      * Subject.
      *
@@ -394,6 +421,7 @@ public class TemplateEmail
         {
             se.addCc(ccEmail, ccName);
         }
+        addReplyTo(se);
         se.setSubject(subject);
         se.setMsg(body);
         se.send();
@@ -428,9 +456,30 @@ public class TemplateEmail
         {
             se.setCc(ccList);
         }
+        addReplyTo(se);
         se.setSubject(subject);
         se.setMsg(body);
         se.send();
+    }
+
+    /**
+     * if any reply-to email addresses exist, add them to the SimpleEmail
+     *
+     * @param se a <code>SimpleEmail</code> value
+     * @exception Exception if an error occurs
+     */
+    private void addReplyTo(SimpleEmail se)
+        throws Exception
+    {
+        if (replyToList != null) 
+        {
+            Iterator i = replyToList.iterator();
+            while (i.hasNext()) 
+            {
+                String[] emailName = (String[])i.next();
+                se.addReplyTo(emailName[0], emailName[1]);
+            }
+        }
     }
 
     /**
