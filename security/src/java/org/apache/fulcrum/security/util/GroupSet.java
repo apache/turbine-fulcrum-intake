@@ -174,7 +174,7 @@ public class GroupSet
      */
     public boolean contains(Group group)
     {
-        return nameMap.containsValue((Object) group);
+        return super.contains(group);
     }
 
 

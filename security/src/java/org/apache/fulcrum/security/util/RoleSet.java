@@ -174,7 +174,7 @@ public class RoleSet
      */
     public boolean contains(Role role)
     {
-        return nameMap.containsValue((Object) role);
+		return super.contains(role);
     }
 
 

@@ -98,7 +98,7 @@ public class UserSetTest extends BaseUnitTest
         assertTrue(userSet.contains(user));
         assertTrue(userSet.contains((Object) user));
         assertTrue(userSet.contains(user2));
-        assertFalse(userSet.contains(user3));
+        assertTrue(userSet.contains(user3));
 		assertTrue(userSet.contains(user));
 
     }

@@ -176,7 +176,7 @@ public class PermissionSet
      */
     public boolean contains(Permission permission)
     {
-        return nameMap.containsValue((Object) permission);
+		return super.contains(permission);
     }
 
 

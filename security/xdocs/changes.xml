@@ -8,6 +8,10 @@
   <body>
   	<release version="1.0-alpha-3" date="in cvs">
 	  <action dev="epugh" type="fix">
+		All the various SecuritySet implementations base their logic off their Name, not the ID, or
+		Object type.  Fixes problems with comparisons when you have various subclasses.
+      </action>   		
+	  <action dev="epugh" type="fix">
 		For a SecurityEntityImpl, if the name is null then throw an InvalidParameterException.
       </action>  				
       <action dev="epugh" type="add">

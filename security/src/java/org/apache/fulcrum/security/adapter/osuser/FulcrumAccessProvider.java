@@ -59,6 +59,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.acl.AccessControlList;
+import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
@@ -110,7 +111,9 @@ public class FulcrumAccessProvider
 			User user = getSecurityService().getUserManager().getUser(username);
 			AccessControlList acl =
 			getSecurityService().getUserManager().getACL(user);
-			return acl.hasRole(acl.getRoles().getRoleByName(groupname));
+			Role role = acl.getRoles().getRoleByName(groupname);
+			boolean result =acl.hasRole(role); 
+			return result;
 		}
 		catch (UnknownEntityException uee)
 		{

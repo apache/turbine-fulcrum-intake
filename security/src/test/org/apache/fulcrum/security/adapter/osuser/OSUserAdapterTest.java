@@ -145,6 +145,8 @@ public class OSUserAdapterTest extends BaseUnitTest
             acl.hasRole("role1"),
             accessProvider.inGroup("Jeannie", "role1"));
 
+        System.out.println("hi");
+        
         assertEquals(
             "Neither should have role3",
             acl.hasRole("role3"),

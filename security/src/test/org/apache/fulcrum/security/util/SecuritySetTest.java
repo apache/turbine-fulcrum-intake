@@ -41,14 +41,15 @@ package org.apache.fulcrum.security.util;
  * Apache Software Foundation, please see <http://www.apache.org/> .
  */
 
-import org.apache.fulcrum.security.entity.Group;
-import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 /**
+ * Test using a securitySet.  Useing various subclasses since it is
+ * Abstract.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class GroupSetTest extends BaseUnitTest
+public class SecuritySetTest extends BaseUnitTest
 {
 
     /**
@@ -56,82 +57,20 @@ public class GroupSetTest extends BaseUnitTest
 	 * 
 	 * @param name the testcase's name.
 	 */
-    public GroupSetTest(String name)
+    public SecuritySetTest(String name)
     {
         super(name);
     }
     public static void main(String[] args)
     {
-        junit.textui.TestRunner.run(GroupSetTest.class);
+        junit.textui.TestRunner.run(SecuritySetTest.class);
     }
 
-    public void testNullGroup() throws Exception {
-        GroupSet groupSet = new GroupSet();
-        assertFalse(groupSet.contains(null));             
+    public void testNull() throws Exception {
+        SecuritySet securitySet = new GroupSet();
+        assertFalse(securitySet.contains(null));             
     }
     
-    public void testAddGroups() throws Exception
-    {
-        Group group = new SimpleGroup();
-        group.setId(new Integer(1));
-        group.setName("Eric");
-        GroupSet groupSet = new GroupSet();
-        groupSet.add(group);
-        assertTrue(groupSet.contains(group));
-
-        Group group2 = new SimpleGroup();
-        group2.setName("Kate");
-        group2.setId(new Integer(2));
-        groupSet.add(group2);
-
-        Group group3 = new SimpleGroup();
-        group3.setId(new Integer(1));
-        group3.setName("Eric");
-        groupSet.add(group3);
-        assertTrue(groupSet.contains(group));
-        assertTrue(groupSet.contains((Object) group));
-        assertTrue(groupSet.contains(group2));
-        assertTrue(groupSet.contains(group3));
-        assertTrue(groupSet.contains(group));
-    }
-
-    public void testGroupSetWithSubclass() throws Exception
-    {
-        GroupSet groupSet = new GroupSet();
-        Group group = new GroupSubClass();
-		group.setId(new Integer(1));
-		group.setName("Eric");
-
-        groupSet.add(group);
-        assertTrue(groupSet.contains(group));
-
-        Group group2 = new SimpleGroup();
-        group2.setId(new Integer(1));
-        group2.setName("Eric");
-        assertTrue(groupSet.contains(group2));
-
-    }
-
-    class GroupSubClass extends SimpleGroup
-    {
-        private String extraGroupData;
-
-        /**
-		 * @return Returns the extraGroupData.
-		 */
-        public String getExtraGroupData()
-        {
-            return extraGroupData;
-        }
-
-        /**
-		 * @param extraGroupData The extraGroupData to set.
-		 */
-        public void setExtraGroupData(String extraGroupData)
-        {
-            this.extraGroupData = extraGroupData;
-        }
-
-    }
+   
 
 }

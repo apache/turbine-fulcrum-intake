@@ -163,7 +163,8 @@ public class UserSet
     }
 
     /**
-     * Checks whether this UserSet contains a User.
+     * Checks whether this UserSet contains a User based on the
+     * name of the User.
      *
      * @param user A User.
      * @return True if this UserSet contains the User,
@@ -171,7 +172,7 @@ public class UserSet
      */
     public boolean contains(User user)
     {
-        return nameMap.containsValue((Object) user);
+		return super.contains(user);
     }
 
 
