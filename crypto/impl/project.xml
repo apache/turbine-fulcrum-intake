@@ -24,7 +24,8 @@
 
     <dependency>
       <id>javamail</id>
-      <version>1.3</version>
+      <version>1.3.1</version>
+      <url>http://java.sun.com/products/javamail/</url>
     </dependency>
 
     <dependency>

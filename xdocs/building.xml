@@ -30,9 +30,9 @@
       	for Maven.  You can do this by:
 <source><![CDATA[
 
-$ maven plugin:download -DartifactId=avalon-meta-plugin -DgroupId=avalon-meta -Dversion=1.2
+$ maven plugin:download -DartifactId=avalon-meta-plugin -DgroupId=avalon-meta -Dversion=1.3.2
 
-$ maven plugin:download -DartifactId=merlin-plugin -DgroupId=merlin -Dversion=1.1-snapshot
+$ maven plugin:download -DartifactId=merlin-plugin -DgroupId=merlin -Dversion=3.2.5
 
 ]]></source>
 		You should check the Ibiblio site or the Avalon site for the latest and greatest
@@ -41,12 +41,12 @@ $ maven plugin:download -DartifactId=merlin-plugin -DgroupId=merlin -Dversion=1.
       <p>
         From the root directory of the Fulcrum project (where you checked
         out the code to or unpacked a source distribution), simply type 
-        'maven' and press enter.  This will start a process that will
+        'maven fulcrum:build' and press enter.  This will start a process that will
         build each component.  After the component is built, it will be 
         installed into you local maven repository.
       </p>
       <p>
-        To build a local copy of the documentation, use 'maven multiproject'.
+        To build a local copy of the documentation, use 'maven multiproject:site'.
         This will build a local copy of the web site in the 'target/docs' 
         directory.
       </p>      
@@ -59,9 +59,16 @@ $ maven plugin:download -DartifactId=merlin-plugin -DgroupId=merlin -Dversion=1.
           converted to Avalon components, or discarded.
         </p>
         <p>
+          <strong>Missing JARS!</strong>  There are some jar files that you must manually
+          install due to licensing restrictions.  Javamail.jar will need to be downloaded.
+          Note, when you download it from Sun's site, you will need to rename it from mail.jar
+          to javamail-1.3.1.jar and place it in your MAVEN_REPO/javamail/jars/ directory.  You
+          will also need to download jdbc-2.0.jar as well.  
+        </p>        
+        <p>
           Depending on your version of Maven, you may have various problems with
           the reports being generate, or you may run out of memory when you do a
-          complete build.  One approach to take is to turn of running unit tests
+          complete build.  One approach to take is to turn off running unit tests
           and excluding various components:<br/> 'maven multiproject:site -Dmaven.test.skip=true 
           -Dmaven.multiproject.excludes=security/*.*,cache/*.*,scheduler/*.*'
         </p>        

@@ -55,7 +55,7 @@
      </dependency>
      <dependency>
        <groupId>mckoi</groupId>      
-       <artifactId>mckoidb</artifactId>             
+       <artifactId>mckoi</artifactId>             
        <version>1.0.2</version>
      </dependency>    
      <dependency>
@@ -92,13 +92,13 @@
       <groupId>hibernate</groupId>      
       <artifactId>hibernate-cglib</artifactId>            
       <version>2.1.1</version>
-      <url>http://hibernate.org/</url>  
+      <url>http://www.hibernate.org</url>  
     </dependency>
  	<dependency>
       <groupId>hibernate</groupId>      
       <artifactId>jta</artifactId>            
       <version>hib2.1</version>
-      <url>http://hibernate.org/</url> 
+      <url>http://java.sun.com/products/jta/</url> 
     </dependency>                                 
      <dependency>
        <id>dom4j</id>      
