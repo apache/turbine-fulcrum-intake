@@ -54,31 +54,32 @@ package org.apache.fulcrum.crypto.provider;
  * <http://www.apache.org/>.
  */
 
+import javax.mail.internet.MimeUtility;
 import java.security.MessageDigest;
-
-import org.apache.commons.codec.base64.Base64;
+import java.io.OutputStream;
+import java.io.ByteArrayOutputStream;
 
 import org.apache.fulcrum.crypto.CryptoAlgorithm;
 
 /**
- * Implements the normal java.security.MessageDigest stream cipers.
- * Base64 strings returned by this provider are correctly padded to 
- * multiples of four bytes. If you run into interoperability problems
- * with other languages, especially perl and the Digest::MD5 module, 
- * note that the md5_base64 function from this package incorrectly drops
- * the pad bytes. Use the MIME::Base64 package instead.
+ * This is the Message Digest Implementation of Turbine 2.1. It does
+ * not pad the Base64 encryption of the Message Digests correctly but
+ * truncates after 20 chars. This leads to interoperability problems
+ * if you want to use e.g. database columns between two languages.
  *
- * If you upgrade from Turbine 2.1 and suddently your old stored passwords
- * no longer work, please take a look at the OldJavaCrypt provider for 
- * bug-to-bug compatibility.
+ * If you upgrade an application from Turbine 2.1 and have already used
+ * the Security Service with encrypted passwords and no way to rebuild
+ * your databases, use this provider. It is bug-compatible.
  *
- * This provider can be used as the default crypto algorithm provider.
+ * DO NOT USE THIS PROVIDER FOR ANY NEW APPLICATION!
+ * 
+ * Nevertheless it can be used as the default crypto algorithm .
  *
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
 
-public class JavaCrypt 
+public class OldJavaCrypt 
     implements CryptoAlgorithm
 {
 
@@ -94,7 +95,7 @@ public class JavaCrypt
      *
      */
 
-    public JavaCrypt()
+    public OldJavaCrypt()
     {
         this.cipher = DEFAULT_CIPHER;
     }
@@ -146,11 +147,12 @@ public class JavaCrypt
 
         // We need to use unicode here, to be independent of platform's
         // default encoding. Thanks to SGawin for spotting this.
-        byte[] digest = md.digest(value.getBytes("UTF-8"));
 
-        // Base64-encode the digest.
-        byte[] encodedDigest = Base64.encode(digest);
-        return (encodedDigest == null ? null :
-                new String(encodedDigest));
+        byte[] digest = md.digest(value.getBytes("UTF-8"));
+        ByteArrayOutputStream bas = 
+            new ByteArrayOutputStream(digest.length + digest.length / 3 + 1);
+        OutputStream encodedStream = MimeUtility.encode(bas, "base64");
+        encodedStream.write(digest);
+        return bas.toString();
     }
 }
