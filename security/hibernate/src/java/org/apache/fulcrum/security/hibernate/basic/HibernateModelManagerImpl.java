@@ -63,7 +63,6 @@ import org.apache.fulcrum.security.hibernate.AbstractHibernateModelManager;
 import org.apache.fulcrum.security.model.basic.BasicModelManager;
 import org.apache.fulcrum.security.model.basic.entity.BasicGroup;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
-
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
@@ -97,14 +96,14 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
             userExists = getUserManager().checkExists(user);
             if (groupExists && userExists)
             {
-                ((BasicUser) user).addGroup(group);
-                ((BasicGroup) group).addUser(user);
+                
                 Session session = getPersistenceHelper().retrieveSession();
                 Transaction transaction = session.beginTransaction();
+				((BasicUser) user).addGroup(group);
+				((BasicGroup) group).addUser(user);
                 session.update(user);
                 session.update(group);
                 transaction.commit();
-                session.close();
                 return;
             }
         }
@@ -150,7 +149,6 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
                 session.update(user);
                 session.update(group);
                 transaction.commit();
-                session.close();
                 return;
             }
         }

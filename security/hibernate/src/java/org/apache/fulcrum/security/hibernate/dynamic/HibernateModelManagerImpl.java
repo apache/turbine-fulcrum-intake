@@ -259,7 +259,6 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
                 session.update(user);
                 session.update(group);
                 transaction.commit();
-                session.close();
                 return;
             }
         }
@@ -305,7 +304,6 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
                 session.update(user);
                 session.update(group);
                 transaction.commit();
-                session.close();
                 return;
             }
         }
@@ -383,7 +381,6 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
                 session.update(role);
                 session.update(group);
                 transaction.commit();
-                session.close();
                 return;
             }
         }
