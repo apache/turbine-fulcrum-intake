@@ -133,7 +133,15 @@
   </contributors>
   
   <dependencies>
-
+    
+    <!-- TESTING -->
+    <dependency>
+      <groupId>merlin</groupId>
+      <artifactId>merlin-unit</artifactId>
+      <version>3.3.0</version>
+    </dependency>
+    
+    <!-- PLUGINS -->
     <dependency> 
     	<groupId>avalon-meta</groupId> 
     	<artifactId>avalon-meta-plugin</artifactId> 

@@ -46,14 +46,6 @@
       <version>1.6.1</version>         
     </dependency>       
 
-    <!-- testing -->
-
-    <dependency>
-      <groupId>merlin</groupId>
-      <artifactId>merlin-unit</artifactId>
-      <version>3.3.0</version>
-    </dependency>
-
   </dependencies>
 
 </project>
