@@ -18,9 +18,9 @@ either your ${user.home}/build.properties file, or the build.properties
 file provided in the Fulcrum build/ directory:
 
 log4j.jar
-bsf.jar
+bsf.jar (http://oss.software.ibm.com/developerworks/projects/bsf)
 velocity.jar
-village.jar
+village.jar (http://share.whichever.com/)
 jdbc.jar
 torque.jar
 regexp.jar
@@ -28,8 +28,8 @@ xmlrpc.jar
 xalan.jar
 xerces.jar
 servlet.jar
-javamail.jar
-jaf.jar
+javamail.jar (http://java.sun.com/products/javamail/index.html)
+jaf.jar (http://java.sun.com/products/javamail/index.html)
 
 Alternately, you can set the property lib.repo to the directory acting
 as a repository holding the JARs named by default.properties.
