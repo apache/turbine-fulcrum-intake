@@ -1,0 +1,23 @@
+package $package;
+
+$license
+
+import org.apache.turbine.services.BaseService;
+
+/**
+ *
+ * @author <a href="mailto:$email">$name</a>
+ */
+public class Turbine${baseName}Service 
+    extends BaseService
+    implements ${baseName}Service
+
+{
+    /**
+     * Initialize the Turbine${baseName} Service.
+     */
+    public void init()
+    {
+        setInit(true);
+    }
+}

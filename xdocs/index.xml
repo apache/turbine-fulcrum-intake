@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<document>
+
+ <properties>
+  <title>Fulcrum</title>
+  <author email="jvanzyl@apache.org">Jason van Zyl</author>
+ </properties>
+
+ <body>
+
+ <section name="What is Fulcrum?">
+
+ <p>
+    Fulcrum is a services framework.
+ </p>
+
+</section>
+
+ </body>
+ </document>

@@ -1,0 +1,57 @@
+--------------------------------------------------------------------------
+C O U P L I N G  I S S U E S
+--------------------------------------------------------------------------
+
+SecurityService
+---------------
+
+User is tied to Servlets by the HttpSessionBindingListener
+which makes the security service useless outside of servlets.
+There's no reason the security service can't be used in
+non servlet applications.
+
+BaseSecurityService.java is tied to JavaMail simply for the
+base64 encoding. There are a number of base64 encoding
+classes in Jakarta, take one of those and get rid of
+this tie.
+
+UploadService
+-------------
+
+FileItem extends DataSource in the JAF, I don't think
+this is really necessary.
+
+TemplateService
+---------------
+
+Remove RunData
+
+VelocityService
+---------------
+
+Remove RunData
+
+IntakeService
+-------------
+
+I think Intake is pretty much bound to Turbine and doesn't
+look like it can be a general validation service. With the
+separate service builds this won't be a problem.
+
+---
+
+Overall even if there are a some coupling issues most of the
+services are only going to be used in Turbine at first. The
+separate build for each service will isolate the coupling
+to a service. A service can state it's deps and have properties
+set to satisfy any requirements.
+
+The following classes are also used all over the services
+so we need to get these in a common location. Maybe have
+a little build for Turbine utilties until we get them
+in the commons:
+
+ObjectUtils.java
+StringStackBuffer.java
+StringUtils.java
+list
