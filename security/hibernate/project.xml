@@ -94,14 +94,14 @@
       <version>1.4.1</version>
       <url>http://www.objectweb.org/asm</url>  
 	</dependency>
-<!--    
+
     <dependency>
       <groupId>hibernate</groupId>      
       <artifactId>jta</artifactId>            
       <version>hib2.1</version>
       <url>http://www.hibernate.org</url> 
     </dependency>  
--->                               
+
     <dependency>
        <id>dom4j</id>      
        <version>1.4</version>
