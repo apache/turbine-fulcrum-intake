@@ -56,7 +56,7 @@ package org.apache.fulcrum.crypto.provider;
 
 import java.security.MessageDigest;
 
-import org.apache.commons.codec.base64.Base64;
+import org.apache.commons.codec.binary.Base64;
 
 import org.apache.fulcrum.crypto.CryptoAlgorithm;
 
@@ -70,7 +70,7 @@ import org.apache.fulcrum.crypto.CryptoAlgorithm;
  *
  * If you upgrade from Turbine 2.1 and suddently your old stored passwords
  * no longer work, please take a look at the OldJavaCrypt provider for 
- * bug-to-bug compatibility.
+ * bug-to-bug compatibility.                                                                                                                                                                     
  *
  * This provider can be used as the default crypto algorithm provider.
  *
@@ -149,8 +149,8 @@ public class JavaCrypt
         byte[] digest = md.digest(value.getBytes("UTF-8"));
 
         // Base64-encode the digest.
-        byte[] encodedDigest = Base64.encode(digest);
+        byte[] encodedDigest = Base64.encodeBase64(digest);
         return (encodedDigest == null ? null :
                 new String(encodedDigest));
     }
-}
+}                                                                                                            

@@ -6,6 +6,11 @@
   </properties>
 
   <body>
+    <release version="1.0.5" date="">
+      <action dev="epugh" type="update" due-to="Youngho Cho">
+        Update to use commons-codec-1.3
+      </action>  
+    </release>    
     <release version="1.0.4" date="">
       <action dev="epugh" type="update">
         Update to use Merlin 3.3.0
