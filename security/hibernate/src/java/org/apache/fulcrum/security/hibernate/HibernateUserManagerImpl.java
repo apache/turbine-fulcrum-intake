@@ -230,4 +230,41 @@ public class HibernateUserManagerImpl extends AbstractUserManager
 		return persistenceHelper;
 	}    
     
+	/**
+	 * Retrieve a User object with specified id.
+	 * 
+	 * @param id
+	 *            the id of the User.
+	 * @return an object representing the User with specified id.
+	 * @throws DataBackendException
+	 *             if there was an error accessing the data backend.
+	 * @throws UnknownEntityException
+	 *             if the user does not exist.
+	 */
+	public User getUserById(Object id)
+	throws DataBackendException, UnknownEntityException {
+		
+		User user = null;
+
+		if (id != null)
+			try {
+				List users =
+					getPersistenceHelper().retrieveSession().find(
+							"from " + User.class.getName() + " su where su.id=?",
+							id,
+							Hibernate.LONG);
+				if (users.size() == 0) {
+					throw new UnknownEntityException(
+							"Could not find user by id " + id);
+				}
+				user = (User) users.get(0);
+				//session.close();
+			} catch (HibernateException e) {
+				throw new DataBackendException(
+						"Error retriving user information",
+						e);
+			}
+			
+		return user;
+	}
 }

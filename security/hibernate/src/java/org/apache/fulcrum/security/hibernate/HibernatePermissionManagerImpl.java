@@ -127,20 +127,19 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager
     /**
     * Determines if the <code>Permission</code> exists in the security system.
     *
-    * @param permission a <code>Permission</code> value
-    * @return true if the permission exists in the system, false otherwise
+    * @param permissionName a <code>Permission</code> value
+    * @return true if the permission name exists in the system, false otherwise
     * @throws DataBackendException when more than one Permission with
     *         the same name exists.
-    * @throws Exception A generic exception.
     */
-    public boolean checkExists(Permission permission) throws DataBackendException
+    public boolean checkExists(String permissionName) throws DataBackendException
     {
         List permissions;
         try
         {
         
             permissions =
-			getPersistenceHelper().retrieveSession().find("from " + Permission.class.getName() + " sr where sr.name=?", permission.getName(), Hibernate.STRING);
+			getPersistenceHelper().retrieveSession().find("from " + Permission.class.getName() + " sp where sp.name=?", permissionName, Hibernate.STRING);
 		
         }
         catch (HibernateException e)
@@ -149,7 +148,7 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager
         }
         if (permissions.size() > 1)
         {
-            throw new DataBackendException("Multiple permissions with same name '" + permission.getName() + "'");
+            throw new DataBackendException("Multiple permissions with same name '" + permissionName + "'");
         }
         return (permissions.size() == 1);
     }
@@ -203,5 +202,54 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager
 		}
 		return persistenceHelper;
 	}
-   
+	/**
+	 * Determines if the <code>Permission</code> exists in the security system.
+	 *
+	 * @param permission a <code>Permission</code> value
+	 * @return true if the permission exists in the system, false otherwise
+	 * @throws DataBackendException when more than one Permission with
+	 *         the same name exists.
+	 */
+	public boolean checkExists(Permission permission) throws DataBackendException
+	{
+		return checkExists(permission.getName());
+	}
+	
+	/**
+	 * Retrieve a Permission object with specified id.
+	 * 
+	 * @param id
+	 *            the id of the Permission.
+	 * @return an object representing the Permission with specified id.
+	 * @throws DataBackendException
+	 *             if there was an error accessing the data backend.
+	 * @throws UnknownEntityException
+	 *             if the permission does not exist.
+	 */
+	public Permission getPermissionById(Object id)
+	throws DataBackendException, UnknownEntityException {
+		
+		Permission permission = null;
+
+		if (id != null)
+			try {
+				List permissions =
+					getPersistenceHelper().retrieveSession().find(
+							"from " + Permission.class.getName() + " sp where sp.id=?",
+							id,
+							Hibernate.LONG);
+				if (permissions.size() == 0) {
+					throw new UnknownEntityException(
+							"Could not find permission by id " + id);
+				}
+				permission = (Permission) permissions.get(0);
+				
+			} catch (HibernateException e) {
+				throw new DataBackendException(
+						"Error retriving permission information",
+						e);
+			}
+			
+		return permission;
+	}
 }

@@ -186,34 +186,45 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager
      * @return true if the group exists in the system, false otherwise
      * @throws DataBackendException when more than one Group with
      *         the same name exists.
-     * @throws Exception A generic exception.
      */
     public boolean checkExists(Group group) throws DataBackendException
     {
-        List groups;
-        try
-        {
+    	return checkExists(group.getName());
+    }
+    /**
+     * Determines if the <code>Group</code> exists in the security system.
+     *
+     * @param groupName a <code>Group</code> value
+     * @return true if the group name exists in the system, false otherwise
+     * @throws DataBackendException when more than one Group with
+     *         the same name exists.
+     */
+    public boolean checkExists(String groupName) throws DataBackendException
+	{
+    	List groups;
+    	try
+		{
 
-            groups =
-			getPersistenceHelper().retrieveSession().find(
-                    "from "
-                        + Group.class.getName()
-                        + " sg where sg.name=?",
-                    group.getName(),
-                    Hibernate.STRING);
-        }
-        catch (HibernateException e)
-        {
-            throw new DataBackendException(
-                "Error retriving user information",
-                e);
-        }
-        if (groups.size() > 1)
-        {
-            throw new DataBackendException(
-                "Multiple groups with same name '" + group.getName() + "'");
-        }
-        return (groups.size() == 1);
+    		groups =
+    			getPersistenceHelper().retrieveSession().find(
+    					"from "
+    					+ Group.class.getName()
+						+ " sg where sg.name=?",
+						groupName,
+						Hibernate.STRING);
+    	}
+    	catch (HibernateException e)
+		{
+    		throw new DataBackendException(
+    				"Error retriving user information",
+					e);
+    	}
+    	if (groups.size() > 1)
+    	{
+    		throw new DataBackendException(
+    				"Multiple groups with same name '" + groupName + "'");
+    	}
+    	return (groups.size() == 1);
     }
     /**
     * Creates a new group with specified attributes.
@@ -244,4 +255,43 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager
         return persistenceHelper;
     }
 
+    /**
+     * Retrieve a Group object with specified id.
+     * 
+     * @param id
+     *            the id of the Group.
+     * @return an object representing the Group with specified id.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the group does not exist.
+     */
+    public Group getGroupById(Object id)
+	throws DataBackendException, UnknownEntityException {
+    	
+    	Group group = null;
+
+    	if (id != null)
+    		try {
+    			List groups =
+    				getPersistenceHelper().retrieveSession().find(
+    						"from " + Group.class.getName() + " sr where sr.id=?",
+							id,
+							Hibernate.LONG);
+    			if (groups.size() == 0) {
+    				throw new UnknownEntityException(
+    						"Could not find group by id " + id);
+    			}
+    			group = (Group) groups.get(0);
+    			
+    		} catch (HibernateException e) {
+    			throw new DataBackendException(
+    					"Error retriving group information",
+						e);
+    		}
+    		
+    		return group;
+    }
+    
+    
 }

@@ -72,34 +72,42 @@ import org.apache.fulcrum.security.util.PermissionSet;
  */
 public class DynamicRole extends SecurityEntityImpl implements Role
 {
-    private PermissionSet permissionSet = new PermissionSet();
+    private Set permissionSet = new PermissionSet();
 
-    private GroupSet groupSet = new GroupSet();
+    private Set groupSet = new GroupSet();
     /**
      * @return
      */
     public PermissionSet getPermissions()
     {
-        return permissionSet;
+    	if( permissionSet instanceof PermissionSet )
+    		return (PermissionSet) permissionSet;
+    	else {
+    		permissionSet = new PermissionSet(permissionSet);
+    		return (PermissionSet)permissionSet;
+    	}
     }
     /**
      * @return
      */
     public Set getPermissionsAsSet()
     {
-        return permissionSet.getSet();
+        return permissionSet;
     }
 
-    void setPermissionsAsSet(Set permissions)
+    public void setPermissionsAsSet(Set permissions)
     {
-        this.getPermissions().add(permissions);
+        this.permissionSet = permissions;;
     }
     /**
      * @param permissionSet
      */
     public void setPermissions(PermissionSet permissionSet)
     {
-        this.permissionSet = permissionSet;
+    	if( permissionSet != null )
+    		this.permissionSet = permissionSet;
+    	else
+    		this.permissionSet = new PermissionSet();
     }
 
     /**
@@ -124,14 +132,22 @@ public class DynamicRole extends SecurityEntityImpl implements Role
     	*/
     public GroupSet getGroups()
     {
-        return groupSet;
+    	if( groupSet instanceof GroupSet )
+    		return (GroupSet) groupSet;
+    	else {
+    		groupSet = new GroupSet(groupSet);
+    		return (GroupSet)groupSet;
+    	}
     }
     /**
     	* @param groupSet
     	*/
     public void setGroups(GroupSet groupSet)
     {
-        this.groupSet = groupSet;
+    	if( groupSet != null )
+    		this.groupSet = groupSet;
+    	else
+    		this.groupSet = new GroupSet();
     }
 
     /**
@@ -151,12 +167,12 @@ public class DynamicRole extends SecurityEntityImpl implements Role
         getGroups().remove(group);
     }
 
-    void setGroupsAsSet(Set groups)
+    public void setGroupsAsSet(Set groups)
     {
-        this.getGroups().add(groups);
+        this.groupSet = groups;
     }
-    Set getGroupsAsSet()
+    public Set getGroupsAsSet()
     {
-        return getGroups().getSet();
+        return groupSet;
     }
 }

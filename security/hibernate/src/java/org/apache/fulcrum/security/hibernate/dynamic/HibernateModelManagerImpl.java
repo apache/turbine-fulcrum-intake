@@ -201,9 +201,9 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
         }
     }
     /**
-	 * Revokes all permissions from a Role.
+	 * Revokes all permissions and groups from a Role.
 	 * 
-	 * This method is user when deleting a Role.
+	 * This method is used when deleting a Role.
 	 * 
 	 * @param role the Role
 	 * @throws DataBackendException if there was an error accessing the data backend.
@@ -220,8 +220,16 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
             {
                 ((DynamicRole) role).setPermissions(new PermissionSet());
 				getPersistenceHelper().updateEntity(role);
-                return;
-            }
+				
+				Object groups[] = ((DynamicRole) role).getGroups().toArray();
+				
+				for (int i = 0; i < groups.length; i++)
+				{
+					Group group = (Group) groups[i];
+					revoke(group, role);
+				}	
+				return;            
+			}
         }
         catch (Exception e)
         {
@@ -242,7 +250,7 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
 	 * @throws DataBackendException if there was an error accessing the data backend.
 	 * @throws UnknownEntityException if the account is not present.
 	 */
-    public void grant(User user, Group group) throws DataBackendException, UnknownEntityException
+    public synchronized void grant(User user, Group group) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
         boolean userExists = false;
@@ -287,7 +295,7 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
 	 * @throws DataBackendException if there was an error accessing the data backend.
 	 * @throws UnknownEntityException if the user or group is not present.
 	 */
-    public void revoke(User user, Group group) throws DataBackendException, UnknownEntityException
+    public synchronized void revoke(User user, Group group) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
         boolean userExists = false;
@@ -398,5 +406,44 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
             throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
         }
     }
+    
+    /**
+     * Revokes all users and roles from a group
+     * 
+     * This method is used when deleting a group.
+     * 
+     * @param group the Group.
+     * @throws DataBackendException if there was an error accessing the data backend.
+     * @throws UnknownEntityException if the account is not present.
+     */
+    public synchronized void revokeAll(Group group)
+	throws DataBackendException, UnknownEntityException
+	{
+    	boolean groupExists = false;
+    	groupExists = getGroupManager().checkExists(group);
+    	if (groupExists)
+    	{
+    		Object users[] = ((DynamicGroup) group).getUsers().toArray();
+   		
+    		for (int i = 0; i < users.length; i++)
+    		{
+    			User user = (User) users[i];
+    			revoke(user, group);
+    		}
 
+    		Object roles[] = ((DynamicGroup) group).getRoles().toArray();
+    		
+    		for (int i = 0; i < roles.length; i++)
+    		{
+    			Role role = (Role) roles[i];
+    			revoke(group, role);
+    		}
+
+    		return;
+    	}
+    	else
+    	{
+    		throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
+    	}
+    }
 }

@@ -6,18 +6,25 @@
   </properties>
 
   <body>
-  	<release version="1.0-alpha-6" date="in cvs">
+    <release version="1.0-alpha-7" date="in cvs">
+      <action dev="mmanner" type="add">
+        Change Dynamic* entity objects to use Set.  Refactored Hibernate implementation of Security to 
+        use more efficient deletion when doing oneshot deletes during revokeAll methods.  Added get[Entity]ById()
+        method as well.  Change grants/revokes to be Synchronizied.
+      </action>
+    </release>  
+    <release version="1.0-alpha-6" date="in cvs">
       <action dev="epugh" type="add">
-	  Added getAllUsers() to UserManager
+    Added getAllUsers() to UserManager
       </action>
     </release>
     <release version="1.0-alpha-4" date="in cvs">
       <action dev="epugh" type="add">
-	  Added ThreadSafe marker interface to AbstractManager.
-      </action>        	
+    Added ThreadSafe marker interface to AbstractManager.
+      </action>         
       <action dev="epugh" type="add">
       Added the "Basic" model and supplied implementations for memory, NT, and Hibernate.
-      </action>        	
+      </action>         
       <action dev="epugh" type="add">
       Added the "Basic" model and supplied implementations for memory, NT, and Hibernate.
       </action>       

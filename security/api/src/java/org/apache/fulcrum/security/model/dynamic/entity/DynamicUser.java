@@ -71,7 +71,7 @@ import org.apache.fulcrum.security.util.GroupSet;
 public class DynamicUser extends SecurityEntityImpl implements User
 {
     private String password;
-    private GroupSet groups = new GroupSet();
+    private Set groupSet = new GroupSet();
 
 
     /**
@@ -93,14 +93,22 @@ public class DynamicUser extends SecurityEntityImpl implements User
     */
     public GroupSet getGroups()
     {
-        return groups;
+    	if( groupSet instanceof GroupSet )
+    		return (GroupSet) groupSet;
+    	else {
+    		groupSet = new GroupSet(groupSet);
+    		return (GroupSet)groupSet;
+    	}
     }
     /**
      * @param groups
      */
     public void setGroups(GroupSet groups)
     {
-        this.groups = groups;
+    	if( groups != null )
+    		this.groupSet = groups;
+    	else
+    		this.groupSet = new GroupSet();
     }
     public void removeGroup(Group group)
     {
@@ -111,12 +119,12 @@ public class DynamicUser extends SecurityEntityImpl implements User
         getGroups().add(group);
     }
 
-	void setGroupsAsSet(Set groups)
+	public void setGroupsAsSet(Set groups)
 	{
-		this.getGroups().add(groups);
+		this.groupSet = groups;
 	}
-	Set getGroupsAsSet()
+	public Set getGroupsAsSet()
 	{
-		return getGroups().getSet();
+		return groupSet;
 	}
 }

@@ -107,19 +107,18 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
     /**
       * Determines if the <code>Role</code> exists in the security system.
       *
-      * @param role a <code>Role</code> value
-      * @return true if the role exists in the system, false otherwise
+      * @param roleName a <code>Role</code> value
+      * @return true if the role name exists in the system, false otherwise
       * @throws DataBackendException when more than one Role with
       *         the same name exists.
-      * @throws Exception A generic exception.
       */
-    public boolean checkExists(Role role) throws DataBackendException
+    public boolean checkExists(String roleName) throws DataBackendException
     {
         List roles;
         try
         {
             
-            roles = getPersistenceHelper().retrieveSession().find("from " + Role.class.getName() + " sr where sr.name=?", role.getName(), Hibernate.STRING);
+            roles = getPersistenceHelper().retrieveSession().find("from " + Role.class.getName() + " sr where sr.name=?", roleName, Hibernate.STRING);
 
         }
         catch (HibernateException e)
@@ -128,7 +127,7 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
         }
         if (roles.size() > 1)
         {
-            throw new DataBackendException("Multiple roles with same name '" + role.getName() + "'");
+            throw new DataBackendException("Multiple roles with same name '" + roleName + "'");
         }
         return (roles.size() == 1);
     }
@@ -211,5 +210,56 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
 			persistenceHelper = (PersistenceHelper)resolve(PersistenceHelper.ROLE);
 		}
 		return persistenceHelper;
+	}
+	
+	/**
+	 * Determines if the <code>Role</code> exists in the security system.
+	 *
+	 * @param role a <code>Role</code> value
+	 * @return true if the role exists in the system, false otherwise
+	 * @throws DataBackendException when more than one Role with
+	 *         the same name exists.
+	 */
+	public boolean checkExists(Role role) throws DataBackendException
+	{
+		return checkExists(role.getName());
+	}
+	
+	/**
+	 * Retrieve a Role object with specified id.
+	 * 
+	 * @param id
+	 *            the id of the Role.
+	 * @return an object representing the Role with specified id.
+	 * @throws DataBackendException
+	 *             if there was an error accessing the data backend.
+	 * @throws UnknownEntityException
+	 *             if the role does not exist.
+	 */
+	public Role getRoleById(Object id)
+	throws DataBackendException, UnknownEntityException {
+		
+		Role role = null;
+
+		if (id != null)
+			try {
+				List roles =
+					getPersistenceHelper().retrieveSession().find(
+							"from " + Role.class.getName() + " sr where sr.id=?",
+							id,
+							Hibernate.LONG);
+				if (roles.size() == 0) {
+					throw new UnknownEntityException(
+							"Could not find role by id " + id);
+				}
+				role = (Role) roles.get(0);
+				
+			} catch (HibernateException e) {
+				throw new DataBackendException(
+						"Error retriving role information",
+						e);
+			}
+			
+		return role;
 	}
 }

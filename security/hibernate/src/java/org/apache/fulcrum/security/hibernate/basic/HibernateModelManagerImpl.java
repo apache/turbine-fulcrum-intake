@@ -86,7 +86,7 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
 	 * @throws DataBackendException if there was an error accessing the data backend.
 	 * @throws UnknownEntityException if the account is not present.
 	 */
-    public void grant(User user, Group group) throws DataBackendException, UnknownEntityException
+    public synchronized void grant(User user, Group group) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
         boolean userExists = false;
@@ -132,7 +132,7 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
 	 * @throws DataBackendException if there was an error accessing the data backend.
 	 * @throws UnknownEntityException if the user or group is not present.
 	 */
-    public void revoke(User user, Group group) throws DataBackendException, UnknownEntityException
+    public synchronized void revoke(User user, Group group) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
         boolean userExists = false;

@@ -72,14 +72,19 @@ import org.apache.fulcrum.security.util.UserSet;
  */
 public class DynamicGroup extends SecurityEntityImpl implements Group
 {
-    private RoleSet roleSet = new RoleSet();
-    private UserSet userSet = new UserSet();
+    private Set roleSet = new RoleSet();
+    private Set userSet = new UserSet();
     /**
      * @return
      */
     public UserSet getUsers()
     {
-        return userSet;
+    	if( userSet instanceof UserSet )
+    		return (UserSet) userSet;
+    	else {
+    		userSet = new UserSet(userSet);
+    		return (UserSet)userSet;
+    	}
     }
 
     /**
@@ -87,13 +92,16 @@ public class DynamicGroup extends SecurityEntityImpl implements Group
      */
     public void setUsers(UserSet userSet)
     {
-        this.userSet = userSet;
+    	if( userSet != null )
+    		this.userSet = userSet;
+    	else
+    		this.userSet = new UserSet();
     }
     
 	/**
 	 * @return
 	 */
-	public UserSet getUsersAsSet()
+	public Set getUsersAsSet()
 	{
 		return userSet;
 	}
@@ -103,7 +111,7 @@ public class DynamicGroup extends SecurityEntityImpl implements Group
 	 */
 	public void setUsersAsSet(Set users)
 	{
-		getUsers().add(users);
+		this.userSet = users;
 	}    
 
     /**
@@ -111,14 +119,22 @@ public class DynamicGroup extends SecurityEntityImpl implements Group
      */
     public RoleSet getRoles()
     {
-        return roleSet;
+    	if( roleSet instanceof RoleSet )
+    		return (RoleSet) roleSet;
+    	else {
+    		roleSet = new RoleSet(roleSet);
+    		return (RoleSet)roleSet;
+    	}
     }
     /**
      * @param roleSet
      */
     public void setRoles(RoleSet roleSet)
     {
-        this.roleSet = roleSet;
+    	if( roleSet != null )
+    		this.roleSet = roleSet;
+    	else
+    		this.roleSet = new RoleSet();
     }
     public void addRole(Role role)
     {
@@ -138,12 +154,12 @@ public class DynamicGroup extends SecurityEntityImpl implements Group
         getUsers().remove(user);
     }
     
-	void setRolesAsSet(Set roles)
+	public void setRolesAsSet(Set roles)
 	{
-		this.getRoles().add(roles);
+		this.roleSet = roles;
 	}
-	Set getRolesAsSet()
+	public Set getRolesAsSet()
 	{
-		return getRoles().getSet();
+		return roleSet;
 	}    
 }
