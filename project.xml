@@ -233,6 +233,7 @@
     </dependency>
   </dependencies>
   <build>
+    <nagEmailAddress>turbine-dev@jakarta.apache.org</nagEmailAddress>
     <sourceDirectories>
       <sourceDirectory>src/core</sourceDirectory>
       <sourceDirectory>src/services</sourceDirectory>
