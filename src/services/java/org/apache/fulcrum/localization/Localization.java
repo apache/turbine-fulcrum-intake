@@ -230,9 +230,9 @@ public abstract class Localization
     }
 
     /**
-     * Attempts to pull the "Accept-Language" header out of the
-     * HttpServletRequest object and then parse it.  If the header is
-     * not present, it will return a null Locale.
+     * Attempts to pull the <code>Accept-Language</code> header out of
+     * the HttpServletRequest object and then parse it.  If the header
+     * is not present, it will return a null Locale.
      *
      * @param req HttpServletRequest.
      * @return A Locale.
@@ -243,8 +243,8 @@ public abstract class Localization
     }
 
     /**
-     * This method parses the Accept-Language header and attempts to
-     * create a Locale out of it.
+     * This method parses the <code>Accept-Language</code> header and
+     * attempts to create a Locale out of it.
      *
      * @param languageHeader A String with the language header.
      * @return A Locale.
