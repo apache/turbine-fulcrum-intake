@@ -32,9 +32,15 @@
   <target name="env">
     <echo message="java.home = ${java.home}"/>
     <echo message="user.home = ${user.home}"/>
+    <echo message="lib.repo = ${lib.repo}"/>
     <echo message="velocity.jar = ${velocity.jar}"/>
     <echo message="log4j.jar = ${log4j.jar}"/>
-    <echo message=""/>
+    <echo message="torque.jar = ${torque.jar}"/>
+    <echo message="bsf.jar = ${bsf.jar}"/>
+    <echo message="servlet.jar = ${servlet.jar}"/>
+    <echo message="javamail.jar = ${javamail.jar}"/>
+    <echo message="jaf.jar = ${jaf.jar}"/>
+    <echo message="xmlrpc.jar = ${xmlrpc.jar}"/>
   </target>
 
   <!-- ================================================================== -->
@@ -85,6 +91,42 @@
       property="jdbc.present"
       classpathref="classpath"
     />
+
+    <available
+      classname="org.apache.turbine.torque.TorqueObjectModelTask" 
+      property="torque.present"
+      classpathref="classpath"
+    />
+
+    <available
+      classname="com.ibm.bsf.BSFManager" 
+      property="bsf.present"
+      classpathref="classpath"
+    />
+
+    <available
+      classname="javax.servlet.http.HttpSessionBindingListener" 
+      property="servlet.present"
+      classpathref="classpath"
+    />
+
+    <available
+      classname="javax.mail.internet.MimeUtility" 
+      property="javamail.present"
+      classpathref="classpath"
+    />
+
+    <available
+      classname="javax.activation.DataSource" 
+      property="jaf.present"
+      classpathref="classpath"
+    />
+
+    <available
+      classname="org.apache.xmlrpc.XmlRpcException" 
+      property="xmlrpc.present"
+      classpathref="classpath"
+    />
   </target>
 
   <!-- ================================================================== -->
@@ -105,6 +147,48 @@
     </antcall>
   </target>
 
+  <target name="check.torque" unless="torque.present">
+    <antcall target="property-warning">
+      <param name="name" value="torque.jar"/>
+      <param name="value" value="${torque.jar}"/>
+    </antcall>
+  </target>
+
+  <target name="check.bsf" unless="bsf.present">
+    <antcall target="property-warning">
+      <param name="name" value="bsf.jar"/>
+      <param name="value" value="${bsf.jar}"/>
+    </antcall>
+  </target>
+
+  <target name="check.servlet" unless="servlet.present">
+    <antcall target="property-warning">
+      <param name="name" value="servlet.jar"/>
+      <param name="value" value="${servlet.jar}"/>
+    </antcall>
+  </target>
+
+  <target name="check.javamail" unless="javamail.present">
+    <antcall target="property-warning">
+      <param name="name" value="javamail.jar"/>
+      <param name="value" value="${javamail.jar}"/>
+    </antcall>
+  </target>
+
+  <target name="check.jaf" unless="jaf.present">
+    <antcall target="property-warning">
+      <param name="name" value="jaf.jar"/>
+      <param name="value" value="${jaf.jar}"/>
+    </antcall>
+  </target>
+
+  <target name="check.xmlrpc" unless="xmlrpc.present">
+    <antcall target="property-warning">
+      <param name="name" value="xmlrpc.jar"/>
+      <param name="value" value="${xmlrpc.jar}"/>
+    </antcall>
+  </target>
+
   <target name="property-warning">
     <echo>
       +----------------------------------------------------------------+
@@ -113,7 +197,7 @@
       | You must define the following property in order                |
       | to build Torque:                                               |
       |                                                                |
-      | ${name} 
+      | ${name} = ${value}
       |                                                                |
       | You can set this property in the provided build.properties     |
       | file, or you may set this property in your                     |
@@ -128,7 +212,10 @@
   <!-- ================================================================== -->
   
   <target name="prepare" 
-    depends="init,check.velocity,check.log4j,om,env">
+    depends="init,
+        check.velocity,check.log4j,check.torque,check.bsf,
+        check.servlet,check.javamail,check.jaf,check.xmlrpc,
+        om,env">
     
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}/classes"/>
@@ -158,16 +245,17 @@
       <classpath refid="classpath"/>
     </javac>
 
-    <!-- copy database.dtd to the right place -->
+    <!-- copy database.dtd to the right place
     <copy file="${src.dir}/dtd/database.dtd"
       todir="${build.dir}/classes/org/apache/turbine/torque/engine/database/transform"/>
+     -->
   </target>
 
   <!-- ================================================================== -->
   <!-- J A R                                                              -->
   <!-- ================================================================== -->
   
-  <target name="jar" depends="compile" description="--> generates the torque.jar">
+  <target name="jar" depends="compile" description="--> generates the fulcrum.jar">
     <jar jarfile="${build.dir}/${final.name}.jar"
          basedir="${build.dir}/classes"
          excludes="**/package.html"/>
@@ -277,6 +365,19 @@
   <!-- ================================================================== -->
 
   <target name="dist" depends="compile">
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- I N S T A L L J A R                                                -->
+  <!-- ================================================================== -->
+
+  <target name="install-jar" depends="jar" 
+          description="--> Installs .jar file in ${lib.repo}">
+    <copy todir="${lib.repo}" filtering="no">
+      <fileset dir="${build.dir}">
+        <include name="${final.name}.jar"/>
+      </fileset>
+    </copy>
   </target>
 
   <!-- ================================================================== -->
