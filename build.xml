@@ -19,7 +19,6 @@
     <pathelement location="${jndi.jar}"/>
     <pathelement location="${xalan.jar}"/>
     <pathelement location="${xmlrpc.jar}"/>
-    <pathelement location="${xalan.jar}"/>
     <pathelement location="${torque.jar}"/>
     <pathelement location="${village.jar}"/>
     <pathelement location="${jdbc.jar}"/>
