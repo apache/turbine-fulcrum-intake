@@ -140,15 +140,7 @@ public class TurbineTemplateService
     public void init()
         throws InitializationException
     {
-        initTemplate();
         setInit(true);
-    }
-
-    /**
-     * Initialize the template service.
-     */
-    private void initTemplate()
-    {
     }
 
     /**
