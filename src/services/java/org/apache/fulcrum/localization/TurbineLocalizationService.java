@@ -114,7 +114,9 @@ public class TurbineLocalizationService
      */
     private HashMap bundles = null;
 
-    /** The name of the default bundle to use. */
+    /**
+     * The list of default bundles to search.
+     */
     private String[] bundleNames = null;
 
     /**
