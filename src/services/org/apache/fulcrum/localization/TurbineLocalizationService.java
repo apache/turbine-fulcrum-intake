@@ -306,7 +306,7 @@ public class TurbineLocalizationService
     {
         HashMap bundlesByLocale = (HashMap) bundles.get(bundleName);
         ResourceBundle rb = (bundlesByLocale == null ? null :
-                             (ResourceBundle) bundlesByLocale.get(bundleName));
+                             (ResourceBundle) bundlesByLocale.get(locale));
 
         if (rb == null)
         {
