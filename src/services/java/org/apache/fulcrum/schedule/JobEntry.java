@@ -55,6 +55,7 @@ package org.apache.fulcrum.schedule;
  */
 
 import java.util.Calendar;
+import java.lang.Comparable;
 import java.util.Date;
 import org.apache.torque.om.Persistent;
 
@@ -67,7 +68,7 @@ import org.apache.torque.om.Persistent;
  */
 public class JobEntry
     extends org.apache.fulcrum.schedule.BaseJobEntry
-    implements Persistent
+    implements Persistent, Comparable
 {
 
     /** indicates if job is currently running */
@@ -131,8 +132,11 @@ public class JobEntry
         throws Exception
     {
         if ( task == null || task.length() == 0 )
-            throw new Exception("Error in JobEntry. Bad Job parameter. Task not set.");
-
+        {
+            throw new Exception("Error in JobEntry. " + 
+                "Bad Job parameter. Task not set.");
+        }
+        
         setSecond(sec);
         setMinute(min);
         setHour(hour);
@@ -141,6 +145,21 @@ public class JobEntry
         setTask(task);
 
         calcRunTime();
+    }
+
+    /**
+     * Compares one JobEntry to another JobEntry based on the JobId
+     */
+    public int compareTo(Object je)
+    {
+        int result = -1;
+        if (je instanceof JobEntry)
+        {
+            result = getJobId().getBigDecimal()
+            .compareTo(
+                ((JobEntry)je).getJobId().getBigDecimal());
+        }
+        return result;
     }
 
     /**
