@@ -55,6 +55,7 @@ package org.apache.fulcrum.template;
  */
 
 import java.io.OutputStream;
+import java.io.Writer;
 import org.apache.fulcrum.ServiceException;
 import org.apache.fulcrum.TurbineServices;
 
@@ -106,6 +107,14 @@ public abstract class TurbineTemplate
         throws ServiceException
     {
         getService().handleRequest(context, template, outputStream);
+    }
+
+    public static final void handleRequest(TemplateContext context,
+                                           String template,
+                                           Writer writer)
+        throws ServiceException
+    {
+        getService().handleRequest(context, template, writer);
     }
 
     public static final TemplateContext getTemplateContext()

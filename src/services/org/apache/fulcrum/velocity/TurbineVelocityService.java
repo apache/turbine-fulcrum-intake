@@ -59,6 +59,7 @@ import java.util.Iterator;
 import java.util.Enumeration;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 import java.io.OutputStreamWriter;
 import java.io.ByteArrayOutputStream;
 import org.apache.velocity.Template;
@@ -167,7 +168,7 @@ public class TurbineVelocityService
     public String handleRequest(Context context, String filename)
         throws ServiceException
     {
-        return handleRequest(context, filename, null, null);
+        return handleRequest(context, filename, (String)null, null);
     }
 
     /**
@@ -239,6 +240,54 @@ public class TurbineVelocityService
     }
 
     /**
+     * @see org.apache.fulcrum.template.TemplateEngineService#handleRequest(
+     * Context, String, Writer)
+     */
+    public void handleRequest(TemplateContext context, 
+                                       String template, Writer writer)
+        throws ServiceException
+    {
+        handleRequest(new ContextAdapter(context), template, writer);
+    }
+
+    /**
+     * @see org.apache.fulcrum.velocity.VelocityService#handleRequest(Context,
+     * String, Writer)
+     */
+    public void handleRequest(Context context, String filename,
+                              Writer writer)
+        throws ServiceException
+    {
+        handleRequest(context, filename, writer, null);
+    }
+
+    /**
+     * @see org.apache.fulcrum.velocity.VelocityService#handleRequest(Context,
+     * String, Writer, String)
+     */
+    public void handleRequest(Context context, String filename,
+                              Writer writer, String encoding)
+        throws ServiceException
+    {
+        try
+        {
+            if (encoding != null)
+            {
+                // Request scoped encoding first supported by Velocity 1.1.
+                Velocity.mergeTemplate(filename, encoding, context, writer);
+            }
+            else
+            {
+                Velocity.mergeTemplate(filename, context, writer);
+            }
+        }
+        catch (Exception e)
+        {
+            renderingError(filename, e);
+        }
+    }
+
+    /**
      * Returns the populated event cartridge
      */
     public EventCartridge getEventCartridge()
@@ -287,20 +336,24 @@ public class TurbineVelocityService
         OutputStreamWriter writer = null;
         try
         {
-            writer = new OutputStreamWriter(output, charset);
-            if (encoding != null)
+            try
             {
+<<<<<<< TurbineVelocityService.java
+                writer = new OutputStreamWriter(output, charset);
+=======
                 // Request scoped encoding first supported by Velocity 1.1.
                 Velocity.mergeTemplate(filename, encoding, vc, writer);
+>>>>>>> 1.9
             }
-            else
+            catch (Exception e)
             {
+<<<<<<< TurbineVelocityService.java
+                renderingError(filename, e);
+=======
                 Velocity.mergeTemplate(filename, vc, writer);
+>>>>>>> 1.9
             }
-        }
-        catch (Exception e)
-        {
-            renderingError(filename, e);
+            handleRequest(context, filename, writer, encoding);
         }
         finally
         {

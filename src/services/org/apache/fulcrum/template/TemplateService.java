@@ -55,6 +55,7 @@ package org.apache.fulcrum.template;
  */
 
 import java.io.OutputStream;
+import java.io.Writer;
 import org.apache.fulcrum.Service;
 import org.apache.fulcrum.ServiceException;
 
@@ -117,6 +118,10 @@ public interface TemplateService
 
     public void handleRequest(TemplateContext context, String template,
                               OutputStream outputStream)
+        throws ServiceException;
+
+    public void handleRequest(TemplateContext context, String template,
+                              Writer writer)
         throws ServiceException;
 
     public TemplateContext getTemplateContext();

@@ -55,6 +55,7 @@ package org.apache.fulcrum.velocity;
  */
 
 import java.io.OutputStream;
+import java.io.Writer;
 import org.apache.fulcrum.Service;
 import org.apache.fulcrum.ServiceException;
 import org.apache.velocity.Template;
@@ -138,5 +139,37 @@ public interface VelocityService extends Service
     public void handleRequest(Context context, String filename,
                               OutputStream out, String charset,
                               String encoding)
+        throws ServiceException;
+
+    /**
+     * Process the request and fill in the template using the values
+     * set in <code>context</code>.
+     *
+     * @param context A context to use when evaluating the specified
+     * template.
+     * @param filename The file name of the template.
+     * @param writer The writer to which we will write the processed template.
+     * @throws ServiceException Any exception trown while processing will be
+     *         wrapped into a ServiceException and rethrown.
+     */
+    public void handleRequest(Context context, String filename,
+                              Writer writer)
+        throws ServiceException;
+
+    /**
+     * Process the request and fill in the template using the values
+     * set in <code>context</code>.
+     *
+     * @param context A context to use when evaluating the specified
+     * template.
+     * @param filename The file name of the template.
+     * @param writer The writer to which we will write the processed template.
+     * @param encoding The encoding to use when merging context and
+     * template.
+     * @throws ServiceException Any exception trown while processing will be
+     *         wrapped into a ServiceException and rethrown.
+     */
+    public void handleRequest(Context context, String filename,
+                              Writer writer, String encoding)
         throws ServiceException;
 }

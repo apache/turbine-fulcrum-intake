@@ -57,6 +57,7 @@ package org.apache.fulcrum.jsp;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.RequestDispatcher;
@@ -230,6 +231,17 @@ public class TurbineJspService
      */
     public void handleRequest(TemplateContext context, String template,
                               OutputStream outputStream)
+        throws ServiceException
+    {
+        // TODO: Implement me!
+    }
+
+    /**
+     * @see org.apache.fulcrum.template.TemplateEngineService#handleRequest(
+     * Context, String, Writer)
+     */
+    public void handleRequest(TemplateContext context, 
+                              String template, Writer writer)
         throws ServiceException
     {
         // TODO: Implement me!

@@ -55,6 +55,7 @@ package org.apache.fulcrum.template;
  */
 
 import java.io.OutputStream;
+import java.io.Writer;
 import java.util.Iterator;
 import java.util.Hashtable;
 import org.apache.fulcrum.BaseService;
@@ -159,5 +160,12 @@ public abstract class BaseTemplateEngineService
 
     public abstract void handleRequest(TemplateContext context,
                                        String template, OutputStream os)
+        throws ServiceException;
+
+    /**
+     * @see org.apache.fulcrum.template.TemplateEngineService
+     */
+    public abstract void handleRequest(TemplateContext context, 
+                                       String template, Writer writer)
         throws ServiceException;
 }

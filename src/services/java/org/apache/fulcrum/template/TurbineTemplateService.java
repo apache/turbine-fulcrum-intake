@@ -56,6 +56,7 @@ package org.apache.fulcrum.template;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Hashtable;
 import org.apache.fulcrum.ServiceException;
@@ -251,6 +252,14 @@ public class TurbineTemplateService
     {
         TemplateEngineService tes = getTemplateEngineService(template);
         tes.handleRequest(context, template, outputStream);
+    }
+
+    public void handleRequest(TemplateContext context, String template,
+                              Writer writer)
+        throws ServiceException
+    {
+        TemplateEngineService tes = getTemplateEngineService(template);
+        tes.handleRequest(context, template, writer);
     }
 
     public TemplateContext getTemplateContext()

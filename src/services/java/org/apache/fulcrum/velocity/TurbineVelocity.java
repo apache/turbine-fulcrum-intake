@@ -55,7 +55,9 @@ package org.apache.fulcrum.velocity;
  */
 
 import java.io.OutputStream;
+import java.io.Writer;
 import org.apache.fulcrum.TurbineServices;
+import org.apache.fulcrum.ServiceException;
 import org.apache.velocity.context.Context;
 
 /**
@@ -161,5 +163,27 @@ public abstract class TurbineVelocity
         throws Exception
     {
         getService().handleRequest(context, template, out, charset, encoding);
+    }
+
+    /**
+     * @see org.apache.fulcrum.velocity.VelocityService#handleRequest(Context,
+     * String, Writer)
+     */
+    public static void handleRequest(Context context, String filename, 
+                                     Writer writer)
+        throws ServiceException
+    {
+        getService().handleRequest(context, filename, writer, null);
+    }
+
+    /**
+     * @see org.apache.fulcrum.velocity.VelocityService#handleRequest(Context,
+     * String, Writer, String)
+     */
+    public static void handleRequest(Context context, String filename,
+                                     Writer writer, String encoding)
+        throws ServiceException
+    {
+        getService().handleRequest(context, filename, writer, encoding);
     }
 }
