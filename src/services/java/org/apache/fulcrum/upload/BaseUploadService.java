@@ -55,6 +55,7 @@ package org.apache.fulcrum.upload;
  */
 
 import java.util.ArrayList;
+import java.io.File;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
@@ -89,15 +90,23 @@ public abstract class BaseUploadService
      */
     public void init() throws InitializationException
     {
-        String path = getConfiguration().getString(
+        String repoPath = getConfiguration().getString(
             UploadService.REPOSITORY_KEY,
             UploadService.REPOSITORY_DEFAULT);
 
-        path = getRealPath(path);
-        getConfiguration().setProperty(UploadService.REPOSITORY_KEY, path);
+        // test for the existence of the path within the webapp directory.
+        // if it does not exist, assume the path was to be used as is.
+        String testPath = getRealPath(repoPath);
+        File testDir = new File(testPath);
+        if ( testDir.exists() ) 
+        {
+            repoPath = testPath;
+        }
+
+        getConfiguration().setProperty(UploadService.REPOSITORY_KEY, repoPath);
 
         getCategory().debug(
-            "Upload Service: REPOSITORY_KEY => " + path);
+            "Upload Service: REPOSITORY_KEY => " + repoPath);
 
         setInit(true);
     }
