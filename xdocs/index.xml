@@ -15,11 +15,12 @@
      used on both projects.  
    </p>
    <p>
-     Fulcrum is currently evolving into a component repository for Turbine.  
+     Fulcrum is currently evolving into a component repository based on the Avalon framework.  
      Each service is being converted into a stand alone component that can
      be released independently of the other components.  This will allow the 
      Turbine project to to release components as they change instead of having
-     to release everything at once.
+     to release everything at once.  This will also allow other projects to take advantage
+     of these components.
    </p>
  </section>
  
@@ -28,6 +29,12 @@
      All components are compatible in Avalon's ECM container.  Any dependancies 
      on other components, system properties, or context elements are clearly 
      documentmented in the docs for each component.
+   </p>
+   <p>
+    Additionally, Fulcrum offers the Yaafi component.  Yaafi (Yet Another Avalon Framework
+    Implementation) is a very simple container that is meant to be used with singleton
+    components.  It is perfect for unit testing your components.  You can then run them in
+    any other Avalon container like ECM, Phoenix, Excaliber, etc..
    </p>
  </section>
 
