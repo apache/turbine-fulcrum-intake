@@ -449,7 +449,7 @@ public class DefaultVelocityService
 
             ecconfig = oldConf
                 .getVector("eventCartridge.classes", new Vector(0));
-            if (ecconfig.size() == 0)
+            if (ecconfig.isEmpty())
             {
                 getLogger().info("No Velocity EventCartridges configured.");
             }
