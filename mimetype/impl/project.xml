@@ -9,7 +9,7 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-mimetype-api</artifactId>
-      <version>1.0.4</version>
+      <version>1.0.4-dev</version>
     </dependency>
 
     <!--  Needed only for testing -->
