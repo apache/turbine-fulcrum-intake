@@ -27,6 +27,8 @@
       <item name="Pull"                  href="/multiproject/fulcrum-pull/index.html"/>
       <item name="Scheduler"             href="/multiproject/fulcrum-scheduler/index.html"/>
       <item name="Security"              href="/multiproject/fulcrum-security/index.html"/>
+      <item name="Workflow"              href="/multiproject/fulcrum-workflow/index.html"/>      
+      <item name="Workflow Example"      href="/multiproject/fulcrum-workflow-example/index.html"/>            
       <item name="XMLRPC"                href="/multiproject/fulcrum-xmlrpc/index.html"/>
     </menu>
     <menu name="Howtos (old)">
