@@ -89,6 +89,7 @@ public class ContainerTest extends BaseUnitTest
         }
         assertNotNull(sc);
         sc.test();
+        assertEquals(sc.getAppRoot(),sc.getAppRoot2());
         this.release(sc);
     }
     public void testAlternativeRoles()

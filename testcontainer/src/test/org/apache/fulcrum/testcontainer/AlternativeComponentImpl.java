@@ -65,6 +65,7 @@ import org.apache.avalon.framework.context.ContextException;
  * Interface of the component
  *
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
+ * @author <a href="mailto:epugh@opensourceconnections.com">Eric Pugh</a>
  * @version $Id$
  */
 public class AlternativeComponentImpl
@@ -73,6 +74,7 @@ public class AlternativeComponentImpl
             Contextualizable
 {
     private String appRoot;
+    private String appRoot2;
 
     public void initialize() throws Exception
     {
@@ -92,5 +94,23 @@ public class AlternativeComponentImpl
     public void contextualize(Context context) throws ContextException
     {
         appRoot = (String) context.get("componentAppRoot");
+        appRoot2 = (String) context.get("urn:avalon:home");
+        
     }
+    /**
+     * @return Returns the appRoot.
+     */
+    public String getAppRoot()
+    {
+        return appRoot;
+    }
+
+    /**
+     * @return Returns the appRoot2.
+     */
+    public String getAppRoot2()
+    {
+        return appRoot2;
+    }
+
 }

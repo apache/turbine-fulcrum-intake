@@ -1,0 +1,7 @@
+<!-- This configuration file for Avalon components is used for testing the TestComponent -->
+<role-list>
+    <role
+        name="org.apache.fulcrum.naming.NamingService"
+        shorthand="naming"
+        default-class="org.apache.fulcrum.naming.DefaultNamingService"/>
+</role-list>

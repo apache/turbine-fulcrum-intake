@@ -76,8 +76,12 @@ import org.apache.avalon.framework.logger.AbstractLogEnabled;
 public class Container extends AbstractLogEnabled implements Initializable, Disposable
 {
 	/** Key used in the context for defining the application root */
-	public static String COMPONENT_APP_ROOT = "componentAppRoot";
-	
+    public static String COMPONENT_APP_ROOT = "componentAppRoot";
+
+    /** Alternate Merlin Friendly Key used in the context for 
+     * defining the application root */
+    public static String URN_AVALON_HOME = "urn:avalon:home";    
+    
     /** Component manager */
     private ExcaliburComponentManager manager = new ExcaliburComponentManager();
     /** Configurqation file */
@@ -155,7 +159,9 @@ public class Container extends AbstractLogEnabled implements Initializable, Disp
         this.manager.setLoggerManager(lm);
         this.manager.enableLogging(lm.getLoggerForCategory("org.apache.fulcrum"));
         DefaultContext context = new DefaultContext();
-        context.put(COMPONENT_APP_ROOT, (new File("")).getAbsolutePath());
+        String absolutePath = new File("").getAbsolutePath();
+        context.put(COMPONENT_APP_ROOT, absolutePath);
+        context.put(URN_AVALON_HOME, absolutePath);
         this.manager.contextualize(context);
         
         this.manager.configure(sysConfig);

@@ -1,0 +1,6 @@
+<componentConfig>
+    <template>
+    	<default-page-template>/index.jsp</default-page-template>
+    	<default-layout-template>/index.jsp</default-layout-template>
+    </template>
+</componentConfig>

@@ -9,6 +9,12 @@
   <body>
   	<release version="1.0-alpha-2" date="in cvs">
       <action dev="epugh" type="add">
+        Add additional context value urn:avalon:home to be more
+        Merlin friendly.
+      </action>
+    </release>  
+  	<release version="1.0-alpha-2" date="02-13-2004">
+      <action dev="epugh" type="add">
         allow setup method of subclasses to throw exceptions if they want..
       </action>
     </release>

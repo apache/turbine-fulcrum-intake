@@ -1,0 +1,3 @@
+<componentConfig>
+    <upload repository="target" sizeMax="1048576" sizeThreshold="10240"/>
+</componentConfig>

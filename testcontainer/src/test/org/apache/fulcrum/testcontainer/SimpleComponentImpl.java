@@ -73,6 +73,7 @@ public class SimpleComponentImpl
             Contextualizable
 {
     private String appRoot;
+    private String appRoot2;
 
     public void initialize() throws Exception
     {
@@ -87,10 +88,28 @@ public class SimpleComponentImpl
         setupLogger(this, "SimpleComponent");
         getLogger().debug("test");
         getLogger().debug("ComponentAppRoot = "+appRoot);
+        getLogger().debug("ComponentAppRoot2 = "+appRoot2);
     }
 
     public void contextualize(Context context) throws ContextException
     {
         appRoot = (String) context.get("componentAppRoot");
+        appRoot2 = (String) context.get("urn:avalon:home");
     }
+    /**
+     * @return Returns the appRoot.
+     */
+    public String getAppRoot()
+    {
+        return appRoot;
+    }
+
+    /**
+     * @return Returns the appRoot2.
+     */
+    public String getAppRoot2()
+    {
+        return appRoot2;
+    }
+
 }

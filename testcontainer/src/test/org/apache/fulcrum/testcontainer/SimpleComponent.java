@@ -1,5 +1,7 @@
 package org.apache.fulcrum.testcontainer;
 
+import org.apache.avalon.framework.component.Component;
+
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -54,20 +56,23 @@ package org.apache.fulcrum.testcontainer;
  * <http://www.apache.org/>.
  */
 
-import org.apache.avalon.framework.component.Component;
 
 /**
  * Implementation of the test component
  *
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
+ * @author <a href="mailto:epugh@opensourceconnections.com">Eric Pugh</a>
  * @version $Id$
  */
-public interface SimpleComponent
-        extends Component
+public interface SimpleComponent extends Component
 {
 
-    static final String ROLE =
-            "org.apache.fulcrum.testcontainer.SimpleComponent";
+    static final String ROLE = SimpleComponent.class.getName();
+
 
     void test();
+    
+    public String getAppRoot();
+    
+    public String getAppRoot2();
 }
