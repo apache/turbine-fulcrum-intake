@@ -24,6 +24,7 @@
     <pathelement location="${jdbc.jar}"/>
     <pathelement location="${javamail.jar}"/>
     <pathelement location="${jaf.jar}"/>
+    <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-util.jar}"/>
     <pathelement location="${commons-email.jar}"/>
   </path>
@@ -45,6 +46,7 @@
     <echo message="jaf.jar = ${jaf.jar}"/>
     <echo message="xalan.jar = ${xalan.jar}"/>
     <echo message="xmlrpc.jar = ${xmlrpc.jar}"/>
+    <echo message="commons-collections.jar = ${commons-collections.jar}"/>
     <echo message="commons-util.jar = ${commons-util.jar}"/>
     <echo message="[optional] commons-email.jar = ${commons-email.jar}"/>
   </target>
@@ -141,6 +143,12 @@
     />
 
     <available
+      classname="org.apache.commons.collections.ExtendedProperties" 
+      property="commons-collections.present"
+      classpathref="classpath"
+    />
+
+    <available
       classname="org.apache.commons.util.exception.NestableException" 
       property="commons-util.present"
       classpathref="classpath"
@@ -227,6 +235,14 @@
     </antcall>
   </target>
 
+  <target name="check.commons-collections"
+          unless="commons-collections.present">
+    <antcall target="property-warning">
+      <param name="name" value="commons-collections.jar"/>
+      <param name="value" value="${commons-collections.jar}"/>
+    </antcall>
+  </target>
+
   <target name="check.commons-util" unless="commons-util.present">
     <antcall target="property-warning">
       <param name="name" value="commons-util.jar"/>
@@ -280,7 +296,7 @@
     depends="init,env,
         check.velocity,check.log4j,check.torque,check.bsf,check.servlet,
         check.javamail,check.jaf,check.xerces,check.xalan,check.xmlrpc,
-        check.commons-util,include-email,om">
+        check.commons-collections,check.commons-util,include-email,om">
     
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}/classes"/>
