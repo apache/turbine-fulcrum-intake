@@ -4,7 +4,7 @@ F U L C R U M
 
 Fulcrum is services framework.
 
-bin/        Temporary directory for building the project.
+target/     Temporary directory for building the project.
 build/      Location of Ant build.xml and build.properties files.
 src/        Location of Java sources and Torque templates.
 xdocs/      Fulcrum documention in Anakia formatted tags.
