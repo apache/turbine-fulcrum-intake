@@ -24,7 +24,8 @@
   </target>
         
   <target 
-    name="maven:jar">
+    name="maven:jar"
+    depends="om">
     <ant antfile="${ant.home}/maven/build-maven.xml" target="jar"/>
   </target>
         
