@@ -7,6 +7,10 @@
 
   <body>
     <release version="1.0.3-dev" date="in CVS">
+     <action dev="epugh" type="remove">
+        Remove UploadServiceFacade..  Facades are very use specific, and
+        all this does was hide the underlying service.
+      </action>              
      <action dev="epugh" type="update">
         Clean up dependencies list.
       </action>      
