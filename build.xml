@@ -12,7 +12,6 @@
   <path id="classpath">
     <pathelement location="${velocity.jar}"/>
     <pathelement location="${log4j.jar}"/>
-    <pathelement location="${commons-util.jar}"/>
     <pathelement location="${xerces.jar}"/>
     <pathelement location="${bsf.jar}"/>
     <pathelement location="${torque.jar}"/>
@@ -39,7 +38,6 @@
     <echo message="lib.repo = ${lib.repo}"/>
     <echo message="velocity.jar = ${velocity.jar}"/>
     <echo message="log4j.jar = ${log4j.jar}"/>
-    <echo message="commons-util.jar = ${commons-util.jar}"/>
     <echo message="torque.jar = ${torque.jar}"/>
     <echo message="bsf.jar = ${bsf.jar}"/>
     <echo message="servlet.jar = ${servlet.jar}"/>
@@ -96,12 +94,6 @@
     <available
       classname="org.apache.log4j.Category" 
       property="log4j.present"
-      classpathref="classpath"
-    />
-
-    <available
-      classname="org.apache.commons.util.exception.NestableException" 
-      property="commons-util.present"
       classpathref="classpath"
     />
 
@@ -259,8 +251,7 @@
   
   <target name="prepare" 
     depends="init,
-        check.velocity,check.log4j,check.commons-util,check.torque,check.bsf,
-        check.servlet,
+        check.velocity,check.log4j,check.torque,check.bsf,check.servlet,
         check.javamail,check.jaf,check.xerces,check.xalan,check.xmlrpc,
         check.commons-util,
         om,env">
