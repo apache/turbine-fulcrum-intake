@@ -8,6 +8,10 @@
 
   <body>
     <release version="Not applicable" date="">
+      <action dev="ronald" type="add">
+        Add merlin meta info generation.  Refactor common code between server and
+        client.
+      </action>     	
       <action dev="quintonm" type="add">
         XML-RPC component was added.
       </action>      

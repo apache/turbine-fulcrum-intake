@@ -1,5 +1,5 @@
 <componentConfig>
-    <XmlRpcComponent>
+    <XmlRpcServerComponent>
       <!-- Port on which the XML-RPC server will listen for
            incoming connections -->
       <port>12345</port>
@@ -59,6 +59,38 @@
            section has no meaning unless operating in paranoid mode -->
       <deniedClients clientIP="10.1.1.*"/>
       <deniedClients clientIP="10.1.2.*"/>
-    </XmlRpcComponent>
+    </XmlRpcServerComponent>
+    <XmlRpcClientComponent>
+      <!-- Parser implementation to use -->
+      <parser>org.apache.xerces.parsers.SAXParser</parser>
+      <!-- Secure server options -->
+      <systemProperty name="java.protocol.handler.pkgs"
+          value="com.sun.net.ssl.internal.www.protocol" />
+      <systemProperty name="security.provider"
+          value="com.sun.net.ssl.internal.ssl.Provider" />
+      <systemProperty name="security.protocol"
+          value="TLS" />
+      <!-- You probabley want to keep you keyStore and
+           trustStore out of you webapp root -->
+      <systemProperty name="javax.net.ssl.keyStore"
+          value="/tmp/keystore" />
+      <systemProperty name="javax.net.ssl.keyStoreType"
+          value="jks" />
+      <systemProperty name="javax.net.ssl.keyStorePassword"
+            value="password" />
+      <systemProperty name="javax.net.ssl.trustStoreType"
+          value="/tmp/truststore" />
+      <systemProperty name="javax.net.ssl.trustStorePassword"
+          value="password" />
+      <systemProperty name="sun.ssl.keymanager.type"
+          value="SunX509" />
+      <systemProperty name="sun.ssl.trust.manager.type"
+          value="SunX509" />
+      <!-- Set the following values to "all" for debugging -->
+      <systemProperty name="javax.net.debug"
+          value="none" />
+      <systemProperty name="java.security.debug"
+          value="none" />
+    </XmlRpcClientComponent>
     <TestHandler/>
 </componentConfig>

@@ -1,10 +1,10 @@
 package org.apache.fulcrum.xmlrpc;
 
+import java.net.URL;
 import java.util.Vector;
 
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 import org.apache.avalon.framework.component.ComponentException;
-import org.apache.xmlrpc.XmlRpcClient;
 
 import junit.framework.TestSuite;
 
@@ -16,7 +16,6 @@ import junit.framework.TestSuite;
  */
 public class XmlRpcComponentTest extends BaseUnitTest
 {
-
     /**
      * Constructor for test.
      *
@@ -45,10 +44,10 @@ public class XmlRpcComponentTest extends BaseUnitTest
 
     public void OFFtestLookup()
     {
-        XmlRpcComponent xmlrpc = null;
+        XmlRpcServerComponent xmlrpc = null;
         try
         {
-            xmlrpc = (XmlRpcComponent) lookup(XmlRpcComponent.ROLE);
+            xmlrpc = (XmlRpcServerComponent) lookup(XmlRpcServerComponent.ROLE);
         }
         catch (ComponentException e)
         {
@@ -60,10 +59,10 @@ public class XmlRpcComponentTest extends BaseUnitTest
     public void testHandler() throws Exception
     {
         // start the xml-rpc server
-        XmlRpcComponent xmlrpc = null;
+        XmlRpcServerComponent xmlrpc = null;
         try
         {
-            xmlrpc = (XmlRpcComponent) lookup(XmlRpcComponent.ROLE);
+            xmlrpc = (XmlRpcServerComponent) lookup(XmlRpcServerComponent.ROLE);
         }
         catch (ComponentException e)
         {
@@ -72,8 +71,17 @@ public class XmlRpcComponentTest extends BaseUnitTest
         }
 
         // create the client
-        XmlRpcClient rpcClient =
-                new XmlRpcClient("http://localhost:12345/RPC2");
+        XmlRpcClientComponent rpcClient = null;
+        try
+        {
+            rpcClient = (XmlRpcClientComponent) lookup(XmlRpcClientComponent.ROLE);
+        }
+        catch (ComponentException e)
+        {
+            e.printStackTrace();
+            fail("Could not lookup component");
+        }
+        URL server = new URL("http://localhost:12345/RPC2");
 
         // setup param from rpc call
         Vector params = new Vector();
@@ -81,18 +89,13 @@ public class XmlRpcComponentTest extends BaseUnitTest
         params.addElement(testMessage);
 
         // test calling the component handler
-        String result = (String) rpcClient.execute("ComponentHandler.echo",
+        String result = (String) rpcClient.executeRpc(server, "ComponentHandler.echo",
                 params);
         assertEquals(result, testMessage);
 
         // test calling the class handler
-        result = (String) rpcClient.execute("ClassHandler.echo",
+        result = (String) rpcClient.executeRpc(server, "ClassHandler.echo",
                 params);
         assertEquals(result, testMessage);
-
-
-
-
     }
-
 }
