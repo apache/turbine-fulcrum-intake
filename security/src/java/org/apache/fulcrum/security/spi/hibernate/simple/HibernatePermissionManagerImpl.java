@@ -53,26 +53,16 @@ package org.apache.fulcrum.security.spi.hibernate.simple;
  * <http://www.apache.org/>.
  */
 import java.util.List;
-
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-import net.sf.hibernate.avalon.HibernateService;
-
-import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.component.ComponentException;
-import org.apache.avalon.framework.component.ComponentManager;
-import org.apache.avalon.framework.component.Composable;
-import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.PermissionManager;
-import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.model.simple.entity.SimplePermission;
+import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PermissionSet;
@@ -83,29 +73,10 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class HibernatePermissionManagerImpl
-    extends AbstractLogEnabled
-    implements PermissionManager, Composable, Disposable
+public class HibernatePermissionManagerImpl extends BaseHibernateManager implements PermissionManager
 {
     /** Logging */
     private static Log log = LogFactory.getLog(HibernatePermissionManagerImpl.class);
-    private RoleManager roleManager = null;
-    /** Hibernate components */
-    private HibernateService hibernateService;
-    private Session session;
-    private Transaction transaction;
-    private ComponentManager manager = null;
-    /**
-    	 * @return
-    	 */
-    RoleManager getRoleManager() throws ComponentException
-    {
-        if (roleManager == null)
-        {
-            roleManager = (RoleManager) manager.lookup(RoleManager.ROLE);
-        }
-        return roleManager;
-    }
     /**
      * Construct a blank Permission object.
      *
@@ -175,7 +146,7 @@ public class HibernatePermissionManagerImpl
      * @throws DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public Permission getPermissionById(int id) throws DataBackendException, UnknownEntityException
+    public Permission getPermissionById(long id) throws DataBackendException, UnknownEntityException
     {
         Permission permission = getAllPermissions().getPermissionById(id);
         if (permission == null)
@@ -219,24 +190,17 @@ public class HibernatePermissionManagerImpl
         throws DataBackendException, UnknownEntityException
     {
         boolean permissionExists = false;
-        try
+        permissionExists = checkExists(permission);
+        if (permissionExists)
         {
-            permissionExists = checkExists(permission);
-            if (permissionExists)
-            {
-                permission.setName(name);
-                savePermission(permission);
-                return;
-            }
+            permission.setName(name);
+            updateEntity(permission);
+            return;
         }
-        catch (Exception e)
+        else
         {
-            throw new DataBackendException("renamePermission(Permission,name)", e);
+            throw new UnknownEntityException("Unknown permission '" + permission + "'");
         }
-        finally
-        {
-        }
-        throw new UnknownEntityException("Unknown permission '" + permission + "'");
     }
     /**
     * Determines if the <code>Permission</code> exists in the security system.
@@ -267,38 +231,6 @@ public class HibernatePermissionManagerImpl
         return (permissions.size() == 1);
     }
     /**
-    * Stores Permission's attributes. The Permissions is required to exist in
-    * the system.
-    *
-    * @param permission The Permission to be stored.
-    * @throws DataBackendException if there was an error accessing the data
-    *         backend.
-    * @throws UnknownEntityException if the permission does not exist.
-    */
-    public void savePermission(Permission permission) throws DataBackendException, UnknownEntityException
-    {
-        boolean permissionExists = false;
-        try
-        {
-            permissionExists = checkExists(permission);
-            if (permissionExists)
-            {
-                session = hibernateService.openSession();
-                transaction = session.beginTransaction();
-                session.update(permission);
-                transaction.commit();
-            }
-            else
-            {
-                throw new UnknownEntityException("Unknown permission '" + permission + "'");
-            }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("savePermission(Permission) failed", e);
-        }
-    }
-    /**
      * Removes a Permission from the system.
      *
      * @param permission The object describing the permission to be removed.
@@ -310,26 +242,14 @@ public class HibernatePermissionManagerImpl
         throws DataBackendException, UnknownEntityException
     {
         boolean permissionExists = false;
-        try
+        permissionExists = checkExists(permission);
+        if (permissionExists)
         {
-            permissionExists = checkExists(permission);
-            if (permissionExists)
-            {
-                session = hibernateService.openSession();
-                transaction = session.beginTransaction();
-                session.delete(permission);
-                transaction.commit();
-            }
-            else
-            {
-                throw new UnknownEntityException("Unknown permission '" + permission + "'");
-            }
+            deleteEntity(permission);
         }
-        catch (Exception e)
+        else
         {
-            log.error("Failed to delete a Permission");
-            log.error(e);
-            throw new DataBackendException("removePermission(Permission) failed", e);
+            throw new UnknownEntityException("Unknown permission '" + permission + "'");
         }
     }
     /**
@@ -357,88 +277,33 @@ public class HibernatePermissionManagerImpl
         {
             throw new EntityExistsException("The permission '" + permission.getName() + "' already exists");
         }
-        try
-        {
-            session = hibernateService.openSession();
-            transaction = session.beginTransaction();
-            session.save(permission);
-            transaction.commit();
-        }
-        catch (HibernateException e)
-        {
-            log.error("Error adding permission", e);
-            try
-            {
-                transaction.rollback();
-            }
-            catch (HibernateException he)
-            {
-            }
-            throw new DataBackendException("Failed to create permission '" + permission.getName() + "'", e);
-        }
+        addEntity(permission);
         return permission;
     }
     /**
-	 * Retrieves all permissions associated with a role.
-	 *
-	 * @param role the role name, for which the permissions are to be retrieved.
-	 * @return A Permission set for the Role.
-	 * @throws DataBackendException if there was an error accessing the data
-	 *         backend.
-	 * @throws UnknownEntityException if the role is not present.
-	 */
+     * Retrieves all permissions associated with a role.
+     *
+     * @param role the role name, for which the permissions are to be retrieved.
+     * @return A Permission set for the Role.
+     * @throws DataBackendException if there was an error accessing the data
+     *         backend.
+     * @throws UnknownEntityException if the role is not present.
+     */
     public PermissionSet getPermissions(Role role) throws DataBackendException, UnknownEntityException
     {
-        boolean roleExists = false;
-        try
-        {
-            roleExists = checkExists(role);
-            if (roleExists)
-            {
-                return role.getPermissions();
-            }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("getPermissions(Role) failed", e);
-        }
-        finally
-        {
-        }
-        throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
+        return ((SimpleRole)role).getPermissions();
     }
     /**
-	* Determines if the <code>Role</code> exists in the security system.
-	*
-	* @param role a <code>Role</code> value
-	* @return true if the role exists in the system, false otherwise
-	* @throws DataBackendException when more than one Role with
-	*         the same name exists.
-	* @throws Exception A generic exception.
-	*/
+    * Determines if the <code>Role</code> exists in the security system.
+    *
+    * @param role a <code>Role</code> value
+    * @return true if the role exists in the system, false otherwise
+    * @throws DataBackendException when more than one Role with
+    *         the same name exists.
+    * @throws Exception A generic exception.
+    */
     public boolean checkExists(Role role) throws DataBackendException
     {
-        try
-        {
-            return getRoleManager().checkExists(role);
-        }
-        catch (ComponentException ce)
-        {
-            throw new DataBackendException("Problem accessing role manager", ce);
-        }
-    }
-    /**
-    * Avalon component lifecycle method
-    */
-    public void compose(ComponentManager manager) throws ComponentException
-    {
-        this.manager = manager;
-        hibernateService = (HibernateService) manager.lookup(HibernateService.ROLE);
-    }
-    public void dispose()
-    {
-        hibernateService = null;
-        manager = null;
-        roleManager = null;
+        return getRoleManager().checkExists(role);
     }
 }

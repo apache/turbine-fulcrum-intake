@@ -56,23 +56,15 @@ import java.util.List;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-import net.sf.hibernate.avalon.HibernateService;
 
-import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.component.ComponentException;
-import org.apache.avalon.framework.component.ComponentManager;
-import org.apache.avalon.framework.component.Composable;
-import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.fulcrum.security.PermissionManager;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
 import org.apache.fulcrum.security.model.simple.manager.SimpleRoleManager;
+import org.apache.fulcrum.security.spi.hibernate.simple.entity.HibernateSimpleRole;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PermissionSet;
@@ -85,29 +77,10 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class HibernateRoleManagerImpl extends AbstractLogEnabled implements SimpleRoleManager, Composable, Disposable
+public class HibernateRoleManagerImpl extends BaseHibernateManager implements SimpleRoleManager
 {
-    boolean composed = false;
     /** Logging */
     private static Log log = LogFactory.getLog(HibernateRoleManagerImpl.class);
-    /** Our permissionManager **/
-    private PermissionManager permissionManager;
-    /** Hibernate components */
-    private HibernateService hibernateService;
-    private Session session;
-    private Transaction transaction;
-    private ComponentManager manager = null;
-    /**
-     * @return
-     */
-    PermissionManager getPermissionManager() throws ComponentException
-    {
-        if (permissionManager == null)
-        {
-            permissionManager = (PermissionManager) manager.lookup(PermissionManager.ROLE);
-        }
-        return permissionManager;
-    }
     /**
     	* Construct a blank Role object.
     	*
@@ -122,7 +95,7 @@ public class HibernateRoleManagerImpl extends AbstractLogEnabled implements Simp
         Role role;
         try
         {
-            role = (Role) new SimpleRole();
+            role = (Role) new HibernateSimpleRole();
         }
         catch (Exception e)
         {
@@ -164,7 +137,6 @@ public class HibernateRoleManagerImpl extends AbstractLogEnabled implements Simp
         {
             throw new UnknownEntityException("The specified role does not exist");
         }
-        role.setPermissions(getPermissions(role));
         return role;
     }
     /**
@@ -179,14 +151,13 @@ public class HibernateRoleManagerImpl extends AbstractLogEnabled implements Simp
     	* @throws DataBackendException if there is a problem accessing the
     	*            storage.
     	*/
-    public Role getRoleById(int id) throws DataBackendException, UnknownEntityException
+    public Role getRoleById(long id) throws DataBackendException, UnknownEntityException
     {
         Role role = getAllRoles().getRoleById(id);
         if (role == null)
         {
             throw new UnknownEntityException("The specified role does not exist");
         }
-        role.setPermissions(getPermissions(role));
         return role;
     }
     /**
@@ -209,7 +180,8 @@ public class HibernateRoleManagerImpl extends AbstractLogEnabled implements Simp
             permissionExists = checkExists(permission);
             if (roleExists && permissionExists)
             {
-                ((SimpleRole) role).addPermission(permission);
+                ((HibernateSimpleRole) role).addPermission(permission);
+                updateEntity(role);
                 return;
             }
         }
@@ -246,7 +218,8 @@ public class HibernateRoleManagerImpl extends AbstractLogEnabled implements Simp
             permissionExists = checkExists(permission);
             if (roleExists && permissionExists)
             {
-                ((SimpleRole) role).removePermission(permission);
+                ((HibernateSimpleRole) role).removePermission(permission);
+                updateEntity(role);
                 return;
             }
         }
@@ -284,7 +257,8 @@ public class HibernateRoleManagerImpl extends AbstractLogEnabled implements Simp
             roleExists = checkExists(role);
             if (roleExists)
             {
-                role.setPermissions(new PermissionSet());
+                ((SimpleRole) role).setPermissions(new PermissionSet());
+                updateEntity(role);
                 return;
             }
         }
@@ -298,35 +272,28 @@ public class HibernateRoleManagerImpl extends AbstractLogEnabled implements Simp
         throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
     }
     /**
-    	* Renames an existing Role.
-    	*
-    	* @param role The object describing the role to be renamed.
-    	* @param name the new name for the role.
-    	* @throws DataBackendException if there was an error accessing the data
-    	*         backend.
-    	* @throws UnknownEntityException if the role does not exist.
-    	*/
+    * Renames an existing Role.
+    *
+    * @param role The object describing the role to be renamed.
+    * @param name the new name for the role.
+    * @throws DataBackendException if there was an error accessing the data
+    *         backend.
+    * @throws UnknownEntityException if the role does not exist.
+    */
     public synchronized void renameRole(Role role, String name) throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
-        try
+        roleExists = checkExists(role);
+        if (roleExists)
         {
-            roleExists = checkExists(role);
-            if (roleExists)
-            {
-                role.setName(name);
-                saveRole(role);
-                return;
-            }
+            role.setName(name);
+            updateEntity(role);
+            return;
         }
-        catch (Exception e)
+        else
         {
-            throw new DataBackendException("renameRole(Role,String)", e);
+            throw new UnknownEntityException("Unknown role '" + role + "'");
         }
-        finally
-        {
-        }
-        throw new UnknownEntityException("Unknown role '" + role + "'");
     }
     /**
       * Determines if the <code>Role</code> exists in the security system.
@@ -343,7 +310,7 @@ public class HibernateRoleManagerImpl extends AbstractLogEnabled implements Simp
         try
         {
             session = hibernateService.openSession();
-            roles = session.find("from SimpleRole sr where sr.name=?", role.getName(), Hibernate.STRING);
+            roles = session.find("from HibernateSimpleRole sr where sr.name=?", role.getName(), Hibernate.STRING);
         }
         catch (HibernateException e)
         {
@@ -356,19 +323,19 @@ public class HibernateRoleManagerImpl extends AbstractLogEnabled implements Simp
         return (roles.size() == 1);
     }
     /**
-	 * Retrieves all roles defined in the system.
-	 *
-	 * @return the names of all roles defined in the system.
-	 * @throws DataBackendException if there was an error accessing the
-	 *         data backend.
-	 */
+     * Retrieves all roles defined in the system.
+     *
+     * @return the names of all roles defined in the system.
+     * @throws DataBackendException if there was an error accessing the
+     *         data backend.
+     */
     public RoleSet getAllRoles() throws DataBackendException
     {
         RoleSet roleSet = new RoleSet();
         try
         {
             session = hibernateService.openSession();
-            List roles = session.find("from SimpleRole");
+            List roles = session.find("from HibernateSimpleRole");
             roleSet.add(roles);
         }
         catch (HibernateException e)
@@ -417,14 +384,7 @@ public class HibernateRoleManagerImpl extends AbstractLogEnabled implements Simp
      */
     public boolean checkExists(Permission permission) throws DataBackendException
     {
-        try
-        {
-            return getPermissionManager().checkExists(permission);
-        }
-        catch (ComponentException ce)
-        {
-            throw new DataBackendException("Problem getting permission manager", ce);
-        }
+        return getPermissionManager().checkExists(permission);
     }
     /**
     * Creates a new role with specified attributes.
@@ -450,57 +410,8 @@ public class HibernateRoleManagerImpl extends AbstractLogEnabled implements Simp
         {
             throw new EntityExistsException("The role '" + role.getName() + "' already exists");
         }
-        try
-        {
-            session = hibernateService.openSession();
-            transaction = session.beginTransaction();
-            session.save(role);
-            transaction.commit();
-        }
-        catch (HibernateException e)
-        {
-            log.error("Error adding role", e);
-            try
-            {
-                transaction.rollback();
-            }
-            catch (HibernateException he)
-            {
-            }
-            throw new DataBackendException("Failed to create role '" + role.getName() + "'", e);
-        }
+        addEntity(role);
         return role;
-    }
-    /**
-    * Stores Role's attributes. The Roles is required to exist in the system.
-    *
-    * @param role The Role to be stored.
-    * @throws DataBackendException if there was an error accessing the data
-    *         backend.
-    * @throws UnknownEntityException if the role does not exist.
-    */
-    public void saveRole(Role role) throws DataBackendException, UnknownEntityException
-    {
-        boolean roleExists = false;
-        try
-        {
-            roleExists = checkExists(role);
-            if (roleExists)
-            {
-                session = hibernateService.openSession();
-                transaction = session.beginTransaction();
-                session.update(role);
-                transaction.commit();
-            }
-            else
-            {
-                throw new UnknownEntityException("Unknown role '" + role + "'");
-            }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("saveRole(Role) failed", e);
-        }
     }
     /**
     * Removes a Role from the system.
@@ -518,10 +429,7 @@ public class HibernateRoleManagerImpl extends AbstractLogEnabled implements Simp
             roleExists = checkExists(role);
             if (roleExists)
             {
-                session = hibernateService.openSession();
-                transaction = session.beginTransaction();
-                session.delete(role);
-                transaction.commit();
+                removeEntity(role);
             }
             else
             {
@@ -534,19 +442,5 @@ public class HibernateRoleManagerImpl extends AbstractLogEnabled implements Simp
             log.error(e);
             throw new DataBackendException("removeRole(Role) failed", e);
         }
-    }
-    /**
-    * Avalon component lifecycle method
-    */
-    public void compose(ComponentManager manager) throws ComponentException
-    {
-        this.manager = manager;
-        hibernateService = (HibernateService) manager.lookup(HibernateService.ROLE);
-    }
-    public void dispose()
-    {
-        hibernateService = null;
-        manager = null;
-        permissionManager = null;
     }
 }
