@@ -59,6 +59,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Vector;
@@ -106,14 +107,26 @@ public class TurbineXmlRpcService
     extends BaseService
     implements XmlRpcService
 {
+    /**
+     * Whether a version of Apache's XML-RPC library greater than 1.1
+     * is available.
+     */
+    protected boolean isModernVersion = false;
+
     /** The standalone xmlrpc server. */
-    private WebServer webserver = null;
+    protected WebServer webserver = null;
 
     /** The encapsulated xmlrpc server. */
-    private XmlRpcServer server = null;
+    protected XmlRpcServer server = null;
+
+    /**
+     * The address to listen on.  The default of <code>null</code>
+     * indicates all network interfaces on a multi-homed host.
+     */
+    private InetAddress address = null;
 
     /** The port to listen on. */
-    private int port = 0;
+    protected int port = 0;
 
     /**
      * This function initializes the XmlRpcService.
@@ -130,18 +143,28 @@ public class TurbineXmlRpcService
                 getConfiguration().subset("secure.server.option");
             setSystemPropertiesFromConfiguration(secureServerOptions);
 
-            // Set the port for the service
+            // Host and port information for the WebServer
+            String addr = getConfiguration().getString("address", null);
             port = getConfiguration().getInt("port", 0);
 
             if(port != 0)
             {
+                try
+                {
+                    address = InetAddress.getByName(addr);
+                }
+                catch (UnknownHostException useDefault)
+                {
+                    address = null;
+                }
+
                 if (getConfiguration().getBoolean("secure.server", false))
                 {
-                    webserver = new SecureWebServer(port);
+                    webserver = new SecureWebServer(port, address);
                 }
                 else
                 {
-                    webserver = new WebServer(port);
+                    webserver = new WebServer(port, address);
                 }
             }
 
@@ -211,6 +234,24 @@ public class TurbineXmlRpcService
                     }
                 }
             }
+
+            // If we have a XML-RPC JAR whose version is greater than the
+            // 1.1 series, the WebServer must be explicitly start()'d.
+            try
+            {
+                Class.forName("org.apache.xmlrpc.XmlRpcRequest");
+                isModernVersion = true;
+                webserver.start();
+            }
+            catch (ClassNotFoundException ignored)
+            {
+                // XmlRpcRequest does not exist in versions 1.1 and lower.
+                // Assume that our WebServer was already started.
+            }
+            getCategory().debug(XmlRpcService.SERVICE_NAME + ": Using " +
+                                "Apache XML-RPC version " +
+                                (isModernVersion ?
+                                 "greater than 1.1" : "1.1 or lower"));
         }
         catch (Exception e)
         {
@@ -626,20 +667,26 @@ public class TurbineXmlRpcService
      */
     public void shutdown()
     {
-        // Stop the XML RPC server.  org.apache.xmlrpc.WebServer blocks in a call to
-        // ServerSocket.accept() until a socket connection is made.
+        // Stop the XML RPC server.
         webserver.shutdown();
-        try
+
+        if (!isModernVersion)
         {
-            Socket interrupt = new Socket(InetAddress.getLocalHost(), port);
-            interrupt.close();
-        }
-        catch (Exception notShutdown)
-        {
-            // Remotely possible we're leaving an open listener socket around.
-            getCategory().warn(XmlRpcService.SERVICE_NAME +
-                "It's possible the xmlrpc server was not shutdown: " + 
-                notShutdown.getMessage());
+            // org.apache.xmlrpc.WebServer used to block in a call to
+            // ServerSocket.accept() until a socket connection was made.
+            try
+            {
+                Socket interrupt = new Socket(address, port);
+                interrupt.close();
+            }
+            catch (Exception notShutdown)
+            {
+                // It's remotely possible we're leaving an open listener
+                // socket around.
+                getCategory().warn(XmlRpcService.SERVICE_NAME +
+                                   "It's possible the xmlrpc server was not " +
+                                   "shutdown: " + notShutdown.getMessage());
+            }
         }
 
         setInit(false);
