@@ -372,7 +372,6 @@ public class DefaultGlobalCacheService
     }
     public void initialize() throws Exception
     {
-		CacheServiceFacade.setService(this);
         try
         {
             cache = new Hashtable(cacheInitialSize);

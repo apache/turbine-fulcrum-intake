@@ -7,6 +7,9 @@
 
   <body>
     <release version="1.0.4" date="">
+     <action dev="epugh" type="remove">
+        Remove CacheServiceFacade.  It was a code smell.
+      </action>         
      <action dev="epugh" type="update">
         Make long running tests optional.  They often fail for random reasons.
       </action>            
