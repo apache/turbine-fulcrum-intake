@@ -68,12 +68,7 @@ public class DvslBasicTest extends AbstractMerlinTestCase
     private DvslService dvslService = null;
     public DvslBasicTest(String name)
     {
-        super( 
-          MAVEN_TARGET_CLASSES_DIR, 
-          MERLIN_DEFAULT_CONFIG_FILE, 
-          MERLIN_INFO_OFF, 
-          MERLIN_DEBUG_OFF, 
-          name );
+        super( name );
     }
 
     public void setUp() throws Exception
@@ -81,11 +76,11 @@ public class DvslBasicTest extends AbstractMerlinTestCase
          super.setUp();
          try
          {
-            dvslService = (DvslService) this.resolve( "dvsl" );
+           dvslService = (DvslService) this.resolve( "/test/dvsl" );
          }
          catch (Throwable e)
          {
-             getLogger().error( "Setup failure.", e );
+             
              fail(e.getMessage());
          }
     }
@@ -102,6 +97,6 @@ public class DvslBasicTest extends AbstractMerlinTestCase
         StringWriter sw = new StringWriter();
         dvslService.transform("style", new StringReader(input), sw);
         assertEquals("Hello from element! Foo",sw.toString());
-        getLogger().info( "OK" );
+        
     }
 }

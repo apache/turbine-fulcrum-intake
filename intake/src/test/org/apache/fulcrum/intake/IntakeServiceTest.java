@@ -43,9 +43,8 @@ public class IntakeServiceTest extends AbstractMerlinTestCase
             appData.delete();
         }
         try {
-            intakeService = (IntakeService) this.resolve( "intake" );
+            intakeService = (IntakeService) this.resolve( "/test/intake" );
         } catch (Throwable e) {
-            getLogger().error( "Setup failure.", e );
             fail(e.getMessage());
         }
     }
@@ -65,7 +64,6 @@ public class IntakeServiceTest extends AbstractMerlinTestCase
         assertNotNull(group2);
         assertEquals("anotherGroupKey", group2.getGID());
         assertEquals("AnotherGroup", group2.getIntakeGroupName());
-        getLogger().info( "OK" );
     }
 
 }

@@ -31,11 +31,10 @@ public class FactoryServiceTest extends AbstractMerlinTestCase
         super.setUp();
         try
         {
-            factoryService = (FactoryService) this.resolve( "factory" );
+            factoryService = (FactoryService) this.resolve( "/test/factory" );
         }
         catch (Throwable e)
         {
-            getLogger().error( "Setup error.", e );
             fail(e.getMessage());
         }
     }
@@ -54,7 +53,6 @@ public class FactoryServiceTest extends AbstractMerlinTestCase
     {
         Object object = factoryService.getInstance("java.lang.StringBuffer", StringBuffer.class.getClassLoader());
         assertTrue(object instanceof StringBuffer);
-        getLogger().info( "OK" );
     }
     /*
      * Class to test for Object getInstance(String, Object[], String[])
@@ -62,14 +60,14 @@ public class FactoryServiceTest extends AbstractMerlinTestCase
     public void testGetInstanceStringObjectArrayStringArray() throws Exception
     {
         Object params[] = new Object[1];
-        String sourceValu = "testing";
-        params[0] = sourceValu;
+        String sourceValue = "testing";
+        params[0] = sourceValue;
         String signature[] = new String[1];
         signature[0] = "java.lang.String";
         Object object = factoryService.getInstance("java.lang.StringBuffer", params, signature);
         assertTrue(object instanceof StringBuffer);
-        assertEquals(sourceValu, object.toString());
-        getLogger().info( "OK" );
+        assertEquals(sourceValue, object.toString());
+         
     }
     /*
      * Class to test for Object getInstance(String, ClassLoader, Object[], String[])
@@ -89,7 +87,7 @@ public class FactoryServiceTest extends AbstractMerlinTestCase
                 signature);
         assertTrue(object instanceof StringBuffer);
         assertEquals(sourceValu, object.toString());
-        getLogger().info( "OK" );
+         
     }
     /**
      * @todo Need to run a test where the loader is NOT supported.
@@ -98,7 +96,7 @@ public class FactoryServiceTest extends AbstractMerlinTestCase
     public void testIsLoaderSupported() throws Exception
     {
         assertTrue(factoryService.isLoaderSupported("java.lang.String"));
-        getLogger().info( "OK" );
+         
     }
     public void testGetSignature() throws Exception
     {
@@ -117,6 +115,6 @@ public class FactoryServiceTest extends AbstractMerlinTestCase
         results = factoryService.getSignature(ArrayList.class, params, signature);
         assertEquals(1, results.length);
         assertTrue("Result:" + results[0].getName(),results[0].equals(Integer.class));
-        getLogger().info( "OK" );
+         
     }
 }

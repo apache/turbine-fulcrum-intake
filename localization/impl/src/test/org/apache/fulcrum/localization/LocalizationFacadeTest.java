@@ -78,62 +78,32 @@ public class LocalizationFacadeTest extends AbstractMerlinTestCase
      */
     public LocalizationFacadeTest(String name)
     {
-        super( 
-          MAVEN_TARGET_CLASSES_DIR, 
-          MERLIN_DEFAULT_CONFIG_FILE, 
-          MERLIN_INFO_OFF, 
-          MERLIN_DEBUG_OFF, 
-          name );
-    }
-    /**
-     * Start the tests.
-     *
-     * @param args the arguments. Not used
-     */
-    public static void main(String args[])
-    {
-        TestRunner.main(new String[] { LocalizationFacadeTest.class.getName()});
-    }
-    /**
-     * Creates the test suite.
-     *
-     * @return a test suite (<code>TestSuite</code>) that includes all methods
-     *         starting with "test"
-     */
-    public static Test suite()
-    {
-        // All methods starting with "test" will be executed in the test suite.
-        return new TestSuite(LocalizationFacadeTest.class);
+        super( name );
     }
 
     public void testFacadeNotConfigured() throws Exception
     {
-        getLogger().info( "testFacadeConfigured: " + Localization.isInitialized() );
-	  assertFalse( Localization.isInitialized() );
-        getLogger().info( "looking good" );
+	    assertFalse( Localization.isInitialized() );        
         try
         {
             Localization.getString("bill");
         }
         catch (RuntimeException re)
         {
-            getLogger().info( "OK" );
             //good;
         }
     }
 
     public void testFacadeConfigured() throws Exception
     {
-        getLogger().info( "testFacadeConfigured " + Localization.isInitialized() );
         // this.lookup causes the service to be configured.
-        this.resolve( "localization" );
+        this.resolve( "/test/localization" );
         assertTrue(Localization.isInitialized());
         String s = Localization.getString(null, new Locale("ko", "KR"), "key4");
         assertEquals(
             "Unable to retrieve localized text for locale: default",
             s,
             "value4");
-        getLogger().info( "OK" );
     }
 
 }

@@ -319,7 +319,6 @@ public class DefaultPoolService extends AbstractLogEnabled implements PoolServic
     private Map capacityMap;
     private FactoryService factoryService;
     private ServiceManager manager;
-    private boolean disposed;
     /**
      * Constructs a Pool Service.
      */
@@ -468,7 +467,7 @@ public class DefaultPoolService extends AbstractLogEnabled implements PoolServic
         try
         {
             Object instance = pollInstance(clazz.getName(), params, signature);
-            FactoryService fs = getFactory();            
+            //FactoryService fs = getFactory();            
             return instance == null ? getFactory().getInstance(clazz.toString(), params, signature) : instance;
         }
         catch (FactoryException fe)
@@ -683,6 +682,5 @@ public class DefaultPoolService extends AbstractLogEnabled implements PoolServic
         }
         factoryService = null;
         manager = null;
-        disposed = true;
     }
 }

@@ -32,10 +32,10 @@
        class="org.apache.fulcrum.intake.IntakeServiceImpl"
        activation="lazy">
      <configuration>
-       <serialDataPath>../../target/appData.ser</serialDataPath>
+       <serialDataPath>../../../target/appData.ser</serialDataPath>
        <xmlPaths>
-      	<xmlPath>../../src/test/intake1.xml</xmlPath>
-      	<xmlPath>../../src/test/intake2.xml</xmlPath>
+      	<xmlPath>../../../src/test/intake1.xml</xmlPath>
+      	<xmlPath>../../../src/test/intake2.xml</xmlPath>
        </xmlPaths>
      </configuration>
    </component>

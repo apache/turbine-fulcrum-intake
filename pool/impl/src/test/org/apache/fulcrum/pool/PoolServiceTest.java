@@ -26,20 +26,16 @@ public class PoolServiceTest extends AbstractMerlinTestCase
     {
         super(name);
     }
-    public static void main(String[] args)
-    {
-        junit.textui.TestRunner.run(PoolServiceTest.class);
-    }
+   
     public void setUp() throws Exception
     {
         super.setUp();
         try
         {
-            poolService = (PoolService) this.resolve( "pool" );
+            poolService = (PoolService) this.resolve( "/test/pool" );
         }
         catch (Throwable e)
         {
-            getLogger().error( "Setup failure.", e );
             fail(e.getMessage());
         }
     }
@@ -52,21 +48,21 @@ public class PoolServiceTest extends AbstractMerlinTestCase
     {
         //Object object = poolService.getInstance("java.lang.StringBuffer");
         //assertTrue(object instanceof StringBuffer);
-        getLogger().info( "no-impl" );
+         
     }
     /*
      * Class to test for Object getInstance(String, ClassLoader)
      */
     public void testGetInstanceStringClassLoader()
     {
-        getLogger().info( "no-impl" );
+         
     }
     /*
      * Class to test for Object getInstance(String, Object[], String[])
      */
     public void testGetInstanceStringObjectArrayStringArray()
     {
-        getLogger().info( "no-impl" );
+         
     }
 
     /*
@@ -74,12 +70,12 @@ public class PoolServiceTest extends AbstractMerlinTestCase
      */
     public void testGetInstanceStringClassLoaderObjectArrayStringArray()
     {
-        getLogger().info( "no-impl" );
+         
     }
 
     public void testIsLoaderSupported()
     {
-        getLogger().info( "no-impl" );
+         
     }
 
     /*
@@ -89,14 +85,14 @@ public class PoolServiceTest extends AbstractMerlinTestCase
     {
         Object object = poolService.getInstance(StringBuffer.class);
         assertTrue(object instanceof StringBuffer);
-        getLogger().info( "OK" );
+        
     }
     /*
      * Class to test for Object getInstance(Class, Object[], String[])
      */
     public void testGetInstanceClassObjectArrayStringArray()
     {
-        getLogger().info( "no-impl" );
+         
     }
 
     public void testPutInstance()
@@ -105,14 +101,14 @@ public class PoolServiceTest extends AbstractMerlinTestCase
         assertEquals(0, poolService.getSize("java.lang.String"));
         poolService.putInstance(s);
         assertEquals(1, poolService.getSize("java.lang.String"));
-        getLogger().info( "OK" );
+        
     }
     public void testGetSetCapacity()
     {
         assertEquals(128, poolService.getCapacity("java.lang.String"));
         poolService.setCapacity("java.lang.String", 278);
         assertEquals(278, poolService.getCapacity("java.lang.String"));
-        getLogger().info( "OK" );
+        
     }
     public void testGetSize()
     {
@@ -120,7 +116,7 @@ public class PoolServiceTest extends AbstractMerlinTestCase
         assertEquals(0, poolService.getSize("java.lang.String"));
         poolService.putInstance(s);
         assertEquals(1, poolService.getSize("java.lang.String"));
-        getLogger().info( "OK" );
+        
     }
     /*
      * Class to test for void clearPool(String)
@@ -133,7 +129,7 @@ public class PoolServiceTest extends AbstractMerlinTestCase
         assertEquals(1, poolService.getSize("java.lang.String"));
         poolService.clearPool("java.lang.String");
         assertEquals(0, poolService.getSize("java.lang.String"));
-        getLogger().info( "OK" );
+        
     }
     /*
      * Class to test for void clearPool()
@@ -148,6 +144,6 @@ public class PoolServiceTest extends AbstractMerlinTestCase
         poolService.clearPool();
         assertEquals(0, poolService.getSize("java.lang.String"));
         assertEquals(0, poolService.getSize("java.lang.Double"));
-        getLogger().info( "OK" );
+        
     }
 }

@@ -4,7 +4,7 @@
    <classloader>
      <classpath>
        <repository>
-         <resource id="fulcrum:fulcrum-dvsl-api" version="1.0-alpha-3"/>
+         <resource id="fulcrum:fulcrum-dvsl-api" version="1.0-alpha-4"/>
        </repository>
      </classpath>
    </classloader>

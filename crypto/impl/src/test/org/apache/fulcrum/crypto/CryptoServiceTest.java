@@ -54,7 +54,8 @@ package org.apache.fulcrum.crypto;
  */
 
 import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
-import org.apache.avalon.merlin.unit.UnitHelper;
+import org.apache.avalon.util.exception.ExceptionHelper;
+
 import junit.framework.TestSuite;
 
 /**
@@ -100,8 +101,7 @@ public class CryptoServiceTest extends AbstractMerlinTestCase
         catch ( Exception e)
         {
             final String error = 
-              UnitHelper.packException( e.getMessage(), e, true );
-            getLogger().error( error );
+			ExceptionHelper.packException( e.getMessage(), e, true );
             fail( error );
         }
     }
@@ -128,13 +128,12 @@ public class CryptoServiceTest extends AbstractMerlinTestCase
             ca.setSeed(result);
             output = ca.encrypt(preDefinedInput);
             assertEquals("Encryption failed ", output, result);
-            getLogger().info( "ok" );
+            
         }
         catch (Exception e)
         {
             final String error = 
-              UnitHelper.packException( e.getMessage(), e, true );
-            getLogger().error( error );
+			ExceptionHelper.packException( e.getMessage(), e, true );
             fail();
         }
     }
@@ -147,13 +146,12 @@ public class CryptoServiceTest extends AbstractMerlinTestCase
             CryptoAlgorithm ca = sc.getCryptoAlgorithm("clear");
             String output = ca.encrypt(preDefinedInput);
             assertEquals("Encryption failed ", preDefinedResult, output);
-            getLogger().info( "ok" );
+           
         }
         catch (Exception e)
         {
             final String error = 
-              UnitHelper.packException( e.getMessage(), e, true );
-            getLogger().error( error );
+			ExceptionHelper.packException( e.getMessage(), e, true );
             fail();
         }
     }
@@ -167,13 +165,12 @@ public class CryptoServiceTest extends AbstractMerlinTestCase
             ca.setCipher("MD5");
             String output = ca.encrypt(preDefinedInput);
             assertEquals("MD5 Encryption failed ", preDefinedResult, output);
-            getLogger().info( "ok" );
+            
         }
         catch (Exception e)
         {
             final String error = 
-              UnitHelper.packException( e.getMessage(), e, true );
-            getLogger().error( error );
+			ExceptionHelper.packException( e.getMessage(), e, true );
             fail();
         }
     }
@@ -186,13 +183,12 @@ public class CryptoServiceTest extends AbstractMerlinTestCase
             ca.setCipher("SHA1");
             String output = ca.encrypt(preDefinedInput);
             assertEquals("SHA1 Encryption failed ", preDefinedResult, output);
-            getLogger().info( "ok" );
+            
         }
         catch (Exception e)
         {
             final String error = 
-              UnitHelper.packException( e.getMessage(), e, true );
-            getLogger().error( error );
+			ExceptionHelper.packException( e.getMessage(), e, true );
             fail();
         }
     }
@@ -205,13 +201,12 @@ public class CryptoServiceTest extends AbstractMerlinTestCase
             ca.setCipher("MD5");
             String output = ca.encrypt(preDefinedInput);
             assertEquals("MD5 Encryption failed ", preDefinedResult, output);
-            getLogger().info( "ok" );
+           
         }
         catch (Exception e)
         {
             final String error = 
-              UnitHelper.packException( e.getMessage(), e, true );
-            getLogger().error( error );
+			ExceptionHelper.packException( e.getMessage(), e, true );
             fail();
         }
     }
@@ -225,13 +220,12 @@ public class CryptoServiceTest extends AbstractMerlinTestCase
             ca.setCipher("SHA1");
             String output = ca.encrypt(preDefinedInput);
             assertEquals("SHA1 Encryption failed ", preDefinedResult, output);
-            getLogger().info( "ok" );
+            
         }
         catch (Exception e)
         {
             final String error = 
-              UnitHelper.packException( e.getMessage(), e, true );
-            getLogger().error( error );
+			ExceptionHelper.packException( e.getMessage(), e, true );
             fail();
         }
     }

@@ -75,27 +75,18 @@ public class LocalizationTest extends AbstractMerlinTestCase
     private LocalizationService ls = null;
     public LocalizationTest(String name)
     {
-        super( 
-          MAVEN_TARGET_CLASSES_DIR, 
-          MERLIN_DEFAULT_CONFIG_FILE, 
-          MERLIN_INFO_OFF, 
-          MERLIN_DEBUG_OFF, 
-          name );
+        super( name );
     }
-    public static Test suite()
-    {
-        return new TestSuite(LocalizationTest.class);
-    }
+  
     public void setUp() throws Exception
     {
         super.setUp();
         try
         {
-            ls = (LocalizationService) this.resolve( "localization" );
+            ls = (LocalizationService) this.resolve( "/test/localization" );
         }
         catch (Throwable e)
         {
-            getLogger().error( "Setup failure.", e );
             fail(e.getMessage());
         }
     }
@@ -124,7 +115,6 @@ public class LocalizationTest extends AbstractMerlinTestCase
         catch( Throwable e )
         {
             // should not happen
-            getLogger().error( "unresonable exception condition", e );
             fail();
         }
         // When a locale is used which cannot be produced for a given
@@ -140,7 +130,6 @@ public class LocalizationTest extends AbstractMerlinTestCase
         {
             // Asked for key from default bundle which does not exist,
         }
-        getLogger().info( "OK" );
     }
     /**
      * Putting this in a seperate testcase because it fails..  Why?  I don't know.  I have never
