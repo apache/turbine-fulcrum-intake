@@ -65,7 +65,7 @@ import org.apache.log4j.Category;
  * <code>Service</code> classes.
  *
  * Functionality that <code>ServiceBroker</code> provides in addition
- * to <code>InitableBroker</code> functionality includes:
+ * to <code>ServiceBroker</code> functionality includes:
  *
  * <ul>
  *
@@ -86,34 +86,6 @@ import org.apache.log4j.Category;
 public interface ServiceBroker
 {
     /**
-     * Performs early initialization of an Initable class.
-     *
-     * If your class depends on another Initable being initialized to
-     * perform early initialization, you should always ask your broker
-     * to initialize the other class with the objects that are passed
-     * to you, before you try to retrieve that Initable's instance with
-     * getInitable().
-     *
-     * @param className The name of the class to be initailized.
-     * @param data An object to be used for initialization activities.
-     * @exception InitializationException, if initialization of this
-     * class was not successful.
-     */
-    public void initClass( String className )
-        throws InitializationException;
-
-    /**
-     * Shutdowns an Initable class.
-     *
-     * This method is used to release resources allocated by an
-     * Initable class, and return it to initial (uninitailized)
-     * state.
-     *
-     * @param className The name of the class to be uninitialized.
-     */
-    public void shutdownClass( String className );
-
-    /**
      * Determines whether a service is registered in the configured
      * <code>TurbineResources.properties</code>.
      *
@@ -123,7 +95,7 @@ public interface ServiceBroker
     public boolean isRegistered( String serviceName );
 
     /**
-     * Performs early initialization of specified service.
+     * Performs early initialization of the specified service.
      *
      * @param name The name of the service.
      * @param data An Object to use for initialization activities.
