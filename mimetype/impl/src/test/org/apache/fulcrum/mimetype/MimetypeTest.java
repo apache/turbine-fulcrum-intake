@@ -55,9 +55,7 @@ package org.apache.fulcrum.mimetype;
 // Cactus and Junit imports
 import java.io.File;
 import java.util.Locale;
-import junit.awtui.TestRunner;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+
 import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
 import org.apache.fulcrum.mimetype.util.MimeType;
 
@@ -83,36 +81,16 @@ public class MimetypeTest extends AbstractMerlinTestCase
     {
         super(name);
     }
-    /**
-     * Start the tests.
-     *
-     * @param args the arguments. Not used
-     */
-    public static void main(String args[])
-    {
-        TestRunner.main(new String[] { MimetypeTest.class.getName()});
-    }
-    /**
-     * Creates the test suite.
-     *
-     * @return a test suite (<code>TestSuite</code>) that includes all methods
-     *         starting with "test"
-     */
-    public static Test suite()
-    {
-        // All methods starting with "test" will be executed in the test suite.
-        return new TestSuite(MimetypeTest.class);
-    }
+
     public  void setUp() throws Exception
     {
         super.setUp();
         try
         {
-            mimeTypeService = (MimeTypeService) this.resolve( "mimetype" );
+            mimeTypeService = (MimeTypeService) this.resolve( "/test/mimetype" );
         }
         catch (Throwable e)
         {
-            getLogger().error( "Setup failure.", e );
             fail(e.getMessage());
         }
     }
@@ -121,7 +99,6 @@ public class MimetypeTest extends AbstractMerlinTestCase
         Locale locale = new Locale("en", "US");
         String s = mimeTypeService.getCharSet(locale);
         assertEquals("ISO-8859-1", s);
-        getLogger().info( "OK" );
     }
     public void testSetGetContentType() throws Exception
     {
@@ -133,7 +110,6 @@ public class MimetypeTest extends AbstractMerlinTestCase
         assertEquals(mimeType, mimeTypeService.getContentType(files[0]));
         assertEquals(mimeType, mimeTypeService.getContentType(files[1]));
         assertEquals(mimeType, mimeTypeService.getContentType(files[2]));
-        getLogger().info( "OK" );
     }
     public void testGetDefaultExtension() throws Exception
     {
@@ -143,6 +119,5 @@ public class MimetypeTest extends AbstractMerlinTestCase
         MimeType mt = new MimeType(mimeType);
         result = mimeTypeService.getDefaultExtension(mt);
         assertEquals("crazy", result);
-        getLogger().info( "OK" );
     }
 }

@@ -55,10 +55,10 @@ package org.apache.fulcrum.mimetype;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
+
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
@@ -299,7 +299,7 @@ public class DefaultMimeTypeService
     /**
      * Avalon component lifecycle method
      */
-    public void configure(Configuration conf) throws ConfigurationException
+    public void configure(Configuration conf) 
     {
         mimetypePath = conf.getAttribute(MIME_TYPES, null);
         charsetPath = conf.getAttribute(CHARSETS, null);
