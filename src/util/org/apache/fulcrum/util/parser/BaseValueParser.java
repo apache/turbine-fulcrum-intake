@@ -385,7 +385,8 @@ public class BaseValueParser
                 value = true;
             }
             if ( tmp.equalsIgnoreCase ("0") ||
-                 tmp.equalsIgnoreCase ("false") )
+                 tmp.equalsIgnoreCase ("false") ||
+                 tmp.equalsIgnoreCase ("off") )
             {
                 value = false;
             }
