@@ -67,6 +67,7 @@
       <item name="Upload"                href="/fulcrum-upload/index.html"/>
       <item name="XMLRPC"                href="/fulcrum-xmlrpc/index.html"/>
       <item name="XSLT"                  href="/fulcrum-xslt/index.html"/>
+      <item name="YAAFI"                  href="/fulcrum-yaafi/index.html"/>
     </menu>
     <menu name="Howtos (old)">
       <item name="JSP Service"            href="/howto/jsp-service.html"/>

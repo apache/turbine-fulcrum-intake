@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Fulcrum YAAFI</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+	<section name="Overview">
+  	  <p>
+	    This is the Yet Another Avalon Framework Implementation aka YAAFI.
+	  </p>
+	  <p>
+	    The project was born out of the frustration to get Merlin to run. The service 
+	    container is compatible to the existing framework implementation such as Excalibur
+	    and Merlin since they rely on the Avalon service lifecycle.
+	  </p>
+	</section>
+
+  </body>
+
+</document>

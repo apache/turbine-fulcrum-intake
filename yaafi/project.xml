@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<project>
+  <extend>${basedir}/../project.xml</extend>
+  <id>fulcrum-yaafi</id>
+  <name>Fulcrum's YAAFI</name>
+  <currentVersion>1.0.3-dev</currentVersion>
+
+  <dependencies>
+
+   <dependency>
+      <groupId>avalon-framework</groupId>
+      <artifactId>avalon-framework-api</artifactId>
+      <version>4.2.0</version>
+      <url>http://avalon.apache.org/framework/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+        <ear.bundle>true</ear.bundle>
+      </properties>
+    </dependency>
+
+   <dependency>
+      <groupId>avalon-framework</groupId>
+      <artifactId>avalon-framework-impl</artifactId>
+      <version>4.2.0</version>
+      <url>http://avalon.apache.org/framework/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+        <ear.bundle>true</ear.bundle>
+      </properties>
+    </dependency>   
+
+  </dependencies>
+
+  <build>
+    <unitTest>
+      <includes>
+        <include>**/*Test.java</include>
+      </includes>
+      <excludes>
+        <exclude>**/BaseUnitTest.java</exclude>
+      </excludes>
+      <resources>
+        <resource>
+          <directory>${basedir}/src/test</directory>
+          <includes>
+            <include>**/*.xml</include>
+          </includes>
+        </resource>
+      </resources>
+    </unitTest>    
+  </build>
+
+  <build>
+    <unitTest>
+      <includes>
+        <include>**/*Test.java</include>
+      </includes>
+      <excludes>
+        <exclude>**/BaseUnitTest.java</exclude>
+      </excludes>
+      <resources>
+        <resource>
+          <directory>${basedir}/src/test</directory>
+          <includes>
+            <include>**/*.xml</include>
+          </includes>
+        </resource>
+      </resources>
+    </unitTest>    
+  </build>
+
+</project>
+
