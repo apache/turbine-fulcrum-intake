@@ -86,6 +86,18 @@ public class BaseSecurityService
 	 */
     public UserManager getUserManager()
     {
+        if (userManager == null)
+        {
+            try
+            {
+                userManager = (UserManager) manager.lookup(UserManager.ROLE);
+
+            }
+            catch (ComponentException ce)
+            {
+                throw new RuntimeException(ce.getMessage(), ce);
+            }
+        }
         return userManager;
     }
     /**
@@ -95,6 +107,18 @@ public class BaseSecurityService
 	 */
     public GroupManager getGroupManager()
     {
+        if (groupManager == null)
+        {
+            try
+            {
+                groupManager = (GroupManager) manager.lookup(GroupManager.ROLE);
+
+            }
+            catch (ComponentException ce)
+            {
+                throw new RuntimeException(ce.getMessage(), ce);
+            }
+        }
         return groupManager;
     }
     /**
@@ -104,6 +128,18 @@ public class BaseSecurityService
 	 */
     public RoleManager getRoleManager()
     {
+        if (roleManager == null)
+        {
+            try
+            {
+                roleManager = (RoleManager) manager.lookup(RoleManager.ROLE);
+
+            }
+            catch (ComponentException ce)
+            {
+                throw new RuntimeException(ce.getMessage(), ce);
+            }
+        }
         return roleManager;
     }
     /**
@@ -113,6 +149,18 @@ public class BaseSecurityService
 	 */
     public PermissionManager getPermissionManager()
     {
+        if (permissionManager == null)
+        {
+            try
+            {
+                permissionManager = (PermissionManager) manager.lookup(PermissionManager.ROLE);
+
+            }
+            catch (ComponentException ce)
+            {
+                throw new RuntimeException(ce.getMessage(), ce);
+            }
+        }
         return permissionManager;
     }
     /**
@@ -122,6 +170,18 @@ public class BaseSecurityService
 	 */
     public ModelManager getModelManager()
     {
+        if (modelManager == null)
+        {
+            try
+            {
+                modelManager = (ModelManager) manager.lookup(ModelManager.ROLE);
+
+            }
+            catch (ComponentException ce)
+            {
+                throw new RuntimeException(ce.getMessage(), ce);
+            }
+        }
         return modelManager;
     }
     /**
@@ -143,11 +203,7 @@ public class BaseSecurityService
     public void compose(ComponentManager manager) throws ComponentException
     {
         this.manager = manager;
-        userManager = (UserManager) manager.lookup(UserManager.ROLE);
-        roleManager = (RoleManager) manager.lookup(RoleManager.ROLE);
-        groupManager = (GroupManager) manager.lookup(GroupManager.ROLE);
-        permissionManager = (PermissionManager) manager.lookup(PermissionManager.ROLE);
-        modelManager = (ModelManager) manager.lookup(ModelManager.ROLE);
+        
 
     }
     /**
