@@ -75,7 +75,7 @@ import org.apache.torque.util.Criteria;
 // Classes needed for password encryption
 import java.security.MessageDigest;
 
-import org.apache.commons.util.Base64;
+import org.apache.commons.codec.base64.Base64;
 
 /**
  * This is a common subset of SecurityService implementation.

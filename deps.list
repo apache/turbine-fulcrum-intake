@@ -3,7 +3,7 @@ bsf.jar
 commons-collections.jar
 commons-email-0.1-dev.jar
 commons-lang-0.1-dev.jar
-commons-util-0.1-dev.jar
+commons-codec.jar
 dom4j-1.1.jar
 jakarta-regexp-1.3-dev.jar
 jdbc2_0-stdext.jar

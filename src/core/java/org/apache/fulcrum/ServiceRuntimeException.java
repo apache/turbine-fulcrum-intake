@@ -54,7 +54,7 @@ package org.apache.fulcrum;
  * <http://www.apache.org/>.
  */
 
-import org.apache.commons.util.exception.NestableRuntimeException;
+import org.apache.commons.lang.exception.NestableRuntimeException;
 
 /**
  * This is a base class of runtime exeptions thrown by Fulcrum.

@@ -69,7 +69,6 @@ import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import org.apache.fulcrum.pool.Recyclable;
 import org.apache.fulcrum.pool.RecyclableSupport;
-import org.apache.commons.util.StringUtils;
 
 /**
  * BaseValueParser is a base class for classes that need to parse

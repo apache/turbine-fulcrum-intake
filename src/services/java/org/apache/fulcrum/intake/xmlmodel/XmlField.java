@@ -59,7 +59,7 @@ import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
-import org.apache.commons.util.StringUtils;
+import org.apache.commons.lang.Strings;
 import org.xml.sax.Attributes;
 
 /**
@@ -203,7 +203,7 @@ public class XmlField
      */
     public String getName()
     {
-        return StringUtils.replace(name, "_", "");
+        return Strings.replace(name, "_", "");
     }
 
     /**

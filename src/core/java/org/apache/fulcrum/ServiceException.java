@@ -54,7 +54,7 @@ package org.apache.fulcrum;
  * <http://www.apache.org/>.
  */
 
-import org.apache.commons.util.exception.NestableException;
+import org.apache.commons.lang.exception.NestableException;
 
 /**
  * The base class of all regular exceptions thrown by Fulcrum.

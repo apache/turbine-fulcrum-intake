@@ -54,7 +54,6 @@ package org.apache.fulcrum.intake.xmlmodel;
  * <http://www.apache.org/>.
  */
 
-import org.apache.commons.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.apache.fulcrum.intake.validator.Constraint;
 

@@ -64,7 +64,7 @@ import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.util.StringUtils;
+import org.apache.commons.lang.Strings;
 import org.apache.log4j.Category;
 import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
@@ -394,7 +394,7 @@ public class TurbineLocalizationService
                                               Map bundlesByLocale)
     {
         ResourceBundle rb = null;
-        if ( !StringUtils.isValid(locale.getCountry()) &&
+        if ( !Strings.isValid(locale.getCountry()) &&
              defaultLanguage.equals(locale.getLanguage()) )
         {
             /*
@@ -410,7 +410,7 @@ public class TurbineLocalizationService
                 rb = getBundleIgnoreException(bundleName, withDefaultCountry);
             }
         }
-        else if ( !StringUtils.isValid(locale.getLanguage()) &&
+        else if ( !Strings.isValid(locale.getLanguage()) &&
                   defaultCountry.equals(locale.getCountry()) )
         {
             Locale withDefaultLanguage = new Locale(defaultLanguage, 
@@ -486,7 +486,7 @@ public class TurbineLocalizationService
      */
     public Locale getLocale(String header)
     {
-        if (!StringUtils.isEmpty(header))
+        if (!Strings.isEmpty(header))
         {
             LocaleTokenizer tok = new LocaleTokenizer(header);
             if (tok.hasNext())
