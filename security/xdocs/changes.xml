@@ -6,7 +6,11 @@
   </properties>
 
   <body>
-    <release version="1.0-alpha-7" date="in cvs">
+    <release version="1.0.6" date="in cvs">
+      <action dev="mmanner" type="add">
+        Merge the fulcrum-security-spi classes into fulcurm-security-api.  The split
+        made it too complex to handle unit testing.
+      </action>    	      
       <action dev="mmanner" type="add">
         Null passwords properly dealt with in TextMatchAuthenticator.
       </action>    	    	

@@ -3,11 +3,37 @@
   <extend>${basedir}/../project.xml</extend>
   <id>fulcrum-security-site</id>
   <name>Fulcrum Security Site</name>
-  <currentVersion>1.0-alpha-6</currentVersion>
+  <currentVersion>1.0.6</currentVersion>
   <package>org.apache.fulcrum.security</package>
 
+ <contributors>
+    <contributor>
+      <name>Michael Jones</name>
+      <id>mjones</id>
+      <email>michael.jones@anite.com</email>
+      <organization>Anite</organization>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </contributor>
+  </contributors>
   
-
+  <dependencies>
+    <!-- testing -->
+    <dependency>
+      <groupId>fulcrum</groupId>    
+      <artifactId>fulcrum-testcontainer</artifactId>
+      <version>1.0.3</version>
+    </dependency>    
+  </dependencies>
+ <resources>
+       <resource>
+         <directory>/</directory>
+         <includes>
+           <include>incl_nav.xml</include>
+         </includes>
+       </resource>
+    </resources>  
 
 </project>
 

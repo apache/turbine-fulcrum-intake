@@ -1,0 +1,11 @@
+<project default="jar:jar" 
+        xmlns:maven="jelly:maven" 
+        xmlns:j="jelly:core" 
+        xmlns:ant="jelly:ant" 
+        xmlns:util="jelly:util">
+
+  <preGoal name="site">
+    <ant:copy file="${basedir}/incl_nav.xml" todir="target" failonerror="false"/>
+  </preGoal>
+
+</project>
