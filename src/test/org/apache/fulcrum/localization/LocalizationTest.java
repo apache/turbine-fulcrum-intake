@@ -62,98 +62,96 @@ import java.util.ResourceBundle;
 import org.apache.commons.collections.ExtendedProperties;
 import org.apache.fulcrum.ServiceManager;
 import org.apache.fulcrum.TurbineServices;
+import org.apache.stratum.configuration.ConfigurationConverter;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 /**
  * Tests the API of the
  * {@link org.apache.fulcrum.localization.LocalizationService}.
  * <br>
- * TODO: Turn into a JUnit test
  *
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
+ * @author <a href="mailto:jason@zenplex.com">Jason van Zyl</a>
  */
 public class LocalizationTest
+    extends TestCase
 {
     private static final String PREFIX = "services." +
         LocalizationService.SERVICE_NAME + '.';
 
-    public static void main(String[] argv)
-        throws Exception
+    public LocalizationTest(String name)
     {
-        ServiceManager serviceManager = TurbineServices.getManager();
-        serviceManager.setApplicationRoot(".");
+        super(name);
+    }        
+    
+    public static Test suite()
+    {
+        return new TestSuite(LocalizationTest.class);
+    }
 
-        ExtendedProperties cfg = new ExtendedProperties();
-        cfg.setProperty(PREFIX + "classname",
-                        TurbineLocalizationService.class.getName());
-        cfg.setProperty(PREFIX + "locale.default.bundles",
-                        "FooBundle,MissingBundle,BarBundle");
-        cfg.setProperty(PREFIX + "locale.default.language", "en");
-        cfg.setProperty(PREFIX + "locale.default.country", "US");
-        serviceManager.setConfiguration(cfg);
-        serviceManager.init();
-
-        // Test retrieval of text using multiple default bundles
-        String s = Localization.getString(null, null, "key1");
-        assertEquals("Unable to retrieve localized text for locale: default",
-                     s, "value1");
-        s = Localization.getString(null, new Locale("en", "US"), "key2");
-        assertEquals("Unable to retrieve localized text for locale: en-US",
-                     s, "value2");
-        s = Localization.getString(null, new Locale("fr", "US"), "key3");
-        assertEquals("Unable to retrieve localized text for locale: fr",
-                     s, "[fr] value3");
-
-        s = Localization.getString("BarBundle", new Locale("ko", "KR"),
-                                   "key3");
-        assertEquals("Unable to retrieve localized text for locale: ko-KR",
-                     s, "[ko] value3");
-
+    public void testLocalization()
+    {
         try
         {
-            Localization.getString("DoesNotExist", new Locale("ko", ""),
-                                   "key1");
-            fail();
-        }
-        catch (MissingResourceException expectedFailure)
-        {
-            // Asked for resource bundle which does not exist.
-        }
+            ServiceManager serviceManager = TurbineServices.getManager();
+            serviceManager.setApplicationRoot(".");
 
-        // When a locale is used which cannot be produced for a given
-        // bundle, fall back to the default locale.
-        s = Localization.getString(null, new Locale("ko", "KR"), "key3");
-        assertEquals("Unable to retrieve localized text for locale: default",
+            ExtendedProperties cfg = new ExtendedProperties();
+            cfg.setProperty(PREFIX + "classname",
+                            TurbineLocalizationService.class.getName());
+            cfg.setProperty(PREFIX + "locale.default.bundles",
+                            "FooBundle,MissingBundle,BarBundle");
+            cfg.setProperty(PREFIX + "locale.default.language", "en");
+            cfg.setProperty(PREFIX + "locale.default.country", "US");
+        
+            serviceManager.setConfiguration(
+                ConfigurationConverter.getConfiguration(cfg));
+        
+            serviceManager.init();
+
+            // Test retrieval of text using multiple default bundles
+            String s = Localization.getString(null, null, "key1");
+            assertEquals("Unable to retrieve localized text for locale: default",s, "value1");
+            s = Localization.getString(null, new Locale("en", "US"), "key2");
+            assertEquals("Unable to retrieve localized text for locale: en-US",s, "value2");
+            s = Localization.getString(null, new Locale("fr", "US"), "key3");
+            assertEquals("Unable to retrieve localized text for locale: fr",s, "[fr] value3");
+            s = Localization.getString("BarBundle", new Locale("ko", "KR"),"key3");
+            assertEquals("Unable to retrieve localized text for locale: ko-KR",s, "[ko] value3");
+
+            try
+            {
+                Localization.getString("DoesNotExist", new Locale("ko", ""),"key1");
+                fail();
+            }
+            catch (MissingResourceException expectedFailure)
+            {
+                // Asked for resource bundle which does not exist.
+            }
+
+            // When a locale is used which cannot be produced for a given
+            // bundle, fall back to the default locale.
+            s = Localization.getString(null, new Locale("ko", "KR"), "key3");
+            assertEquals("Unable to retrieve localized text for locale: default",
                      s, "value3");
 
-        try
-        {
-            Localization.getString(null, null, "NoSuchKey");
-            fail();
-        }
-        catch (MissingResourceException expectedFailure)
-        {
-            // Asked for key from default bundle which does not exist, 
-        }
-
-        System.out.println(LocalizationService.SERVICE_NAME + " test passed");
-    }
-
-    private static void assertEquals(String msg, Object value, Object expected)
-        throws Exception
-    {
-        if (expected != null || value != null)
-        {
-            if (!expected.equals(value))
+            try
             {
-                throw new Exception("Assertion failure [" + value + " != " +
-                                    expected + "]: " + msg);
+                Localization.getString(null, null, "NoSuchKey");
+                fail();
+            }
+            catch (MissingResourceException expectedFailure)
+            {
+                // Asked for key from default bundle which does not exist, 
             }
         }
-    }
-
-    private static void fail()
-        throws Exception
-    {
-        throw new Exception(LocalizationService.SERVICE_NAME + " test failed");
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }            
     }
 }
