@@ -66,20 +66,18 @@ import java.security.NoSuchAlgorithmException;
  */
 public interface CryptoService
 {
-    /** Avalon role - used to id the component within the manager */
-    String ROLE = CryptoService.class.getName();
 
 
-	/**
-	 * Returns a CryptoAlgorithm Object which represents the requested
-	 * crypto algorithm.
-	 *
-	 * @param algo      Name of the requested algorithm
-	 *
-	 * @return An Object representing the algorithm
-	 *
-	 * @throws NoSuchAlgorithmException  Requested algorithm is not available
-	 *
-	 */
-	public CryptoAlgorithm getCryptoAlgorithm(String algo) throws NoSuchAlgorithmException;
+  /**
+   * Returns a CryptoAlgorithm Object which represents the requested
+   * crypto algorithm.
+   *
+   * @param algo      Name of the requested algorithm
+   *
+   * @return An Object representing the algorithm
+   *
+   * @throws NoSuchAlgorithmException  Requested algorithm is not available
+   *
+   */
+  public CryptoAlgorithm getCryptoAlgorithm(String algo) throws NoSuchAlgorithmException;
 }
