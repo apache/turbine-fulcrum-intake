@@ -136,6 +136,15 @@ public abstract class FieldFactory
                 }
             }
                        );
+        fieldCtors.put("DateString", new FieldFactory.FieldCtor()
+            {
+                public Field getInstance(XmlField f, Group g)
+                    throws Exception
+                {
+                    return new DateStringField(f, g);
+                }
+            }
+                       );
         return fieldCtors;
     }
 
