@@ -5,12 +5,14 @@
 
   <body>
     <links>
-      <item name="Turbine"			       href="http://jakarta.apache.org/turbine/"/>
-      <item name="Fulcrum"			       href="http://jakarta.apache.org/turbine/fulcrum/"/>
+      <item name="Turbine"
+            href="http://jakarta.apache.org/turbine/"/>
+      <item name="Fulcrum"
+            href="http://jakarta.apache.org/turbine/fulcrum/"/>
     </links>
-    
+
     <menu name="Overview">
-      <item name="Main"   				   href="/index.html"/>
+      <item name="Main"                 href="/index.html"/>
     </menu>
   </body>
 </project>
