@@ -467,10 +467,10 @@ public class DefaultConfigurationService
             confFile = new File(applicationRoot,confPath);
         }
         */
-		System.out.println( "PATH: " + confPath );
-		System.out.println( "HOME: " + applicationRoot );
+		//System.out.println( "PATH: " + confPath );
+		//System.out.println( "HOME: " + applicationRoot );
 		File file = new File( applicationRoot, confPath );
-		System.out.println( "REAL: " + file.getAbsolutePath());
+		//System.out.println( "REAL: " + file.getAbsolutePath());
 
         
         if(!file.exists()){            
