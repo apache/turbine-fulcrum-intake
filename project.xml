@@ -170,7 +170,8 @@
     </dependency>
     
     <dependency>
-      <id>commons-lang</id>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
       <version>2.0</version>
     </dependency> 
     
@@ -180,30 +181,35 @@
      |
      -->
     <dependency>
-      <id>commons-io</id>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
       <version>20030203.000550</version>
     </dependency>
     
     <dependency>
-      <id>commons-logging</id>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
       <version>1.0.3</version>
       <url>http://jakarta.apache.org/commons/logging.html</url>
     </dependency>
     
     <dependency>
-      <id>log4j</id>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
       <version>1.2.8</version>
       <url>http://jakarta.apache.org/log4j/</url>
     </dependency>
 
     <dependency>
-      <id>commons-collections</id>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
       <version>2.1</version>
       <url>http://jakarta.apache.org/commons/collections.html</url>
     </dependency>
     
     <dependency>
-      <id>commons-configuration</id>
+      <groupId>commons-configuration</groupId>
+      <artifactId>commons-configuration</artifactId>
       <version>20030706.202021</version>
       <url>http://jakarta.apache.org/commons/sandbox/configuration</url>
     </dependency>    

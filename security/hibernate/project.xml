@@ -29,22 +29,26 @@
     </dependency> 
     
     <dependency>
-      <id>commons-logging</id>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
       <version>1.0.3</version>
     </dependency>      
     <dependency>
-      <id>commons-lang</id>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
       <version>2.0</version>
     </dependency>  
     <dependency>
-      <id>cryptix</id>
+      <groupId>cryptix</groupId>
+      <artifactId>cryptix</artifactId>
       <version>3.2.0</version>
       <url>http://www.cryptix.org/</url>
     </dependency>    
     
 <!-- Needed for the Hibernate SPI -->
      <dependency>
-       <id>commons-beanutils</id>
+       <groupId>commons-beanutils</groupId>
+       <artifactId>commons-beanutils</artifactId>
        <version>1.6.1</version>
      </dependency>
      <dependency>
@@ -53,11 +57,13 @@
        <version>1.0.2</version>
      </dependency>    
      <dependency>
-       <id>hsqldb</id>      
+       <groupId>hsqldb</groupId>      
+       <artifactId>hsqldb</artifactId>      
        <version>1.7.1</version>
      </dependency>    
      <dependency>
-       <id>hibernate</id>      
+       <groupId>hibernate</groupId>      
+       <artifactId>hibernate</artifactId>      
        <version>2.1.6</version>
      </dependency>
 	<dependency>
@@ -79,21 +85,22 @@
       <url>http://hibernate.org/101.html</url>        
     </dependency>                 
     <dependency>
-       <id>odmg</id>      
+       <groupId>odmg</groupId>      
+       <artifactId>odmg</artifactId>      
        <version>3.0</version>
     </dependency>                  
-	<dependency>
+    <dependency>
       <groupId>cglib</groupId>      
       <artifactId>cglib</artifactId>            
       <version>2.0.1</version>
       <url>http://cglib.sf.net</url>  
-	</dependency>
-	<dependency>
+    </dependency>
+    <dependency>
       <groupId>asm</groupId>      
       <artifactId>asm</artifactId>            
       <version>1.4.1</version>
       <url>http://www.objectweb.org/asm</url>  
-	</dependency>
+    </dependency>
 
     <dependency>
       <groupId>hibernate</groupId>      
@@ -103,7 +110,8 @@
     </dependency>  
 
     <dependency>
-       <id>dom4j</id>      
+       <groupId>dom4j</groupId>      
+       <artifactId>dom4j</artifactId>      
        <version>1.4</version>
        <url>http://www.dom4j.org/</url>
     </dependency>                 

@@ -42,12 +42,14 @@
       <url>http://java.sun.com/products/javabeans/glasgow/jaf.html</url>
     </dependency>
     <dependency>
-      <id>bsh</id>
+      <groupId>bsh</groupId>
+      <artifactId>bsh</artifactId>
       <version>1.2b7</version>
     </dependency>    
            
     <dependency>
-      <id>bsf</id>
+      <groupId>bsf</groupId>
+      <artifactId>bsf</artifactId>
       <version>2.3.0</version>
     </dependency>           
     
@@ -59,13 +61,15 @@
     </dependency>
 
     <dependency>
-      <id>xerces:xercesImpl</id>
+      <groupId>xercesImpl</groupId>
+      <artifactId>xercesImpl</artifactId>
       <version>2.0.2</version>
       <url>http://xml.apache.org/xerces2-j/</url>
     </dependency>
 
     <dependency>
-      <id>xerces:xml-apis</id>
+      <groupId>xml-apis</groupId>
+      <artifactId>xml-apis</artifactId>
       <version>2.0.2</version>
       <url>http://xml.apache.org/xerces2-j/</url>
     </dependency>

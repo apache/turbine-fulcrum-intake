@@ -35,14 +35,14 @@
       <version>1.0.3</version>
     </dependency>    
   </dependencies>
- <resources>
-       <resource>
-         <directory>/</directory>
-         <includes>
-           <include>incl_nav.xml</include>
-         </includes>
-       </resource>
-    </resources>  
+  <resources>
+    <resource>
+      <directory>/</directory>
+      <includes>
+        <include>incl_nav.xml</include>
+      </includes>
+    </resource>
+  </resources>  
 
 </project>
 

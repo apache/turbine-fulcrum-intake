@@ -11,7 +11,8 @@
   <dependencies>
 
     <dependency>
-      <id>servletapi</id>
+      <groupId>servletapi</groupId>
+      <artifactId>servletapi</artifactId>
       <version>2.3</version>
     </dependency>
 
