@@ -58,7 +58,7 @@ import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
 
 /**
- * Classes that implement this interface can act as a mamager for
+ * Classes that implement this interface can act as a manager for
  * <code>Service</code> classes.
  *
  * Functionality that <code>ServiceManager</code> provides in addition
