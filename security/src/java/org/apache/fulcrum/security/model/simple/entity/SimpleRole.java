@@ -1,7 +1,9 @@
 package org.apache.fulcrum.security.model.simple.entity;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
+import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PermissionSet;
 /**
  * @author Eric Pugh
@@ -12,7 +14,9 @@ import org.apache.fulcrum.security.util.PermissionSet;
  */
 public class SimpleRole extends SecurityEntityImpl implements Role
 {
-    private PermissionSet permissionSet = new PermissionSet();
+	private PermissionSet permissionSet = new PermissionSet();
+	
+	private GroupSet groupSet = new GroupSet();
     /**
      * @return
      */
@@ -44,4 +48,36 @@ public class SimpleRole extends SecurityEntityImpl implements Role
     {
         getPermissions().remove(permission);
     }
+    
+	/**
+		* @return
+		*/
+	   public GroupSet getGroups()
+	   {
+		   return groupSet;
+	   }
+	   /**
+		* @param groupSet
+		*/
+	   public void setGroups(GroupSet groupSet)
+	   {
+		   this.groupSet = groupSet;
+	   }
+    
+	   /**
+	   * This method should only be used by a RoleManager.  Not directly.
+	   * @param group
+	   */
+	   public void addGroup(Group group)
+	   {
+		   getGroups().add(group);
+	   }
+	   /**
+		* This method should only be used by a RoleManager.  Not directly.
+		* @param group
+		*/
+	   public void removeGroup(Group group)
+	   {
+		   getGroups().remove(group);
+	   }    
 }
