@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Fulcrum ResourceManager Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Usage">
+
+        <source>
+        <![CDATA[
+// Reading a XSL from the domain 'xsl'
+
+ResourceManagerService service = ....
+String[] resourceContext = { "foo", "bar", "special" };
+String xsl = new String( service.read( "xslt", resourceContext, "test.xsl" ) );
+        ]]>
+        </source>
+
+    </section> 
+
+  </body>
+</document>

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Fulcrum Groovy Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="What is the Fulcrum Groovy Service?">
+
+      <p>
+        The Fulcrum Groovy Service executes Groovy scripts managed by
+        the Fulcrum ResourceManager Service.
+      </p>
+
+      <p>
+        It provides the following features:
+        
+        <ul>
+          <li>caching of Groovy scripts to improve performance</li>
+          <li>thread-safe execution of compiled Groovy scripts</li>
+          <li>seamless integration with the existing Avalon infrastructure</li>
+        </ul>
+      </p>  
+     
+    </section>
+
+  </body>
+
+</document>

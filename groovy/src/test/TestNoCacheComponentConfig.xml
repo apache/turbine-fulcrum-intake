@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<componentConfig>
+  
+  <ResourceManagerService>
+    <domain name="groovy" type="org.apache.fulcrum.resourcemanager.impl.FileResourceManager">
+      <suffix>groovy</suffix>
+      <location>./src/test/scripts</location>
+      <useLocator>true</useLocator>
+    </domain>
+  </ResourceManagerService>
+  
+  <GroovyService useCache="false" domain="groovy"/>
+
+</componentConfig>

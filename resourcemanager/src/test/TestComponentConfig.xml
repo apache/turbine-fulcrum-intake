@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<componentConfig>
+  
+  <ResourceManagerService>
+    <domain name="groovy" type="org.apache.fulcrum.resourcemanager.impl.FileResourceManager">
+      <suffix>groovy</suffix>
+      <location>./src/test/resources/scripts</location>
+      <useLocator>true</useLocator>
+    </domain>
+    <domain name="xslt" type="org.apache.fulcrum.resourcemanager.impl.FileResourceManager">
+      <suffix>xsl</suffix>
+      <location>./src/test/resources/xslt</location>
+      <useLocator>true</useLocator>
+    </domain>
+    <domain name="test" type="org.apache.fulcrum.resourcemanager.impl.FileResourceManager">
+      <suffix>txt</suffix>
+      <location>./src/test/resources/test</location>
+      <useLocator>false</useLocator>
+    </domain>    
+  </ResourceManagerService>
+  
+</componentConfig>

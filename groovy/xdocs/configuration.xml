@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Fulcrum GroovyScriptExecutor Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Configuration">
+
+      <subsection name="Role Configuration">
+        <source>
+          <![CDATA[
+<role
+    name="org.apache.fulcrum.resourcemanager.ResourceManagerService"
+    default-class="org.apache.fulcrum.resourcemanager.impl.ResourceManagerServiceImpl"
+    shorthand="ResourceManagerService" 
+    early-init="true"
+    description="Handles the management of resources"
+ />
+
+<role
+    name="org.apache.fulcrum.groovy.GroovyService"
+    default-class="org.apache.fulcrum.groovy.impl.GroovyServiceImpl"
+    shorthand="GroovyService" 
+    early-init="true"
+    description="Handles the execution of Groovy scripts"
+ /> 
+          ]]>
+        </source> 
+      </subsection>  
+
+      <subsection name="Component Configuration">
+        <source>
+        <![CDATA[
+  <ResourceManagerService>
+    <domain name="groovy" type="file">
+      <suffix>groovy</suffix>
+      <location>./src/test/scripts</location>
+      <useLocator>true</useLocator>
+    </domain>
+  </ResourceManagerService>
+  
+  <GroovyService useCache="true" domain="groovy"/>
+        ]]>
+        </source>
+      </subsection>  
+
+    </section>
+
+  </body>
+
+</document>

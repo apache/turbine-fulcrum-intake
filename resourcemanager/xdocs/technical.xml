@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Fulcrum ResourceManager Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="The Implementation">
+    
+      <p>
+        The Fulcrum ResourceManager Services manages multiple ResourceManager. Each ResourceManager 
+        is responsible for exactly one domain. Therefore the Fulcrum ResourceManager Services just
+        delegates the method invocations to the various ResourceManagers.
+      </p>
+
+      <subsection name="The Domain">
+        <p>
+          The resources are located in a domain. A domain definition contains the location of the 
+          hierarchical resources, a suffix to filter resources based on their externsion and 
+          a flag for using the locator feature
+        </p>
+
+        <p>
+          It is not possible to define a domain more than once since each domain has a unique name. But it 
+          is possible to use different domain names and share a location using a suffix filter.
+        </p>
+      </subsection>     
+
+      <subsection name="The Context">
+        <p>
+          The context consist of a String[] and is used to locate a resource. The file system
+          implementation iterates over the context and creates a relative file name
+        </p>
+      </subsection>     
+        
+    </section> 
+
+  </body>
+</document>

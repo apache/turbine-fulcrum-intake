@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<project>
+  <extend>${basedir}/../project.xml</extend>
+  <id>fulcrum-groovy</id>
+  <name>Fulcrum Groovy Component</name>
+  <currentVersion>1.0.0</currentVersion>
+
+  <dependencies>
+  
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-resourcemanager</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>groovy</groupId>
+      <artifactId>groovy-all</artifactId>
+      <version>1.0-beta-9</version>
+    </dependency>
+
+    <!--  Needed only for testing -->
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-testcontainer</artifactId>
+      <version>1.0.4</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-yaafi</artifactId>
+      <version>1.0.4-dev</version>
+    </dependency>
+
+  </dependencies>
+
+</project>
+

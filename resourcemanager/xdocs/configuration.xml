@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Fulcrum ResourceManager Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+  <body>
+    <section name="Configuration">
+
+      <subsection name="RoleConfiguration">
+        <source><![CDATA[
+<role
+    name="org.apache.fulcrum.resourcemanager.ResourceManagerService"
+    default-class="org.apache.fulcrum.resourcemanager.impl.ResourceManagerServiceImpl"
+    shorthand="ResourceManagerService" 
+    early-init="true"
+    description="Handles the management of resources for multiple domains"
+ />
+        ]]></source>
+      </subsection>
+      
+      <subsection name="Component Configuration">
+        <table>
+          <tr>
+            <th>Item</th>
+            <th>Datatype</th>
+            <th>Optional</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>domain</td>
+            <td>Element</td>
+            <td>N</td>
+            <td>Defines one or more domains for managing resources</td>
+          </tr>
+          <tr>
+            <td>domain@name</td>
+            <td>String</td>
+            <td>N</td>
+            <td>The name of the domain</td>
+          </tr>
+          <tr>
+            <td>domain@type</td>
+            <td>String</td>
+            <td>N</td>
+            <td>Defines the implementation class.</td>
+          </tr>
+          <tr>
+            <td>suffix</td>
+            <td>String</td>
+            <td>Y</td>
+            <td>The extension of the resources to manage</td>
+          </tr>
+          <tr>
+            <td>location</td>
+            <td>String</td>
+            <td>N</td>
+            <td>The location were the resources reside</td>
+          </tr>
+          <tr>
+            <td>useLocator</td>
+            <td>Boolean</td>
+            <td>Y</td>
+            <td>Enable/disable the locator feature</td>
+          </tr>
+        </table>
+      </subsection>
+
+      <subsection name="ComponentConfiguration">
+        <source><![CDATA[
+<ResourceManagerService>
+  <domain name="groovy" type="org.apache.fulcrum.resourcemanager.impl.FileResourceManager">
+    <suffix>groovy</suffix>
+    <location>./src/test/resources/scripts</location>
+    <useLocator>true</useLocator>
+  </domain>
+  <domain name="xslt" type="org.apache.fulcrum.resourcemanager.impl.FileResourceManager">
+    <suffix>*</suffix>
+    <location>./src/test/resources/xslt</location>
+    <useLocator>true</useLocator>
+  </domain>
+  <domain name="test" type="org.apache.fulcrum.resourcemanager.impl.FileResourceManager">
+    <suffix>txt</suffix>
+    <location>./src/test/resources/test</location>
+    <useLocator>false</useLocator>
+  </domain>    
+</ResourceManagerService>
+        ]]></source>
+      </subsection>
+    </section>
+  </body>
+</document>

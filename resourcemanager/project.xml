@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<project>
+  <extend>${basedir}/../project.xml</extend>
+  <id>fulcrum-resourcemanager</id>
+  <name>Fulcrum ResourceManager Component</name>
+  <currentVersion>1.0.0</currentVersion>
+
+  <dependencies>
+  
+    <!--  Needed only for testing -->
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-testcontainer</artifactId>
+      <version>1.0.4</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-yaafi</artifactId>
+      <version>1.0.4-dev</version>
+    </dependency>
+
+  </dependencies>
+
+</project>
+

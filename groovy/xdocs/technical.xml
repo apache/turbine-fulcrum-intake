@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Fulcrum Groovy Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Multi-threaded Groovy?">
+
+      <p>
+        Currently the implementation of groovy.lang.Script keeps the binding
+        (= the parameters you pass to the script) as a member variable. One 
+        could call it a feature ... :-(
+      </p>
+      
+      <p>
+        Running a script with two threads would overwrite the
+        parameters passed to the script. Therefore the Groovy Service
+        uses semaphore to enforce the single-threaded execution of
+        a Groovy script. This still allows executing different scipts
+        in parallel with multiple threads.
+      </p>      
+      
+    </section>
+
+    <section name="Locator">
+    
+      <p>
+        The locator gives you easy customization of Groovy scripts. Let's
+        say you would like to invoke the script 'magic.groovy' for a customer
+        'ABC' and 'XYZ' using the following script layout
+      </p>      
+          
+      <source>
+        <![CDATA[
+scripts
+  -- magic.groovy
+  -- ABC
+     -- magic.groovy
+        ]]>
+      </source>
+
+      <p>
+        In the case of invoking 'ABC/magic.groovy' the script 'ABC/magic.groovy' would be executed.
+        In the case of invoking 'XYZ/magic.groovy' the locator is looking for 'XYZ/magic.groovy'. Since
+        it isn't found it steps up a directory to execute 'magic.groovy'. The trick was taken from 
+        the Fulcrum XSLT service which uses a simlilar fallback mechanism.
+      </p>      
+        
+    </section>
+
+    <section name="Script Management">
+      <p>
+        The Groovy scripts are managesd by the Fulcrum ResourcManager Service. In the 
+        future this might allow to store the Groovy Scripts in a database.
+      </p>
+    </section>
+
+    <section name="Why not using BSF">
+      <p>
+        At the time of coding I was pretty ignorant regarding BSF (in the meantime I know better).
+        Having said that BSF does not add a lot of value for the moment and a BSF-free service allows
+        tinkering with the more advanced features of Groovy.
+      </p>
+    </section>
+    
+  </body>
+
+</document>

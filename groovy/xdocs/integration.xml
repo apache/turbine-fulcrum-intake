@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Fulcrum Groovy Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+      <section name="Invoking a script">
+
+      <p>
+        A scipt has a unique name and needs parameters for invocation.
+      </p>
+
+      <p>
+        There are two ways to invoke a script - invoking the GroovyService
+        directly or using the GroovyRunnable.
+      </p>
+
+      <source>
+        <![CDATA[
+Object result = null;
+Object[] args = { new Integer(2) };
+result = groovyService.execute( "test.groovy", args );
+        ]]>
+      </source>
+
+      <source>
+        <![CDATA[
+Object result = null;
+Object[] args = { new Integer(2) };
+GroovyRunnable runnable = groovyService.createGroovyRunnable( "test.groovy" );
+runnable.setArgs( args1 );        
+runnable.run();
+result = runnable.getResult();
+        ]]>
+      </source>
+
+    </section>
+
+    <section name="Accessing the GroovyAvalonContext from a Groovy Script">
+      <p>
+        The Fulcrum Groovy Service passes a GroovyAvalonContext to the script
+      </p>      
+      <p>
+        A little example how to use those Java objects within a Groovy script
+        taken from 'src/test/scripts/test.groovy'
+      </p>      
+      <source>
+        <![CDATA[
+System.out.println( avalonContext.getApplicationDir() );
+avalonContext.getLogger().debug( "Logging from within a Groovy script ...:-)" );
+        ]]>
+      </source>
+
+    </section>
+      
+    <section name="A Real World Example">
+      <p>
+        Our <b>IT20one Invoice20one Enterprise Server</b> creates digitally
+        signed invoices and SMIME messages using X.509 certificates. Due to legal 
+        requirements we need to archive those documents using commercial archiving
+        systems.
+      </p>      
+      <p>
+        What we don't know at this point are the fields and the format for the index files 
+        since this depends on the customer and the archiving system being used.
+      </p>      
+      <p>
+        Therefore the archiving is done using an event listener which maps the archiving event
+        to the name of a Groovy script. The corresponding Groovy script can be easily 
+        customized without going through the whole release cycle.
+      </p>            
+      <p>
+        And the Groovy scripts looks like Java and behaves like Java - voila!
+      </p>            
+    </section>
+      
+  </body>
+
+</document>
