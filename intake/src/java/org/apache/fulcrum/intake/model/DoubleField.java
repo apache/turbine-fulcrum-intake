@@ -61,10 +61,8 @@ import org.apache.fulcrum.intake.validator.DoubleValidator;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 
 /**
- * Creates Double Field objects.
+ * Processor for double fields.
  *
- * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
- * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Id$
  */
 public class DoubleField
@@ -153,18 +151,21 @@ public class DoubleField
         if (isMultiValued)
         {
             String[] inputs = parser.getStrings(getKey());
-            Double[] values = new Double[inputs.length];
+            double[] values = new double[inputs.length];
             for (int i = 0; i < inputs.length; i++)
             {
                 values[i] = StringUtils.isNotEmpty(inputs[i])
-                        ? new Double(inputs[i]) : (Double) getEmptyValue();
+                        ? new Double(inputs[i]).doubleValue() 
+                        : ((Double) getEmptyValue()).doubleValue();
             }
             setTestValue(values);
         }
         else
         {
             String val = parser.getString(getKey());
-            setTestValue(StringUtils.isNotEmpty(val) ? new Double(val) : (Double) getEmptyValue());
+            setTestValue(StringUtils.isNotEmpty(val) 
+                    ? new Double(val) : (Double) getEmptyValue());
         }
     }
+    
 }

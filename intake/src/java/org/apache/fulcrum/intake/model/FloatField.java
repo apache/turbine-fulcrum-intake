@@ -61,19 +61,13 @@ import org.apache.fulcrum.intake.validator.FloatValidator;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 
 /**
- * Creates Float Field objects.
+ * Processor for float fields.
  *
- * @author <a href="mailto:r.wekker@rubicon-bv.com>Ronald Wekker</a>
- * @author <a href="mailto:jmcnally@collab.net>John McNally</a>
- * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
- * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
- * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Id$
  */
 public class FloatField
         extends Field
 {
-
     /**
      * Constructor.
      *
@@ -157,18 +151,21 @@ public class FloatField
         if (isMultiValued)
         {
             String[] inputs = parser.getStrings(getKey());
-            Float[] values = new Float[inputs.length];
+            float[] values = new float[inputs.length];
             for (int i = 0; i < inputs.length; i++)
             {
                 values[i] = StringUtils.isNotEmpty(inputs[i])
-                        ? new Float(inputs[i]) : (Float) getEmptyValue();
+                        ? new Float(inputs[i]).floatValue() 
+                        : ((Float) getEmptyValue()).floatValue();
             }
             setTestValue(values);
         }
         else
         {
             String val = parser.getString(getKey());
-            setTestValue(StringUtils.isNotEmpty(val) ? new Float(val) : getEmptyValue());
+            setTestValue(StringUtils.isNotEmpty(val) 
+                    ? new Float(val) : getEmptyValue());
         }
     }
+    
 }

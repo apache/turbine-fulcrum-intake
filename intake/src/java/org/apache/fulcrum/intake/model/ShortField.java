@@ -61,17 +61,13 @@ import org.apache.fulcrum.intake.validator.ShortValidator;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 
 /**
- * Creates Short Field objects.
+ * Processor for short fields.
  *
- * @author <a href="mailto:jmcnally@collab.net>John McNally</a>
- * @author <a href="mailto:Colin.Chalmers@maxware.nl">Colin Chalmers</a>
- * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Id$
  */
 public class ShortField
         extends Field
 {
-
     /**
      * Constructor.
      *
@@ -156,18 +152,21 @@ public class ShortField
         if (isMultiValued)
         {
             String[] inputs = parser.getStrings(getKey());
-            Short[] values = new Short[inputs.length];
+            short[] values = new short[inputs.length];
             for (int i = 0; i < inputs.length; i++)
             {
                 values[i] = StringUtils.isNotEmpty(inputs[i])
-                        ? new Short(inputs[i]) : (Short) getEmptyValue();
+                        ? new Short(inputs[i]).shortValue() 
+                        : ((Short) getEmptyValue()).shortValue();
             }
             setTestValue(values);
         }
         else
         {
             String val = parser.getString(getKey());
-            setTestValue(StringUtils.isNotEmpty(val) ? new Short(val) : (Short) getEmptyValue());
+            setTestValue(StringUtils.isNotEmpty(val) 
+                    ? new Short(val) : (Short) getEmptyValue());
         }
     }
+    
 }

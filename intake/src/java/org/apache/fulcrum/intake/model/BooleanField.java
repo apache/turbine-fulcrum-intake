@@ -64,15 +64,18 @@ import org.apache.fulcrum.intake.xmlmodel.XmlField;
 /**
  * Processor for boolean fields.
  *
- * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
- * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
- * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
- * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Id$
  */
 public class BooleanField
         extends Field
 {
+    /**
+     * Constructor.
+     *
+     * @param field xml field definition object
+     * @param group xml group definition object
+     * @throws IntakeException thrown by superclass
+     */
     public BooleanField(XmlField field, Group group)
             throws IntakeException
     {
@@ -149,18 +152,20 @@ public class BooleanField
         if (isMultiValued)
         {
             String[] inputs = parser.getStrings(getKey());
-            Boolean[] values = new Boolean[inputs.length];
+            boolean[] values = new boolean[inputs.length];
             for (int i = 0; i < inputs.length; i++)
             {
                 values[i] = StringUtils.isNotEmpty(inputs[i])
-                        ? getBoolean(inputs[i]) : (Boolean) getEmptyValue();
+                        ? getBoolean(inputs[i]).booleanValue() 
+                        : ((Boolean) getEmptyValue()).booleanValue();
             }
             setTestValue(values);
         }
         else
         {
             String val = parser.getString(getKey());
-            setTestValue(StringUtils.isNotEmpty(val) ? getBoolean(val) : (Boolean) getEmptyValue());
+            setTestValue(StringUtils.isNotEmpty(val) 
+                    ? getBoolean(val) : (Boolean) getEmptyValue());
         }
     }
 
@@ -219,4 +224,5 @@ public class BooleanField
         }
         return result;
     }
+    
 }

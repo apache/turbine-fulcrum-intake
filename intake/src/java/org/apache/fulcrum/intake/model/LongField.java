@@ -61,11 +61,8 @@ import org.apache.fulcrum.intake.validator.LongValidator;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 
 /**
- * Creates Short Field objects.
+ * Processor for long fields.
  *
- * @author <a href="mailto:jmcnally@collab.net>John McNally</a>
- * @author <a href="mailto:Colin.Chalmers@maxware.nl">Colin Chalmers</a>
- * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Id$
  */
 public class LongField
@@ -155,18 +152,21 @@ public class LongField
         if (isMultiValued)
         {
             String[] inputs = parser.getStrings(getKey());
-            Long[] values = new Long[inputs.length];
+            long[] values = new long[inputs.length];
             for (int i = 0; i < inputs.length; i++)
             {
                 values[i] = StringUtils.isNotEmpty(inputs[i])
-                        ? new Long(inputs[i]) : (Long) getEmptyValue();
+                        ? new Long(inputs[i]).longValue() 
+                        : ((Long) getEmptyValue()).longValue();
             }
             setTestValue(values);
         }
         else
         {
             String val = parser.getString(getKey());
-            setTestValue(StringUtils.isNotEmpty(val) ? new Long(val) : (Long) getEmptyValue());
+            setTestValue(StringUtils.isNotEmpty(val) 
+                    ? new Long(val) : (Long) getEmptyValue());
         }
     }
+    
 }
