@@ -27,6 +27,7 @@ import org
     .test
     .AbstractDynamicModelManagerTest;
 import org.apache.fulcrum.security.hibernate.HibernateHelper;
+
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$

@@ -23,14 +23,14 @@ import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.hibernate.AbstractHibernateModelManager;
+import org.apache.fulcrum.security.hibernate.PersistenceHelper;
+import org.apache.fulcrum.security.model.dynamic.AbstractDynamicModelManager;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 import org.apache.fulcrum.security.util.DataBackendException;
-import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
  * This implementation persists to a database via Hibernate.
@@ -38,11 +38,12 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class HibernateModelManagerImpl extends AbstractHibernateModelManager implements DynamicModelManager
+public class HibernateModelManagerImpl extends AbstractDynamicModelManager implements DynamicModelManager
 {
     /** Logging */
     private static Log log = LogFactory.getLog(HibernateModelManagerImpl.class);
 
+    private PersistenceHelper persistenceHelper;
     /**
 	 * Revokes a Role from a Group.
 	 * 
@@ -166,47 +167,7 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
         {
             throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
         }
-    }
-    /**
-	 * Revokes all permissions and groups from a Role.
-	 * 
-	 * This method is used when deleting a Role.
-	 * 
-	 * @param role the Role
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the Role is not present.
-	 */
-    public synchronized void revokeAll(Role role)
-        throws DataBackendException, UnknownEntityException
-    {
-        boolean roleExists = false;
-        try
-        {
-            roleExists = getRoleManager().checkExists(role);
-            if (roleExists)
-            {
-                ((DynamicRole) role).setPermissions(new PermissionSet());
-				getPersistenceHelper().updateEntity(role);
-				
-				Object groups[] = ((DynamicRole) role).getGroups().toArray();
-				
-				for (int i = 0; i < groups.length; i++)
-				{
-					Group group = (Group) groups[i];
-					revoke(group, role);
-				}	
-				return;            
-			}
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("revokeAll(Role) failed", e);
-        }
-        finally
-        {
-        }
-        throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
-    }
+    }  
 
     /**
 	 * Puts a user in a group.
@@ -297,37 +258,7 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
         }
     }
 
-    /**
-	 * Revokes all groups from a user
-	 * 
-	 * This method is used when deleting an account.
-	 * 
-	 * @param user the User.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the account is not present.
-	 */
-    public synchronized void revokeAll(User user)
-        throws DataBackendException, UnknownEntityException
-    {
-        boolean userExists = false;
-        userExists = getUserManager().checkExists(user);
-        if (userExists)
-        {
-            Object groups[] = ((DynamicUser) user).getGroups().toArray();
 
-            for (int i = 0; i < groups.length; i++)
-            {
-                Group group = (Group) groups[i];
-                revoke(user, group);
-            }
-
-            return;
-        }
-        else
-        {
-            throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
-        }
-    }
     /**
 	 * Grants a Group a Role
 	 * 
@@ -368,76 +299,18 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
         }
     }
     
-    /**
-     * Revokes all users and roles from a group
-     * 
-     * This method is used when deleting a group.
-     * 
-     * @param group the Group.
-     * @throws DataBackendException if there was an error accessing the data backend.
-     * @throws UnknownEntityException if the account is not present.
-     */
-    public synchronized void revokeAll(Group group)
-	throws DataBackendException, UnknownEntityException
+	/**
+	 * @return Returns the persistenceHelper.
+	 */
+	public PersistenceHelper getPersistenceHelper() throws DataBackendException
 	{
-    	boolean groupExists = false;
-    	groupExists = getGroupManager().checkExists(group);
-    	if (groupExists)
-    	{
-    		Object users[] = ((DynamicGroup) group).getUsers().toArray();
-   		
-    		for (int i = 0; i < users.length; i++)
-    		{
-    			User user = (User) users[i];
-    			revoke(user, group);
-    		}
-
-    		Object roles[] = ((DynamicGroup) group).getRoles().toArray();
-    		
-    		for (int i = 0; i < roles.length; i++)
-    		{
-    			Role role = (Role) roles[i];
-    			revoke(group, role);
-    		}
-
-    		return;
-    	}
-    	else
-    	{
-    		throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
-    	}
-    }
+		if (persistenceHelper == null)
+		{
+			persistenceHelper = (PersistenceHelper)resolve(PersistenceHelper.ROLE);
+		}
+		return persistenceHelper;
+	}    
+ 
     
-    /**
-     * Revokes all roles from a permission
-     * 
-     * This method is used when deleting a permission.
-     * 
-     * @param permission the permission.
-     * @throws DataBackendException if there was an error accessing the data backend.
-     * @throws UnknownEntityException if the account is not present.
-     */
-    public synchronized void revokeAll(Permission permission)
-	throws DataBackendException, UnknownEntityException
-	{
-    	boolean permissionExists = false;
-    	permissionExists = getPermissionManager().checkExists(permission);
-    	if (permissionExists)
-    	{
-    		Object roles[] = ((DynamicPermission) permission).getRoles().toArray();
-   		
-    		for (int i = 0; i < roles.length; i++)
-    		{
-    		    Role role = (Role) roles[i];
-    			revoke(role, permission);
-    		}
-
-    		
-    		return;
-    	}
-    	else
-    	{
-    		throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
-    	}
-    }    
+ 
 }

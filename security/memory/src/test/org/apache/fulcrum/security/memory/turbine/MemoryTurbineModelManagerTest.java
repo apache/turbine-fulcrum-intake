@@ -33,10 +33,7 @@ import org
 public class MemoryTurbineModelManagerTest
     extends AbstractTurbineModelManagerTest
 {
-    public static void main(String[] args)
-    {
-        junit.textui.TestRunner.run(MemoryTurbineModelManagerTest.class);
-    }
+
     public void setUp() throws Exception
     {
 

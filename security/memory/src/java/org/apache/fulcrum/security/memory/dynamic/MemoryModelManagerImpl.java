@@ -14,24 +14,19 @@ package org.apache.fulcrum.security.memory.dynamic;
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import java.util.Iterator;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.dynamic.AbstractDynamicModelManager;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
-import org.apache.fulcrum.security.spi.AbstractManager;
 import org.apache.fulcrum.security.util.DataBackendException;
-import org.apache.fulcrum.security.util.GroupSet;
-import org.apache.fulcrum.security.util.PermissionSet;
-import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
@@ -42,7 +37,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @version $Id$
  */
 public class MemoryModelManagerImpl
-    extends AbstractManager
+    extends AbstractDynamicModelManager
     implements DynamicModelManager
 {
     /** Logging */
@@ -259,6 +254,7 @@ public class MemoryModelManagerImpl
             if (roleExists && permissionExists)
             {
                 ((DynamicRole) role).removePermission(permission);
+                ((DynamicPermission) permission).removeRole(role);
                 return;
             }
         }
@@ -276,98 +272,5 @@ public class MemoryModelManagerImpl
             throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
         }
     }
-    /**
-	 * Revokes all permissions from a Role.
-	 * 
-	 * This method is user when deleting a Role.
-	 * 
-	 * @param role the Role
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the Role is not present.
-	 */
-    public synchronized void revokeAll(Role role)
-        throws DataBackendException, UnknownEntityException
-    {
-        boolean roleExists = false;
-        try
-        {
-            roleExists = getRoleManager().checkExists(role);
-            if (roleExists)
-            {
-                ((DynamicRole) role).setPermissions(new PermissionSet());
-                return;
-            }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("revokeAll(Role) failed", e);
-        }
-        
-        throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
-    }
-    /**
-	 * Revokes all groups from a user
-	 * 
-	 * This method is used when deleting an account.
-	 * 
-	 * @param user the User.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the account is not present.
-	 */
-    public synchronized void revokeAll(User user)
-        throws DataBackendException, UnknownEntityException
-    {
-        boolean userExists = false;
-        try
-        {
-            userExists = getUserManager().checkExists(user);
-            if (userExists)
-            {
-                for (Iterator i = ((DynamicUser) user).getGroups().iterator(); i.hasNext();)
-                {
-                    DynamicGroup group = (DynamicGroup) i.next();
-                    group.removeUser(user);
-                }
-                ((DynamicUser) user).setGroups(new GroupSet());
-                return;
-            }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("revokeAll(User) failed:" + e.getMessage(), e);
-        }
-        throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
-    }
-    
-    /**
-	 * Revokes all roles from a Permission.
-	 * 
-	 * This method is used when deleting a Permission.
-	 * 
-	 * @param permission the Permission
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the Permission is not present.
-	 */
-    public synchronized void revokeAll(Permission permission)
-        throws DataBackendException, UnknownEntityException
-    {
-        boolean roleExists = false;
-        try
-        {
-            roleExists = getPermissionManager().checkExists(permission);
-            if (roleExists)
-            {
-                ((DynamicPermission) permission).setRoles(new RoleSet());
-                return;
-            }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("revokeAll(Permission) failed", e);
-        }
-        
-        throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
-    }    
-
 
 }

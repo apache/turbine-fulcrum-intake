@@ -21,10 +21,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.hibernate.AbstractHibernateModelManager;
+import org.apache.fulcrum.security.hibernate.PersistenceHelper;
 import org.apache.fulcrum.security.model.basic.BasicModelManager;
 import org.apache.fulcrum.security.model.basic.entity.BasicGroup;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
+import org.apache.fulcrum.security.spi.AbstractManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
@@ -33,11 +34,12 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class HibernateModelManagerImpl extends AbstractHibernateModelManager implements BasicModelManager
+public class HibernateModelManagerImpl extends AbstractManager implements BasicModelManager
 {
     /** Logging */
     private static Log log = LogFactory.getLog(HibernateModelManagerImpl.class);
     
+    private PersistenceHelper persistenceHelper;
 
     /**
 	 * Puts a user in a group.
@@ -163,5 +165,17 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
             throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
         }
     }
+    
+	/**
+	 * @return Returns the persistenceHelper.
+	 */
+	public PersistenceHelper getPersistenceHelper() throws DataBackendException
+	{
+		if (persistenceHelper == null)
+		{
+			persistenceHelper = (PersistenceHelper)resolve(PersistenceHelper.ROLE);
+		}
+		return persistenceHelper;
+	}    
 
 }
