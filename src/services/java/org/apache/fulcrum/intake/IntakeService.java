@@ -64,6 +64,14 @@ import org.apache.fulcrum.intake.model.Group;
  * This service provides access to input processing objects based
  * on an XML specification.
  *
+ * <p>Localization of Intake's error messages can be accomplished
+ * using Turbine's <code>LocalizationTool</code> from a Velocity template
+ * as follows:
+ * <blockquote><code></pre>
+ * $l10n.get($intake.SomeGroup.SomeField.Message)
+ * </pre></code></blockquote>
+ * </p>
+ *
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
  * @version $Id$
  */
