@@ -1,0 +1,15 @@
+
+<container name="test">
+
+   <classloader>
+     <classpath>
+       <repository>
+         <resource id="fulcrum:fulcrum-mimetype-api" version="1.0-alpha-4"/>
+       </repository>
+     </classpath>
+   </classloader>
+
+   <component name="mimetype" 
+     class="org.apache.fulcrum.mimetype.DefaultMimeTypeService"/>
+
+</container>

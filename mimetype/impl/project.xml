@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<project>
+  <extend>${basedir}/../../project-merlin.xml</extend>
+  <id>fulcrum-mimetype-impl</id>
+  <name>Fulcrum Mimtype Component</name>
+  <currentVersion>1.0-alpha-4</currentVersion>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-mimetype-api</artifactId>
+      <version>1.0-alpha-4</version>
+    </dependency>
+
+    <!--  Needed only for testing -->
+
+    <dependency>
+      <groupId>merlin</groupId>
+      <artifactId>merlin-unit</artifactId>
+      <version>3.2.2-dev</version>
+    </dependency>
+
+  </dependencies>
+
+</project>
+

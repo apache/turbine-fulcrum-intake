@@ -58,17 +58,18 @@ import java.util.Locale;
 import junit.awtui.TestRunner;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.apache.avalon.framework.component.ComponentException;
+import org.apache.avalon.merlin.unit.AbstractMerlinTestCase;
 import org.apache.fulcrum.mimetype.util.MimeType;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+
 /**
  * CacheTest
  *
  * @author <a href="paulsp@apache.org">Paul Spencer</a>
- * @author <a href="epugh@upstate.com">Eric Pugh</a>
+ * @author <a href="epugh@upstate.com">Eric Pugh</a> 
+ * @author <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>
  * @version $Id$
  */
-public class MimetypeTest extends BaseUnitTest
+public class MimetypeTest extends AbstractMerlinTestCase
 {
     private MimeTypeService mimeTypeService = null;
     private static final String mimeType = "text/crazy";
@@ -102,16 +103,16 @@ public class MimetypeTest extends BaseUnitTest
         // All methods starting with "test" will be executed in the test suite.
         return new TestSuite(MimetypeTest.class);
     }
-    protected void setUp() throws Exception
+    public  void setUp() throws Exception
     {
         super.setUp();
         try
         {
-            mimeTypeService = (MimeTypeService) this.lookup(MimeTypeService.ROLE);
+            mimeTypeService = (MimeTypeService) this.resolve( "mimetype" );
         }
-        catch (ComponentException e)
+        catch (Throwable e)
         {
-            e.printStackTrace();
+            getLogger().error( "Setup failure.", e );
             fail(e.getMessage());
         }
     }
@@ -120,6 +121,7 @@ public class MimetypeTest extends BaseUnitTest
         Locale locale = new Locale("en", "US");
         String s = mimeTypeService.getCharSet(locale);
         assertEquals("ISO-8859-1", s);
+        getLogger().info( "OK" );
     }
     public void testSetGetContentType() throws Exception
     {
@@ -131,6 +133,7 @@ public class MimetypeTest extends BaseUnitTest
         assertEquals(mimeType, mimeTypeService.getContentType(files[0]));
         assertEquals(mimeType, mimeTypeService.getContentType(files[1]));
         assertEquals(mimeType, mimeTypeService.getContentType(files[2]));
+        getLogger().info( "OK" );
     }
     public void testGetDefaultExtension() throws Exception
     {
@@ -140,5 +143,6 @@ public class MimetypeTest extends BaseUnitTest
         MimeType mt = new MimeType(mimeType);
         result = mimeTypeService.getDefaultExtension(mt);
         assertEquals("crazy", result);
+        getLogger().info( "OK" );
     }
 }

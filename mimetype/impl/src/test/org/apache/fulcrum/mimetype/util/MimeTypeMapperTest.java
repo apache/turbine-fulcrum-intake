@@ -39,7 +39,7 @@ public class MimeTypeMapperTest extends TestCase
         
     }
     
-    public void testGetExtension()
-    {
-    }
+	public void testGetDefaultExtension() throws Exception
+{
+}
 }
