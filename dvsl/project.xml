@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<project>
+
+  <id>fulcrum-dvsl</id>
+  <extend>${basedir}/../project.xml</extend>
+  <name>Fulcrum DVSL</name>
+  <currentVersion>1.0.5-dev</currentVersion>
+  <package>org.apache.fulcrum.dvsl</package>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.1</version>
+      <url>http://jakarta.apache.org/commons/collections.html</url>
+    </dependency>
+    
+
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>1.4</version>
+    </dependency>
+    <dependency>
+      <groupId>jaxen</groupId>
+      <artifactId>jaxen</artifactId>
+      <version>1.0-FCS-full</version>
+    </dependency>    
+    <dependency>
+      <groupId>velocity</groupId>
+      <artifactId>velocity</artifactId>
+      <version>1.4</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>velocity-dvsl</groupId>
+      <artifactId>velocity-dvsl</artifactId>
+      <version>0.45</version>
+    </dependency>    
+
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.8</version>
+      <url>http://jakarta.apache.org/log4j/</url>
+    </dependency>   
+    <!--  Needed only for testing -->
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-testcontainer</artifactId>
+      <version>1.0.4-dev</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-yaafi</artifactId>
+      <version>1.0.3-dev</version>
+    </dependency>
+
+  </dependencies>
+
+</project>
+

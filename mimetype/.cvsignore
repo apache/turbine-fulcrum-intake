@@ -3,3 +3,4 @@ target
 .classpath
 .project
 jcoverage.ser
+*.merlin

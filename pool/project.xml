@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<project>
+  <extend>${basedir}/../project.xml</extend>
+  <id>fulcrum-pool</id>
+  <name>Fulcrum Pool Component</name>
+  <currentVersion>1.0.3-dev</currentVersion>
+
+  <dependencies>
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-factory</artifactId>
+      <version>1.0.3-dev</version>
+    </dependency>    
+    
+    <!--  Needed only for testing -->
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-testcontainer</artifactId>
+      <version>1.0.4-dev</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-yaafi</artifactId>
+      <version>1.0.3-dev</version>
+    </dependency>     
+
+  </dependencies>
+
+</project>
+

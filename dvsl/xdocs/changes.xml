@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Fulcrum DVSL</title>
+    <author email="epugh@upstate.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+	 <release version="1.0.4" date="">
+      <action dev="epugh" type="update" due-to="Kostyantyn Shchekotykhin">
+        Merge api and impl jars into one project.
+      </action> 
+      <action dev="epugh" type="update">
+      	Update to use Merlin 3.3.0
+      </action>
+      <action dev="epugh" type="update">
+      	Merlinized component
+      </action>
+    </release>
+  </body>
+</document>
+

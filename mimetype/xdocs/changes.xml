@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Fulcrum MIME type</title>
+    <author email="epugh@upstate.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+    <release version="1.0.4" date="in cvs">
+      <action dev="epugh" type="update" due-to="Kostyantyn Shchekotykhin">
+        Merge api and impl jars into one project.
+      </action>         
+      <action dev="epugh" type="remove">
+        Remove MimeTypeServiceFacadeTest, is should have never been in the
+        impl package anyway, and now MimeTypeServiceFacade is gone.
+      </action>
+      <action dev="epugh" type="remove">
+        Remove MimeTypeServiceFacade, it is a code smell.
+      </action>
+      <action dev="epugh" type="update">
+        Reimplement test based on TestContainer
+      </action>         
+      <action dev="epugh" type="update">
+        Update to use Merlin 3.3.0
+      </action>      
+      <action dev="epugh" type="add">
+        Committing first cut of Merlin enabled components..
+      </action>
+      <action dev="dlr" type="update">
+        Increase the smarts of MIME type auto-detection to handle
+        known file extensions specified with a capitalization which
+        may not match that of the definitions from your config file.
+      </action>
+    </release>
+    
+    <release version="1.0-alpha-3" date="11-01-2003">
+      <action dev="epugh" type="add">
+        Initial creation of project.
+      </action>
+    </release>
+
+  </body>
+</document>
+
