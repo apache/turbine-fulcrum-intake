@@ -129,6 +129,7 @@ public class DefaultNamingService
     public void configure(Configuration conf) throws ConfigurationException
     {
 
+        contextPropsList = new Hashtable();
         Configuration[] keys = conf.getChildren();
         if (keys != null)
         {
@@ -189,7 +190,7 @@ public class DefaultNamingService
         {
             getLogger().error("Failed to initialize JDNI contexts!", e);
 
-            throw new Exception("Failed to initialize JDNI contexts!");
+            throw new Exception("Failed to initialize JDNI contexts!",e);
         }
     }
 
