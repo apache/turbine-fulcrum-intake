@@ -93,18 +93,9 @@ public class TurbineUploadService
     extends BaseUploadService
 {
     /**
-     * <p> Processes an <a href="http://rf.cx/rfc1867.html">RFC
-     * 1867</a> compliant <code>multipart/form-data</code> stream.
-     *
-     * @param req The servlet request to be parsed.
-     * @param params The ParameterParser instance to insert form
-     * fields into.
-     * @param path The location where the files should be stored.
-     * @exception ServiceException If there are problems reading/parsing
-     * the request or storing files.
+     * @see org.apache.fulcrum.upload.UploadService
      */
-    public ArrayList parseRequest( HttpServletRequest req,
-                                   String path )
+    public ArrayList parseRequest(HttpServletRequest req, String path)
         throws ServiceException
     {
         ArrayList items = new ArrayList();
