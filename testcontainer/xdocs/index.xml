@@ -11,20 +11,58 @@
 
   <section name="Overview">
     <p>
-      This component is really just a test container for testing the 
-      other components.  This container is not meant to be used in 
+      This component is really just a test container for testing the
+      other components.  This container is not meant to be used in
       a production environment.
     </p>
-  </section>
-
-  <section name="Configuration">
     <p>
+      In order to same you a little coding, a base class has been provided
+      for your test cases.  Simply extend
+      <code>org.apache.fulcrum.testcontainer.BaseUnitTest</code> and
+      you are ready to go.
     </p>
   </section>
 
   <section name="Usage">
-    <p>
-    </p>
+
+    <subsection name="Extending the test case">
+      <p>
+        In order to same you a little coding, a base class has been provided
+        for your test cases.  Simply extend
+        <code>org.apache.fulcrum.testcontainer.BaseUnitTest</code> and
+        you are ready to go.
+      </p>
+      <p>
+        The <code>setUp</code> and <code>tearDown</code> methods of
+        <code>BaseUnitTest</code> will handle the lifecycle of the container
+        for you.  Each test will have a freshly initialized container in
+        which to run.
+      </p>
+      <p>
+        To lookup and release components, call the <code>lookup</code>
+        and <code>release</code> methods of <code>BaseUnitTest</code>.
+      </p>
+      <p>
+        By default, all tests will use the configuration files
+        <code>TestComponentConfig.xml</code> and
+        <code>TestRoleConfig.xml</code> located in the
+        <code>src/test</code> directory.  If you want to override that
+        behavior, you can override the <code>getConfigurationFileName()</code>
+        and/or <code>getRoleFileName()</code> methods.
+      </p>
+
+    </subsection>
+
+    <subsection name="Using the container directly>
+      <p>
+        If you need more control over the container itself for your test,
+        just don't extend the unit test provided with the container.  Instead,
+        embed the container directly in your test case.  See the java
+        docs for <code>org.apache.fulcrum.testcontainer.Container</code>
+        for more information.
+      </p>
+    </sunsection>
+
   </section>
 
 </body>
