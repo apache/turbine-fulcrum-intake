@@ -11,12 +11,12 @@
 
   <section name="Overview">
     <p>
-      This component attempts to provide a security framework  It is written 
-      for use in Turbine but it has been expanded and can be used in any container compatible 
-      with Avalon's ECM container.
+      This component provides a highly flexible security framework  It is based on code from the
+      Turbine framework, but has been expanded and can be used in any container compatible 
+      with the Avalon framework.
     <ul>
       <li>Allow pluggability via Avalon components of various entities.</li>
-      <li>Explicit Model interface allows entities to be glued together.</li>
+      <li>Explicit Model interface allows generic entities to be glued together in a custom model very quickly.</li>
       <li>Provide adapters to various other security systems</li>
       <li>Solve most common problems in dealing with security</li>
       <li>Not enforce assumptions about how a security framework should be setup.</li>
@@ -25,73 +25,62 @@
     <subsection name="Matrix">    
       <table>
         <tr>
-          <th/><th colspan="4">Simple Model</th><th colspan="4">Turbine Model</th>
+          <th/><th colspan="2">Basic Model</th><th colspan="4">Dynamic Model</th><th colspan="4">Turbine Model</th>
         </tr>
         <tr>
-          <th/><th>User</th><th>Group</th><th>Role</th><th>Permission</th><th>User</th><th>Group</th><th>Role</th><th>Permission</th>
+          <th/><th>User</th><th>Group</th><th>User</th><th>Group</th><th>Role</th><th>Permission</th><th>User</th><th>Group</th><th>Role</th><th>Permission</th>
         </tr>
-        <tr><th>Memory</th><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td></tr>
-        <tr><th>Hibernate</th><td>X</td><td>X</td><td>X</td><td>X</td><td></td><td></td><td></td><td></td></tr>
-        <tr><th>Torque</th><td></td><td></td><td></td><td></td><td>X</td><td>X</td><td>X</td><td>X</td></tr>
-        <tr><th>Passive</th><td></td><td></td><td></td><td></td><td>X</td><td></td><td></td><td></td></tr>
-        <tr><th>NT</th><td>X</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><th>Memory</th><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td></tr>
+        <tr><th>Hibernate</th><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td></td><td></td><td></td><td></td></tr>
+        <tr><th>NT</th><td>X</td><td>X</td><td>X</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
       </table>
     </subsection>
   </section>
   
   <section name="Common Security Implementations">
     <p>
-    There are a couple common approaches to security.  Currently this component tries to solve
-    two common setups for security.
+    The two most common models for security are embodied in the "Basic" and "Dynamic" models.  A third model, "Turbine", 
+    demonstrates customizing the "Dynamic" model by adding a concept of a global group.
     </p>    
-    <subsection name="Simple">
+    <subsection name="Dynamic">
       <p>
-      For lack of a better name, this one is called Simple.  In it, you have a set of permissions
-      that are related in a many to many relation ship with a set or roles.  Those roles are related
+      For lack of a better name, this one is called Dynamic because you can configure all the relationships.
+      In it, you have a set of permissions that are related in a many to many relation ship with a set or roles.  
+      Those roles are related
       in a many to many relationship with a set of groups.  A user is in a many to many relationship
-      with a set of groups.  <i>note: I will try and get a diagram. any suggestions on diagram tools?</i>
-      Also, after seeing some other schemes, maybe a better name would be <i>Complex</i> or <i>Very Flexible</i>
-      as it is a much more complex approach.
+      with a set of groups.  <i>note: I will try and get a diagram. any suggestions on diagram tools?</i>     
       </p>
       <p>
-      The <code>memory</code> package currently implements this security model.  However, if you
-      change the SimpleModel objects, you could implement the second one, "Turbine".
+      The <code>memory</code> and <code>hibernate</code>  packages currently implements this security model.
       </p>
     </subsection>
 
     <subsection name="Turbine">
       <p>
-    This model is based on what the Turbine application server uses.  In it, permissions are in a
-    many to many relationship with Roles.  However, what makes this different is that instead of roles
+    This model is based on what the Turbine application server uses, and leverages the Dynamic model.  It merely adds
+    the concept of a "global group" which is a toplevel group to the Dynamic model.
+    However, what makes this different is that instead of roles
     being related just to groups, there instead is a many to many relationship between users and 
     groups and roles.  So you pick a user, pick their role, and their group, and that is their permissions.
-    This strikes me as a maintence nightmare, why actually have a group entity?
-    <i>note: I will try and get a diagram. any suggestions on diagram tools?</i>
-      </p>
-      <p>
-      The <code>torque</code> package currently implements this security model.  <strong>WARNING:
-      this code hasn't been tested at all.  It only compiles.</strong>  
-      </p>
+    </p>
     </subsection>
-    <subsection name="UsersAndGroup (OSUser Model)">
+    <subsection name="Basic">
       <p>
-    This model is based on what OSUser implements.  In it, you have users, and groups, and security
+    This model is very simple and was originally inspired by OSUser's security model.  In it, you have users, and groups, and security
     is based on a user belonging to a group.  Users can belong to multiple groups.  So groups become
-    the equivalent of roles/permissions.  So, when an ACL class asks:  <code>acl.hasRole("someRole")</code>
-    what it is really asking is whether the user is part of a group or not.
+    the equivalent of roles/permissions.  
       </p>
       <p>
-      <strong>This model has NOT yet been implemented.  If there is interest, it should be very easy to
-      do.</strong>  
+      The <code>memory</code>, <code>nt</code>, and <code>hibernate</code>  packages currently implements this security model.
       </p>
     </subsection>
   </section>  
   
 <section name="Simple">
 
-    <subsection name="Usage of Simple InMemory component">
+    <subsection name="Usage of InMemory components">
     <p>
-    The InMemory components implement the Simple model.  All data is strictly in memory, and is
+    The InMemory components implement the Basic model.  All data is strictly in memory, and is
     not persisted.  Therefore when your application stops, all values are lost.  However, this is
     very useful in unit testing and prototyping using the Security component.  Notice how role,
     user, group, and permission managers are all Avalon components as well?  This allows you to swap one 
@@ -102,7 +91,8 @@
     </subsection>
     <subsection name="Configuration">
     <p>
-    This uses the integrated role and component config XML.  
+    This uses the integrated role and component config XML.  Check the /src/test directory for the most uptodate
+    examples of the configuration files used in unit testing!  
     </p>
     <p>
 <source>
@@ -115,26 +105,26 @@
   
   <component
     role="org.apache.fulcrum.security.UserManager"
-    class="org.apache.fulcrum.security.spi.memory.simple.MemoryUserManagerImpl">   
+    class="org.apache.fulcrum.security.memory.MemoryUserManagerImpl">   
   </component>   
   <component
     role="org.apache.fulcrum.security.GroupManager"
-    class="org.apache.fulcrum.security.spi.memory.simple.MemoryGroupManagerImpl">   
+    class="org.apache.fulcrum.security.memory.MemoryGroupManagerImpl">   
   </component>     
 
   <component
     role="org.apache.fulcrum.security.RoleManager"
-    class="org.apache.fulcrum.security.spi.memory.simple.MemoryRoleManagerImpl">   
+    class="org.apache.fulcrum.security.memory.MemoryRoleManagerImpl">   
   </component>     
 
   <component
     role="org.apache.fulcrum.security.PermissionManager"
-    class="org.apache.fulcrum.security.spi.memory.simple.MemoryPermissionManagerImpl">   
+    class="org.apache.fulcrum.security.memory.MemoryPermissionManagerImpl">   
   </component>     
 
   <component
     role="org.apache.fulcrum.security.ModelManager"
-    class="org.apache.fulcrum.security.spi.memory.simple.MemoryModelManagerImpl">   
+    class="org.apache.fulcrum.security.memory.basic.MemoryModelManagerImpl">   
   </component>
 </my-system>
 ]]>
@@ -179,13 +169,20 @@
     </subsection>    
 </section>  
 
-<section name="SPI Details">
+<section name="Implementation Details">
   <subsection name="Hibernate">
     <p>
-    With the Hibernate SPI, you can just subclass the HibernateSimpleUser object, provide your own mapping .hbm file
-    and then any additional user properties will be persisted!  Very very easy customization to your environment!
+    With the Hibernate SPI, you can just subclass the BasicUser/DynamicUser class, or implement the User interface, provide your own mapping .hbm file
+    and then any additional user properties will be persisted!  Very easy customization for your environment!
     </p>
-    </subsection>
+  </subsection>
+  <subsection name="NT">
+    <p>
+    If you use the BasicModel with the NT implementation, you have a wholly NT based authentication scheme!  The groups map onto NT groups, while the
+    users are authenticated against NT as well.  This does require you to ask your users for their NT username and password however, we 
+    don't have NTLM working as yet.
+    </p>
+  </subsection>  
 </section>  
 
 </body>

@@ -6,49 +6,66 @@
   </properties>
 
   <body>
-  	<release version="1.0-alpha-3" date="in cvs">
-	  <action dev="epugh" type="add">
-		Realized the one size fits all ACL doesn't work.. ACL's are tied to models.  Now, there is
-		an AccessControlList interface, but it is just a marker.  Each model implements the ACL.
-		Added a Memory implementaiton of the Turbine model.
-      </action>   		
-	  <action dev="epugh" type="fix">
-		All the various SecuritySet implementations base their logic off their Name, not the ID, or
-		Object type.  Fixes problems with comparisons when you have various subclasses.
-      </action>   		
-	  <action dev="epugh" type="fix">
-		For a SecurityEntityImpl, if the name is null then throw an InvalidParameterException.
-      </action>  				
+    <release version="1.0-alpha-4" date="in cvs">
+    <action dev="epugh" type="add">
+    Added the "Basic" model and supplied implementations for memory, NT, and Hibernate.
+      </action>       
+    <action dev="epugh" type="add">
+      AccessControlLists are now pluggable via the ACLFactory implementation you supply.
+      </action>       
+    <action dev="epugh" type="update">
+    Vastly refactored the builds into multiple projects.  The api related onces are <code>/api</code> and <code>/spi</code>.
+    The implementation details are in <code>/memory</code>,<code>/hibernate</code>, and<code>/nt</code>.  And lastly, there
+    are two adapters: <code>/adapters/turbine</code> and <code>/adapters/opensymphony</code>.
+      </action>    
+    <action dev="epugh" type="remove">
+    Tossed the various Torque code.  It isn't unit tested, and was causing lots of work that couldn't be tested..  At some
+    point, if there is demand, we can put it back.
+      </action>       
+    </release>    
+    <release version="1.0-alpha-3" date="n/a">
+    <action dev="epugh" type="add">
+    Realized the one size fits all ACL doesn't work.. ACL's are tied to models.  Now, there is
+    an AccessControlList interface, but it is just a marker.  Each model implements the ACL.
+    Added a Memory implementaiton of the Turbine model.
+      </action>       
+    <action dev="epugh" type="fix">
+    All the various SecuritySet implementations base their logic off their Name, not the ID, or
+    Object type.  Fixes problems with comparisons when you have various subclasses.
+      </action>       
+    <action dev="epugh" type="fix">
+    For a SecurityEntityImpl, if the name is null then throw an InvalidParameterException.
+      </action>         
       <action dev="epugh" type="add">
-		Add ModelManager interface and SimpleModelManager and TurbineModelManager 
-		component that explicitly contains the relationship between the various		
-		entities.
+    Add ModelManager interface and SimpleModelManager and TurbineModelManager 
+    component that explicitly contains the relationship between the various   
+    entities.
       </action>
     </release>
-  	<release version="1.0-alpha-2" date="10-29-2003">
-	  <action dev="epugh" type="update">
-		Change all get(Role/Group/User/Permssion)Instance from throwing an UnknownEntityException to
-		throwing a DataBackendException.  There is no entity id when creating a new one yet!
-      </action>  		
+    <release version="1.0-alpha-2" date="10-29-2003">
+    <action dev="epugh" type="update">
+    Change all get(Role/Group/User/Permssion)Instance from throwing an UnknownEntityException to
+    throwing a DataBackendException.  There is no entity id when creating a new one yet!
+      </action>     
       <action dev="epugh" type="add">
-		Added an adapter to OSUser.  This allows OSUser to query Fulcrum Security
-		for users and to authenticate them via Fulcrum Security authenticators.
+    Added an adapter to OSUser.  This allows OSUser to query Fulcrum Security
+    for users and to authenticate them via Fulcrum Security authenticators.
       </action>
     </release>
     <release version="1.0-alpha-1" date="2003-10-21">
       <action dev="epugh" type="add">
-		Added an IntegerConverter so the adapter can be used with fulcrum SPI's
-		that use Long/Integer/String (as a number) as the ID.
+    Added an IntegerConverter so the adapter can be used with fulcrum SPI's
+    that use Long/Integer/String (as a number) as the ID.
       </action>      
       <action dev="epugh" type="add">
-		Converted id to Object.  Now the various SPI's cast the Object type
-		to whatever they want to use.
+    Converted id to Object.  Now the various SPI's cast the Object type
+    to whatever they want to use.
       </action>       
       <action dev="epugh" type="add">
-		Pluggable Authenticators done.  Added NT, crypto, and plain text.
+    Pluggable Authenticators done.  Added NT, crypto, and plain text.
       </action>       
       <action dev="epugh" type="add">
-		Hibernate based Simple model done.
+    Hibernate based Simple model done.
       </action>    
       <action dev="epugh" type="update">
         Converted all id's for security objects to "long" values to prevent running out of numbers.
