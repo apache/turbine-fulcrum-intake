@@ -61,7 +61,6 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Vector;
-import javax.servlet.ServletConfig;
 import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
 import org.apache.fulcrum.ServiceBroker;
