@@ -57,8 +57,10 @@ package org.apache.fulcrum.parser;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.pool.Recyclable;
-import org.apache.log4j.Category;
 
 /**
  * CookieParser is used to get and set values of Cookies on the Client
@@ -99,9 +101,9 @@ public class DefaultCookieParser
     private HttpServletResponse response;
 
     /**
-     * Log4j category
+     * Logger to use
      */
-    Category category = Category.getInstance(getClass().getName());
+    Log log = LogFactory.getLog(DefaultCookieParser.class);
 
     /**
      * Constructs a new CookieParser.
@@ -146,13 +148,13 @@ public class DefaultCookieParser
 
         Cookie[] cookies = request.getCookies();
 
-        category.debug ("Number of Cookies "+cookies.length);
+        log.debug ("Number of Cookies "+cookies.length);
 
         for (int i=0; i<cookies.length; i++)
         {
             String name = convert (cookies[i].getName());
             String value = cookies[i].getValue();
-            category.debug ("Adding "+name+"="+value);
+            log.debug ("Adding "+name+"="+value);
             add (name,value);
         }
 

@@ -17,6 +17,12 @@
       <version>1.0</version>
       <url>http://jakarta.apache.org/commons/fileupload/index.html</url>
     </dependency>  
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.0.3</version>
+      <url>http://jakarta.apache.org/commons/logging/index.html</url>
+    </dependency>     
   
     <dependency>
       <groupId>fulcrum</groupId>
