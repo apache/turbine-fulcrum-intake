@@ -466,7 +466,7 @@ public class Group
               .append(gid)
               .append("\" value=\"")
               .append(oid)
-              .append("\"></input>");
+              .append("\"/>\n");
         }
     }
 

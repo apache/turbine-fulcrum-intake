@@ -80,6 +80,10 @@ public class Intake
     private HashMap groups;
     private ParameterParser pp;
 
+    HashMap declaredGroups = new HashMap();
+    StringBuffer allGroupsSB = new StringBuffer(256);
+    StringBuffer groupSB = new StringBuffer(128);
+
     /** The cache of PullHelpers. **/
     private Map pullMap;
 
@@ -162,10 +166,6 @@ public class Intake
         return allGroupsSB.toString();
     }
 
-    HashMap declaredGroups = new HashMap();
-    StringBuffer allGroupsSB = new StringBuffer(256);
-    StringBuffer groupSB = new StringBuffer(128);
-
     /**
      * A convenience method to write out the hidden form fields
      * that notify intake of the group.
@@ -189,7 +189,7 @@ public class Intake
             sb.append("<input type=\"hidden\" name=\"")
               .append("intake-grp\" value=\"")
               .append(group.getGID())
-              .append("\"></input>\n");
+              .append("\"/>\n");
         }
         group.appendHtmlFormInput(sb);
     }
