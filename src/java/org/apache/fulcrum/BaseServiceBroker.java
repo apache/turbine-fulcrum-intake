@@ -617,6 +617,13 @@ public abstract class BaseServiceBroker implements ServiceBroker
         return obj;
     }
 
+    /**
+     * Retrieves an instance of an old Fulcrum-style service.
+     *
+     * @param name The name of the service to get (generally specified
+     * by its interface's <code>SERVICE_NAME</code> constant).
+     * @return The service instance.
+     */
     private Service getOldService(String name)
         throws InstantiationException
     {
