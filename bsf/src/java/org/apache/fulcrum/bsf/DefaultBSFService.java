@@ -60,8 +60,7 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.FileInputStream;
 import java.io.StringWriter;
-import com.ibm.bsf.BSFManager;
-import com.ibm.bsf.BSFException;
+
 
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.context.Context;
@@ -72,6 +71,8 @@ import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.thread.ThreadSafe;
+import org.apache.bsf.BSFException;
+import org.apache.bsf.BSFManager;
 
 /**
  *
@@ -153,6 +154,7 @@ public class DefaultBSFService extends AbstractLogEnabled
              * of the script.
              */
             int reason = bsfe.getReason();
+            System.out.println("Reason:" + reason);
             bsfe.printStackTrace();
         }
     }
