@@ -54,12 +54,7 @@ package org.apache.fulcrum.security.adapter.osuser;
  */
 import java.util.Properties;
 
-import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.component.ComponentException;
-import org.apache.avalon.framework.component.ComponentManager;
-import org.apache.avalon.framework.component.Composable;
-import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.SecurityService;
@@ -155,7 +150,7 @@ public abstract class BaseFulcrumProvider implements UserProvider
 	  * 
 	  * @return
 	  */
-	 SecurityService getSecurityService() throws DataBackendException
+	 public SecurityService getSecurityService() throws DataBackendException
 	 {
 		 if (securityService == null)
 		 {

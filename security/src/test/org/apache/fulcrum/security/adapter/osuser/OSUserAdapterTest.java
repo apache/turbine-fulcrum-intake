@@ -53,6 +53,7 @@ import org.apache.fulcrum.security.model.simple.manager.SimpleRoleManager;
 import org.apache.fulcrum.security.model.simple.manager.SimpleUserManager;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
+import com.opensymphony.user.User;
 import com.opensymphony.user.UserManager;
 import com.opensymphony.user.provider.AccessProvider;
 import com.opensymphony.user.provider.CredentialsProvider;
@@ -70,8 +71,11 @@ public class OSUserAdapterTest extends BaseUnitTest
 {
 
     protected UserManager osUserManager;
-    
+
     protected SecurityService securityService;
+    private org.apache.fulcrum.security.entity.User fulcrumUser;
+    private User osUser;
+    
     public OSUserAdapterTest(String name) throws Exception
     {
         super(name);
@@ -80,15 +84,12 @@ public class OSUserAdapterTest extends BaseUnitTest
     {
         try
         {
-            /*
-			 * this.setRoleFileName(null);
-			 * this.setConfigurationFileName("src/test/SimpleMemory.xml");
-			 * securityService = (SecurityService)
-			 * lookup(SecurityService.ROLE); fulcrumUserManager =
-			 * securityService.getUserManager();
-			 * 
-			 * osUserManager = new UserManager("osuser.xml");
-			 */
+            this.setRoleFileName(null);
+            this.setConfigurationFileName("src/test/OSUserAvalonConf.xml");
+            securityService = (SecurityService) lookup(SecurityService.ROLE);
+            BaseFulcrumProvider.setSecurityService(securityService);
+
+            osUserManager = new UserManager("osuser.xml");
         }
         catch (Exception e)
         {
@@ -99,20 +100,11 @@ public class OSUserAdapterTest extends BaseUnitTest
     {
 
         osUserManager = null;
-    
+
         securityService = null;
     }
     public void testUsingAvalonComponents() throws Exception
     {
-
-        this.setRoleFileName(null);
-        this.setConfigurationFileName("src/test/OSUserAvalonConf.xml");
-        securityService = (SecurityService) lookup(SecurityService.ROLE);
-        BaseFulcrumProvider.setSecurityService(securityService);
-       
-
-        osUserManager = new UserManager("osuser.xml");
-
         Group fulcrumGroup =
             securityService.getGroupManager().getGroupInstance(
                 "TEST_REVOKEALL");
@@ -159,7 +151,7 @@ public class OSUserAdapterTest extends BaseUnitTest
         ((SimpleGroupManager) securityService.getGroupManager()).grant(
             fulcrumGroup2,
             fulcrumRole2);
-        org.apache.fulcrum.security.entity.User fulcrumUser =
+        fulcrumUser =
             securityService.getUserManager().getUserInstance("Jeannie");
         securityService.getUserManager().addUser(fulcrumUser, "wyatt");
         ((SimpleUserManager) securityService.getUserManager()).grant(
@@ -177,25 +169,33 @@ public class OSUserAdapterTest extends BaseUnitTest
         assertTrue(accessProvider.handles("Jeannie"));
         assertTrue(securityService.getUserManager().checkExists("Jeannie"));
 
-        assertEquals("Both should not handle user Bob",accessProvider.handles("Bob") ,securityService.getUserManager().checkExists("Bob"));
-        
+        assertEquals(
+            "Both should not handle user Bob",
+            accessProvider.handles("Bob"),
+            securityService.getUserManager().checkExists("Bob"));
 
         fulcrumUser = securityService.getUserManager().getUser("Jeannie");
         AccessControlList acl =
             securityService.getUserManager().getACL(fulcrumUser);
-        assertEquals("Both should have role1",acl.hasRole("role1"),accessProvider.inGroup("Jeannie", "role1"));
-        
+        assertEquals(
+            "Both should have role1",
+            acl.hasRole("role1"),
+            accessProvider.inGroup("Jeannie", "role1"));
 
-        assertEquals("Neither should have role3",acl.hasRole("role3"),accessProvider.inGroup("Jeannie", "role3"));
-        
-        Collection credentialProviders = osUserManager.getCredentialsProviders();
-        assertEquals(1,credentialProviders.size());
-		CredentialsProvider credentialProvider = (CredentialsProvider)credentialProviders.toArray()[0];
-		
-	
-		assertTrue(credentialProvider.authenticate("Jeannie","wyatt"));
-		
+        assertEquals(
+            "Neither should have role3",
+            acl.hasRole("role3"),
+            accessProvider.inGroup("Jeannie", "role3"));
+
+        Collection credentialProviders =
+            osUserManager.getCredentialsProviders();
+        assertEquals(1, credentialProviders.size());
+        CredentialsProvider credentialProvider =
+            (CredentialsProvider) credentialProviders.toArray()[0];
+
+        assertTrue(credentialProvider.authenticate("Jeannie", "wyatt"));
 
     }
+
 
 }
