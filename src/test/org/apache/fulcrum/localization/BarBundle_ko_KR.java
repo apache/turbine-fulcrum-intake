@@ -3,7 +3,7 @@ import java.util.ListResourceBundle;
 /**
  * A dummied up Korean resource bundle for use in testing.
  */
-public class BarBundle_kr_KO extends ListResourceBundle
+public class BarBundle_ko_KR extends ListResourceBundle
 {
     private static final Object[][] CONTENTS =
     {
