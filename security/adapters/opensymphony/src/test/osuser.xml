@@ -1,0 +1,15 @@
+<opensymphony-user>
+    <!--
+		Authenticators can take properties just like providers.
+
+		This smart authenticator should work for 'most' cases - it dynamically looks up
+		the most appropriate authenticator for the current server.
+	-->
+	<authenticator class="com.opensymphony.user.authenticator.SmartAuthenticator" />
+
+    <!-- Fulcrum providers -->
+    <provider class="org.apache.fulcrum.security.adapter.osuser.FulcrumAccessProvider"/>       
+    <provider class="org.apache.fulcrum.security.adapter.osuser.FulcrumCredentialsProvider"/>
+	<!-- don't have a propertyset provider, so just return a memory one. -->
+    <provider class="com.opensymphony.user.provider.memory.MemoryProfileProvider" />
+</opensymphony-user>
