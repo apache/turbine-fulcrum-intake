@@ -160,7 +160,10 @@ public class TurbineUploadService
                                 }
                                 finally
                                 {
-                                    os.close();
+                                    if (os != null)
+                                    {
+                                        os.close();
+                                    }
                                 }
                                 item.setFieldName(getFieldName(headers));
                                 items.add(item);
