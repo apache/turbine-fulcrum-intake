@@ -7,6 +7,11 @@
 
   <body>
     <release version="1.0-alpha-1" date="">
+	  <action dev="epugh" type="update">
+        Integrated Stephen McConnell's refactoring.  Removed
+        API project as the API is provided by the Commons-Configuration
+        Configuration.java class.
+      </action>    	
       <action dev="epugh" type="add">
         Initial creation of project.
       </action>

@@ -1,0 +1,21 @@
+
+<container name="config">
+
+   <classloader>
+     <classpath>
+       <repository>
+         <!--<resource id="fulcrum:fulcrum-configuration-api" version="1.0-alpha-2"/>-->
+       </repository>
+     </classpath>
+   </classloader>
+
+   <services>
+     <service type="org.apache.commons.configuration.Configuration">
+       <source>config</source>
+     </service>
+   </services>
+
+   <component name="conf" 
+     class="org.apache.fulcrum.configuration.DefaultConfigurationService"/>
+
+</container>
