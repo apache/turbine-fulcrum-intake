@@ -5,7 +5,7 @@
   <id>fulcrum-dvsl-impl</id>
   <extend>${basedir}/../../project.xml</extend>
   <name>Fulcrum DVSL Implementation</name>
-  <currentVersion>1.0.4</currentVersion>
+  <currentVersion>1.0.5-dev</currentVersion>
   <package>org.apache.fulcrum.dvsl</package>
 
   <dependencies>
