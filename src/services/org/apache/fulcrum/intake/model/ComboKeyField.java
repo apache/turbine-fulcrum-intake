@@ -63,7 +63,9 @@ import org.apache.fulcrum.intake.xmlmodel.XmlField;
 //import org.apache.fulcrum.ServiceException;
 import org.apache.log4j.Category;
 
-/**  */
+/**
+ * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
+ */
 public class ComboKeyField extends Field
 {
     /**
@@ -80,7 +82,7 @@ public class ComboKeyField extends Field
     /**
      * converts the parameter to the correct Object.
      */
-    protected void doSetValue(ValueParser pp)
+    protected void doSetValue()
     {
         try
         {

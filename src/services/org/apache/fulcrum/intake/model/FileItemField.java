@@ -67,10 +67,11 @@ import org.apache.fulcrum.intake.validator.Constraint;
 import org.apache.fulcrum.upload.FileItem;
 import org.apache.fulcrum.ServiceException;
 
-/**  */
+/**
+ * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
+ */
 public class FileItemField extends Field
 {
-
     public FileItemField(XmlField field, Group group)
         throws Exception
     {
@@ -102,7 +103,7 @@ public class FileItemField extends Field
     {
         try
         {
-            this.pp = (ParameterParser)vp;
+            super.pp = (ParameterParser) vp;
         }
         catch (ClassCastException e)
         {
@@ -125,10 +126,10 @@ public class FileItemField extends Field
     /**
      * Compares request data with constraints and sets the valid flag.
      */
-    protected boolean validate(ValueParser vp)
+    protected boolean validate()
     //    throws ServiceException
     {
-        ParameterParser pp = (ParameterParser)vp;        
+        ParameterParser pp = (ParameterParser) super.pp;
         if ( isMultiValued  )
         {
             FileItem[] ss = pp.getFileItems(getKey());
@@ -196,9 +197,9 @@ public class FileItemField extends Field
     /**
      * converts the parameter to the correct Object.
      */
-    protected void doSetValue(ValueParser vp)
+    protected void doSetValue()
     {
-        ParameterParser pp = (ParameterParser)vp;
+        ParameterParser pp = (ParameterParser) super.pp;
         if ( isMultiValued  )
         {
             setTestValue(pp.getFileItems(getKey()));

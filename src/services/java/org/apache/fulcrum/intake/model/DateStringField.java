@@ -66,6 +66,8 @@ import org.apache.fulcrum.util.parser.ValueParser;
  * Field for date inputs as free form text.  The parsing of date strings
  * is dependent on any rules that are defined, so this field will expect that
  * any validator will be (or extend) DateStringValidator. 
+ *
+ * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
  */
 public class DateStringField extends Field
 {
@@ -96,7 +98,7 @@ public class DateStringField extends Field
     /**
      * converts the parameter to the correct Object.
      */
-    protected void doSetValue(ValueParser pp)
+    protected void doSetValue()
     {        
         if ( isMultiValued  )
         {
@@ -119,6 +121,7 @@ public class DateStringField extends Field
         Date date = null;
         try
         {
+            // FIXME: Canonicalize user-entered date strings.
             if ( df == null ) // guarantees validator != null
             {
                 date = ((DateStringValidator)validator).parse(dateString);

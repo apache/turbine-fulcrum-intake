@@ -58,16 +58,16 @@ import org.apache.torque.om.StringKey;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 import org.apache.fulcrum.util.parser.ValueParser;
 
-/**  */
+/**
+ * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
+ */
 public class StringKeyField extends Field
 {
     public StringKeyField(XmlField field, Group group)
         throws Exception
     {
         super(field, group);
-
     }
-
 
     /**
      * A suitable validator.
@@ -76,14 +76,13 @@ public class StringKeyField extends Field
      */
     protected String getDefaultValidator()
     {
-        return
-            "org.apache.fulcrum.intake.validator.DefaultValidator";
+        return "org.apache.fulcrum.intake.validator.DefaultValidator";
     }
 
     /**
      * converts the parameter to the correct Object.
      */
-    protected void doSetValue(ValueParser pp)
+    protected void doSetValue()
     {
         if ( isMultiValued  )
         {
@@ -100,5 +99,4 @@ public class StringKeyField extends Field
             setTestValue( new StringKey(pp.getString(getKey())) );
         }
     }
-
 }

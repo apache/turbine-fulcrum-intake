@@ -59,9 +59,9 @@ import org.apache.fulcrum.util.parser.ValueParser;
 import org.apache.log4j.Category;
 
 /**
- * Base class for Intake generated input processing classes.
+ * Processor for boolean fields.
  *
- * @author <a href="mailto:jmcnally@collab.net>John McNally</a>
+ * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
  * @version $Id$
  */
 public class BooleanField extends Field
@@ -90,7 +90,7 @@ public class BooleanField extends Field
     /**
      * converts the parameter to the correct Object.
      */
-    protected void doSetValue(ValueParser pp)
+    protected void doSetValue()
     {
         setTestValue( pp.getBool(getKey()) );
     }

@@ -54,10 +54,15 @@ package org.apache.fulcrum.intake.model;
  * <http://www.apache.org/>.
  */
 
+import java.util.Locale;
 import java.util.Map;
 import java.lang.reflect.Method;
+
 import org.apache.regexp.RE;
-import org.apache.fulcrum.util.parser.ValueParser;
+import org.apache.fulcrum.ServiceException;
+import org.apache.fulcrum.TurbineServices;
+import org.apache.fulcrum.localization.Localization;
+import org.apache.fulcrum.localization.LocalizationService;
 import org.apache.fulcrum.intake.Retrievable;
 import org.apache.fulcrum.intake.TurbineIntake;
 import org.apache.fulcrum.intake.xmlmodel.Rule;
@@ -66,13 +71,15 @@ import org.apache.fulcrum.intake.xmlmodel.XmlGroup;
 import org.apache.fulcrum.intake.validator.Validator;
 import org.apache.fulcrum.intake.validator.InitableByConstraintMap;
 import org.apache.fulcrum.intake.validator.ValidationException;
-import org.apache.fulcrum.ServiceException;
+import org.apache.fulcrum.util.parser.ParameterParser;
+import org.apache.fulcrum.util.parser.ValueParser;
 import org.apache.log4j.Category;
 
 /**
  * Base class for Intake generated input processing classes.
  *
  * @author <a href="mailto:jmcnally@collab.net>John McNally</a>
+ * @author <a href="mailto:dlr@finemaltcoding.com>Daniel Rall</a>
  * @version $Id$
  */
 public abstract class Field
@@ -102,13 +109,17 @@ public abstract class Field
     protected String message;
     protected Retrievable retrievable;
 
+    private Locale locale;
     private String stringValue;
     private String[] stringValues;
     private Object validValue;
     private Object testValue;
     private Object[] valArray; // for reflection
 
-    /** The object containing the request data */
+    /**
+     * The object containing the field data.
+     * TODO: Rename to parser.
+     */
     protected ValueParser pp;
 
     /**
@@ -122,6 +133,7 @@ public abstract class Field
      *
      * @param field a <code>XmlField</code> value
      * @param group a <code>Group</code> value
+     * @param locale The locale
      * @exception Exception if an error occurs
      */
     public Field(XmlField field, Group group)
@@ -195,6 +207,22 @@ public abstract class Field
         this.pp = pp;
         valid_flag = true;
 
+        // If the parser is for a HTTP request, use the request it's
+        // associated with to grok the locale.
+        if (TurbineServices.getInstance()
+            .isRegistered(LocalizationService.SERVICE_NAME))
+        {
+            if (pp instanceof ParameterParser)
+            {
+                this.locale = Localization.getLocale
+                    ( ((ParameterParser)pp).getRequest() );
+            }
+            else
+            {
+                this.locale = Localization.getLocale((String)null);
+            }
+        }
+
         if ( pp.containsKey(getKey()) && pp.getString(getKey()) != null )
         {
             set_flag = true;
@@ -234,7 +262,20 @@ public abstract class Field
         return this;
     }
 
+    /**
+     * Returns the <code>Locale</code> used when localizing data for
+     * this field, or <code>null</code> if unknown.
+     *
+     * @return Where to localize for.
+     */
+    protected Locale getLocale()
+    {
+        return locale;
+    }
 
+    /**
+     * Produces the fully qualified class name of the default validator.
+     */
     protected String getDefaultValidator()
     {
         return "org.apache.fulcrum.intake.validator.DefaultValidator";
@@ -258,7 +299,7 @@ public abstract class Field
      * Set whether this field is required to have a value.
      * @param v  Value to assign to required.
      */
-    public void setRequired(boolean  v)
+    public void setRequired(boolean v)
     {
         setRequired(v, ifRequiredMessage);
     }
@@ -269,7 +310,7 @@ public abstract class Field
      * @param v a <code>boolean</code> value
      * @param message, override the value from intake.xml
      */
-    public void setRequired(boolean  v, String message)
+    public void setRequired(boolean v, String message)
     {
         this.required = v;
         if (v && !set_flag)
@@ -304,6 +345,7 @@ public abstract class Field
         message = null;
         retrievable = null;
 
+        locale = null;
         stringValue = null;
         stringValues = null;
         validValue = null;
@@ -407,9 +449,17 @@ public abstract class Field
     }
 
     /**
-     * Compares request data with constraints and sets the valid flag.
+     * @deprecated Call validate() instead (with no parameters).
      */
     protected boolean validate(ValueParser pp)
+    {
+        return validate();
+    }
+
+    /**
+     * Compares request data with constraints and sets the valid flag.
+     */
+    protected boolean validate()
     //    throws ServiceException
     {
         if ( isMultiValued  )
@@ -442,7 +492,6 @@ public abstract class Field
             {
                 doSetValue(pp);
             }
-
         }
         else
         {
@@ -478,12 +527,18 @@ public abstract class Field
     }
 
     /**
+     * @deprecated Use doSetValue() instead (with no parameters).
+     */
+    protected void doSetValue(ValueParser pp)
+    {
+        doSetValue();
+    }
+
+    /**
      * Compares request data with constraints and sets the valid flag.
      * To be implemented in subclasses
      */
-    protected abstract void doSetValue(ValueParser pp);
-
-
+    protected abstract void doSetValue();
 
     /**
      * Set the value used as a default, in the event the field

@@ -58,9 +58,9 @@ import org.apache.fulcrum.util.parser.ValueParser;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 
 /**
- * Base class for Intake generated input processing classes.
+ * Text field.
  *
- * @author <a href="mailto:jmcnally@collab.net>John McNally</a>
+ * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
  * @version $Id$
  */
 public class StringField extends Field
@@ -74,7 +74,7 @@ public class StringField extends Field
     /**
      * converts the parameter to the correct Object.
      */
-    protected void doSetValue(ValueParser pp)
+    protected void doSetValue()
     {
         if ( isMultiValued )
         {
@@ -91,21 +91,13 @@ public class StringField extends Field
      * Set the value of required.
      * @param v  Value to assign to required.
      */
-    public void setRequired(boolean  v, String message)
+    public void setRequired(boolean v, String message)
     {
         this.required = v;
         if (v && (!set_flag || ((String)getTestValue()).length() == 0) )
         {
-            valid_flag=false;
+            valid_flag = false;
             this.message = message;
         }
     }
 }
-
-
-
-
-
-
-
-

@@ -54,15 +54,18 @@ package org.apache.fulcrum.intake.model;
  * <http://www.apache.org/>.
  */
 
-import java.util.Vector;
+import java.math.BigDecimal;
 import org.apache.torque.om.NumberKey;
 import org.apache.torque.om.ObjectKey;
 import org.apache.fulcrum.intake.xmlmodel.Rule;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 import org.apache.fulcrum.util.parser.ValueParser;
 
-/**  */
-public class NumberKeyField extends Field
+/**
+ * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
+ * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
+ */
+public class NumberKeyField extends BigDecimalField
 {
     public NumberKeyField(XmlField field, Group group)
         throws Exception
@@ -71,7 +74,6 @@ public class NumberKeyField extends Field
 
     }
 
-
     /**
      * A suitable validator.
      *
@@ -79,48 +81,28 @@ public class NumberKeyField extends Field
      */
     protected String getDefaultValidator()
     {
-        return
-            "org.apache.fulcrum.intake.validator.NumberKeyValidator";
+        return "org.apache.fulcrum.intake.validator.NumberKeyValidator";
     }
 
     /**
      * converts the parameter to the correct Object.
      */
-    protected void doSetValue(ValueParser pp)
+    protected void doSetValue()
     {
         if ( isMultiValued  )
         {
-            String[] ss = pp.getStrings(getKey());
-            NumberKey[] ival = new NumberKey[ss.length];
-            for (int i=0; i<ss.length; i++)
+            String[] inputs = pp.getStrings(getKey());
+            NumberKey[] values = new NumberKey[inputs.length];
+            for (int i = 0; i < inputs.length; i++)
             {
-                ival[i] = new NumberKey(ss[i]);
+                values[i] = new NumberKey(canonicalizeDecimalInput(inputs[i]));
             }
-            setTestValue(ival);
+            setTestValue(values);
         }
         else
         {
-            setTestValue( new NumberKey(pp.getString(getKey())) );
+            BigDecimal bd = canonicalizeDecimalInput( pp.getString(getKey()) );
+            setTestValue( new NumberKey(bd) );
         }
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

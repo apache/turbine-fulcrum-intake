@@ -59,10 +59,11 @@ import org.apache.fulcrum.intake.xmlmodel.Rule;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 import org.apache.fulcrum.util.parser.ValueParser;
 
-/**  */
+/**
+ * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
+ */
 public class IntegerField extends Field
 {
-
     public IntegerField(XmlField field, Group group)
         throws Exception
     {
@@ -82,7 +83,7 @@ public class IntegerField extends Field
     /**
      * converts the parameter to the correct Object.
      */
-    protected void doSetValue(ValueParser pp)
+    protected void doSetValue()
     {
         if ( isMultiValued  )
         {
