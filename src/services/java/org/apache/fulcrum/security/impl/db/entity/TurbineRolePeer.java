@@ -3,7 +3,7 @@ package org.apache.fulcrum.security.impl.db.entity;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -118,7 +118,7 @@ public class TurbineRolePeer
     public static String getColumnName(String name)
     {
         StringBuffer sb = new StringBuffer();
-        sb.append(TurbineRoleMapBuilder.getTable());
+        sb.append(TurbineRolePeer.TABLE_NAME);
         sb.append(".");
         sb.append(name);
         return sb.toString();
