@@ -69,7 +69,14 @@ import org.apache.fulcrum.Service;
 public interface LocalizationService
     extends Service
 {
+    /**
+     * The name of this service.
+     */
     public static final String SERVICE_NAME = "LocalizationService";
+
+    /**
+     * A constant for the HTTP <code>Accept-Language</code> header.
+     */
     public static final String ACCEPT_LANGUAGE = "Accept-Language";
 
     public String getDefaultLanguage();
