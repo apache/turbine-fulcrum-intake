@@ -533,9 +533,12 @@ public class TurbineLocalizationService
 
         if (value == null)
         {
+            String loc = locale.toString();
+            category.debug(SERVICE_NAME + " noticed missing resource: " +
+                           "bundleName=" + bundleName + ", locale=" + loc +
+                           ", key=" + key);
             // Text not found in requested or default bundles.
-            throw new MissingResourceException(bundleName, locale.toString(),
-                                               key);
+            throw new MissingResourceException(bundleName, loc, key);
         }
 
         return value;
