@@ -86,6 +86,8 @@
     <ant antfile="${maven.home}/build-maven.xml" target="compile"/>
   </target>
 
+  <!-- maven:end -->
+
   <!-- ================================================================== -->
   <!-- C H E C K  O M                                                     -->
   <!-- ================================================================== -->
@@ -119,6 +121,4 @@
     <ant antfile="${maven.home}/build-maven.xml" target="update-jars"/>
   </target>
     
-  <!-- maven:end -->
-
 </project>
