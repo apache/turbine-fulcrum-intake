@@ -55,15 +55,17 @@ package org.apache.fulcrum.velocity;
  */
 
 import org.apache.fulcrum.template.TemplateContext;
+
 import org.apache.velocity.context.Context;
 
 /**
- * An adapter for Turbine's {@link
- * org.apache.fulcrum.template.TemplateContext} which extends
- * Velocity's Context interface.  Allows for easy processing of
- * TemplateContext objects by Velocity.
+ * An adapter for Fulcrum's {@link
+ * org.apache.fulcrum.template.TemplateContext}.  Allows for easy
+ * processing of TemplateContext objects by Velocity.
  *
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+ * @see org.apache.fulcrum.template.TemplateContext
+ * @see org.apache.velocity.context.Context
  */
 public class ContextAdapter
     implements Context
