@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <document>
   <properties>
-    <title>Fulcrum Mimetype</title>
+    <title>Fulcrum MIME type</title>
     <author email="epugh@upstate.com">Eric Pugh</author>
   </properties>
 
@@ -9,6 +9,11 @@
     <release version="1.0-alpha-4" date="in cvs">
       <action dev="epugh" type="add">
         Committing first cut of Merlin enabled components..
+      </action>
+      <action dev="dlr" type="update">
+        Increase the smarts of MIME type auto-detection to handle
+        known file extensions specified with a capitalization which
+        may not match that of the definitions from your config file.
       </action>
     </release>
     
