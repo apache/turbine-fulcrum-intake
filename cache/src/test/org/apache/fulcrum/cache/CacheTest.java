@@ -76,8 +76,9 @@ public class CacheTest extends BaseUnitTest
 {
     
     private GlobalCacheService globalCache = null;
-    private static final String cacheKey = new String("CacheKey");
-    private static final String cacheKey_2 = new String("CacheKey_2");
+    private static final String cacheKey = "CacheKey";
+    private static final String cacheKey_2 = "CacheKey_2";
+    public static final String SKIP_TESTS_KEY = "fulcrum.cache.skip.long.tests";
     
 
     /**
@@ -89,26 +90,7 @@ public class CacheTest extends BaseUnitTest
     {
         super(name);
     }
-    /**
-     * Start the tests.
-     *
-     * @param args the arguments. Not used
-     */
-    public static void main(String args[])
-    {
-        TestRunner.main(new String[] { CacheTest.class.getName()});
-    }
-    /**
-     * Creates the test suite.
-     *
-     * @return a test suite (<code>TestSuite</code>) that includes all methods
-     *         starting with "test"
-     */
-    public static Test suite()
-    {
-        // All methods starting with "test" will be executed in the test suite.
-        return new TestSuite(CacheTest.class);
-    }
+
     protected void setUp() throws Exception
     {
         super.setUp();
@@ -586,7 +568,15 @@ public class CacheTest extends BaseUnitTest
      */
     private long getCacheRefresh()
     {
-        return ((DefaultGlobalCacheService) globalCache).getCacheCheckFrequency()*1000;
+        String skipTestsProperty = System.getProperty(SKIP_TESTS_KEY,"false");
+        System.out.println("What is the skipTestsProperty:" + skipTestsProperty);
+        if(Boolean.getBoolean(skipTestsProperty)==true){
+            return 0;
+        }
+        else {
+            return ((DefaultGlobalCacheService) globalCache).getCacheCheckFrequency()*1000;
+        }
+        
     }
     
     /** 
