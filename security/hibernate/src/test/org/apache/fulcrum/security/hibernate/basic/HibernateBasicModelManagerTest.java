@@ -53,11 +53,16 @@ package org.apache.fulcrum.security.hibernate.basic;
  * <http://www.apache.org/>.
  */
 
+
+import net.sf.hibernate.Transaction;
 import net.sf.hibernate.avalon.HibernateService;
 
 import org.apache.fulcrum.security.SecurityService;
 
+import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.hibernate.HibernateHelper;
+import org.apache.fulcrum.security.hibernate.HibernateUserManagerImpl;
+import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 import org.apache.fulcrum.security.model.basic.test.AbstractModelManagerTest;
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
@@ -77,6 +82,17 @@ public class HibernateBasicModelManagerTest extends AbstractModelManagerTest
         super.setUp();
 
     }
+    
+	public void testRevokeAllUser() throws Exception{
+	    super.testRevokeAllUser();
+	    ((HibernateUserManagerImpl)userManager).getPersistenceHelper().retrieveSession().close();
+	    Transaction tx = ((HibernateUserManagerImpl)userManager).getPersistenceHelper().retrieveSession().beginTransaction();
+		User user = userManager.getUserInstance("Clint2");
+		assertEquals(0, ((BasicUser) user).getGroups().size());
+		tx.commit();
+	    
+	}
+    
     public void tearDown()
     {
         try

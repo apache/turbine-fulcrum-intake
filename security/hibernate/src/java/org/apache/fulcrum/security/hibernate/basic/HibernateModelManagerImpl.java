@@ -142,10 +142,11 @@ public class HibernateModelManagerImpl extends AbstractHibernateModelManager imp
             userExists = getUserManager().checkExists(user);
             if (groupExists && userExists)
             {
-                ((BasicUser) user).removeGroup(group);
-                ((BasicGroup) group).removeUser(user);
+
 				Session session = getPersistenceHelper().retrieveSession();
                 Transaction transaction = session.beginTransaction();
+				((BasicUser) user).removeGroup(group);
+				((BasicGroup) group).removeUser(user);                
                 session.update(user);
                 session.update(group);
                 transaction.commit();

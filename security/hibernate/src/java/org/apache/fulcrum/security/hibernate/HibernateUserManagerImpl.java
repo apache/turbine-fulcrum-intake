@@ -63,6 +63,7 @@ import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.spi.AbstractUserManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.apache.fulcrum.security.util.UserSet;
 /**
  * This implementation persists to a database via Hibernate.
  *
@@ -140,6 +141,33 @@ public class HibernateUserManagerImpl extends AbstractUserManager
         throw new UnknownEntityException("Unknown user '" + userName + "'");
     }
   
+	/**
+	   * Retrieves all users defined in the system.
+	   *
+	   * @return the names of all users defined in the system.
+	   * @throws DataBackendException if there was an error accessing the data
+	   *         backend.
+	   */
+	public UserSet getAllUsers() throws DataBackendException
+	{
+		UserSet userSet = new UserSet();
+		try
+		{
+
+			List users =
+			getPersistenceHelper().retrieveSession().find(
+					"from " + User.class.getName() + "");
+			userSet.add(users);
+		}
+		catch (HibernateException e)
+		{
+			throw new DataBackendException(
+				"Error retriving all users",
+				e);
+		}
+		return userSet;
+
+	}    
     /**
 	* Removes an user account from the system.
 	*

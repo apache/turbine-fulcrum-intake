@@ -54,6 +54,8 @@ package org.apache.fulcrum.security.hibernate;
  */
 
 import net.sf.hibernate.avalon.HibernateService;
+import net.sf.hibernate.avalon.HibernateServiceImpl;
+
 import org.apache.fulcrum.security.SecurityService;
 
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
@@ -85,14 +87,18 @@ public class PersistenceHelperTest extends BaseUnitTest
             (HibernateService) lookup(HibernateService.ROLE);
         HibernateHelper.exportSchema(hibernateService.getConfiguration());
 
+        HibernateService hibernateService2 = new HibernateServiceImpl();
+        
+        assertNotSame(hibernateService,hibernateService2);
         
 		SecurityService securityService = (SecurityService) lookup(SecurityService.ROLE);
 		HibernateGroupManagerImpl groupManager = (HibernateGroupManagerImpl)securityService.getGroupManager();
-		assertNotSame(hibernateService,groupManager.getPersistenceHelper().getHibernateService());
-		groupManager.getPersistenceHelper().setHibernateService(hibernateService);
 		assertSame(hibernateService,groupManager.getPersistenceHelper().getHibernateService());
+		groupManager.getPersistenceHelper().setHibernateService(hibernateService2);
+		assertSame(hibernateService2,groupManager.getPersistenceHelper().getHibernateService());
 		
 		HibernateRoleManagerImpl roleManager = (HibernateRoleManagerImpl)securityService.getRoleManager();
+		assertSame(hibernateService2,roleManager.getPersistenceHelper().getHibernateService());
 		assertNotSame(hibernateService,roleManager.getPersistenceHelper().getHibernateService());
 		roleManager.getPersistenceHelper().setHibernateService(hibernateService);
 		assertSame(roleManager.getPersistenceHelper().getHibernateService(),groupManager.getPersistenceHelper().getHibernateService());
