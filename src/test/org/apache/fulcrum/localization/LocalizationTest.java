@@ -96,7 +96,7 @@ public class LocalizationTest
     {
         try
         {
-            ServiceManager serviceManager = TurbineServices.getManager();
+            ServiceManager serviceManager = TurbineServices.getInstance();
             serviceManager.setApplicationRoot(".");
 
             Configuration cfg = new BaseConfiguration();
