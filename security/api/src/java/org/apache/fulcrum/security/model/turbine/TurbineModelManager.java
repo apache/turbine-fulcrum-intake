@@ -15,10 +15,11 @@ package org.apache.fulcrum.security.model.turbine;
  *  limitations under the License.
  */
 
+import org.apache.fulcrum.security.ModelManager;
 import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
@@ -28,7 +29,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public interface TurbineModelManager extends DynamicModelManager
+public interface TurbineModelManager extends ModelManager
 {
 
     /**
@@ -43,6 +44,49 @@ public interface TurbineModelManager extends DynamicModelManager
     	* @return A Group object that represents the global group.
     	*/
     Group getGlobalGroup() throws DataBackendException;
+    
+    /**
+     * Puts a permission in a role
+     * 
+     * This method is used when adding a permission to a role
+     * 
+     * @param user the User.
+     * @throws DataBackendException if there was an error accessing the data backend.
+     * @throws UnknownEntityException if the account is not present.
+     */
+    void grant(Role role, Permission permission)
+        throws DataBackendException, UnknownEntityException;
+    /**
+     * Removes a permission from a role
+     * 
+     * @param role the Role.
+     * @throws DataBackendException if there was an error accessing the data backend.
+     * @throws UnknownEntityException if the user or group is not present.
+     */
+    void revoke(Role role, Permission permission)
+        throws DataBackendException, UnknownEntityException;
+
+    /**
+     * Revokes all roles from an User.
+     * 
+     * This method is typically used when deleting an account.
+     * 
+     * @param user the User.
+     * @throws DataBackendException if there was an error accessing the data backend.
+     * @throws UnknownEntityException if the account is not present.
+     */
+    void revokeAll(User user) throws DataBackendException, UnknownEntityException;
+    /**
+     * Revokes all permissions from a Role.
+     * 
+     * This method is typically used when deleting a Role.
+     * 
+     * @param role the Role
+     * @throws DataBackendException if there was an error accessing the data backend.
+     * @throws UnknownEntityException if the Role is not present.
+     */
+    void revokeAll(Role role) throws DataBackendException, UnknownEntityException;
+   
 
     /**
      * Grant an User a Role in a Group.
