@@ -5,7 +5,7 @@
   <id>fulcrum-crypto-impl</id>
   <extend>${basedir}/../../merlin-project.xml</extend>
   <name>Fulcrum Crypto Component Implementation</name>
-  <currentVersion>1.0-alpha-4</currentVersion>
+  <currentVersion>1.0.4</currentVersion>
   <package>org.apache.fulcrum.crypto</package>
 
   <dependencies>
@@ -13,7 +13,7 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-crypto-api</artifactId>
-      <version>1.0-alpha-4</version>
+      <version>1.0.4</version>
     </dependency>
 
     <dependency>
@@ -36,14 +36,6 @@
       <id>cryptix</id>
       <version>3.2.0</version>
     </dependency>    
-
-    <!-- testing -->
-
-    <dependency>
-      <groupId>merlin</groupId>
-      <artifactId>merlin-unit</artifactId>
-      <version>3.2.10</version>
-    </dependency>
 
   </dependencies>
 
