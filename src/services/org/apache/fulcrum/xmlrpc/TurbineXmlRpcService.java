@@ -92,6 +92,8 @@ import org.apache.commons.collections.ExtendedProperties;
  * String name = (String)xs.executeRpc(url, "examples.getStateName", vec);
  * </pre></code></blockquote>
  *
+ * <p>TODO: Handle XmlRpc.setDebug(boolean)</p>
+ *
  * @author <a href="mailto:josh@stonecottage.com">Josh Lucas</a>
  * @author <a href="mailto:magnus@handtolvur.is">Magnús Þór Torfason</a>
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
