@@ -267,10 +267,11 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     }
     public void testForcePassword() throws Exception
     {
-        user = userManager.getUser(GUESTUSER, "");
-        user.setPassword("");
         try
-        {
+        {        
+            user = userManager.getUser(GUESTUSER, "");
+            user.setPassword("");
+
             userManager.forcePassword(user, "JC_SUBSET");
             fail("Should throw runtime exception");
         }
