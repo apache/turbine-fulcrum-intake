@@ -80,7 +80,6 @@ import org.apache.fulcrum.security.impl.db.entity.UserPeer;
 import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.security.BaseSecurityService;
 import org.apache.fulcrum.security.TurbineSecurity;
-import org.apache.fulcrum.Log;
 import org.apache.torque.util.Criteria;
 import org.apache.fulcrum.security.util.AccessControlList;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -89,6 +88,7 @@ import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.apache.log4j.Category;
 
 /**
  * An implementation of SecurityService that uses a database as backend.
@@ -111,6 +111,11 @@ public class DBSecurityService
      */
     public static final String USER_PEER_CLASS_DEFAULT =
         "org.apache.turbine.om.security.TurbineUserPeer";
+
+    /**
+     * Log4j category
+     */
+    Category category = Category.getInstance(getClass().getName());
 
     /*-----------------------------------------------------------------------
       Creation of AccessControlLists
@@ -938,8 +943,8 @@ public class DBSecurityService
         }
         catch(Exception e)
         {
-            Log.error("Failed to delete a Group");
-            Log.error(e);
+            category.error("Failed to delete a Group");
+            category.error(e);
             throw new DataBackendException("removeGroup(Group) failed", e);
         }
         finally

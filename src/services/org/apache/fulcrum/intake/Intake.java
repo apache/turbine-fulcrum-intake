@@ -60,12 +60,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.apache.fulcrum.Log;
 import org.apache.fulcrum.pool.Recyclable;
 import org.apache.torque.om.Retrievable;
 import org.apache.fulcrum.util.parser.ValueParser;
 import org.apache.fulcrum.intake.model.Group;
 import org.apache.fulcrum.intake.TurbineIntake;
+import org.apache.log4j.Category;
 
 /**
  * The main class through which Intake is accessed.
@@ -86,6 +86,11 @@ public class Intake
 
     /** The cache of PullHelpers. **/
     private Map pullMap;
+
+    /**
+     * Log4j category
+     */
+    Category category = Category.getInstance(getClass().getName());
 
     public Intake()
     {
@@ -141,7 +146,7 @@ public class Intake
             }
             catch(Exception e)
             {
-                Log.error(e);
+                category.error(e);
             }
         }
     }
@@ -272,7 +277,7 @@ public class Intake
             }
             catch(Exception e)
             {
-                Log.error(e);
+                category.error(e);
             }
 
             return null;

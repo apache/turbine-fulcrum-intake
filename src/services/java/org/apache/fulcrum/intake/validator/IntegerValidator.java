@@ -55,7 +55,6 @@ package org.apache.fulcrum.intake.validator;
  */
 
 import java.util.Map;
-import org.apache.fulcrum.Log;
 import org.apache.fulcrum.ServiceException;
 
 /**

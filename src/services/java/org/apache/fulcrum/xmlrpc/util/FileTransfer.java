@@ -55,11 +55,9 @@ package org.apache.fulcrum.xmlrpc.util;
  */
 
 import java.util.Vector;
-
 import java.net.URL;
-
-import org.apache.fulcrum.Log;
 import org.apache.fulcrum.xmlrpc.TurbineXmlRpc;
+import org.apache.log4j.Category;
 
 /**
  * Test class for FileHandler.
@@ -69,6 +67,12 @@ import org.apache.fulcrum.xmlrpc.TurbineXmlRpc;
  */
 public class FileTransfer
 {
+    /**
+     * Log4j category
+     */
+    protected static Category category = 
+        Category.getInstance(FileTransfer.class.getName());
+    
     /**
      * Method to allow a client to send a file to a server.
      *
@@ -113,7 +117,7 @@ public class FileTransfer
         }
         catch (Exception e)
         {
-            Log.error("Error sending file to server:", e);
+            category.error("Error sending file to server:", e);
             throw new Exception(e.toString());
         }
     }
@@ -171,7 +175,7 @@ public class FileTransfer
         }
         catch (Exception e)
         {
-            Log.error("Error sending file to server:", e);
+            category.error("Error sending file to server:", e);
             throw new Exception(e.toString());
         }
     }
@@ -221,7 +225,7 @@ public class FileTransfer
         }
         catch (Exception e)
         {
-            Log.error("Error getting file from server:", e);
+            category.error("Error getting file from server:", e);
             throw new Exception(e.toString());
         }
     }
@@ -280,7 +284,7 @@ public class FileTransfer
         }
         catch (Exception e)
         {
-            Log.error("Error getting file from server:", e);
+            category.error("Error getting file from server:", e);
             throw new Exception(e.toString());
         }
     }
@@ -317,7 +321,7 @@ public class FileTransfer
         }
         catch (Exception e)
         {
-            Log.error("Error removing file from server:", e);
+            category.error("Error removing file from server:", e);
             throw new Exception(e.toString());
         }
     }
@@ -362,7 +366,7 @@ public class FileTransfer
         }
         catch (Exception e)
         {
-            Log.error("Error removing file from server:", e);
+            category.error("Error removing file from server:", e);
             throw new Exception(e.toString());
         }
     }

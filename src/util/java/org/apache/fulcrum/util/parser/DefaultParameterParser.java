@@ -60,11 +60,11 @@ import java.util.Iterator;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.fulcrum.Log;
 import org.apache.fulcrum.ServiceException;
 import org.apache.fulcrum.pool.Recyclable;
 import org.apache.fulcrum.upload.FileItem;
 import org.apache.fulcrum.upload.TurbineUpload;
+import org.apache.log4j.Category;
 
 /**
  * DefaultParameterParser is a utility object to handle parsing and
@@ -104,6 +104,11 @@ public class DefaultParameterParser
      * The raw data of a file upload.
      */
     private byte[] uploadData = null;
+
+    /**
+     * Log4j category
+     */
+    Category category = Category.getInstance(getClass().getName());
 
     /**
      * Create a new empty instance of ParameterParser.  Uses the
@@ -203,7 +208,7 @@ public class DefaultParameterParser
             }
             catch(ServiceException e)
             {
-                Log.error(new ServiceException("File upload failed", e));
+                category.error(new ServiceException("File upload failed", e));
             }
         }
 

@@ -63,7 +63,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import org.apache.fulcrum.Log;
+import org.apache.log4j.Category;
 
 /**
  * DataStreamParser is used to parse a stream with a fixed format and
@@ -119,6 +119,11 @@ public abstract class DataStreamParser
      * The character encoding of the input
      */
     private String          characterEncoding;
+
+    /**
+     * Log4j category
+     */
+    Category category = Category.getInstance(getClass().getName());
 
     /**
      * Create a new DataStreamParser instance. Requires a Reader to read the
@@ -247,7 +252,7 @@ public abstract class DataStreamParser
                 String colval  = tokenizer.sval;
                 if (DEBUG)
                 {
-                    Log.debug("DataStreamParser.nextRow(): " +
+                    category.debug("DataStreamParser.nextRow(): " +
                               colname + '=' + colval);
                 }
                 lineValues.add(colname, colval);
@@ -273,7 +278,7 @@ public abstract class DataStreamParser
         }
         catch (IOException e)
         {
-            Log.error("IOException in CSVParser.hasNext", e);
+            category.error("IOException in CSVParser.hasNext", e);
         }
 
         return hasNext;
@@ -297,7 +302,7 @@ public abstract class DataStreamParser
         }
         catch (IOException e)
         {
-            Log.error("IOException in CSVParser.next", e);
+            category.error("IOException in CSVParser.next", e);
             throw new NoSuchElementException();
         }
 
