@@ -54,11 +54,12 @@ package org.apache.fulcrum.security.adapter.turbine;
  */
 import java.util.Iterator;
 import java.util.List;
+
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.SecurityService;
-import org.apache.fulcrum.security.model.dynamic.DynamicAccessControlList;
+import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
@@ -145,8 +146,8 @@ public class SecurityServiceAdapter extends BaseSecurityService
         {
             org.apache.fulcrum.security.entity.User fulcrumUser =
                 securityService.getUserManager().getUser(user.getName());
-			DynamicAccessControlList acl =
-                (DynamicAccessControlList) securityService
+			 AccessControlList acl =
+                 securityService
                     .getUserManager()
                     .getACL(
                     fulcrumUser);
