@@ -3,7 +3,7 @@
   <extend>${basedir}/../project.xml</extend>
   <id>fulcrum-localization</id>
   <name>Fulcrum Localization Component</name>
-  <currentVersion>1.0.5</currentVersion>
+  <currentVersion>1.0.6-dev</currentVersion>
   <versions>
     <version>
       <id>1.0.5</id>

@@ -1,6 +1,6 @@
 <componentConfig>
 
-   <localization>
+   <localization locale-default-language="en" locale-default-country="US">
       <bundles>
         <bundle>org.apache.fulcrum.localization.BarBundle</bundle>
         <bundle>org.apache.fulcrum.localization.FooBundle</bundle>
