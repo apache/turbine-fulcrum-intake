@@ -58,8 +58,8 @@ import java.util.List;
 import java.util.Vector;
 import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
-import org.apache.turbine.services.db.om.NumberKey;
-import org.apache.turbine.services.db.util.Criteria;
+import org.apache.torque.om.NumberKey;
+import org.apache.torque.util.Criteria;
 
 /**
  * Service for a cron like scheduler.

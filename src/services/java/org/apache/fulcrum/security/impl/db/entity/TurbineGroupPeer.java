@@ -57,9 +57,9 @@ package org.apache.fulcrum.security.impl.db.entity;
 // JDK classes
 import java.util.Vector;
 import org.apache.fulcrum.security.impl.db.entity.map.TurbineGroupMapBuilder;
-import org.apache.turbine.services.db.util.BasePeer;
-import org.apache.turbine.services.db.pool.DBConnection;
-import org.apache.turbine.services.db.util.Criteria;
+import org.apache.torque.util.BasePeer;
+import org.apache.torque.pool.DBConnection;
+import org.apache.torque.util.Criteria;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.SecurityEntity;
 import org.apache.fulcrum.security.util.GroupSet;

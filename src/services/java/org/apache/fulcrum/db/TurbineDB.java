@@ -55,10 +55,10 @@ package org.apache.fulcrum.db;
  */
 
 import org.apache.fulcrum.ServiceException;
-import org.apache.turbine.services.db.adapter.DB;
-import org.apache.turbine.services.db.map.DatabaseMap;
-import org.apache.turbine.services.db.pool.DBConnection;
 import org.apache.fulcrum.TurbineServices;
+import org.apache.torque.adapter.DB;
+import org.apache.torque.map.DatabaseMap;
+import org.apache.torque.pool.DBConnection;
 
 /**
  * This class provides a common front end to the DatabaseService in Turbine. 

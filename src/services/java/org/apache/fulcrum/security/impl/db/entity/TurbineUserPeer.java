@@ -55,9 +55,9 @@ package org.apache.fulcrum.security.impl.db.entity;
  */
 
 import java.util.Vector;
-import org.apache.turbine.services.db.util.BasePeer;
-import org.apache.turbine.services.db.pool.DBConnection;
-import org.apache.turbine.services.db.util.Criteria;
+import org.apache.torque.util.BasePeer;
+import org.apache.torque.pool.DBConnection;
+import org.apache.torque.util.Criteria;
 import org.apache.fulcrum.security.TurbineSecurity;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.DataBackendException;

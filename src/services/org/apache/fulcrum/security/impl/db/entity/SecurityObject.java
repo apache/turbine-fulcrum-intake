@@ -57,7 +57,7 @@ package org.apache.fulcrum.security.impl.db.entity;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.turbine.services.db.om.BaseObject;
+import org.apache.torque.om.BaseObject;
 
 /**
  * This class represents a generic object used in the Access Control Lists.

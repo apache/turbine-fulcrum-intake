@@ -56,7 +56,7 @@ package org.apache.fulcrum.security.impl.passive;
 
 import org.apache.fulcrum.security.entity.User;
 
-import org.apache.turbine.services.db.util.Criteria;
+import org.apache.torque.util.Criteria;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.EntityExistsException;

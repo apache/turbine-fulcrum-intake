@@ -54,25 +54,23 @@ package org.apache.fulcrum.security;
  * <http://www.apache.org/>.
  */
 
-import org.apache.turbine.services.db.util.Criteria;
-
+import org.apache.fulcrum.BaseService;
+import org.apache.fulcrum.InitializationException;
+import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.Permission;
-
-import org.apache.fulcrum.BaseService;
-import org.apache.fulcrum.InitializationException;
-import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.PermissionSet;
-
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.TurbineSecurityException;
+
+import org.apache.torque.util.Criteria;
 
 // Classes needed for password encryption
 import javax.mail.internet.MimeUtility;

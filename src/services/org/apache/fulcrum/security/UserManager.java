@@ -60,7 +60,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 
-import org.apache.turbine.services.db.util.Criteria;
+import org.apache.torque.util.Criteria;
 
 /**
  * An UserManager performs {@link org.apache.fulcrum.security.entity.User} objects

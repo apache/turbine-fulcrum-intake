@@ -56,7 +56,7 @@ package org.apache.fulcrum.schedule;
 
 import java.util.Calendar;
 import java.util.Date;
-import org.apache.turbine.services.db.om.Persistent;
+import org.apache.torque.om.Persistent;
 
 /**
  * This is a wrapper for a scheduled job.  It is modeled after the

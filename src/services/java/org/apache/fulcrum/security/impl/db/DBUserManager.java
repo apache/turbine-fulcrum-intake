@@ -57,8 +57,8 @@ package org.apache.fulcrum.security.impl.db;
 import java.util.Vector;
 import java.util.Iterator;
 
-import org.apache.turbine.services.db.om.BaseObject;
-import org.apache.turbine.services.db.om.ObjectKey;
+import org.apache.torque.om.BaseObject;
+import org.apache.torque.om.ObjectKey;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.impl.db.entity.TurbineUserPeer;
 
@@ -68,7 +68,7 @@ import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 
 import org.apache.fulcrum.Log;
-import org.apache.turbine.services.db.util.Criteria;
+import org.apache.torque.util.Criteria;
 
 import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.TurbineSecurity;

@@ -55,9 +55,9 @@ package org.apache.fulcrum.db;
  */
 
 import org.apache.fulcrum.Service;
-import org.apache.turbine.services.db.map.DatabaseMap;
-import org.apache.turbine.services.db.pool.DBConnection;
-import org.apache.turbine.services.db.adapter.DB;
+import org.apache.torque.map.DatabaseMap;
+import org.apache.torque.pool.DBConnection;
+import org.apache.torque.adapter.DB;
 
 /**
  * This service provides database connection pooling and manages 

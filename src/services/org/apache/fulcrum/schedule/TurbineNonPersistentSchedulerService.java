@@ -56,8 +56,8 @@ package org.apache.fulcrum.schedule;
 
 import java.util.List;
 import java.util.Vector;
-import org.apache.turbine.services.db.om.NumberKey;
-import org.apache.turbine.services.db.om.ObjectKey;
+import org.apache.torque.om.NumberKey;
+import org.apache.torque.om.ObjectKey;
 import org.apache.fulcrum.InitializationException;
 
 /**

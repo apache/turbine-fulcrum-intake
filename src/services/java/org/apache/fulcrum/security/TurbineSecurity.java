@@ -69,7 +69,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.TurbineSecurityException;
-import org.apache.turbine.services.db.util.Criteria;
+import org.apache.torque.util.Criteria;
 
 /**
  * This is a Facade class for SecurityService.

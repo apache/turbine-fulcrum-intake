@@ -61,8 +61,6 @@ import java.util.Hashtable;
 import javax.servlet.http.HttpSessionBindingEvent;
 import org.apache.fulcrum.security.TurbineSecurity;
 import org.apache.fulcrum.security.entity.User;
-//import org.apache.turbine.util.Log;
-import org.apache.turbine.util.ObjectUtils;
 
 /**
  * A generic implementation of User interface.
@@ -305,7 +303,7 @@ public class TurbineUser
      */
     public void setPerm(String name, Object value)
     {
-        ObjectUtils.safeAddToHashtable(getPermStorage(), name, value);
+        safeAddToHashtable(getPermStorage(), name, value);
     }
 
     /**
@@ -393,7 +391,7 @@ public class TurbineUser
      */
     public void setTemp(String name, Object value)
     {
-        ObjectUtils.safeAddToHashtable(tempStorage, name, value);
+        safeAddToHashtable(tempStorage, name, value);
     }
 
     /**
@@ -472,5 +470,30 @@ public class TurbineUser
     public String getName()
     {
         return getUserName();
+    }
+
+    /**
+     * Nice method for adding data to a Hashtable in such a way
+     * as to not get NPE's. The point being that if the
+     * value is null, Hashtable.put() will throw an exception.
+     * That blows in the case of this class cause you may want to 
+     * essentially treat put("Not Null", null ) == put("Not Null", "")
+     * We will still throw a NPE if the key is null cause that should
+     * never happen.
+     *
+     * !! Maybe a hashtable isn't the best option here and we
+     * should use a Map. This was taken from ObjectUtils.
+     */
+    public static final void safeAddToHashtable(Hashtable hash, Object key, Object value)
+        throws NullPointerException
+    {
+        if (value == null)
+        {
+            hash.put ( key, "" );
+        }
+        else
+        {
+           hash.put ( key, value );
+        }
     }
 }

@@ -55,25 +55,21 @@ package org.apache.fulcrum.security;
  */
 
 import org.apache.fulcrum.Service;
-
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.impl.db.entity.UserPeer;
-
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.AccessControlList;
-
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.TurbineSecurityException;
-
-import org.apache.turbine.services.db.util.Criteria;
+import org.apache.torque.util.Criteria;
 
 /**
  * The Security Service manages Users, Groups Roles and Permissions in the

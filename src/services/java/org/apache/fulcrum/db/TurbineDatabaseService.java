@@ -54,14 +54,14 @@ package org.apache.fulcrum.db;
  * <http://www.apache.org/>.
  */
  
-import org.apache.turbine.torque.Torque;
-import org.apache.turbine.torque.TorqueException;
 import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
-import org.apache.turbine.services.db.adapter.DB;
-import org.apache.turbine.services.db.map.DatabaseMap;
-import org.apache.turbine.services.db.pool.DBConnection;
 import org.apache.fulcrum.TurbineServices;
+import org.apache.torque.Torque;
+import org.apache.torque.TorqueException;
+import org.apache.torque.adapter.DB;
+import org.apache.torque.map.DatabaseMap;
+import org.apache.torque.pool.DBConnection;
 
 /**
  * Turbine's default implementation of {@link DatabaseService}.
