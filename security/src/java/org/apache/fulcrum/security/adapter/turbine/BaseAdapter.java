@@ -86,7 +86,7 @@ public class BaseAdapter
     {
         return getIdAsObj().intValue();
     }
-    /* (non-Javadoc)
+    /* 
      * @see org.apache.turbine.om.security.SecurityEntity#getIdAsObj()
      */
     public Integer getIdAsObj()
@@ -101,30 +101,30 @@ public class BaseAdapter
 	 {
 		throw new RuntimeException("Unsupported operation");
 	 }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.om.security.SecurityEntity#setId(int)
      */
     public void setId(int arg0)
     {
         throw new RuntimeException("Unsupported operation");
     }
-    /* (non-Javadoc)
-    	* @see org.apache.turbine.om.security.Group#save()
-    	*/
+    /* Not implemented.
+	 * @see org.apache.turbine.om.security.Group#save()
+	 */
     public void save() throws TurbineSecurityException
     {
         throw new RuntimeException("Unsupported operation");
     }
-    /* (non-Javadoc)
-    	* @see org.apache.turbine.om.security.Group#remove()
-    	*/
+    /* Not implemented.
+     * @see org.apache.turbine.om.security.Group#remove()
+     */
     public void remove() throws TurbineSecurityException
     {
         throw new RuntimeException("Unsupported operation");
     }
-    /* (non-Javadoc)
-    	* @see org.apache.turbine.om.security.Group#rename(java.lang.String)
-    	*/
+    /* Not implemented.
+	 * @see org.apache.turbine.om.security.Group#rename(java.lang.String)
+	 */
     public void rename(String arg0) throws TurbineSecurityException
     {
         throw new RuntimeException("Unsupported operation");

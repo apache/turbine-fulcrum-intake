@@ -83,6 +83,10 @@ import org.apache.turbine.util.security.RoleSet;
  * security.  However, it should actually use the "Turbine" model of 
  * security.  I didn't do that because I don't quite understand some of
  * the reasons behind the "Turbine" model.
+ * 
+ * All the methods that currently throw a not implemented RuntimeException
+ * could easily delegate their calls to the Fulcrum SecurityService.
+ * 
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
@@ -657,14 +661,15 @@ public class SecurityServiceAdapter extends BaseSecurityService
         PermissionSet permissionSet = getPermissions(new Criteria());
         return permissionSet.contains(permission);
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#getUserManager()
      */
     public UserManager getUserManager()
     {
         throw new RuntimeException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* This doesn't do anything.  You don't need to call this anymore
+     * as the SecurityService loads it's UserManager via Avalon.
      * @see org.apache.turbine.services.security.SecurityService#setUserManager(org.apache.turbine.services.security.UserManager)
      */
     public void setUserManager(UserManager arg0)
@@ -672,28 +677,28 @@ public class SecurityServiceAdapter extends BaseSecurityService
         //throw new RuntimeException("Not implemented");
         log.info("setUserManager() call being eaten by SecurityServiceAdapter");
     }
-    /* (non-Javadoc)
+    /* Returns whther an account exists for this username
      * @see org.apache.turbine.services.security.SecurityService#accountExists(java.lang.String)
      */
-    public boolean accountExists(String arg0) throws org.apache.turbine.util.security.DataBackendException
+    public boolean accountExists(String name) throws org.apache.turbine.util.security.DataBackendException
     {
         try
         {
-            return securityService.getUserManager().checkExists(arg0);
+            return securityService.getUserManager().checkExists(name);
         }
         catch (DataBackendException dbe)
         {
             throw new org.apache.turbine.util.security.DataBackendException(dbe.getMessage(), dbe);
         }
     }
-    /* (non-Javadoc)
+    /* 
      * @see org.apache.turbine.services.security.SecurityService#accountExists(org.apache.turbine.om.security.User)
      */
     public boolean accountExists(User arg0) throws org.apache.turbine.util.security.DataBackendException
     {
         return accountExists(arg0.getName());
     }
-    /* (non-Javadoc)
+    /* 
      * @see org.apache.turbine.services.security.SecurityService#getAuthenticatedUser(java.lang.String, java.lang.String)
      */
     public User getAuthenticatedUser(String arg0, String arg1)
@@ -719,7 +724,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
             throw new org.apache.turbine.util.security.DataBackendException(dbe.getMessage(), dbe);
         }
     }
-    /* (non-Javadoc)
+    /* 
      * @see org.apache.turbine.services.security.SecurityService#getUser(java.lang.String)
      */
     public User getUser(String arg0)
@@ -738,7 +743,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
             throw new org.apache.turbine.util.security.DataBackendException(dbe.getMessage(), dbe);
         }
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#getUsers(org.apache.torque.util.Criteria)
      */
     public User[] getUsers(Criteria arg0) throws org.apache.turbine.util.security.DataBackendException
@@ -752,7 +757,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
             throw new org.apache.turbine.util.security.DataBackendException(uee.getMessage(), uee);
         }
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#getUserList(org.apache.torque.util.Criteria)
      */
     public List getUserList(Criteria arg0) throws org.apache.turbine.util.security.DataBackendException
@@ -766,7 +771,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
             throw new org.apache.turbine.util.security.DataBackendException(uee.getMessage(), uee);
         }
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#saveUser(org.apache.turbine.om.security.User)
      */
     public void saveUser(User arg0)
@@ -774,7 +779,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
     {
         throw new org.apache.turbine.util.security.UnknownEntityException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#saveOnSessionUnbind(org.apache.turbine.om.security.User)
      */
     public void saveOnSessionUnbind(User arg0)
@@ -782,14 +787,14 @@ public class SecurityServiceAdapter extends BaseSecurityService
     {
         throw new org.apache.turbine.util.security.DataBackendException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#addUser(org.apache.turbine.om.security.User, java.lang.String)
      */
     public void addUser(User arg0, String arg1) throws org.apache.turbine.util.security.DataBackendException
     {
         throw new org.apache.turbine.util.security.DataBackendException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#removeUser(org.apache.turbine.om.security.User)
      */
     public void removeUser(User arg0)
@@ -797,28 +802,28 @@ public class SecurityServiceAdapter extends BaseSecurityService
     {
         throw new org.apache.turbine.util.security.DataBackendException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#encryptPassword(java.lang.String)
      */
     public String encryptPassword(String arg0)
     {
         throw new RuntimeException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#encryptPassword(java.lang.String, java.lang.String)
      */
     public String encryptPassword(String arg0, String arg1)
     {
         throw new RuntimeException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#checkPassword(java.lang.String, java.lang.String)
      */
     public boolean checkPassword(String arg0, String arg1)
     {
         throw new RuntimeException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#changePassword(org.apache.turbine.om.security.User, java.lang.String, java.lang.String)
      */
     public void changePassword(User arg0, String arg1, String arg2)
@@ -829,7 +834,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
     {
         throw new RuntimeException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#forcePassword(org.apache.turbine.om.security.User, java.lang.String)
      */
     public void forcePassword(User arg0, String arg1)
@@ -837,35 +842,35 @@ public class SecurityServiceAdapter extends BaseSecurityService
     {
         throw new RuntimeException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#getGlobalGroup()
      */
     public Group getGlobalGroup()
     {
         throw new RuntimeException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#getNewGroup(java.lang.String)
      */
     public Group getNewGroup(String arg0)
     {
         throw new RuntimeException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#getNewRole(java.lang.String)
      */
     public Role getNewRole(String arg0)
     {
         throw new RuntimeException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#getNewPermission(java.lang.String)
      */
     public Permission getNewPermission(String arg0)
     {
         throw new RuntimeException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#getGroup(java.lang.String)
      */
     public Group getGroup(String arg0)
@@ -873,7 +878,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
     {
         throw new RuntimeException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#getGroupByName(java.lang.String)
      */
     public Group getGroupByName(String arg0)
@@ -881,7 +886,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
     {
         throw new RuntimeException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#getGroupById(int)
      */
     public Group getGroupById(int arg0)
@@ -889,7 +894,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
     {
         throw new RuntimeException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#getRole(java.lang.String)
      */
     public Role getRole(String arg0)
@@ -897,7 +902,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
     {
         throw new RuntimeException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#getRoleByName(java.lang.String)
      */
     public Role getRoleByName(String arg0)
@@ -905,7 +910,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
     {
         throw new RuntimeException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#getRoleById(int)
      */
     public Role getRoleById(int arg0)
@@ -913,7 +918,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
     {
         throw new RuntimeException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#getPermission(java.lang.String)
      */
     public Permission getPermission(String arg0)
@@ -921,7 +926,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
     {
         throw new RuntimeException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#getPermissionByName(java.lang.String)
      */
     public Permission getPermissionByName(String arg0)
@@ -929,7 +934,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
     {
         throw new RuntimeException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#getPermissionById(int)
      */
     public Permission getPermissionById(int arg0)
@@ -937,7 +942,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
     {
         throw new RuntimeException("Not implemented");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.services.security.SecurityService#getAllGroups()
      */
     public GroupSet getAllGroups() throws org.apache.turbine.util.security.DataBackendException
@@ -960,7 +965,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
             throw new org.apache.turbine.util.security.DataBackendException(uee.getMessage(), uee);
         }
     }
-    /* (non-Javadoc)
+    /* Return all the roles from the Fulcrum Security Service.
      * @see org.apache.turbine.services.security.SecurityService#getAllRoles()
      */
     public RoleSet getAllRoles() throws org.apache.turbine.util.security.DataBackendException
@@ -983,7 +988,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
             throw new org.apache.turbine.util.security.DataBackendException(uee.getMessage(), uee);
         }
     }
-    /* (non-Javadoc)
+    /* Return all the permissions from the Fulcrum SecurityService.
      * @see org.apache.turbine.services.security.SecurityService#getAllPermissions()
      */
     public PermissionSet getAllPermissions() throws org.apache.turbine.util.security.DataBackendException

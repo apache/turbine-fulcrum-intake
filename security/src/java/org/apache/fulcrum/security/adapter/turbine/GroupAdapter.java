@@ -71,28 +71,28 @@ public class GroupAdapter extends BaseAdapter implements Group
 	public GroupAdapter(org.apache.fulcrum.security.entity.Group group){
 		super((SecurityEntity)group);
 	   }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.om.security.Group#grant(org.apache.turbine.om.security.User, org.apache.turbine.om.security.Role)
      */
     public void grant(User arg0, Role arg1) throws TurbineSecurityException
     {
         throw new RuntimeException("Unsupported operation");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.om.security.Group#grant(org.apache.turbine.om.security.User, org.apache.turbine.util.security.RoleSet)
      */
     public void grant(User arg0, RoleSet arg1) throws TurbineSecurityException
     {
         throw new RuntimeException("Unsupported operation");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.om.security.Group#revoke(org.apache.turbine.om.security.User, org.apache.turbine.om.security.Role)
      */
     public void revoke(User arg0, Role arg1) throws TurbineSecurityException
     {
         throw new RuntimeException("Unsupported operation");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.om.security.Group#revoke(org.apache.turbine.om.security.User, org.apache.turbine.util.security.RoleSet)
      */
     public void revoke(User arg0, RoleSet arg1) throws TurbineSecurityException

@@ -79,35 +79,35 @@ public class RoleAdapter extends BaseAdapter implements Role
     {
 		throw new RuntimeException("Unsupported operation");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.om.security.Role#create(java.lang.String)
      */
     public Role create(String arg0) throws TurbineSecurityException
     {
 		throw new RuntimeException("Unsupported operation");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.om.security.Role#grant(org.apache.turbine.om.security.Permission)
      */
     public void grant(Permission arg0) throws TurbineSecurityException
     {
 		throw new RuntimeException("Unsupported operation");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.om.security.Role#grant(org.apache.turbine.util.security.PermissionSet)
      */
     public void grant(PermissionSet arg0) throws TurbineSecurityException
     {
 		throw new RuntimeException("Unsupported operation");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.om.security.Role#revoke(org.apache.turbine.om.security.Permission)
      */
     public void revoke(Permission arg0) throws TurbineSecurityException
     {
 		throw new RuntimeException("Unsupported operation");
     }
-    /* (non-Javadoc)
+    /* Not implemented.
      * @see org.apache.turbine.om.security.Role#revoke(org.apache.turbine.util.security.PermissionSet)
      */
     public void revoke(PermissionSet arg0) throws TurbineSecurityException
