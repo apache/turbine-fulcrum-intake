@@ -506,6 +506,11 @@ public class TurbineLocalizationService
     {
         String value = null;
 
+        if (locale == null)
+        {
+            locale = getLocale((String) null);
+        }
+
         // Look for text in requested bundle.
         ResourceBundle rb = getBundle(bundleName, locale);
         value = getStringOrNull(rb, key);
@@ -525,6 +530,7 @@ public class TurbineLocalizationService
                     value = getStringOrNull(rb, key);
                     if (value != null)
                     {
+                        locale = rb.getLocale();
                         break;
                     }
                 }
