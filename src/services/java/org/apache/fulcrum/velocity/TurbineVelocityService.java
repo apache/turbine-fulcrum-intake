@@ -116,7 +116,7 @@ public class TurbineVelocityService
     /**
      * The prefix used for URIs which are of type <code>absolute</code>.
      */
-    private static final String ABSOLUTE_PREFIX = "absolute:";
+    private static final String ABSOLUTE_PREFIX = "file://";
 
     /**
      * Performs early initialization of this Turbine service.
