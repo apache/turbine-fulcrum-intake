@@ -26,7 +26,20 @@
         use Maven.
       </p>      
       <p>
-        From the root directory of the fulcrum project (where you checked
+      	You will need to install the Avalon Meta plugin and Merlin plugin's
+      	for Maven.  You can do this by:
+<source><![CDATA[
+
+$ maven plugin:download -DartifactId=avalon-meta-plugin -DgroupId=avalon-meta -Dversion=1.2
+
+$ maven plugin:download -DartifactId=merlin-plugin -DgroupId=merlin -Dversion=1.1-snapshot
+
+]]></source>
+		You should check the Ibiblio site or the Avalon site for the latest and greatest
+		plugins to use.
+      </p>
+      <p>
+        From the root directory of the Fulcrum project (where you checked
         out the code to or unpacked a source distribution), simply type 
         'maven' and press enter.  This will start a process that will
         build each component.  After the component is built, it will be 

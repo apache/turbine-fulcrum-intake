@@ -2,24 +2,23 @@
 F U L C R U M
 --------------------------------------------------------------------------
 
-Fulcrum is services framework.
-
-target/     Temporary directory for building the project.
-build/      Location of Ant build.xml and build.properties files.
-src/        Location of Java sources and Torque templates.
-xdocs/      Fulcrum documention in Anakia formatted tags.
-
+Fulcrum is a collection of components originally part of the Jakarta Turbine
+project that are suitable for use in any environment.  They are designed to
+be used within any Avalon compatible container.
 --------------------------------------------------------------------------
 B U I L D I N G
 --------------------------------------------------------------------------
-You must have ant version 1.4 or newer installed.
+You must have Maven RC1 or better.
 
 Building the Fulcrum from CVS is now very easy.  Fulcrum has been
 Maven-enabled.  Please refer to the Maven Getting Started document for
 instructions on building.  This document is available here:
 
-http://jakarta.apache.org/turbine/maven/getting-started.html
+http://maven.apache.org/start/index.html
 
-Note: you'll also need Torque's Maven plugin. It can be installed by
-checking out the jakarta-turbine-torque repository and running the
-command 'maven plugin:install' in the 'src/maven-plugin' directory.
+Note: you'll also need Avalon's Maven plugin as well as the Merlin
+plugin. It can be installed by running the plugin:download goal
+like this:
+
+$ maven plugin:download -DartifactId=avalon-meta-plugin -DgroupId=avalon-meta -Dversion=1.2
+$ maven plugin:download -DartifactId=merlin-plugin -DgroupId=merlin -Dversion=1.1-snapshot

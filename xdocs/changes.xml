@@ -9,6 +9,10 @@
   <body>
     <release version="Not applicable" date="">
      <action dev="epugh" type="add">
+     	Finished updating the conversion process.  All the components
+     	that Steve McConnell revamped are integrated and building.
+     </action>
+     <action dev="epugh" type="add">
         Changed multiproject site build so that instead of having a
         /docs/multiproject/fulcrum-XXX url, it is /docs/fulcrum-XXX
         url for all the components.  Allows us to leverage the multiproject
