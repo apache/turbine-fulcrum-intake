@@ -75,8 +75,8 @@
   import java.util.Date;
 
   //Turbine
-  import org.apache.turbine.modules.ScheduledJob;
-  import org.apache.turbine.services.schedule.JobEntry;
+  import org.apache.fulcrum.schedule.ScheduledJob;
+  import org.apache.fulcrum.schedule.JobEntry;
   import org.apache.turbine.util.Log;
 
   public class SimpleScheduledTask extends ScheduledJob
@@ -194,8 +194,8 @@
 
   //Turbine
   import org.apache.turbine.util.RunData;
-  import org.apache.turbine.services.schedule.JobEntry;
-  import org.apache.turbine.services.schedule.ScheduleService;
+  import org.apache.fulcrum.schedule.JobEntry;
+  import org.apache.fulcrum.schedule.ScheduleService;
   import org.apache.turbine.modules.actions.VelocityAction;
 
   public class SchedulerStart extends VelocityAction

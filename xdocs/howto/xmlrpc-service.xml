@@ -13,8 +13,8 @@
 <p>
   The XML-RPC service is the easiest way to add distributed
   computing and B2B capabilities to your Turbine web application.
-  The current implementation is based on the Helma XML-RPC
-  package which can be found <a href="http://classic.helma.at/hannes/xmlrpc/">
+  The current implementation is based on the Apache XML-RPC
+  package which can be found <a href="http://xml.apache.org/xmlrpc/">
   here</a>.
 </p>
 
@@ -24,7 +24,7 @@
   performs certain actions: for example you may have a FileHandler
   that is responsible for sending, getting and removing files from
   a remote server. For your convenience there is the <strong>
-  org.apache.turbine.services.xmlrpc.util.FileHandler</strong>
+  org.apache.fulcrum.xmlrpc.util.FileHandler</strong>
   class that will perform these operations for you. Please refer
   to the usage section below for more details.
 </p>
@@ -92,7 +92,7 @@ services.XmlRpcService.port=12345
 # that needs to be shared between Turbine applications
 # running on separate servers.
 
-services.XmlRpcService.handler.file = org.apache.turbine.services.xmlrpc.util.FileHandler
+services.XmlRpcService.handler.file = org.apache.fulcrum.xmlrpc.util.FileHandler
 services.XmlRpcService.paranoid = false
 services.XmlRpcService.acceptClient = 192.168.1.*
 services.XmlRpcService.denyClient =
@@ -106,7 +106,7 @@ services.XmlRpcService.denyClient =
 <p>
   The following example is taken from the class used to test the
   file transfer features of the XML-RPC service. The <strong>
-  org.apache.turbine.services.xmlrpc.util.FileHandlerTest</strong>
+  org.apache.fulcrum.xmlrpc.util.FileHandlerTest</strong>
   can be found in the CVS repository. Here is how the FileHandler
   might be used:
 </p>

@@ -67,7 +67,7 @@ services.JspService.buffer.size = 8192
 <section name="Usage">
 
 <p>
-Please refer to the org.apache.turbine.services.jsp classes for details
+Please refer to the org.apache.fulcrum.jsp classes for details
 on how to use this service.
 </p>
 

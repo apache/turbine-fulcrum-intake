@@ -94,8 +94,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.turbine.util.TurbineException;
-import org.apache.turbine.services.factory.Factory;
+import org.apache.fulcrum.ServiceException;
+import org.apache.fulcrum.factory.Factory;
 
 /**
  * A factory for instantiating DOM parsers.
@@ -111,7 +111,7 @@ public class DomBuilderFactory implements Factory
      * Initializes the factory.
      */
     public void init(String className)
-        throws TurbineException
+        throws ServiceException
     {
         factory = DocumentBuilderFactory.newInstance();
     }
@@ -120,7 +120,7 @@ public class DomBuilderFactory implements Factory
      * Gets a DocumentBuilder instance.
      */
     public Object getInstance()
-        throws TurbineException
+        throws ServiceException
     {
         try
         {
@@ -137,7 +137,7 @@ public class DomBuilderFactory implements Factory
      * The given loader is ignored.
      */
     public Object getInstance(ClassLoader loader)
-        throws TurbineException
+        throws ServiceException
     {
         return getInstance();
     }
@@ -148,7 +148,7 @@ public class DomBuilderFactory implements Factory
      */
     public Object getInstance(Object[] params,
                               String[] signature)
-        throws TurbineException
+        throws ServiceException
     {
         return getInstance();
     }
@@ -160,7 +160,7 @@ public class DomBuilderFactory implements Factory
     public Object getInstance(ClassLoader loader,
                               Object[] params,
                               String[] signature)
-        throws TurbineException
+        throws ServiceException
     {
         return getInstance();
     }

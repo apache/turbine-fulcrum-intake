@@ -104,8 +104,8 @@ the top of a .java file:
 </p>
 
 <source><![CDATA[
-import org.apache.turbine.services.intake.IntakeTool;
-import org.apache.turbine.services.intake.model.*;
+import org.apache.fulcrum.intake.IntakeTool;
+import org.apache.fulcrum.intake.model.*;
 ]]></source>
 
 </section>
