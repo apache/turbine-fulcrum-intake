@@ -607,17 +607,7 @@ public abstract class BaseSecurityService
     public GroupSet getAllGroups()
         throws DataBackendException
     {
-        if(allGroups == null)
-        {
-            synchronized(this)
-            {
-                if(allGroups == null)
-                {
-                    allGroups = getGroups( new Criteria() );
-                }
-            }
-        }
-        return allGroups;
+        return getGroups( new Criteria() );
     }
 
     /**
@@ -629,17 +619,7 @@ public abstract class BaseSecurityService
     public RoleSet getAllRoles()
         throws DataBackendException
     {
-        if(allRoles == null)
-        {
-            synchronized(this)
-            {
-                if(allRoles == null)
-                {
-                    allRoles = getRoles( new Criteria() );
-                }
-            }
-        }
-        return allRoles;
+        return getRoles( new Criteria() );
     }
 
     /**
@@ -651,16 +631,6 @@ public abstract class BaseSecurityService
     public PermissionSet getAllPermissions()
         throws DataBackendException
     {
-        if(allPermissions == null)
-        {
-            synchronized(this)
-            {
-                if(allPermissions == null)
-                {
-                    allPermissions = getPermissions( new Criteria() );
-                }
-            }
-        }
-        return allPermissions;
+        return getPermissions( new Criteria() );
     }
 }
