@@ -649,12 +649,4 @@ public class DefaultLocalizationService
         messageFormat.applyPattern(value);
         return messageFormat.format(args);
     }
-    /** 
-     * The name used to specify this component in TurbineResources.properties 
-     * @deprecated part of the pre-avalon compatibility layer
-     */
-    protected String getName()
-    {
-        return "LocalizationService";
-    }
 }
