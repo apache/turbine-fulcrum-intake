@@ -63,8 +63,6 @@ import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
 
-import org.apache.fulcrum.security.impl.db.entity.UserPeer;
-
 import org.apache.fulcrum.security.util.AccessControlList;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
@@ -72,7 +70,6 @@ import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.RoleSet;
-import org.apache.fulcrum.security.util.TurbineSecurityException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 import org.apache.torque.util.Criteria;
@@ -161,7 +158,7 @@ public interface SecurityService
      * @throws UnknownEntityException if the system's implementation of User
      *         interface could not be determined.
      */
-    public Class getUserClass()
+    Class getUserClass()
         throws UnknownEntityException;
 
     /**
@@ -173,7 +170,7 @@ public interface SecurityService
      * @return an object implementing User interface.
      * @throws UnknownEntityException if the object could not be instantiated.
      */
-    public User getUserInstance()
+    User getUserInstance()
         throws UnknownEntityException;
 
     /**
@@ -182,10 +179,12 @@ public interface SecurityService
      * This method calls getUserClass, and then creates a new object using
      * the default constructor.
      *
+     * @param userName The name of the user.
+     *
      * @return an object implementing User interface.
      * @throws UnknownEntityException if the object could not be instantiated.
      */
-    public User getUserInstance(String userName)
+    User getUserInstance(String userName)
         throws UnknownEntityException;
 
     /**
@@ -196,7 +195,7 @@ public interface SecurityService
      * @throws UnknownEntityException if the system's implementation of Group
      *         interface could not be determined.
      */
-    public Class getGroupClass()
+    Class getGroupClass()
         throws UnknownEntityException;
 
     /**
@@ -208,7 +207,7 @@ public interface SecurityService
      * @return an object implementing Group interface.
      * @throws UnknownEntityException if the object could not be instantiated.
      */
-    public Group getGroupInstance()
+    Group getGroupInstance()
         throws UnknownEntityException;
 
     /**
@@ -217,10 +216,12 @@ public interface SecurityService
      * This method calls getGroupClass, and then creates a new object using
      * the default constructor.
      *
+     * @param groupName The name of the Group
+     *
      * @return an object implementing Group interface.
      * @throws UnknownEntityException if the object could not be instantiated.
      */
-    public Group getGroupInstance( String groupName )
+    Group getGroupInstance(String groupName)
         throws UnknownEntityException;
 
     /**
@@ -231,7 +232,7 @@ public interface SecurityService
      * @throws UnknownEntityException if the system's implementation of Permission
      *         interface could not be determined.
      */
-    public Class getPermissionClass()
+    Class getPermissionClass()
         throws UnknownEntityException;
 
     /**
@@ -243,7 +244,7 @@ public interface SecurityService
      * @return an object implementing Permission interface.
      * @throws UnknownEntityException if the object could not be instantiated.
      */
-    public Permission getPermissionInstance()
+    Permission getPermissionInstance()
         throws UnknownEntityException;
 
     /**
@@ -252,10 +253,12 @@ public interface SecurityService
      * This method calls getPermissionClass, and then creates a new object using
      * the default constructor.
      *
+     * @param permName The name of the Permission
+     *
      * @return an object implementing Permission interface.
      * @throws UnknownEntityException if the object could not be instantiated.
      */
-    public Permission getPermissionInstance(String permName)
+    Permission getPermissionInstance(String permName)
         throws UnknownEntityException;
 
     /**
@@ -266,7 +269,7 @@ public interface SecurityService
      * @throws UnknownEntityException if the system's implementation of Role
      *         interface could not be determined.
      */
-    public Class getRoleClass()
+    Class getRoleClass()
         throws UnknownEntityException;
 
     /**
@@ -278,7 +281,7 @@ public interface SecurityService
      * @return an object implementing Role interface.
      * @throws UnknownEntityException if the object could not be instantiated.
      */
-    public Role getRoleInstance()
+    Role getRoleInstance()
         throws UnknownEntityException;
 
     /**
@@ -287,10 +290,12 @@ public interface SecurityService
      * This method calls getRoleClass, and then creates a new object using
      * the default constructor.
      *
+     * @param roleName The name of the Role
+     *
      * @return an object implementing Role interface.
      * @throws UnknownEntityException if the object could not be instantiated.
      */
-    public Role getRoleInstance(String roleName)
+    Role getRoleInstance(String roleName)
         throws UnknownEntityException;
 
     /**
@@ -301,7 +306,7 @@ public interface SecurityService
      * @throws UnknownEntityException if the system's implementation of AccessControlList
      *         interface could not be determined.
      */
-    public Class getAclClass()
+    Class getAclClass()
         throws UnknownEntityException;
 
     /**
@@ -316,7 +321,7 @@ public interface SecurityService
      * @return an object implementing ACL interface.
      * @throws UnknownEntityException if the object could not be instantiated.
      */
-    public AccessControlList getAclInstance(Map roles, Map permissions)
+    AccessControlList getAclInstance(Map roles, Map permissions)
         throws UnknownEntityException;
 
     /**
@@ -324,23 +329,26 @@ public interface SecurityService
      *
      * The login name is used for looking up the account.
      *
-     * @param user The user to be checked.
+     * @param userName The user to be checked.
+     *
      * @return true if the specified account exists
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      */
-    public boolean accountExists( String username )
+    boolean accountExists(String userName)
         throws DataBackendException;
 
     /**
      * Check whether a specified user's account exists.
+     * An User object is used for looking up the account.
      *
-     * The login name is used for looking up the account.
+     * @param user The user object to be checked.
      *
-     * @param usename The name of the user to be checked.
      * @return true if the specified account exists
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      */
-    public boolean accountExists( User user )
+    boolean accountExists(User user)
         throws DataBackendException;
 
     /**
@@ -353,7 +361,7 @@ public interface SecurityService
      * @throws UnknownEntityException if user account is not present.
      * @throws PasswordMismatchException if the supplied password was incorrect.
      */
-    public User getAuthenticatedUser( String username, String password )
+    User getAuthenticatedUser(String username, String password)
         throws DataBackendException, UnknownEntityException, PasswordMismatchException;
 
     /**
@@ -364,7 +372,7 @@ public interface SecurityService
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if user account is not present.
      */
-    public User getUser( String username )
+    User getUser(String username)
         throws DataBackendException, UnknownEntityException;
 
     /**
@@ -381,7 +389,7 @@ public interface SecurityService
      * @throws DataBackendException if there is a problem accessing the
      *         storage.
      */
-    public User[] getUsers( Criteria criteria )
+    User[] getUsers(Criteria criteria)
         throws DataBackendException;
 
     /**
@@ -391,19 +399,21 @@ public interface SecurityService
      * @throws UnknownEntityException if the anonymous User object couldn't be
      *         constructed.
      */
-    public User getAnonymousUser()
+    User getAnonymousUser()
         throws UnknownEntityException;
 
     /**
      * Saves User's data in the permanent storage. The user account is required
      * to exist in the storage.
      *
+     * @param user The user object to save.
+     *
      * @exception UnknownEntityException if the user's account does not
      *            exist in the database.
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public void saveUser( User user )
+    void saveUser(User user)
         throws UnknownEntityException, DataBackendException;
 
     /*-----------------------------------------------------------------------
@@ -414,10 +424,12 @@ public interface SecurityService
      * Creates new user account with specified attributes.
      *
      * @param user the object describing account to be created.
+     * @param password The password to use.
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws EntityExistsException if the user account already exists.
      */
-    public void addUser( User user, String password )
+    void addUser(User user, String password)
         throws DataBackendException, EntityExistsException;
 
     /**
@@ -427,7 +439,7 @@ public interface SecurityService
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the user account is not present.
      */
-    public void removeUser( User user )
+    void removeUser(User user)
         throws DataBackendException, UnknownEntityException;
 
     /*-----------------------------------------------------------------------
@@ -444,7 +456,7 @@ public interface SecurityService
      * @param password the password to process
      * @return processed password
      */
-    public String encryptPassword( String password );
+    String encryptPassword(String password);
 
     /**
      * Change the password for an User.
@@ -459,7 +471,7 @@ public interface SecurityService
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public void changePassword( User user, String oldPassword, String newPassword )
+    void changePassword(User user, String oldPassword, String newPassword)
         throws PasswordMismatchException, UnknownEntityException,
                DataBackendException;
 
@@ -478,7 +490,7 @@ public interface SecurityService
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public void forcePassword( User user, String password )
+    void forcePassword(User user, String password)
         throws UnknownEntityException, DataBackendException;
 
     /*-----------------------------------------------------------------------
@@ -489,20 +501,26 @@ public interface SecurityService
      * Constructs an AccessControlList for a specific user.
      *
      * @param user the user for whom the AccessControlList are to be retrieved
+     *
+     * @return A new AccessControlList object.
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if user account is not present.
      */
-    public AccessControlList getACL( User user )
+    AccessControlList getACL(User user)
         throws DataBackendException, UnknownEntityException;
 
     /**
      * Retrieves all permissions associated with a role.
      *
      * @param role the role name, for which the permissions are to be retrieved.
+     *
+     * @return A Permission set for the Role.
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the role is not present.
      */
-    public PermissionSet getPermissions( Role role )
+    PermissionSet getPermissions(Role role)
         throws DataBackendException, UnknownEntityException;
 
     /*-----------------------------------------------------------------------
@@ -512,25 +530,25 @@ public interface SecurityService
     /**
      * Grant an User a Role in a Group.
      *
-     * @param User the user.
-     * @param Group the group.
-     * @param Role the role.
+     * @param user the user.
+     * @param group the group.
+     * @param role the role.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if user account, group or role is not present.
      */
-    public void grant( User user, Group group, Role role )
+    void grant(User user, Group group, Role role)
         throws DataBackendException, UnknownEntityException;
 
     /**
      * Revoke a Role in a Group from an User.
      *
-     * @param User the user.
-     * @param Group the group.
-     * @param Role the role.
+     * @param user the user.
+     * @param group the group.
+     * @param role the role.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if user account, group or role is not present.
      */
-    public void revoke( User user, Group group, Role role )
+    void revoke(User user, Group group, Role role)
         throws DataBackendException, UnknownEntityException;
 
     /**
@@ -542,7 +560,7 @@ public interface SecurityService
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the account is not present.
      */
-    public void revokeAll( User user )
+    void revokeAll(User user)
         throws DataBackendException, UnknownEntityException;
 
     /**
@@ -553,7 +571,7 @@ public interface SecurityService
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if role or permission is not present.
      */
-    public void grant( Role role, Permission permission )
+    void grant(Role role, Permission permission)
         throws DataBackendException, UnknownEntityException;
 
     /**
@@ -564,7 +582,7 @@ public interface SecurityService
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if role or permission is not present.
      */
-    public void revoke( Role role, Permission permission )
+    void revoke(Role role, Permission permission)
         throws DataBackendException, UnknownEntityException;
 
     /**
@@ -576,7 +594,7 @@ public interface SecurityService
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws  UnknownEntityException if the Role is not present.
      */
-    public void revokeAll( Role role )
+    void revokeAll(Role role)
         throws DataBackendException, UnknownEntityException;
 
     /*-----------------------------------------------------------------------
@@ -587,77 +605,104 @@ public interface SecurityService
      * Provides a reference to the Group object that represents the
      * <a href="#global">global group</a>.
      *
-     * @return a Group object that represents the global group.
+     * @return A Group object that represents the global group.
      */
-    public Group getGlobalGroup();
+    Group getGlobalGroup();
 
     /**
      * @deprecated Use getGroupInstance(String name) instead.
      */
-    public Group getNewGroup( String groupName );
+    Group getNewGroup(String groupName);
 
     /**
      * @deprecated Use getRoleInstance(String name) instead.
      */
-    public Role getNewRole( String roleName );
+    Role getNewRole(String roleName);
 
     /**
      * @deprecated Use getPermissionInstance(String name) instead.
      */
-    public Permission getNewPermission( String permissionName );
+    Permission getNewPermission(String permissionName);
 
     /**
      * Retrieve a Group object with specified name.
      *
      * @param name the name of the Group.
+     *
      * @return an object representing the Group with specified name.
+     *
+     * @exception UnknownEntityException if the permission does not
+     *            exist in the database.
+     * @exception DataBackendException if there is a problem accessing the
+     *            storage.
      */
-    public Group getGroup( String name )
+    Group getGroup(String name)
         throws DataBackendException, UnknownEntityException;
 
     /**
      * Retrieve a Role object with specified name.
      *
      * @param name the name of the Role.
+     *
      * @return an object representing the Role with specified name.
+     *
+     * @exception UnknownEntityException if the permission does not
+     *            exist in the database.
+     * @exception DataBackendException if there is a problem accessing the
+     *            storage.
      */
-    public Role getRole( String name )
+    Role getRole(String name)
         throws DataBackendException, UnknownEntityException;
 
     /**
      * Retrieve a Permission object with specified name.
      *
      * @param name the name of the Permission.
+     *
      * @return an object representing the Permission with specified name.
+     *
+     * @exception UnknownEntityException if the permission does not
+     *            exist in the database.
+     * @exception DataBackendException if there is a problem accessing the
+     *            storage.
      */
-    public Permission getPermission( String name )
+    Permission getPermission(String name)
         throws DataBackendException, UnknownEntityException;
 
     /**
      * Retrieve a set of Groups that meet the specified Criteria.
      *
-     * @param a Criteria of Group selection.
+     * @param criteria a Criteria of Group selection.
      * @return a set of Groups that meet the specified Criteria.
+     *
+     * @exception DataBackendException if there is a problem accessing the
+     *            storage.
      */
-    public GroupSet getGroups( Criteria criteria )
+    GroupSet getGroups(Criteria criteria)
         throws DataBackendException;
 
     /**
      * Retrieve a set of Roles that meet the specified Criteria.
      *
-     * @param a Criteria of Roles selection.
+     * @param criteria a Criteria of Roles selection.
      * @return a set of Roles that meet the specified Criteria.
+     *
+     * @exception DataBackendException if there is a problem accessing the
+     *            storage.
      */
-    public RoleSet getRoles( Criteria criteria )
+    RoleSet getRoles(Criteria criteria)
         throws DataBackendException;
 
     /**
      * Retrieve a set of Permissions that meet the specified Criteria.
      *
-     * @param a Criteria of Permissions selection.
+     * @param criteria a Criteria of Permissions selection.
      * @return a set of Permissions that meet the specified Criteria.
+     *
+     * @exception DataBackendException if there is a problem accessing the
+     *            storage.
      */
-    public PermissionSet getPermissions( Criteria criteria )
+    PermissionSet getPermissions(Criteria criteria)
         throws DataBackendException;
 
     /**
@@ -666,7 +711,7 @@ public interface SecurityService
      * @return the names of all groups defined in the system.
      * @throws DataBackendException if there was an error accessing the data backend.
      */
-    public GroupSet getAllGroups()
+    GroupSet getAllGroups()
         throws DataBackendException;
 
     /**
@@ -675,7 +720,7 @@ public interface SecurityService
      * @return the names of all roles defined in the system.
      * @throws DataBackendException if there was an error accessing the data backend.
      */
-    public RoleSet getAllRoles()
+    RoleSet getAllRoles()
         throws DataBackendException;
 
     /**
@@ -684,16 +729,16 @@ public interface SecurityService
      * @return the names of all roles defined in the system.
      * @throws DataBackendException if there was an error accessing the data backend.
      */
-    public PermissionSet getAllPermissions()
+    PermissionSet getAllPermissions()
         throws DataBackendException;
-     /**
+    /**
      * Stores Group's attributes. The Groups is required to exist in the system.
      *
      * @param group The Group to be stored.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the group does not exist.
      */
-    public void saveGroup( Group group )
+    void saveGroup(Group group)
         throws DataBackendException, UnknownEntityException;
 
     /**
@@ -703,7 +748,7 @@ public interface SecurityService
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the role does not exist.
      */
-    public void saveRole( Role role )
+    void saveRole(Role role)
         throws DataBackendException, UnknownEntityException;
 
     /**
@@ -713,7 +758,7 @@ public interface SecurityService
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the permission does not exist.
      */
-    public void savePermission( Permission permission )
+    void savePermission(Permission permission)
         throws DataBackendException, UnknownEntityException;
 
     /*-----------------------------------------------------------------------
@@ -728,91 +773,91 @@ public interface SecurityService
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws EntityExistsException if the group already exists.
      */
-    public Group addGroup( Group group )
+    Group addGroup(Group group)
         throws DataBackendException, EntityExistsException;
 
     /**
      * Creates a new role with specified attributes.
      *
-     * @param group the objects describing the group to be created.
+     * @param role The object describing the role to be created.
      * @return the new Role object.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws EntityExistsException if the role already exists.
      */
-    public Role addRole( Role role )
+    Role addRole(Role role)
         throws DataBackendException, EntityExistsException;
 
     /**
      * Creates a new permission with specified attributes.
      *
-     * @param group the objects describing the group to be created.
+     * @param permission The object describing the permission to be created.
      * @return the new Permission object.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws EntityExistsException if the permission already exists.
      */
-    public Permission addPermission( Permission permission )
+    Permission addPermission(Permission permission)
         throws DataBackendException, EntityExistsException;
 
     /**
      * Removes a Group from the system.
      *
-     * @param the object describing group to be removed.
+     * @param group The object describing group to be removed.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the group does not exist.
      */
-    public void removeGroup( Group group )
+    void removeGroup(Group group)
         throws DataBackendException, UnknownEntityException;
 
     /**
      * Removes a Role from the system.
      *
-     * @param the object describing role to be removed.
+     * @param role The object describing role to be removed.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the role does not exist.
      */
-    public void removeRole( Role role )
+    void removeRole(Role role)
         throws DataBackendException, UnknownEntityException;
 
     /**
      * Removes a Permission from the system.
      *
-     * @param the object describing permission to be removed.
+     * @param permission The object describing permission to be removed.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the permission does not exist.
      */
-    public void removePermission( Permission permission )
+    void removePermission(Permission permission)
         throws DataBackendException, UnknownEntityException;
 
     /**
      * Renames an existing Group.
      *
-     * @param the object describing the group to be renamed.
+     * @param group The object describing the group to be renamed.
      * @param name the new name for the group.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the group does not exist.
      */
-    public void renameGroup( Group group, String name )
+    void renameGroup(Group group, String name)
         throws DataBackendException, UnknownEntityException;
 
     /**
      * Renames an existing Role.
      *
-     * @param the object describing the role to be renamed.
+     * @param role The object describing the role to be renamed.
      * @param name the new name for the role.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the role does not exist.
      */
-    public void renameRole( Role role, String name )
+    void renameRole(Role role, String name)
         throws DataBackendException, UnknownEntityException;
 
     /**
      * Renames an existing Permission.
      *
-     * @param the object describing the permission to be renamed.
+     * @param permission The object describing the permission to be renamed.
      * @param name the new name for the permission.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the permission does not exist.
      */
-    public void renamePermission( Permission permission, String name )
+    void renamePermission(Permission permission, String name)
         throws DataBackendException, UnknownEntityException;
 }

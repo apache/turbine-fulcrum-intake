@@ -56,7 +56,6 @@ package org.apache.fulcrum.security.util;
 
 import java.io.Serializable;
 
-import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeSet;
@@ -106,19 +105,20 @@ public class PermissionSet implements Serializable
     /**
      * Adds a Permission to this PermissionSet.
      *
-     * @param group A Permission.
+     * @param permission A Permission.
      * @return True if Permission was added; false if PermissionSet
      * already contained the Permission.
      */
     public boolean add(Permission permission)
     {
-        return set.add( (Object)permission );
+        return set.add((Object) permission);
     }
 
     /**
      * Adds the Permissions in a Collection to this PermissionSet.
      *
-     * @param permissionSet A Collection of Permissions.
+     * @param permissions A Collection of Permissions.
+     *
      * @return True if this PermissionSet changed as a result; false
      * if no change to this PermissionSet occurred (this PermissionSet
      * already contained all members of the added PermissionSet).
@@ -132,26 +132,27 @@ public class PermissionSet implements Serializable
      * Adds the Permissions in another PermissionSet to this
      * PermissionSet.
      *
-     * @param groupSet A PermissionSet.
+     * @param permissionSet A PermissionSet.
+     *
      * @return True if this PermissionSet changed as a result; false
      * if no change to this PermissionSet occurred (this PermissionSet
      * already contained all members of the added PermissionSet).
      */
     public boolean add(PermissionSet permissionSet)
     {
-        return set.addAll(  (Collection) permissionSet.set );
+        return set.addAll((Collection) permissionSet.set);
     }
 
     /**
      * Removes a Permission from this PermissionSet.
      *
-     * @param group A Permission.
+     * @param permission A Permission.
      * @return True if this PermissionSet contained the Permission
      * before it was removed.
      */
     public boolean remove(Permission permission)
     {
-        return set.remove( (Object)permission );
+        return set.remove((Object) permission);
     }
 
     /**
@@ -165,31 +166,32 @@ public class PermissionSet implements Serializable
     /**
      * Checks whether this PermissionSet contains a Permission.
      *
-     * @param group A Permission.
+     * @param permission A Permission.
      * @return True if this PermissionSet contains the Permission,
      * false otherwise.
      */
     public boolean contains(Permission permission)
     {
-        return set.contains( (Object)permission );
+        return set.contains((Object) permission);
     }
 
     /**
      * Compares by name a Permission with the Permissions contained in
      * this PermissionSet.
      *
-     * @param groupName Name of Permission.
+     * @param permissionName Name of Permission.
+     *
      * @return True if argument matched a Permission in this
      * PermissionSet; false if no match.
      */
     public boolean contains(String permissionName)
     {
         Iterator iter = set.iterator();
-        while ( iter.hasNext() )
+        while (iter.hasNext())
         {
-            Permission permission = (Permission)iter.next();
-            if ( permissionName != null  &&
-                 permissionName.equals( ((SecurityEntity)permission).getName() ) )
+            Permission permission = (Permission) iter.next();
+            if (permissionName != null  &&
+                 permissionName.equals(((SecurityEntity) permission).getName()))
             {
                 return true;
             }
@@ -201,18 +203,18 @@ public class PermissionSet implements Serializable
      * Returns a Permission with the given name, if it is contained in
      * this PermissionSet.
      *
-     * @param groupName Name of Permission.
+     * @param permissionName Name of Permission.
      * @return Permission if argument matched a Permission in this
      * PermissionSet; null if no match.
      */
     public Permission getPermission(String permissionName)
     {
         Iterator iter = set.iterator();
-        while ( iter.hasNext() )
+        while (iter.hasNext())
         {
-            Permission permission = (Permission)iter.next();
-            if ( permissionName != null  &&
-                 permissionName.equals( ((SecurityEntity)permission).getName() ) )
+            Permission permission = (Permission) iter.next();
+            if (permissionName != null  &&
+                 permissionName.equals(((SecurityEntity) permission).getName()))
             {
                 return permission;
             }
@@ -221,17 +223,19 @@ public class PermissionSet implements Serializable
     }
 
     /**
-     * Returns an Permissions[] of Permissions in this PermissionSet.
+     * Returns an Permissions [] of Permissions in this PermissionSet.
      *
-     * @return A Permission[].
+     * @return A Permission [].
      */
-    public Permission[] getPermissionsArray()
+    public Permission [] getPermissionsArray()
     {
-        return (Permission[])set.toArray(new Permission[0]);
+        return (Permission []) set.toArray(new Permission[0]);
     }
 
     /**
      * Returns an Iterator for Permissions in this PermissionSet.
+     *
+     * @return An Iterator for this Permission Set.
      */
     public Iterator elements()
     {
@@ -250,14 +254,16 @@ public class PermissionSet implements Serializable
 
     /**
      * list of permission names in this set
+     *
+     * @return A String representation of this Permission Set.
      */
     public String toString()
     {
-        StringBuffer sbuf = new StringBuffer(12*size());
+        StringBuffer sbuf = new StringBuffer(12 * size());
         Iterator i = set.iterator();
-        while ( i.hasNext() ) 
+        while (i.hasNext()) 
         {
-            sbuf.append(((Permission)i.next()).getName())
+            sbuf.append(((Permission) i.next()).getName())
                 .append(", ");
         }
         return sbuf.toString();

@@ -56,13 +56,11 @@ package org.apache.fulcrum.security.util;
 
 import java.io.Serializable;
 
-import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeSet;
 
 import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.entity.SecurityEntity;
 
 /**
  * This class represents a set of Roles.  It makes it easy to build a
@@ -111,13 +109,14 @@ public class RoleSet implements Serializable
      */
     public boolean add(Role role)
     {
-        return set.add( (Object)role );
+        return set.add((Object) role);
     }
 
     /**
      * Adds the Roles in a Collection to this RoleSet.
      *
-     * @param roleSet A Collection of Roles.
+     * @param roles A Collection of Roles.
+     *
      * @return True if this RoleSet changed as a result; false
      * if no change to this RoleSet occurred (this RoleSet
      * already contained all members of the added RoleSet).
@@ -137,7 +136,7 @@ public class RoleSet implements Serializable
      */
     public boolean add(RoleSet roleSet)
     {
-        return set.add((Collection)roleSet.set);
+        return set.add((Collection) roleSet.set);
     }
 
     /**
@@ -149,7 +148,7 @@ public class RoleSet implements Serializable
      */
     public boolean remove(Role role)
     {
-        return set.remove( (Object)role );
+        return set.remove((Object) role);
     }
 
     /**
@@ -169,7 +168,7 @@ public class RoleSet implements Serializable
      */
     public boolean contains(Role role)
     {
-        return set.contains( (Object)role );
+        return set.contains((Object) role);
     }
 
     /**
@@ -183,11 +182,11 @@ public class RoleSet implements Serializable
     public boolean contains(String roleName)
     {
         Iterator iter = set.iterator();
-        while ( iter.hasNext() )
+        while (iter.hasNext())
         {
-            Role role = (Role)iter.next();
-            if ( roleName != null  &&
-                 roleName.equals( role.getName() ) )
+            Role role = (Role) iter.next();
+            if (roleName != null  &&
+                roleName.equals(role.getName()))
             {
                 return true;
             }
@@ -206,11 +205,11 @@ public class RoleSet implements Serializable
     public Role getRole(String roleName)
     {
         Iterator iter = set.iterator();
-        while ( iter.hasNext() )
+        while (iter.hasNext())
         {
-            Role role = (Role)iter.next();
-            if ( roleName != null  &&
-                 roleName.equals( role.getName() ) )
+            Role role = (Role) iter.next();
+            if (roleName != null  &&
+                roleName.equals(role.getName()))
             {
                 return role;
             }
@@ -219,17 +218,19 @@ public class RoleSet implements Serializable
     }
 
     /**
-     * Returns an Roles[] of Roles in this RoleSet.
+     * Returns an Roles [] of Roles in this RoleSet.
      *
-     * @return A Role[].
+     * @return A Role [].
      */
-    public Role[] getRolesArray()
+    public Role [] getRolesArray()
     {
-        return (Role[])set.toArray(new Role[0]);
+        return (Role []) set.toArray(new Role[0]);
     }
 
     /**
      * Returns an Iterator for Roles in this RoleSet.
+     *
+     * @return An iterator for the RoleSet
      */
     public Iterator elements()
     {
@@ -248,14 +249,16 @@ public class RoleSet implements Serializable
 
     /**
      * list of role names in this set
+     *
+     * @return The string representation of this RoleSet.
      */
     public String toString()
     {
-        StringBuffer sbuf = new StringBuffer(12*size());
+        StringBuffer sbuf = new StringBuffer(12 * size());
         Iterator i = set.iterator();
-        while ( i.hasNext() ) 
+        while (i.hasNext()) 
         {
-            sbuf.append(((Role)i.next()).getName())
+            sbuf.append(((Role) i.next()).getName())
                 .append(", ");
         }
         return sbuf.toString();

@@ -66,12 +66,16 @@ public interface SessionBindingListener
     /**
      * Notifies the object that it is being bound to a session and
      * identifies the session.
+     *
+     * @param event A SessionBindingEvent object.
      */
-    public void valueBound(SessionBindingEvent event);
+    void valueBound(SessionBindingEvent event);
 
     /**
      * Notifies the object that it is being unbound from a session and
      * identifies the session.
+     *
+     * @param event A SessionBindingEvent object.
      */
-    public void valueUnbound(SessionBindingEvent event);
+    void valueUnbound(SessionBindingEvent event);
 }

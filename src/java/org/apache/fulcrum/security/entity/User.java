@@ -54,7 +54,6 @@ package org.apache.fulcrum.security.entity;
  * <http://www.apache.org/>.
  */
 
-import java.util.Date;
 import java.util.Hashtable;
 import java.io.Serializable;
 
@@ -114,14 +113,14 @@ public interface User
      *
      * @return The access counter for the user.
      */
-    public int getAccessCounter();
+    int getAccessCounter();
 
     /**
      * Gets the access counter for a user during a session.
      *
      * @return The access counter for the user for the session.
      */
-    public int getAccessCounterForSession();
+    int getAccessCounterForSession();
 
     /**
      * Gets the last access date for this User. This is the last time
@@ -129,7 +128,7 @@ public interface User
      *
      * @return A Java Date with the last access date for the user.
      */
-    public java.util.Date getLastAccessDate();
+    java.util.Date getLastAccessDate();
 
     /**
      * Gets the create date for this User.  This is the time at which
@@ -137,14 +136,14 @@ public interface User
      *
      * @return A Java Date with the date of creation for the user.
      */
-    public java.util.Date getCreateDate();
+    java.util.Date getCreateDate();
 
     /**
      * Returns the user's last login date.
      *
      * @return A Java Date with the last login date for the user.
      */
-    public java.util.Date getLastLogin();
+    java.util.Date getLastLogin();
 
     /**
      * Returns the user's password. This method should not be used by
@@ -158,7 +157,7 @@ public interface User
      *
      * @return A String with the password for the user.
      */
-    public String getPassword();
+    String getPassword();
 
     /**
      * Get an object from permanent storage.
@@ -166,7 +165,7 @@ public interface User
      * @param name The object's name.
      * @return An Object with the given name.
      */
-    public Object getPerm ( String name );
+    Object getPerm(String name);
 
     /**
      * Get an object from permanent storage; return default if value
@@ -176,7 +175,7 @@ public interface User
      * @param def A default value to return.
      * @return An Object with the given name.
      */
-    public Object getPerm ( String name, Object def );
+    Object getPerm(String name, Object def);
 
     /**
      * This should only be used in the case where we want to save the
@@ -184,7 +183,7 @@ public interface User
      *
      * @return A Hashtable.
      */
-    public Hashtable getPermStorage();
+    Hashtable getPermStorage();
 
     /**
      * This should only be used in the case where we want to save the
@@ -192,7 +191,7 @@ public interface User
      *
      * @return A Hashtable.
      */
-    public Hashtable getTempStorage();
+    Hashtable getTempStorage();
 
     /**
      * Get an object from temporary storage.
@@ -200,7 +199,7 @@ public interface User
      * @param name The object's name.
      * @return An Object with the given name.
      */
-    public Object getTemp ( String name );
+    Object getTemp(String name);
 
     /**
      * Get an object from temporary storage; return default if value
@@ -210,14 +209,14 @@ public interface User
      * @param def A default value to return.
      * @return An Object with the given name.
      */
-    public Object getTemp ( String name, Object def );
+    Object getTemp(String name, Object def);
 
     /**
      * Returns the username for this user.
      *
      * @return A String with the username.
      */
-    public String getUserName();
+    String getUserName();
 
     /**
      * Returns the first name for this user.
@@ -225,21 +224,21 @@ public interface User
      * @return A String with the user's first name.
      */
 
-    public String getFirstName();
+    String getFirstName();
 
     /**
      * Returns the last name for this user.
      *
      * @return A String with the user's last name.
      */
-    public String getLastName();
+    String getLastName();
 
     /**
      * Returns the email address for this user.
      *
      * @return A String with the user's email address.
      */
-    public String getEmail();
+    String getEmail();
 
     /**
      * This sets whether or not someone has logged in.  hasLoggedIn()
@@ -247,24 +246,24 @@ public interface User
      *
      * @param value Whether someone has logged in or not.
      */
-    public void setHasLoggedIn(Boolean value);
+    void setHasLoggedIn(Boolean value);
 
     /**
      * The user is considered logged in if they have not timed out.
      *
      * @return True if the user has logged in.
      */
-    public boolean hasLoggedIn();
+    boolean hasLoggedIn();
 
     /**
      * Increments the permanent hit counter for the user.
      */
-    public void incrementAccessCounter();
+    void incrementAccessCounter();
 
     /**
      * Increments the session hit counter for the user.
      */
-    public void incrementAccessCounterForSession();
+    void incrementAccessCounterForSession();
 
     /**
      * Remove an object from temporary storage and return the object.
@@ -272,14 +271,14 @@ public interface User
      * @param name The name of the object to remove.
      * @return An Object.
      */
-    public Object removeTemp ( String name );
+    Object removeTemp(String name);
 
     /**
      * Sets the access counter for a user, saved in perm storage.
      *
      * @param cnt The new count.
      */
-    public void setAccessCounter(int cnt);
+    void setAccessCounter(int cnt);
 
     /**
      * Sets the session access counter for a user, saved in temp
@@ -287,20 +286,20 @@ public interface User
      *
      * @param cnt The new count.
      */
-    public void setAccessCounterForSession(int cnt);
+    void setAccessCounterForSession(int cnt);
 
     /**
      * Sets the last access date for this User. This is the last time
      * that the user object was referenced.
      */
-    public void setLastAccessDate();
+    void setLastAccessDate();
 
     /**
      * Set last login date/time.
      *
-     * @param date The last login date.
+     * @param lastLogin The last login date.
      */
-    public void setLastLogin(java.util.Date lastLogin);
+    void setLastLogin(java.util.Date lastLogin);
 
     /**
      * Set password. Application should not use this method
@@ -310,7 +309,7 @@ public interface User
      * @param password The new password.
      */
 
-    public void setPassword(String password);
+    void setPassword(String password);
 
     /**
      * Put an object into permanent storage.
@@ -318,16 +317,8 @@ public interface User
      * @param name The object's name.
      * @param value The object.
      */
-    public void setPerm ( String name,
-                          Object value );
-
-    /**
-     * This should only be used in the case where we want to save the
-     * data to the database.
-     *
-     * @param stuff A Hashtable.
-     */
-    public void setPermStorage(Hashtable stuff);
+    void setPerm(String name,
+                 Object value);
 
     /**
      * This should only be used in the case where we want to save the
@@ -335,7 +326,15 @@ public interface User
      *
      * @param storage A Hashtable.
      */
-    public void setTempStorage(Hashtable stuff);
+    void setPermStorage(Hashtable storage);
+
+    /**
+     * This should only be used in the case where we want to save the
+     * data to the database.
+     *
+     * @param storage A Hashtable.
+     */
+    void setTempStorage(Hashtable storage);
 
     /**
      * Put an object into temporary storage.
@@ -343,73 +342,71 @@ public interface User
      * @param name The object's name.
      * @param value The object.
      */
-    public void setTemp ( String name, Object value );
+    void setTemp(String name, Object value);
 
     /**
      * Sets the username for this user.
      *
      * @param username The user's username.
      */
-    public void setUserName(String username);
+    void setUserName(String username);
 
     /**
      * Sets the first name for this user.
      *
      * @param firstName User's first name.
      */
-    public void setFirstName(String firstName);
+    void setFirstName(String firstName);
 
     /**
      * Sets the last name for this user.
      *
      * @param lastName User's last name.
      */
-    public void setLastName(String lastName);
+    void setLastName(String lastName);
 
     /**
      * Sets the creation date for this user.
      *
      * @param date Creation date
      */
-    public void setCreateDate(java.util.Date date);
+    void setCreateDate(java.util.Date date);
 
     /**
      * Sets the email address.
      *
      * @param address The email address.
      */
-    public void setEmail(String address);
+    void setEmail(String address);
 
     /**
      * This method reports whether or not the user has been confirmed
      * in the system by checking the TurbineUserPeer.CONFIRM_VALUE
      * column to see if it is equal to CONFIRM_DATA.
      *
-     * @param user The User object.
      * @return True if the user has been confirmed.
-     * @exception Exception, a generic exception.
      */
-    public boolean isConfirmed();
+    boolean isConfirmed();
 
     /**
      * Sets the confirmation value.
      *
      * @param value The confirmation key value.
      */
-    public void setConfirmed(String value);
+    void setConfirmed(String value);
 
     /**
      * Gets the confirmation value.
      *
      * @return The confirmed value
      */
-    public String getConfirmed();
+    String getConfirmed();
 
     /**
      * Updates the last login date in the database.
      *
-     * @exception Exception, a generic exception.
+     * @exception Exception A generic exception.
      */
-    public void updateLastLogin()
+    void updateLastLogin()
         throws Exception;
 }

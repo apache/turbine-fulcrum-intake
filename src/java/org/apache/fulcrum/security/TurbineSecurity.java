@@ -61,8 +61,6 @@ import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
 
-import org.apache.fulcrum.security.impl.db.entity.UserPeer;
-
 import org.apache.fulcrum.security.util.AccessControlList;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.RoleSet;
@@ -102,7 +100,7 @@ public abstract class TurbineSecurity
      */
     public static SecurityService getService()
     {
-        return (SecurityService)TurbineServices.getInstance().
+        return (SecurityService) TurbineServices.getInstance().
             getService(SecurityService.SERVICE_NAME);
     }
 
@@ -110,7 +108,7 @@ public abstract class TurbineSecurity
       Management of User objects
       -----------------------------------------------------------------------*/
 
-    /*
+    /**
      * This method provides client-side encryption of passwords.
      *
      * This is an utility method that is used by other classes to maintain
@@ -120,7 +118,7 @@ public abstract class TurbineSecurity
      * @param password the password to process
      * @return processed password
      */
-    public static String encryptPassword( String password )
+    public static String encryptPassword(String password)
     {
         return getService().encryptPassword(password);
     }
@@ -163,7 +161,7 @@ public abstract class TurbineSecurity
      * @return true if the specified account exists
      * @throws DataBackendException if there was an error accessing the data backend.
      */
-    public static boolean accountExists( User user )
+    public static boolean accountExists(User user)
         throws DataBackendException
     {
         return getService().accountExists(user);
@@ -174,14 +172,16 @@ public abstract class TurbineSecurity
      *
      * The login name is used for looking up the account.
      *
-     * @param usename The name of the user to be checked.
+     * @param userName The name of the user to be checked.
+     *
      * @return true if the specified account exists
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      */
-    public static boolean accountExists( String username )
+    public static boolean accountExists(String userName)
         throws DataBackendException
     {
-        return getService().accountExists(username);
+        return getService().accountExists(userName);
     }
 
     /**
@@ -192,9 +192,9 @@ public abstract class TurbineSecurity
      * @return An authenticated Turbine User.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if user account is not present.
-     * @throws PasswordMissmatchException if the supplied password was incorrect.
+     * @throws PasswordMismatchException if the supplied password was incorrect.
      */
-    public static User getAuthenticatedUser( String username, String password)
+    public static User getAuthenticatedUser(String username, String password)
         throws DataBackendException, UnknownEntityException, PasswordMismatchException
     {
         return getService().getAuthenticatedUser(username, password);
@@ -208,7 +208,7 @@ public abstract class TurbineSecurity
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if user account is not present.
      */
-    public static User getUser( String username )
+    public static User getUser(String username)
         throws DataBackendException, UnknownEntityException
     {
         return getService().getUser(username);
@@ -228,7 +228,7 @@ public abstract class TurbineSecurity
      * @throws DataBackendException if there is a problem accessing the
      *         storage.
      */
-    public static User[] getUsers( Criteria criteria )
+    public static User[] getUsers(Criteria criteria)
         throws DataBackendException
     {
         return getService().getUsers(criteria);
@@ -251,12 +251,14 @@ public abstract class TurbineSecurity
      * Saves User's data in the permanent storage. The user account is required
      * to exist in the storage.
      *
+     * @param user The User object to save.
+     *
      * @exception UnknownEntityException if the user's account does not
      *            exist in the database.
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public static void saveUser( User user )
+    public static void saveUser(User user)
         throws UnknownEntityException, DataBackendException
     {
         getService().saveUser(user);
@@ -275,7 +277,7 @@ public abstract class TurbineSecurity
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public static void changePassword( User user, String oldPassword, String newPassword )
+    public static void changePassword(User user, String oldPassword, String newPassword)
         throws PasswordMismatchException, UnknownEntityException,
                DataBackendException
     {
@@ -297,10 +299,10 @@ public abstract class TurbineSecurity
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public static void forcePassword( User user, String password )
+    public static void forcePassword(User user, String password)
         throws UnknownEntityException, DataBackendException
     {
-        getService().forcePassword( user, password );
+        getService().forcePassword(user, password);
     }
 
     /*-----------------------------------------------------------------------
@@ -311,10 +313,13 @@ public abstract class TurbineSecurity
      * Constructs an AccessControlList for a specific user.
      *
      * @param user the user for whom the AccessControlList are to be retrieved
+     *
+     * @return The AccessControList object constructed from the user object.
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if user account is not present.
      */
-    public static AccessControlList getACL( User user )
+    public static AccessControlList getACL(User user)
         throws DataBackendException, UnknownEntityException
     {
         return getService().getACL(user);
@@ -327,13 +332,13 @@ public abstract class TurbineSecurity
     /**
      * Grant an User a Role in a Group.
      *
-     * @param User the user.
-     * @param Group the group.
-     * @param Role the role.
+     * @param user the user.
+     * @param group the group.
+     * @param role the role.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if user account, group or role is not present.
      */
-    public static void grant( User user, Group group, Role role )
+    public static void grant(User user, Group group, Role role)
         throws DataBackendException, UnknownEntityException
     {
         getService().grant(user, group, role);
@@ -342,13 +347,13 @@ public abstract class TurbineSecurity
     /**
      * Revoke a Role in a Group from an User.
      *
-     * @param User the user.
-     * @param Group the group.
-     * @param Role the role.
+     * @param user the user.
+     * @param group the group.
+     * @param role the role.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if user account, group or role is not present.
      */
-    public static void revoke( User user, Group group, Role role )
+    public static void revoke(User user, Group group, Role role)
         throws DataBackendException, UnknownEntityException
     {
         getService().revoke(user, group, role);
@@ -363,7 +368,7 @@ public abstract class TurbineSecurity
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the account is not present.
      */
-    public static void revokeAll( User user )
+    public static void revokeAll(User user)
         throws DataBackendException, UnknownEntityException
     {
         getService().revokeAll(user);
@@ -377,7 +382,7 @@ public abstract class TurbineSecurity
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if role or permission is not present.
      */
-    public static void grant( Role role, Permission permission )
+    public static void grant(Role role, Permission permission)
         throws DataBackendException, UnknownEntityException
     {
         getService().grant(role, permission);
@@ -391,7 +396,7 @@ public abstract class TurbineSecurity
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if role or permission is not present.
      */
-    public static void revoke( Role role, Permission permission )
+    public static void revoke(Role role, Permission permission)
         throws DataBackendException, UnknownEntityException
     {
         getService().revoke(role, permission);
@@ -406,7 +411,7 @@ public abstract class TurbineSecurity
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws  UnknownEntityException if the Role is not present.
      */
-    public static void revokeAll( Role role )
+    public static void revokeAll(Role role)
         throws DataBackendException, UnknownEntityException
     {
         getService().revokeAll(role);
@@ -422,10 +427,12 @@ public abstract class TurbineSecurity
      * <strong>TODO</strong> throw more specific exception<br>
      *
      * @param user the object describing account to be created.
+     * @param password The password to use.
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws EntityExistsException if the user account already exists.
      */
-    public static void addUser( User user, String password )
+    public static void addUser(User user, String password)
         throws DataBackendException, EntityExistsException
     {
         getService().addUser(user, password);
@@ -441,7 +448,7 @@ public abstract class TurbineSecurity
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the user account is not present.
      */
-    public static void removeUser( User user )
+    public static void removeUser(User user)
         throws DataBackendException, UnknownEntityException
     {
         getService().removeUser(user);
@@ -470,7 +477,7 @@ public abstract class TurbineSecurity
      * @return An object representing the new Group.
      * @throws TurbineSecurityException if the Group could not be created.
      */
-    public static Group createGroup( String name )
+    public static Group createGroup(String name)
         throws TurbineSecurityException
     {
         return getService().addGroup(getNewGroup(name));
@@ -484,7 +491,7 @@ public abstract class TurbineSecurity
      * @return An object representing the new Permission.
      * @throws TurbineSecurityException if the Permission could not be created.
      */
-    public static Permission createPermission( String name )
+    public static Permission createPermission(String name)
         throws TurbineSecurityException
     {
         return getService().addPermission(getNewPermission(name));
@@ -495,10 +502,12 @@ public abstract class TurbineSecurity
      * method.
      *
      * @param name The name of the Role.
+     *
      * @return An object representing the new Role.
+     *
      * @throws TurbineSecurityException if the Role could not be created.
      */
-    public static Role createRole( String name )
+    public static Role createRole(String name)
         throws TurbineSecurityException
     {
         return getService().addRole(getNewRole(name));
@@ -508,10 +517,13 @@ public abstract class TurbineSecurity
      * Retrieves a named Group.
      *
      * @param groupName The name of the Group to be retrieved.
+     *
+     * @return an object representing the Group with specified name.
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the Group is not present.
      */
-    public static Group getGroup( String groupName )
+    public static Group getGroup(String groupName)
         throws DataBackendException, UnknownEntityException
     {
         return getService().getGroup(groupName);
@@ -524,9 +536,12 @@ public abstract class TurbineSecurity
      * point.
      *
      * @param groupName The name of the Group to be retrieved.
+     *
+     * @return an object representing the Group with specified name.
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      */
-    public static Group getNewGroup( String groupName )
+    public static Group getNewGroup(String groupName)
         throws DataBackendException
     {
         return getService().getNewGroup(groupName);
@@ -539,9 +554,12 @@ public abstract class TurbineSecurity
      * point.
      *
      * @param roleName The name of the Role to be retrieved.
-     * @throws DataBackendException if there was an error accessing the data backend.
+     *
+     * @return an object representing the Role with specified name.
+     *
+     * @throws TurbineSecurityException if the Role could not be created.
      */
-    public static Role getNewRole( String roleName )
+    public static Role getNewRole(String roleName)
         throws TurbineSecurityException
     {
         return getService().getNewRole(roleName);
@@ -553,10 +571,13 @@ public abstract class TurbineSecurity
      * to pass in null or "" here and then use Permission.setName() at a later
      * point.
      *
-     * @param groupName The name of the Permission to be retrieved.
+     * @param permissionName The name of the Permission to be retrieved.
+     *
+     * @return an object representing the Permission with specified name.
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      */
-    public static Permission getNewPermission( String permissionName )
+    public static Permission getNewPermission(String permissionName)
         throws DataBackendException
     {
         return getService().getNewPermission(permissionName);
@@ -566,10 +587,13 @@ public abstract class TurbineSecurity
      * Retrieves a named Role.
      *
      * @param roleName The name of the Role to be retrieved.
+     *
+     * @return an object representing the Role with specified name.
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the Role is not present.
      */
-    public static Role getRole( String roleName )
+    public static Role getRole(String roleName)
         throws DataBackendException, UnknownEntityException
     {
         return getService().getRole(roleName);
@@ -579,10 +603,13 @@ public abstract class TurbineSecurity
      * Retrieves a named Permission.
      *
      * @param permissionName The name of the Permission to be retrieved.
+     *
+     * @return an object representing the Permission with specified name.
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the Permission is not present.
      */
-    public static Permission getPermission( String permissionName )
+    public static Permission getPermission(String permissionName)
         throws DataBackendException, UnknownEntityException
     {
         return getService().getPermission(permissionName);
@@ -591,10 +618,14 @@ public abstract class TurbineSecurity
     /**
      * Retrieve a set of Groups that meet the specified Criteria.
      *
-     * @param a Criteria of Group selection.
+     * @param criteria A Criteria of Group selection.
+     *
      * @return a set of Groups that meet the specified Criteria.
+     *
+     * @exception DataBackendException if there is a problem accessing the
+     *            storage.
      */
-    public static GroupSet getGroups( Criteria criteria )
+    public static GroupSet getGroups(Criteria criteria)
         throws DataBackendException
     {
         return getService().getGroups(criteria);
@@ -606,8 +637,11 @@ public abstract class TurbineSecurity
      *
      * @param criteria a Criteria of Roles selection.
      * @return a set of Roles that meet the specified Criteria.
+     *
+     * @exception DataBackendException if there is a problem accessing the
+     *            storage.
      */
-    public static RoleSet getRoles( Criteria criteria )
+    public static RoleSet getRoles(Criteria criteria)
         throws DataBackendException
     {
         return getService().getRoles(criteria);
@@ -617,9 +651,13 @@ public abstract class TurbineSecurity
      * Retrieve a set of Permissions that meet the specified Criteria.
      *
      * @param criteria a Criteria of Permissions selection.
+     *
      * @return a set of Permissions that meet the specified Criteria.
+     *
+     * @exception DataBackendException if there is a problem accessing the
+     *            storage.
      */
-    public static PermissionSet getPermissions( Criteria criteria )
+    public static PermissionSet getPermissions(Criteria criteria)
         throws DataBackendException
     {
         return getService().getPermissions(criteria);
@@ -629,6 +667,9 @@ public abstract class TurbineSecurity
      * Retrieves all groups defined in the system.
      *
      * @return the names of all groups defined in the system.
+     *
+     * @exception DataBackendException if there is a problem accessing the
+     *            storage.
      */
     public static GroupSet getAllGroups()
         throws DataBackendException
@@ -640,6 +681,7 @@ public abstract class TurbineSecurity
      * Retrieves all roles defined in the system.
      *
      * @return the names of all roles defined in the system.
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      */
     public static RoleSet getAllRoles()
@@ -652,6 +694,7 @@ public abstract class TurbineSecurity
      * Retrieves all permissions defined in the system.
      *
      * @return the names of all roles defined in the system.
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      */
     public static PermissionSet getAllPermissions()
@@ -664,10 +707,13 @@ public abstract class TurbineSecurity
      * Retrieves all permissions associated with a role.
      *
      * @param role the role name, for which the permissions are to be retrieved.
+     *
+     * @return an PermissionSet with all permissions for the supplied role.
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the role is not present.
      */
-    public static PermissionSet getPermissions( Role role )
+    public static PermissionSet getPermissions(Role role)
         throws DataBackendException, UnknownEntityException
     {
         return getService().getPermissions(role);
@@ -677,10 +723,11 @@ public abstract class TurbineSecurity
      * Stores Group's attributes. The Groups is required to exist in the system.
      *
      * @param group The Group to be stored.
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the group does not exist.
      */
-    public static void saveGroup( Group group )
+    public static void saveGroup(Group group)
         throws DataBackendException, UnknownEntityException
     {
         getService().saveGroup(group);
@@ -690,10 +737,11 @@ public abstract class TurbineSecurity
      * Stores Role's attributes. The Roles is required to exist in the system.
      *
      * @param role The Role to be stored.
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the role does not exist.
      */
-    public static void saveRole( Role role )
+    public static void saveRole(Role role)
         throws DataBackendException, UnknownEntityException
     {
         getService().saveRole(role);
@@ -707,7 +755,7 @@ public abstract class TurbineSecurity
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the permission does not exist.
      */
-    public static void savePermission( Permission permission )
+    public static void savePermission(Permission permission)
         throws DataBackendException, UnknownEntityException
     {
         getService().savePermission(permission);
@@ -720,7 +768,7 @@ public abstract class TurbineSecurity
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws EntityExistsException if the group already exists.
      */
-    public static void addGroup( Group group )
+    public static void addGroup(Group group)
         throws DataBackendException, EntityExistsException
     {
         getService().addGroup(group);
@@ -729,11 +777,11 @@ public abstract class TurbineSecurity
     /**
      * Creates a new role with specified attributes.
      *
-     * @param group the objects describing the group to be created.
+     * @param role the objects describing the role to be created.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws EntityExistsException if the role already exists.
      */
-    public static void addRole( Role role )
+    public static void addRole(Role role)
         throws DataBackendException, EntityExistsException
     {
         getService().addRole(role);
@@ -742,11 +790,11 @@ public abstract class TurbineSecurity
     /**
      * Creates a new permission with specified attributes.
      *
-     * @param group the objects describing the group to be created.
+     * @param permission the objects describing the permission to be created.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws EntityExistsException if the permission already exists.
      */
-    public static void addPermission( Permission permission )
+    public static void addPermission(Permission permission)
         throws DataBackendException, EntityExistsException
     {
         getService().addPermission(permission);
@@ -755,11 +803,12 @@ public abstract class TurbineSecurity
     /**
      * Removes a Group from the system.
      *
-     * @param the object describing group to be removed.
+     * @param group the object describing group to be removed.
+     *
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the group does not exist.
      */
-    public static void removeGroup( Group group )
+    public static void removeGroup(Group group)
         throws DataBackendException, UnknownEntityException
     {
         getService().removeGroup(group);
@@ -768,11 +817,11 @@ public abstract class TurbineSecurity
     /**
      * Removes a Role from the system.
      *
-     * @param the object describing role to be removed.
+     * @param role The object describing role to be removed.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the role does not exist.
      */
-    public static void removeRole( Role role )
+    public static void removeRole(Role role)
         throws DataBackendException, UnknownEntityException
     {
         getService().removeRole(role);
@@ -781,11 +830,11 @@ public abstract class TurbineSecurity
     /**
      * Removes a Permission from the system.
      *
-     * @param the object describing permission to be removed.
+     * @param permission The object describing permission to be removed.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the permission does not exist.
      */
-    public static void removePermission( Permission permission )
+    public static void removePermission(Permission permission)
         throws DataBackendException, UnknownEntityException
     {
         getService().removePermission(permission);
@@ -794,12 +843,12 @@ public abstract class TurbineSecurity
     /**
      * Renames an existing Group.
      *
-     * @param the object describing the group to be renamed.
+     * @param group The object describing the group to be renamed.
      * @param name the new name for the group.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the group does not exist.
      */
-    public static void renameGroup( Group group, String name )
+    public static void renameGroup(Group group, String name)
         throws DataBackendException, UnknownEntityException
     {
         getService().renameGroup(group, name);
@@ -808,12 +857,12 @@ public abstract class TurbineSecurity
     /**
      * Renames an existing Role.
      *
-     * @param the object describing the role to be renamed.
+     * @param role The object describing the role to be renamed.
      * @param name the new name for the role.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the role does not exist.
      */
-    public static void renameRole( Role role, String name )
+    public static void renameRole(Role role, String name)
         throws DataBackendException, UnknownEntityException
     {
         getService().renameRole(role, name);
@@ -822,12 +871,12 @@ public abstract class TurbineSecurity
     /**
      * Renames an existing Permission.
      *
-     * @param the object describing the permission to be renamed.
+     * @param permission The object describing the permission to be renamed.
      * @param name the new name for the permission.
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the permission does not exist.
      */
-    public static void renamePermission( Permission permission, String name )
+    public static void renamePermission(Permission permission, String name)
         throws DataBackendException, UnknownEntityException
     {
         getService().renamePermission(permission, name);

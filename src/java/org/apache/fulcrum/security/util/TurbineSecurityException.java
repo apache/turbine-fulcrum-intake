@@ -70,7 +70,7 @@ public class TurbineSecurityException
      *
      * @param msg The detail message.
      */
-    public TurbineSecurityException( String msg )
+    public TurbineSecurityException(String msg)
     {
         super(msg);
     }
@@ -83,7 +83,7 @@ public class TurbineSecurityException
      * @param nested the exception or error that caused this exception
      *               to be thrown.
      */
-    public TurbineSecurityException( String msg, Throwable nested )
+    public TurbineSecurityException(String msg, Throwable nested)
     {
         super(msg, nested);
     }

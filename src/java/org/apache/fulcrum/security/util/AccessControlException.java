@@ -69,7 +69,7 @@ public class AccessControlException
      *
      * @param msg The detail message.
      */
-    public AccessControlException( String msg )
+    public AccessControlException(String msg)
     {
         super(msg);
     }

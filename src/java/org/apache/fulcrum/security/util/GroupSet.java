@@ -56,7 +56,6 @@ package org.apache.fulcrum.security.util;
 
 import java.io.Serializable;
 
-import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeSet;
@@ -110,13 +109,14 @@ public class GroupSet implements Serializable
      */
     public boolean add(Group group)
     {
-        return set.add( (Object)group );
+        return set.add((Object) group);
     }
 
     /**
      * Adds the Groups in a Collection to this GroupSet.
      *
-     * @param groupSet A Collection of Groups.
+     * @param groups A Collection of Groups.
+     *
      * @return True if this GroupSet changed as a result; false
      * if no change to this GroupSet occurred (this GroupSet
      * already contained all members of the added GroupSet).
@@ -136,7 +136,7 @@ public class GroupSet implements Serializable
      */
     public boolean add(GroupSet groupSet)
     {
-        return add((Collection)groupSet.set);
+        return add((Collection) groupSet.set);
     }
 
     /**
@@ -148,7 +148,7 @@ public class GroupSet implements Serializable
      */
     public boolean remove(Group group)
     {
-        return set.remove( (Object)group );
+        return set.remove((Object) group);
     }
 
     /**
@@ -168,7 +168,7 @@ public class GroupSet implements Serializable
      */
     public boolean contains(Group group)
     {
-        return set.contains( (Object)group );
+        return set.contains((Object) group);
     }
 
     /**
@@ -182,11 +182,11 @@ public class GroupSet implements Serializable
     public boolean contains(String groupName)
     {
         Iterator iter = set.iterator();
-        while ( iter.hasNext() )
+        while (iter.hasNext())
         {
-            Group group = (Group)iter.next();
-            if ( groupName != null  &&
-                 groupName.equals( group.getName() ) )
+            Group group = (Group) iter.next();
+            if (groupName != null  &&
+                 groupName.equals(group.getName()))
             {
                 return true;
             }
@@ -205,11 +205,11 @@ public class GroupSet implements Serializable
     public Group getGroup(String groupName)
     {
         Iterator iter = set.iterator();
-        while ( iter.hasNext() )
+        while (iter.hasNext())
         {
-            Group group = (Group)iter.next();
-            if ( groupName != null  &&
-                 groupName.equals( group.getName() ) )
+            Group group = (Group) iter.next();
+            if (groupName != null  &&
+                 groupName.equals(group.getName()))
             {
                 return group;
             }
@@ -218,17 +218,19 @@ public class GroupSet implements Serializable
     }
 
     /**
-     * Returns an Groups[] of Groups in this GroupSet.
+     * Returns an Groups [] of Groups in this GroupSet.
      *
-     * @return A Group[].
+     * @return A Group [].
      */
-    public Group[] getGroupsArray()
+    public Group [] getGroupsArray()
     {
-        return (Group[])set.toArray(new Group[0]);
+        return (Group []) set.toArray(new Group[0]);
     }
 
     /**
      * Returns an Iterator for Groups in this GroupSet.
+     *
+     * @return An Iterator for the GroupSet.
      */
     public Iterator elements()
     {

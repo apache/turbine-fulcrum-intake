@@ -68,10 +68,8 @@ public class DataBackendException
      * Construct an DataBackendException with specified detail message.
      *
      * @param msg The detail message.
-     * @param nested the exception or error that caused this exception
-     *               to be thrown.
      */
-    public DataBackendException( String msg )
+    public DataBackendException(String msg)
     {
         super(msg);
     }
@@ -84,7 +82,7 @@ public class DataBackendException
      * @param nested the exception or error that caused this exception
      *               to be thrown.
      */
-    public DataBackendException( String msg, Throwable nested )
+    public DataBackendException(String msg, Throwable nested)
     {
         super(msg, nested);
     }
