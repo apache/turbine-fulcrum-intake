@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<project>
+  <extend>${basedir}/../../project.xml</extend>
+  <id>fulcrum-security-api</id>
+  <name>Fulcrum Security API</name>
+  <currentVersion>1.0-alpha-4</currentVersion>
+  <package>org.apache.fulcrum.security</package>
+
+  <dependencies>
+    <dependency>
+      <groupId>fulcrum</groupId>   
+      <artifactId>fulcrum-crypto</artifactId>
+      <version>1.0-alpha-3</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>fulcrum</groupId>    
+      <artifactId>fulcrum-factory</artifactId>
+      <version>1.0-alpha-1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>avalon-framework</groupId>
+      <artifactId>avalon-framework-api</artifactId>
+      <version>4.1.5</version>
+    </dependency> 
+    
+    <dependency>
+      <id>commons-logging</id>
+      <version>1.0.3</version>
+    </dependency>      
+    <dependency>
+      <id>commons-lang</id>
+      <version>2.0</version>
+    </dependency>  
+    <dependency>
+      <id>cryptix</id>
+      <version>3.2.0</version>
+      <url>http://www.cryptix.org/</url>
+    </dependency>    
+    <dependency>
+      <id>commons-codec</id>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>    
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+    </dependency> 
+        
+    <!-- testing -->
+    <dependency>
+      <groupId>fulcrum</groupId>    
+      <artifactId>fulcrum-testcontainer</artifactId>
+      <version>1.0-alpha-1</version>
+    </dependency>    
+    <!--dependency>
+      <groupId>merlin</groupId>
+      <artifactId>merlin-unit</artifactId>
+      <version>3.2.3-dev</version>
+    </dependency-->
+
+  </dependencies>
+
+
+</project>
+
