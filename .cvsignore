@@ -2,3 +2,5 @@ target
 velocity.log
 maven.log
 *~
+.classpath
+.project

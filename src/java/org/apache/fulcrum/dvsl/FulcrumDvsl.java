@@ -59,7 +59,6 @@ import java.io.Writer;
 
 import java.util.Properties;
 
-import org.apache.fulcrum.Service;
 import org.apache.fulcrum.TurbineServices;
 
 /**

@@ -58,14 +58,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-import java.util.Stack;
 import java.lang.reflect.Field;
 
 import org.apache.fulcrum.ServiceException;

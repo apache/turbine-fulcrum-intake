@@ -54,11 +54,7 @@ package org.apache.fulcrum.intake.model;
  * <http://www.apache.org/>.
  */
 
-import java.util.Vector;
-import org.apache.fulcrum.util.parser.ValueParser;
 import org.apache.torque.om.ComboKey;
-import org.apache.torque.om.ObjectKey;
-import org.apache.fulcrum.intake.xmlmodel.Rule;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 //import org.apache.fulcrum.ServiceException;
 import org.apache.log4j.Category;

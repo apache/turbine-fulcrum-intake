@@ -65,7 +65,7 @@ import java.io.Serializable;
  * @version $Id$
  */
 public class CachedObject
-    implements java.io.Serializable
+    implements Serializable
 {
 
     /** Cache the object with the Default TTL */

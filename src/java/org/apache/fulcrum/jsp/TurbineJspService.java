@@ -54,16 +54,10 @@ package org.apache.fulcrum.jsp;
  * <http://www.apache.org/>.
  */
 
-import java.io.File;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.util.List;
 import java.util.ArrayList;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServletRequest;
 //import org.apache.turbine.RunData;
 import org.apache.fulcrum.ServiceException;
 //import org.apache.fulcrum.jsp.util.JspLink;

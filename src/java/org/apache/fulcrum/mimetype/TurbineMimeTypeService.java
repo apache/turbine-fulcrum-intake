@@ -58,7 +58,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
-import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
 import org.apache.fulcrum.mimetype.util.MimeType;
 import org.apache.fulcrum.mimetype.util.MimeTypeMap;

@@ -61,7 +61,6 @@ import java.io.FileInputStream;
 import java.io.StringWriter;
 import com.ibm.bsf.BSFManager;
 import com.ibm.bsf.BSFException;
-import org.apache.fulcrum.InitializationException;
 import org.apache.fulcrum.HasApplicationRoot;
 
 import org.apache.avalon.framework.activity.Initializable;
@@ -132,7 +131,7 @@ public class TurbineBSFService
 
         try
         {
-            manager.exec(manager.getLangFromFilename(script),
+            manager.exec(BSFManager.getLangFromFilename(script),
                 script, 0, 0, fileContentsToString(script));
         }
         catch (IOException ioe)

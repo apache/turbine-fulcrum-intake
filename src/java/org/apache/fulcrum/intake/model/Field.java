@@ -55,10 +55,8 @@ package org.apache.fulcrum.intake.model;
  */
 
 import java.util.Locale;
-import java.util.Map;
 import java.lang.reflect.Method;
 
-import org.apache.regexp.RE;
 import org.apache.fulcrum.ServiceException;
 import org.apache.fulcrum.TurbineServices;
 import org.apache.fulcrum.localization.Localization;
@@ -67,7 +65,6 @@ import org.apache.fulcrum.intake.Retrievable;
 import org.apache.fulcrum.intake.TurbineIntake;
 import org.apache.fulcrum.intake.xmlmodel.Rule;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
-import org.apache.fulcrum.intake.xmlmodel.XmlGroup;
 import org.apache.fulcrum.intake.validator.Validator;
 import org.apache.fulcrum.intake.validator.InitableByConstraintMap;
 import org.apache.fulcrum.intake.validator.ValidationException;

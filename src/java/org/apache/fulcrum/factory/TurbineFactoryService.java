@@ -54,7 +54,6 @@ package org.apache.fulcrum.factory;
  * <http://www.apache.org/>.
  */
 
-import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
@@ -67,13 +66,11 @@ import org.apache.fulcrum.pool.ObjectInputStreamForContext;
 import org.apache.fulcrum.InitializationException;
 import org.apache.fulcrum.BaseFulcrumComponent;
 
-import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.thread.ThreadSafe;
 //import org.apache.avalon.framework.;
 

@@ -56,8 +56,6 @@ package org.apache.fulcrum;
 
 import java.io.File;
 
-import org.apache.avalon.framework.logger.AbstractLogEnabled;
-import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 

@@ -54,9 +54,6 @@ package org.apache.fulcrum.intake.validator;
  * <http://www.apache.org/>.
  */
 
-import java.util.Map;
-import org.apache.fulcrum.ServiceException;
-
 /**
  * Validator api.
  *

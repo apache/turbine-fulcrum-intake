@@ -55,7 +55,6 @@ package org.apache.fulcrum.db;
  */
 
 import java.sql.Connection;
-import org.apache.fulcrum.ServiceException;
 import org.apache.fulcrum.TurbineServices;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.map.DatabaseMap;

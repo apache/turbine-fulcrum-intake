@@ -54,16 +54,12 @@ package org.apache.fulcrum.intake.model;
  * <http://www.apache.org/>.
  */
 
-import java.util.Vector;
-import org.apache.fulcrum.intake.xmlmodel.Rule;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 import org.apache.fulcrum.util.parser.ValueParser;
 import org.apache.fulcrum.util.parser.ParameterParser;
-import org.apache.fulcrum.intake.validator.Validator;
 import org.apache.fulcrum.intake.validator.FileValidator;
 // import org.apache.fulcrum.intake.validator.InitableByConstraintMap;
 import org.apache.fulcrum.intake.validator.ValidationException;
-import org.apache.fulcrum.intake.validator.Constraint;
 import org.apache.fulcrum.ServiceException;
 import org.apache.commons.fileupload.FileItem;
 

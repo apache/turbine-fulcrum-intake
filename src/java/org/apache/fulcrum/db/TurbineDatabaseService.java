@@ -58,12 +58,9 @@ import java.sql.Connection;
 import org.apache.log4j.Category;
 import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
-import org.apache.fulcrum.TurbineServices;
 import org.apache.torque.Torque;
-import org.apache.torque.TorqueException;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.map.DatabaseMap;
-import org.apache.torque.util.BasePeer;
 
 /**
  * Turbine's default implementation of {@link DatabaseService}.

@@ -57,7 +57,6 @@ package org.apache.fulcrum.intake.model;
 import java.math.BigDecimal;
 import java.text.DecimalFormatSymbols;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
-import org.apache.fulcrum.util.parser.ValueParser;
 import org.apache.log4j.Category;
 
 /**

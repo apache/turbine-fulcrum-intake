@@ -56,9 +56,6 @@ package org.apache.fulcrum.pool;
 
 import org.apache.fulcrum.ServiceException;
 import org.apache.fulcrum.factory.FactoryService;
-import org.apache.avalon.framework.component.Component;
-
-
 
 /**
  * The Pool Service extends the Factory Service by adding support

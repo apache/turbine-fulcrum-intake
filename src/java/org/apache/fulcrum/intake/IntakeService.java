@@ -57,8 +57,6 @@ package org.apache.fulcrum.intake;
 import java.lang.reflect.Method;
 import org.apache.avalon.framework.component.Component;
 import org.apache.fulcrum.ServiceException;
-import org.apache.fulcrum.pool.Recyclable;
-import org.apache.fulcrum.util.parser.ValueParser;
 import org.apache.fulcrum.intake.model.Group;
 
 /**

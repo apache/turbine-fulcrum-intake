@@ -54,7 +54,6 @@ package org.apache.fulcrum.jsp;
  * <http://www.apache.org/>.
  */
 
-import org.apache.fulcrum.ServiceException;
 import org.apache.avalon.framework.component.Component;
 
 /**

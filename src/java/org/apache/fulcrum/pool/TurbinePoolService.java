@@ -65,13 +65,9 @@ import org.apache.fulcrum.factory.FactoryService;
 import org.apache.fulcrum.factory.TurbineFactoryService;
 
 import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.component.ComponentManager;
-import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.component.Composable;
-import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
 //import org.apache.avalon.framework.logger.AbstractLogEnabled;
 //import org.apache.avalon.framework.thread.ThreadSafe;
 //import org.apache.avalon.framework.;

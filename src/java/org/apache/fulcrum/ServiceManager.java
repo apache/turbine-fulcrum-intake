@@ -55,7 +55,6 @@ package org.apache.fulcrum;
  */
 
 import org.apache.commons.configuration.Configuration;
-import org.apache.log4j.Category;
 
 /**
  * Classes that implement this interface can act as a manager for

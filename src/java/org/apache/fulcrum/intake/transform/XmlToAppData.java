@@ -56,18 +56,13 @@ package org.apache.fulcrum.intake.transform;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.Reader;
 import org.apache.fulcrum.intake.xmlmodel.AppData;
 import org.apache.fulcrum.intake.xmlmodel.Rule;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 import org.apache.fulcrum.intake.xmlmodel.XmlGroup;
 import org.apache.xerces.parsers.SAXParser;
 import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
