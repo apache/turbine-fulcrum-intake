@@ -59,15 +59,18 @@ import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 import org.apache.fulcrum.security.model.test.AbstractUserManagerTest;
+import org.apache.fulcrum.security.util.DataBackendException;
 
 import com.tagish.auth.win32.NTSystem;
 /**
- * @author Eric Pugh
  * 
  * Test the NT implementation of the user manager. This test traps some exceptions that can be
  * thrown if there is NO nt dll.
+ * 
+ * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
+ * @version $Id$
  */
-public class NTUserManagerTest extends AbstractUserManagerTest
+public class NTUserManagerTest extends AbstractUserManagerTest implements TestConstants
 {
     private static Log log = LogFactory.getLog(NTUserManagerTest.class);
     private static final String ERROR_MSG = "Not supported by NT User Manager";
@@ -111,6 +114,9 @@ public class NTUserManagerTest extends AbstractUserManagerTest
 			user = userManager.getUser(GUESTUSER, "");
             user.setPassword("");
             assertTrue(userManager.checkExists(user));
+        }
+        catch(DataBackendException dbe){
+            assertTrue(dbe.getMessage().indexOf(SCB_INVALID)>-1);
         }
         catch (UnsatisfiedLinkError ule)
         {

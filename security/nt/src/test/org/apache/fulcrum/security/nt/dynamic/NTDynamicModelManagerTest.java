@@ -60,15 +60,18 @@ import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
+import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 /**
- * @author Eric Pugh
  * 
  * Test the NT implementation of the user manager. This test traps some exceptions that can be
  * thrown if there is NO nt dll.
+ * 
+ * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
+ * @version $Id$
  */
-public class NTDynamicModelManagerTest extends BaseUnitTest
+public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConstants
 {
     private static Log log = LogFactory.getLog(NTDynamicModelManagerTest.class);
     private static final String ERROR_MSG = "Not supported by NT User Manager";
@@ -117,6 +120,9 @@ public class NTDynamicModelManagerTest extends BaseUnitTest
             user.setPassword("rob");
             modelManager.revokeAll(user);
             fail("Should throw runtime exception");
+        }
+        catch(DataBackendException dbe){
+            assertTrue(dbe.getMessage().indexOf(SCB_INVALID)>-1);
         }
         catch (UnknownEntityException re)
         {

@@ -61,15 +61,18 @@ import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.basic.BasicAccessControlList;
 import org.apache.fulcrum.security.model.basic.BasicModelManager;
+import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 /**
- * @author Eric Pugh
  * 
  * Test the NT implementation of the user manager. This test traps some exceptions that can be
  * thrown if there is NO nt dll.
+ *  
+ * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
+ * @version $Id$
  */
-public class NTBasicACLTest extends BaseUnitTest
+public class NTBasicACLTest extends BaseUnitTest implements TestConstants
 {
     private static Log log = LogFactory.getLog(NTBasicACLTest.class);
     private static final String ERROR_MSG = "Not supported by NT User Manager";
@@ -123,6 +126,9 @@ public class NTBasicACLTest extends BaseUnitTest
 			assertTrue(bacl.hasGroup("Guests"));
 			assertTrue(bacl.hasGroup("gUEsts"));
             
+        }
+        catch(DataBackendException dbe){
+            assertTrue(dbe.getMessage().indexOf(SCB_INVALID)>-1);
         }
         catch (UnknownEntityException re)
         {
