@@ -573,6 +573,8 @@ public class TurbineIntakeService
             {
                 try
                 {
+                    // !FIXME! will throw an exception if the getter is not
+                    // available.  Need to make this more robust
                     pd = new PropertyDescriptor(propName, 
                                                 Class.forName(className));
                     setter = pd.getWriteMethod();
@@ -600,7 +602,7 @@ public class TurbineIntakeService
                 }
                 catch (Exception e)
                 {
-                    getCategory().error(e);
+                    // ignore, the getter may not be needed
                 }
             }
         }
@@ -621,11 +623,13 @@ public class TurbineIntakeService
 
         if ( getter == null )
         {
-            PropertyDescriptor pd = null; 
+            PropertyDescriptor pd = null;
             synchronized(getterMap)
             {
                 try
                 {
+                    // !FIXME! will throw an exception if the setter is not
+                    // available.  Need to make this more robust
                     pd = new PropertyDescriptor(propName, 
                                                 Class.forName(className));
                     getter = pd.getReadMethod();
@@ -653,7 +657,7 @@ public class TurbineIntakeService
                 }
                 catch (Exception e)
                 {
-                    getCategory().error(e);
+                    // ignore, the setter may not be needed
                 }
             }
         }
