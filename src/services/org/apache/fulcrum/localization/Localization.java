@@ -143,7 +143,7 @@ public abstract class Localization
      */
     public static String getString(String key, String lang)
     {
-        return Localization.getBundle(getDefaultBundle(), new Locale(lang, ""))
+        return getBundle(getDefaultBundleName(), new Locale(lang, ""))
             .getString(key);
     }
 
@@ -249,9 +249,9 @@ public abstract class Localization
     /**
      * @see org.apache.fulcrum.localization.LocalizationService#getDefaultBundle()
      */
-    public static String getDefaultBundle()
+    public static String getDefaultBundleName()
     {
-        return getService().getDefaultBundle();
+        return getService().getDefaultBundleName();
     }
 
     /**

@@ -61,9 +61,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.fulcrum.Service;
 
 /**
- * Implementations of the LocalizationService interface.
+ * Provides localization functionality using the interface provided by
+ * <code>ResourceBundle</code>.
  *
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
+ * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$
  */
 public interface LocalizationService
@@ -79,9 +81,23 @@ public interface LocalizationService
      */
     public static final String ACCEPT_LANGUAGE = "Accept-Language";
 
+    /**
+     * Retrieves the default language (as specified in the config
+     * file).
+     */
     public String getDefaultLanguage();
+
+    /**
+     * Retrieves the default country (as specified in the config
+     * file).
+     */
     public String getDefaultCountry();
-    public String getDefaultBundle();
+
+    /**
+     * Retrieves the name of the default bundle (as specified in the
+     * config file).
+     */
+    public String getDefaultBundleName();
 
     /**
      * Convenience method to get a default ResourceBundle.

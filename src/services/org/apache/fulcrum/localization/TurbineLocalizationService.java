@@ -168,9 +168,10 @@ public class TurbineLocalizationService
     }
 
     /**
-     * Retrieves the default bundle (specified in the config file).
+     * Retrieves the name of the default bundle (as specified in the
+     * config file).
      */
-    public String getDefaultBundle()
+    public String getDefaultBundleName()
     {
         return defaultBundle;
     }
