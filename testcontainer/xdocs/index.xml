@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Test Container</title>
+    <author email="quintonm@bellsouth.net">Quinton McCombs</author>
+  </properties>
+
+  <body>
+
+  <section name="Overview">
+    <p>
+      This component is really just a test container for testing the 
+      other components.  This container is not meant to be used in 
+      a production environment.
+    </p>
+  </section>
+
+  <section name="Configuration">
+    <p>
+    </p>
+  </section>
+
+  <section name="Usage">
+    <p>
+    </p>
+  </section>
+
+</body>
+</document>
