@@ -3,7 +3,7 @@
 
   <name>jakarta-turbine-fulcrum</name>
   <id>fulcrum</id>
-  <currentVersion>3.0-b1</currentVersion>
+  <currentVersion>3.0-b2-dev</currentVersion>
   <organization>Apache Software Foundation</organization>
   <inceptionYear>2000</inceptionYear>
   <package>org.apache.fulcrum</package>
