@@ -82,12 +82,26 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
     /** Logging */
     private static Log log = LogFactory.getLog(BaseHibernateManager.class);
     protected HibernateService hibernateService;
-    protected Session session;
+    private Session session;
     protected Transaction transaction;
     protected ComponentManager manager = null;
     protected PermissionManager permissionManager;
     protected RoleManager roleManager;
     protected GroupManager groupManager;
+    /**
+     * @return
+     */
+    public Session getHibernateSession()
+    {
+        return session;
+    }
+    /**
+     * @param session
+     */
+    public void setHibernateSession(Session session)
+    {
+        this.session = session;
+    }
     /**
     	 * @return
     	 */
@@ -105,6 +119,11 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
             try
             {
                 permissionManager = (PermissionManager) manager.lookup(PermissionManager.ROLE);
+                ((BaseHibernateManager) permissionManager).setHibernateSession(retrieveSession());
+            }
+            catch (HibernateException he)
+            {
+                throw new DataBackendException(he.getMessage(), he);
             }
             catch (ComponentException ce)
             {
@@ -123,6 +142,11 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
             try
             {
                 roleManager = (RoleManager) manager.lookup(RoleManager.ROLE);
+                ((BaseHibernateManager) roleManager).setHibernateSession(retrieveSession());
+            }
+            catch (HibernateException he)
+            {
+                throw new DataBackendException(he.getMessage(), he);
             }
             catch (ComponentException ce)
             {
@@ -141,6 +165,11 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
             try
             {
                 groupManager = (GroupManager) manager.lookup(GroupManager.ROLE);
+                ((BaseHibernateManager) groupManager).setHibernateSession(retrieveSession());
+            }
+            catch (HibernateException he)
+            {
+                throw new DataBackendException(he.getMessage(), he);
             }
             catch (ComponentException ce)
             {
@@ -153,11 +182,10 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
     {
         try
         {
-            session = hibernateService.openSession();
+            session = retrieveSession();
             transaction = session.beginTransaction();
             session.delete(entity);
             transaction.commit();
-			session.close();
         }
         catch (HibernateException he)
         {
@@ -183,11 +211,11 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
     {
         try
         {
-            session = hibernateService.openSession();
+            session = retrieveSession();
             transaction = session.beginTransaction();
             session.update(entity);
             transaction.commit();
-            session.close();
+            
         }
         catch (HibernateException he)
         {
@@ -198,7 +226,7 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
             catch (HibernateException hex)
             {
             }
-            throw new DataBackendException("updateEntity(" + entity+")", he);
+            throw new DataBackendException("updateEntity(" + entity + ")", he);
         }
         return;
     }
@@ -214,11 +242,11 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
     {
         try
         {
-            session = hibernateService.openSession();
+            session = retrieveSession();
             transaction = session.beginTransaction();
             session.save(entity);
             transaction.commit();
-			session.close();
+            //session.close();
         }
         catch (HibernateException he)
         {
@@ -245,11 +273,11 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
     {
         try
         {
-            session = hibernateService.openSession();
+            //session = hibernateService.openSession();
             transaction = session.beginTransaction();
             session.delete(entity);
             transaction.commit();
-			session.close();
+            session = retrieveSession();
         }
         catch (HibernateException he)
         {
@@ -263,6 +291,14 @@ public class BaseHibernateManager extends AbstractLogEnabled implements Composab
             throw new DataBackendException("delete()", he);
         }
         return;
+    }
+    protected Session retrieveSession() throws HibernateException
+    {
+        if (session==null || (!session.isConnected() && !session.isOpen()))
+        {
+            session = hibernateService.openSession();
+        }
+        return session;
     }
     /**
     * Avalon component lifecycle method

@@ -3,11 +3,8 @@
  *
  */
 package org.apache.fulcrum.security.spi.hibernate.simple.entity;
-
 import java.util.Set;
-
 import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
-
 /**
  * @author Eric Pugh
  *
@@ -16,22 +13,20 @@ import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
  */
 public class HibernateSimpleRole extends SimpleRole
 {
-	
-	void setHibernatePermissions(Set permissions){
-		this.getPermissions().add(permissions);
-	}
-	
-	Set getHibernatePermissions(){
-		return getPermissions().getSet();	
-	}
-	
-	void setHibernateGroups(Set groups){
-			this.getGroups().add(groups);
-		}
-	
-		Set getHibernateGroups(){
-			return getGroups().getSet();	
-		}
-	
-	
+    void setHibernatePermissions(Set permissions)
+    {
+        this.getPermissions().add(permissions);
+    }
+    Set getHibernatePermissions()
+    {
+        return getPermissions().getSet();
+    }
+    void setHibernateGroups(Set groups)
+    {
+        this.getGroups().add(groups);
+    }
+    Set getHibernateGroups()
+    {
+        return getGroups().getSet();
+    }
 }

@@ -3,11 +3,10 @@
  *
  */
 package org.apache.fulcrum.security.spi.hibernate.simple.entity;
-
+import java.util.Iterator;
 import java.util.Set;
-
+import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
-
 /**
  * @author Eric Pugh
  *
@@ -17,14 +16,41 @@ import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
  */
 public class HibernateSimpleGroup extends SimpleGroup
 {
-	
-	void setHibernateRoles(Set permissions){
-		this.getRoles().add(permissions);
-	}
-	
-	Set getHibernateRoles(){
-		return getRoles().getSet();	
-	}
-	
-	
+    private UserSet users = new UserSet();
+    public void addUser(User user)
+    {
+        users.add(user);
+    }
+    public void removeUser(User user)
+    {
+        users.remove(user);
+    }
+    public void setUsers(Set users)
+    {
+        this.users.addAll(users);
+    }
+    public Set getUsers()
+    {
+        return this.users;
+    }
+    void setHibernateUsers(Set users)
+    {
+        for (Iterator i = users.iterator(); i.hasNext();)
+        {
+            User user = (User) i.next();
+            this.users.add(user);
+        }
+    }
+    Set getHibernateUsers()
+    {
+        return users.getSet();
+    }
+    void setHibernateRoles(Set roles)
+    {
+        this.getRoles().add(roles);
+    }
+    Set getHibernateRoles()
+    {
+        return getRoles().getSet();
+    }
 }

@@ -53,9 +53,9 @@ package org.apache.fulcrum.security.spi.hibernate.simple;
  * <http://www.apache.org/>.
  */
 import java.util.List;
-
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -146,10 +146,22 @@ public class HibernateGroupManagerImpl extends BaseHibernateManager implements S
      */
     public Group getGroupByName(String name) throws DataBackendException, UnknownEntityException
     {
-        Group group = getAllGroups().getGroupByName(name);
-        if (group == null)
+        Group group = null;
+        try
         {
-            throw new UnknownEntityException("The specified group does not exist");
+          
+            List groups =
+			retrieveSession().find("from HibernateSimpleGroup g where g.name=?", name.toLowerCase(), Hibernate.STRING);
+            if (groups.size() == 0)
+            {
+                throw new UnknownEntityException("Could not find group" + name);
+            }
+            group = (Group) groups.get(0);
+            //session.close();
+        }
+        catch (HibernateException e)
+        {
+            throw new DataBackendException("Error retriving group information", e);
         }
         return group;
     }
@@ -186,10 +198,9 @@ public class HibernateGroupManagerImpl extends BaseHibernateManager implements S
         GroupSet groupSet = new GroupSet();
         try
         {
-            session = hibernateService.openSession();
-            List groups = session.find("from HibernateSimpleGroup");
+            
+            List groups = retrieveSession().find("from HibernateSimpleGroup");
             groupSet.add(groups);
-			session.close();
         }
         catch (HibernateException e)
         {
@@ -247,9 +258,8 @@ public class HibernateGroupManagerImpl extends BaseHibernateManager implements S
         List groups;
         try
         {
-            session = hibernateService.openSession();
-            groups = session.find("from HibernateSimpleGroup sg where sg.name=?", group.getName(), Hibernate.STRING);
-			session.close();
+            
+            groups = retrieveSession().find("from HibernateSimpleGroup sg where sg.name=?", group.getName(), Hibernate.STRING);
         }
         catch (HibernateException e)
         {
@@ -307,10 +317,14 @@ public class HibernateGroupManagerImpl extends BaseHibernateManager implements S
             roleExists = checkExists(role);
             if (groupExists && roleExists)
             {
-				((HibernateSimpleGroup) group).addRole(role);
-				((HibernateSimpleRole) role).addGroup(group);
-				updateEntity(group);
-				//updateEntity(role);
+                ((HibernateSimpleGroup) group).addRole(role);
+                ((HibernateSimpleRole) role).addGroup(group);
+				Session session = hibernateService.openSession(); //retrieveSession();
+				transaction = session.beginTransaction();
+				session.update(role);
+				session.update(group);
+				transaction.commit();
+				session.close();
                 return;
             }
         }
@@ -346,10 +360,10 @@ public class HibernateGroupManagerImpl extends BaseHibernateManager implements S
             roleExists = checkExists(role);
             if (groupExists && roleExists)
             {
-				((SimpleGroup) group).removeRole(role);
-				((SimpleRole) role).removeGroup(group);
-				updateEntity(group);
-				//updateEntity(role);
+                ((SimpleGroup) group).removeRole(role);
+                ((SimpleRole) role).removeGroup(group);
+                updateEntity(group);
+                //updateEntity(role);
                 return;
             }
         }

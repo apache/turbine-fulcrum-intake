@@ -167,10 +167,10 @@ public class HibernatePermissionManagerImpl extends BaseHibernateManager impleme
         PermissionSet permissionSet = new PermissionSet();
         try
         {
-            session = hibernateService.openSession();
-            List permissions = session.find("from SimplePermission");
+            
+            List permissions = retrieveSession().find("from SimplePermission");
             permissionSet.add(permissions);
-			session.close();
+	
         }
         catch (HibernateException e)
         {
@@ -217,10 +217,10 @@ public class HibernatePermissionManagerImpl extends BaseHibernateManager impleme
         List permissions;
         try
         {
-            session = hibernateService.openSession();
+        
             permissions =
-                session.find("from SimplePermission sr where sr.name=?", permission.getName(), Hibernate.STRING);
-			session.close();
+			retrieveSession().find("from SimplePermission sr where sr.name=?", permission.getName(), Hibernate.STRING);
+		
         }
         catch (HibernateException e)
         {

@@ -56,10 +56,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
-
+import net.sf.hibernate.Session;
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -75,10 +74,10 @@ import org.apache.fulcrum.security.model.simple.entity.SimpleGroup;
 import org.apache.fulcrum.security.model.simple.entity.SimpleRole;
 import org.apache.fulcrum.security.model.simple.entity.SimpleUser;
 import org.apache.fulcrum.security.model.simple.manager.SimpleUserManager;
+import org.apache.fulcrum.security.spi.hibernate.simple.entity.HibernateSimpleGroup;
 import org.apache.fulcrum.security.spi.hibernate.simple.entity.HibernateSimpleUser;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
-import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
@@ -126,9 +125,7 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
         List users = null;
         try
         {
-            session = hibernateService.openSession();
-            users = session.find("from HibernateSimpleUser su where su.name=?", userName, Hibernate.STRING);
-			session.close();
+            users = retrieveSession().find("from HibernateSimpleUser su where su.name=?", userName, Hibernate.STRING);
         }
         catch (HibernateException e)
         {
@@ -156,10 +153,11 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
         List users = null;
         try
         {
-            session = hibernateService.openSession();
             users =
-                session.find("from HibernateSimpleUser su where su.name=?", userName.toLowerCase(), Hibernate.STRING);
-			session.close();
+                retrieveSession().find(
+                    "from HibernateSimpleUser su where su.name=?",
+                    userName.toLowerCase(),
+                    Hibernate.STRING);
         }
         catch (HibernateException e)
         {
@@ -226,8 +224,9 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
                 throw new DataBackendException(ce.getMessage(), ce);
             }
         }
-        if (!authenticator.authenticate(user,password)){
-        	throw new PasswordMismatchException("Can not authenticate user.");
+        if (!authenticator.authenticate(user, password))
+        {
+            throw new PasswordMismatchException("Can not authenticate user.");
         }
     }
     /**
@@ -341,24 +340,23 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
     public synchronized void revokeAll(User user) throws DataBackendException, UnknownEntityException
     {
         boolean userExists = false;
-        try
+        userExists = checkExists(user);
+        if (userExists)
         {
-            userExists = checkExists(user);
-            if (userExists)
+            Object groups[] = ((SimpleUser) user).getGroups().toArray();
+           
+            for (int i = 0; i < groups.length; i++)
             {
-                ((SimpleUser) user).setGroups(new GroupSet());
-                updateEntity(user);
-                return;
+                Group group = (Group) groups[i];
+                revoke(user, group);
             }
+           
+            return;
         }
-        catch (Exception e)
+        else
         {
-            throw new DataBackendException("revokeAll(User) failed", e);
+            throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
         }
-        finally
-        {
-        }
-        throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
     }
     /**
     * Determines if the <code>Group</code> exists in the security system.
@@ -521,10 +519,14 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
             userExists = checkExists(user);
             if (groupExists && userExists)
             {
-				((SimpleUser) user).addGroup(group);
-				((SimpleGroup) group).addUser(user);
-				updateEntity(user);
-				//updateEntity(group);
+                ((HibernateSimpleUser) user).addGroup(group);
+                ((HibernateSimpleGroup) group).addUser(user);
+                Session session = hibernateService.openSession(); //retrieveSession();
+                transaction = session.beginTransaction();
+                session.update(user);
+                session.update(group);
+                transaction.commit();
+                session.close();
                 return;
             }
         }
@@ -564,9 +566,14 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
             userExists = checkExists(user);
             if (groupExists && userExists)
             {
-				((SimpleUser) user).removeGroup(group);
-
-                updateEntity(user);
+                ((HibernateSimpleUser) user).removeGroup(group);
+                ((HibernateSimpleGroup) group).removeUser(user);
+                Session session = hibernateService.openSession(); //retrieveSession();
+                transaction = session.beginTransaction();
+                session.update(user);
+                session.update(group);
+                transaction.commit();
+                session.close();
                 return;
             }
         }
