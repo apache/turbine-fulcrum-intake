@@ -83,9 +83,9 @@ public class AppData
     /**
      * Imports the top level element from an XML specification
      */
-    public void loadFromXML (Attributes attrib)
+    public void loadFromXML(Attributes attrib)
     {
-        setBasePackage(basePkg);
+        setBasePackage(attrib.getValue("basePackage"));
     }
 
     /**
