@@ -73,10 +73,9 @@ import org.apache.fulcrum.security.util.TurbineSecurityException;
 import org.apache.torque.util.Criteria;
 
 // Classes needed for password encryption
-import javax.mail.internet.MimeUtility;
 import java.security.MessageDigest;
-import java.io.OutputStream;
-import java.io.ByteArrayOutputStream;
+
+import org.apache.commons.util.Base64;
 
 /**
  * This is a common subset of SecurityService implementation.
@@ -161,12 +160,10 @@ public abstract class BaseSecurityService
                 // default encoding. Thanks to SGawin for spotting this.
                 byte[] digest = md.digest(password.getBytes("UTF-8"));
 
-                ByteArrayOutputStream bas = new ByteArrayOutputStream(
-                    digest.length + digest.length / 3 + 1);
-
-                OutputStream encodedStream = MimeUtility.encode(bas, "base64");
-                encodedStream.write(digest);
-                return bas.toString();
+                // Base64-encode the digest.
+                byte[] encodedDigest = Base64.encode(digest);
+                return (encodedDigest == null ? null :
+                        new String(encodedDigest));
             }
             catch (Exception e)
             {
