@@ -5,7 +5,7 @@
   <id>fulcrum-configuration-impl</id>
   <extend>${basedir}/../../merlin-project.xml</extend>
   <name>Fulcrum Configuration Impl</name>
-  <currentVersion>1.0-alpha-2</currentVersion>
+  <currentVersion>1.0.2</currentVersion>
   <package>org.apache.fulcrum.configuration</package>
 
   <dependencies>
@@ -51,7 +51,7 @@
     <dependency>
       <groupId>merlin</groupId>
       <artifactId>merlin-unit</artifactId>
-      <version>3.2.10</version>
+      <version>3.3.0</version>
     </dependency>
 
   </dependencies>
