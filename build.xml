@@ -13,6 +13,7 @@
   <path id="classpath">
     <pathelement location="${velocity.jar}"/>
     <pathelement location="${log4j.jar}"/>
+    <pathelement location="${logkit.jar}"/>
     <pathelement location="${xerces.jar}"/>
     <pathelement location="${bsf.jar}"/>
     <pathelement location="${torque.jar}"/>
@@ -42,6 +43,7 @@
     <echo message="lib.repo = ${lib.repo}"/>
 
     <echo message="velocity.jar = ${velocity.jar}"/>
+    <echo message="logkit.jar = ${logkit.jar}"/>
     <echo message="log4j.jar = ${log4j.jar}"/>
     <echo message="xerces.jar = ${xerces.jar}"/>
     <echo message="bsf.jar = ${bsf.jar}"/>
@@ -133,6 +135,12 @@
       classpathref="classpath"
     />
     
+    <available
+      classname="org.apache.log.LogKit"
+      property="logkit.present"
+      classpathref="classpath"
+    />
+
     <available 
       classname="org.apache.velocity.runtime.Runtime"
       property="velocity.present"
@@ -238,6 +246,13 @@
     <antcall target="property-warning">
       <param name="name" value="velocity.jar"/>
       <param name="value" value="${velocity.jar}"/>
+    </antcall>
+  </target>
+
+  <target name="check.logkit" unless="logkit.present">
+    <antcall target="property-warning">
+      <param name="name" value="logkit.jar"/>
+      <param name="value" value="${logkit.jar}"/>
     </antcall>
   </target>
 
@@ -380,9 +395,10 @@
   
   <target name="prepare" 
     depends="init,env,create-dirs,
-        check.velocity,check.log4j,check.torque,check.bsf,check.servlet,
-        check.javamail,check.jaf,check.xerces,check.xalan,check.xmlrpc,
-        check.commons-collections,check.commons-util,check.regexp,
+        check.velocity,check.logkit,check.log4j,check.torque,check.bsf,
+        check.servlet,check.javamail,check.jaf,check.xerces,check.xalan,
+        check.xmlrpc,check.commons-collections,check.commons-util,
+        check.regexp,
         include-email,om">
     
     <!-- We have some static files that should overwrite
