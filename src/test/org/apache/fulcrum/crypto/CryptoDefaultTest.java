@@ -54,7 +54,12 @@ package org.apache.fulcrum.crypto;
  * <http://www.apache.org/>.
  */
 
+import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
+import org.apache.commons.configuration.BaseConfiguration;
+import org.apache.commons.configuration.Configuration;
 
 import org.apache.fulcrum.ServiceManager;
 import org.apache.fulcrum.TurbineServices;
@@ -62,65 +67,26 @@ import org.apache.fulcrum.TurbineServices;
 import org.apache.fulcrum.factory.FactoryService; 
 import org.apache.fulcrum.factory.TurbineFactoryService; 
 
-import org.apache.commons.configuration.BaseConfiguration;
-import org.apache.commons.configuration.Configuration;
-
-/**
- * Testcase for the CryptoService.
- *
- * Objective: Checks, whether the supplied "java" crypto
- * provider can be selected and offers MD5 and SHA1
- * algorithms.
- *
- * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
- * @version $Id$
- *
- */
-
-public class OldJavaCryptTest
+public class CryptoDefaultTest
     extends TestCase
 {
     private static final String PREFIX = "services." +
         CryptoService.SERVICE_NAME + '.';
 
-    private String input   = "Oeltanks";
-    private String md5result   = "XSop0mncK19Ii2r2CUe2";
-    private String sha1result  = "uVDiJHaavRYX8oWt5ctkaa7j";
+    private static final String preDefinedInput = "Oeltanks";
 
-    public OldJavaCryptTest( String name )
+    public CryptoDefaultTest( String name )
     {
         super(name);
-    }
 
-    public void testSelection()
-    {
-        try
-        {
-            doit();
-        }
-        catch( Exception e )
-        {
-            fail( e.getMessage() );
-        }
-    }
-
-    public void doit()
-        throws Exception
-    {
         ServiceManager serviceManager = TurbineServices.getInstance();
         serviceManager.setApplicationRoot(".");
         
         Configuration cfg = new BaseConfiguration();
         cfg.setProperty(PREFIX + "classname",
                         TurbineCryptoService.class.getName());
-        cfg.setProperty(PREFIX + "algorithm.unix",
-                        "org.apache.fulcrum.crypto.provider.UnixCrypt");
-        cfg.setProperty(PREFIX + "algorithm.clear",
-                        "org.apache.fulcrum.crypto.provider.ClearCrypt");
-        cfg.setProperty(PREFIX + "algorithm.java",
-                        "org.apache.fulcrum.crypto.provider.JavaCrypt");
-        cfg.setProperty(PREFIX + "algorithm.oldjava",
-                        "org.apache.fulcrum.crypto.provider.OldJavaCrypt");
+
+        /* No providers configured. Should be "java" then */
 
         /* Ugh */
 
@@ -129,26 +95,67 @@ public class OldJavaCryptTest
 
         serviceManager.setConfiguration(cfg);
 
-        serviceManager.init();
-
-        CryptoAlgorithm ca = TurbineCrypto.getService().getCryptoAlgorithm("oldjava");
-
-        ca.setCipher("MD5");
-
-        String output = ca.encrypt(input);
-
-        if(!output.equals(md5result))
+        try
         {
-            fail("MD5 Encryption failed, expected "+md5result+", got "+output);
+            serviceManager.init();
         }
-
-        ca.setCipher("SHA1");
-
-        output = ca.encrypt(input);
-
-        if(!output.equals(sha1result))
+        catch (Exception e)
         {
-            fail("SHA1 Encryption failed, expected "+sha1result+", got "+output);
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public static Test suite()
+    {
+        return new TestSuite(CryptoDefaultTest.class);
+    }
+
+    public void testMd5()
+    {
+        String preDefinedResult = "XSop0mncK19Ii2r2CUe29w==";
+
+        try
+        {
+            CryptoAlgorithm ca = TurbineCrypto.getCryptoAlgorithm("default");
+
+            ca.setCipher("MD5");
+
+            String output = ca.encrypt(preDefinedInput);
+
+            assertEquals("MD5 Encryption failed ",
+                         preDefinedResult,
+                         output);
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    public void testSha1()
+    {
+        String preDefinedResult  = "uVDiJHaavRYX8oWt5ctkaa7j1cw=";
+
+        try
+        {
+            CryptoAlgorithm ca = TurbineCrypto.getCryptoAlgorithm("default");
+
+            ca.setCipher("SHA1");
+
+            String output = ca.encrypt(preDefinedInput);
+
+            assertEquals("SHA1 Encryption failed ",
+                         preDefinedResult,
+                         output);
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            fail();
         }
     }
 }
