@@ -129,7 +129,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
      * True if logging should go throught
      * LoggingService, false if not.
      */
-    protected boolean loggingEnabled = false;
+    protected boolean loggingConfigured;
 
     /**
      * These are objects that the parent application
@@ -165,6 +165,44 @@ public abstract class BaseServiceBroker implements ServiceBroker
     protected BaseServiceBroker()
     {
     }
+    
+    /**
+     * Determine whether log4j has already been configured.
+     *
+     * @return boolean is log4j configured
+     */
+    protected boolean isLoggingConfigured() 
+    {
+        // This is a note from Ceki, taken from a message on the log4j
+        // user list:
+        //
+        // Having defined categories does not necessarily mean configuration. 
+        // Remember that most categories are created outside the configuration file. 
+        // What you want to check for is the existence of appenders. The correct 
+        // procedure is to first check for appenders in the root category and if that 
+        // returns no appenders to check in other categories. 
+        
+        Enumeration enum = Category.getRoot().getAllAppenders();
+             
+        if(!(enum instanceof org.apache.log4j.helpers.NullEnumeration))
+        {
+            return true;
+        } 
+        else 
+        { 
+            Enumeration cats =  Category.getCurrentCategories();
+            while(cats.hasMoreElements()) 
+            {
+                Category c = (Category) cats.nextElement();
+                if(!(c.getAllAppenders() instanceof org.apache.log4j.helpers.NullEnumeration))
+                {
+                    return true;
+                }                     
+            }
+        }
+             
+        return false;
+    } 
 
     /**
      * Set the configuration object for the services broker.
@@ -217,6 +255,10 @@ public abstract class BaseServiceBroker implements ServiceBroker
         //!! We should make some service framework exceptions
         //   to throw in the event these requirements
         //   aren't satisfied.
+
+        // Check to see if a parent application has already
+        // configured the logging.
+        loggingConfigured = isLoggingConfigured();
 
         // Create the mapping between service names
         // and their classes.
@@ -728,7 +770,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
      */
     public void notice(String msg)
     {
-        if (loggingEnabled)
+        if (loggingConfigured)
         {
             category.info(msg);
         }
@@ -750,7 +792,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
      */
     public void error(Throwable t)
     {
-        if (loggingEnabled)
+        if (loggingConfigured)
         {
             category.info(t);
             category.info(stackTrace(t));
