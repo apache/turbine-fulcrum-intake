@@ -83,6 +83,12 @@ public class LocaleTokenizer
     private static final char QUALITY_SEPARATOR = ';';
 
     /**
+     * The default quality value for an <code>AcceptLanguage</code>
+     * object.
+     */
+    private static final Float DEFAULT_QUALITY = new Float(1.0f);
+
+    /**
      * The parsed locales.
      */
     private ArrayList locales = new ArrayList(3);
@@ -182,8 +188,6 @@ public class LocaleTokenizer
      */
     private class AcceptLanguage implements Comparable
     {
-        static final Float DEFAULT_QUALITY = new Float(1.0f);
-
         /**
          * The language and country.
          */
