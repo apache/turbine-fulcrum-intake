@@ -2,6 +2,13 @@
   xmlns:j="jelly:core"
   xmlns:m="maven">
 
+  <postGoal name="java:compile">
+    <copy
+      file="src/java/org/apache/fulcrum/avalon-roles.xml"
+      tofile="target/classes/org/apache/fulcrum/avalon-roles.xml"
+    />
+  </postGoal>
+
   <!-- ================================================================== -->
   <!-- T O R Q U E  G E N E R A T I O N  P R E  G O A L                   --> 
   <!-- ================================================================== -->
