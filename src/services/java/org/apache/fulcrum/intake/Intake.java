@@ -61,7 +61,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.fulcrum.pool.Recyclable;
-import org.apache.torque.om.Retrievable;
 import org.apache.fulcrum.util.parser.ValueParser;
 import org.apache.fulcrum.intake.model.Group;
 import org.apache.fulcrum.intake.TurbineIntake;

@@ -58,7 +58,7 @@ import java.util.Map;
 import java.lang.reflect.Method;
 import org.apache.regexp.RE;
 import org.apache.fulcrum.util.parser.ValueParser;
-import org.apache.torque.om.Retrievable;
+import org.apache.fulcrum.intake.Retrievable;
 import org.apache.fulcrum.intake.TurbineIntake;
 import org.apache.fulcrum.intake.xmlmodel.Rule;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
