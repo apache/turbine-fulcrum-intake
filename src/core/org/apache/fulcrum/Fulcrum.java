@@ -65,22 +65,41 @@ import org.apache.stratum.configuration.Configuration;
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
-public class Fulcrum extends BaseServiceBroker
+public class Fulcrum
         implements Configurable, Initializable
 {
+    private static ServiceManager ts = TurbineServices.getInstance();
+
     /**
      * initialize fulcrum
      */
     public void initialize() throws Exception
     {
-        super.init();
+        ts.init();
     }
 
     /**
      * configure fulcrum
+     *
+     * @param configuration
      */
     public void configure(Configuration configuration)
     {
-        super.setConfiguration(configuration);
+        ts.setConfiguration(configuration);
+    }
+
+    /**
+     * get a service
+     *
+     * @param name The name of the service to retrieve.
+     */
+    public static Service getService(String name)
+    {
+        return ts.getService(name);
+    }
+
+    public static void shutdownServices()
+    {
+        ts.shutdownServices();
     }
 }
