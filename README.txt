@@ -13,29 +13,44 @@ xdocs/      Fulcrum documention in Anakia formatted tags.
 B U I L D I N G
 --------------------------------------------------------------------------
 
-In order to build Fulcrum you must must set the following properties in
-either your ${user.home}/build.properties file, or the build.properties
-file provided in the Fulcrum build/ directory:
+Building Fulcrum from CVS is fairly straightforward.  Changes
+have been made to the Fulcrum build process to simplify the
+acquisition of jar dependencies.  The entire build process is now
+a four-step process.
 
-log4j.jar
-bsf.jar (http://oss.software.ibm.com/developerworks/projects/bsf)
-velocity.jar
-village.jar (http://share.whichever.com/)
-jdbc.jar
-torque.jar
-regexp.jar
-xmlrpc.jar
-xalan.jar
-xerces.jar
-servlet.jar
-javamail.jar (http://java.sun.com/products/javamail/index.html)
-jaf.jar (http://java.sun.com/products/javabeans/glasgow/jaf.html)
+The first step of the process is to obtain the source.  Checkout
+the 'jakarta-turbine-fulcrum' repository.  You'll also need to
+check out 'jakarta-turbine-torque' because the current build
+process references templates in that source tree.  If you are
+unfamiliar with the Jakarta CVS repositories, please refer to the
+CVS Repositories document
+(http://jakarta.apache.org/site/cvsindex.html) document for
+assistance.
 
-Alternately, you can set the property lib.repo to the directory acting
-as a repository holding the JARs named by default.properties.
+Next, you must define the 'lib.repo' property in your
+'${user.home}/build.properties' file.  If you do not have a
+'${user.home}/build.properties' file, create one in your home
+directory and add the following line:
 
-These are paths to all the JARs that are required for building
-all the services. Soon there will be a mini build for each of
-the individual services: each service can state it's 
-dependencies and the overall build will simply not build
-services whose requirements aren't satisfied.
+  lib.repo = /path/to/some/directory  
+
+The value of this property determines the location that the
+Fulcrum dependencies will be stored after they have been
+downloaded.  Note: this directory must exist in the
+filesystem.
+
+Next, in the top-level directory of the Fulcrum distribution,
+type the following command to download all of the
+dependencies required to build Fulcrum:
+
+  ant update-jars  
+
+Lastly, after all of the jars have been downloaded to your
+'lib.repo' directory, building the Fulcrum distribution is only a
+matter of verifying that the 'torque.dir' property (defined in
+'jakarta-turbine-fulcrum/default.properties') is set
+correctly, and typing the following command:
+
+  ant
+
+The resulting jar file will be located in the 'bin' directory.  
