@@ -94,6 +94,11 @@
     <ant antfile="${maven.home}/build-maven.xml" target="init"/>
   </target>
 
+  <target
+    name="maven:cross-ref">
+    <ant antfile="${maven.home}/build-docs.xml" target="cross-ref"/>
+  </target>
+
   <!-- maven:end -->
 
   <!-- ================================================================== -->
@@ -106,7 +111,7 @@
 
     <property
       name="omStatusFile"
-      value="${maven.prepareSourceDirectory}/report.turbine.om.generation"
+      value="${maven.prepareSourceDirectory}/report.fulcrum.om.generation"
     />
 
     <uptodate
@@ -186,7 +191,7 @@
       controlTemplate="${OMControlTemplate}"
       outputDirectory="${maven.prepareSourceDirectory}"
       useClasspath="true"
-      outputFile="report.turbine.om.generation"
+      outputFile="report.fulcrum.om.generation"
       targetPackage="${securityPackage}"
       xmlFile="${maven.prepareSourceDirectory}/turbine-schema.xml"
       targetDatabase="${database}"
@@ -210,7 +215,7 @@
       controlTemplate="${OMControlTemplate}"
       outputDirectory="${maven.prepareSourceDirectory}"
       useClasspath="true"
-      outputFile="report.turbine.scheduler.generation"
+      outputFile="report.fulcrum.scheduler.generation"
       targetPackage="${schedulerPackage}"
       xmlFile="${maven.prepareSourceDirectory}/scheduler-schema.xml"
     />
