@@ -3,7 +3,7 @@
 <document>
 
   <properties>
-    <title>Cache Component</title>
+    <title>Mimetype Component</title>
     <author email="epugh@upstate.com">Eric PUgh</author>
   </properties>
 
@@ -11,14 +11,11 @@
 
   <section name="Overview">
     <p>
-     This Service functions as a Global Cache.  A global cache is a good
-     place to store items that you may need to access often but don't
-     necessarily need (or want) to fetch from the database everytime.  A
-     good example would be a look up table of States that you store in a
-     database and use throughout your application.  Since information
-     about States doesn't change very often, you could store this
-     information in the Global Cache and decrease the overhead of
-     hitting the database everytime you need State information.
+      The MimeType Service maintains mappings between MIME types and
+      the corresponding file name extensions, and between locales and
+      character encodings. The mappings are typically defined in
+      properties or files located in user's home directory, Java home
+      directory or the current class jar depending on the implementation.
    </p>
       
     <p>
@@ -37,9 +34,9 @@
 <source>
 <![CDATA[
     <role
-        name="org.apache.fulcrum.cache.GlobalCacheService"
-        shorthand="cache"
-        default-class="org.apache.fulcrum.cache.DefaultGlobalCacheService"/>
+        name="org.apache.fulcrum.mimetype.MimeTypeService"
+        shorthand="mimetype"
+        default-class="org.apache.fulcrum.mimetype.DefaultMimeTypeService"/>
 ]]>
 </source>
 
@@ -49,7 +46,7 @@
 <source>
 
 <![CDATA[
-    <cache cacheInitialSize="20" cacheCheckFrequency="5"/>
+        <mimetype/>
 ]]>
 </source>
 
