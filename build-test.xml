@@ -32,6 +32,7 @@
     <pathelement location="${junit.jar}"/>
     <pathelement location="${dvsl.jar}" />
     <pathelement location="${dom4j.jar}" />
+    <pathelement location="${stratum.jar}" />
   </path>
 
   <!-- ================================================================== -->
