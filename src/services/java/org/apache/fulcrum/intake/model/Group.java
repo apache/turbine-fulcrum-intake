@@ -67,6 +67,7 @@ import org.apache.fulcrum.intake.xmlmodel.XmlGroup;
 import org.apache.fulcrum.util.parser.ValueParser;
 import org.apache.fulcrum.ServiceException;
 import org.apache.fulcrum.pool.Recyclable;
+import org.apache.log4j.Category;
 
 /** Holds a group of Fields */
 public class Group
@@ -78,6 +79,15 @@ public class Group
      * An id representing a new object.
      */
     public static final String NEW = "_0";
+
+    private static final Category log;
+    private static final boolean isDebugEnabled;
+
+    static
+    {
+        log = Category.getInstance(Group.class.getName());
+        isDebugEnabled = log.isDebugEnabled();
+    }
 
     /**
      * The key used to represent this group in a parameter.
@@ -355,6 +365,12 @@ public class Group
         for (int i=fieldsArray.length-1; i>=0; i--)
         {
             valid &= fieldsArray[i].isValid();
+            if ( isDebugEnabled && !fieldsArray[i].isValid()) 
+            {
+                log.debug("[Intake] Group(" + oid + "): " + name + "; Field: "
+                          + fieldsArray[i].name + "; value=" + 
+                          fieldsArray[i].getValue() + " is invalid!"); 
+            }
         }
         return valid;
     }
