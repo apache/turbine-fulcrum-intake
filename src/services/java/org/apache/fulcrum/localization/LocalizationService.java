@@ -100,19 +100,30 @@ public interface LocalizationService
 
     /**
      * Retrieves the name of the default bundle (as specified in the
-     * config file).
+     * config file), or the first in the list if there are more than
+     * one.
      */
     public String getDefaultBundleName();
 
     /**
-     * Convenience method to get a default ResourceBundle.
+     * Retrieves the list of names of bundles to search by default for
+     * <code>ResourceBundle</code> keys (as specified in the config
+     * file).
      *
-     * @return A localized ResourceBundle.
+     * @return The list of configured bundle names.
+     */
+    public String[] getBundleNames();
+
+    /**
+     * Convenience method to get the default <code>ResourceBundle</code>.
+     *
+     * @return A localized <code>ResourceBundle</code>.
      */
     public ResourceBundle getBundle();
 
     /**
-     * Convenience method to get a ResourceBundle based on name.
+     * Returns a ResourceBundle given the bundle name and the default
+     * locale information supplied by the configuration.
      *
      * @param bundleName Name of bundle.
      * @return A localized ResourceBundle.
@@ -137,11 +148,12 @@ public interface LocalizationService
      * <code>Accept-Language</code> of.
      * @return A localized ResourceBundle.
      */
-    public ResourceBundle getBundle (HttpServletRequest req);
+    public ResourceBundle getBundle(HttpServletRequest req);
 
     /**
-     * Convenience method to get a ResourceBundle based on name and
-     * HTTP Accept-Language header in HttpServletRequest.
+     * Convenience method to get a <code>ResourceBundle</code> based
+     * on name and HTTP <code>Accept-Language</code> header from a
+     * <code>HttpServletRequest</code>.
      *
      * @param bundleName Name of bundle.
      * @param req The HTTP request to parse the
@@ -183,6 +195,18 @@ public interface LocalizationService
      * language and country defaults.
      */
     public Locale getLocale(String languageHeader);
+
+    /**
+     * Tries very hard to return a value, looking first in the
+     * specified bundle, then searching list of default bundles
+     * (giving precedence to earlier bundles over later bundles).
+     *
+     * @param bundleName Name of the bundle to look in first.
+     * @param locale Locale to get text for.
+     * @param key Name of the text to retrieve.
+     * @return Localized text.
+     */
+    public String getString(String bundleName, Locale locale, String key);
 
     /**
      * This method sets the name of the defaultBundle.
