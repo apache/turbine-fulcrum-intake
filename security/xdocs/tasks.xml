@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>Tasks</title>
+    <author email="epugh@upstate.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+    <section name="Tasks">
+      <p>
+      	Lists of todos and ideas for future versions.
+      </p>
+       <p>
+       	
+          <ul>
+           <li>
+              The Turbine model was taken from the Turbine security.  However, I really don't quite grok it yet.  Therefore all the
+              unit tests have been written agains the Simple model, which is what I want to implement.
+            </li>
+           <li>
+              Need to provide an Memory implementation of the Turbine model for unit testing.
+            </li>
+           <li>
+              Finish fleshing out the Adapters for Turbine.  Right now they are a pretty minimal implementation
+              to validate that the Adapter concept would work.  Currently they only support moving objects from
+              fulcrum to turbine.  Sending objects from Turbine back to Fulcrum is not supported.  Just needs some
+              grunt work.
+            </li>            
+            <li>
+              Convert all avalon components to use Servicable.  Per this email:
+<pre>
+Eric Pugh wrote:
+> So, if I am stuck currently using ECM, then I need to keep it.  Or, I guess
+> if I think users of my wrapper are running it in ECM as well..
+
+yes.
+
+> Any suggestions on what the best way to move forward?  Deprecate the
+> interface or something?  Release two versions of the wrapper, one with and
+> one without?
+
+simply keep implementing Component in all your wrappers, but do move to 
+use Servicable/ServiceManager. So:
+
+class MyImpl implements My, Servicable, Component
+{
+   service( ServiceManager sm )
+   {
+     MyOtherComp o = (MyOtherComp)sm.lookup( "blah" );
+   }
+}
+
+that way, MyImpl won't suffer if the implementation for MyOtherComp has 
+its 'Component' marker removed. And yes, this works in the latest 
+release of ECM, too.
+
+> I guess, now that I grok the docs a bit better, that I am now supposed to
+> use Serviceable and the ServiceManager in all the places I had Composable
+> and ComponentManager?  I guess my other question is whether to use upgrade
+> Turbine's AvalonComponentService to use Fortress or Merlin.  The overview
+> doc (http://avalon.apache.org/containers/index.html) seems to suggest
+> Fortress, however Merlin has a release out.
+
+Fortress has a final release, merlin does not. The releases Steve is 
+making available atm are snapshots of the Merlin3 tree, not final releases.
+
+Based on my knowledge of the needs in turbine, I would suggest going 
+with fortress if you decide to upgrade. Merlin atm offers a kitchen sink 
+or two you guys don't need :D
+
+cheers,
+
+- LSD
+
+</pre>
+            </li>
+          </ul>
+        </p>      
+
+    </section>
+    
+    <section name="Things to Resolve">
+      <subsection name="Naming">
+       <p>       	
+          <ul>
+           <li>
+              Right now I don't like the names of the types of Model's..  I think "Simple" and "Turbine" are
+              terribly non descriptive names.
+            </li>
+           <li>
+              Should SPI implementations have the same name?  Right now the name of the model is in the name of the SPI implementator like
+              <code>org.apache.fulcrum.security.spi.memory.simple.SimpleGroupManagerImpl</code>.  Should it be called 
+              <code>o.a.f.s.spi.memory.simple.GroupManger</code>?  Is that confusing if there is also <code>o.a.f.s.spi.memory.turbine.GroupManager</code>.
+              <br/>
+              Although, I guess you would only have a single GroupManager per app?  I could see have <code>o.a.f.s.spi.memory.simple.UserManager</code>
+              as well as <code>o.a.f.s.spi.nt.simple.GroupManager</code>.  But not two GroupManagers.
+            </li>
+            
+            <li>
+              Related, should the interfaces like <code>SimpleGroupManager</code> extends <code>GroupManager</code>?  Or should they instead
+              be called something like <code>GroupModel</code> or <code>SimpleGroupModel</code> because they specify the model of how the
+              bits and pieces fit togther?  However, when you are doing a grant/revoke type action you would cast to <code>((GroupModel)groupManager).revokeAll()</code>
+              versus casting to <code>((SimpleGroupManager)groupManager).revokeAll()</code>.  So you cast to GroupModel for model changes, and to SimpleGroupManager for
+              entity changes..  Not sure..  smells maybe of needless complexity...
+             
+            </li>
+          </ul>
+        </p>      
+      </subsection>
+      
+      <subsection name="Access Control Lists">
+       <p>
+       	  A couple of the objects are hardcoded when being created.
+          <ul>
+           <li>
+              the DefaultAccessControlList is the only option in the SimpleUserManager.  It is hardcoded, versus
+              using a factory service.  Should a factory be used?  If so, is it the fulcrum factory service, or
+              does it look up the Factory as an Avalon component?
+            </li>
+           <li>
+              Is there a performance gain from pooling ACL's?  They are very specific to the user however.
+            </li>
+          </ul>
+        </p>      
+      </subsection>
+      
+            
+    
+    </section>    
+
+  </body>
+</document>

@@ -13,6 +13,7 @@
 
     <menu name="Overview">
       <item name="Main"                 href="/index.html"/>
+      <item name="Tasks"                 href="/tasks.html"/>
     </menu>
   </body>
 </project>
