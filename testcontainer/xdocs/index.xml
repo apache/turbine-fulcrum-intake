@@ -53,7 +53,7 @@
 
     </subsection>
 
-    <subsection name="Using the container directly>
+    <subsection name="Using the container directly">
       <p>
         If you need more control over the container itself for your test,
         just don't extend the unit test provided with the container.  Instead,
@@ -61,7 +61,7 @@
         docs for <code>org.apache.fulcrum.testcontainer.Container</code>
         for more information.
       </p>
-    </sunsection>
+    </subsection>
 
   </section>
 
