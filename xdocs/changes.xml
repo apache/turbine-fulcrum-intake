@@ -8,13 +8,20 @@
 
   <body>
     <release version="Not applicable" date="">
-     <action dev="epugh" type="add">
-     	Integrate the avalon-meta plugin into the project.xml files so
-     	that this dependency is downloaded.
+     <action dev="sgoeschl" type="add">
+       Added fulcrum:site to build a subprojects and the master 
+       project including Dashboard report
+     </action>    
+     <action dev="sgoeschl" type="add">
+       Added Dashboard report
      </action>    
      <action dev="epugh" type="add">
-     	Finished updating the conversion process.  All the components
-     	that Steve McConnell revamped are integrated and building.
+      Integrate the avalon-meta plugin into the project.xml files so
+      that this dependency is downloaded.
+     </action>    
+     <action dev="epugh" type="add">
+      Finished updating the conversion process.  All the components
+      that Steve McConnell revamped are integrated and building.
      </action>
      <action dev="epugh" type="add">
         Changed multiproject site build so that instead of having a
@@ -22,10 +29,10 @@
         url for all the components.  Allows us to leverage the multiproject
         plugin better.  Updated docs on building the site.  Easier to update 
         individual component site documentation this way.
-      </action>     	
+      </action>       
       <action dev="epugh" type="add">
         Intake Component Added
-      </action>    	
+      </action>     
       <action dev="epugh" type="add">
         Build process updated to use 'multiproject' plugin.  Additionally,
         significantly more components have been converted to being seperate

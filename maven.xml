@@ -5,6 +5,16 @@
   xmlns:deploy="deploy"
   >
 
+<goal name="fulcrum:site" description="Build the site for all Fulcrum components">
+    <attainGoal name="multiproject:site"/>
+    <!-- 
+      Since we don't have a seperate project.xml for the master projet
+      we dynamically add the Dashboard plugin before generating the
+      master site
+    -->
+    <attainGoal name="maven-dashboard-plugin:register"/>
+    <attainGoal name="site"/>
+  </goal>
 
 <goal name="fulcrum:build" description="Build and install all Fulcrum components">
     <maven:reactor basedir="${basedir}"
