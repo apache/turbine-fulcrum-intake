@@ -41,8 +41,8 @@
     </mailingList>
     <mailingList>
       <name>Turbine Developer List</name>
-      <subscribe>mailto:turbine-dev-subscribe@jakarta.apache.org</subscribe>
-      <unsubscribe>mailto:turbine-dev-unsubscribe@jakarta.apache.org</unsubscribe>
+      <subscribe>turbine-dev-subscribe@jakarta.apache.org</subscribe>
+      <unsubscribe>turbine-dev-unsubscribe@jakarta.apache.org</unsubscribe>
       <archive>http://archives.apache.org/eyebrowse/SummarizeList?listName=turbine-dev@jakarta.apache.org</archive>
     </mailingList>
   </mailingLists>
@@ -124,12 +124,12 @@
     </dependency>
     <dependency>
       <id>commons-lang</id>
-      <version>1.0-b1</version>
+      <version>1.0</version>
       <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
       <id>commons-logging</id>
-      <version>1.0.1</version>
+      <version>1.0.2</version>
       <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
@@ -159,7 +159,7 @@
     </dependency>
     <dependency>
       <id>junit</id>
-      <version>3.7</version>
+      <version>3.8.1</version>
     </dependency>
     <dependency>
       <id>log4j</id>
@@ -181,7 +181,7 @@
     </dependency>
     <dependency>
       <id>stratum</id>
-      <version>1.0-b3-dev</version>
+      <version>1.0-b3</version>
       <url>http://jakarta.apache.org/turbine/stratum/</url>
     </dependency>
     <dependency>
@@ -223,7 +223,7 @@
     </dependency>
     <dependency>
       <id>xmlrpc</id>
-      <version>1.1</version>
+      <version>1.2-a1</version>
     </dependency>
   </dependencies>
   <build>
