@@ -56,6 +56,7 @@ package org.apache.fulcrum.localization;
 
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
@@ -107,6 +108,12 @@ public class TurbineLocalizationService
     /** The name of the default bundle to use. */
     private String defaultBundle = null;
 
+    /**
+     * The name of the default locale to use (includes language and
+     * country).
+     */
+    private Locale defaultLocale = null;
+
     /** The name of the default language to use. */
     private String defaultLanguage = null;
 
@@ -140,6 +147,7 @@ public class TurbineLocalizationService
         defaultCountry = getConfiguration()
             .getString("locale.default.country",
                        jvmDefault.getCountry()).trim();
+        defaultLocale = new Locale(defaultLanguage, defaultCountry);
         setInit(true);
     }
 
@@ -301,7 +309,7 @@ public class TurbineLocalizationService
             }
             catch (MissingResourceException e)
             {
-                rb = guessBundle(bundleName, locale, bundlesByLocale);
+                rb = findClosestBundle(bundleName, locale, bundlesByLocale);
                 if (rb == null)
                 {
                     throw (MissingResourceException) e.fillInStackTrace();
@@ -322,16 +330,22 @@ public class TurbineLocalizationService
     }
 
     /**
-     * Some browsers send a HTTP Accept-Language header with a value
-     * of only the language to use (i.e. "Accept-Language: en"), and
-     * neglect to include a country.  When there is no bundle for the
-     * requested language, this method can be called to try the
-     * default country (checking internally to assure the requested
-     * language matches the default to avoid disconnects between
-     * language and country).
+     * <p>Retrieves the bundle most closely matching first against the
+     * supplied inputs, then against the defaults.</p>
+     *
+     * <p>Use case: some clients send a HTTP Accept-Language header
+     * with a value of only the language to use
+     * (i.e. "Accept-Language: en"), and neglect to include a country.
+     * When there is no bundle for the requested language, this method
+     * can be called to try the default country (checking internally
+     * to assure the requested criteria matches the default to avoid
+     * disconnects between language and country).</p>
+     *
+     * <p>Since we're really just guessing at possible bundles to use,
+     * we don't ever throw <code>MissingResourceException</code>.</p>
      */
-    private final ResourceBundle guessBundle(String bundleName, Locale locale,
-                                             HashMap bundlesByLocale)
+    private ResourceBundle findClosestBundle(String bundleName, Locale locale,
+                                             Map bundlesByLocale)
     {
         ResourceBundle rb = null;
         if ( !StringUtils.isValid(locale.getCountry()) &&
@@ -347,19 +361,45 @@ public class TurbineLocalizationService
             rb = (ResourceBundle) bundlesByLocale.get(withDefaultCountry);
             if (rb == null)
             {
-                try
-                {
-                    rb = ResourceBundle.getBundle(bundleName,
-                                                  withDefaultCountry);
-                }
-                catch (MissingResourceException ignored)
-                {
-                    // Since we're really just guessing, we can't in
-                    // good conscience throw an exception here.
-                }
+                rb = getBundleIgnoreException(bundleName, withDefaultCountry);
             }
         }
+        else if ( !StringUtils.isValid(locale.getLanguage()) &&
+                  defaultCountry.equals(locale.getCountry()) )
+        {
+            Locale withDefaultLanguage = new Locale(defaultLanguage, 
+                                                    locale.getCountry());
+            rb = (ResourceBundle) bundlesByLocale.get(withDefaultLanguage);
+            if (rb == null)
+            {
+                rb = getBundleIgnoreException(bundleName, withDefaultLanguage);
+            }
+        }
+
+        if (rb == null && !defaultLocale.equals(locale))
+        {
+            rb = getBundleIgnoreException(bundleName, defaultLocale);
+        }
+
         return rb;
+    }
+
+    /**
+     * Retrieves the bundle using the
+     * <code>ResourceBundle.getBundle(String, Locale)</code> method,
+     * ignoring <code>MissingResourceException</code>.
+     */
+    private final ResourceBundle getBundleIgnoreException(String bundleName,
+                                                          Locale locale)
+    {
+        try
+        {
+            return ResourceBundle.getBundle(bundleName, locale);
+        }
+        catch (MissingResourceException ignored)
+        {
+            return null;
+        }
     }
 
     /**
@@ -407,6 +447,6 @@ public class TurbineLocalizationService
         }
 
         // Couldn't parse locale.
-        return new Locale(defaultLanguage, defaultCountry);
+        return defaultLocale;
     }
 }
