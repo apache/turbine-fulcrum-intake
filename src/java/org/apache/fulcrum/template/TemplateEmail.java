@@ -58,7 +58,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.mail.internet.InternetAddress;
 import org.apache.commons.mail.SimpleEmail;
-import org.apache.commons.lang.Strings;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.util.WordWrapper;
 
 /**
  * This is a simple class for sending email from within the TemplateService.
@@ -381,7 +382,7 @@ public class TemplateEmail
         // If the caller desires word-wrapping, do it here
         if (wordWrap > 0)
         {
-            body = Strings.wrapText (body,
+            body = WordWrapper.wrapText (body,
                                      System.getProperty("line.separator"),
                                      wordWrap);
         }
@@ -415,7 +416,7 @@ public class TemplateEmail
         // If the caller desires word-wrapping, do it here
         if (wordWrap > 0)
         {
-            body = Strings.wrapText (body,
+            body = WordWrapper.wrapText (body,
                                      System.getProperty("line.separator"),
                                      wordWrap);
         }
