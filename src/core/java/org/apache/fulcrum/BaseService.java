@@ -135,6 +135,10 @@ public abstract class BaseService
     }
 
     /**
+     * Returns either <code>Initialized</code> or
+     * <code>Uninitialized</code>, depending upon {@link
+     * org.apache.fulcrum.Service} innitialization state.
+     *
      * @see org.apache.fulcrum.Service#getStatus()
      */
     public String getStatus()
