@@ -28,6 +28,8 @@
     <pathelement location="${xalan.jar}"/>
     <pathelement location="${xerces.jar}"/>
     <pathelement location="${xmlrpc.jar}"/>
+    <pathelement location="${dvsl.jar}"/>
+    <pathelement location="${junit.jar}"/>
   </path>
 
   <!-- ================================================================== -->

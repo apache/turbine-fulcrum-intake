@@ -30,6 +30,8 @@
     <pathelement location="${xmlrpc.jar}"/>
     <pathelement location="${build.dest}"/>
     <pathelement location="${junit.jar}"/>
+    <pathelement location="${dvsl.jar}" />
+    <pathelement location="${dom4j.jar}" />
   </path>
 
   <!-- ================================================================== -->
@@ -103,4 +105,17 @@
     </javac>
   </target>
 
+
+  <target name="test-dvsl">
+    <echo message="Running DVSL service tests"/>
+
+    <java classname="junit.textui.TestRunner" fork="yes" failonerror="true">
+      <arg value="org.apache.fulcrum.dvsl.DvslBasicTest"/>
+      <classpath>
+        <path refid="classpath"/>
+        <pathelement location="${build.dir}/classes"/>
+        <pathelement location="${build.dir}/test"/>
+      </classpath>
+    </java>
+   </target>
 </project>
