@@ -448,7 +448,9 @@ public class BaseValueParser
         {
             Object object = parameters.get(convert(name));
             if (object != null)
-                value = Double.valueOf(((String[])object)[0]).doubleValue();
+            {
+                value = Double.valueOf(((String[]) object)[0]).doubleValue();
+            }
         }
         catch (NumberFormatException exception)
         {
@@ -484,7 +486,9 @@ public class BaseValueParser
         {
             Object object = parameters.get(convert(name));
             if (object != null)
-                value = Float.valueOf(((String[])object)[0]).floatValue();
+            {
+                value = Float.valueOf(((String[]) object)[0]).floatValue();
+            }
         }
         catch (NumberFormatException exception)
         {
@@ -522,10 +526,10 @@ public class BaseValueParser
             Object object = parameters.get(convert(name));
             if (object != null)
             {
-                String temp = ((String[])object)[0];
+                String temp = ((String[]) object)[0];
                 if (temp.length() > 0)
                 {
-                    value = new BigDecimal(((String[])object)[0]);
+                    value = new BigDecimal(((String[]) object)[0]);
                 }
             }
         }
@@ -560,10 +564,12 @@ public class BaseValueParser
         Object object = getStrings(convert(name));
         if (object != null)
         {
-            String[] temp = (String[])object;
+            String[] temp = (String[]) object;
             value = new BigDecimal[temp.length];
             for (int i=0; i<temp.length; i++)
-                value[i] = new BigDecimal( temp[i] );
+            {
+                value[i] = new BigDecimal(temp[i]);
+            }
         }
         return value;
     }
@@ -584,7 +590,9 @@ public class BaseValueParser
         {
             Object object = parameters.get(convert(name));
             if (object != null)
-                value = Integer.valueOf(((String[])object)[0]).intValue();
+            {
+                value = Integer.valueOf(((String[]) object)[0]).intValue();
+            }
         }
         catch (NumberFormatException exception)
         {
@@ -658,10 +666,12 @@ public class BaseValueParser
         Object object = getStrings(convert(name));
         if (object != null)
         {
-            String[] temp = (String[])object;
+            String[] temp = (String[]) object;
             value = new int[temp.length];
             for (int i=0; i<temp.length; i++)
-                value[i] = Integer.parseInt( temp[i] );
+            {
+                value[i] = Integer.parseInt(temp[i]);
+            }
         }
         return value;
     }
@@ -679,10 +689,12 @@ public class BaseValueParser
         Object object = getStrings(convert(name));
         if (object != null)
         {
-            String[] temp = (String[])object;
+            String[] temp = (String[]) object;
             value = new Integer[temp.length];
             for (int i=0; i<temp.length; i++)
-                value[i] = Integer.valueOf( temp[i] );
+            {
+                value[i] = Integer.valueOf(temp[i]);
+            }
         }
         return value;
     }
@@ -703,7 +715,9 @@ public class BaseValueParser
         {
             Object object = parameters.get(convert(name));
             if (object != null)
-                value = Long.valueOf(((String[])object)[0]).longValue();
+            {
+                value = Long.valueOf(((String[]) object)[0]).longValue();
+            }
         }
         catch (NumberFormatException exception)
         {
@@ -736,10 +750,12 @@ public class BaseValueParser
         Object object = getStrings(convert(name));
         if (object != null)
         {
-            String[] temp = (String[])object;
+            String[] temp = (String[]) object;
             value = new long[temp.length];
             for (int i=0; i<temp.length; i++)
+            {
                 value[i] = Long.parseLong( temp[i] );
+            }
         }
         return value;
     }
@@ -757,10 +773,12 @@ public class BaseValueParser
         Object object = getStrings(convert(name));
         if (object != null)
         {
-            String[] temp = (String[])object;
+            String[] temp = (String[]) object;
             value = new Long[temp.length];
             for (int i=0; i<temp.length; i++)
+            {
                 value[i] = Long.valueOf( temp[i] );
+            }
         }
         return value;
     }
@@ -781,7 +799,9 @@ public class BaseValueParser
         {
             Object object = parameters.get(convert(name));
             if (object != null)
-                value = Byte.valueOf(((String[])object)[0]).byteValue();
+            {
+                value = Byte.valueOf(((String[]) object)[0]).byteValue();
+            }
         }
         catch (NumberFormatException exception)
         {
@@ -833,9 +853,11 @@ public class BaseValueParser
             String value = null;
             Object object = parameters.get(convert(name));
             if (object != null)
-                value = ((String[])object)[0];
+                value = ((String[]) object)[0];
             if (value == null || value.equals("null"))
+            {
                 return null;
+            }
             return value;
         }
         catch ( ClassCastException e )
@@ -909,7 +931,9 @@ public class BaseValueParser
         String[] value = null;
         Object object = parameters.get(convert(name));
         if (object != null)
-            value = ((String[])object);
+        {
+            value = ((String[]) object);
+        }
         return value;
     }
 
@@ -984,7 +1008,7 @@ public class BaseValueParser
     {
         try
         {
-            return (Object[])parameters.get(convert(name));
+            return (Object[]) parameters.get(convert(name));
         }
         catch ( ClassCastException e )
         {
