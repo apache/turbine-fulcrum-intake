@@ -83,9 +83,9 @@ extends Component
      * the default constructor.
      *
      * @return an object implementing Group interface.
-     * @throws UnknownEntityException if the object could not be instantiated.
+     * @throws DataBackendException if the object could not be instantiated.
      */
-    Group getGroupInstance() throws UnknownEntityException;
+    Group getGroupInstance() throws DataBackendException;
     /**
      * Construct a blank Group object.
      *
@@ -95,9 +95,9 @@ extends Component
      * @param groupName The name of the Group
      *
      * @return an object implementing Group interface.
-     * @throws UnknownEntityException if the object could not be instantiated.
+     * @throws DataBackendException if the object could not be instantiated.
      */
-    Group getGroupInstance(String groupName) throws UnknownEntityException;
+    Group getGroupInstance(String groupName) throws DataBackendException;
     /**
     	* Retrieve a Group object with specified name.
     	*

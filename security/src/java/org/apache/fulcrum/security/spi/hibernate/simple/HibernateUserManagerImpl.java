@@ -293,19 +293,14 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
      * the default constructor.
      *
      * @return an object implementing User interface.
-     * @throws UnknownEntityException if the object could not be instantiated.
+     * @throws DataBackendException if the object could not be instantiated.
      */
-    public User getUserInstance() throws UnknownEntityException
+    public User getUserInstance() throws DataBackendException
     {
         User user;
-        try
-        {
-            user = (User) new HibernateSimpleUser();
-        }
-        catch (Exception e)
-        {
-            throw new UnknownEntityException("Failed instantiate an User implementation object", e);
-        }
+        
+        user = (User) new HibernateSimpleUser();
+        
         return user;
     }
     /**
@@ -318,9 +313,9 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Si
      *
      * @return an object implementing User interface.
      *
-     * @throws UnknownEntityException if the object could not be instantiated.
+     * @throws DataBackendException if the object could not be instantiated.
      */
-    public User getUserInstance(String userName) throws UnknownEntityException
+    public User getUserInstance(String userName) throws DataBackendException
     {
         User user = getUserInstance();
         user.setName(userName);

@@ -112,19 +112,13 @@ public class MemoryRoleManagerImpl extends AbstractLogEnabled implements SimpleR
     	* the default constructor.
     	*
     	* @return an object implementing Role interface.
-    	* @throws UnknownEntityException if the object could not be instantiated.
+    	* @throws DataBackendException if the object could not be instantiated.
     	*/
-    public Role getRoleInstance() throws UnknownEntityException
+    public Role getRoleInstance() throws DataBackendException
     {
         Role role;
-        try
-        {
-            role = (Role) new SimpleRole();
-        }
-        catch (Exception e)
-        {
-            throw new UnknownEntityException("Failed to instantiate a Role implementation object", e);
-        }
+        role = (Role) new SimpleRole();
+        
         return role;
     }
     /**
@@ -137,9 +131,9 @@ public class MemoryRoleManagerImpl extends AbstractLogEnabled implements SimpleR
     	*
     	* @return an object implementing Role interface.
     	*
-    	* @throws UnknownEntityException if the object could not be instantiated.
+    	* @throws DataBackendException if the object could not be instantiated.
     	*/
-    public Role getRoleInstance(String roleName) throws UnknownEntityException
+    public Role getRoleInstance(String roleName) throws DataBackendException
     {
         Role role = getRoleInstance();
         role.setName(roleName);

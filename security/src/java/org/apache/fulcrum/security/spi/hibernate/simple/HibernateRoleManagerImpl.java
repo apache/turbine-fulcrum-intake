@@ -88,19 +88,13 @@ public class HibernateRoleManagerImpl extends BaseHibernateManager implements Si
     	* the default constructor.
     	*
     	* @return an object implementing Role interface.
-    	* @throws UnknownEntityException if the object could not be instantiated.
+    	* @throws DataBackendException if the object could not be instantiated.
     	*/
-    public Role getRoleInstance() throws UnknownEntityException
+    public Role getRoleInstance() throws DataBackendException
     {
         Role role;
-        try
-        {
             role = (Role) new HibernateSimpleRole();
-        }
-        catch (Exception e)
-        {
-            throw new UnknownEntityException("Failed to instantiate a Role implementation object", e);
-        }
+       
         return role;
     }
     /**
@@ -113,9 +107,9 @@ public class HibernateRoleManagerImpl extends BaseHibernateManager implements Si
     	*
     	* @return an object implementing Role interface.
     	*
-    	* @throws UnknownEntityException if the object could not be instantiated.
+    	* @throws DataBackendException if the object could not be instantiated.
     	*/
-    public Role getRoleInstance(String roleName) throws UnknownEntityException
+    public Role getRoleInstance(String roleName) throws DataBackendException
     {
         Role role = getRoleInstance();
         role.setName(roleName);

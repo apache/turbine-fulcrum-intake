@@ -6,11 +6,17 @@
   </properties>
 
   <body>
-    <release version="1.0-alpha-1" date="in cvs">
+  	<release version="1.0-alpha-2" date="in cvs">
+	  <action dev="epugh" type="update">
+		Change all get(Role/Group/User/Permssion)Instance from throwing an UnknownEntityException to
+		throwing a DataBackendException.  There is no entity id when creating a new one yet!
+      </action>  		
       <action dev="epugh" type="add">
 		Added an adapter to OSUser.  This allows OSUser to query Fulcrum Security
 		for users and to authenticate them via Fulcrum Security authenticators.
       </action>
+    </release>
+    <release version="1.0-alpha-1" date="2003-10-21">
       <action dev="epugh" type="add">
 		Added an IntegerConverter so the adapter can be used with fulcrum SPI's
 		that use Long/Integer/String (as a number) as the ID.

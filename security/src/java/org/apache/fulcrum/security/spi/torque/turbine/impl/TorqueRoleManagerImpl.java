@@ -120,9 +120,9 @@ public class TorqueRoleManagerImpl extends TorqueManagerComponent implements Tor
     	* the default constructor.
     	*
     	* @return an object implementing Role interface.
-    	* @throws UnknownEntityException if the object could not be instantiated.
+    	* @throws DataBackendException if the object could not be instantiated.
     	*/
-    public Role getRoleInstance() throws UnknownEntityException
+    public Role getRoleInstance() throws DataBackendException
     {
         Role role;
         try
@@ -131,7 +131,7 @@ public class TorqueRoleManagerImpl extends TorqueManagerComponent implements Tor
         }
         catch (Exception e)
         {
-            throw new UnknownEntityException("Failed to instantiate a Role implementation object", e);
+            throw new DataBackendException("Failed to instantiate a Role implementation object", e);
         }
         return role;
     }
@@ -145,9 +145,9 @@ public class TorqueRoleManagerImpl extends TorqueManagerComponent implements Tor
     	*
     	* @return an object implementing Role interface.
     	*
-    	* @throws UnknownEntityException if the object could not be instantiated.
+    	* @throws DataBackendException if the object could not be instantiated.
     	*/
-    public Role getRoleInstance(String roleName) throws UnknownEntityException
+    public Role getRoleInstance(String roleName) throws DataBackendException
     {
         Role role = getRoleInstance();
         role.setName(roleName);

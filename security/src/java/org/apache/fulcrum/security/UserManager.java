@@ -82,9 +82,9 @@ public interface UserManager extends Component
      * the default constructor.
      *
      * @return an object implementing User interface.
-     * @throws UnknownEntityException if the object could not be instantiated.
+     * @throws DataBackendException if the object could not be instantiated.
      */
-    User getUserInstance() throws UnknownEntityException;
+    User getUserInstance() throws DataBackendException;
     /**
      * Construct a blank User object.
      *
@@ -94,9 +94,9 @@ public interface UserManager extends Component
      * @param userName The name of the user.
      *
      * @return an object implementing User interface.
-     * @throws UnknownEntityException if the object could not be instantiated.
+     * @throws DataBackendException if the object could not be instantiated.
      */
-    User getUserInstance(String userName) throws UnknownEntityException;
+    User getUserInstance(String userName) throws DataBackendException;
  
 	/**
    * Determines if the <code>User</code> exists in the security system.

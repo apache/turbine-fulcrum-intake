@@ -503,9 +503,9 @@ public class TorqueUserManagerImpl extends TorqueManagerComponent implements Tor
      * the default constructor.
      *
      * @return an object implementing User interface.
-     * @throws UnknownEntityException if the object could not be instantiated.
+     * @throws DataBackendException if the object could not be instantiated.
      */
-    public User getUserInstance() throws UnknownEntityException
+    public User getUserInstance() throws DataBackendException
     {
         User user;
         try
@@ -514,7 +514,7 @@ public class TorqueUserManagerImpl extends TorqueManagerComponent implements Tor
         }
         catch (Exception e)
         {
-            throw new UnknownEntityException("Failed instantiate an User implementation object", e);
+            throw new DataBackendException("Failed instantiate an User implementation object", e);
         }
         return user;
     }
@@ -528,9 +528,9 @@ public class TorqueUserManagerImpl extends TorqueManagerComponent implements Tor
      *
      * @return an object implementing User interface.
      *
-     * @throws UnknownEntityException if the object could not be instantiated.
+     * @throws DataBackendException if the object could not be instantiated.
      */
-    public User getUserInstance(String userName) throws UnknownEntityException
+    public User getUserInstance(String userName) throws DataBackendException
     {
         User user = getUserInstance();
         user.setName(userName);
@@ -817,7 +817,13 @@ public class TorqueUserManagerImpl extends TorqueManagerComponent implements Tor
 	  public User getAnonymousUser()
 			  throws UnknownEntityException
 	  {
-		  User user = getUserInstance();
+		  User user;
+	      try {
+		   user = getUserInstance();
+	      }
+	      catch (DataBackendException dbe){
+	          throw new UnknownEntityException("Coudl not create an anonymous user.",dbe);
+	      }
 		  user.setName("");
 		  return user;
 	  }

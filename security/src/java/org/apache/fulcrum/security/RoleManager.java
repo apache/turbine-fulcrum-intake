@@ -80,9 +80,9 @@ public interface RoleManager extends Component
      * the default constructor.
      *
      * @return an object implementing Role interface.
-     * @throws UnknownEntityException if the object could not be instantiated.
+     * @throws DataBackendException if the object could not be instantiated.
      */
-    public Role getRoleInstance() throws UnknownEntityException;
+    public Role getRoleInstance() throws DataBackendException;
     /**
     * Construct a blank Role object.
     *
@@ -92,42 +92,42 @@ public interface RoleManager extends Component
     * @param roleName The name of the Role
     *
     * @return an object implementing Role interface.
-    * @throws UnknownEntityException if the object could not be instantiated.
+    * @throws DataBackendException if the object could not be instantiated.
     */
-    Role getRoleInstance(String roleName) throws UnknownEntityException;
+    Role getRoleInstance(String roleName) throws DataBackendException;
     /**
-    	* Revokes all permissions from a Role.
-    	*
-    	* This method is user when deleting a Role.
-    	*
-    	* @param role the Role
-    	* @throws DataBackendException if there was an error accessing the data
-    	*         backend.
-    	* @throws  UnknownEntityException if the Role is not present.
-    	*/
+	 * Revokes all permissions from a Role.
+	 *
+	 * This method is user when deleting a Role.
+	 *
+	 * @param role the Role
+	 * @throws DataBackendException if there was an error accessing the data
+	 *         backend.
+	 * @throws  UnknownEntityException if the Role is not present.
+	 */
     void revokeAll(Role role) throws DataBackendException, UnknownEntityException;
     /**
-    	 * Retrieve a Role object with specified name.
-    	 *
-    	 * @param name the name of the Role.
-    	 * @return an object representing the Role with specified name.
-    	 * @throws DataBackendException if there was an error accessing the data
-    	 *         backend.
-    	 * @throws UnknownEntityException if the role does not exist.
-    	 */
+	 * Retrieve a Role object with specified name.
+	 *
+	 * @param name the name of the Role.
+	 * @return an object representing the Role with specified name.
+	 * @throws DataBackendException if there was an error accessing the data
+	 *         backend.
+	 * @throws UnknownEntityException if the role does not exist.
+	 */
     Role getRoleByName(String name) throws DataBackendException, UnknownEntityException;
     /**
-    	* Retrieve a Role object with specified Id.
-    	*
-    	* @param name the name of the Role.
-    	*
-    	* @return an object representing the Role with specified name.
-    	*
-    	* @exception UnknownEntityException if the permission does not
-    	*            exist in the database.
-    	* @exception DataBackendException if there is a problem accessing the
-    	*            storage.
-    	*/
+     * Retrieve a Role object with specified Id.
+	 *
+	 * @param name the name of the Role.
+	 *
+	 * @return an object representing the Role with specified name.
+	 *
+	 * @exception UnknownEntityException if the permission does not
+	 *            exist in the database.
+	 * @exception DataBackendException if there is a problem accessing the
+	 *            storage.
+	 */
     Role getRoleById(Object id) throws DataBackendException, UnknownEntityException;
     /**
      * Retrieves all roles defined in the system.
@@ -149,7 +149,7 @@ public interface RoleManager extends Component
       */
     Role addRole(Role role) throws DataBackendException, EntityExistsException;
     /**
-    	* Removes a Role from the system.
+     * Removes a Role from the system.
     	*
     	* @param role The object describing the role to be removed.
     	* @throws DataBackendException if there was an error accessing the data

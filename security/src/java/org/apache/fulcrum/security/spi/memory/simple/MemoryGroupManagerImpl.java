@@ -109,19 +109,13 @@ public class MemoryGroupManagerImpl extends AbstractLogEnabled implements Simple
     	* the default constructor.
     	*
     	* @return an object implementing Group interface.
-    	* @throws UnknownEntityException if the object could not be instantiated.
+    	* @throws DataBackendException if the object could not be instantiated.
     	*/
-    public Group getGroupInstance() throws UnknownEntityException
+    public Group getGroupInstance() throws DataBackendException
     {
         Group group;
-        try
-        {
-            group = (Group) new SimpleGroup();
-        }
-        catch (Exception e)
-        {
-            throw new UnknownEntityException("Failed to instantiate a Group implementation object", e);
-        }
+        group = (Group) new SimpleGroup();
+       
         return group;
     }
     /**
@@ -134,9 +128,9 @@ public class MemoryGroupManagerImpl extends AbstractLogEnabled implements Simple
     	*
     	* @return an object implementing Group interface.
     	*
-    	* @throws UnknownEntityException if the object could not be instantiated.
+    	* @throws DataBackendException if the object could not be instantiated.
     	*/
-    public Group getGroupInstance(String groupName) throws UnknownEntityException
+    public Group getGroupInstance(String groupName) throws DataBackendException
     {
         Group group = getGroupInstance();
         group.setName(groupName);

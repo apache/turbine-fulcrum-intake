@@ -88,9 +88,9 @@ public class HibernateGroupManagerImpl extends BaseHibernateManager implements S
     	* the default constructor.
     	*
     	* @return an object implementing Group interface.
-    	* @throws UnknownEntityException if the object could not be instantiated.
+    	* @throws DataBackendException if the object could not be instantiated.
     	*/
-    public Group getGroupInstance() throws UnknownEntityException
+    public Group getGroupInstance() throws DataBackendException
     {
         Group group;
         try
@@ -99,7 +99,7 @@ public class HibernateGroupManagerImpl extends BaseHibernateManager implements S
         }
         catch (Exception e)
         {
-            throw new UnknownEntityException("Failed to instantiate a Group implementation object", e);
+            throw new DataBackendException("Failed to instantiate a Group implementation object", e);
         }
         return group;
     }
@@ -113,9 +113,9 @@ public class HibernateGroupManagerImpl extends BaseHibernateManager implements S
     	*
     	* @return an object implementing Group interface.
     	*
-    	* @throws UnknownEntityException if the object could not be instantiated.
+    	* @throws DataBackendException if the object could not be instantiated.
     	*/
-    public Group getGroupInstance(String groupName) throws UnknownEntityException
+    public Group getGroupInstance(String groupName) throws DataBackendException
     {
         Group group = getGroupInstance();
         group.setName(groupName);

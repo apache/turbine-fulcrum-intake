@@ -89,14 +89,8 @@ public class HibernatePermissionManagerImpl extends BaseHibernateManager impleme
     public Permission getPermissionInstance() throws UnknownEntityException
     {
         Permission permission;
-        try
-        {
-            permission = (Permission) new SimplePermission();
-        }
-        catch (Exception e)
-        {
-            throw new UnknownEntityException("Failed to instantiate a Permission implementation object", e);
-        }
+        permission = (Permission) new SimplePermission();
+      
         return permission;
     }
     /**
