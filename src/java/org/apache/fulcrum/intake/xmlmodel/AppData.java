@@ -166,7 +166,7 @@ public class AppData
         if (v != null)
         {
             int len = v.length();
-            if (len > 0 && v.chatAt(len - 1) != '.')
+            if (len > 0 && v.charAt(len - 1) != '.')
             {
                 v += '.';
             }
