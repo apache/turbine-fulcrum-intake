@@ -25,13 +25,13 @@ package org.apache.fulcrum.db;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -61,12 +61,12 @@ import org.apache.torque.map.DatabaseMap;
 import org.apache.torque.pool.DBConnection;
 
 /**
- * This class provides a common front end to the DatabaseService in Turbine. 
- * This class contains static methods that you can call to access the methods 
+ * This class provides a common front end to the DatabaseService in Turbine.
+ * This class contains static methods that you can call to access the methods
  * of system's configured service implementations.
  * <p>
- * Assuming that your TurbineResources.properties file is setup correctly, the 
- * sample code below demonstrates the right way to get and release a database 
+ * Assuming that your TurbineResources.properties file is setup correctly, the
+ * sample code below demonstrates the right way to get and release a database
  * connection (exception handling is application dependent):
  * <blockquote><code><pre>
  * DBConnection dbConn = null;
@@ -107,7 +107,7 @@ public abstract class TurbineDB
         return (DatabaseService)TurbineServices
             .getInstance().getService(DatabaseService.SERVICE_NAME);
     }
-    
+
     ///////////////////////////////////////////////////////////////////////////
     // Database maps
     ///////////////////////////////////////////////////////////////////////////
@@ -117,7 +117,7 @@ public abstract class TurbineDB
      *
      * @return the map name for the default database.
      */
-     
+
     public static String getDefaultMap()
     {
         return getService().getDefaultMap();
@@ -161,7 +161,7 @@ public abstract class TurbineDB
      *
      * @return the pool name for the default database.
      */
-    
+
     public static String getDefaultDB()
     {
         return getService().getDefaultDB();

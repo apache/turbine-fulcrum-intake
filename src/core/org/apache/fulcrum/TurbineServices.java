@@ -65,7 +65,7 @@ package org.apache.fulcrum;
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @version $Id$
  */
-public class TurbineServices 
+public class TurbineServices
     extends BaseServiceBroker
     implements ServiceManager
 {

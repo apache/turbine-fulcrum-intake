@@ -25,13 +25,13 @@ package org.apache.fulcrum.bsf;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -68,13 +68,13 @@ import org.apache.fulcrum.InitializationException;
  *
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  */
-public class TurbineBSFService 
+public class TurbineBSFService
     extends BaseService
     implements BSFService
 {
     /**
      * BSF manager that is responsible for executing scripts.
-     * This may eventually be a pool of managers and 
+     * This may eventually be a pool of managers and
      * utilize the pool service.
      */
     protected BSFManager manager;
@@ -83,11 +83,11 @@ public class TurbineBSFService
      * Directory where scripts are stored
      */
     protected String scriptsDirectory;
-    
+
     /**
      * Tag for scripts directory in the service
      * configuration.
-     */     
+     */
     protected static final String SCRIPTS_DIRECTORY = "scriptsDirectory";
 
     /**
@@ -109,14 +109,14 @@ public class TurbineBSFService
         throws InitializationException
     {
         scriptsDirectory = getConfiguration().getString(SCRIPTS_DIRECTORY);
-       
+
         if (scriptsDirectory == null)
         {
             throw new InitializationException(
                 "You must provide a scripts directory in " +
                     "order to executes scripts!");
-        }                    
-       
+        }
+
         defaultExtension = getConfiguration().getString(DEFAULT_EXTENSION);
         initBSFManagers();
         setInit(true);
@@ -126,7 +126,7 @@ public class TurbineBSFService
     {
         manager = new BSFManager();
     }
-    
+
     /**
      * Execute a script. The script can be in any of
      * the scripting languages supported by the BSF.
@@ -138,12 +138,12 @@ public class TurbineBSFService
         if (script.lastIndexOf('.') == -1)
         {
             script += '.' + defaultExtension;
-        }            
-        
+        }
+
         script = getRealPath(scriptsDirectory + "/" + script);
-        
+
         getCategory().debug("[BSFService] Script to execute: " + script);
-        
+
         try
         {
             manager.exec(manager.getLangFromFilename(script),
@@ -163,30 +163,30 @@ public class TurbineBSFService
             bsfe.printStackTrace();
         }
     }
-    
+
     /**
      * Create a string from the contents of a file.
      *
      * @param String file from which to read the contents
      * @return String file contents
-     * 
+     *
      */
     protected String fileContentsToString(String file)
         throws IOException
     {
         StringWriter sw = new StringWriter();
-            
+
         BufferedReader reader = new BufferedReader(
             new InputStreamReader(new FileInputStream(file)));
-            
+
         char buf[] = new char[1024];
         int len = 0;
-            
+
         while ( ( len = reader.read( buf, 0, 1024 )) != -1)
         {
             sw.write( buf, 0, len );
-        }            
-        
+        }
+
         return sw.toString();
     }
 }

@@ -71,7 +71,7 @@ import org.apache.fulcrum.InitializationException;
  * @author <a href="mailto:colin.chalmers@maxware.nl">Colin Chalmers</a>
  * @version $Id$
  */
-public class TurbineNamingService 
+public class TurbineNamingService
     extends BaseService
     implements NamingService
 {
@@ -87,7 +87,7 @@ public class TurbineNamingService
      * Called the first time the Service is used.<br>
      *
      */
-    public void init() 
+    public void init()
         throws InitializationException
     {
         // Context properties are specified in lines in the properties
@@ -112,20 +112,20 @@ public class TurbineNamingService
 
                 if (contextPropsList.containsKey(contextName))
                 {
-                    contextProps = (Properties) 
+                    contextProps = (Properties)
                         contextPropsList.get(contextName);
                 }
                 else
                 {
                     contextProps = new Properties();
                 }
-                
+
                 contextProps.put(
                     key.substring(end + 1), getConfiguration().getString(key));
-                
+
                 contextPropsList.put(contextName, contextProps);
             }
-            
+
             Enumeration contextPropsKeys = contextPropsList.keys();
             while (contextPropsKeys.hasMoreElements())
             {
@@ -140,7 +140,7 @@ public class TurbineNamingService
         catch (Exception e)
         {
             getCategory().error("Failed to initialize JDNI contexts!", e);
-            
+
             throw new InitializationException(
                 "Failed to initialize JDNI contexts!");
         }

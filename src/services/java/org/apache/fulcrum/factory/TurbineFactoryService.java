@@ -25,13 +25,13 @@ package org.apache.fulcrum.factory;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -75,7 +75,7 @@ import org.apache.fulcrum.InitializationException;
  * @author <a href="mailto:ilkka.priha@simsoft.fi">Ilkka Priha</a>
  * @version $Id$
  */
-public class TurbineFactoryService 
+public class TurbineFactoryService
     extends BaseService
     implements FactoryService
 {
@@ -110,7 +110,7 @@ public class TurbineFactoryService
      * Additional class loaders.
      */
     private ArrayList classLoaders = new ArrayList();
-    
+
     /**
      * Customized object factories.
      */
@@ -140,7 +140,7 @@ public class TurbineFactoryService
      *
      * @throws InitializationException if initialization fails.
      */
-    public void init() 
+    public void init()
         throws InitializationException
     {
         if (getConfiguration() != null)
@@ -158,19 +158,19 @@ public class TurbineFactoryService
                     catch (Exception x)
                     {
                         throw new InitializationException(
-                            "No such class loader '" + 
-                                (String) loaders.get(i) + 
+                            "No such class loader '" +
+                                (String) loaders.get(i) +
                                     "' for TurbinbeFactoryService",x);
                     }
                 }
             }
-            
+
             String key,factory;
             for (Iterator i = getConfiguration().getKeys(OBJECT_FACTORY); i.hasNext();)
             {
                 key = (String) i.next();
                 factory = getConfiguration().getString(key);
-                
+
                 /*
                  * Store the factory to the table as a string and
                  * instantiate it by using the service when needed.
@@ -221,10 +221,10 @@ public class TurbineFactoryService
 
     /**
      * Gets an instance of a named class using a specified class loader.
-     * 
+     *
      * <p>Class loaders are supported only if the isLoaderSupported
-     * method returns true. Otherwise the loader parameter is ignored. 
-     * 
+     * method returns true. Otherwise the loader parameter is ignored.
+     *
      * @param className the name of the class.
      * @param loader the class loader.
      * @return the instance.
@@ -317,8 +317,8 @@ public class TurbineFactoryService
      * primitive types must be wrapped with a corresponding class.
      *
      * <p>Class loaders are supported only if the isLoaderSupported
-     * method returns true. Otherwise the loader parameter is ignored. 
-     * 
+     * method returns true. Otherwise the loader parameter is ignored.
+     *
      * @param className the name of the class.
      * @param loader the class loader.
      * @param params an array containing the parameters of the constructor.
@@ -368,16 +368,16 @@ public class TurbineFactoryService
 
     /**
      * Tests if specified class loaders are supported for a named class.
-     * 
+     *
      * @param className the name of the class.
-     * @return true if class loaders are supported, false otherwise. 
+     * @return true if class loaders are supported, false otherwise.
      * @throws ServiceException if test fails.
      */
     public boolean isLoaderSupported(String className)
         throws ServiceException
     {
         Factory factory = getFactory(className);
-        return factory != null ? 
+        return factory != null ?
             factory.isLoaderSupported() : true;
     }
 
@@ -470,7 +470,7 @@ public class TurbineFactoryService
                             !tempLoader.equals(params[i].getClass().getClassLoader()))
                         {
                             /*
-                             * The class uses a different class loader, 
+                             * The class uses a different class loader,
                              * switch the parameter.
                              */
                             params[i] = switchObjectContext(params[i],loader);
@@ -577,10 +577,10 @@ public class TurbineFactoryService
         return loader != null ?
             loader.loadClass(className) : loadClass(className);
     }
-    
+
     /**
      * Gets a customized factory for a named class.
-     * 
+     *
      * @param className the name of the class to load.
      * @return the factory or null if not specified.
      * @throws ServiceException if instantiation of the factory fails.
@@ -607,7 +607,7 @@ public class TurbineFactoryService
                 catch (ClassCastException x)
                 {
                     throw new ServiceException(
-                        "Incorrect factory " + (String) factory + 
+                        "Incorrect factory " + (String) factory +
                             " for class " + className,x);
                 }
                 factories = (HashMap) factories.clone();

@@ -25,13 +25,13 @@ package org.apache.fulcrum.upload;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -109,33 +109,33 @@ public class TurbineUploadService
     {
         ArrayList items = new ArrayList();
         String contentType = req.getHeader(CONTENT_TYPE);
-        
+
         if(!contentType.startsWith(MULTIPART_FORM_DATA))
         {
-            throw new ServiceException("the request doesn't contain a " + 
+            throw new ServiceException("the request doesn't contain a " +
                 MULTIPART_FORM_DATA + " stream");
         }
         int requestSize = req.getContentLength();
-        
+
         if(requestSize == -1)
         {
-            throw new ServiceException("the request was rejected because " + 
+            throw new ServiceException("the request was rejected because " +
                 "it's size is unknown");
         }
-        
+
         if(requestSize > TurbineUpload.getSizeMax())
         {
-            throw new ServiceException("the request was rejected because " + 
+            throw new ServiceException("the request was rejected because " +
                 "it's size exceeds allowed range");
         }
 
-        try 
+        try
         {
             byte[] boundary = contentType.substring(
                 contentType.indexOf("boundary=")+9).getBytes();
-            
+
             InputStream input = (InputStream)req.getInputStream();
-            
+
             MultipartStream multi = new MultipartStream(input, boundary);
             boolean nextPart = multi.skipPreamble();
             while(nextPart)
@@ -149,7 +149,7 @@ public class TurbineUploadService
                                                 .startsWith(MULTIPART_MIXED))
                     {
                         // Multiple files.
-                        byte[] subBoundary = 
+                        byte[] subBoundary =
                             subContentType.substring(
                                 subContentType
                                 .indexOf("boundary=")+9).getBytes();
@@ -234,10 +234,10 @@ public class TurbineUploadService
         catch(IOException e)
         {
             throw new ServiceException(
-                "Processing of " + MULTIPART_FORM_DATA + 
+                "Processing of " + MULTIPART_FORM_DATA +
                     " request failed", e);
         }
-    
+
         return items;
     }
 
@@ -352,7 +352,7 @@ public class TurbineUploadService
                     }
                     headerName = header.substring(0, header.indexOf(':'))
                         .trim().toLowerCase();
-                    headerValue = 
+                    headerValue =
                         header.substring(header.indexOf(':') + 1).trim();
                     if (getHeader(headers, headerName) != null)
                     {

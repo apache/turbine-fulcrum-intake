@@ -25,13 +25,13 @@ package org.apache.fulcrum.db;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -53,7 +53,7 @@ package org.apache.fulcrum.db;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- 
+
 import org.apache.fulcrum.BaseService;
 import org.apache.fulcrum.InitializationException;
 import org.apache.fulcrum.TurbineServices;
@@ -69,8 +69,8 @@ import org.apache.torque.pool.DBConnection;
  * @author <a href="mailto:jvanzyl@periapt.com">Jason van Zyl</a>
  * @version $Id$
  */
-public class TurbineDatabaseService 
-    extends BaseService 
+public class TurbineDatabaseService
+    extends BaseService
     implements DatabaseService
 {
     /**
@@ -81,16 +81,16 @@ public class TurbineDatabaseService
     {
         Torque.setConfiguration(getConfiguration());
         Torque.setCategory(getCategory());
-        
+
         try
         {
             Torque.init();
-        } 
+        }
         catch (Exception e)
         {
             throw new InitializationException("Can't initialize Torque!", e);
-        }            
-        
+        }
+
         // indicate that the service initialized correctly
         setInit(true);
     }
@@ -110,7 +110,7 @@ public class TurbineDatabaseService
      * Returns the default database map information.
      *
      * @return A DatabaseMap.
-     * @throws ServiceException Any exceptions caught during procssing will be 
+     * @throws ServiceException Any exceptions caught during procssing will be
      *         rethrown wrapped into a ServiceException.
      */
     public DatabaseMap getDatabaseMap()
@@ -118,7 +118,7 @@ public class TurbineDatabaseService
     {
         return Torque.getDatabaseMap();
     }
-    
+
     /**
      * Returns the database map information. Name relates to the name
      * of the connection pool to associate with the map.
@@ -126,7 +126,7 @@ public class TurbineDatabaseService
      * @param name The name of the <code>DatabaseMap</code> to
      * retrieve.
      * @return The named <code>DatabaseMap</code>.
-     * @throws ServiceException Any exceptions caught during procssing will be 
+     * @throws ServiceException Any exceptions caught during procssing will be
      *         rethrown wrapped into a ServiceException.
      */
     public DatabaseMap getDatabaseMap(String name)
@@ -199,7 +199,7 @@ public class TurbineDatabaseService
     }
 
     /**
-     * Release a connection back to the database pool.  <code>null</code> 
+     * Release a connection back to the database pool.  <code>null</code>
      * references are ignored.
      *
      * @throws ServiceException Any exceptions caught during processing will be
@@ -233,7 +233,7 @@ public class TurbineDatabaseService
     {
         Torque.registerPool(name,driver,url,username,password);
     }
-    
+
     /**
      * This thread-safe method registers a new pool using the given parameters.
      *
@@ -244,8 +244,8 @@ public class TurbineDatabaseService
      * @param password The password of the database user.
      * @exception Exception A generic exception.
      */
-    public void registerPool( String name, 
-                              String driver, 
+    public void registerPool( String name,
+                              String driver,
                               String url,
                               String username,
                               String password,

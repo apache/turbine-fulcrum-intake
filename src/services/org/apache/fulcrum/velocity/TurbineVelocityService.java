@@ -25,13 +25,13 @@ package org.apache.fulcrum.velocity;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -93,7 +93,7 @@ import org.apache.fulcrum.template.BaseTemplateEngineService;
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$
  */
-public class TurbineVelocityService 
+public class TurbineVelocityService
     extends BaseTemplateEngineService
     implements VelocityService
 {
@@ -102,22 +102,22 @@ public class TurbineVelocityService
      */
     private static final String RESOURCE_LOADER_PATH =
         ".resource.loader.path";
-  
+
     /**
      * Default character set to use if not specified by caller.
      */
     private static final String DEFAULT_CHAR_SET = "ISO-8859-1";
-     
+
     /**
      * Performs early initialization of this Turbine service.
      */
-    public void init() 
+    public void init()
         throws InitializationException
     {
         try
         {
             initVelocity();
-            
+
             // Register with the template service.
             registerConfiguration("vm");
             setInit(true);
@@ -157,21 +157,21 @@ public class TurbineVelocityService
     {
         String results = null;
         ByteArrayOutputStream bytes = null;
-        
+
         try
         {
             bytes = new ByteArrayOutputStream();
             charset = decodeRequest(context, filename, bytes, charset,
                                     encoding);
             results = bytes.toString(charset);
-        } 
+        }
         catch (Exception e)
         {
             renderingError(filename, e);
         }
         finally
         {
-            try 
+            try
             {
                 if (bytes != null)
                 {
@@ -272,7 +272,7 @@ public class TurbineVelocityService
                 if (writer != null)
                 {
                     writer.flush();
-                }                
+                }
             }
             catch (Exception ignored)
             {
@@ -312,14 +312,14 @@ public class TurbineVelocityService
      *
      * @exception InitializationException For any errors during initialization.
      */
-    private void initVelocity() 
+    private void initVelocity()
         throws InitializationException
     {
         // Now we have to perform a couple of path translations
         // for our log file and template paths.
         String path = getRealPath(
             getConfiguration().getString(Velocity.RUNTIME_LOG, null));
-        
+
         if (path != null && path.length() > 0)
         {
             getConfiguration().setProperty(Velocity.RUNTIME_LOG, path);
@@ -328,7 +328,7 @@ public class TurbineVelocityService
         {
             String msg = VelocityService.SERVICE_NAME + " runtime log file " +
                 "is misconfigured: '" + path + "' is not a valid log file";
-            
+
             throw new Error(msg);
         }
 
@@ -395,7 +395,7 @@ public class TurbineVelocityService
                 }
             }
         }
-        
+
         try
         {
             Velocity.setConfiguration(getConfiguration());

@@ -25,13 +25,13 @@ package org.apache.fulcrum;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -104,7 +104,7 @@ public interface ServiceBroker
     /**
      * Shutdowns an Initable class.
      *
-     * This method is used to release resources allocated by an 
+     * This method is used to release resources allocated by an
      * Initable class, and return it to initial (uninitailized)
      * state.
      *
@@ -145,7 +145,7 @@ public interface ServiceBroker
     /**
      * Shutdowns all Services.
      *
-     * This method is used to release resources allocated by 
+     * This method is used to release resources allocated by
      * Services, and return them to initial (uninitailized) state.
      */
     public void shutdownServices( );
@@ -169,7 +169,7 @@ public interface ServiceBroker
      * @return Configuration of the requested service.
      */
     public Configuration getConfiguration( String name );
-    
+
     /**
      * Set an object for use in the services.
      *
@@ -177,7 +177,7 @@ public interface ServiceBroker
      * @param String value
      */
     public void setServiceObject(String key, Object value);
-    
+
     /**
      * Get service object
      *
@@ -185,29 +185,29 @@ public interface ServiceBroker
      * @return Object value
      */
     public Object getServiceObject(String key);
-    
+
     /**
      * Return a path translated to the application root.
      *
      * @param String path
      * @return String translated path
      */
-    public String getRealPath(String path);    
-    
+    public String getRealPath(String path);
+
     /**
      * Get the application root.
      *
      * @return String application root
      */
     public String getApplicationRoot();
-    
+
     /**
      * Get default log4j category.
      *
      * @return Category default log4j category.
      */
     public Category getCategory();
-    
+
     /**
      * Get a log4j category by name.
      *

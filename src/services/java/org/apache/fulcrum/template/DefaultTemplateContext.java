@@ -1,6 +1,6 @@
 package org.apache.fulcrum.template;
 
-/*
+/* ====================================================================
  * The Apache Software License, Version 1.1
  *
  * Copyright (c) 2000-2001 The Apache Software Foundation.  All rights
@@ -59,20 +59,20 @@ import java.util.List;
 import java.util.Iterator;
 
 /**
- *  General purpose implemention of the application Context 
- *  interface for general application use.  This class should 
+ *  General purpose implemention of the application Context
+ *  interface for general application use.  This class should
  *  be used in place of the original Context class.
  *
- *  This implementation uses a HashMap  (@see java.util.HashMap ) 
+ *  This implementation uses a HashMap  (@see java.util.HashMap )
  *  for data storage.
  *
  *  This context implementation cannot be shared between threads
- *  without those threads synchronizing access between them, as 
+ *  without those threads synchronizing access between them, as
  *  the HashMap is not synchronized, nor are some of the fundamentals
- *  of AbstractContext.  If you need to share a Context between 
- *  threads with simultaneous access for some reason, please create 
- *  your own and extend the interface Context 
- *  
+ *  of AbstractContext.  If you need to share a Context between
+ *  threads with simultaneous access for some reason, please create
+ *  your own and extend the interface Context
+ *
  *  @see org.apache.velocity.context.Context
  *
  *  @author <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
@@ -86,37 +86,37 @@ public class DefaultTemplateContext
     TemplateContext innerContext;
 
     /**
-     *  storage for key/value pairs 
+     *  storage for key/value pairs
      */
     private HashMap context = new HashMap();
 
-    /** 
-     * default contructor, does nothing 
+    /**
+     * default contructor, does nothing
      * interesting
      */
     public DefaultTemplateContext()
     {
     }
-    
+
     /**
      * Allow chained contexts.
      */
     public DefaultTemplateContext(TemplateContext context)
     {
         super();
-        
+
         //!! I realize this is not the most efficient
         // way to do this, but I'm not sure if chained
         // contexts can work with templating solutions
         // other than velocity. I don't see why not right
         // of the bat, but this will work for now.
-        
+
         Object[] keys = context.getKeys();
-        
+
         for (int i = 0; i < keys.length; i++)
         {
             put((String) keys[i], context.get((String)keys[i]));
-        }            
+        }
     }
 
     public void put(String key, Object value)
@@ -125,9 +125,9 @@ public class DefaultTemplateContext
     }
 
     public Object get(String key)
-    {   
+    {
         return context.get(key);
-    }        
+    }
 
     public Object remove(Object key)
     {

@@ -25,13 +25,13 @@ package org.apache.fulcrum.schedule;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -91,7 +91,7 @@ public class WorkerThread
         if (je == null || je.isActive())
         {
             return;
-        }            
+        }
 
         try
         {
@@ -99,21 +99,21 @@ public class WorkerThread
             {
                 je.setActive(true);
                 logStateChange("started");
-                
+
                 // We should have a set of job packages and
                 // search through them like the module
                 // loader does. This right here requires the
                 // getTask() method to return a class name.
                 ScheduledJob sc = (ScheduledJob) Class.forName(
                     je.getTask()).newInstance();
-                
+
                 sc.execute(je);
             }
         }
         catch (Exception e)
         {
             //!! use the service for logging
-            //Log.error("Error in WorkerThread for sheduled job #" + 
+            //Log.error("Error in WorkerThread for sheduled job #" +
             //             je.getPrimaryKey() + ", task: " + je.getTask(), e);
         }
         finally
@@ -134,7 +134,7 @@ public class WorkerThread
     private final void logStateChange(String state)
     {
         //!! use the service to log.
-        //Log.debug("Scheduled job #" + je.getPrimaryKey() + ' ' + state + 
+        //Log.debug("Scheduled job #" + je.getPrimaryKey() + ' ' + state +
         //    ", task: " + je.getTask());
     }
 }

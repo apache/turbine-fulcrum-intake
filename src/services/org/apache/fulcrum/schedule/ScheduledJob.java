@@ -67,7 +67,7 @@ import org.apache.fulcrum.schedule.JobEntry;
  * @author <a href="mailto:mbryson@mindspring.com">Dave Bryson</a>
  * @version $Id$
  */
-public abstract class ScheduledJob 
+public abstract class ScheduledJob
 {
     /**
      * Run the Jobentry from the scheduler queue.

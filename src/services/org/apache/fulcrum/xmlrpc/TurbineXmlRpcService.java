@@ -114,7 +114,7 @@ public class TurbineXmlRpcService
     /**
      * This function initializes the XmlRpcService.
      */
-    public void init() 
+    public void init()
         throws InitializationException
     {
         try
@@ -132,22 +132,22 @@ public class TurbineXmlRpcService
                     // that we must set for use in the SecureWebServer
                     // and the URL https connection handler that is
                     // used in XmlRpcClient.
-                    
-                    Configuration secureServerOptions = 
+
+                    Configuration secureServerOptions =
                         getConfiguration().subset("secure.server.option");
-                        
+
                     Iterator i = secureServerOptions.getKeys();
-                    
+
                     while (i.hasNext())
                     {
                         String option = (String) i.next();
                         String value = secureServerOptions.getString(option);
-                        
+
                         getCategory().debug("JSSE option: " + option + " => " + value);
-                        
+
                         System.setProperty(option, value);
                     }
-                    
+
                     webserver = new SecureWebServer(port);
                 }
                 else

@@ -25,13 +25,13 @@ package org.apache.fulcrum.template;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -69,31 +69,31 @@ import org.apache.fulcrum.InitializationException;
  * template structure.  It also performs caching if turned on in the
  * properties file.
  *
- * Since everything is keyed off the template variable, 
+ * Since everything is keyed off the template variable,
  * if data.getParameters().getString("template") returns
- * /about_us/directions/driving.vm, the search for the 
+ * /about_us/directions/driving.vm, the search for the
  * Screen class is as follows (in order):
- * 
- * 1. about_us.directions.Driving 
- * 2. about_us.directions.Default 
- * 3. about_us.Default 
- * 4. Default 
+ *
+ * 1. about_us.directions.Driving
+ * 2. about_us.directions.Default
+ * 3. about_us.Default
+ * 4. Default
  * 5. VelocityScreen
  *
- * If the template variable does not exist, then VelocityScreen will be 
- * executed and templates/screens/index.vm will be executed. 
- * If index.vm is not found or if the template is invalid or Velocity 
+ * If the template variable does not exist, then VelocityScreen will be
+ * executed and templates/screens/index.vm will be executed.
+ * If index.vm is not found or if the template is invalid or Velocity
  * execution throws an exception of any reason, then
- * templates/screens/error.vm will be executed. 
- * 
- * For the Layouts and Navigations, the following paths will be 
+ * templates/screens/error.vm will be executed.
+ *
+ * For the Layouts and Navigations, the following paths will be
  * searched in the layouts and navigations template
- * subdirectories (in order): 
- * 
- * 1./about_us/directions/driving.vm 
- * 2./about_us/directions/default.vm 
- * 3./about_us/default.vm 
- * 4./default.vm 
+ * subdirectories (in order):
+ *
+ * 1./about_us/directions/driving.vm
+ * 2./about_us/directions/default.vm
+ * 3./about_us/default.vm
+ * 4./default.vm
  *
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:mbryson@mont.mindspring.com">Dave Bryson</a>
@@ -102,7 +102,7 @@ import org.apache.fulcrum.InitializationException;
  * @author <a href="mailto:ilkka.priha@simsoft.fi">Ilkka Priha</a>
  * @version $Id$
  */
-public class TurbineTemplateService 
+public class TurbineTemplateService
     extends BaseService
     implements TemplateService
 {
@@ -112,8 +112,8 @@ public class TurbineTemplateService
      */
     protected static final String NO_FILE_EXT = "";
 
-    /** 
-     * Default extension for templates. 
+    /**
+     * Default extension for templates.
      */
     private String defaultExtension;
 
@@ -126,7 +126,7 @@ public class TurbineTemplateService
      * based template hierarchy only.
      */
     private HashMap templateEngineRegistry;
-    
+
     public TurbineTemplateService()
     {
     }
@@ -136,7 +136,7 @@ public class TurbineTemplateService
      *
      * @exception InitializationException.
      */
-    public void init() 
+    public void init()
         throws InitializationException
     {
         initTemplate();
@@ -154,7 +154,7 @@ public class TurbineTemplateService
      * Translates the supplied template paths into their Turbine-canonical
      * equivalent (probably absolute paths).
      *
-     * @param templatePaths An array of template paths. 
+     * @param templatePaths An array of template paths.
      * @return An array of translated template paths.
      */
     public String[] translateTemplatePaths(String[] templatePaths)
@@ -174,7 +174,7 @@ public class TurbineTemplateService
      * @param template The template to check for the existance of.
      * @param templatePaths The paths to check for the template.
      */
-    public boolean templateExists(String template, 
+    public boolean templateExists(String template,
                                   String[] templatePaths)
     {
         for (int i = 0; i < templatePaths.length; i++)
@@ -201,11 +201,11 @@ public class TurbineTemplateService
      */
     public synchronized void registerTemplateEngineService(TemplateEngineService service)
     {
-        // Clone the registry to write to non-sync'd 
+        // Clone the registry to write to non-sync'd
         // Map implementations.
         HashMap registry = templateEngineRegistry != null ?
             (HashMap) templateEngineRegistry.clone() : new HashMap();
-        
+
         String[] exts = service.getAssociatedFileExtensions();
 
         for (int i = 0; i < exts.length; i++)
@@ -218,7 +218,7 @@ public class TurbineTemplateService
     /**
      * The {@link org.apache.fulcrum.template.TemplateEngineService}
      * associated with the specified template's file extension.
-     * 
+     *
      * @param template The template name.
      * @return The template engine service.
      */
@@ -228,7 +228,7 @@ public class TurbineTemplateService
         if (registry != null && template != null)
         {
             int dotIndex = template.lastIndexOf('.');
-            String ext = dotIndex == -1 ? 
+            String ext = dotIndex == -1 ?
                 defaultExtension : template.substring(dotIndex + 1);
             return (TemplateEngineService) registry.get(ext);
         }
@@ -237,7 +237,7 @@ public class TurbineTemplateService
             return null;
         }
     }
-    
+
     public String handleRequest(TemplateContext context, String template)
         throws ServiceException
     {
@@ -245,8 +245,8 @@ public class TurbineTemplateService
         return tes.handleRequest(context, template);
     }
 
-    public void handleRequest(TemplateContext context, 
-                                String template, 
+    public void handleRequest(TemplateContext context,
+                                String template,
                                 OutputStream outputStream)
         throws ServiceException
     {

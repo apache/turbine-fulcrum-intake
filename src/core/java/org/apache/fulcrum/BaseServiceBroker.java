@@ -98,13 +98,13 @@ import org.apache.velocity.runtime.configuration.Configuration;
  */
 public abstract class BaseServiceBroker implements ServiceBroker
 {
-    /** 
-     * Mapping of Service names to class names. 
+    /**
+     * Mapping of Service names to class names.
      */
     protected Configuration mapping = new Configuration();
 
-    /** 
-     * A repository of Service instances. 
+    /**
+     * A repository of Service instances.
      */
     protected Hashtable services = new Hashtable();
 
@@ -127,9 +127,9 @@ public abstract class BaseServiceBroker implements ServiceBroker
      */
     public static final String CLASSNAME_SUFFIX = ".classname";
 
-    /** 
-     * True if logging should go throught 
-     * LoggingService, false if not. 
+    /**
+     * True if logging should go throught
+     * LoggingService, false if not.
      */
     protected boolean loggingEnabled = false;
 
@@ -140,7 +140,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
      * information. For example, in Turbine there are services
      * that require the RunData object: these services can
      * retrieve the RunData object that Turbine has placed
-     * in the service manager. This alleviates us of 
+     * in the service manager. This alleviates us of
      * the requirement of having init(Object) all
      * together.
      */
@@ -169,7 +169,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
     protected BaseServiceBroker()
     {
     }
-    
+
     /**
      * Set the configuration object for the services broker.
      * This is the configuration that contains information
@@ -213,8 +213,8 @@ public abstract class BaseServiceBroker implements ServiceBroker
     public Category getCategory()
     {
         return category;
-    }        
-    
+    }
+
     /**
      * Get a log4j Category by name.
      *
@@ -224,22 +224,22 @@ public abstract class BaseServiceBroker implements ServiceBroker
     public Category getCategory(String name)
     {
         return Category.getInstance(name);
-    }        
+    }
 
     public void setCategoryTable(Hashtable categoryTable)
     {
         this.categoryTable = categoryTable;
     }
-    
+
     public Hashtable getCategoryTable()
     {
         return categoryTable;
-    }        
+    }
 
     /**
      * Initialize this service manager.
      */
-    public void init() 
+    public void init()
         throws InitializationException
     {
         // Check:
@@ -247,23 +247,23 @@ public abstract class BaseServiceBroker implements ServiceBroker
         // 1. The configuration has been set.
         // 2. Logging category has been set.
         // 3. Make sure the application root has been set.
-        
+
         //!! We should make some service framework exceptions
         //   to throw in the event these requirements
         //   aren't satisfied.
-        
+
         // Create the mapping between service names
         // and their classes.
         initMapping();
-        
+
         Log.setCategory(getCategory());
         Log.setCategoryTable(getCategoryTable());
-        
+
         // Start services that have their 'earlyInit'
         // property set to 'true'.
         initServices(false);
     }
-    
+
     /**
      * Set an application specific service object
      * that can be used by application specific
@@ -276,7 +276,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
     {
         serviceObjects.put(name, value);
     }
-    
+
     /**
      * Get an application specific service object.
      *
@@ -285,7 +285,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
     public Object getServiceObject(String name)
     {
         return serviceObjects.get(name);
-    }        
+    }
 
     /**
      * Creates a mapping between Service names and class names.
@@ -307,7 +307,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
     {
         int pref = SERVICE_PREFIX.length();
         int suff = CLASSNAME_SUFFIX.length();
-        
+
         /*
          * These keys returned in an order that corresponds
          * to the order the services are listed in
@@ -321,21 +321,21 @@ public abstract class BaseServiceBroker implements ServiceBroker
          * of keys if they aren't kept in order :-)
          */
         Iterator keys = configuration.getKeys();
-        
+
         while(keys.hasNext())
         {
             String key = (String)keys.next();
-            
+
             if(key.startsWith(SERVICE_PREFIX) && key.endsWith(CLASSNAME_SUFFIX))
             {
                 String serviceKey = key.substring(pref, key.length() - suff);
                 notice ("Added Mapping for Service: " + serviceKey);
-                
+
                 if (! mapping.containsKey(serviceKey))
                 {
-                    mapping.setProperty(serviceKey, 
+                    mapping.setProperty(serviceKey,
                                         configuration.getString(key));
-                }                    
+                }
             }
         }
     }
@@ -384,7 +384,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
             // Shutdown of a nonexistent class was requested.
             // This does not hurt anything, so we log the error and continue.
             error(new ServiceException(
-                "Shutdown of a nonexistent class " + className + 
+                "Shutdown of a nonexistent class " + className +
                     " was requested", e));
         }
     }
@@ -437,14 +437,14 @@ public abstract class BaseServiceBroker implements ServiceBroker
         throws InitializationException
     {
         String className = (String) mapping.get(name);
-        
+
         if (className == null || className.trim().length() == 0)
         {
             throw new InitializationException(
                 "ServiceBroker: initialization of unknown service " +
                     name + " requested.");
         }
-        
+
         initClass(name);
     }
 
@@ -478,7 +478,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
      * @param data An Object to use for initialization activities.
      * @param report <code>true</code> if you want exceptions thrown.
      */
-    public void initServices(boolean report) 
+    public void initServices(boolean report)
         throws InstantiationException, InitializationException
     {
         Iterator names = getServiceNames();
@@ -518,8 +518,8 @@ public abstract class BaseServiceBroker implements ServiceBroker
      * Internal utility method for use in initServices()
      * to prevent duplication of code.
      */
-    private void doInitService(String name) 
-        throws InstantiationException, 
+    private void doInitService(String name)
+        throws InstantiationException,
                InitializationException
     {
         /*
@@ -530,15 +530,15 @@ public abstract class BaseServiceBroker implements ServiceBroker
         if (getConfiguration(name).getBoolean("earlyInit", false) == false)
         {
             return;
-        }            
-            
+        }
+
         notice("Start Initializing service (early): " + name);
 
         // Make sure the service has it's name and broker
         // reference set before initialization.
         getServiceInstance(name);
 
-        /* 
+        /*
          * We are using the name of the service now.
          */
         initClass(name);
@@ -557,7 +557,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
     public void shutdownService(String name)
     {
         String className = (String) mapping.get(name);
-                
+
         if (className != null)
         {
             shutdownClass(className);
@@ -671,7 +671,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
         if (service == null)
         {
             String className = mapping.getString(name);
-            
+
             if (className == null)
             {
                 throw new InstantiationException(
@@ -708,26 +708,26 @@ public abstract class BaseServiceBroker implements ServiceBroker
                         }
                         else if (t instanceof ClassNotFoundException)
                         {
-                            msg = "Class " + className + 
+                            msg = "Class " + className +
                                 " is unavailable. Check your jars and classes.";
                         }
                         else if (t instanceof ClassCastException)
                         {
-                            msg = "Class " + className + 
+                            msg = "Class " + className +
                                 " doesn't implement Service interface";
                         }
                         else
                         {
                             msg = "Failed to instantiate " + className;
                         }
-                        
+
                         throw new InstantiationException(msg, t);
                     }
                 }
             }
             catch (ClassCastException e)
             {
-                throw new InstantiationException("ServiceBroker: class " 
+                throw new InstantiationException("ServiceBroker: class "
                     + className + " does not implement Service interface.", e);
             }
             catch (InstantiationException e)
@@ -768,11 +768,11 @@ public abstract class BaseServiceBroker implements ServiceBroker
         if (loggingEnabled)
         {
             category.info(msg);
-        }            
+        }
         else
         {
             System.out.println("NOTICE: " + msg);
-        }            
+        }
     }
 
     /**
@@ -796,7 +796,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
         {
             System.out.println("ERROR: " + t.getMessage());
             t.printStackTrace();
-        }            
+        }
     }
 
     /**
@@ -830,7 +830,7 @@ public abstract class BaseServiceBroker implements ServiceBroker
     public void setApplicationRoot(String applicationRoot)
     {
         this.applicationRoot = applicationRoot;
-    }        
+    }
 
     /**
      * Get the application root as set by

@@ -25,13 +25,13 @@ package org.apache.fulcrum.db;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -60,16 +60,16 @@ import org.apache.torque.pool.DBConnection;
 import org.apache.torque.adapter.DB;
 
 /**
- * This service provides database connection pooling and manages 
- * {@link org.apache.turbine.util.db.map.DatabaseMap} objects used throughout 
+ * This service provides database connection pooling and manages
+ * {@link org.apache.turbine.util.db.map.DatabaseMap} objects used throughout
  * a Turbine application.
- * It provides single point of access to a pool of maps, assuring that every 
+ * It provides single point of access to a pool of maps, assuring that every
  * client will access the same instance of DatabaseMap object.
  *
  * The service can manage a number of connection pools. Each pool is related
  * to a specific database, identified by it's driver class name, url, username
  * and password. The pools may be defined in TurbineResources.properties
- * file, or created at runtime using 
+ * file, or created at runtime using
  * {@link #registerPool(String,String,String,String,String)} method.
  *
  * <p> You can use {@link #getConnection(String)} to acquire a
@@ -80,7 +80,7 @@ import org.apache.torque.adapter.DB;
  * return it to the pool using {@link #releaseConnection(DBConnection)} method.
  * This method call is often placed in <code>finally</code> clause of a <code>try /
  * catch</code> statement, to ensure that the connection is always returned
- * to the pool.<br> 
+ * to the pool.<br>
  *
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @version $Id$
@@ -93,12 +93,12 @@ public interface DatabaseService extends Service
      * Returns the default database map information.
      *
      * @return A DatabaseMap.
-     * @throws Exception Any exceptions caught during procssing will be 
+     * @throws Exception Any exceptions caught during procssing will be
      *         rethrown wrapped into a Exception.
      */
     public DatabaseMap getDatabaseMap()
         throws Exception;
-    
+
     /**
      * Returns the database map information. Name relates to the name
      * of the connection pool to associate with the map.
@@ -106,7 +106,7 @@ public interface DatabaseService extends Service
      * @param name The name of the <code>DatabaseMap</code> to
      * retrieve.
      * @return The named <code>DatabaseMap</code>.
-     * @throws Exception Any exceptions caught during procssing will be 
+     * @throws Exception Any exceptions caught during procssing will be
      *         rethrown wrapped into a Exception.
      */
     public DatabaseMap getDatabaseMap(String name)
@@ -219,6 +219,6 @@ public interface DatabaseService extends Service
 
 
     public String getDefaultDB();
-    
+
     public String getDefaultMap();
 }

@@ -25,13 +25,13 @@ package org.apache.fulcrum.xslt;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -62,7 +62,7 @@ import org.w3c.dom.Node;
 /**
  * The Turbine XSLT Service is used to transform xml with a xsl stylesheet.
  * The service makes use of the Xalan xslt engine available from apache.
- * 
+ *
  *
  * @author <a href="mailto:leon@opticode.co.za">Leon Messerschmidt</a>
  */
@@ -80,7 +80,7 @@ public interface XSLTService
      * @param out The writer for the transformed output
      */
     public void transform (String xslName, Reader in, Writer out) throws Exception;
-    
+
     /**
      * Uses an xsl file to transform xml input from a reader and returns a
      * string containing the transformed output.
@@ -89,7 +89,7 @@ public interface XSLTService
      * @param in The reader that passes the xml to be transformed
      */
     public String transform (String xslName, Reader in) throws Exception;
-    
+
     /**
      * Uses an xsl file to transform xml input from a DOM note and writes the
      * output to a writer.
@@ -99,7 +99,7 @@ public interface XSLTService
      * @param out The writer for the transformed output
      */
     public void transform (String xslName, Node in, Writer out) throws Exception;
-    
+
     /**
      * Uses an xsl file to transform xml input from a DOM note and returns a
      * string containing the transformed output.

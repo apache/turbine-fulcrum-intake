@@ -25,13 +25,13 @@ package org.apache.fulcrum.template;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -71,7 +71,7 @@ import org.apache.fulcrum.ServiceException;
  * @author <a href="mailto:ilkka.priha@simsoft.fi">Ilkka Priha</a>
  * @version $Id$
  */
-public interface TemplateService 
+public interface TemplateService
     extends Service
 {
 
@@ -86,7 +86,7 @@ public interface TemplateService
      * Translates the supplied template paths into their Turbine-canonical
      * equivalent (probably absolute paths).
      *
-     * @param templatePaths An array of template paths. 
+     * @param templatePaths An array of template paths.
      * @return An array of translated template paths.
      */
     public String[] translateTemplatePaths(String[] templatePaths);
@@ -99,7 +99,7 @@ public interface TemplateService
      * @param template      The template to check for the existance of.
      * @param templatePaths The paths to check for the template.
      */
-    public boolean templateExists(String template, 
+    public boolean templateExists(String template,
                                   String[] templatePaths);
 
     /**

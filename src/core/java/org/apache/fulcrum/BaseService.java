@@ -25,13 +25,13 @@ package org.apache.fulcrum;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -71,20 +71,20 @@ import org.apache.velocity.runtime.configuration.Configuration;
  * @author <a href="mailto:leonardr@segfault.org">Leonard Richardson</a>
  * @version $Id$
  */
-public abstract class BaseService 
+public abstract class BaseService
     implements Service
 {
-    /** 
-     * Initialization status of this class. 
+    /**
+     * Initialization status of this class.
      */
     protected boolean isInitialized = false;
-    
-    /** 
-     * A reference to the ServiceBroker that instantiated this object. 
+
+    /**
+     * A reference to the ServiceBroker that instantiated this object.
      */
     protected ServiceBroker serviceBroker;
 
-    /** 
+    /**
      * The properties of this service. These will
      * soon go away. We will use a Configuration
      * interface.
@@ -95,9 +95,9 @@ public abstract class BaseService
      * Configuration for this service.
      */
     protected Configuration configuration;
-     
-    /** 
-     * The name of this Service. 
+
+    /**
+     * The name of this Service.
      */
     protected String name;
 
@@ -155,7 +155,7 @@ public abstract class BaseService
     public boolean isInitialized()
     {
         return isInitialized;
-    }        
+    }
 
     /**
      * Sets initailization status.
@@ -220,12 +220,12 @@ public abstract class BaseService
         {
             return null;
         }
-        
+
         if (configuration == null)
         {
             configuration = getServiceBroker().getConfiguration(name);
         }
-        
+
         return configuration;
     }
 
@@ -235,7 +235,7 @@ public abstract class BaseService
     public Object getServiceObject(String name)
     {
         return getServiceBroker().getServiceObject(name);
-    }        
+    }
 
     /**
      * @see org.apache.fulcrum.Service#getRealPath()
@@ -251,7 +251,7 @@ public abstract class BaseService
     public Category getCategory()
     {
         return getServiceBroker().getCategory();
-    }        
+    }
 
     /**
      * @see org.apache.fulcrum.Service#getCategory(String name)
@@ -259,5 +259,5 @@ public abstract class BaseService
     public Category getCategory(String name)
     {
         return getServiceBroker().getCategory(name);
-    }        
+    }
 }

@@ -25,13 +25,13 @@ package org.apache.fulcrum;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -72,8 +72,8 @@ import org.apache.velocity.runtime.configuration.Configuration;
  */
 public interface Service
 {
-    /** 
-     * The name of this service. 
+    /**
+     * The name of this service.
      */
     public static final String SERVICE_NAME = "Service";
 
@@ -85,7 +85,7 @@ public interface Service
      * will be invoked.  A typical implementation for classes
      * extending {@link org.apache.fulcrum.BaseService} will look
      * something like the following:
-     * 
+     *
      * <blockquote><code><pre>
      * if (!isInitialized())
      * {
@@ -108,7 +108,7 @@ public interface Service
      * @exception InitializationException, if initialization of this
      * class was not successful.
      */
-    public void init( ) 
+    public void init( )
         throws InitializationException;
 
     /**
@@ -156,7 +156,7 @@ public interface Service
      *
      * @return The Configuration of this Service.
      */
-    public Configuration getConfiguration();    
+    public Configuration getConfiguration();
 
     /**
      * Given a relative paths, gets the real path.

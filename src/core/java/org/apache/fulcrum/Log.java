@@ -25,13 +25,13 @@ package org.apache.fulcrum;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -78,7 +78,7 @@ public class Log
      * This is the default logger.
      */
     private static Category defaultLogger;
-    
+
     /**
      * This is a collection of log4j categories.
      */
@@ -94,12 +94,12 @@ public class Log
     {
         defaultLogger = category;
     }
-    
+
     public static void setCategoryTable(Hashtable h)
     {
         loggers = h;
-    }        
-    
+    }
+
     /**
      * Retrieve a category from our configured set
      * of Categories.
@@ -137,7 +137,7 @@ public class Log
     public static void debug(String logName, String message)
     {
         Category logger = getLogger(logName);
-        
+
         if (logger == null)
         {
             debug(message);
@@ -145,7 +145,7 @@ public class Log
         else
         {
             logger.debug(message);
-        }            
+        }
     }
 
     /**
@@ -155,7 +155,7 @@ public class Log
     public static void debug(String logName ,String message, Throwable t)
     {
         Category logger = getLogger(logName);
-        
+
         if (logger == null)
         {
             debug(message,t);
@@ -163,9 +163,9 @@ public class Log
         else
         {
             logger.debug(message,t);
-        }            
+        }
     }
-    
+
     /**
      * This is a log method with logLevel == INFO, printing is done by
      * the default logger
@@ -191,7 +191,7 @@ public class Log
     public static void info(String logName, String message)
     {
         Category logger = getLogger(logName);
-        
+
         if (logger == null)
         {
             info(message);
@@ -199,7 +199,7 @@ public class Log
         else
         {
             logger.info(message);
-        }            
+        }
     }
 
     /**
@@ -209,7 +209,7 @@ public class Log
     public static void info(String logName, String message, Throwable t)
     {
         Category logger = getLogger(logName);
-        
+
         if (logger == null)
         {
             info(message,t);
@@ -217,7 +217,7 @@ public class Log
         else
         {
             logger.info(message,t);
-        }            
+        }
     }
 
     /**
@@ -245,7 +245,7 @@ public class Log
     public static void warn(String logName, String message)
     {
         Category logger = getLogger(logName);
-        
+
         if (logger == null)
         {
             warn(message);
@@ -253,7 +253,7 @@ public class Log
         else
         {
             logger.warn(message);
-        }            
+        }
     }
 
     /**
@@ -263,7 +263,7 @@ public class Log
     public static void warn(String logName, String message, Throwable t)
     {
         Category logger = getLogger(logName);
-        
+
         if (logger == null)
         {
             warn(message,t);
@@ -271,7 +271,7 @@ public class Log
         else
         {
             logger.warn(message,t);
-        }            
+        }
     }
 
     /**
@@ -299,7 +299,7 @@ public class Log
     public static void error(String logName, String message)
     {
         Category logger = getLogger(logName);
-        
+
         if (logger == null)
         {
             error(message);
@@ -307,7 +307,7 @@ public class Log
         else
         {
             logger.error(message);
-        }            
+        }
     }
 
     /**
@@ -317,7 +317,7 @@ public class Log
     public static void error(String logName, String message, Throwable t)
     {
         Category logger = getLogger(logName);
-        
+
         if (logger == null)
         {
             error(message,t);
@@ -325,7 +325,7 @@ public class Log
         else
         {
             logger.error(message,t);
-        }            
+        }
     }
 
     /**

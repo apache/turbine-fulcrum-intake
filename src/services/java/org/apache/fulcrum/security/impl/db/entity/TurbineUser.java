@@ -476,7 +476,7 @@ public class TurbineUser
      * Nice method for adding data to a Hashtable in such a way
      * as to not get NPE's. The point being that if the
      * value is null, Hashtable.put() will throw an exception.
-     * That blows in the case of this class cause you may want to 
+     * That blows in the case of this class cause you may want to
      * essentially treat put("Not Null", null ) == put("Not Null", "")
      * We will still throw a NPE if the key is null cause that should
      * never happen.

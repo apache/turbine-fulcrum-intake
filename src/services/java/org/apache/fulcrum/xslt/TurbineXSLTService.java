@@ -25,13 +25,13 @@ package org.apache.fulcrum.xslt;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -91,18 +91,18 @@ public class TurbineXSLTService
      * Property to control the caching of Templates.
      */
     protected boolean caching = false;
-    
+
     /**
      * Path to style sheets used for tranforming well-formed
      * XML documents. The path is relative to the webapp context.
      */
-    protected  String path;    
+    protected  String path;
 
     /**
      * Cache of compiled Templates.
      */
     protected Hashtable cache = new Hashtable();
-    
+
     protected final static String STYLESHEET_PATH = "path";
 
     protected final static String STYLESHEET_CACHING = "cache";
@@ -111,34 +111,34 @@ public class TurbineXSLTService
      * Factory for producing templates and null transformers
      */
     private static TransformerFactory tfactory;
-    
+
     /**
      * Initialize the TurbineXSLT Service.  Load the path to search for
      * xsl files and initiates the cache.
      */
-    public void init() 
+    public void init()
         throws InitializationException
     {
         //!! is this even needed? jvz.
         if (isInitialized())
         {
             return;
-        }            
-        
+        }
+
         path = getRealPath(getConfiguration().getString(STYLESHEET_PATH));
-                                           
+
         if (!path.endsWith("/") && !path.endsWith ("\\"))
         {
             path=path+File.separator;
         }
-        
+
         caching = getConfiguration().getBoolean(STYLESHEET_CACHING);
-        
+
         tfactory = TransformerFactory.newInstance();
 
         setInit(true);
     }
-    
+
     /**
      * Get a valid and existing filename from a template name.
      * The extension is removed and replaced with .xsl.  If this
@@ -153,7 +153,7 @@ public class TurbineXSLTService
         {
             templateName = templateName.substring (0,colon);
         }
-        
+
         // Now we try to find the file ...
         File f = new File (path+templateName+".xsl");
         if (f.exists())
@@ -174,7 +174,7 @@ public class TurbineXSLTService
             }
         }
     }
-    
+
     /**
      * Compile Templates from an input file.
      */
@@ -195,37 +195,37 @@ public class TurbineXSLTService
      * This method is synchronized on the xsl cache so that a thread
      * does not attempt to load Templates from the cache while
      * it is still being compiled.
-     */    
+     */
     protected Templates getTemplates(String xslName) throws Exception
     {
         synchronized (cache)
         {
             String fn = getFileName (xslName);
             if (fn == null) return null;
-            
+
             if (caching && cache.containsKey (fn))
             {
                 return (Templates)cache.get(fn);
             }
-            
+
             Templates sr = compileTemplates (fn);
-            
+
             if (caching)
             {
                 cache.put (fn,sr);
             }
-            
+
             return sr;
         }
-        
+
     }
-    
+
     protected void transform (String xslName, Source xmlin, Result xmlout)
         throws Exception
     {
         Templates sr = getTemplates(xslName);
         Transformer transformer;
-        
+
         // If there is no stylesheet we just echo the xml
         if (sr == null)
         {
@@ -249,7 +249,7 @@ public class TurbineXSLTService
         Result xmlout = new StreamResult(out);
         transform (xslName,xmlin,xmlout);
     }
-    
+
     /**
      * Execute an xslt
      */
@@ -260,19 +260,19 @@ public class TurbineXSLTService
         transform (xslName,in,sw);
         return sw.toString();
     }
-    
+
 
     /**
      * Execute an xslt
      */
-    public void transform (String xslName, org.w3c.dom.Node in, Writer out) 
+    public void transform (String xslName, org.w3c.dom.Node in, Writer out)
         throws Exception
     {
         Source xmlin = new DOMSource(in);
         Result xmlout = new StreamResult(out);
         transform (xslName,xmlin,xmlout);
     }
-    
+
     /**
      * Execute an xslt
      */
@@ -283,5 +283,5 @@ public class TurbineXSLTService
         transform (xslName,in,sw);
         return sw.toString();
     }
-    
+
 }

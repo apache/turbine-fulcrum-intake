@@ -124,7 +124,7 @@ public class TurbineMimeTypeService
         throws InitializationException
     {
         String path = null;
-        
+
         if (getConfiguration() != null)
         {
             path = getConfiguration().getString(MIME_TYPES);

@@ -89,7 +89,7 @@ public class FileTransfer
         {
             Vector params = new Vector();
             FileHandler fh = new FileHandler();
-            
+
             /*
              * fileContents
              */
