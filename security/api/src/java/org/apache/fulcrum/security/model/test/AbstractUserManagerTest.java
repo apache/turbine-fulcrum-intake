@@ -240,6 +240,13 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
         catch (EntityExistsException uee){
             //good
         }        
-    }         
+    }
+    
+    public void testCheckUserCaseSensitiveExists() throws Exception {
+        user = userManager.getUserInstance("borrisJohnson");
+        userManager.addUser(user,"bob");
+        
+        assertTrue(userManager.checkExists("borrisJohnson"));
+    }
    
 }
