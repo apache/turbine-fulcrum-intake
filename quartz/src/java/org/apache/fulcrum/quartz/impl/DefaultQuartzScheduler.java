@@ -1,12 +1,12 @@
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -51,11 +51,11 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 /**
  * Default implementation of QuartzScheduler
- * 
+ *
  * @author <a href="mailto:leandro@ibnetwork.com.br">Leandro Rodrigo Saad Cruz
  *         </a>
  * @author <a href="mailto:epughNOSPAM@opensourceconnections.com">Eric Pugh </a>
- *  
+ *
  */
 public class DefaultQuartzScheduler implements QuartzScheduler, Configurable, Serviceable, Disposable, Initializable,
         ThreadSafe {
@@ -163,14 +163,14 @@ public class DefaultQuartzScheduler implements QuartzScheduler, Configurable, Se
                     CronTrigger triggerToSchedule = new CronTrigger(trigger.getName(),trigger.getGroup(),trigger.getJobName(),trigger.getJobGroup(),((CronTrigger)trigger).getCronExpression());
                     logger.debug("Scheduling trigger [" + triggerToSchedule.getFullName() + "] for  job ["
                             + triggerToSchedule.getFullJobName() + "] using cron " + triggerToSchedule.getCronExpression());
-                    
+
                     triggerToSchedule.setDescription(trigger.getDescription());
                    // CronTrigger cronTrigger = new CronTrigger("someTriggerCron", Scheduler.DEFAULT_GROUP,
                    //         "simpleJob","DEFAULT_GROUP" ,"* * * * * ?");
                     scheduler.scheduleJob(triggerToSchedule);
                  /*   Trigger rightNow = new SimpleTrigger("someTrigger", Scheduler.DEFAULT_GROUP,
                             "notSoSimpleJob","DEFAULT_GROUP" ,new Date(), null, 0,0L);
-                            
+
                     scheduler.scheduleJob(rightNow);*/
                 }
             }
@@ -189,7 +189,9 @@ public class DefaultQuartzScheduler implements QuartzScheduler, Configurable, Se
         } catch (SchedulerException e) {
             logger.warn("Problem shuting down scheduler ", e);
         }
-        wrapper.dispose();
+        if(wrapper != null) {
+            wrapper.dispose();
+        }
         scheduler = null;
         manager = null;
     }
@@ -210,7 +212,7 @@ public class DefaultQuartzScheduler implements QuartzScheduler, Configurable, Se
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see br.com.ibnetwork.xingu.quartzscheduler.QuartzScheduler#getTriggersMap()
      */
     public Map getTriggersMap() {
