@@ -24,6 +24,11 @@
   </target>
         
   <target 
+    name="maven:update-jars">
+    <ant antfile="${maven.home}/build-maven.xml" target="update-jars"/>
+  </target>
+
+  <target 
     name="maven:jar">
     <ant antfile="${maven.home}/build-maven.xml" target="jar"/>
   </target>
