@@ -11,7 +11,7 @@
 
   <shortDescription>An example application implementing workflow.</shortDescription>
   <description>This is a small example application using the Turbine framework with the Fulcrum OSWorkflow component.  The engine underneath
-  	is provided by OpenSymphony's OSWorkflow project.</description>
+    is provided by OpenSymphony's OSWorkflow project.</description>
 
 
   <developers>
@@ -391,10 +391,10 @@
       <report>maven-jxr-plugin</report>    
       <report>maven-junit-report-plugin</report>
       <report>maven-pmd-plugin</report>
-      <report>maven-checkstyle-plugin</report> 
+      
    <!--  maven site-all chokes on these.
       <report>maven-linkcheck-plugin</report>
-        
+      <report>maven-checkstyle-plugin</report> 
       <report>maven-tasklist-plugin</report>
       -->
       

@@ -10,7 +10,7 @@
       <item name="Fulcrum"
             href="http://jakarta.apache.org/turbine/fulcrum/"/>
       <item name="Fulcrum Workflow"
-            href="http://jakarta.apache.org/turbine/fulcrum/multiproject/fulcrum-osworkflow/"/>            
+            href="http://jakarta.apache.org/turbine/fulcrum/fulcrum-osworkflow/"/>            
       <item name="OSWorkflow"
             href="http://www.opensymphony.com/osworkflow/"/>            
     </links>
