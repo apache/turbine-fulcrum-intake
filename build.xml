@@ -314,6 +314,7 @@
     <copy todir="${build.dir}/src/org" overwrite="yes">
       <fileset dir="${src.dir}/core/java/org"/>
       <fileset dir="${src.dir}/services/java/org"/>
+      <fileset dir="${src.dir}/util/java/org"/>
     </copy>
   </target>
 
