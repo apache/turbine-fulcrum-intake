@@ -132,14 +132,6 @@ public abstract class Localization
     }
 
     /**
-     * @deprecated Use getString(String, HttpServletRequest) instead.
-     */
-    public static final String getString(HttpServletRequest req, String key)
-    {
-        return getString(key, req);
-    }
-
-    /**
      * Convenience method that pulls a localized string off the
      * LocalizationService using the default ResourceBundle name
      * defined in the TurbineResources.properties file and the
