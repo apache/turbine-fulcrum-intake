@@ -22,7 +22,7 @@
 
   <target name="init">
     <taskdef name="torque-om"
-      classname="org.apache.torque.task.TorqueObjectModelTask">
+      classname="org.apache.torque.task.TorqueDataModelTask">
       <classpath>
         <pathelement location="${velocity.jar}"/>
         <pathelement location="${log4j.jar}"/>
