@@ -54,7 +54,7 @@
       <item name="HsqlDB"                href="/fulcrum-hsqldb/index.html"/>
       <item name="Intake"                href="/fulcrum-intake/index.html"/>
       <item name="Parser"                href="/fulcrum-parser/index.html"/>
-      <item name="Template"               href="/fulcrum-template/index.html"/>      
+      <item name="Template"              href="/fulcrum-template/index.html"/>      
     </menu>
         
     <menu name="Howtos (old)">
