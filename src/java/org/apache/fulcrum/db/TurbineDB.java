@@ -115,7 +115,12 @@ public abstract class TurbineDB
     /**
      * Returns the map name for the default database.
      *
+     * This method is gone in Torque HEAD as it is a duplicate
+     * for getDefaultDB, but will stay here marked as deprecated
+     * for a little while.
+     *
      * @return the map name for the default database.
+     * @deprecated
      */
 
     public static String getDefaultMap()

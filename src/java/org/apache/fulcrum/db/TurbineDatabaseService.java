@@ -229,8 +229,9 @@ public class TurbineDatabaseService
     }
 
     /**
-     * This method is gone in Torque HEAD, but still in Torque 3.0, so is still
-     * here. It will be removed once Fulcrum moves to the next Torque 3.x.
+     * This method is gone in Torque HEAD as it is a duplicate
+     * for getDefaultDB, but will stay here marked as deprecated
+     * for a little while.
      *
      * @deprecated
      */
