@@ -77,12 +77,7 @@ public class ConfigTest extends AbstractMerlinTestCase
      */
     public ConfigTest(String name)
     {
-        super( 
-          MAVEN_TARGET_CLASSES_DIR, 
-          MERLIN_DEFAULT_CONFIG_FILE, 
-          MERLIN_INFO_OFF, 
-          MERLIN_DEBUG_OFF, 
-          name );
+        super( name );
     }
     /**
      * Factory method for creating a TestSuite for this class.
@@ -99,7 +94,8 @@ public class ConfigTest extends AbstractMerlinTestCase
         super.setUp();
         try
         {
-            config = (Configuration) this.resolve( "conf" );
+            config = (Configuration) this.resolve( "/config/conf" );
+
         }
         catch (ComponentException e)
         {
@@ -117,7 +113,6 @@ public class ConfigTest extends AbstractMerlinTestCase
 	  assertEquals(10.25,config.getDouble("test.double"),0);
 	  assertEquals(
           "I'm complex!",config.getString("element2.subelement.subsubelement"));
-        getLogger().info( "OK" );
     }
    
 }

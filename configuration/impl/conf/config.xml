@@ -3,7 +3,7 @@
 
   <target path="/config/conf">
     <categories priority="INFO"/>
-    <configuration configurationPath="../../src/test/configuration.xml"/>
+    <configuration configurationPath="../../../src/test/configuration.xml"/>
   </target>
 
 </targets>

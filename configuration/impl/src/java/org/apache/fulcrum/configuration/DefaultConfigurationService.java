@@ -451,16 +451,24 @@ public class DefaultConfigurationService
     public void configure(Configuration conf) throws ConfigurationException
     {
         String confPath = conf.getAttribute(CONFIGURATION_PATH);
+        /*
         File confFile = new File(confPath);
         if(!confFile.exists()){
             confFile = new File(applicationRoot,confPath);
         }
-        if(!confFile.exists()){            
-            throw new ConfigurationException("XML file for ConfigurationFactory can not be found:" +confFile);
+        */
+		System.out.println( "PATH: " + confPath );
+		System.out.println( "HOME: " + applicationRoot );
+		File file = new File( applicationRoot, confPath );
+		System.out.println( "REAL: " + file.getAbsolutePath());
+
+        
+        if(!file.exists()){            
+            throw new ConfigurationException("XML file for ConfigurationFactory can not be found:" +file.getAbsolutePath());
         }
 
         ConfigurationFactory configurationFactory =
-            new ConfigurationFactory(confFile.getAbsolutePath());
+            new ConfigurationFactory(file.getAbsolutePath());
         configurationFactory.setBasePath(applicationRoot);
         try
         {

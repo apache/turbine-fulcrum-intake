@@ -60,7 +60,7 @@
     <dependency>
       <groupId>merlin</groupId>
       <artifactId>merlin-unit</artifactId>
-      <version>3.2.2-dev</version>
+      <version>3.2.10</version>
     </dependency>
 
   </dependencies>
