@@ -194,7 +194,7 @@ public class HibernateRoleManagerImpl extends BaseHibernateManager implements Ro
         try
         {
             
-            roles = retrieveSession().find("from HibernateSimpleRole sr where sr.name=?", role.getName(), Hibernate.STRING);
+            roles = retrieveSession().find("from " + HibernateSimpleRole.class.getName() + " sr where sr.name=?", role.getName(), Hibernate.STRING);
 
         }
         catch (HibernateException e)
@@ -219,7 +219,7 @@ public class HibernateRoleManagerImpl extends BaseHibernateManager implements Ro
         RoleSet roleSet = new RoleSet();
         try
         {
-            List roles = retrieveSession().find("from HibernateSimpleRole");
+            List roles = retrieveSession().find("from " + HibernateSimpleRole.class.getName() + "");
             roleSet.add(roles);
         }
         catch (HibernateException e)

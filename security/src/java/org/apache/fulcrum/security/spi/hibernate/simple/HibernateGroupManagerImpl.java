@@ -148,7 +148,7 @@ public class HibernateGroupManagerImpl extends BaseHibernateManager implements G
         {
           
             List groups =
-			retrieveSession().find("from HibernateSimpleGroup g where g.name=?", name.toLowerCase(), Hibernate.STRING);
+			retrieveSession().find("from " + HibernateSimpleGroup.class.getName() + " g where g.name=?", name.toLowerCase(), Hibernate.STRING);
             if (groups.size() == 0)
             {
                 throw new UnknownEntityException("Could not find group" + name);
@@ -196,7 +196,7 @@ public class HibernateGroupManagerImpl extends BaseHibernateManager implements G
         try
         {
             
-            List groups = retrieveSession().find("from HibernateSimpleGroup");
+            List groups = retrieveSession().find("from " + HibernateSimpleGroup.class.getName() + "");
             groupSet.add(groups);
         }
         catch (HibernateException e)
@@ -256,7 +256,7 @@ public class HibernateGroupManagerImpl extends BaseHibernateManager implements G
         try
         {
             
-            groups = retrieveSession().find("from HibernateSimpleGroup sg where sg.name=?", group.getName(), Hibernate.STRING);
+            groups = retrieveSession().find("from " + HibernateSimpleGroup.class.getName() + " sg where sg.name=?", group.getName(), Hibernate.STRING);
         }
         catch (HibernateException e)
         {

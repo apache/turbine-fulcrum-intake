@@ -164,7 +164,7 @@ public class HibernatePermissionManagerImpl extends BaseHibernateManager impleme
         try
         {
             
-            List permissions = retrieveSession().find("from SimplePermission");
+            List permissions = retrieveSession().find("from " + SimplePermission.class.getName() + "");
             permissionSet.add(permissions);
 	
         }
@@ -215,7 +215,7 @@ public class HibernatePermissionManagerImpl extends BaseHibernateManager impleme
         {
         
             permissions =
-			retrieveSession().find("from SimplePermission sr where sr.name=?", permission.getName(), Hibernate.STRING);
+			retrieveSession().find("from " + SimplePermission.class.getName() + " sr where sr.name=?", permission.getName(), Hibernate.STRING);
 		
         }
         catch (HibernateException e)

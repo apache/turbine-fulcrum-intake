@@ -124,7 +124,7 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Us
         List users = null;
         try
         {
-            users = retrieveSession().find("from HibernateSimpleUser su where su.name=?", userName, Hibernate.STRING);
+            users = retrieveSession().find("from " + HibernateSimpleUser.class.getName() + " su where su.name=?", userName, Hibernate.STRING);
         }
         catch (HibernateException e)
         {
@@ -154,7 +154,7 @@ public class HibernateUserManagerImpl extends BaseHibernateManager implements Us
         {
             users =
                 retrieveSession().find(
-                    "from HibernateSimpleUser su where su.name=?",
+                    "from " + HibernateSimpleUser.class.getName() + " su where su.name=?",
                     userName.toLowerCase(),
                     Hibernate.STRING);
         }
