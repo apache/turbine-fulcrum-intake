@@ -69,13 +69,25 @@ import org.apache.commons.fileupload.FileItem;
 
 /**
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
+ * @version $Id$
  */
-public class FileItemField extends Field
+public class FileItemField 
+    extends Field
 {
     public FileItemField(XmlField field, Group group)
         throws Exception
     {
         super(field, group);
+    }
+
+    /**
+     * Sets the default value for an FileItemField
+     */
+
+    protected void setDefaultValue(String prop)
+    {
+        defaultValue = prop;
     }
 
     /**

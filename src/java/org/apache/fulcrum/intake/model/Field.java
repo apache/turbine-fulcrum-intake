@@ -80,6 +80,7 @@ import org.apache.log4j.Category;
  *
  * @author <a href="mailto:jmcnally@collab.net>John McNally</a>
  * @author <a href="mailto:dlr@finemaltcoding.com>Daniel Rall</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
 public abstract class Field
@@ -100,6 +101,7 @@ public abstract class Field
     protected final Group group;
     protected boolean alwaysRequired;
     protected Object onError;
+    protected Object defaultValue;
 
     // these are reset when the Field is returned to the pool
     protected boolean set_flag;
@@ -144,6 +146,7 @@ public abstract class Field
         name = field.getName();
         displayName = field.getDisplayName();
         isMultiValued  = field.isMultiValued();
+        setDefaultValue(field.getDefaultValue());
         String className = field.getValidator();
         if ( className == null && field.getRules().size() > 0 )
         {
@@ -529,6 +532,11 @@ public abstract class Field
     }
 
     /**
+     * Set the default Value
+     */
+    protected abstract void setDefaultValue(String prop);
+
+    /**
      * @deprecated Use doSetValue() instead (with no parameters).
      */
     protected void doSetValue(ValueParser pp)
@@ -570,6 +578,10 @@ public abstract class Field
             if ( retrievable != null )
             {
                 getProperty(retrievable);
+            }
+            else
+            {
+                getDefault();
             }
         }
         return validValue;
@@ -661,6 +673,15 @@ public abstract class Field
     }
 
     /**
+     * Loads the default value from the object
+     */
+    
+    public void getDefault()
+    {
+        validValue = getDefaultValue();
+    }
+
+    /**
      * Calls a setter method on obj, if this field has been set.
      * @exception throws a ServiceException if called and the input
      * was not valid.
@@ -688,5 +709,13 @@ public abstract class Field
                                            valArray[0], e);
             }
         }
+    }
+    
+    /**
+     * Get the default Value
+     */
+    public Object getDefaultValue()
+    {
+        return defaultValue;
     }
 }

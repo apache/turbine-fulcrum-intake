@@ -54,6 +54,7 @@ package org.apache.fulcrum.intake.xmlmodel;
  * <http://www.apache.org/>.
  */
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -66,10 +67,11 @@ import org.xml.sax.Attributes;
  * A Class for holding data about a property used in an Application.
  *
  * @author <a href="mailto:jmcnally@collab.net>John McNally</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
 public class XmlField
-    implements java.io.Serializable
+    implements Serializable
 {
     private static final String DEFAULT_VALIDATOR =
         "org.apache.fulcrum.intake.validatore.DefaultValidator";
@@ -88,6 +90,7 @@ public class XmlField
     private String mapToObject;
     private String mapToProperty;
     private String validator;
+    private String defaultValue;
 
     private static HashMap defaultOnErrors;
     private static HashMap convertHash;
@@ -187,6 +190,7 @@ public class XmlField
             setMapToProperty(mapProp);
         }
         setValidator(attrib.getValue("validator"));
+        setDefaultValue(attrib.getValue("defaultValue"));
     }
 
 
@@ -380,6 +384,26 @@ public class XmlField
     }
 
     /**
+     * Set the default Value.
+     *
+     * @param prop The parameter to use as default value.
+     */
+    public void setDefaultValue(String prop)
+    {
+        defaultValue = prop;
+    }
+    
+    /**
+     * Get the default Value.
+     *
+     * @return The default value for this field.
+     */
+    public String getDefaultValue()
+    {
+        return defaultValue;
+    }
+    
+    /**
      * The name of the field making sure the first letter is lowercase.
      *
      * @return a <code>String</code> value
@@ -524,6 +548,10 @@ public class XmlField
         {
             result.append(" validator=\""+validator+"\"");
         }
+        if (defaultValue != null)
+        {
+            result.append(" defaultValue=\""+defaultValue+"\"");
+        }
 
 
         if ( rules.size() == 0 )
@@ -556,9 +584,4 @@ public class XmlField
         stream.defaultReadObject();
         populateDefaults();
     }
-
-
 }
-
-
-

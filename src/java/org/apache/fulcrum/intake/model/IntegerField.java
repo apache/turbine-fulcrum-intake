@@ -57,16 +57,49 @@ package org.apache.fulcrum.intake.model;
 import org.apache.fulcrum.intake.xmlmodel.Rule;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 import org.apache.fulcrum.util.parser.ValueParser;
+import org.apache.log4j.Category;
 
 /**
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
+ * @version $Id$
  */
-public class IntegerField extends Field
+public class IntegerField 
+    extends Field
 {
+    /** Log4j category */
+    Category category = Category.getInstance(getClass().getName());
+
     public IntegerField(XmlField field, Group group)
         throws Exception
     {
         super(field, group);
+    }
+
+    /**
+     * Sets the default value for an Integer Field
+     *
+     * @param prop Parameter for the default values
+     */
+    protected void setDefaultValue(String prop)
+    {
+        defaultValue = null;
+
+        if (prop == null)
+        {
+            return;
+        }
+
+        try
+        {
+            defaultValue = new Integer(prop);
+        }
+        catch (Exception e)
+        {
+            category.error("Could not convert "
+                           + prop + " into an Integer. ("
+                           + name + ")");
+        }
     }
 
     /**

@@ -58,17 +58,50 @@ import java.math.BigDecimal;
 import java.text.DecimalFormatSymbols;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 import org.apache.fulcrum.util.parser.ValueParser;
+import org.apache.log4j.Category;
 
 /**
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
+ * @version $Id$
  */
-public class BigDecimalField extends Field
+public class BigDecimalField 
+    extends Field
 {
+    /** Log4j category */
+    Category category = Category.getInstance(getClass().getName());
+
     public BigDecimalField(XmlField field, Group group)
         throws Exception
     {
         super(field, group);
+    }
+
+    /**
+     * Sets the default value for a BigDecimal field
+     *
+     * @param prop Parameter for the default values
+     */
+    protected void setDefaultValue(String prop)
+    {
+        defaultValue = null;
+        
+        if (prop == null)
+        {
+            return;
+        }
+        
+        try
+        {
+            defaultValue = new BigDecimal(prop);
+        }
+        catch (RuntimeException e)
+        {
+            category.error("Could not convert " + prop
+                           + " into a BigDecimal. (" 
+                           + name + ")");
+        }
     }
 
     /**

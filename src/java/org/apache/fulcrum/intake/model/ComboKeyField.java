@@ -65,18 +65,29 @@ import org.apache.log4j.Category;
 
 /**
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
+ * @version $Id$
  */
-public class ComboKeyField extends Field
+public class ComboKeyField 
+    extends Field
 {
-    /**
-     * Log4j category
-     */
+    /** Log4j category */
     Category category = Category.getInstance(getClass().getName());
 
     public ComboKeyField(XmlField field, Group group)
         throws Exception
     {
         super(field, group);
+    }
+
+    /**
+     * Sets the default value for a ComboKey field
+     *
+     * @param prop Parameter for the default values
+     */
+    protected void setDefaultValue(String prop)
+    {
+        defaultValue = prop;
     }
 
     /**

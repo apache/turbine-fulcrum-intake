@@ -62,13 +62,13 @@ import org.apache.log4j.Category;
  * Processor for boolean fields.
  *
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
-public class BooleanField extends Field
+public class BooleanField 
+    extends Field
 {
-    /**
-     * Log4j category
-     */
+    /** Log4j category */
     Category category = Category.getInstance(getClass().getName());
 
     public BooleanField(XmlField field, Group group)
@@ -77,6 +77,30 @@ public class BooleanField extends Field
         super(field, group);
     }
 
+    /**
+     * Sets the default value for a Boolean field
+     *
+     * @param prop Parameter for the default values
+     */
+    protected void setDefaultValue(String prop)
+    {
+        if (prop == null)
+        {
+            return;
+        }
+        
+        try
+        {
+            defaultValue = new Boolean(prop);
+        } 
+        catch (RuntimeException e) 
+        {
+            category.error("Could not convert " + prop
+                           + " into a Boolean. (" 
+                           + name + ")");
+        }
+    }
+    
     /**
      * A suitable validator.
      *

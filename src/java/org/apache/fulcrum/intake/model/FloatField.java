@@ -56,17 +56,22 @@ package org.apache.fulcrum.intake.model;
 
 import org.apache.fulcrum.intake.xmlmodel.Rule;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
+import org.apache.log4j.Category;
 
 /**
- * Creates Field objects.
+ * Creates Float Field objects.
  *
  * @author <a href="mailto:r.wekker@rubicon-bv.com>Ronald Wekker</a>
  * @author <a href="mailto:jmcnally@collab.net>John McNally</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
  
-public class FloatField extends Field
+public class FloatField 
+    extends Field
 {
+    /** Log4j category */
+    Category category = Category.getInstance(getClass().getName());
 
     public FloatField(XmlField field, Group group)
         throws Exception
@@ -74,30 +79,32 @@ public class FloatField extends Field
         super(field, group);
     }
 
-    /* *
-     * Sets the default value for an Float
-     * /    
+    /**
+     * Sets the default value for an Float Field
+     *
+     * @param prop Parameter for the default values
+     */    
     protected void setDefaultValue(String prop)
     {
         defaultValue = null;
-
-        if(prop == null)
+        
+        if (prop == null)
         {
             return;
         }
-
+        
         try
         {
             defaultValue = new Float(prop);
         } 
         catch(Exception e) 
         {
-            Category.getInstance(getClass().getName())
-                .error("Could not convert "+prop+" into an Float. ("+name+")");
+            category.error("Could not convert "
+                           + prop + " into an Float. ("
+                           + name + ")");
         }
     }
-    */
-
+    
     /**
      * A suitable validator.
      *

@@ -54,6 +54,7 @@ package org.apache.fulcrum.intake.xmlmodel;
  * <http://www.apache.org/>.
  */
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -66,7 +67,7 @@ import org.xml.sax.Attributes;
  * @version $Id$
  */
 public class XmlGroup
-    implements java.io.Serializable
+    implements Serializable
 {
     private List fields;
     private List mapToObjects;
@@ -313,6 +314,4 @@ public class XmlGroup
 
         return result.toString();
     }
-
-
 }
