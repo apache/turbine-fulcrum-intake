@@ -17,7 +17,6 @@ package org.apache.fulcrum.security.hibernate;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
-import net.sf.hibernate.avalon.HibernateService;
 
 import org.apache.fulcrum.security.entity.SecurityEntity;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -38,8 +37,6 @@ public interface PersistenceHelper
 	public void addEntity(SecurityEntity entity) throws DataBackendException;
 	
 	public Session retrieveSession() throws HibernateException;
-	public void setHibernateService(HibernateService hibernateService);
-	public HibernateService getHibernateService() throws HibernateException;
-	
+		
 
 }

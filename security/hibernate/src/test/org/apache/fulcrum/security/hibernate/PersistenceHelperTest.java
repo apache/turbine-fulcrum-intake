@@ -74,4 +74,6 @@ public class PersistenceHelperTest extends BaseUnitTest
         assertSame(persistenceHelperFromRoleManager2.getHibernateService(),persistenceHelperFromRoleManager.getHibernateService());
         assertSame(persistenceHelperFromRoleManager2.getHibernateService(),persistenceHelperFromGroupManager.getHibernateService());
     }
+    
+    
 }
