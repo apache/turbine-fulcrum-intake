@@ -4,3 +4,4 @@ logs
 .classpath
 .project
 *.ser
+fulcrum-security-pom-snapshot-version
