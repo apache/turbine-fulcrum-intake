@@ -2,19 +2,13 @@
 
 <project>
 
-  <id>fulcrum-crypto-impl</id>
-  <extend>${basedir}/../../project.xml</extend>
-  <name>Fulcrum Crypto Component Implementation</name>
+  <id>fulcrum-crypto</id>
+  <extend>${basedir}/../project.xml</extend>
+  <name>Fulcrum Crypto Component</name>
   <currentVersion>1.0.5-dev</currentVersion>
   <package>org.apache.fulcrum.crypto</package>
 
   <dependencies>
-
-    <dependency>
-      <groupId>fulcrum</groupId>
-      <artifactId>fulcrum-crypto-api</artifactId>
-      <version>1.0.5-dev</version>
-    </dependency>
 
     <dependency>
       <groupId>javamail</groupId>

@@ -7,6 +7,9 @@
 
   <body>
     <release version="1.0.5" date="">
+      <action dev="epugh" type="update" due-to="Kostyantyn Shchekotykhin">
+        Merge api and impl jars into one project.
+      </action>        
       <action dev="epugh" type="update">
         Add ECM based tests.
       </action>          
