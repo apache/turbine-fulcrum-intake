@@ -1,5 +1,4 @@
 package org.apache.fulcrum.testcontainer;
-
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -53,9 +52,7 @@ package org.apache.fulcrum.testcontainer;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-
 import java.io.File;
-
 import org.apache.avalon.excalibur.component.DefaultRoleManager;
 import org.apache.avalon.excalibur.component.ExcaliburComponentManager;
 import org.apache.avalon.excalibur.logger.LoggerManager;
@@ -68,7 +65,6 @@ import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.avalon.framework.context.DefaultContext;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
-
 /**
  * This is a simple ECM based container that can be used in unit test
  * of the fulcrum components.
@@ -76,44 +72,41 @@ import org.apache.avalon.framework.logger.AbstractLogEnabled;
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
  */
-public class Container
-        extends AbstractLogEnabled
-        implements Initializable, Disposable
+public class Container extends AbstractLogEnabled implements Initializable, Disposable
 {
     /** Component manager */
     private ExcaliburComponentManager manager = new ExcaliburComponentManager();
-
     /** Configurqation file */
     private String configFileName;
-
     /** Role file name */
     private String roleFileName;
-
     /** LogManager for logging */
     private LoggerManager lm = new Log4JLoggerManager();
-
     /**
      * Constructor
      */
     public Container()
     {
         org.apache.log4j.BasicConfigurator.configure();
-        this.enableLogging(lm.getLoggerForCategory(
-                "org.apache.fulcrum.testcontainer.Container"));
+        this.enableLogging(lm.getLoggerForCategory("org.apache.fulcrum.testcontainer.Container"));
     }
-
     /**
      * Starts up the container and initializes it.
      *
      * @param configFileName Name of the component configuration file
      * @param roleFileName Name of the role configuration file
      */
-    public void startup( String configFileName, String roleFileName )
+    public void startup(String configFileName, String roleFileName)
     {
         getLogger().debug("Starting container...");
-
         this.configFileName = configFileName;
         this.roleFileName = roleFileName;
+        File configFile = new File(configFileName);
+        if (!configFile.exists())
+        {
+            throw new RuntimeException(
+                "Could not initialize the container because the config file could not be found:" + configFile);
+        }
         try
         {
             initialize();
@@ -128,7 +121,6 @@ public class Container
     // -------------------------------------------------------------
     // Avalon lifecycle interfaces
     // -------------------------------------------------------------
-
     /**
      * Initializes the container
      *
@@ -136,31 +128,36 @@ public class Container
      */
     public void initialize() throws Exception
     {
+        boolean useRoles = true;
+        File roleFile = new File(roleFileName+"");
+        if (!roleFile.exists())
+        {
+            useRoles = false;
+            getLogger().info("Not using seperate roles file");
+        }
         // process configuration files
         DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
         Configuration sysConfig = builder.buildFromFile(configFileName);
-        Configuration roleConfig = builder.buildFromFile(roleFileName);
-
-        // Setup the RoleManager
-        DefaultRoleManager roles = new DefaultRoleManager();
-        roles.enableLogging(
-                lm.getLoggerForCategory("org.apache.fulcrum"));
-        roles.configure(roleConfig);
-
+        if (useRoles)
+        {
+            Configuration roleConfig = builder.buildFromFile(roleFileName);
+            // Setup the RoleManager
+            DefaultRoleManager roles = new DefaultRoleManager();
+            roles.enableLogging(lm.getLoggerForCategory("org.apache.fulcrum"));
+            roles.configure(roleConfig);
+			this.manager.setRoleManager(roles);
+        }
         // Setup ECM
         this.manager.setLoggerManager(lm);
-        this.manager.enableLogging(
-                lm.getLoggerForCategory("org.apache.fulcrum"));
+        this.manager.enableLogging(lm.getLoggerForCategory("org.apache.fulcrum"));
         DefaultContext context = new DefaultContext();
         context.put("ComponentAppRoot", (new File("")).getAbsolutePath());
         this.manager.contextualize(context);
-        this.manager.setRoleManager(roles);
+        
         this.manager.configure(sysConfig);
-
         // Init ECM!!!!
         this.manager.initialize();
     }
-
     /**
      * Disposes of the container and releases resources
      */
@@ -170,19 +167,16 @@ public class Container
         this.manager.dispose();
         getLogger().info("Container has been disposed.");
     }
-
     /**
      * Returns an instance of the named component
      *
      * @param roleName Name of the role the component fills.
      * @throws ComponentException generic exception
      */
-    public Component lookup(String roleName)
-            throws ComponentException
+    public Component lookup(String roleName) throws ComponentException
     {
         return this.manager.lookup(roleName);
     }
-
     /**
      * Releases the component
      *
@@ -192,5 +186,4 @@ public class Container
     {
         this.manager.release(component);
     }
-
 }

@@ -1,5 +1,4 @@
 package org.apache.fulcrum.testcontainer;
-
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -53,13 +52,9 @@ package org.apache.fulcrum.testcontainer;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-
 import java.io.File;
-
 import org.apache.avalon.framework.component.ComponentException;
-
 import junit.framework.TestSuite;
-
 /**
  * Basic testing of the Container
  *
@@ -68,7 +63,6 @@ import junit.framework.TestSuite;
  */
 public class ContainerTest extends BaseUnitTest
 {
-
     /**
      * Constructor for test.
      *
@@ -78,7 +72,6 @@ public class ContainerTest extends BaseUnitTest
     {
         super(testName);
     }
-
     /**
      * Factory method for creating a TestSuite for this class.
      *
@@ -89,12 +82,10 @@ public class ContainerTest extends BaseUnitTest
         TestSuite suite = new TestSuite(ContainerTest.class);
         return suite;
     }
-
     public void testInitialization()
     {
         assertTrue(true);
     }
-
     public void testComponentUsage()
     {
         SimpleComponent sc = null;
@@ -107,39 +98,49 @@ public class ContainerTest extends BaseUnitTest
             e.printStackTrace();
             fail(e.getMessage());
         }
-
         assertNotNull(sc);
-
         sc.test();
-
         this.release(sc);
-
+    }
+    public void testAlternativeRoles()
+    {
+        SimpleComponent sc = null;
+        File f = new File("src/test/TestAlternativeRoleConfig.xml");
+        assertTrue(f.exists());
+        this.setRoleFileName("src/test/TestAlternativeRoleConfig.xml");
+        try
+        {
+            sc = (SimpleComponent) this.lookup(SimpleComponent.ROLE);
+        }
+        catch (ComponentException e)
+        {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertTrue(sc instanceof AlternativeComponentImpl);
+        assertNotNull(sc);
+        sc.test();
+        this.release(sc);
     }
     
-	public void testAlternativeRoles()
+	public void testLoadingContainerWithNoRolesfile()
+	{
+		SimpleComponent sc = null;
+
+		this.setRoleFileName(null);
+		this.setConfigurationFileName("src/test/TestComponentConfigIntegratedRoles.xml");
+		try
 		{
-			SimpleComponent sc = null;
-			File f = new File("src/test/TestAlternativeRoleConfig.xml");
-			assertTrue(f.exists());
-			this.setRoleFileName("src/test/TestAlternativeRoleConfig.xml");
-			try
-			{
-				sc = (SimpleComponent) this.lookup(SimpleComponent.ROLE);
-			}
-			catch (ComponentException e)
-			{
-				e.printStackTrace();
-				fail(e.getMessage());
-			}
-			
-			assertTrue(sc instanceof AlternativeComponentImpl);
-
-			assertNotNull(sc);
-
-			sc.test();
-
-			this.release(sc);
-
+			sc = (SimpleComponent) this.lookup(SimpleComponent.ROLE);
 		}
-
+		catch (ComponentException e)
+		{
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		assertTrue(sc instanceof AlternativeComponentImpl);
+		assertNotNull(sc);
+		sc.test();
+		this.release(sc);
+	}    
 }
