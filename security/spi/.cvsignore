@@ -2,3 +2,5 @@ target
 *.classpath
 *.project
 *.log
+*.ser
+fulcrum-security-spi-pom-snapshot-version
