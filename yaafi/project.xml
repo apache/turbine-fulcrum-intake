@@ -23,33 +23,6 @@
       <excludes>
         <exclude>**/BaseUnitTest.java</exclude>
       </excludes>
-      <resources>
-        <resource>
-          <directory>${basedir}/src/test</directory>
-          <includes>
-            <include>**/*.xml</include>
-          </includes>
-        </resource>
-      </resources>
-    </unitTest>    
-  </build>
-
-  <build>
-    <unitTest>
-      <includes>
-        <include>**/*Test.java</include>
-      </includes>
-      <excludes>
-        <exclude>**/BaseUnitTest.java</exclude>
-      </excludes>
-      <resources>
-        <resource>
-          <directory>${basedir}/src/test</directory>
-          <includes>
-            <include>**/*.xml</include>
-          </includes>
-        </resource>
-      </resources>
     </unitTest>    
   </build>
 
