@@ -74,8 +74,10 @@ public class StringValueParser
      * @param s a <code>String</code> value
      * @param delim a <code>char</code> value
      * @param urlDecode a <code>boolean</code> value
+     * @exception Exception Error decoding name/value pairs.
      */
     public void parse(String s, char delim, boolean urlDecode) 
+        throws Exception
     {
         String delimChar = String.valueOf(delim);
         StringTokenizer st = new StringTokenizer(s, delimChar);
@@ -109,6 +111,7 @@ public class StringValueParser
 
     public void parse(String s, char paramDelim, char pairDelim, 
                       boolean urlDecode)
+        throws Exception
     {
         if ( paramDelim == pairDelim ) 
         {
