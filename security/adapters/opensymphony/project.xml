@@ -10,12 +10,12 @@
     <dependency>
       <groupId>fulcrum</groupId>   
       <artifactId>fulcrum-security-api</artifactId>
-      <version>1.0-alpha-4</version>
+      <version>1.0-alpha-6</version>
     </dependency>   
     <dependency>
       <groupId>fulcrum</groupId>   
       <artifactId>fulcrum-security-spi</artifactId>
-      <version>1.0-alpha-4</version>
+      <version>1.0-alpha-6</version>
     </dependency>      
     <dependency>
       <groupId>fulcrum</groupId>   
@@ -27,17 +27,6 @@
       <artifactId>fulcrum-crypto-impl</artifactId>
       <version>1.0-alpha-4</version>
     </dependency>  
-    
-    <dependency>
-      <groupId>fulcrum</groupId>    
-      <artifactId>fulcrum-factory-api</artifactId>
-      <version>1.0-alpha-2</version>
-    </dependency>
-    <dependency>
-      <groupId>fulcrum</groupId>    
-      <artifactId>fulcrum-factory-impl</artifactId>
-      <version>1.0-alpha-2</version>
-    </dependency>
 
     <dependency>
       <groupId>avalon-framework</groupId>
@@ -84,7 +73,7 @@
     <dependency>
       <groupId>fulcrum</groupId>    
       <artifactId>fulcrum-security-memory</artifactId>
-      <version>1.0-alpha-4</version>
+      <version>1.0-alpha-6</version>
     </dependency>      
     <dependency>
       <groupId>fulcrum</groupId>    
