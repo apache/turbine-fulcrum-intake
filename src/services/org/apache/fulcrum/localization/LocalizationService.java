@@ -92,7 +92,7 @@ public interface LocalizationService
 
     /**
      * Convenience method to get a ResourceBundle based on name and
-     * HTTP Accept-Language header.
+     * HTTP <code>Accept-Language</code> header.
      *
      * @param bundleName Name of bundle.
      * @param languageHeader A String with the language header.
@@ -105,7 +105,8 @@ public interface LocalizationService
      * Convenience method to get a ResourceBundle based on HTTP
      * Accept-Language header in HttpServletRequest.
      *
-     * @param req HttpServletRequest.
+     * @param req The HTTP request to parse the
+     * <code>Accept-Language</code> of.
      * @return A localized ResourceBundle.
      */
     public ResourceBundle getBundle (HttpServletRequest req);
@@ -115,7 +116,8 @@ public interface LocalizationService
      * HTTP Accept-Language header in HttpServletRequest.
      *
      * @param bundleName Name of bundle.
-     * @param req HttpServletRequest.
+     * @param req The HTTP request to parse the
+     * <code>Accept-Language</code> of.
      * @return A localized ResourceBundle.
      */
     public ResourceBundle getBundle(String bundleName,
