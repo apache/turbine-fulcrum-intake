@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+  name="Xmlrpc"
+  href="http://jakarta.apache.org/turbine/fulcrum/xmlrpc/">
+
+  <body>
+    <links>
+      <item name="Turbine"			       href="http://jakarta.apache.org/turbine/"/>
+      <item name="Fulcrum"			       href="http://jakarta.apache.org/turbine/fulcrum/"/>
+    </links>
+    
+    <menu name="Overview">
+      <item name="Main"   				   href="/index.html"/>
+    </menu>
+  </body>
+</project>
