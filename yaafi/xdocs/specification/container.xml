@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Specification</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Container Configuration File">
+
+      <p>
+        The Container Configuration File is used to bootstrap the
+        YAAFI container.
+      </p>
+      
+      <subsection name="Specification">
+        <table>
+          <tr>
+            <th>Item</th>
+            <th>Datatype</th>
+            <th>Optional</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>containerClazzName</td>
+            <td>String</td>
+            <td>Y</td>
+            <td>
+              The class name of the YAAFI container to be instantiated. This
+              feature allows to use inheritance for customizing the container
+              functionality.              
+            </td>
+          </tr>
+          <tr>
+            <td>componentRoles/location</td>
+            <td>String</td>
+            <td>Y</td>
+            <td>The location of the component role file</td>
+          </tr>
+          <tr>
+            <td>componentRoles/isEncrypted</td>
+            <td>Boolean</td>
+            <td>Y</td>
+            <td>Is the component role file encrypted?</td>
+          </tr>
+          <tr>
+            <td>componentConfiguration/location</td>
+            <td>String</td>
+            <td>Y</td>
+            <td>The location of the component configuration file</td>
+          </tr>
+          <tr>
+            <td>componentConfiguration/isEncrypted</td>
+            <td>Boolean</td>
+            <td>Y</td>
+            <td>Is the component configuration file encrypted?</td>
+          </tr>
+          <tr>
+            <td>parameters/location</td>
+            <td>String</td>
+            <td>Y</td>
+            <td>The location of the parameters file</td>
+          </tr>
+          <tr>
+            <td>parameters/isEncrypted</td>
+            <td>Boolean</td>
+            <td>Y</td>
+            <td>Is the parameters file encrypted?</td>
+          </tr>
+        </table>
+      </subsection>
+
+      <subsection name="Example">
+        <source>
+          <![CDATA[
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<fulcrum-yaafi>
+  <containerClazzName>org.apache.fulcrum.yaafi.framework.container.ServiceContainerImpl</containerClazzName>
+  <componentRoles>
+    <location>./src/test/TestRoleConfig.xml</location>
+    <isEncrypted>false</isEncrypted>
+  </componentRoles>
+  <componentConfiguration>
+    <location>./src/test/TestComponentConfig.xml</location>
+    <isEncrypted>false</isEncrypted>
+  </componentConfiguration>
+  <parameters>
+    <location>./src/test/TestParameters.properties</location>
+    <isEncrypted>false</isEncrypted>
+  </parameters>
+</fulcrum-yaafi>              
+          ]]>
+        </source>
+      </subsection>
+            
+    </section>
+
+  </body>
+
+</document>

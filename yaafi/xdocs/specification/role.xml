@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Specification</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Role Configuration File">
+
+      <p>
+        The Role Configuration File is used to map the services to
+        implementation classes.
+      </p>
+      
+      <subsection name="Specification">
+        <table>
+          <tr>
+            <th>Item</th>
+            <th>Datatype</th>
+            <th>Optional</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>role@name</td>
+            <td>String</td>
+            <td>Y</td>
+            <td>
+              The name of the service being used for the lookup. If
+              no value is defined then <b>role@default-class</b> will
+              be used.
+            </td>
+          </tr>
+          <tr>
+            <td>role@shorthand</td>
+            <td>String</td>
+            <td>Y</td>
+            <td>
+              The shorthand for referencing the section in the Component
+              Configuration File. If no value is defined then 
+              <b>role@name</b> will be used.
+            </td>
+          </tr>
+          <tr>
+            <td>role@default-class</td>
+            <td>String</td>
+            <td>N</td>
+            <td>
+              The implementation class of the service.
+            </td>
+          </tr>
+          <tr>
+            <td>role@early-init</td>
+            <td>Boolean</td>
+            <td>Y</td>
+            <td>
+              Shall the service implementation class be instantiated
+              during startup of the container or on demand?
+            </td>
+          </tr>
+          <tr>
+            <td>role@description</td>
+            <td>String</td>
+            <td>Y</td>
+            <td>
+              A description what the service is actually doing.
+            </td>
+          </tr>
+        </table>
+      </subsection>
+
+      <subsection name="Example">
+        <source>
+          <![CDATA[
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<role-list>
+  <role
+    name="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyService"
+    shorthand="SystemPropertyService"
+    default-class="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyServiceImpl"
+    early-init="true"
+    description="Copies name/value pairs into the SystemProperties"
+  />   
+</role-list>          
+          ]]>
+        </source>
+      </subsection>
+            
+    </section>
+
+  </body>
+
+</document>

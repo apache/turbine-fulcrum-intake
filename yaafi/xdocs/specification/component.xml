@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Specification</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Component Configuration File">
+
+      <p>
+        The Component Configuration File is used to configure the 
+        components defined in the Role Configuration File. It is
+        seperated into sections where the shorthand of the component
+        is used.
+      </p>
+      
+      <subsection name="Example">
+        <source>
+          <![CDATA[
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<componentConfig>
+  <SystemPropertyService>
+    <property name="FOO">BAR</property>
+  </SystemPropertyService>
+</componentConfig>              
+          ]]>
+        </source>
+      </subsection>
+            
+    </section>
+
+  </body>
+
+</document>

@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Specification</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Avalon Context">
+
+      <p>
+        The components are initialized with an Avalon Context if the implementation
+        class implements the Contextualizable interface
+      </p>
+      
+      <subsection name="Specification">
+        <table>
+          <tr>
+            <th>Item</th>
+            <th>Datatype</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>urn:avalon:home</td>
+            <td>File</td>
+            <td>
+              Defines the Merlin application root.
+            </td>
+          </tr>
+          <tr>
+            <td>urn:avalon:temp</td>
+            <td>File</td>
+            <td>
+              Define the Merlin temporary directory.
+            </td>
+          </tr>
+          <tr>
+            <td>urn:avalon:name</td>
+            <td>String</td>
+            <td>
+              Define the Merlin component name.
+            </td>
+          </tr>
+          <tr>
+            <td>urn:avalon:partition</td>
+            <td>String</td>
+            <td>
+              Define the Merlin partition name.
+            </td>
+          </tr>
+          <tr>
+            <td>urn:avalon:classloader</td>
+            <td>Classloader</td>
+            <td>
+              Define the Merlin component classloader.
+            </td>
+          </tr>
+        </table>
+      </subsection>
+
+      <subsection name="Example">
+        <table>
+          <tr>
+            <th>Entry</th>
+            <th>Value</th>
+          </tr>
+          <tr>
+            <td>urn:avalon:home</td>
+            <td>W:\work\it20one\service\it20one-service-framework</td>
+          </tr>
+          <tr>
+            <td>urn:avalon:temp</td>
+            <td>C:\DOKUME~1\Sigi\LOKALE~1\Temp</td>
+          </tr>
+          <tr>
+            <td>urn:avalon:name</td>
+            <td>org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyService</td>
+          </tr>
+          <tr>
+            <td>urn:avalon:partition</td>
+            <td>root</td>
+          </tr>
+          <tr>
+            <td>urn:avalon:classloader</td>
+            <td>sun.misc.Launcher$AppClassLoader@e80a59</td>
+          </tr>
+
+        </table>            
+
+      </subsection>
+            
+    </section>
+
+  </body>
+
+</document>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<fulcrum-yaafi>
+  <containerType>phoenix</containerType>
+  <containerClazzName>org.apache.fulcrum.yaafi.framework.container.ServiceContainerImpl</containerClazzName>
+  <componentRoles>
+    <location>./src/test/TestRoleConfig.xml</location>
+    <isEncrypted>false</isEncrypted>
+  </componentRoles>
+  <componentConfiguration>
+    <location>./src/test/TestComponentConfig.xml</location>
+    <isEncrypted>false</isEncrypted>
+  </componentConfiguration>
+  <parameters>
+    <location>./src/test/TestParameters.properties</location>
+    <isEncrypted>false</isEncrypted>
+  </parameters>
+</fulcrum-yaafi>              

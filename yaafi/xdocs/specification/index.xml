@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Specification</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Specification">
+
+      <p>
+        Here you find the specification of the following entities
+        
+        <ul>
+            <li><a href="container.html">Container Configuration</a></li>
+            <li><a href="role.html">Role Configuration</a></li>
+            <li><a href="component.html">Component Configuration</a></li>
+            <li><a href="context.html">Avalon Context</a></li>
+        </ul>
+      </p>
+            
+    </section>
+
+  </body>
+
+</document>
