@@ -6,7 +6,7 @@
   <property file="build.properties" />
   <!-- Set default values for the build -->
   <property file="default.properties" />
- 
+
 
   <!-- ================================================================ -->
   <!-- I N I T  T A R G E T                                             -->
@@ -46,6 +46,15 @@
 
   <target name="security-om" depends="init">
 
+    <filter token="DATABASE_DEFAULT" value="${security.database.name}"/>
+    <!-- is there a way to load this from an xml file? -->
+    <filter token="EXTRA_USER_COLUMNS" value="${security.extra.user.columns}"/>
+    <copy 
+      todir="${build.src}"
+      file="${schemaDirectory}/turbine-schema.xml"
+      filtering="yes" 
+    />
+
     <torque-om
       contextProperties="default.properties"
       controlTemplate="${OMControlTemplate}"
@@ -53,13 +62,21 @@
       templatePath="${templatePath}"
       outputFile="report.turbine.om.generation"
       targetPackage="${securityPackage}"
-      xmlFile="${schemaDirectory}/turbine-schema.xml"
+      xmlFile="${build.src}/turbine-schema.xml"
+      targetDatabase="${database}"
     />
 
   </target>
 
 
   <target name="scheduler-om" depends="init">
+
+    <filter token="DATABASE_DEFAULT" value="${scheduler.database.name}"/>
+    <copy 
+      todir="${build.src}"
+      file="${schemaDirectory}/scheduler-schema.xml"
+      filtering="yes" 
+    />
 
     <torque-om
       contextProperties="default.properties"
@@ -68,7 +85,7 @@
       templatePath="${templatePath}"
       outputFile="report.turbine.scheduler.generation"
       targetPackage="${schedulerPackage}"
-      xmlFile="${schemaDirectory}/scheduler-schema.xml"
+      xmlFile="${build.src}/scheduler-schema.xml"
     />
 
   </target>

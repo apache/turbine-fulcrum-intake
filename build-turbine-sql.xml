@@ -222,12 +222,21 @@
     <echo message="| Generating Turbine SQL schema for ${database} "/>
     <echo message="+----------------------------------------------+"/>
 
+    <filter token="DATABASE_DEFAULT" value="${security.database.name}"/>
+    <!-- is there a way to load this from an xml file? -->
+    <filter token="EXTRA_USER_COLUMNS" value="${security.extra.user.columns}"/>
+    <copy 
+      todir="${build.src}"
+      file="${schemaDirectory}/turbine-schema.xml"
+      filtering="yes" 
+    />
+
     <torque-sql
       controlTemplate="${SQLControlTemplate}"
       outputDirectory="${outputDirectory}"
       templatePath="${templatePath}"
       outputFile="${database}-turbine.sql"
-      xmlFile="${schemaDirectory}/turbine-schema.xml"
+      xmlFile="${build.src}/turbine-schema.xml"
       targetDatabase="${database}"
     />
 
@@ -243,12 +252,19 @@
     <echo message="| Generating Scheduler SQL schema for ${database} "/>
     <echo message="+------------------------------------------------+"/>
 
+    <filter token="DATABASE_DEFAULT" value="${scheduler.database.name}"/>
+    <copy 
+      todir="${build.src}"
+      file="${schemaDirectory}/scheduler-schema.xml"
+      filtering="yes" 
+    />
+
     <torque-sql
       controlTemplate="${SQLControlTemplate}"
       outputDirectory="${outputDirectory}"
       templatePath="${templatePath}"
       outputFile="${database}-scheduler.sql"
-      xmlFile="${schemaDirectory}/scheduler-schema.xml"
+      xmlFile="${build.src}/scheduler-schema.xml"
       targetDatabase="${database}"
     />
 

@@ -16,7 +16,7 @@
 <!-- @version $Id$     -->
 <!-- ==================================================================== -->
 
-<database>
+<database name="@DATABASE_DEFAULT@">
   
   <table name="TURBINE_PERMISSION" idMethod="idbroker">
     <column name="PERMISSION_ID" required="true" primaryKey="true" type="INTEGER"/>
@@ -73,7 +73,7 @@
     <column name="CREATED" type="TIMESTAMP" javaName="CreateDate"/>
     <column name="LAST_LOGIN" type="TIMESTAMP"/>
     <column name="OBJECTDATA" type="VARBINARY"/>
-    
+    @EXTRA_USER_COLUMNS@
     <unique>
         <unique-column name="LOGIN_NAME"/>
     </unique>        
