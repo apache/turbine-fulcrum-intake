@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<project>
+  <extend>${basedir}/../project.xml</extend>
+  <id>fulcrum-xmlrpc</id>
+  <name>Fulcrum XMLRPC Component</name>
+  <currentVersion>1.0-alpha-2</currentVersion>
+
+  <dependencies>
+    
+    <dependency>
+      <id>javamail</id>
+      <version>1.2</version>
+    </dependency>
+
+    <dependency>
+      <id>xmlrpc</id>
+      <version>1.1</version>
+    </dependency>
+
+    <dependency>
+      <id>xml-apis</id>
+      <version>1.0.b2</version>
+    </dependency>
+
+  </dependencies>
+
+  <properties>
+    <implementation>org.apache.fulcrum.xmlrpc.DefaultXmlRpcComponent</implementation>
+  </properties>
+
+</project>
+
