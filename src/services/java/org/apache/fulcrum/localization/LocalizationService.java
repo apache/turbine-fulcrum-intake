@@ -64,6 +64,10 @@ import org.apache.fulcrum.Service;
  * Provides localization functionality using the interface provided by
  * <code>ResourceBundle</code>.
  *
+ * <p>It is suggested that one handle
+ * <a href="http://www.math.fu-berlin.de/~rene/www/java/tutorial/i18n/message/messageFormat.html">dealing with concatenated messages</a>
+ * using <code>MessageFormat</code> and properties files.</p>
+ *
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:leonardr@collab.net">Leonard Richardson</a>
