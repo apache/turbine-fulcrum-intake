@@ -17,7 +17,7 @@
   
   <component
     role="org.apache.fulcrum.security.hibernate.PersistenceHelper"
-    class="org.apache.fulcrum.security.hibernate.PersistenceHelperImpl">   
+    class="org.apache.fulcrum.security.hibernate.PersistenceHelperHibernateServiceImpl">   
   </component>
     
   <component

@@ -7,24 +7,24 @@
   <component
     role="org.apache.fulcrum.security.UserManager"
     class="org.apache.fulcrum.security.hibernate.HibernateUserManagerImpl"> 
-    <className>org.apache.fulcrum.security.model.dynamic.entity.DynamicUser</className>  
+    <className>org.apache.fulcrum.security.model.turbine.entity.TurbineUser</className>  
   </component>   
   <component
     role="org.apache.fulcrum.security.GroupManager"
     class="org.apache.fulcrum.security.hibernate.HibernateGroupManagerImpl">   
-    <className>org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup</className>    
+    <className>org.apache.fulcrum.security.model.turbine.entity.TurbineGroup</className>    
   </component>     
 
   <component
     role="org.apache.fulcrum.security.RoleManager"
     class="org.apache.fulcrum.security.hibernate.HibernateRoleManagerImpl">   
-    <className>org.apache.fulcrum.security.model.dynamic.entity.DynamicRole</className>
+    <className>org.apache.fulcrum.security.model.turbine.entity.TurbineRole</className>
   </component>     
 
   <component
     role="org.apache.fulcrum.security.PermissionManager"
     class="org.apache.fulcrum.security.hibernate.HibernatePermissionManagerImpl">  
-    <className>org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission</className>    
+    <className>org.apache.fulcrum.security.model.turbine.entity.TurbinePermission</className>    
   </component>     
   
   <component
@@ -34,19 +34,18 @@
     
   <component
     role="org.apache.fulcrum.security.ModelManager"
-    class="org.apache.fulcrum.security.hibernate.dynamic.HibernateModelManagerImpl">   
-  </component>    
-   
+    class="org.apache.fulcrum.security.hibernate.turbine.HibernateModelManagerImpl">   
+  </component>   
   <component 
     role="net.sf.hibernate.avalon.HibernateService"
     class="net.sf.hibernate.avalon.HibernateServiceImpl">   
-    <parameter name="default.configuration" value="false"/>
+    <parameter name="default.configuration" value="false"/>    
   <session-factory >
-        <property name="show_sql">true</property>
-        <property name="use_outer_join">true</property>
+        <property name="show_sql">false</property>
+        <property name="use_outer_join">auto</property>
 
         <!-- properties for this SessionFactory only -->
-        
+        <property name="hibernate.cglib.use_reflection_optimizer">false</property>
         <property name="connection.driver_class">com.mckoi.JDBCDriver</property>
         <property name="connection.username">test</property>
         <property name="connection.password">test</property>
@@ -56,17 +55,17 @@
         <!-- mapping files -->
     </session-factory>    
     <mappings>
-      <resource>ExtendedUserHibernate.hbm.xml</resource>
+      <resource>TurbineHibernate.hbm.xml</resource>
   </mappings>    
   </component>
 
    <component
     role="org.apache.fulcrum.security.authenticator.Authenticator"
     class="org.apache.fulcrum.security.authenticator.TextMatchAuthenticator">   
-  </component> 
+  </component>
   
-  <component
+  <!--component
     role="org.apache.fulcrum.security.model.ACLFactory"
-    class="org.apache.fulcrum.security.model.dynamic.DynamicACLFactory">   
-  </component>   
+    class="org.apache.fulcrum.security.model.turbine.TurbineACLFactory">   
+  </component-->    
 </my-system>

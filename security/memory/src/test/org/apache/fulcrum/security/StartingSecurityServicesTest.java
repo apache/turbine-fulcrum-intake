@@ -18,6 +18,7 @@ import org.apache.avalon.framework.service.ServiceException;
 
 import org.apache.fulcrum.security.model.basic.BasicModelManager;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
+import org.apache.fulcrum.security.model.turbine.TurbineModelManager;
 import org.apache.fulcrum.security.memory.MemoryGroupManagerImpl;
 import org.apache.fulcrum.security.memory.MemoryPermissionManagerImpl;
 import org.apache.fulcrum.security.memory.MemoryRoleManagerImpl;
@@ -77,7 +78,7 @@ public class StartingSecurityServicesTest extends BaseUnitTest
                 instanceof org.apache.fulcrum.security.memory.turbine
                     .MemoryTurbineModelManagerImpl);
         assertTrue(
-            securityService.getModelManager() instanceof DynamicModelManager);
+            securityService.getModelManager() instanceof TurbineModelManager);
     }
 
     public void testStartingBasicModel() throws Exception

@@ -6,6 +6,11 @@
   </properties>
 
   <body>
+    <release version="1.0.7" date="in cvs">
+      <action dev="epugh" type="add">
+        Properly flesh out Turbine model of security.
+      </action> 
+    </release>
     <release version="1.0.6" date="in cvs">
       <action dev="epugh" type="add" due-to="Ben Gidley">
         Add to the dynamic model the ability to add delegators for users.  A user can have

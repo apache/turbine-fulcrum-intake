@@ -55,17 +55,23 @@ public class PersistenceHelperTest extends BaseUnitTest
         
 		SecurityService securityService = (SecurityService) lookup(SecurityService.ROLE);
 		HibernateGroupManagerImpl groupManager = (HibernateGroupManagerImpl)securityService.getGroupManager();
-		assertSame(hibernateService,groupManager.getPersistenceHelper().getHibernateService());
-		groupManager.getPersistenceHelper().setHibernateService(hibernateService2);
-		assertSame(hibernateService2,groupManager.getPersistenceHelper().getHibernateService());
+        PersistenceHelper persistenceHelper = groupManager.getPersistenceHelper();
+        assertTrue(persistenceHelper instanceof PersistenceHelperHibernateServiceImpl);
+        PersistenceHelperHibernateServiceImpl persistenceHelperFromGroupManager = (PersistenceHelperHibernateServiceImpl)persistenceHelper;
+		assertSame(hibernateService,persistenceHelperFromGroupManager.getHibernateService());    
+        persistenceHelperFromGroupManager.setHibernateService(hibernateService2);
+		assertSame(hibernateService2,persistenceHelperFromGroupManager.getHibernateService());
 		
 		HibernateRoleManagerImpl roleManager = (HibernateRoleManagerImpl)securityService.getRoleManager();
-		assertSame(hibernateService2,roleManager.getPersistenceHelper().getHibernateService());
-		assertNotSame(hibernateService,roleManager.getPersistenceHelper().getHibernateService());
-		roleManager.getPersistenceHelper().setHibernateService(hibernateService);
-		assertSame(roleManager.getPersistenceHelper().getHibernateService(),groupManager.getPersistenceHelper().getHibernateService());
+        PersistenceHelperHibernateServiceImpl persistenceHelperFromRoleManager = (PersistenceHelperHibernateServiceImpl)roleManager.getPersistenceHelper();
+		assertSame(hibernateService2,persistenceHelperFromRoleManager.getHibernateService());
+		assertNotSame(hibernateService,persistenceHelperFromRoleManager.getHibernateService());
+		persistenceHelperFromRoleManager.setHibernateService(hibernateService);
+		assertSame(persistenceHelperFromRoleManager.getHibernateService(),persistenceHelperFromGroupManager.getHibernateService());
 		
 		roleManager = (HibernateRoleManagerImpl)securityService.getRoleManager();
-		assertSame(roleManager.getPersistenceHelper().getHibernateService(),groupManager.getPersistenceHelper().getHibernateService());
+        PersistenceHelperHibernateServiceImpl persistenceHelperFromRoleManager2 = (PersistenceHelperHibernateServiceImpl)roleManager.getPersistenceHelper();
+        assertSame(persistenceHelperFromRoleManager2.getHibernateService(),persistenceHelperFromRoleManager.getHibernateService());
+        assertSame(persistenceHelperFromRoleManager2.getHibernateService(),persistenceHelperFromGroupManager.getHibernateService());
     }
 }

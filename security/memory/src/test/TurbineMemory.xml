@@ -7,24 +7,24 @@
   <component
     role="org.apache.fulcrum.security.UserManager"
     class="org.apache.fulcrum.security.memory.turbine.MemoryTurbineUserManagerImpl">  
-    <className>org.apache.fulcrum.security.model.dynamic.entity.DynamicUser</className>     
+    <className>org.apache.fulcrum.security.model.turbine.entity.TurbineUser</className>     
   </component>   
   <component
     role="org.apache.fulcrum.security.GroupManager"
     class="org.apache.fulcrum.security.memory.MemoryGroupManagerImpl">   
-    <className>org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup</className>
+    <className>org.apache.fulcrum.security.model.turbine.entity.TurbineGroup</className>
   </component>     
 
   <component
     role="org.apache.fulcrum.security.RoleManager"
     class="org.apache.fulcrum.security.memory.MemoryRoleManagerImpl">   
-    <className>org.apache.fulcrum.security.model.dynamic.entity.DynamicRole</className>
+    <className>org.apache.fulcrum.security.model.turbine.entity.TurbineRole</className>
   </component>     
 
   <component
     role="org.apache.fulcrum.security.PermissionManager"
     class="org.apache.fulcrum.security.memory.MemoryPermissionManagerImpl">   
-    <className>org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission</className>    
+    <className>org.apache.fulcrum.security.model.turbine.entity.TurbinePermission</className>    
   </component>     
 
   <component
