@@ -98,7 +98,7 @@
       <groupId>hibernate</groupId>      
       <artifactId>jta</artifactId>            
       <version>hib2.1</version>
-      <url>http://java.sun.com/products/jta/</url> 
+      <url>http://www.hibernate.org</url> 
     </dependency>                                 
      <dependency>
        <id>dom4j</id>      
