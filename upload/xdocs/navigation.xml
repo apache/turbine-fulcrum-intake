@@ -13,6 +13,7 @@
 
     <menu name="Overview">
       <item name="Main"                 href="/index.html"/>
+      <item name="Properties"           href="/properties.html" />
     </menu>
   </body>
 </project>
