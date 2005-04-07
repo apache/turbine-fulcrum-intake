@@ -1,106 +1,104 @@
 package org.apache.turbine.services.yafficomponent;
 
-
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
+ * Copyright 2004 Apache Software Foundation
+ * Licensed  under the  Apache License,  Version 2.0  (the "License");
+ * you may not use  this file  except in  compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * distributed  under the  License is distributed on an "AS IS" BASIS,
+ * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
+ * implied.
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
 
-
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Initializable;
-import org.apache.avalon.framework.context.DefaultContext;
 import org.apache.avalon.framework.logger.Log4JLogger;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.configuration.Configuration;
 import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
-import org.apache.fulcrum.yaafi.framework.factory.ServiceManagerFactory;
+import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerConfiguration;
+import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
+import org.apache.log4j.Logger;
 import org.apache.turbine.Turbine;
 import org.apache.turbine.services.InitializationException;
 import org.apache.turbine.services.TurbineBaseService;
+import org.apache.turbine.services.servlet.TurbineServlet;
 
 /**
- * An implementation of YaafiComponentService which loads all the
- * components given in the TurbineResources.properties File.
- * <p>
- * For component which require the location of the application or
- * context root, there are two ways to get it.
- * <ol>
- * <li>
- *   Implement the Contextualizable interface.  The full path to the
- *   correct OS directory can be found under the ComponentAppRoot key.
- * </li>
- * <li>
- *   The system property "applicationRoot" is also set to the full path
- *   of the correct OS directory.
- * </li>
- * </ol>
- * If you want to initialize Torque by using the AvalonComponentService, you
- * must activate Torque at initialization time by specifying
+ * An implementation of Turbine service initializing the YAAFI container
  *
- * services.AvalonComponentService.lookup = org.apache.torque.Torque
- *
- * in your TurbineResources.properties.
- *
- * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
- * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
- * @version $Id$
+ * @author <a href="mailto:siegfried.goescfl@it20one.at">Siegfried Goeschl</a>
  */
 public class TurbineYaafiComponentService
         extends TurbineBaseService
         implements YaafiComponentService, Initializable, Disposable
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(TurbineYaafiComponentService.class);
+	/** property to lookup the container configuration file */
+	public final String CONTAINER_CONFIGURATION_KEY = "containerConfiguration";
+
+	/** the default value for the container configuration file */
+	public final String CONTAINER_CONFIGURATION_VALUE = "/WEB-INF/conf/containerConfiguration.xml";
+
+    /** property to lookup the properties file */
+	public final String COMPONENT_PARAMETERS_KEY = "parameters";
+
+	/** the default value for the parameter file */
+	public final String COMPONENT_PARAMETERS_VALUE = "/WEB-INF/conf/parameters.properties";
 
     /** YAFFI container */
-    private ServiceContainer container = null;
+    private ServiceContainer container;
+
+    /** our Log4J logger */
+    private Logger logger;
 
     // -------------------------------------------------------------
     // Service initialization
     // -------------------------------------------------------------
 
+    public TurbineYaafiComponentService()
+    {
+        this.logger = Logger.getLogger(TurbineYaafiComponentService.class);
+    }
+
     /**
-	 * Load all configured components and initialize them. This is a zero parameter variant which
-	 * queries the Turbine Servlet for its config.
-	 *
-	 * @throws InitializationException Something went wrong in the init stage
-	 */
+     * Load all configured components and initialize them. This is a zero parameter variant which
+     * queries the Turbine Servlet for its config.
+     *
+     * @throws InitializationException Something went wrong in the init stage
+     */
     public void init( Object data )
-    	throws InitializationException
+        throws InitializationException
     {
         try
         {
+            this.logger.info( "Initializing TurbineYaafiComponentService ..." );
             initialize();
             setInit(true);
         }
         catch (Exception e)
         {
-            log.error("Exception caught initialising service: ", e);
-            throw new InitializationException("init failed", e);
+            this.logger.error("Exception caught initialising service: ", e);
+            throw new InitializationException("Initializing TurbineYaafiComponentService failed", e);
         }
     }
 
     /**
-	 * Shuts the Component Service down, calls dispose on the components that implement this
-	 * interface
-	 *
-	 */
+     * Shuts the Component Service down, calls dispose on the components that implement this
+     * interface
+     *
+     */
     public void shutdown()
     {
+        this.logger.info( "Disposing TurbineYaafiComponentService ..." );
         dispose();
         setInit(false);
     }
@@ -110,67 +108,54 @@ public class TurbineYaafiComponentService
     // -------------------------------------------------------------
 
     /**
-	 * Initializes the container
-	 *
-	 * @throws Exception generic exception
-	 */
+     * Initializes the container
+     *
+     * @throws Exception generic exception
+     */
     public void initialize() throws Exception
     {
-		org.apache.commons.configuration.Configuration conf = getConfiguration();
+        // get the configuration from the baseclass
 
-		// determine the home directory
+        Configuration conf = this.getConfiguration();
 
-        String homePath = Turbine.getApplicationRoot();
+        // if we are not running witin a servlet we get a null string here !!!
+
+        String homePath = TurbineServlet.getRealPath ("/");
+
+        if( homePath == null )
+        {
+            homePath = Turbine.getApplicationRoot();
+        }
+
+        // determine the home directory
+
         File home = new File(homePath);
 
-        // determine the location of the role configuraton file
+        this.logger.info( "Using the following home : " + home.getAbsolutePath() );
 
-        String roleConfigurationFileName = conf.getString(
-            this.COMPONENT_ROLE_KEYS,
-            this.COMPONENT_ROLE_VALUE
-            );
-
-        // determine the location of component configuration file
-
-        String componentConfigurationFileName = conf.getString(
-            this.COMPONENT_CONFIG_KEY,
-            this.COMPONENT_CONFIG_VALUE
-            );
-
-        // determine the location of parameters file
-
-        String parametersFileName = conf.getString(
-            this.COMPONENT_PARAMETERS_KEY,
-            this.COMPONENT_PARAMETERS_VALUE
-            );
-
-        // build up a default context
-
-        DefaultContext context = new DefaultContext();
-        context.put(COMPONENT_APP_ROOT, homePath);
-        context.put(URN_AVALON_HOME, new File( homePath ) );
-        context.put(URN_AVALON_TEMP, new File( homePath ) );
+        // create the configuration for YAAFI
+        
+        ServiceContainerConfiguration config = this.createServiceContainerConfiguration(conf);
+        
+        config.setLogger( this.createAvalonLogger( "yaafi" ) );
+        config.setApplicationRootDir( home );
 
         try
         {
-            this.container = ServiceManagerFactory.create(
-                new Log4JLogger( org.apache.log4j.Logger.getLogger( TurbineYaafiComponentService.class ) ),
-                roleConfigurationFileName,
-                componentConfigurationFileName,
-                parametersFileName,
-                context
+            this.container = ServiceContainerFactory.create(
+                config
                 );
         }
         catch (Throwable t)
         {
-            t.printStackTrace();
-            log.error(t);
+            String msg = "Initializing YAAFI failed";
+            this.logger.error(msg,t);
         }
     }
 
     /**
-	 * Disposes of the container and releases resources
-	 */
+     * Disposes of the container and releases resources
+     */
     public void dispose()
     {
         if (this.container != null)
@@ -181,27 +166,103 @@ public class TurbineYaafiComponentService
     }
 
     /**
-	 * Returns an instance of the named component
-	 *
-	 * @param roleName Name of the role the component fills.
-	 * @return an instance of the named component
-	 * @throws Exception generic exception
-	 */
+     * Returns an instance of the named component
+     *
+     * @param roleName Name of the role the component fills.
+     * @return an instance of the named component
+     * @throws Exception generic exception
+     */
     public Object lookup(String path) throws Exception
     {
         return this.container.lookup(path);
     }
 
     /**
-	 * Releases the component
-	 *
-	 * @param source. The path to the handler for this component For example, if the object is a
-	 *            java.sql.Connection object sourced from the "/turbine-merlin/datasource"
-	 *            component, the call would be :- release("/turbine-merlin/datasource", conn);
-	 * @param component the component to release
-	 */
+     * Releases the component
+     *
+     * @param source. The path to the handler for this component For example, if the object is a
+     *            java.sql.Connection object sourced from the "/turbine-merlin/datasource"
+     *            component, the call would be :- release("/turbine-merlin/datasource", conn);
+     * @param component the component to release
+     */
     public void release(Object component)
     {
         this.container.release( component );
+    }
+    
+    /**
+     * Create a ServiceContainerConfiguration based on the Turbine configuration
+     * 
+     * @param conf the Turbine configuration
+     * @return the YAAFI configuration
+     * @throws IOException creating the YAAFI configuration failed
+     */
+    protected ServiceContainerConfiguration createServiceContainerConfiguration( Configuration conf )
+    	throws IOException
+    {
+        ServiceContainerConfiguration result = new ServiceContainerConfiguration();
+
+        // are we using a "containerConfiguration.xml" ?!
+        
+        if( conf.containsKey(CONTAINER_CONFIGURATION_KEY) )
+        {
+	        // determine the container configuration file
+	        
+	        String containerConfiguration = conf.getString(
+	            CONTAINER_CONFIGURATION_KEY
+	            );
+	        
+	        result.loadContainerConfiguration(containerConfiguration);
+        }    
+	    else if( conf.containsKey(COMPONENT_ROLE_KEY) )
+	    {		         
+	        // determine the location of the role configuraton file
+	
+	        String roleConfigurationFileName = conf.getString(
+	            COMPONENT_ROLE_KEY,
+	            COMPONENT_ROLE_VALUE
+	            );
+	
+	        // determine the location of component configuration file
+	
+	        String componentConfigurationFileName = conf.getString(
+	            COMPONENT_CONFIG_KEY,
+	            COMPONENT_CONFIG_VALUE
+	            );
+	
+	        // determine the location of parameters file
+	
+	        String parametersFileName = conf.getString(
+	            COMPONENT_PARAMETERS_KEY,
+	            COMPONENT_PARAMETERS_VALUE
+	            );
+	        
+	        result.setComponentRolesLocation( roleConfigurationFileName );
+	        result.setComponentConfigurationLocation( componentConfigurationFileName );
+	        result.setParametersLocation( parametersFileName );
+	    }
+	    else
+        {
+	        // determine the container configuration file
+	        
+	        String containerConfiguration = conf.getString(
+	            CONTAINER_CONFIGURATION_KEY,
+	            CONTAINER_CONFIGURATION_VALUE
+	            );
+	        
+	        result.loadContainerConfiguration(containerConfiguration);
+        }    
+        
+        return result;
+    }
+    
+    /**
+     * Create the Avalon logger to be passed to YAAFI
+     * @param name the name of the logger
+     * @return an Avalon Logger
+     */
+    protected org.apache.avalon.framework.logger.Logger createAvalonLogger( String name )
+    {
+        return new Log4JLogger( Logger.getLogger( name ) );        
     }
 }
