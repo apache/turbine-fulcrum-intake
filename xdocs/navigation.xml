@@ -52,6 +52,7 @@
     <menu name="Sandbox Components">      
       <item name="PBE"                   href="/fulcrum-pbe/index.html"/>
       <item name="Groovy"                href="/fulcrum-groovy/index.html"/>
+      <item name="ResourceManager"       href="/fulcrum-resourcemanager/index.html"/>
       <item name="Configuration"         href="/fulcrum-configuration-impl/index.html"/>
       <item name="HsqlDB"                href="/fulcrum-hsqldb/index.html"/>
       <item name="Intake"                href="/fulcrum-intake/index.html"/>
