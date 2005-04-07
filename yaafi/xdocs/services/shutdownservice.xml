@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>ShutdownService</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Overview">
+      <p>
+        This service uses a background thread to monitor a resource. A 
+        resource is loaded by using a resource name and an InputStreamLocator. 
+        The a SHA-1 hashcode is derived and compared to the previous hashcode.
+        If a change is detected the container is disposed, either by 
+        terminating all active threads or by calling System.exit(). This
+        service allows to shutdown a long-running application by writing
+        a timestamp into a file therefore avoiding any additional network
+        support.
+      </p>
+    </section>
+    
+    <section name="Configuration">
+
+      <subsection name="Role Configuration">
+        <source>
+          <![CDATA[
+<role
+  name="org.apache.fulcrum.yaafi.service.shutdown.ShutdownService"
+  shorthand="ShutdownService"
+  default-class="org.apache.fulcrum.yaafi.service.shutdown.ShutdownServiceImpl"
+  early-init="true"
+  description="Monitors a resource to force a disposal of the Avalon container"
+/>   
+          ]]>
+        </source>
+      </subsection>
+
+      <subsection name="Example Component Configuration">
+        <p>
+          The following configuration checks every 5 seconds
+          if the files have changed. Changing "shutdown.txt"
+          forces a disposable of the container and invoking
+          System.exit() afterwards
+        </p>
+        <source>
+          <![CDATA[
+<ShutdownService interval="5000">
+  <entry>
+    <location>./src/test/shutdown.txt</location> 
+    <useSystemExit>true</useSystemExit> 
+  </entry>    
+</ShutdownService>
+          ]]>
+        </source>
+      </subsection>
+    </section>
+        
+  </body>
+    
+</document>

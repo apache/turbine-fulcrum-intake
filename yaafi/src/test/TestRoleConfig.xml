@@ -28,6 +28,15 @@
     description="Monitors the componentConfiguration.xml to reconfigure YAAFI"
   />   
   <role
+    name="org.apache.fulcrum.yaafi.service.shutdown.ShutdownService"
+    shorthand="ShutdownService"
+    default-class="org.apache.fulcrum.yaafi.service.shutdown.ShutdownServiceImpl"
+    early-init="true"
+    component-type="avalon"
+    component-flavour="yaafi"    
+    description="Monitors a resource to force a disposal of the Avalon container"
+  />   
+  <role
     name="org.apache.fulcrum.yaafi.TestComponent"
     shorthand="test"
     default-class="org.apache.fulcrum.yaafi.TestComponentImpl"

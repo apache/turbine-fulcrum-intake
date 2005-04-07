@@ -21,6 +21,17 @@
         <service name="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyService"/>
       </services> 
     </entry>    
+    <shutdown>
+      <location>./src/test/shutdown.txt</location> 
+      <useSystemExit>false</useSystemExit> 
+    </shutdown>    
   </ReconfigurationService>
+
+  <ShutdownService interval="5000">
+    <entry>
+      <location>./src/test/shutdown.txt</location> 
+      <useSystemExit>true</useSystemExit> 
+    </entry>    
+  </ShutdownService>
   
 </componentConfig>

@@ -39,6 +39,12 @@
               Automatic reconfiguration after changes of the configuration file
             </td>
           </tr>
+          <tr>
+            <td><a href="shutdownservice.html">ShutdownService</a></td>
+            <td>
+              Automatic shutdown after changes of an arbitrary configuration file
+            </td>
+          </tr>
         </table>
         
       </p>

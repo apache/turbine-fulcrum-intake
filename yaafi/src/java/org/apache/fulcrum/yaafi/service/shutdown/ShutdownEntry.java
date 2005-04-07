@@ -1,4 +1,4 @@
-package org.apache.fulcrum.yaafi.service.reconfiguration;
+package org.apache.fulcrum.yaafi.service.shutdown;
 
 /*
  * Copyright 2004 Apache Software Foundation
@@ -33,13 +33,10 @@ import org.apache.fulcrum.yaafi.framework.util.InputStreamLocator;
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
-public class ReconfigurationEntry
+public class ShutdownEntry
 {
     /** the location to monitor for changes */
     private String location;
-    
-    /** the list of services to be reconfigured */
-    private String[] serviceList;
     
     /** the last message digest of the location */
     private byte[] digest;
@@ -53,21 +50,24 @@ public class ReconfigurationEntry
     /** the logger to be used */
     private Logger logger;    
     
+    /** use System.exit() to shutdown the JVM */
+    private boolean useSystemExit;
+    
     /**
      * Constructor
      * 
      * @param logger the logger to use
      * @param applicationDir the home directory of the application
      * @param location the location to monitor for changes
-     * @param serviceList the list of services to be reconfigured
+     * @param useSystemExit use System.exit() on shutdown
      */
-    public ReconfigurationEntry( Logger logger, File applicationDir, String location, String[] serviceList )
+    public ShutdownEntry( Logger logger, File applicationDir, String location, boolean useSystemExit )
     {
         this.isFirstInvocation = true;
+        this.useSystemExit = useSystemExit;
         this.location = location;
         this.locator  = new InputStreamLocator( applicationDir );
-        this.logger = logger;
-        this.serviceList = serviceList;        
+        this.logger = logger;        
     }
     
     /**
@@ -140,15 +140,15 @@ public class ReconfigurationEntry
         }
         
     }
-    
+       
     /**
-     * @return Returns the serviceList.
+     * @return Returns the useSystemExit.
      */
-    public String [] getServiceList()
+    public boolean isUseSystemExit()
     {
-        return serviceList;
+        return useSystemExit;
     }
-        
+    
     /**
      * @return Returns the isFirstInvocation.
      */

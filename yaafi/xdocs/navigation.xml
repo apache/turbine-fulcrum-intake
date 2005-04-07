@@ -22,6 +22,7 @@
         <item name="ServiceManagerService"      href="/services/servicemanagerservice.html"/>
         <item name="SystemPropertyService"      href="/services/systempropertyservice.html"/>
         <item name="ReconfigurationService"     href="/services/reconfigurationservice.html"/>
+        <item name="ShutdownService"            href="/services/shutdownservice.html"/>
       </item>
       <item name="Specification"              href="/specification/index.html" collapse="true">     
         <item name="Container Configuration"    href="/specification/container.html"/>
