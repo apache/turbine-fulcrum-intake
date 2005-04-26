@@ -21,6 +21,7 @@ import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
+import org.apache.avalon.framework.context.DefaultContext;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.logger.Logger;
 import org.apache.avalon.framework.parameters.ParameterException;
@@ -120,8 +121,8 @@ public class ServiceManagerServiceImpl
     public void dispose()
     {
         this.serviceManager = null;
-        this.parameters = null;
-        this.context = null;
+        this.parameters = new Parameters();
+        this.context = new DefaultContext();
         ServiceManagerServiceImpl.instance = null;
     }
 
