@@ -22,6 +22,8 @@ import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.configuration.Reconfigurable;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.LogEnabled;
+import org.apache.avalon.framework.parameters.Parameterizable;
+import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.service.ServiceManager;
 
 /**
@@ -31,8 +33,12 @@ import org.apache.avalon.framework.service.ServiceManager;
  */
 
 public interface ServiceContainer
-	extends LogEnabled, Contextualizable, Initializable, Reconfigurable, Disposable, 
+	extends LogEnabled, Contextualizable, Parameterizable, Initializable, Reconfigurable, Disposable, 
 		ServiceManager, ServiceLifecycleManager
 {    	
-    // nothing to export
+    /**
+     * Return the Avalon parameters loaded by the Avalon service container
+     * @return the Avalon paramters
+     */
+    Parameters getParameters();
 }
