@@ -8,6 +8,17 @@
   <body>
     <release version="1.0.4-dev" date="as in CVS">
       <action dev="sgoeschl" type="add">
+        The CLI can be now configured using SystemProperties and the command
+        line.
+      </action>
+      <action dev="sgoeschl" type="add">
+        Added a getParameters() to the ServiceContainer interface. This
+        allows to retrieve the Avalon parameters easily.
+      </action>
+      <action dev="sgoeschl" type="add">
+        The YAAFI service container implements Parameterizable
+      </action>
+      <action dev="sgoeschl" type="add">
         Added a Shutdown service to dispose the YAAFI container
       </action>
       <action dev="sgoeschl" type="fix">
