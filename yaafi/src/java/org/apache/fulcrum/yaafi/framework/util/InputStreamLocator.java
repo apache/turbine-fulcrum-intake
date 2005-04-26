@@ -79,6 +79,7 @@ public class InputStreamLocator
 			if( file.exists() )
 			{
 				is = new FileInputStream( file );
+				this.getLogger().debug("Found " + location + " as " + file.getAbsolutePath() );
 			}
 		}
 
@@ -94,6 +95,7 @@ public class InputStreamLocator
 			if( file.isAbsolute() && file.exists() )
 			{
 				is = new FileInputStream( file );
+				this.getLogger().debug("Found " + location + " as " + file.getAbsolutePath() );
 			}
 		}
 
