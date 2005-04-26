@@ -32,6 +32,7 @@ import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.logger.Logger;
+import org.apache.avalon.framework.parameters.ParameterException;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.fulcrum.jce.crypto.CryptoStreamFactoryImpl;
@@ -258,12 +259,18 @@ public class ServiceContainerImpl
                 "false" )
                 );
     }
-
+    
     /**
-     * Initializes the service container implementation.
-     * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
+     * @see org.apache.avalon.framework.parameters.Parameterizable#parameterize(org.apache.avalon.framework.parameters.Parameters)
      */
-
+    public synchronized void parameterize(Parameters parameters) throws ParameterException
+    {
+        this.parameters = parameters;
+    }
+    
+    /**
+     * @see org.apache.avalon.framework.activity.Initializable#initialize()
+     */
     public synchronized void initialize() throws Exception
     {
         this.getLogger().debug( "YAAFI Service Framework is starting up");
@@ -331,7 +338,7 @@ public class ServiceContainerImpl
         // we are up and running
 
         this.isDisposed = false;
-        this.getLogger().debug( "Service Framework is up and running");
+        this.getLogger().info( "YAAFI Avalon Service Container is up and running");
     }
 
 
@@ -349,7 +356,7 @@ public class ServiceContainerImpl
 
         if( this.getLogger() != null )
         {
-            this.getLogger().info("Disposing all services");
+            this.getLogger().debug("Disposing all services");
         }
 
         // decommision all servcies
@@ -543,9 +550,35 @@ public class ServiceContainerImpl
         this.decommision(serviceComponent);
     }
 
+    /**
+     * @see org.apache.fulcrum.yaafi.framework.container.ServiceContainer#getParameters()
+     */
+    public Parameters getParameters()
+    {
+        return this.parameters;
+    }
+    
     /////////////////////////////////////////////////////////////////////////
     // Service Implementation
     /////////////////////////////////////////////////////////////////////////
+
+    private File makeAbsolutePath( String fileName )
+    {
+        return this.makeAbsolutePath( new File(fileName) );
+    }
+
+    private File makeAbsolutePath( File file )
+    {
+        File result = file;       
+        
+        if( result.isAbsolute() == false )
+        {
+            String temp = file.getPath() + "/" + file.getName();
+            result = new File( this.getApplicationRootDir(), temp ); 
+        }
+        
+        return result;
+    }
 
     private RoleConfigurationParser createRoleConfigurationParser()
     {
@@ -906,9 +939,11 @@ public class ServiceContainerImpl
      */
     private File setApplicationRootDir(File dir)
     {
+        this.getLogger().debug( "Setting applicationRootDir to " + dir.getAbsolutePath() );
+        
         Validate.notNull(dir,"applicationRootDir is <null>");
         Validate.isTrue(dir.exists(),"applicationRootDir does not exist");
-        this.getLogger().debug( "Setting applicationRootDir to " + dir.getAbsolutePath() );
+
         this.applicationRootDir = dir;
         return this.applicationRootDir;
     }
@@ -926,10 +961,12 @@ public class ServiceContainerImpl
      */
     private File setTempRootDir(File dir)
     {
+        this.getLogger().debug( "Setting tempRootDir to " + dir.getAbsolutePath() );
+        
         Validate.notNull(dir,"tempRootDir is <null>");
         Validate.isTrue(dir.exists(),"tempRootDir does not exist");
         Validate.isTrue(dir.canWrite(),"tempRootDir is not writeable");
-        this.getLogger().debug( "Setting tempRootDir to " + dir.getAbsolutePath() );
+        
         this.tempRootDir = dir;
         return this.tempRootDir;
     }
@@ -1058,15 +1095,7 @@ public class ServiceContainerImpl
     {
         return context;
     }
-    
-    /**
-     * @return Returns the parameters.
-     */
-    private Parameters getParameters()
-    {
-        return parameters;
-    }
-    
+        
     private void waitForReconfiguration()
     {
         try

@@ -83,10 +83,10 @@ public class ServiceContainerConfiguration
     private Logger logger;
     
     /** the application directory */
-    private File applicationRootDir;
+    private String applicationRootDir;
     
     /** the temporary directory */
-    private File tempRootDir;
+    private String tempRootDir;
     
     /** the class loader passed in the Avalon Context */
     private ClassLoader componentClassLoader;
@@ -110,8 +110,8 @@ public class ServiceContainerConfiguration
         this.parametersLocation = ServiceConstants.COMPONENT_PARAMETERS_VALUE;
         this.isParametersEncrypted = "false";        
         this.context = new DefaultContext();
-        this.applicationRootDir = new File( new File("").getAbsolutePath() );
-        this.tempRootDir = new File( System.getProperty("java.io.tmpdir","."));      
+        this.applicationRootDir = new File("").getAbsolutePath();
+        this.tempRootDir = System.getProperty("java.io.tmpdir",".");      
         this.componentClassLoader = this.getClass().getClassLoader();        
     }
     
@@ -372,6 +372,7 @@ public class ServiceContainerConfiguration
     public void setComponentConfigurationLocation(
         String componentConfigurationLocation)
     {
+        Validate.notNull(componentConfigurationLocation,"componentConfigurationLocation");
         this.componentConfigurationLocation = componentConfigurationLocation;
     }
     
@@ -459,6 +460,7 @@ public class ServiceContainerConfiguration
      */
     public void setParametersEncrypted(String isParametersEncrypted)
     {
+        Validate.notEmpty(isParametersEncrypted,"isParametersEncrypted");
         this.isParametersEncrypted = isParametersEncrypted;
     }
     
@@ -499,15 +501,24 @@ public class ServiceContainerConfiguration
      */
     private File getApplicationRootDir()
     {
-        return applicationRootDir;
+        return new File(applicationRootDir);
     }
     
     /**
      * @param applicationRootDir The applicationRootDir to set.
      */
-    public void setApplicationRootDir(File applicationRootDir)
+    public void setApplicationRootDir(String applicationRootDir)
     {
-        this.applicationRootDir = applicationRootDir;
+        Validate.notNull(applicationRootDir, "applicationRootDir");
+        
+        if( applicationRootDir.equals(".") )
+        {
+            this.applicationRootDir = new File("").getAbsolutePath();
+        }
+        else
+        {
+            this.applicationRootDir = new File( applicationRootDir ).getAbsolutePath();
+        }
     }
     
     /**
@@ -515,14 +526,15 @@ public class ServiceContainerConfiguration
      */
     private File getTempRootDir()
     {
-        return tempRootDir;
+        return makeAbsoluteFile(this.getApplicationRootDir(),this.tempRootDir);
     }
     
     /**
      * @param tempRootDir The tempRootDir to set.
      */
-    public void setTempRootDir(File tempRootDir)
+    public void setTempRootDir(String tempRootDir)
     {
+        Validate.notNull(tempRootDir, "tempRootDir");
         this.tempRootDir = tempRootDir;
     }
         
@@ -539,6 +551,7 @@ public class ServiceContainerConfiguration
      */
     public void setComponentClassLoader(ClassLoader componentClassLoader)
     {
+        Validate.notNull(componentClassLoader, "componentClassLoader");
         this.componentClassLoader = componentClassLoader;
     }    
     
@@ -651,5 +664,23 @@ public class ServiceContainerConfiguration
 		    this.getLogger().error(msg);
 		    throw new IOException(msg);
 		}
+    }
+    
+    /**
+     * Determines the absolute file.
+     * @param baseDir the base directory 
+     * @param fileName the filename 
+     * @return the absolute path
+     */
+    private static File makeAbsoluteFile( File baseDir, String fileName )
+    {
+        File result = new File(fileName);       
+        
+        if( result.isAbsolute() == false )
+        {
+            result = new File( baseDir, fileName ); 
+        }
+        
+        return result;
     }
 }
