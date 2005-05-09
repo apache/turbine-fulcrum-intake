@@ -34,8 +34,10 @@ public class Shutdown implements Runnable
     private boolean useSystemExit;
     
     /**
-     * Constructor
-     * @param disposable The service manager to be disposed
+     * Constructor.
+     * @param disposable the instance to be disposed
+     * @param useSystemExit call System.exit()?
+     * 
      */
     public Shutdown( Disposable disposable, boolean useSystemExit )
     {
