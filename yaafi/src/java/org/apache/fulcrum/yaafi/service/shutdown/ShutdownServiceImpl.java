@@ -199,6 +199,15 @@ public class ShutdownServiceImpl
     {
         while( this.terminateNow == false )
         {
+            try
+            {
+                Thread.sleep( this.interval );
+            }
+            catch (InterruptedException e)
+            {
+                ; // nothing to do
+            } 
+            
             if( this.hasShutdownEntry() && this.getShutdownEntry().hasChanged() )
             {
                 if( this.serviceManager instanceof Disposable )
