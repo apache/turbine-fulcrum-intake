@@ -308,6 +308,7 @@ public class ReconfigurationServiceImpl
         else
         {
             String[] serviceList = reconfigurationEntry.getServiceList();
+            this.getLogger().warn( "Calling reconfigure() on individual services : " + serviceList.length );
             this.serviceLifecycleManager.reconfigure(serviceList);
         }
     }     
