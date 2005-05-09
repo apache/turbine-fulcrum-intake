@@ -44,4 +44,11 @@
     component-type="merlin"
     description="A simple test component"
   />        
+  <role
+    name="org.apache.fulcrum.yaafi.baseservice.DerivedService"
+    shorthand="DerivedService"
+    default-class="org.apache.fulcrum.yaafi.baseservice.DerivedServiceImpl"
+    early-init="false"
+    description="A simple service deriving from BaseService"
+  />          
 </role-list>
