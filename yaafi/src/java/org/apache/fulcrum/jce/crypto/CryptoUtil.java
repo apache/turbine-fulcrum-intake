@@ -38,7 +38,10 @@ import java.security.GeneralSecurityException;
  */
 
 public final class CryptoUtil
-{    
+{   
+    /** the size of the internal buffer to copy streams */
+    private static final int BUFFER_SIZE = 1024;
+    
     /**
      * Copies from a source to a target object using encryption
      *
@@ -290,7 +293,7 @@ public final class CryptoUtil
     public static void copy( InputStream is, OutputStream os )
         throws IOException
     {
-        byte[] buf = new byte[1024];
+        byte[] buf = new byte[BUFFER_SIZE];
         int n = 0;
         int total = 0;
 
