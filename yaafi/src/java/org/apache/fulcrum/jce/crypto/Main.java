@@ -39,7 +39,7 @@ public class Main
 {
     /**
      * Allows testing on the command lnie
-     * @param args
+     * @param args the command line parameters
      */
     public static void main( String[] args )
     {
@@ -69,6 +69,9 @@ public class Main
         }
     }
     
+    /**
+     * Prints usage information.
+     */
     public static void printHelp()
     {
         System.out.println("Main file [enc|dec|auto] passwd [file]*");
@@ -97,7 +100,7 @@ public class Main
      * Decrypt/encrypt a single file
      * @param cipherMode the mode
      * @param password the passwors 
-     * @param fileName the file to process
+     * @param file the file to process
      * @throws Exception the operation failed
      */
     public static void processFile(String cipherMode, char[] password, File file)
