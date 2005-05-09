@@ -55,7 +55,7 @@ import org.apache.fulcrum.yaafi.framework.util.YaafiToAvalonContextMapper;
 
 public class ServiceContainerImpl
     implements ServiceContainer, ServiceConstants
-{
+{    
     /** The role configuration file to be used */
     private String componentRolesLocation;
 
@@ -1104,7 +1104,7 @@ public class ServiceContainerImpl
         }
         catch (InterruptedException e)
         {
-            // ignore
+            ; // ignore
         }
     }
 }
