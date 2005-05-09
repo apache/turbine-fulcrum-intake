@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Avalon Service Tutorial Step 1</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="The Role Configuration File">
+
+      <p>
+        The role configuration file is a XML file containing configuration
+        information for the Avalon Service Container.         
+      </p>
+      
+      <subsection name="Adding the Avalon SystemProperty Service">
+        <p>
+          The following information is needed by the Avalon Service Container to
+          manage our service
+          <table>
+            <tr>
+              <th>Entry</th>
+              <th>Descriptoin</th>
+            </tr>
+            <tr>
+              <td>name</td>
+              <td>The name to lookup the service usually the interface class name</td>
+            </tr>
+            <tr>
+              <td>shorthand</td>
+              <td>The shorthand to lookup the configuration in the Compontent Configuration</td>
+            </tr>
+            <tr>
+              <td>default-class</td>
+              <td>The implementation class of the service</td>
+            </tr>
+          </table>          
+          <source><![CDATA[   
+<?xml version="1.0" encoding="UTF-8"?>
+
+<role-list>
+  <role
+    name="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyService"
+    shorthand="SystemPropertyService"
+    default-class="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyServiceImpl"
+   />   
+</role-list>          
+          ]]></source>                         
+        </p>
+      </subsection>
+      
+    </section>
+
+  </body>
+
+</document>

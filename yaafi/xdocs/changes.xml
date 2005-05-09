@@ -7,6 +7,12 @@
 
   <body>
     <release version="1.0.4-dev" date="as in CVS">
+      <action dev="sgoeschl" type="add">
+        Added a simple tutorial
+      </action>
+      <action dev="sgoeschl" type="fix">
+        Fixed bug in ShutdownService reslulting in excessive CPU usage.
+      </action>
       <action dev="sgoeschl" type="update">
         Improved the implementation of BaseServiceImpl
       </action>

@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Avalon Service Tutorial Step 2</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="The Component Configuration File">
+
+      <p>
+        The component configuration file is a XML file containing configuration
+        information for the instantiated Avalone services. 
+      </p>
+      
+      <subsection name="Adding the Avalon SystemProperty Service">
+        <p>    
+          For finding the right section of the component configuration file
+          the shorthand of the role configuration is used - in our case
+          "SystemPropertyService". Here we define a system property with the
+          name "FOO" and the value "BAR".
+          <source><![CDATA[   
+<?xml version="1.0" encoding="UTF-8"?>
+
+<componentConfig> 
+  <SystemPropertyService>
+    <property name="FOO">BAR</property>
+  </SystemPropertyService>
+</componentConfig>  
+          ]]></source>                         
+        </p>
+      </subsection>
+      
+    </section>
+
+  </body>
+
+</document>

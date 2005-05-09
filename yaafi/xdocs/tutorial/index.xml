@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Avalon Service Tutorial</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Avalon Service Tutorial">
+
+      <p>
+        This tutorial demonstrate how to write an Avalon service - in our
+        case an Avalon SystemProperty Service.
+      </p>
+      
+     <subsection name="What We Want to Do?!">
+       <p>
+         The service will implement the following features
+         <ul>
+           <li>read the system properties to be set from the component configuration file</li>
+           <li>write some diagnostic output to the logfile</li>
+           <li>be reconfigurable without restarting the container</li>
+         </ul>       
+       </p>       
+     </subsection>
+
+     <subsection name="The Five Steps to Happiness">
+       <ul>
+         <li><a href="step1.html">The Role Configuration File</a></li>
+         <li><a href="step2.html">The Component Configuration File</a></li>
+         <li><a href="step3.html">Implementing an Avalon Service</a></li>
+         <li><a href="step4.html">Running an Avalon Service</a></li>
+         <li><a href="step5.html">Odds and Ends</a></li>
+       </ul>
+     </subsection>     
+           
+    </section>
+
+  </body>
+
+</document>

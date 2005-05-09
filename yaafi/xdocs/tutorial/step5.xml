@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Avalon Service Tutorial Step 4</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Odds and Ends">
+
+      <subsection name="Setting Up A Logger">
+        <p>    
+          The YAAFI container expects that you setup the logging facilty to be used. 
+          The Avalon Service Framework provides wrappers for commonly used loggers such 
+          as
+          <ul>
+            <li>JDK 1.4 logger</li>
+            <li>Log4J logger</li>
+            <li>LogKit logger</li>
+            <li>Console logger</li>
+            <li>Null logger</li>
+          </ul>
+        </p>   
+        
+        <p>
+          The following examples shows how to use a Log4J logger
+          <source><![CDATA[   
+Main cli = new Main(args)
+String log4jConfig = cli.makeAbsolutePath( System.getProperty("log4j.configuration", "./conf/log4j.properties") );        
+PropertyConfigurator.configureAndWatch( log4jConfig, 2000 );
+cli.setLogger( new Log4JLogger( Logger.getLogger("main") ) );	    
+          ]]></source>                                   
+        </p>
+                     
+      </subsection>
+              
+    </section>
+
+  </body>
+
+</document>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<role-list>
+  <role
+    name="tutorial.service.SystemPropertyService"
+    shorthand="SystemPropertyService"
+    default-class="tutorial.service.SystemPropertyServiceImpl"
+  />   
+</role-list>

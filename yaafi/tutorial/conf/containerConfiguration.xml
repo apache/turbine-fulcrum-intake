@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<fulcrum-yaafi>
+  <componentRoles>
+    <location>./tutorial/conf/componentRoles.xml</location>
+  </componentRoles>
+  <componentConfiguration>
+    <location>./tutorial/conf/componentConfig.xml</location>
+  </componentConfiguration>
+  <parameters>
+    <location>./tutorial/conf/parameters.properties</location>
+  </parameters>
+</fulcrum-yaafi>              

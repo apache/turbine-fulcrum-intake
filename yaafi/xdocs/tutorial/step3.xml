@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Avalon Service Tutorial Step 3</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Implementing an Avalon Service">
+
+      <subsection name="Defining an Interface and an Implementation Class">
+        <p>
+          The evry first step is to define an interface and a corresponding implementation
+          class.
+          <ul>
+            <li>org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyService as interface</li>
+            <li>org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyServiceImpl as implementation class</li>
+          </ul>          
+        </p>
+      </subsection>
+
+      <subsection name="Writing the interface">
+        <p>
+          The interface exposes only business methods and never ever one of the various Avalon
+          interfaces.
+          <source><![CDATA[             
+public interface SystemPropertyService
+{
+    // This interface doesn't exposes any other methods
+}          
+          ]]></source>                         
+        </p>
+      </subsection>
+
+      <subsection name="Chasing the Interfaces to Implement">        
+        <p>
+          The Avalon Service Container interacts with an Avalon service through a bunch
+          of interfaces and finding the right one's might be challenge in the beginning. Our
+          service needs access to the logging infrastructure, to the component configuration
+          and needs to tell the Avalon Service Container that it is reconfigurable:
+          <source><![CDATA[            
+public class SystemPropertyServiceImpl
+    extends AbstractLogEnabled
+    implements SystemPropertyService, Reconfigurable
+{
+    // here comes the implementation ...
+}
+          ]]></source>                  
+        </p>        
+        <p>
+          Our service is deriving from "AbstractLogEnabled" which takes care of getting
+          access to the logger. The implementation class also implements the "Reconfigurable"
+          interface which tells the Avalon Service Container that the service implements
+          <ul>
+            <li>public void configure(Configuration configuration)</li>
+            <li>public void reconfigure(Configuration configuration)</li>
+          </ul>                    
+        </p>
+      </subsection>
+
+      <subsection name="Accessing the Component Configuration">        
+        <p>
+          In the Role Configuration file we defined "SystemPropertyService" as shorthand for accessing
+          the Component Configuration. The Component Configuration we use is shown below
+            <source><![CDATA[            
+<SystemPropertyService>
+    <property name="FOO">BAR</property>
+</SystemPropertyService>
+            ]]></source>        
+        </p>
+        <p>
+          Let's access the configuration to set the system properties - we get all childrem from 
+          the configuration instance and process them. Each child consists of an attribute 
+          containing the name and text for the value of the system property to be set. We also 
+          write some diagnostic ouptut by requesting the logger instance from "AbstractLogEnabled".
+            <source><![CDATA[            
+public void configure(Configuration configuration) throws ConfigurationException
+{
+    Configuration[] systemProperties = configuration.getChildren("property");
+    
+    for( int i=0; i<systemProperties.length; i++ )
+    {
+        String key = systemProperties[i].getAttribute("name");
+        String value = systemProperties[i].getValue();
+        this.getLogger().debug( "Setting the value of " + key + " to " + value );
+        System.setProperty( key, value );           
+    }
+}
+            ]]></source>                  
+        </p>                      
+      </subsection>
+                 
+      <subsection name="Implementing the Reconfiguration">        
+        <p>
+          Making our service reconfigurable is simple. When the service is
+          reconfigured a new configuration instance is passed. We just reuse
+          the configure() method to reinitalize our service - that's it.
+          <source><![CDATA[            
+public void reconfigure(Configuration configuration) throws ConfigurationException
+{
+    this.configure(configuration);
+}          
+          ]]></source>                  
+        </p>
+      </subsection>
+
+      <subsection name="Putting it all together">                
+        <p>
+          Here is our complete and fully functional Avalon service
+          <source><![CDATA[            
+public interface SystemPropertyService
+{
+    // This interface doesn't exposes any other methods
+}          
+
+public class SystemPropertyServiceImpl
+    extends AbstractLogEnabled
+    implements SystemPropertyService, Reconfigurable
+{
+    public void configure(Configuration configuration) throws ConfigurationException
+    {
+        Configuration[] systemProperties = configuration.getChildren("property");
+        
+        for( int i=0; i<systemProperties.length; i++ )
+        {
+            String key = systemProperties[i].getAttribute("name");
+            String value = systemProperties[i].getValue();
+            this.getLogger().debug( "Setting the value of " + key + " to " + value );
+            System.setProperty( key, value );           
+        }
+    }
+
+    public void reconfigure(Configuration configuration) throws ConfigurationException
+    {
+        this.configure(configuration);
+    }                    
+          ]]></source>                  
+        </p>
+      </subsection>
+                       
+    </section>
+
+  </body>
+
+</document>

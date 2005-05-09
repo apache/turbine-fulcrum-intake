@@ -31,6 +31,13 @@
         <item name="Avalon Context"             href="/specification/context.html"/>
         <item name="Lifecycle Contract"         href="/specification/lifecycle.html"/>
       </item>
+      <item name="Tutorial"                   href="/tutorial/index.html" collapse="true">     
+        <item name="Step 1"                     href="/tutorial/step1.html"/>
+        <item name="Step 2"                     href="/tutorial/step2.html"/>
+        <item name="Step 3"                     href="/tutorial/step3.html"/>        
+        <item name="Step 4"                     href="/tutorial/step4.html"/>        
+        <item name="Step 5"                     href="/tutorial/step5.html"/>        
+      </item>
       <item name="Todo's"                     href="/todo.html"/>
     </menu>
     
