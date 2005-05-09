@@ -53,6 +53,12 @@ public class Main implements Runnable, Disposable
     /** parameter for blocking the main thread in Main.run() */
     public static final String APPLICATION_ISBLOCKING = "yaafi.cli.isBlocking";
     
+	/** the interval to check for termination */
+	private static final int SLEEP_TIME = 100; 
+
+	/** the timeout for joing the shutdown thread */
+	private static final int JOIN_TIME = 1000; 
+
     /** The service manager */
     private ServiceContainer container;
     
@@ -70,10 +76,7 @@ public class Main implements Runnable, Disposable
 
 	/** The logger being used */
 	private Logger logger;
-	
-	/** the interval to check for termination */
-	private static int SLEEP_TIME = 100; 
-    
+	    
 	/** the name of the application */
 	private String applicationName;
 	
@@ -212,7 +215,7 @@ public class Main implements Runnable, Disposable
      * home directory.
      *  
      * @param baseDir the base directory 
-     * @param fileName the filename 
+     * @param name the filename 
      * @return the file
      */
     public static File makeAbsoluteFile( File baseDir, String name )
@@ -273,14 +276,13 @@ public class Main implements Runnable, Disposable
             }
             catch (InterruptedException e)
             {
-                // ignore
+                ; // ignore
             }
         }        
     }
     
     /**
-     * Locates the file for the given file name.
-     * @param baseDir the base directory 
+     * Locates the file for the given file name. 
      * @param fileName the filename 
      * @return the absolute path
      */
@@ -594,13 +596,13 @@ public class Main implements Runnable, Disposable
                 try
                 {
                     this.getLogger().debug( "Waiting for shutdown handler thread to terminate" );
-                    this.shutdownThread.join(1000);
+                    this.shutdownThread.join(JOIN_TIME);
                     this.shutdownThread = null;
                     this.getLogger().debug( "Shutdown handler thread is terminated" );
                 }
                 catch (InterruptedException e)
                 {
-                    // nothing to do
+                    ; // nothing to do
                 }                                
             }
             
