@@ -85,6 +85,8 @@ public class RoleConfigurationParserImpl
     private RoleEntry[] mapFromYaafi( Configuration roleConfiguration )
     	throws ConfigurationException
     {
+        Validate.notNull(roleConfiguration, "roleConfiguration");
+        
         String clazzName = null;
         String name = null;
         String shorthand = null;
@@ -126,12 +128,14 @@ public class RoleConfigurationParserImpl
     private RoleEntry[] mapFromPhoenix( Configuration roleConfiguration )
     	throws ConfigurationException
     {
+        Validate.notNull(roleConfiguration, "roleConfiguration");
         throw new ConfigurationException("Not supported yet");
     }
 
     private RoleEntry[] mapFromFortress( Configuration roleConfiguration )
     	throws ConfigurationException
     {
+        Validate.notNull(roleConfiguration, "roleConfiguration");
         throw new ConfigurationException("Not supported yet");
     }
 }
