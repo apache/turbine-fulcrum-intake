@@ -7,6 +7,9 @@
 
   <body>
     <release version="1.0.4-dev" date="as in CVS">
+      <action dev="sgoeschl" type="update">
+        Improved the implementation of BaseServiceImpl
+      </action>
       <action dev="sgoeschl" type="add">
         The CLI can be now configured using SystemProperties and the command
         line.
