@@ -18,7 +18,9 @@ package org.apache.fulcrum.yaafi.service.baseservice;
  */
 
 
+import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Reconfigurable;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.LogEnabled;
 import org.apache.avalon.framework.parameters.Parameterizable;
@@ -33,7 +35,7 @@ import org.apache.avalon.framework.service.Serviceable;
  */
 
 public interface BaseService
-    extends LogEnabled, Contextualizable, Serviceable, Configurable, Parameterizable
+    extends LogEnabled, Contextualizable, Serviceable, Configurable, Parameterizable, Reconfigurable, Disposable
 {
     // This interface doesn't exposes any other methods
 }
