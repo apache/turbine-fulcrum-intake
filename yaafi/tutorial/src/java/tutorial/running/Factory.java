@@ -1,7 +1,7 @@
 package tutorial.running;
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,10 @@ import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
 
 public class Factory
 {
+    /**
+     * Main routine
+     * @param args the command line arguments
+     */
     public static void main( String[] args )
     {
         try
@@ -41,11 +45,10 @@ public class Factory
             container = ServiceContainerFactory.create( config );
 
             container.dispose();
-
         }
         catch( Throwable t )
         {
-            String msg = "Execution of the server failed : " + t.getMessage();
+            String msg = "Execution failed : " + t.getMessage();
             System.err.println(msg);
         }
     }

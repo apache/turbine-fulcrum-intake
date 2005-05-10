@@ -23,6 +23,7 @@
            <li>read the system properties to be set from the component configuration file</li>
            <li>write some diagnostic output to the logfile</li>
            <li>be reconfigurable without restarting the container</li>
+           <li>dump the updated system properties into the temporary directory</li>
          </ul>       
        </p>       
      </subsection>

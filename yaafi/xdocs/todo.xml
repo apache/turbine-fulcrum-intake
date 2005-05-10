@@ -11,13 +11,22 @@
 
     <section name="TODO">
 
+      <subsection name="Using a Proxy">            
+        <p>
+          Currently the caller of a service uses the instance
+          implementing the service interface directly. It would
+          be useful to hand out a proxy object to delegate the 
+          service invocation similiar to EJB and HiveMind.
+        </p>
+      </subsection>
+
       <subsection name="Long-term Compatibilty with Fortress">            
         <p>
           Since Fortress is the only other remaining Avalon container
           within Jakarta we try to achieve compatibility with Fortress
           regarding configuration files. The problem is that there is no
           specification available how the Fortress configuration files
-          look loke ... :-(
+          look like ... :-(
         </p>
       </subsection>
 

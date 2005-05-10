@@ -1,45 +1,45 @@
 <?xml version="1.0"?>
 <document>
 
-    <properties>
-        <title>ServiceManagerService</title>
-        <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
-    </properties>
+  <properties>
+    <title>ServiceManagerService</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
 
-    <body>
+  <body>
 
-        <section name="Overview">
-            <p>
-                This service keeps an YAAFI instance.
-            </p>
-            <p>
-            </p>            
-        </section>
+    <section name="Overview">
+      <p>
+        This service keeps a ServiceManager instance and other Avalon artificats
+        to simplify access through your application code.
+      </p>
+    </section>
 
-        <section name="Configuration">
-            <subsection name="Role Configuration">
-                <source>
-                    <![CDATA[
-<role
-    default-class="org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerService"
-    early-init="true"
-/>                       ]]>
-                </source>
-            </subsection>
-        </section>
+    <section name="Configuration">
+      <subsection name="Role Configuration">
+        <source><![CDATA[
+  <role
+    name="org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerService"
+    default-class="org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerServiceImpl"
+  />    
+            ]]></source>
+      </subsection>
+    </section>
 
-        <section name="Usage">
-            <p>
-                ServiceManagerServiceImpl.getInstance() returns you an instance of
-                ServiceManager which allows to lookup other services.
-            </p>
-            
-            <source>
-ServiceManagerServiceImpl.getInstance().hasService("FOO");
-FOO foo = (FOO) ServiceManagerServiceImpl.getInstance().lookup("FOO");
-            </source>
-        </section>
-        
-    </body>
+    <section name="Usage">
+      <p>
+        ServiceManagerServiceImpl.getInstance() returns you an instance of
+        ServiceManager which allows to lookup other services.
+      </p>
+      <source><![CDATA[
+ServiceManagerService serviceManagerService = ServiceManagerServiceImpl.getInstance();
+
+Logger logger = serviceManagerService.getAvalonLogger();
+boolean hasFoo = serviceManagerService.hasService("Foo");
+Foo foo = (Foo) serviceManagerService.lookup("Foo");
+File home = (File) serviceManagerService.getContext().get("urn:avalon:home")
+      ]]></source>
+    </section>
     
+  </body>
 </document>

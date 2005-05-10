@@ -37,30 +37,56 @@ public interface SystemPropertyService
 
       <subsection name="Chasing the Interfaces to Implement">        
         <p>
-          The Avalon Service Container interacts with an Avalon service through a bunch
-          of interfaces and finding the right one's might be challenge in the beginning. Our
-          service needs access to the logging infrastructure, to the component configuration
-          and needs to tell the Avalon Service Container that it is reconfigurable:
+          The Avalon Service Container interacts with an Avalon service 
+          through a bunch of interfaces also known as 
+          <a href="../lifecycle/index.html">Avalon Lifecycle 
+          Management Specification</a>. Finding the right interface might be 
+          challenge in the beginning but it is not an unsurmountable task. 
+          Our service needs access to the logging infrastructure, to the 
+          component configuration and needs to tell the Avalon Service 
+          Container that it is reconfigurable. To make things more 
+          interesting we want to dump the updated system properties into 
+          the temp directory of the application during service initialization.        
           <source><![CDATA[            
 public class SystemPropertyServiceImpl
     extends AbstractLogEnabled
-    implements SystemPropertyService, Reconfigurable
+    implements SystemPropertyService, Reconfigurable, Contextualizable, Initializable
 {
     // here comes the implementation ...
 }
           ]]></source>                  
         </p>        
         <p>
-          Our service is deriving from "AbstractLogEnabled" which takes care of getting
-          access to the logger. The implementation class also implements the "Reconfigurable"
-          interface which tells the Avalon Service Container that the service implements
+          Our service derives from "AbstractLogEnabled" which takes 
+          care of getting access to the logger. The implementation 
+          class also implements the "Reconfigurable" interface which 
+          tells the Avalon Service Container that the service implements
           <ul>
             <li>public void configure(Configuration configuration)</li>
             <li>public void reconfigure(Configuration configuration)</li>
           </ul>                    
         </p>
+        <p>
+          The information about the application context is provided by 
+          the "Contextualizable" interface while the service initialization
+          needs the "Initializable" interface.
+        </p>
       </subsection>
 
+      <subsection name="Accessing the Avalon Context">        
+        <p>
+          The <a href="../specification/context.html">Avalon Context </a>contains 
+          environment settings such as the current working directory, the 
+          temporary directory or the name of the service.
+            <source><![CDATA[            
+public void contextualize(Context context) throws ContextException
+{        
+    this.tempDir = (File) context.get("urn:avalon:temp");
+}
+            ]]></source>        
+        </p>
+      </subsection>
+      
       <subsection name="Accessing the Component Configuration">        
         <p>
           In the Role Configuration file we defined "SystemPropertyService" as shorthand for accessing
@@ -92,6 +118,23 @@ public void configure(Configuration configuration) throws ConfigurationException
             ]]></source>                  
         </p>                      
       </subsection>
+
+      <subsection name="Service Initialization ">        
+        <p>
+          Since we have done most of our work already we use the 
+          service initialization to dump the current system properties
+          into the temporary directory. 
+            <source><![CDATA[            
+public void initialize() throws Exception
+{
+    FileOutputStream fos = new FileOutputStream( new File(this.tempDir,"system.properties") );
+    System.getProperties().store( fos, "system.properties" );
+    fos.flush();
+    fos.close();
+}
+            ]]></source>        
+        </p>
+      </subsection>
                  
       <subsection name="Implementing the Reconfiguration">        
         <p>
@@ -109,7 +152,7 @@ public void reconfigure(Configuration configuration) throws ConfigurationExcepti
 
       <subsection name="Putting it all together">                
         <p>
-          Here is our complete and fully functional Avalon service
+          Below you find your first complete and fully functional Avalon service.
           <source><![CDATA[            
 public interface SystemPropertyService
 {
@@ -118,25 +161,55 @@ public interface SystemPropertyService
 
 public class SystemPropertyServiceImpl
     extends AbstractLogEnabled
-    implements SystemPropertyService, Reconfigurable
+    implements SystemPropertyService, Reconfigurable, Contextualizable, Initializable
 {
+    /** the Avalon temp directory */
+    private File tempDir;
+        
+    /**
+     * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
+     */
+    public void contextualize(Context context) throws ContextException
+    {        
+        this.tempDir = (File) context.get("urn:avalon:temp");
+    }
+    
+    /**
+     * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
+     */
     public void configure(Configuration configuration) throws ConfigurationException
     {
         Configuration[] systemProperties = configuration.getChildren("property");
-        
+
         for( int i=0; i<systemProperties.length; i++ )
         {
             String key = systemProperties[i].getAttribute("name");
             String value = systemProperties[i].getValue();
             this.getLogger().debug( "Setting the value of " + key + " to " + value );
-            System.setProperty( key, value );           
-        }
+            System.setProperty( key, value );
+        }        
     }
 
-    public void reconfigure(Configuration configuration) throws ConfigurationException
+    /**
+     * @see org.apache.avalon.framework.activity.Initializable#initialize()
+     */
+    public void initialize() throws Exception
+    {
+        FileOutputStream fos = new FileOutputStream( new File(this.tempDir,"system.properties") );
+        System.getProperties().store( fos, "system.properties" );
+        fos.flush();
+        fos.close();
+    }
+    
+    /**
+     * @see org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.apache.avalon.framework.configuration.Configuration)
+     */
+    public void reconfigure(Configuration configuration)
+        throws ConfigurationException
     {
         this.configure(configuration);
-    }                    
+    }
+}
           ]]></source>                  
         </p>
       </subsection>

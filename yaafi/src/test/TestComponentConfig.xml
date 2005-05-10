@@ -1,37 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <componentConfig>
-
- <test>
+  
+  <test>
     <FOO>FOO</FOO>
   </test>
- 
- <SystemPropertyService>
+
+  <SystemPropertyService>
     <property name="FOO">BAR</property>
   </SystemPropertyService>
-  
+
   <ReconfigurationService interval="5000">
     <entry>
-      <location>./src/test/TestComponentConfig.xml</location> 
+      <location>./src/test/TestComponentConfig.xml</location>
     </entry>
     <entry>
       <location>./src/test/TestParameters.properties</location>
       <services>
         <service name="org.apache.fulcrum.yaafi.TestComponent"/>
         <service name="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyService"/>
-      </services> 
-    </entry>    
+      </services>
+    </entry>
     <shutdown>
-      <location>./src/test/shutdown.txt</location> 
-      <useSystemExit>false</useSystemExit> 
-    </shutdown>    
+      <location>./src/test/shutdown.txt</location>
+      <useSystemExit>false</useSystemExit>
+    </shutdown>
   </ReconfigurationService>
 
   <ShutdownService interval="5000">
     <entry>
-      <location>./src/test/shutdown.txt</location> 
-      <useSystemExit>true</useSystemExit> 
-    </entry>    
+      <location>./src/test/shutdown.txt</location>
+      <useSystemExit>true</useSystemExit>
+    </entry>
   </ShutdownService>
-  
+
 </componentConfig>

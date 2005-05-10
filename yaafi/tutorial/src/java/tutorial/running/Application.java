@@ -1,7 +1,7 @@
 package tutorial.running;
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,10 @@ public class Application implements Runnable
     /** the YAAFI command line interface */
     private Main cli;
 
+    /**
+     * Main routine
+     * @param args the command line arguments
+     */
     public static void main( String[] args )
     {
         try
@@ -76,7 +80,7 @@ public class Application implements Runnable
         // 1.4) install a JVM shutdown hook to dispose the YAAFI container
         this.cli.setHasShutdownHook(true);
 
-        // 2) initialize the logger
+        // 2) initialize the console logger
 
         ConsoleLogger consoleLogger = new ConsoleLogger(ConsoleLogger.LEVEL_DEBUG);
         this.cli.setLogger( consoleLogger );

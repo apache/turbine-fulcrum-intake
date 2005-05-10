@@ -26,17 +26,52 @@
         </p>   
         
         <p>
-          The following examples shows how to use a Log4J logger
+          The following examples shows how to use a Log4J logger assuming that
+          the configuration is located in the "conf" directory and tells Log4J
+          to monitor the configuration file to detect changes of the trace level.
           <source><![CDATA[   
 Main cli = new Main(args)
 String log4jConfig = cli.makeAbsolutePath( System.getProperty("log4j.configuration", "./conf/log4j.properties") );        
 PropertyConfigurator.configureAndWatch( log4jConfig, 2000 );
 cli.setLogger( new Log4JLogger( Logger.getLogger("main") ) );	    
           ]]></source>                                   
-        </p>
-                     
+        </p>                     
       </subsection>
-              
+
+      <subsection name="Looking up a Service">
+        <p>    
+          Using an Avalon container requires your application to lookup
+          services during runtime. This functionality is exposed through
+          the "ServiceManager" interface. The real question is how to get
+          hold of a "ServiceManager" interface without polluting the whole
+          application with Avalon dependencies. Unfortunately there is no 
+          simple answer to that
+          <ul>
+            <li>
+              You can keep a "ServiceManager" instance from initializing
+              the YAAFI container.
+           </li>
+            <li>
+              Your service can implement the "Servicable" interface to get
+              an instance of a "ServiceManager".
+           </li>
+            <li>
+              Your can lookup the services using the 
+              <a href="../services/servicemanagerservice.html">ServiceManagerService</a>
+           </li>           
+          </ul>
+        </p>                     
+      </subsection>
+
+      <subsection name="Dynamic Reconfiguration">
+        <p>    
+          A reconfiguration can be triggered by your application code
+          or by the 
+          <a href="../services/reconfigurationservice.html">ReconfigurationService</a>
+          which monitors the component configuration file.
+        </p>                     
+      </subsection>
+          
     </section>
 
   </body>
