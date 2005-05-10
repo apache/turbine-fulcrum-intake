@@ -284,7 +284,7 @@ public class Main implements Runnable, Disposable
     /**
      * Locates the file for the given file name. 
      * @param fileName the filename 
-     * @return the absolute path
+     * @return an absolute file
      */
     public File makeAbsoluteFile( String fileName )
     {
@@ -292,6 +292,19 @@ public class Main implements Runnable, Disposable
             new File(this.getApplicationHome()),
             fileName 
             );
+    }    
+
+    /**
+     * Locates the file for the given file name. 
+     * @param fileName the filename 
+     * @return an absolute path
+     */
+    public String makeAbsolutePath( String fileName )
+    {
+        return Main.makeAbsoluteFile( 
+            new File(this.getApplicationHome()),
+            fileName 
+            ).getAbsolutePath();
     }    
 
     /////////////////////////////////////////////////////////////////////////
