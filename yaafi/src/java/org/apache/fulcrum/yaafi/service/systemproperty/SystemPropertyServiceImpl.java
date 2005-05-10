@@ -49,7 +49,7 @@ public class SystemPropertyServiceImpl
         String key 		= null;
         String value 	= null;
         String oldValue	= null;
-        Configuration[] systemProperties = configuration.getChildren();
+        Configuration[] systemProperties = configuration.getChildren("property");
         
         for( int i=0; i<systemProperties.length; i++ )
         {
@@ -72,8 +72,9 @@ public class SystemPropertyServiceImpl
             
             System.setProperty( key, value ); 
             
-            this.getLogger().debug( "Processed the following number of properties : " + systemProperties.length );
         }
+
+        this.getLogger().debug( "Processed the following number of properties : " + systemProperties.length );
     }
     
     /**
