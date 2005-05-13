@@ -1,0 +1,16 @@
+<project default="jar:install" xmlns:ant="jelly:ant">
+
+  <!-- ################################################################## -->
+  <!-- M A V E N  H O O K S                                               -->
+  <!-- ################################################################## -->
+
+  <postGoal name="clean:clean">
+    <echo>Deleting temporary files</echo>
+    <ant:delete verbose="false" failonerror="false">
+      <ant:fileset dir="${basedir}/temp">
+        <ant:include name="*.txt" />a
+      </ant:fileset>
+    </ant:delete>    
+  </postGoal>
+
+</project>

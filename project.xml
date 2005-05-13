@@ -39,12 +39,16 @@
   <siteAddress>jakarta.apache.org</siteAddress>
   <siteDirectory>/www/jakarta.apache.org/turbine/fulcrum/</siteDirectory>
   <distributionSite>www.apache.org</distributionSite>
-  <distributionDirectory>/www/www.apache.org/dist/java-repository/</distributionDirectory>
+  <distributionDirectory>/www/www.apache.org/dist/java-repository/</distributionDirectory>  
   <repository>
     <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:jakarta-turbine-fulcrum</connection>
     <url>http://cvs.apache.org/viewcvs/jakarta-turbine-fulcrum/</url>
   </repository>
   <releases>
+    <release>
+      <version>3.0.0</version>
+      <tag>FULCRUM_3_0_0</tag>
+    </release>  
   </releases>
   <mailingLists>
     <mailingList>
