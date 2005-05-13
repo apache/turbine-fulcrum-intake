@@ -21,6 +21,14 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>${basedir}/src/java</directory>
+        <includes>
+          <include>**/*.xinfo</include>
+        </includes>
+      </resource>
+    </resources>      
     <unitTest>
       <includes>
         <include>**/*Test.java</include>

@@ -1,0 +1,25 @@
+<project default="jar:install" xmlns:ant="jelly:ant">
+
+  <!-- ################################################################## -->
+  <!-- M A V E N  H O O K S                                               -->
+  <!-- ################################################################## -->
+
+  <postGoal name="clean:clean">
+    <echo>Deleting temporary files</echo>
+    <ant:delete verbose="false" failonerror="false">
+      <ant:fileset dir="${basedir}/temp">
+        <ant:include name="*.txt" />
+        <ant:include name="*.pdf" />
+        <ant:include name="*.xml" />
+        <ant:include name="*.zip" />
+      </ant:fileset>
+    </ant:delete>    
+  </postGoal>
+
+  <preGoal name="jar:jar">
+    <ant:delete file="target/classes/componentRoles.xml"/>
+    <ant:delete file="target/classes/componentConfiguration.xml"/>
+    <ant:delete file="target/classes/log4j.properties"/>
+  </preGoal>
+
+</project>
