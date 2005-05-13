@@ -3,8 +3,13 @@
   <extend>${basedir}/../project.xml</extend>
   <id>fulcrum-testcontainer</id>
   <name>Fulcrum Test Container</name>
-  <currentVersion>1.0.5-dev</currentVersion>
+  <currentVersion>1.0.5</currentVersion>
   <versions>
+    <version>
+      <id>1.0.5</id>
+      <name>1.0.5</name>
+      <tag>FULCRUM_TESTCONTAINER_1_0_5</tag>
+    </version>
     <version>
       <id>1.0.4</id>
       <name>1.0.4</name>
@@ -22,7 +27,7 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
-      <version>1.0.4-dev</version>
+      <version>1.0.4</version>
     </dependency>
     
     <!-- Needed if testing with ECM -->

@@ -7,7 +7,7 @@
   </properties>
 
   <body>
-    <release version="1.0.5-dev" date="as in CVS">    
+    <release version="1.0.5" date="2005-05-13">    
       <action dev="sgoeschl" type="change">
         Changed the implementation wo work with fulcrum-yaafi 1.0.4-dev
         since the initalization changed.

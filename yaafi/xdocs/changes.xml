@@ -6,7 +6,7 @@
   </properties>
 
   <body>
-    <release version="1.0.4-dev" date="as in CVS">
+    <release version="1.0.4" date="2005-05-13">
       <action dev="sgoeschl" type="add">
         Added a simple tutorial
       </action>
