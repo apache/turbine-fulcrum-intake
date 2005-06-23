@@ -1,0 +1,376 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>IT20one PDF Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+  <body>
+    <section name="Configuration">
+
+      <subsection name="Role Configuration">
+        <source><![CDATA[
+  <role
+    name="org.apache.fulcrum.commonsemail.CommonsEmailService"
+    shorthand="CommonsEmailService"
+    default-class="org.apache.fulcrum.commonsemail.impl.CommonsEmailServiceImpl"
+    early-init="true"
+    description="Simplifies the usage of commons-email"
+  />        
+
+          ]]></source>
+      </subsection>
+
+      <subsection name="Component Configuration">
+        <table>
+          <tr>
+            <th>Item</th>
+            <th>Datatype</th>
+            <th>Cardinality</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>defaultDomain</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              The default domain to use if the caller-supplied 
+              domain name was not found
+            </td>
+          </tr>
+          <tr>
+            <td>domains</td>
+            <td>Complex</td>
+            <td>[1]</td>
+            <td>
+              Contains a list of domains
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain</td>
+            <td>Complex</td>
+            <td>[1..n]</td>
+            <td>
+              Represents a single domain
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\domainName</td>
+            <td>String</td>
+            <td>[1]</td>
+            <td>
+              The name of the domain.
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\domainMatch</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              This field is used to match a given argument to 
+              a domain. If no value is supplied than the
+              'domainName' is used
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\mailSmtpHost</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              The SMTP host being used for creating the underlying mail session.
+              If no value is supplied than the SystemProperty 'mail.smtp.host'
+              is used.
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\mailSmtpPort</td>
+            <td>Integer</td>
+            <td>[0|1]</td>
+            <td>
+              The SMTP port being used for creating the underlying mail session.
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\mailFromEmail</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              The email address of the email sender
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\mailFromName</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              The name of the email sender. This setting is
+              ignored if no 'mailFromEmail' is defined.
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\mailReplyToEmail</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              The email address of the email reply address
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\mailReplyToName</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              The name of the email reply address. This setting
+              is ignored if no 'mailReplyToEmail' is defined.
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\mailBounceAddress</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              The bounce address being used by the SMTP server.
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\mailDebug</td>
+            <td>Boolean</td>
+            <td>[0|1]</td>
+            <td>
+              Setting the 'mail.debug' property for the underlying mail session. 
+              If it is not set the default value 'false' is used.
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\mailDump</td>
+            <td>Boolean</td>
+            <td>[0|1]</td>
+            <td>
+              Shall we dump the generated MimeMessage before sending it?
+              If it is not set the default value 'false' is used.
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\mailDoNotSend</td>
+            <td>Boolean</td>
+            <td>[0|1]</td>
+            <td>
+              Skip sending of the MimeMessage? 
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\authentication</td>
+            <td>Complex</td>
+            <td>[0|1]</td>
+            <td>
+              Contains the authentication related stuff
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\authentication\type</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              The type of authentication being used [smtpauth|popbeforesmtp|none]
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\authentication\popHost</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              The POP server for 'popbeforesmtp'. This setting is
+              only useful in combination with 'popbeforesmtp'. If no
+              value is supplied the default value is 'mailSmtpHost'
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\authentication\username</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              The username for the authentication
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\authentication\password</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              The password for the authentication
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\headers</td>
+            <td>Complex</td>
+            <td>[0|1]</td>
+            <td>
+              The list of email headers entries
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\headers\property@name</td>
+            <td>String</td>
+            <td>[1]</td>
+            <td>
+              The name of the email header
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\headers\property</td>
+            <td>String</td>
+            <td>[1]</td>
+            <td>
+              The value of the email header
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\overwrites</td>
+            <td>Complex</td>
+            <td>[0|1]</td>
+            <td>
+              Contains the email addresses of the enforced recipients
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\overwrites\mailToEmail</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              Contains the enforced TO address
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\overwrites\mailCcEmail</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              Contains the enforced CC address
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\overwrites\mailBccEmail</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              Contains the enforced BCC address
+            </td>
+          </tr>          
+          <tr>
+            <td>domains\domain\overwrites\mailBccEmail</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              Contains the enforced BCC address
+            </td>
+          </tr>          
+          <tr>
+            <td>domains\domain\hooks</td>
+            <td>Complex</td>
+            <td>[0|1]</td>
+            <td>
+              Contains the configuration for the application hooks
+            </td>
+          </tr>          
+          <tr>
+            <td>domains\domain\hooks\onSuccess@enable</td>
+            <td>Boolean</td>
+            <td>[0|1]</td>
+            <td>
+              Is the hook for a sucscessfully send email enabled?
+            </td>
+          </tr>                    
+          <tr>
+            <td>domains\domain\hooks\onFailure@enable</td>
+            <td>Boolean</td>
+            <td>[0|1]</td>
+            <td>
+              Is the hook for an undeliverd email enabled?
+            </td>
+          </tr>                    
+          <tr>
+            <td>domains\domain\hooks\onNotSend@enable</td>
+            <td>Boolean</td>
+            <td>[0|1]</td>
+            <td>
+              Is the hook for an unsent email enabled?
+            </td>
+          </tr>                    
+        </table>
+      </subsection>
+
+      <subsection name="Component Configuration Example 1">
+        <p>
+          This is a minimal domain configuration - here we
+          use a SMTP server on localhost:6025 using SMTP
+          authenication. Since we defined a default domain
+          all mails will use the same configuration.
+        </p>
+        <source><![CDATA[
+  <CommonsEmailService>
+    <defaultDomain>it20one.at</defaultDomain>
+    <domains>
+      <domain>
+        <domainName>it20one.at</domainName>
+        <mailSmtpHost>localhost</mailSmtpHost>
+        <mailSmtpPort>6025</mailSmtpPort>
+        <authentication>
+          <type>smtpauth</type>
+          <username>demo</username>
+          <password>demo</password>
+        </authentication>
+      </domain>
+    </domains>
+  </CommonsEmailService>
+        ]]></source>
+      </subsection>
+      
+      <subsection name="Component Configuration Example 2">
+        <p>
+          This is a full blown example. We define a domain 'test'
+          using the SMTP server on localhost:6025 using SMTP
+          auhtentication. We also define the 'from' and 'replyTo'
+          since it can be overwritten by the application. Furthermore
+          all mail recipients are overwritten to ensure that the 
+          emails are delivered to a test account.
+        </p>      
+        <source><![CDATA[
+  <CommonsEmailService>
+    <defaultDomain>test</defaultDomain>
+    <domains>
+      <domain>
+        <domainName>test</domainName>
+        <domainMatch>test</domainMatch>
+        <mailSmtpHost>localhost</mailSmtpHost>
+        <mailSmtpPort>6025</mailSmtpPort>
+        <mailFromEmail>demo@it20one.at</mailFromEmail>
+        <mailFromName>E-Billing Test</mailFromName>
+        <mailReplyToEmail>demo@it20one.at</mailReplyToEmail>
+        <mailReplyToName>E-Billing Test</mailReplyToName>
+        <mailBounceAddress>error@it20one.at</mailBounceAddress>
+        <mailDebug>false</mailDebug>
+        <mailDump>true</mailDump>
+        <mailDoNotSend>false</mailDoNotSend>
+        <authentication>
+          <type>smtpauth</type>
+          <username>demo</username>
+          <password>demo</password>
+        </authentication>
+        <headers>
+          <property name="X-Mailer">Sendmail</property>        
+          <property name="X-Priority">1</property>        
+          <property name="Disposition-Notification-To">demo@it20one.at</property>        
+        </headers>
+        <overwrites>
+          <mailToEmail>demo@it20one.at</mailToEmail>
+          <mailCcEmail>demo@it20one.at</mailCcEmail>
+          <mailBccEmail>archive@it20one.at</mailBccEmail>
+        </overwrites>
+      </domain>
+    </domains>
+  </CommonsEmailService>
+        ]]></source>
+      </subsection>
+      
+    </section>
+  </body>
+</document>

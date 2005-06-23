@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Fulcrum CommonsEmail Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+  <body>
+    <section name="Technical">
+
+      <subsection name="Complexity">
+        <p>
+          Your first impression might be that the implementation is
+          overly complicated - and yes, you are right. On the other 
+          hand sending emails is our core business and we regularly
+          have to do the following things
+          <ul>
+            <li>Signing emails and/or attachment with X.509 certificates</li>
+            <li>Figuring out why sending en email goes wrong</li>
+            <li>
+              Archving the emails being sent using the file system, database or commercial archiving systems
+            </li>
+          </ul>
+        </p>
+      </subsection>          
+    
+      <subsection name="Domain Centric Approach">
+        <p>
+          The configuration of the services is centered around domains whereas
+          a domain usually maps to the mail address of the sender. A domain
+          contains all relevant configuration information for the email being
+          created or sent.
+        </p>
+      </subsection>          
+
+      <subsection name="Application Hooks">
+        <p>
+          The service provide methods which can be overriden by a derived class.
+          Since the author has no idea about the required configuration needed by
+          a derived class the CommonsEmailDomainEntry allows access to the 
+          corresponding configuration instance.
+        </p>
+      </subsection>          
+
+      <subsection name="Determining a Domain">
+        <p>
+          The domain is determined using the following steps
+          <ul>
+            <li>take the domain matching the sender's email address (e.g. foo@bar.com)</li>
+            <li>take the domain matching the sender's domain address (e.g. bar.com)</li>
+            <li>take the default domain</li>
+          </ul>
+        </p>
+      </subsection>          
+      
+    </section>
+  </body>
+</document>

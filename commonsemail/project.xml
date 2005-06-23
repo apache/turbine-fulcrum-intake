@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<project>
+
+  <extend>${basedir}/../project.xml</extend>
+  <id>fulcrum-commonsemail</id>
+  <name>Fulcrum CommonsEmail Service</name>
+  <currentVersion>1.0.0</currentVersion>
+  
+  <dependencies>
+    <dependency>
+        <groupId>activation</groupId>
+        <artifactId>activation</artifactId>
+        <version>1.0.2</version>
+        <url>http://java.sun.com/products/javabeans/glasgow/jaf.html</url>
+        <properties/>
+    </dependency>
+    <dependency>
+        <groupId>commons-email</groupId>
+        <artifactId>commons-email</artifactId>
+        <version>20050601.114714</version>
+        <url>http://jakarta.apache.org/commons/email.html</url>
+        <properties/>
+    </dependency>
+    <dependency>
+        <groupId>commons-lang</groupId>
+        <artifactId>commons-lang</artifactId>
+        <version>2.0</version>
+        <url>http://jakarta.apache.org/commons/lang.html</url>
+        <properties/>
+    </dependency>
+    <dependency>
+        <groupId>javamail</groupId>
+        <artifactId>javamail</artifactId>
+        <version>1.3.2</version>
+        <url>http://java.sun.com/products/javamail/</url>
+        <properties/>
+    </dependency>  
+    <!--  Needed only for testing -->
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-testcontainer</artifactId>
+      <version>1.0.5</version>
+    </dependency>
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-yaafi</artifactId>
+      <version>1.0.4</version>
+    </dependency>
+  </dependencies>
+  
+</project>

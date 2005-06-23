@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<componentConfig>
+
+  <!-- 
+    CommonsEmailService
+    
+    defaultDomain := the name of the default domain if no match was found
+    domains\domain := a single domain configuration
+    domains\domain\domainName := the name of the domain (mandatory)
+    domains\domain\domainMatch := the match field of the domain (mandatory)
+    domains\domain\mailSmtpHost := the SMTP server (optional)
+    domains\domain\mailSmtpPort := the SMTP port (optional)
+    domains\domain\mailFromEmail := the sender address of the email (optional)
+    domains\domain\mailFromName := the sender name of the email (optional)
+    domains\domain\bounceAddress := the bounce address if the email can't be delivered (optional)
+    domains\domain\mailDebug := use debuggind mode of javamail (optional)
+    domains\domain\mailDump := dump the current MimeMessage into the temp directory (optional)
+    domains\domain\mailDoNotSend := skip sending of the email(optional)
+    domains\domain\authentication\type := the type of authentication used for sending emails
+    domains\domain\authentication\popHost := the POP server for 'popbeforesmtp'
+    domains\domain\authentication\username := the username for authentication
+    domains\domain\authentication\password := the password for authentication
+    domains\domain\headers := the list of email headers
+    domains\domain\headers\property := the single email header
+    domains\domain\overwrites\mailToEmail := overwrite the TO recipients
+    domains\domain\overwrites\mailCcEmail := overwrite the CC recipients
+    domains\domain\overwrites\mailBccEmail := overwrite the BCC recipients    
+    domains\domain\hooks\onSuccess@enabled := is the 'onSuccess' application hook enabled
+    domains\domain\hooks\onSuccess\directory := the directory to store the message
+    domains\domain\hooks\onFailure@enabled := is the 'onFailure' application hook enabled
+    domains\domain\hooks\onFailure\directory := the directory to store the message
+    domains\domain\hooks\onNotSend@enabled := is the 'onNotSend' application hook enabled
+    domains\domain\hooks\onNotSend\directory := the directory to store the message
+  -->
+    
+  <CommonsEmailService>
+    <defaultDomain>test</defaultDomain>
+    <domains>
+      <domain>
+        <domainName>test</domainName>
+        <domainMatch>test</domainMatch>
+        <mailSmtpHost>localhost</mailSmtpHost>
+        <mailSmtpPort>6025</mailSmtpPort>
+        <mailFromEmail>demo@it20one.at</mailFromEmail>
+        <mailFromName>E-Billing Test</mailFromName>
+        <mailReplyToEmail>demo@it20one.at</mailReplyToEmail>
+        <mailReplyToName>E-Billing Test</mailReplyToName>
+        <mailBounceAddress>error@it20one.at</mailBounceAddress>
+        <mailDebug>false</mailDebug>
+        <mailDump>true</mailDump>
+        <mailDoNotSend>true</mailDoNotSend>
+        <authentication>
+          <type>smtpauth</type>
+          <username>demo</username>
+          <password>demo</password>
+        </authentication>
+        <headers>
+          <property name="X-Test-Domain">test</property>        
+          <property name="X-Mailer">Sendmail</property>        
+          <property name="X-Priority">1</property>        
+          <property name="Disposition-Notification-To">demo@it20one.at</property>        
+        </headers>
+        <overwrites>
+          <mailToEmail>demo@it20one.at</mailToEmail>
+          <mailCcEmail></mailCcEmail>
+          <mailBccEmail></mailBccEmail>        
+        </overwrites>
+        <hooks>
+          <onSuccess enabled="true">
+            <directory>./temp/archive/out/eml</directory>
+          </onSuccess>
+          <onFailure enabled="true">
+            <directory>./temp/archive/broken/eml</directory>
+          </onFailure>
+          <onNotSend enabled="true">
+            <directory>./temp/archive/broken/eml</directory>
+          </onNotSend>
+        </hooks>        
+      </domain>
+      <domain>
+        <domainName>it20one.at</domainName>
+        <mailSmtpHost>localhost</mailSmtpHost>
+        <mailSmtpPort>6025</mailSmtpPort>
+        <mailDoNotSend>true</mailDoNotSend>
+        <authentication>
+          <type>smtpauth</type>
+          <username>demo</username>
+          <password>demo</password>
+        </authentication>
+      </domain>      
+    </domains>
+  </CommonsEmailService>
+
+</componentConfig>

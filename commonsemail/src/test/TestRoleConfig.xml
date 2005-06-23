@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<role-list>
+  <role
+    name="org.apache.fulcrum.commonsemail.CommonsEmailService"
+    shorthand="CommonsEmailService"
+    default-class="org.apache.fulcrum.commonsemail.impl.CommonsEmailServiceImpl"
+    early-init="true"
+    description="Simplifies the usage of commons-email"
+  />        
+</role-list>

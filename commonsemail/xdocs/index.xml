@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Fulcrum CommonsEmail Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+  <body>
+    <section name="Overview">
+      <p>
+        The Fulcrum CommonsEmail Servivce simplifies the work with the commons-email library.
+        
+        The provided functionality covers four areas
+        <ul>
+          <li>factory methods for preconfigured emails</li>
+          <li>overwriting the recipients before sending emails</li>
+          <li>advanced diagnostic support for sending emails</li>
+          <li>extensibilty through inheritance</li>
+        </ul>
+      </p>
+
+      <subsection name="Factory Methods">
+        <p>
+          The service provides factory methods for creating SimpleEmail,
+          HtmlEmail and MultiPartEmail. The benefit of using these
+          factory methods is getting a fully configured email 
+          where you can override the settings in your application. 
+          
+          The following items can be configured using the factory methods
+          <ul>
+            <li>SMTP server settings, authentication and debugging</li>
+            <li>settings for mailFrom, mailReplyTo and bounceAddress</li>
+            <li>email headers</li>
+          </ul>
+        </p>
+      </subsection>    
+
+      <subsection name="Overwriting Recipients">
+        <p>
+          This is an in-house requierement since we quite often run
+          load tests with real input data containing real email
+          addresses. Therefore it is useful to enforce that the
+          emails are sent to preconfigured mail account instead.
+        </p>
+      </subsection>    
+
+      <subsection name="Advanced Diagnostic Support">
+        <p>
+          The service implementation provides the following features
+          <ul>
+            <li>
+              enable/disable the debug mode of javamail per domain
+            </li>
+            <li>
+              the send() method of the service uses a TransportListener to determine
+              the exact cause for undeliverable emails
+            </li>
+            <li>
+              the email can be dumped into the temp directory
+            </li>            
+          </ul>
+        </p>
+      </subsection>    
+
+      <subsection name="Extensibilty through Inheritance">
+        <p>
+          The service provides application hooks enabled/disabled through the
+          configuration. This allows integration with archiving systems through
+          a derived service.
+        </p>
+      </subsection>    
+      
+    </section>    
+  </body>
+</document>

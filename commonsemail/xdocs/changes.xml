@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>IT20one PDF Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+    <release version="1.0.0" date="as in CVS">
+     <action dev="sgoeschl" type="add">
+        Initial import
+      </action>        
+    </release>    
+  </body>
+</document>
+
