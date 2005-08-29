@@ -6,6 +6,11 @@
   </properties>
 
   <body>
+    <release version="1.0.1-dev" date="in SVN">
+      <action dev="goeschsi" type="fix">
+        Using the newest fulcrum-resourcemanager-service
+      </action>
+    </release>
     <release version="1.0.0" date="in CVS">
       <action dev="goeschsi" type="add">
         Initial version
