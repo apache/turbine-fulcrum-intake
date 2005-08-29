@@ -3,7 +3,7 @@
   <extend>${basedir}/../project.xml</extend>
   <id>fulcrum-resourcemanager</id>
   <name>Fulcrum ResourceManager Component</name>
-  <currentVersion>1.0.0</currentVersion>
+  <currentVersion>1.0.1-dev</currentVersion>
 
   <dependencies>
   

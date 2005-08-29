@@ -52,6 +52,9 @@ public class FileResourceManager
     /** the cached list of all available resources */
     private String[] resourceFileNameList;
     
+    /** the name of the subversion metadata directory */
+    private static final String SVN_DIRNAME = ".svn";
+    
     /////////////////////////////////////////////////////////////////////////
     // Avalon Service Lifecycle Implementation
     /////////////////////////////////////////////////////////////////////////
@@ -457,7 +460,9 @@ public class FileResourceManager
 
             for( int i=0; i<list.length; i++ )
             {
-                if( list[i].isDirectory() )
+                // skip the subversion directories otherwise we pick up unexpected files 
+                
+                if( list[i].isDirectory() && (list[i].getName().equalsIgnoreCase(SVN_DIRNAME) == false) )
                 {
                     this.findAllResources( list[i], suffix, result );
                 }
