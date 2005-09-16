@@ -21,8 +21,6 @@ import java.util.Vector;
 
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
-import junit.framework.TestSuite;
-
 /**
  * Unit testing for the XML-RPC component
  *

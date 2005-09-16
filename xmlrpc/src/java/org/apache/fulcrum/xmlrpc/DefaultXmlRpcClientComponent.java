@@ -42,6 +42,7 @@ public class DefaultXmlRpcClientComponent
     /** Default Constructor. */
     public DefaultXmlRpcClientComponent()
     {
+        // nothing to do
     }
 
     /**

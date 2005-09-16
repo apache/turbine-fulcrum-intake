@@ -22,7 +22,6 @@ import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
-
 import org.apache.xmlrpc.XmlRpc;
 
 /**
@@ -44,6 +43,7 @@ public abstract class AbstractXmlRpcComponent
 
     protected AbstractXmlRpcComponent()
     {
+        // nothing to do
     }
 
     // ----------------------------------------------------------------------

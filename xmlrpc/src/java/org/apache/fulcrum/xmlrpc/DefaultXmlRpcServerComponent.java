@@ -25,6 +25,7 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
+import org.apache.avalon.framework.thread.ThreadSafe;
 
 import org.apache.xmlrpc.WebServer;
 import org.apache.xmlrpc.XmlRpcException;
@@ -48,7 +49,7 @@ import java.net.Socket;
  */
 public class DefaultXmlRpcServerComponent
     extends AbstractXmlRpcComponent
-    implements Startable, Disposable, Serviceable, XmlRpcServerComponent
+    implements Startable, Disposable, Serviceable, ThreadSafe, XmlRpcServerComponent
 {
     /** The service manager for this component. */
     private ServiceManager manager;
@@ -77,6 +78,7 @@ public class DefaultXmlRpcServerComponent
     /** Default Constructor. */
     public DefaultXmlRpcServerComponent()
     {
+        // nothing to do
     }
 
     // ----------------------------------------------------------------------
