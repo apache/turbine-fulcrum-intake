@@ -2,29 +2,41 @@
 <document>
   <properties>
     <title>Fulcrum</title>
+    <author email="sgoeschl@apache.org">Eric Pugh</author>
     <author email="epugh@upstate.com">Eric Pugh</author>
     <author email="quintonm@bellsouth.net">Quinton McCombs</author>
   </properties>
 
   <body>
+    <release version="1.0.6-dev" date="as in SVN">
+      <action dev="sgoeschl" type="fix">
+        Fixed Eclipse compiler warnings
+      </action>
+      <action dev="sgoeschl" type="update">
+        Bump to newer version of xmlrpc liberary, 2.0
+      </action>
+      <action dev="sgoeschl" type="update">
+        Cleaned up project.xml
+      </action>
+    </release>
     <release version="1.0.5" date="2004-11-24">
       <action dev="epugh" type="update">
         Bump to newer version of xmlrpc liberary, 1.2-b2.
-      </action>          
+      </action>
       <action dev="ronald" type="add">
         creates a list of dependencies (all optional), called handler.0 through
-		handler.9, instead of just handler. 
-      </action>       	
+		handler.9, instead of just handler.
+      </action>
       <action dev="ronald" type="fix">
         Change Server component to unregister handlers on dispose() method.  Prevents shutdown errors.
-      </action>       	
+      </action>
       <action dev="ronald" type="add">
         Add merlin meta info generation.  Refactor common code between server and
         client.
-      </action>     	
+      </action>
       <action dev="quintonm" type="add">
         XML-RPC component was added.
-      </action>      
+      </action>
     </release>
 
   </body>
