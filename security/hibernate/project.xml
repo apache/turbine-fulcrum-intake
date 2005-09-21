@@ -96,10 +96,10 @@
     </dependency>
 
     <dependency>
-      <groupId>hibernate</groupId>      
+      <groupId>javax.transaction</groupId>      
       <artifactId>jta</artifactId>            
-      <version>hib2.1</version>
-      <url>http://www.hibernate.org</url> 
+      <version>1.0.1B</version>
+      <url>http://java.sun.com/products/jta/</url>
     </dependency>  
 
     <dependency>
