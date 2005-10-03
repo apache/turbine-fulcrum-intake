@@ -19,19 +19,19 @@ package org.apache.fulcrum.yaafi.framework.constant;
 
 /**
  * Commonly used constants.
- * 
+ *
  *  @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
 public interface AvalonPhoenixConstants
-{	
-	/** The Phoenix Container */
-	String AVALON_CONTAINER_PHOENIX = "phoenix";
-	    
-	/////////////////////////////////////////////////////////////////////////
-	// Phoenix keys for Context
-	/////////////////////////////////////////////////////////////////////////
-    
+{
+    /** The Phoenix Container */
+    String AVALON_CONTAINER_PHOENIX = "phoenix";
+
+    /////////////////////////////////////////////////////////////////////////
+    // Phoenix keys for Context
+    /////////////////////////////////////////////////////////////////////////
+
     /** Phoenix alias for "urn:avalon:partition" */
     String PHOENIX_APP_NAME = "app.name";
 

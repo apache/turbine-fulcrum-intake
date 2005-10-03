@@ -37,25 +37,25 @@ public class ReconfigurationEntry
 {
     /** the location to monitor for changes */
     private String location;
-    
+
     /** the list of services to be reconfigured */
     private String[] serviceList;
-    
+
     /** the last message digest of the location */
     private byte[] digest;
-    
+
     /** the locator to load the monitored resource */
     private InputStreamLocator locator;
-    
+
     /** keep a notice for the very first invocation */
     private boolean isFirstInvocation;
-    
+
     /** the logger to be used */
-    private Logger logger;    
-    
+    private Logger logger;
+
     /**
      * Constructor
-     * 
+     *
      * @param logger the logger to use
      * @param applicationDir the home directory of the application
      * @param location the location to monitor for changes
@@ -67,9 +67,9 @@ public class ReconfigurationEntry
         this.location = location;
         this.locator  = new InputStreamLocator( applicationDir );
         this.logger = logger;
-        this.serviceList = serviceList;        
+        this.serviceList = serviceList;
     }
-    
+
     /**
      * Has the monitored location changed?
      */
@@ -78,11 +78,11 @@ public class ReconfigurationEntry
         boolean result = false;
         InputStream is = null;
         byte[] currDigest = null;
-        
+
         try
         {
-            // get a grip on our resource 
-            
+            // get a grip on our resource
+
             is = this.locate();
 
             if( is == null )
@@ -92,29 +92,29 @@ public class ReconfigurationEntry
             }
             else
             {
-	            // calculate a SHA-1 digest
-	            
-	            currDigest = this.getDigest(is);
-	            is.close();
-	            is = null;
-	         
-	            if( this.isFirstInvocation() == true )
-	            { 
-	                isFirstInvocation = false;
-	                this.getLogger().debug( "Storing SHA-1 digest of " + this.getLocation() );
-	                this.setDigest( currDigest );
-	            }
-	            else
-	            {
-	                if( equals( this.digest, currDigest ) == false )
-	                {
-	                    this.getLogger().debug( "The following resource has changed : " + this.getLocation() );
-	                    this.setDigest( currDigest );
-	                    result = true;
-	                }
-	            }
+                // calculate a SHA-1 digest
+
+                currDigest = this.getDigest(is);
+                is.close();
+                is = null;
+
+                if( this.isFirstInvocation() == true )
+                {
+                    isFirstInvocation = false;
+                    this.getLogger().debug( "Storing SHA-1 digest of " + this.getLocation() );
+                    this.setDigest( currDigest );
+                }
+                else
+                {
+                    if( equals( this.digest, currDigest ) == false )
+                    {
+                        this.getLogger().debug( "The following resource has changed : " + this.getLocation() );
+                        this.setDigest( currDigest );
+                        result = true;
+                    }
+                }
             }
-            
+
             return result;
         }
         catch(Exception e)
@@ -138,9 +138,9 @@ public class ReconfigurationEntry
                 }
             }
         }
-        
+
     }
-    
+
     /**
      * @return Returns the serviceList.
      */
@@ -148,7 +148,7 @@ public class ReconfigurationEntry
     {
         return serviceList;
     }
-        
+
     /**
      * @return Returns the isFirstInvocation.
      */
@@ -156,7 +156,7 @@ public class ReconfigurationEntry
     {
         return isFirstInvocation;
     }
-   
+
     /**
      * @return Returns the location.
      */
@@ -164,7 +164,7 @@ public class ReconfigurationEntry
     {
         return location;
     }
-    
+
     /**
      * @return Returns the locator.
      */
@@ -172,20 +172,20 @@ public class ReconfigurationEntry
     {
         return locator;
     }
-    
+
     /**
-     * Creates an InputStream  
+     * Creates an InputStream
      */
     public InputStream locate() throws IOException
     {
         return this.getLocator().locate(this.getLocation());
     }
 
-    /** 
-     * Creates a message digest 
+    /**
+     * Creates a message digest
      */
     private byte[] getDigest( InputStream is )
-    	throws Exception
+        throws Exception
     {
         byte[] result = null;
         byte[] content = null;
@@ -193,15 +193,15 @@ public class ReconfigurationEntry
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         copy( is, baos );
         content = baos.toByteArray();
-        baos.close();        
-        
+        baos.close();
+
         MessageDigest sha1 = MessageDigest.getInstance( "SHA1" );
         sha1.update( content );
         result = sha1.digest();
 
         return result;
     }
-        
+
     /**
      * @param digest The digest to set.
      */
@@ -209,7 +209,7 @@ public class ReconfigurationEntry
     {
         this.digest = digest;
     }
-    
+
     /**
      * Compares two byte[] for equality
      */
@@ -233,7 +233,7 @@ public class ReconfigurationEntry
                 }
             }
         }
-        
+
         return true;
     }
 
@@ -258,11 +258,11 @@ public class ReconfigurationEntry
         }
 
         is.close();
-        
+
         os.flush();
         os.close();
-    }    
-            
+    }
+
     /**
      * @return Returns the logger.
      */

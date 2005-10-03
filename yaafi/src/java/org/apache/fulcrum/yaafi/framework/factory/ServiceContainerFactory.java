@@ -28,7 +28,7 @@ import org.apache.fulcrum.yaafi.framework.util.Validate;
 
 /**
  * A factory to hide how to initialize YAFFI since this might change over the time
- * 
+ *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl </a>
  */
 
@@ -38,9 +38,10 @@ public class ServiceContainerFactory
     private static Logger logger;
 
     /**
-     * Create a fully initialized YAFFI service container
-     * 
+     * Create a fully initialized YAFFI service container.
+     *
      * @param serviceManagerConfig the configuration to use
+     * @return the service container
      * @throws Exception the creation failed
      */
     public static ServiceContainer create(
@@ -54,9 +55,10 @@ public class ServiceContainerFactory
 
     /**
      * Create a fully initialized YAFFI service container
-     * 
+     *
      * @param serviceManagerConfig the configuration to use
      * @param context the context to use
+     * @return the service container
      * @throws Exception the creation failed
      */
     public static ServiceContainer create(
@@ -65,7 +67,7 @@ public class ServiceContainerFactory
     {
         Validate.notNull(serviceManagerConfig,"serviceManagerConfig");
         Validate.notNull(context,"context");
-        
+
         String clazzName;
         Class clazz = null;
         Configuration configuration = null;
@@ -80,23 +82,23 @@ public class ServiceContainerFactory
             ServiceContainerFactory.logger = serviceManagerConfig.getLogger();
 
             // bootstrap the configuration settings
-            
+
             configuration = serviceManagerConfig.createFinalConfiguration();
-            
+
             // bootstrap the service container
 
             clazzName = getServiceContainerClazzName(configuration);
-            
-            ServiceContainerFactory.logger.debug( 
-                "Loading the service container class " + clazzName 
-                );
-            
-            clazz = ServiceContainerFactory.class.getClassLoader().loadClass(
-                clazzName 
+
+            ServiceContainerFactory.logger.debug(
+                "Loading the service container class " + clazzName
                 );
 
-            ServiceContainerFactory.logger.debug( 
-                "Instantiating the service container class " + clazzName 
+            clazz = ServiceContainerFactory.class.getClassLoader().loadClass(
+                clazzName
+                );
+
+            ServiceContainerFactory.logger.debug(
+                "Instantiating the service container class " + clazzName
                 );
 
             result = (ServiceContainer) clazz.newInstance();
@@ -109,12 +111,12 @@ public class ServiceContainerFactory
         }
 
         Logger serviceContainerLogger = serviceManagerConfig.getLogger();
-        
-        serviceContainerLogger.debug( 
-            "Using the following configuration : " 
+
+        serviceContainerLogger.debug(
+            "Using the following configuration : "
             + ConfigurationUtil.toString( configuration )
             );
-        
+
         ContainerUtil.enableLogging( result, serviceManagerConfig.getLogger() );
         ContainerUtil.contextualize( result, context );
         ContainerUtil.configure( result, configuration );
@@ -124,8 +126,10 @@ public class ServiceContainerFactory
     }
 
     /**
-     * Disposes the container
+     * Disposes the container.
+     * 
      * @param container the container to be disposed
+     * @return true if the disposal was successful or false otherwise
      */
     public static boolean dispose( ServiceContainer container )
     {
@@ -135,17 +139,18 @@ public class ServiceContainerFactory
             {
                 container.dispose();
             }
-            
+
             return true;
         }
         catch( Throwable t )
         {
             String msg = "Disposing the container failed : " + t.getMessage();
             System.err.println(msg);
+            t.printStackTrace();
             return false;
         }
     }
-    
+
     /**
      * Reads the implementation class of the YAAFI container
      */
@@ -154,7 +159,7 @@ public class ServiceContainerFactory
         Configuration containerClazzNameConfig = configuration.getChild(
             ServiceConstants.CONTAINERCLAZZNAME_CONFIG_KEY
             );
-               
+
         if( containerClazzNameConfig != null )
         {
             return containerClazzNameConfig.getValue(ServiceConstants.CLAZZ_NAME);
@@ -164,5 +169,5 @@ public class ServiceContainerFactory
             return ServiceConstants.CLAZZ_NAME;
         }
     }
-    
+
 }

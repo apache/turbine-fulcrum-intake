@@ -19,18 +19,18 @@ package org.apache.fulcrum.yaafi.framework.constant;
 
 /**
  * Commonly used constants.
- * 
+ *
  *  @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
 public interface AvalonFortressConstants
 {
-	/** The Fortress Container */
-	String AVALON_CONTAINER_FORTESS = "fortress";
+    /** The Fortress Container */
+    String AVALON_CONTAINER_FORTESS = "fortress";
 
-	/////////////////////////////////////////////////////////////////////////
-	// Fortress keys for Context
-	/////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    // Fortress keys for Context
+    /////////////////////////////////////////////////////////////////////////
 
     /** Fortress alias for "urn:avalon:partition" */
     String FORTRESS_COMPONENT_ID = "component.id";

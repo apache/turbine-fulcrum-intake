@@ -20,38 +20,45 @@ package org.apache.fulcrum.yaafi.framework.constant;
 /**
  * Commonly used constants for YAAFI. Basically we are mimicking a
  * Merlin container fow whatever it is worth.
- * 
+ *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
 public interface AvalonYaafiConstants
 {
-	/** The YAAFI Container */
-	String AVALON_CONTAINER_YAAFI = "yaafi";
+    /** The YAAFI Container */
+    String AVALON_CONTAINER_YAAFI = "yaafi";
 
-	/////////////////////////////////////////////////////////////////////////
-	// Merlin keys for Context
-	/////////////////////////////////////////////////////////////////////////
-	
+    /////////////////////////////////////////////////////////////////////////
+    // Merlin keys for Context
+    /////////////////////////////////////////////////////////////////////////
+
     /** define the Merlin application root (File) */
     String URN_AVALON_HOME = "urn:avalon:home";
 
     /** define the Merlin temporary directory (File) */
-    String URN_AVALON_TEMP = "urn:avalon:temp";    	
+    String URN_AVALON_TEMP = "urn:avalon:temp";
 
     /** define the Merlin component name (String) */
-    String URN_AVALON_NAME = "urn:avalon:name";    
-    
+    String URN_AVALON_NAME = "urn:avalon:name";
+
     /** define the Merlin partition name (String) */
-    String URN_AVALON_PARTITION = "urn:avalon:partition";    	
-    
+    String URN_AVALON_PARTITION = "urn:avalon:partition";
+
     /** define the Merlin component classloader (ClassLoader) */
     String URN_AVALON_CLASSLOADER = "urn:avalon:classloader";
-    
-	/////////////////////////////////////////////////////////////////////////
-	// ECM keys for Context
-	/////////////////////////////////////////////////////////////////////////
-    
+
+    /////////////////////////////////////////////////////////////////////////
+    // YAAFI keys for Context
+    /////////////////////////////////////////////////////////////////////////
+
+    /** define the Merlin component classloader (ClassLoader) */
+    String URN_YAAFI_KERNELLOCK = "urn:yaafi:kernellock";
+
+    /////////////////////////////////////////////////////////////////////////
+    // ECM keys for Context
+    /////////////////////////////////////////////////////////////////////////
+
     /** this is only supplied for backward compatibilty with ECM */
     String COMPONENT_APP_ROOT  = "componentAppRoot";
 

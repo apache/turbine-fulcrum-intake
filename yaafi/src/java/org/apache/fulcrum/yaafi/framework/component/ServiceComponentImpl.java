@@ -24,6 +24,8 @@ import org.apache.avalon.framework.logger.Logger;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.fulcrum.yaafi.framework.role.RoleEntry;
+import org.apache.fulcrum.yaafi.framework.util.ReadWriteLock;
+import org.apache.fulcrum.yaafi.framework.util.ToStringBuilder;
 import org.apache.fulcrum.yaafi.framework.util.Validate;
 
 /**
@@ -38,43 +40,59 @@ public abstract class ServiceComponentImpl
 {
     /** the information from the role configuration file */
     private RoleEntry roleEntry;
-    
+
     /** the actual implementation class of the service component */
     private Class implementationClazz;
 
     /** the instance of the implementation class of the service component */
     private Object instance;
 
+    /** the proxy of the instance if any */
+    private Object proxy;
+
+    /** the Avalon logger of the container */
+    private Logger parentLogger;
+
     /** the Avalon logger to be passed to the service component instance */
     private Logger logger;
-   
+
     /** The Avalon ServiceManager passed to the service component instance */
     private ServiceManager serviceManager;
 
     /** The Avalon Context passed to the service component instance */
     private Context context;
-    
+
     /** The Avalon Configuration passed to the service component instance */
     private Configuration configuration;
 
     /** The Avalon Parameters passed to the service component instance */
     private Parameters parameters;
-       
+
+    /** read/write lock to snychronize access to services */
+    private ReadWriteLock readWriteLock;
+    
     /**
      * Constructor to parse the configuration.
-     * 
+     *
      * @param roleEntry The information extracted from the role configuration file
-     * @param logger The logger of the service container
+     * @param parentLogger the logger of the service container
+     * @param logger The logger for the service instance
+     * @param readWriteLock the read/write lock to synchronize access to services
      */
-    public ServiceComponentImpl( RoleEntry roleEntry, Logger logger )
+    public ServiceComponentImpl( 
+        RoleEntry roleEntry, Logger parentLogger, Logger logger, ReadWriteLock readWriteLock )
     {
         Validate.notNull( roleEntry, "roleEntry" );
+        Validate.notNull( parentLogger, "parentLogger" );
         Validate.notNull( logger, "logger" );
-        
+        Validate.notNull( readWriteLock, "readWriteLock" );
+
         this.roleEntry = roleEntry;
+        this.parentLogger = parentLogger;
         this.logger = logger;
+        this.readWriteLock = readWriteLock;
     }
-	
+
     /////////////////////////////////////////////////////////////////////////
     // Service Component Lifecycle Implementation
     /////////////////////////////////////////////////////////////////////////
@@ -83,15 +101,15 @@ public abstract class ServiceComponentImpl
      * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentLifecycle#getInstance()
      */
     public Object getInstance()
-    	throws Exception
+        throws Exception
     {
         if( this.isInstantiated() == false )
         {
             this.createInstance();
             this.incarnateInstance();
         }
-        
-        return this.instance;
+
+        return this.getRawInstance(true);
     }
 
     /**
@@ -103,8 +121,8 @@ public abstract class ServiceComponentImpl
         {
             this.implementationClazz = this.getClass().getClassLoader().loadClass(
                 this.getRoleEntry().getImplementationClazzName()
-              	);
-            
+                );
+
             if( this.getRoleEntry().isEarlyInit() )
             {
                 this.getInstance();
@@ -112,24 +130,25 @@ public abstract class ServiceComponentImpl
         }
         catch(Throwable t)
         {
-            String msg = "Failed initialize " 
+            String msg = "Failed initialize "
                 + this.getRoleEntry().getImplementationClazzName();
-            
+
             throw new ConfigurationException(msg,t);
         }
     }
-    
+
     /**
      * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentLifecycle#reconfigure()
      */
     public abstract void reconfigure() throws Exception;
-    
+
     /**
      * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentLifecycle#decommision()
      */
     public void decommision() throws Exception
     {
         this.instance = null;
+        this.proxy = null;
     }
 
     /**
@@ -155,7 +174,7 @@ public abstract class ServiceComponentImpl
     {
         this.serviceManager = serviceManager;
     }
-    
+
     /**
      * @param configuration The configuration to set.
      */
@@ -171,7 +190,7 @@ public abstract class ServiceComponentImpl
     {
         this.parameters = parameters;
     }
-            
+
     /////////////////////////////////////////////////////////////////////////
     // Generated getters and setters
     /////////////////////////////////////////////////////////////////////////
@@ -191,7 +210,7 @@ public abstract class ServiceComponentImpl
     {
         return this.getRoleEntry().getName();
     }
-    
+
     /**
      * @return Returns the roleEntry.
      */
@@ -199,7 +218,7 @@ public abstract class ServiceComponentImpl
     {
         return roleEntry;
     }
-    
+
     /**
      * @return Returns the logger.
      */
@@ -209,13 +228,21 @@ public abstract class ServiceComponentImpl
     }
 
     /**
+     * @return Returns the parentLogger.
+     */
+    public Logger getParentLogger()
+    {
+        return parentLogger;
+    }
+
+    /**
      * @return Returns the implementationClazz.
      */
     public Class getImplementationClazz()
     {
         return this.implementationClazz;
     }
-    
+
     /**
      * @return Returns the configuration.
      */
@@ -223,7 +250,7 @@ public abstract class ServiceComponentImpl
     {
         return configuration;
     }
-        
+
     /**
      * @return Returns the context.
      */
@@ -231,7 +258,7 @@ public abstract class ServiceComponentImpl
     {
         return context;
     }
-        
+
     /**
      * @return Returns the paramaters.
      */
@@ -239,7 +266,7 @@ public abstract class ServiceComponentImpl
     {
         return parameters;
     }
-       
+
     /**
      * @return Returns the serviceManager.
      */
@@ -247,7 +274,7 @@ public abstract class ServiceComponentImpl
     {
         return serviceManager;
     }
-        
+
     /**
      * @return the shorthand of the service
      */
@@ -261,9 +288,21 @@ public abstract class ServiceComponentImpl
     /////////////////////////////////////////////////////////////////////////
 
     /**
+     * @see java.lang.Object#toString()
+     */
+    public String toString()
+    {
+        ToStringBuilder toStringBuilder = new ToStringBuilder(this);
+        toStringBuilder.append("roleEntry",this.roleEntry);
+        toStringBuilder.append("instance",this.instance);
+        toStringBuilder.append("proxy",this.proxy);
+        return toStringBuilder.toString();
+    }
+
+    /**
      * @return Returns <b>true</b> if the service instance was already instantiated.
      */
-    protected boolean isInstantiated()
+    protected final boolean isInstantiated()
     {
         return ( this.instance != null ? true : false );
     }
@@ -277,8 +316,13 @@ public abstract class ServiceComponentImpl
     protected Object createInstance()
         throws InstantiationException, IllegalAccessException
     {
-        this.getLogger().debug( "Instantiating the implementation class for " + this.getShorthand() );
-        this.instance =  this.implementationClazz.newInstance();
+        if( this.getParentLogger().isDebugEnabled() )
+        {
+            this.getParentLogger().debug( "Instantiating the implementation class for " + this.getShorthand() );
+        }
+
+        this.instance = this.implementationClazz.newInstance();
+        this.proxy = null;
         return this.instance;
     }
 
@@ -288,11 +332,36 @@ public abstract class ServiceComponentImpl
     protected abstract void incarnateInstance() throws Exception;
 
     /**
+     * Get either the original service object or the dynamic proxy
+     *
      * @return Returns the raw instance, i.e. does not incarnate
      * the instance.
      */
-    protected Object getRawInstance()
+    protected Object getRawInstance(boolean useProxy)
     {
-        return this.instance;
+        if( useProxy && (this.proxy != null) )
+        {
+            return this.proxy;
+        }
+        else
+        {
+            return this.instance;
+        }
+    }
+
+    /**
+     * @param instance the service instance
+     */
+    protected void setProxyInstance(Object proxy)
+    {
+        this.proxy = proxy;
+    }
+    
+    /**
+     * @return Returns the readWriteLock.
+     */
+    protected final ReadWriteLock getReadWriteLock()
+    {
+        return readWriteLock;
     }
 }

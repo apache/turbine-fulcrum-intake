@@ -26,14 +26,14 @@ import org.apache.avalon.framework.service.ServiceManager;
  * Let's try to break the singleton addiction with this service. This
  * service stores the instance of a service manager and allows access
  * to this instance and related information such as
- * 
+ *
  * <ul>
  *   <li>Logger instance
  *   <li>ServiceManager instance
- * 	 <li>Context instance
+ *   <li>Context instance
  *   <li>Parameters instance
  * </ul>
- * 
+ *
  *  @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
@@ -43,18 +43,18 @@ public interface ServiceManagerService extends ServiceManager
      * @return the Logger of the container
      */
     Logger getAvalonLogger();
-    
-    /** 
+
+    /**
      * @return the ServiceManager for the container
      */
     ServiceManager getServiceManager();
 
-    /** 
+    /**
      * @return the Paramters for the container
      */
     Parameters getParameters();
 
-    /** 
+    /**
      * @return the Context for the container
      */
     Context getContext();

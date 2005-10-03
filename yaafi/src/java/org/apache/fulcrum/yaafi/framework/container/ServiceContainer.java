@@ -28,14 +28,14 @@ import org.apache.avalon.framework.service.ServiceManager;
 
 /**
  * Interface exposed by the ServiceContainerImpl
- * 
+ *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
 public interface ServiceContainer
-	extends LogEnabled, Contextualizable, Parameterizable, Initializable, Reconfigurable, Disposable, 
-		ServiceManager, ServiceLifecycleManager
-{    	
+    extends LogEnabled, Contextualizable, Parameterizable, Initializable, Reconfigurable, Disposable,
+        ServiceManager, ServiceLifecycleManager
+{
     /**
      * Return the Avalon parameters loaded by the Avalon service container
      * @return the Avalon paramters

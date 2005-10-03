@@ -11,4 +11,9 @@
   <parameters>
     <location>./src/test/TestParameters.properties</location>
   </parameters>
-</fulcrum-yaafi>              
+  <hasDynamicProxies>true</hasDynamicProxies>
+  <interceptors>
+    <interceptor>org.apache.fulcrum.yaafi.interceptor.performance.PerformanceInterceptorService</interceptor>
+    <interceptor>org.apache.fulcrum.yaafi.interceptor.logging.LoggingInterceptorService</interceptor>
+  </interceptors>
+</fulcrum-yaafi>

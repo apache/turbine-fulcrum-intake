@@ -1,13 +1,5 @@
 package org.apache.fulcrum.jce.crypto;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 /*
  * Copyright 2004 Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
@@ -25,17 +17,22 @@ import java.io.OutputStream;
  * limitations under the License.
  */
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 
 /**
  * Command line tool for encrypting/decrypting files
- * 
+ *
  * file [enc|dec] passwd [file]*
  * string [enc|dec] passwd plaintext
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
-public class Main	
+public class Main
 {
     /**
      * Allows testing on the command lnie
@@ -49,17 +46,17 @@ public class Main
             {
                 printHelp();
                 throw new IllegalArgumentException("Invalid command line");
-            }        
-            
+            }
+
             String operationMode = args[0];
-            
+
             if( operationMode.equals("file") )
             {
-                processFiles(args); 
+                processFiles(args);
             }
             else if( operationMode.equals("string") )
             {
-                processString(args); 
+                processString(args);
             }
 
         }
@@ -68,82 +65,85 @@ public class Main
             System.out.println(e.getMessage());
         }
     }
-    
+
     /**
      * Prints usage information.
      */
     public static void printHelp()
     {
-        System.out.println("Main file [enc|dec|auto] passwd [file]*");
+        System.out.println("Main file [enc|dec] passwd source [target]");
         System.out.println("Main string [enc|dec] passwd ");
     }
-    
+
     /**
      * Decrypt/encrypt a list of files
      * @param args the command line
      * @throws Exception the operation failed
      */
     public static void processFiles(String[] args)
-		throws Exception
-	{
-	    String cipherMode = args[1]; 
-	    char[] password = args[2].toCharArray();
-	    
-	    for( int i=3; i<args.length; i++ )
-	    {
-	        File file = new File(args[i]);
-	        processFile(cipherMode,password,file);
-	    }                                                                                             
-	}
+        throws Exception
+    {
+        String cipherMode = args[1];
+        char[] password = args[2].toCharArray();
+        File sourceFile = new File(args[3]);
+        File targetFile = null;
+        
+        if( args.length == 4 )
+        {        
+            targetFile = sourceFile;
+        }
+        else
+        {
+            targetFile = new File(args[4]);
+        }
+        
+        processFile(cipherMode,password,sourceFile,targetFile);
+    }
 
     /**
      * Decrypt/encrypt a single file
      * @param cipherMode the mode
-     * @param password the passwors 
-     * @param file the file to process
+     * @param password the passwors
+     * @param sourceFile the file to process
+     * @param targetFile the targetf file
      * @throws Exception the operation failed
      */
-    public static void processFile(String cipherMode, char[] password, File file)
-		throws Exception
-	{
-        FileInputStream fis = new FileInputStream(file);
+    public static void processFile(String cipherMode, char[] password, File sourceFile, File targetFile)
+        throws Exception
+    {
+        FileInputStream fis = new FileInputStream(sourceFile);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        
+
         if( cipherMode.equals("dec") )
         {
-            System.out.println("Decrypting " + file.getAbsolutePath() );
-            InputStream cis = CryptoUtil.getCryptoStreamFactory().getInputStream(fis,password);
-            CryptoUtil.copy(cis,baos);
-            cis.close();
+            System.out.println("Decrypting " + sourceFile.getAbsolutePath() );
+            CryptoUtil.decrypt( fis, baos, password );            
             fis.close();
-        }
-        else if( cipherMode.equals("auto") )
-        {
-            System.out.println("Auto-decrypting " + file.getAbsolutePath() );
-            InputStream cis = CryptoUtil.getCryptoStreamFactory().getSmartInputStream(fis,password);
-            CryptoUtil.copy(cis,baos);
-            cis.close();
-            fis.close();            
+            
+            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+            FileOutputStream fos = new FileOutputStream(targetFile);
+            CryptoUtil.copy(bais,fos);
+            bais.close();
+            fos.close();
         }
         else if( cipherMode.equals("enc") )
         {
-            System.out.println("Enrypting " + file.getAbsolutePath() );
-            OutputStream cos = CryptoUtil.getCryptoStreamFactory().getOutputStream(baos,password);            
-            CryptoUtil.copy(fis,cos);
-            cos.close();            
+            System.out.println("Enrypting " + sourceFile.getAbsolutePath() );
+            CryptoUtil.encrypt( fis, baos, password );            
             fis.close();
+
+            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+            FileOutputStream fos = new FileOutputStream(targetFile);
+            CryptoUtil.copy(bais,fos);
+            bais.close();
+            fos.close();
         }
         else
         {
             String msg = "Don't know what to do with : " + cipherMode;
             throw new IllegalArgumentException(msg);
         }
-        
-        FileOutputStream fos = new FileOutputStream(file);
-        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        CryptoUtil.copy(bais,fos);
-        fos.close();            
-	}    
+    }
 
     /**
      * Decrypt/encrypt a string
@@ -151,22 +151,22 @@ public class Main
      * @throws Exception the operation failed
      */
     public static void processString(String[] args)
-		throws Exception
-	{
+        throws Exception
+    {
         String cipherMode = args[1];
-	    char[] password = args[2].toCharArray();
-	    String value = args[3];
-	    String result = null;
-	    
-	    if( cipherMode.equals("dec") )
-	    {
-	        result = CryptoUtil.decryptString(value,password);
-	    }
-	    else
+        char[] password = args[2].toCharArray();
+        String value = args[3];
+        String result = null;
+
+        if( cipherMode.equals("dec") )
         {
-	        result = CryptoUtil.encryptString(value,password);
+            result = CryptoUtil.decryptString(value,password);
         }
-	    
-	    System.out.println( result );
-	}
+        else
+        {
+            result = CryptoUtil.encryptString(value,password);
+        }
+
+        System.out.println( result );
+    }
 }

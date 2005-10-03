@@ -1,6 +1,5 @@
 package org.apache.fulcrum.jce.crypto;
 
-
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -20,12 +19,6 @@ package org.apache.fulcrum.jce.crypto;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-
-import org.apache.fulcrum.jce.crypto.CryptoParameters;
-import org.apache.fulcrum.jce.crypto.CryptoStreamFactoryImpl;
-import org.apache.fulcrum.jce.crypto.CryptoUtil;
-import org.apache.fulcrum.jce.crypto.HexConverter;
-import org.apache.fulcrum.jce.crypto.PasswordFactory;
 
 import junit.framework.TestCase;
 
@@ -290,4 +283,15 @@ public class CryptoUtilTest extends TestCase
         String result = new String( HexConverter.toBytes( hexString ) );
         assertEquals( source, result );
     }
+
+    /** Test encryption and decryption of Strings */
+    public void testPasswordEncryption() throws Exception
+    {
+        char[] password = "57cb-4a23-d838-45222".toCharArray();
+        String source = "e02c-3b76-ff1e-5d9a1";
+        String cipherText = CryptoUtil.encryptString( source, password );
+        String plainText = CryptoUtil.decryptString( cipherText, password );
+        assertEquals( source, plainText );
+    }
+
 }

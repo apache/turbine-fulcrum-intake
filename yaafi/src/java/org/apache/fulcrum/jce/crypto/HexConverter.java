@@ -20,153 +20,153 @@ package org.apache.fulcrum.jce.crypto;
 
 /**
  * Helper class to for HEX conversion.
- * 
+ *
  * The code uses parts from Markus Hahn's Blowfish library found at
  * http://blowfishj.sourceforge.net/
- * 
+ *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl </a>
  * @author <a href="mailto:maakus@earthlink.net">Markus Hahn</a>
  */
 
 public final class HexConverter
-{    
+{
     /**
      * Table for byte to hex conversion
      */
-	final private static char[] HEXTAB =
-	{
-		'0', '1', '2', '3',	'4', '5', '6', '7',
-		'8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
-	};
+    final private static char[] HEXTAB =
+    {
+        '0', '1', '2', '3', '4', '5', '6', '7',
+        '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
+    };
 
-	/**
-	 * Converts a byte array to a hex string.
-	 * 
-	 * @param data the byte array
-	 * @return the hex string
-	 */
-	public final static String toString( byte[] data )
-	{
-		return bytesToHexStr(data, 0, data.length);
-	}
-	
-	/**
-	 * Converts a hex string into a byte[]
-	 * 
-	 * @param data the hex string
-	 * @return the byte[]
-	 */
-	
-	public final static byte[] toBytes( String data )
-	{
-	    byte[] result = new byte[data.length()/2];     
-	    hexStrToBytes( data, result, 0, 0, result.length );  
-	    return result;
-	}
+    /**
+     * Converts a byte array to a hex string.
+     *
+     * @param data the byte array
+     * @return the hex string
+     */
+    public final static String toString( byte[] data )
+    {
+        return bytesToHexStr(data, 0, data.length);
+    }
 
-	/**
-	 * Converts a byte array to a hex string.
-	 * @param data the byte array
-	 * @param nOfs start index where to get the bytes
-	 * @param nLen number of bytes to convert
-	 * @return the hex string
-	 */
-	private final static String bytesToHexStr(
-		byte[] data,
-		int nOfs,
-		int nLen)
-	{
-		StringBuffer sbuf;
+    /**
+     * Converts a hex string into a byte[]
+     *
+     * @param data the hex string
+     * @return the byte[]
+     */
 
-		sbuf = new StringBuffer();
-		sbuf.setLength(nLen << 1);
+    public final static byte[] toBytes( String data )
+    {
+        byte[] result = new byte[data.length()/2];
+        hexStrToBytes( data, result, 0, 0, result.length );
+        return result;
+    }
 
-		int nPos = 0;
-		int nC = nOfs + nLen;
+    /**
+     * Converts a byte array to a hex string.
+     * @param data the byte array
+     * @param nOfs start index where to get the bytes
+     * @param nLen number of bytes to convert
+     * @return the hex string
+     */
+    private final static String bytesToHexStr(
+        byte[] data,
+        int nOfs,
+        int nLen)
+    {
+        StringBuffer sbuf;
 
-		while (nOfs < nC)
-		{
-			sbuf.setCharAt(nPos++, HEXTAB[(data[nOfs  ] >> 4) & 0x0f]);
-			sbuf.setCharAt(nPos++, HEXTAB[ data[nOfs++]       & 0x0f]);
-		}
-		
-		return sbuf.toString();
-	}
+        sbuf = new StringBuffer();
+        sbuf.setLength(nLen << 1);
 
-	/**
-	 * Converts a hex string back into a byte array (invalid codes will be
-	 * skipped).
-	 * @param sHex hex string
-	 * @param data the target array
-	 * @param nSrcOfs from which character in the string the conversion should
-	 * begin, remember that (nSrcPos modulo 2) should equals 0 normally
-	 * @param nDstOfs to store the bytes from which position in the array
-	 * @param nLen number of bytes to extract
-	 * @return number of extracted bytes
-	 */
-	private final static int hexStrToBytes(
-		String sHex,
-		byte[] data,
-		int nSrcOfs,
-		int nDstOfs,
-		int nLen)
-	{
-		int nI, nJ, nStrLen, nAvailBytes, nDstOfsBak;
-		byte bActByte;
-		boolean blConvertOK;
+        int nPos = 0;
+        int nC = nOfs + nLen;
 
-		// check for correct ranges
-		
-		nStrLen = sHex.length();
+        while (nOfs < nC)
+        {
+            sbuf.setCharAt(nPos++, HEXTAB[(data[nOfs  ] >> 4) & 0x0f]);
+            sbuf.setCharAt(nPos++, HEXTAB[ data[nOfs++]       & 0x0f]);
+        }
 
-		nAvailBytes = (nStrLen - nSrcOfs) >> 1;
-		if (nAvailBytes < nLen)
-		{
-			nLen = nAvailBytes;
-		}
+        return sbuf.toString();
+    }
 
-		int nOutputCapacity = data.length - nDstOfs;
-		if (nLen > nOutputCapacity)
-		{
-			nLen = nOutputCapacity;
-		}
+    /**
+     * Converts a hex string back into a byte array (invalid codes will be
+     * skipped).
+     * @param sHex hex string
+     * @param data the target array
+     * @param nSrcOfs from which character in the string the conversion should
+     * begin, remember that (nSrcPos modulo 2) should equals 0 normally
+     * @param nDstOfs to store the bytes from which position in the array
+     * @param nLen number of bytes to extract
+     * @return number of extracted bytes
+     */
+    private final static int hexStrToBytes(
+        String sHex,
+        byte[] data,
+        int nSrcOfs,
+        int nDstOfs,
+        int nLen)
+    {
+        int nI, nJ, nStrLen, nAvailBytes, nDstOfsBak;
+        byte bActByte;
+        boolean blConvertOK;
 
-		// convert now
+        // check for correct ranges
 
-		nDstOfsBak = nDstOfs;
+        nStrLen = sHex.length();
 
-		for (nI = 0; nI < nLen; nI++)
-		{
-			bActByte = 0;
-			blConvertOK = true;
+        nAvailBytes = (nStrLen - nSrcOfs) >> 1;
+        if (nAvailBytes < nLen)
+        {
+            nLen = nAvailBytes;
+        }
 
-			for (nJ = 0; nJ < 2; nJ++)
-			{
-				bActByte <<= 4;
-				char cActChar = sHex.charAt(nSrcOfs++);
+        int nOutputCapacity = data.length - nDstOfs;
+        if (nLen > nOutputCapacity)
+        {
+            nLen = nOutputCapacity;
+        }
 
-				if ((cActChar >= 'a') && (cActChar <= 'f'))
-				{
-					bActByte |= (byte) (cActChar - 'a') + 10;
-				}
-				else
-				{
-					if ((cActChar >= '0') && (cActChar <= '9'))
-					{
-						bActByte |= (byte) (cActChar - '0');
-					}
-					else
-					{
-						blConvertOK = false;
-					}
-				}
-			}
-			if (blConvertOK)
-			{
-				data[nDstOfs++] = bActByte;
-			}
-		}
+        // convert now
 
-		return (nDstOfs - nDstOfsBak);
-	}
+        nDstOfsBak = nDstOfs;
+
+        for (nI = 0; nI < nLen; nI++)
+        {
+            bActByte = 0;
+            blConvertOK = true;
+
+            for (nJ = 0; nJ < 2; nJ++)
+            {
+                bActByte <<= 4;
+                char cActChar = sHex.charAt(nSrcOfs++);
+
+                if ((cActChar >= 'a') && (cActChar <= 'f'))
+                {
+                    bActByte |= (byte) (cActChar - 'a') + 10;
+                }
+                else
+                {
+                    if ((cActChar >= '0') && (cActChar <= '9'))
+                    {
+                        bActByte |= (byte) (cActChar - '0');
+                    }
+                    else
+                    {
+                        blConvertOK = false;
+                    }
+                }
+            }
+            if (blConvertOK)
+            {
+                data[nDstOfs++] = bActByte;
+            }
+        }
+
+        return (nDstOfs - nDstOfsBak);
+    }
 }

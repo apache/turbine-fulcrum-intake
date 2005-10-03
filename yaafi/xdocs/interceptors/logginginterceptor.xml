@@ -1,0 +1,261 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>Fulcrum YAAFI Avalon Container Interceptors</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Overview">
+      <p>
+        The service solves a simple problem - when a customer complains that
+        something is broken quite often the logfile is not enough - a glimpse at the
+        parameters being used for the service invocation would help a great deal.
+        Therefore this interceptor is intended for running in the background and
+        dumping all parameters when an exception occurs.
+      </p>
+    </section>
+
+    <section name="Captured Information">
+      <p>
+        During the execution the service captures the following information for
+        producing a meaning log
+        <table>
+          <tr>
+            <th>Item</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>Transaction ID (TID)</td>
+            <td>the number of times the invocationDepth was zero</td>
+          </tr>
+          <tr>
+            <td>Invocation ID (IID)</td>
+            <td>the current number of inovking a service method</td>
+          </tr>
+          <tr>
+            <td>InvocationDepth (ID)</td>
+            <td>
+              the service invocation depth, e.g a value of "1" that
+              the currently invoked service method was invoked by
+              another service. A value of "0" indicates that the service
+              method was directly invoked from the caller therefore
+              starting a new transaction
+            </td>
+          </tr>
+          <tr>
+            <td>Mode (M)</td>
+            <td>
+              the invocation mode of the interceptor
+              <ul>
+                <li>0 ==> entering the service method</li>
+                <li>1 ==> leaving the the service method</li>
+                <li>2 ==> an exception occured</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td>ServiceName</td>
+            <td>the shorthand of the service being invoked</td>
+          </tr>
+          <tr>
+            <td>ServiceMethod</td>
+            <td>the name of the service method being invoked</td>
+          </tr>
+          <tr>
+            <td>Millis</td>
+            <td>the execution time in milliseconds</td>
+          </tr>
+          <tr>
+            <td>Method Signature</td>
+            <td>the name of the executing thread</td>
+          </tr>
+          <tr>
+            <td>Parameters</td>
+            <td>the list of parameter values</td>
+          </tr>
+          <tr>
+            <td>Exception</td>
+            <td>the class of the exception being caught</td>
+          </tr>
+          <tr>
+            <td>Stacktrace</td>
+            <td>the stacktrace of the exception being caught</td>
+          </tr>
+        </table>
+      </p>
+    </section>
+    
+    <section name="Example Logfile">
+      <p>
+        Looking at the following <a href="tracing.csv">example</a> you see that
+        <ul>
+          <li>that this was the 54th transaction during the lifetime of the container</li>
+          <li>PdfSignatureService.sign wa invoked with the seven parameter values as shown below</li>
+          <li>an invalid PDF document caused a SignatureServiceException</li>
+          <li>SignatureService.sign was the caller of PdfSignatureService.sign and just rethrow the exception.</li>
+        </ul>
+      </p>
+      <source>
+<![CDATA[
+TID IID ID M Service             Method Signature
+        
+54  402  1 2 PdfSignatureService sign   Object service.signature.SignatureService.sign(
+                                        String,String,String,Object,String,String,Hashtable) 
+                                        arg[0]:={SUPPLIER}  
+                                        arg[1]:={SUPPLIER} 
+                                        arg[2]:={de}  
+                                        arg[3]:={[B@36d047} 
+                                        arg[4]:={broken.pdf}  
+                                        arg[5]:={application/pdf} 
+                                        arg[6]:={{isPdfAttached=false}} 
+                                        service.signature.SignatureServiceException
+                                        Rebuild failed: trailer not found
+
+54  400  0 2 SignatureService    sign   service.signature.SignatureService.sign(
+                                        String,String,String,Object,String,String,Hashtable) 
+                                        arg[0]:={SUPPLIER}  
+                                        arg[1]:={SUPPLIER} 
+                                        arg[2]:={de}  
+                                        arg[3]:={[B@36d047} 
+                                        arg[4]:={broken.pdf}  
+                                        arg[5]:={application/pdf} 
+                                        arg[6]:={{isPdfAttached=false}} 
+                                        service.signature.SignatureServiceException
+                                        Rebuild failed: trailer not found
+]]>
+      </source>
+    </section>
+    
+    <section name="Configuration">
+      <subsection name="Component Configuration">
+        <table>
+          <tr>
+            <th>Item</th>
+            <th>Datatype</th>
+            <th>Cardinality</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>isEnabled</td>
+            <td>Boolean</td>
+            <td>[0|1]</td>
+            <td>
+              Turn the interceptor. If no value is supplied then "false" is used
+              thereby disabling all interceptor invocations.
+            </td>
+          </tr>
+          <tr>
+            <td>maxArgLength</td>
+            <td>Integrer</td>
+            <td>[0|1]</td>
+            <td>
+              The maximum length of an method argument to avoid dumping megabytes
+              of data into the logfile.
+             </td>
+          </tr>
+          <tr>
+            <td>useReflection</td>
+            <td>Boolean</td>
+            <td>[0|1]</td>
+            <td>
+              Enabling this flags results in using 
+              org.apache.commons.lang.ReflectionToSTringBuilder instead
+              of Object.toString() if commons-lang is found in the classpath.
+              If no value is supplied then "false" is used.
+            </td>
+          </tr>
+          <tr>
+            <td>monitorAllExceptions</td>
+            <td>Boolean</td>
+            <td>[0|1]</td>
+            <td>
+              Dump all encountered excpetions therefore overriding
+              the list of monitored services. If no value is supplied 
+              then "true" is used.
+             </td>
+          </tr>          
+          <tr>
+            <td>services</td>
+            <td>Tree</td>
+            <td>[0|1]</td>
+            <td>
+              Contains a list of services to be monitored.
+            </td>
+          </tr>          
+          <tr>
+            <td>services/service@name</td>
+            <td>String</td>
+            <td>[1..n]</td>
+            <td>
+              The name of an individual service to be monitored.
+            </td>
+          </tr>
+        </table>
+      </subsection>
+      <subsection name="Role Configuration">
+        <source><![CDATA[
+<role
+    name="org.apache.fulcrum.yaafi.interceptor.logging.LoggingInterceptorService"
+    shorthand="LoggingInterceptorService"
+    default-class="org.apache.fulcrum.yaafi.interceptor.logging.LoggingInterceptorServiceImpl"
+    logger="tracing"
+/>    
+            ]]></source>
+      </subsection>
+    
+      <subsection name="Log4J Configuration">
+        <p>
+          The following Log4J configuration defines a custom
+          appender for the PerformanceInterceptorService. For
+          the layout we just add a timestamp since we produce
+          a CSV file to be analyzed with EXCEL or your tool
+          of choice
+        </p>
+        <source><![CDATA[
+#
+# Custom logfiles
+#
+
+log4j.category.yaafi.tracing = ERROR, tracing
+log4j.additivity.yaafi.tracing = false
+
+#
+# Tracing Appender
+#
+
+log4j.appender.tracing = org.apache.log4j.RollingFileAppender
+log4j.appender.tracing.file = ./temp/tracing.csv
+log4j.appender.tracing.MaxFileSize=2000KB
+log4j.appender.tracing.layout=org.apache.log4j.PatternLayout
+log4j.appender.tracing.layout.conversionPattern=%d;%t;%m%n
+log4j.appender.tracing.threshold=DEBUG
+log4j.appender.tracing.append = true
+        ]]></source>
+      </subsection>
+    </section>
+    
+    
+    <section name="Usage">
+      <p>
+        Dump the method invocation of all services using ReflectionToStringBuilder
+      </p>
+      <source>
+        <![CDATA[
+<LoggingInterceptorService>
+  <isEnabled>true</isEnabled>
+  <maxArgLength>2000</maxArgLength>
+  <useReflection>true</useReflection>
+  <monitorAllExceptions>false</monitorAllExceptions>
+  <services>
+    <service name="*"/>
+  </services>
+</LoggingInterceptorService>      
+        ]]>
+      </source>
+    </section>
+  
+  </body>
+</document>

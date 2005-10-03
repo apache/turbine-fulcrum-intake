@@ -3,7 +3,7 @@
 <document>
 
   <properties>
-    <title>Avalon Service Tutorial Step 4</title>
+    <title>Fulcrum YAAFI Avalon Container Tutorial Step 5</title>
     <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
   </properties>
 
@@ -33,7 +33,7 @@
 Main cli = new Main(args)
 String log4jConfig = cli.makeAbsolutePath( System.getProperty("log4j.configuration", "./conf/log4j.properties") );        
 PropertyConfigurator.configureAndWatch( log4jConfig, 2000 );
-cli.setLogger( new Log4JLogger( Logger.getLogger("main") ) );	    
+cli.setLogger( new Log4JLogger( Logger.getLogger("main") ) );     
           ]]></source>                                   
         </p>                     
       </subsection>

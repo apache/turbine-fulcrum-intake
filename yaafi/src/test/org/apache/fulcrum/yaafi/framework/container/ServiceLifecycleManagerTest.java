@@ -16,17 +16,14 @@ package org.apache.fulcrum.yaafi.framework.container;
  * limitations under the License.
  */
 
-import java.io.File;
-
+import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.fulcrum.yaafi.TestComponent;
-import org.apache.fulcrum.yaafi.TestComponentImpl;
-import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
-import org.apache.fulcrum.yaafi.framework.container.ServiceLifecycleManager;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerConfiguration;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
 import org.apache.fulcrum.yaafi.framework.role.RoleEntry;
@@ -74,6 +71,19 @@ public class ServiceLifecycleManagerTest extends TestCase
         super.tearDown();
     }
 
+    public static Test suite()
+    {
+        TestSuite suite= new TestSuite();
+
+        suite.addTest( new ServiceLifecycleManagerTest("testGetServiceComponents") );
+        suite.addTest( new ServiceLifecycleManagerTest("testGeneralReconfiguration") );
+        suite.addTest( new ServiceLifecycleManagerTest("testGeneralDecommision") );
+        suite.addTest( new ServiceLifecycleManagerTest("testGeneralReconfigurationAndDecommision") );
+        suite.addTest( new ServiceLifecycleManagerTest("testIndividualDecommission") );
+
+        return suite;
+    }
+
     /**
      * Check our TestComponent.
      *
@@ -88,17 +98,14 @@ public class ServiceLifecycleManagerTest extends TestCase
 
         testComponent.test();
 
-        assertEquals( ((TestComponentImpl) testComponent).bar, "BAR" );
-        assertEquals( ((TestComponentImpl) testComponent).foo, "FOO" );
-        assertNotNull( ((TestComponentImpl) testComponent).urnAvalonClassLoader );
-        assertNotNull( ((TestComponentImpl) testComponent).urnAvaloneHome );
-        assertNotNull( ((TestComponentImpl) testComponent).urnAvaloneTemp );
-        assertNotNull( ((TestComponentImpl) testComponent).urnAvalonName );
-        assertNotNull( ((TestComponentImpl) testComponent).urnAvalonPartition );
+        assertEquals( testComponent.getBar(), "BAR" );
+        assertEquals( testComponent.getFoo(), "FOO" );
 
-        assertTrue( ((TestComponentImpl) testComponent).urnAvaloneHome instanceof File );
-        assertTrue( ((TestComponentImpl) testComponent).urnAvaloneTemp instanceof File );
-        assertTrue( ((TestComponentImpl) testComponent).urnAvalonClassLoader instanceof ClassLoader );
+        assertNotNull( testComponent.getUrnAvalonClassLoader() );
+        assertNotNull( testComponent.getUrnAvaloneHome() );
+        assertNotNull( testComponent.getUrnAvaloneTemp() );
+        assertNotNull( testComponent.getUrnAvalonName() );
+        assertNotNull( testComponent.getUrnAvalonPartition() );
     }
 
     private RoleEntry getRoleEntry( String name )
@@ -139,7 +146,8 @@ public class ServiceLifecycleManagerTest extends TestCase
             String serviceName = list[i].getName();
             System.out.println("Reconfiguring " + serviceName + " ...");
 
-            this.lifecycleManager.reconfigure(list[i].getName());
+            String[] serviceNames = {list[i].getName()};
+            this.lifecycleManager.reconfigure(serviceNames);
             assertTrue(this.container.hasService(serviceName));
             assertNotNull(this.container.lookup(serviceName));
         }
@@ -181,21 +189,22 @@ public class ServiceLifecycleManagerTest extends TestCase
         for( int i=0; i<list.length; i++ )
         {
             serviceName = list[i].getName();
+            String[] serviceNames = {list[i].getName()};
             System.out.println("Processing " + serviceName + " ...");
 
             // reconfigure/decommission/reconfigure the service
-            this.lifecycleManager.reconfigure(serviceName);
+            this.lifecycleManager.reconfigure(serviceNames);
             this.lifecycleManager.decommision(serviceName);
-            this.lifecycleManager.reconfigure(serviceName);
+            this.lifecycleManager.reconfigure(serviceNames);
 
             // run a reconfiguration over all services
             this.container.reconfigure(configuration);
 
             // reconfigure/decommission/reconfigure the service
             this.container.lookup(serviceName);
-            this.lifecycleManager.reconfigure(serviceName);
+            this.lifecycleManager.reconfigure(serviceNames);
             this.lifecycleManager.decommision(serviceName);
-            this.lifecycleManager.reconfigure(serviceName);
+            this.lifecycleManager.reconfigure(serviceNames);
         }
     }
 

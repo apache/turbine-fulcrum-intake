@@ -1,9 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <componentConfig>
-  
-  <test>
+
+  <LoggingInterceptorService>
+    <isEnabled>true</isEnabled>
+    <maxArgLength>2000</maxArgLength>
+    <useReflection>false</useReflection>
+    <monitorAllExceptions>true</monitorAllExceptions>
+    <services>
+      <service name="*"/>
+    </services>
+  </LoggingInterceptorService>
+
+  <PerformanceInterceptorService>
+    <isEnabled>true</isEnabled>
+    <tresholds>
+      <debug millis="0"/>
+      <info  millis="100"/>
+      <warn  millis="500"/>
+      <error millis="1000"/>
+      <fatal millis="5000"/>
+    </tresholds>
+    <services>
+      <service name="*"/>
+    </services>
+  </PerformanceInterceptorService>
+
+  <TestComponent>
     <FOO>FOO</FOO>
-  </test>
+  </TestComponent>
 
   <SystemPropertyService>
     <property name="FOO">BAR</property>
@@ -20,10 +44,6 @@
         <service name="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyService"/>
       </services>
     </entry>
-    <shutdown>
-      <location>./src/test/shutdown.txt</location>
-      <useSystemExit>false</useSystemExit>
-    </shutdown>
   </ReconfigurationService>
 
   <ShutdownService interval="5000">

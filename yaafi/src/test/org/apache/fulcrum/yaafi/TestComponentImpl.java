@@ -20,18 +20,18 @@ package org.apache.fulcrum.yaafi;
 
 import java.io.File;
 
+import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.configuration.Reconfigurable;
+import org.apache.avalon.framework.context.Context;
+import org.apache.avalon.framework.context.ContextException;
+import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.parameters.ParameterException;
 import org.apache.avalon.framework.parameters.Parameterizable;
 import org.apache.avalon.framework.parameters.Parameters;
-import org.apache.avalon.framework.activity.Initializable;
-import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.configuration.Reconfigurable;
-import org.apache.avalon.framework.context.Contextualizable;
-import org.apache.avalon.framework.context.Context;
-import org.apache.avalon.framework.context.ContextException;
 
 /**
  * Implementation of the test component.
@@ -50,7 +50,7 @@ public class TestComponentImpl
 
     public String foo;
     public String bar;
-    public static boolean decomissioned;
+    public boolean decomissioned;
     public String componentName;
 
     public void initialize() throws Exception
@@ -87,7 +87,7 @@ public class TestComponentImpl
     public void dispose()
     {
         getLogger().debug("dispose() was called");
-        TestComponentImpl.decomissioned=true;
+        this.decomissioned=true;
     }
 
     public void test()
@@ -100,5 +100,88 @@ public class TestComponentImpl
         getLogger().debug("urnAvalonName = " + this.urnAvalonName);
         getLogger().debug("foo = " + this.foo );
         getLogger().debug("bar = " + this.bar );
+    }
+    /**
+     * @return Returns the bar.
+     */
+    public String getBar()
+    {
+        return bar;
+    }
+    /**
+     * @return Returns the componentName.
+     */
+    public String getComponentName()
+    {
+        return componentName;
+    }
+    /**
+     * @return Returns the decomissioned.
+     */
+    public boolean isDecomissioned()
+    {
+        return decomissioned;
+    }
+    /**
+     * @return Returns the foo.
+     */
+    public String getFoo()
+    {
+        return foo;
+    }
+    /**
+     * @return Returns the urnAvalonClassLoader.
+     */
+    public ClassLoader getUrnAvalonClassLoader()
+    {
+        return urnAvalonClassLoader;
+    }
+    /**
+     * @return Returns the urnAvaloneHome.
+     */
+    public File getUrnAvaloneHome()
+    {
+        return urnAvaloneHome;
+    }
+    /**
+     * @return Returns the urnAvaloneTemp.
+     */
+    public File getUrnAvaloneTemp()
+    {
+        return urnAvaloneTemp;
+    }
+    /**
+     * @return Returns the urnAvalonName.
+     */
+    public String getUrnAvalonName()
+    {
+        return urnAvalonName;
+    }
+    /**
+     * @return Returns the urnAvalonPartition.
+     */
+    public String getUrnAvalonPartition()
+    {
+        return urnAvalonPartition;
+    }
+
+    /**
+     * @see org.apache.fulcrum.yaafi.TestComponent#createException()
+     */
+    public void createException(String reason, Object caller)
+    {
+        throw new RuntimeException(reason);
+    }
+    
+    public void doSomething(long millis, Object arg)
+    {
+        try
+        {
+            Thread.sleep(millis);
+        }
+        catch (InterruptedException e)
+        {
+            // nothing to do
+        }
     }
 }

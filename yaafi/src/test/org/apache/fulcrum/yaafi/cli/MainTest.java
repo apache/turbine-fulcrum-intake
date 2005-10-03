@@ -67,11 +67,11 @@ public class MainTest extends TestCase
         String[] args = {
             "--yaafi.cli.config",
             "./src/test/TestYaafiContainerConfig.xml"
-        	};
-        
+            };
+
         this.main = new Main(args);
         this.main.run();
-        
+
         this.getTestComponent();
     }
 
@@ -82,11 +82,11 @@ public class MainTest extends TestCase
     {
         String[] args = {
             "--yaafi.cli.applicationHome",
-            ".",                        
+            ".",
             "--yaafi.cli.config",
             "./src/test/TestYaafiContainerConfig.xml"
-        	};
-        
+            };
+
         this.main = new Main(args);
         System.out.println(this.main.toString());
         return;
@@ -100,10 +100,10 @@ public class MainTest extends TestCase
         String[] args = {
             "--yaafi.cli.config",
             " ./src/test/foo.xml"
-        	};
-        
+            };
+
         this.main = new Main(args);
-        
+
         try
         {
             this.main.run();
@@ -113,7 +113,7 @@ public class MainTest extends TestCase
             // that's what we expect
             return;
         }
-        
-        TestCase.fail("The YAAFI CLI should throw an exception");        
+
+        TestCase.fail("The YAAFI CLI should throw an exception");
     }
 }

@@ -27,7 +27,6 @@ import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.avalon.framework.context.DefaultContext;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.fulcrum.yaafi.TestComponent;
-import org.apache.fulcrum.yaafi.TestComponentImpl;
 import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
 
 /**
@@ -65,17 +64,23 @@ public class ServiceContainerFactoryTest extends TestCase
 
         testComponent.test();
 
-        assertEquals( ((TestComponentImpl) testComponent).bar, "BAR" );
-        assertEquals( ((TestComponentImpl) testComponent).foo, "FOO" );
-        assertNotNull( ((TestComponentImpl) testComponent).urnAvalonClassLoader );
-        assertNotNull( ((TestComponentImpl) testComponent).urnAvaloneHome );
-        assertNotNull( ((TestComponentImpl) testComponent).urnAvaloneTemp );
-        assertNotNull( ((TestComponentImpl) testComponent).urnAvalonName );
-        assertNotNull( ((TestComponentImpl) testComponent).urnAvalonPartition );
+        assertEquals( testComponent.getBar(), "BAR" );
+        assertEquals( testComponent.getFoo(), "FOO" );
 
-        assertTrue( ((TestComponentImpl) testComponent).urnAvaloneHome instanceof File );
-        assertTrue( ((TestComponentImpl) testComponent).urnAvaloneTemp instanceof File );
-        assertTrue( ((TestComponentImpl) testComponent).urnAvalonClassLoader instanceof ClassLoader );
+        assertNotNull( testComponent.getUrnAvalonClassLoader() );
+        assertNotNull( testComponent.getUrnAvaloneHome() );
+        assertNotNull( testComponent.getUrnAvaloneTemp() );
+        assertNotNull( testComponent.getUrnAvalonName() );
+        assertNotNull( testComponent.getUrnAvalonPartition() );
+
+        try
+        {
+            testComponent.createException("enforce exception", this);
+        }
+        catch( Exception e )
+        {
+            // nothing to do
+        }
     }
 
     /**
@@ -95,7 +100,7 @@ public class ServiceContainerFactoryTest extends TestCase
     public void testCreationWithContainerConfiguration() throws Exception
     {
         ServiceContainerConfiguration config = new ServiceContainerConfiguration();
-        config.loadContainerConfiguration( "./src/test/TestMerlinContainerConfig.xml" );
+        config.loadContainerConfiguration( "./src/test/TestYaafiContainerConfig.xml" );
         this.container = ServiceContainerFactory.create( config );
         this.checkTestComponent();
     }
@@ -205,15 +210,13 @@ public class ServiceContainerFactoryTest extends TestCase
         ServiceContainerConfiguration config = new ServiceContainerConfiguration();
         config.loadContainerConfiguration( "./src/test/TestYaafiContainerConfig.xml" );
         this.container = ServiceContainerFactory.create( config );
+        this.checkTestComponent();
 
-        // load a different configuration
+        // load a different configuration and reconfigure YAAFI
 
         DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
         Configuration configuration = builder.buildFromFile( "./src/test/TestReconfigurationConfig.xml" );
-        this.checkTestComponent();
         System.out.println(ConfigurationUtil.toString(configuration));
-
-        // reconfigure YAAFI
 
         this.container.reconfigure( configuration );
         TestComponent testComponent = this.getTestComponent();
@@ -222,8 +225,8 @@ public class ServiceContainerFactoryTest extends TestCase
         // the TestReconfigurationConfig.xml overwrites the
         // TestComponentImpl.foo and the SystemProperty.FOO
 
-        assertEquals( ((TestComponentImpl) testComponent).foo, "YAAFI" );
         assertEquals( System.getProperty("FOO"), "YAAFI" );
-    }
+        assertEquals( testComponent.getFoo(), "YAAFI" );
 
+    }
 }

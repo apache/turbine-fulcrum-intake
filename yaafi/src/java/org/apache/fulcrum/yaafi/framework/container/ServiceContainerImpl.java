@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -31,6 +31,7 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
+import org.apache.avalon.framework.context.DefaultContext;
 import org.apache.avalon.framework.logger.Logger;
 import org.apache.avalon.framework.parameters.ParameterException;
 import org.apache.avalon.framework.parameters.Parameters;
@@ -39,13 +40,15 @@ import org.apache.fulcrum.jce.crypto.CryptoStreamFactoryImpl;
 import org.apache.fulcrum.yaafi.framework.component.AvalonServiceComponentImpl;
 import org.apache.fulcrum.yaafi.framework.component.ServiceComponent;
 import org.apache.fulcrum.yaafi.framework.constant.AvalonYaafiConstants;
+import org.apache.fulcrum.yaafi.framework.context.AvalonToYaafiContextMapper;
+import org.apache.fulcrum.yaafi.framework.context.YaafiToAvalonContextMapper;
 import org.apache.fulcrum.yaafi.framework.role.RoleConfigurationParser;
 import org.apache.fulcrum.yaafi.framework.role.RoleConfigurationParserImpl;
 import org.apache.fulcrum.yaafi.framework.role.RoleEntry;
-import org.apache.fulcrum.yaafi.framework.util.AvalonToYaafiContextMapper;
 import org.apache.fulcrum.yaafi.framework.util.InputStreamLocator;
+import org.apache.fulcrum.yaafi.framework.util.ReadWriteLock;
+import org.apache.fulcrum.yaafi.framework.util.StringUtils;
 import org.apache.fulcrum.yaafi.framework.util.Validate;
-import org.apache.fulcrum.yaafi.framework.util.YaafiToAvalonContextMapper;
 
 /**
  * Yet another avalon framework implementation (YAAFI).
@@ -55,16 +58,19 @@ import org.apache.fulcrum.yaafi.framework.util.YaafiToAvalonContextMapper;
 
 public class ServiceContainerImpl
     implements ServiceContainer, ServiceConstants
-{    
+{
+    /** the timeout after getting a write lock for reconfiguration */
+    private static final int RECONFIGURATION_DELAY = 0;
+    
     /** The role configuration file to be used */
     private String componentRolesLocation;
 
     /** is the component role file encrypted? */
     private String isComponentRolesEncrypted;
-    
+
     /** which flavour of component role file we have to parse? */
     private String componentRolesFlavour;
-    
+
     /** The service configuration file to be used */
     private String componentConfigurationLocation;
 
@@ -90,7 +96,7 @@ public class ServiceContainerImpl
     private List serviceList;
 
     /** The map of services used for the lookup */
-    private Hashtable serviceMap;
+    private HashMap serviceMap;
 
     /** The Avalon role configuration loaded by this class */
     private Configuration roleConfiguration;
@@ -115,6 +121,15 @@ public class ServiceContainerImpl
 
     /** The ms to wait before triggering a reconfiguration */
     private int reconfigurationDelay;
+
+    /** global flag for enabling/disabling dynamic proxies */
+    private boolean hasDynamicProxies;
+    
+    /** The list of interceptor services applied to all services */
+    private ArrayList defaultInterceptorServiceList;
+    
+    /** Read/Write lock to synchronize acess to services */
+    private ReadWriteLock readWriteLock;
     
     /////////////////////////////////////////////////////////////////////////
     // Avalon Service Lifecycle
@@ -127,10 +142,10 @@ public class ServiceContainerImpl
     {
         super();
 
-        this.reconfigurationDelay = 2000;
+        this.reconfigurationDelay = RECONFIGURATION_DELAY;
         this.containerFlavour = COMPONENT_CONTAINERFLAVOUR_VALUE;
         this.componentRolesFlavour = COMPONENT_ROLECONFIGFLAVOUR_VALUE;
-        
+
         this.componentRolesLocation = COMPONENT_ROLE_VALUE;
         this.componentConfigurationLocation = COMPONENT_CONFIG_VALUE;
         this.parametersLocation = COMPONENT_PARAMETERS_VALUE;
@@ -141,25 +156,28 @@ public class ServiceContainerImpl
 
         this.isDisposed = false;
         this.serviceList = new ArrayList();
-        this.serviceMap = new Hashtable();
+        this.serviceMap = new HashMap();
 
         this.applicationRootDir = new File( new File("").getAbsolutePath() );
         this.tempRootDir = new File( System.getProperty("java.io.tmpdir",".") );
+
+        this.defaultInterceptorServiceList = new ArrayList();
     }
 
     /**
      * @see org.apache.avalon.framework.logger.LogEnabled#enableLogging(org.apache.avalon.framework.logger.Logger)
      */
-    public synchronized void enableLogging(Logger logger)
+    public void enableLogging(Logger logger)
     {
         Validate.notNull( logger, "logger" );
         this.logger = logger;
+        this.readWriteLock = new ReadWriteLock(URN_YAAFI_KERNELLOCK, logger);
     }
 
     /**
      * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
      */
-    public synchronized void contextualize(Context context) throws ContextException
+    public void contextualize(Context context) throws ContextException
     {
         Validate.notNull( context, "context" );
         // Argghhh - I need to to parse the Configuration before I can map the Context
@@ -169,10 +187,17 @@ public class ServiceContainerImpl
     /**
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
-    public synchronized void configure(Configuration configuration) throws ConfigurationException
+    public void configure(Configuration configuration) throws ConfigurationException
     {
         Validate.notNull( configuration, "configuration" );
 
+        // retrieve the reconfigurationDelay
+        
+        this.reconfigurationDelay = 
+            configuration.getChild(RECONFIGURATION_DELAY_KEY).getValueAsInteger(
+                RECONFIGURATION_DELAY
+                );
+            
         // retrieve the container flavour
 
         this.setContainerFlavour(
@@ -220,12 +245,12 @@ public class ServiceContainerImpl
             currComponentRoles.getChild(COMPONENT_LOCATION_KEY).getValue(
                 COMPONENT_ROLE_VALUE )
                 );
-        
-        this.setComponentRolesFlavour( 
+
+        this.setComponentRolesFlavour(
             currComponentRoles.getChild(CONTAINERFLAVOUR_CONFIG_KEY).getValue(
                 COMPONENT_ROLECONFIGFLAVOUR_VALUE )
                 );
-            
+
         this.setComponentRolesEncrypted(
             currComponentRoles.getChild(COMPONENT_ISENCRYPTED_KEY).getValue(
                 "false" )
@@ -258,20 +283,49 @@ public class ServiceContainerImpl
             currParameters.getChild(COMPONENT_ISENCRYPTED_KEY).getValue(
                 "false" )
                 );
+
+        // evaluate if we are using dynamic proxies
+        
+        this.hasDynamicProxies = 
+            configuration.getChild(DYNAMICPROXY_ENABLED_KEY).getValueAsBoolean(false);
+        
+        // evaluate the default interceptors
+
+        Configuration currInterceptorList = configuration.getChild( 
+            INTERCEPTOR_LIST_KEY 
+            );
+                
+        Configuration[] interceptorConfigList = currInterceptorList.getChildren(
+            INTERCEPTOR_KEY
+            );
+
+        for( int j=0; j<interceptorConfigList.length; j++ )
+        {
+            String interceptorServiceName = interceptorConfigList[j].getValue(null);
+                        
+            if( !StringUtils.isEmpty(interceptorServiceName) && this.hasDynamicProxies())
+            {
+	            this.defaultInterceptorServiceList.add( interceptorServiceName );
+	
+	            this.getLogger().debug("Using the following default interceptor service : "
+	                + interceptorServiceName
+	                );
+            }
+        }
     }
-    
+
     /**
      * @see org.apache.avalon.framework.parameters.Parameterizable#parameterize(org.apache.avalon.framework.parameters.Parameters)
      */
-    public synchronized void parameterize(Parameters parameters) throws ParameterException
+    public void parameterize(Parameters parameters) throws ParameterException
     {
         this.parameters = parameters;
     }
-    
+
     /**
      * @see org.apache.avalon.framework.activity.Initializable#initialize()
      */
-    public synchronized void initialize() throws Exception
+    public void initialize() throws Exception
     {
         this.getLogger().debug( "YAAFI Service Framework is starting up");
 
@@ -320,7 +374,7 @@ public class ServiceContainerImpl
             this.roleConfiguration,
             this.getLogger()
             );
-        
+
         this.setServiceList( currServiceList );
 
         // fill the service map
@@ -347,39 +401,50 @@ public class ServiceContainerImpl
      *
      * @see org.apache.avalon.framework.activity.Disposable#dispose()
      */
-    public synchronized void dispose()
+    public void dispose()
     {
+        Object lock = null;
+            
         if( this.isDisposed )
         {
             return;
         }
 
-        if( this.getLogger() != null )
+        try
         {
-            this.getLogger().debug("Disposing all services");
+            lock = this.getWriteLock();
+            
+            if( this.getLogger() != null )
+            {
+                this.getLogger().debug("Disposing all services");
+            }
+            
+            // decommision all servcies
+
+            this.decommision( this.getServiceList() );
+
+            // clean up
+
+            this.getServiceList().clear();
+            this.getServiceMap().clear();
+
+            this.componentRolesLocation = null;
+            this.componentConfigurationLocation = null;
+            this.context = null;
+            this.parametersLocation = null;
+            this.roleConfiguration = null;
+            this.serviceConfiguration = null;
+            this.parameters = null;
+            this.isDisposed = true;
+
+            if( this.getLogger() != null )
+            {
+                this.getLogger().debug( "All services are disposed" );
+            }
         }
-
-        // decommision all servcies
-
-        this.decommision( this.getServiceList() );
-
-        // clean up
-
-        this.getServiceList().clear();
-        this.getServiceMap().clear();
-
-        this.componentRolesLocation = null;
-        this.componentConfigurationLocation = null;
-        this.context = null;
-        this.parametersLocation = null;
-        this.roleConfiguration = null;
-        this.serviceConfiguration = null;
-        this.parameters = null;
-        this.isDisposed = true;
-
-        if( this.getLogger() != null )
+        finally
         {
-            this.getLogger().debug( "All services are disposed" );
+            this.releaseLock(lock);
         }
     }
 
@@ -390,88 +455,111 @@ public class ServiceContainerImpl
      *
      * @see org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.apache.avalon.framework.configuration.Configuration)
      */
-    public synchronized void reconfigure(Configuration configuration)
+    public void reconfigure(Configuration configuration)
         throws ConfigurationException
     {
         Validate.notNull( configuration, "configuration" );
 
+        Object lock = null;
         int exceptionCounter = 0;
         ServiceComponent serviceComponent = null;
 
         this.getLogger().warn("Reconfiguring all services ...");
-        this.waitForReconfiguration();
-        
-        // 1) store the new configuration
 
-        this.serviceConfiguration = configuration;
-        
-        // 2) reconfigure the services
-        
-        for( int i=0; i<this.getServiceList().size(); i++ )
+        try
         {
-            serviceComponent = (ServiceComponent) this.getServiceList().get(i);
-
-            Configuration serviceComponentConfiguraton = this.getServiceConfiguration().getChild(
-                serviceComponent.getShorthand() 
-                );
+            // 1) lock the service container
             
-            try
-            {
-                serviceComponent.setConfiguration(serviceComponentConfiguraton);
-                serviceComponent.reconfigure();
-            }
-            catch(Throwable t)
-            {
-                exceptionCounter++;
-            }
+            lock = this.getWriteLock();
+            
+	        // 2) store the new configuration
+	
+	        this.serviceConfiguration = configuration;
+	
+	        // 3) reconfigure the services
+	
+	        for( int i=0; i<this.getServiceList().size(); i++ )
+	        {
+	            serviceComponent = (ServiceComponent) this.getServiceList().get(i);
+	
+	            Configuration serviceComponentConfiguraton = this.getServiceConfiguration().getChild(
+	                serviceComponent.getShorthand()
+	                );
+	
+	            try
+	            {
+	                serviceComponent.setConfiguration(serviceComponentConfiguraton);
+	                serviceComponent.reconfigure();
+	            }
+	            catch(Throwable t)
+	            {
+	                String msg = "Reconfiguring of " + serviceComponent.getShorthand() + " failed";
+	                this.getLogger().error(msg);
+	                exceptionCounter++;
+	            }
+	        }
+	
+	        // 4) check the result
+	
+	        if( exceptionCounter > 0 )
+	        {
+	            String msg = "The reconfiguration failed with " + exceptionCounter + " exception(s)";
+	            this.getLogger().error(msg);
+	            throw new ConfigurationException(msg);
+	        }
         }
-
-        // 3) check the result
-        
-        if( exceptionCounter > 0 )
+        finally
         {
-            String msg = "The reconfiguration failed with " + exceptionCounter + " exception(s)";
-            this.getLogger().error(msg);
-            throw new ConfigurationException(msg);
+            this.releaseLock(lock);
         }
     }
 
     /**
      * @see org.apache.fulcrum.yaafi.framework.container.ServiceLifecycleManager#getServiceComponent(java.lang.String)
      */
-    public synchronized RoleEntry getRoleEntry(String name)
+    public RoleEntry getRoleEntry(String name)
         throws ServiceException
     {
-        return this.getServiceComponentEx(name).getRoleEntry();
+        Object lock = null;
+        
+        try
+        {	
+            lock = this.getReadLock();
+            return this.getServiceComponentEx(name).getRoleEntry();
+        }
+        finally
+        {
+            this.releaseLock(lock);
+        }
     }
 
     /**
      * @see org.apache.fulcrum.yaafi.framework.container.ServiceLifecycleManager#getServiceComponents()
      */
-    public synchronized RoleEntry[] getRoleEntries()
-        throws ServiceException
+    public RoleEntry[] getRoleEntries()
     {
-        List serviceList = this.getServiceList();
-        ServiceComponent serviceComponent = null;
-        RoleEntry[] result = new RoleEntry[serviceList.size()];
+        Object lock = null;
         
-        for( int i=0; i<result.length; i++ )
+        try
         {
-            serviceComponent = (ServiceComponent) serviceList.get(i);
-            result[i] = serviceComponent.getRoleEntry();
+            lock = this.getReadLock();
+            
+	        List serviceList = this.getServiceList();
+	        ServiceComponent serviceComponent = null;
+	        RoleEntry[] result = new RoleEntry[serviceList.size()];
+	
+	        for( int i=0; i<result.length; i++ )
+	        {
+	            serviceComponent = (ServiceComponent) serviceList.get(i);
+	            result[i] = serviceComponent.getRoleEntry();
+	        }
+	
+	        return result;
         }
-
-        return result;
-    }
-
-    /**
-     * @see org.apache.fulcrum.yaafi.framework.container.ServiceLifecycleManager#reconfigure(java.lang.String)
-     */
-    public synchronized void reconfigure(String name)
-        throws ServiceException, ConfigurationException
-    {
-        this.waitForReconfiguration();
-        this.reconfigureNow(name);
+        finally
+        {
+            this.releaseLock(lock);
+        }
     }
 
     /**
@@ -482,15 +570,32 @@ public class ServiceContainerImpl
     {
         Validate.notNull(names,"names");
         Validate.noNullElements(names,"names");
+
+        Object lock = null;
         
-        this.waitForReconfiguration();
-        
-        for( int i=0; i<names.length; i++ )
+        try
         {
-            this.reconfigureNow(names[i]);
+            // get exclusive access
+            
+            lock = this.getWriteLock();
+                       
+	        for( int i=0; i<names.length; i++ )
+	        {
+	            // ensure that the service exists since during our reconfiguration
+	            // we might use a stle recofniguration entry
+	
+	            if( this.getServiceMap().get(names[i]) != null )
+	            {
+	                this.reconfigure(names[i]);
+	            }
+	        }
+        }
+        finally
+        {
+            this.release(lock);
         }
     }
-    
+
     /////////////////////////////////////////////////////////////////////////
     // Service Interface Implementation
     /////////////////////////////////////////////////////////////////////////
@@ -498,44 +603,68 @@ public class ServiceContainerImpl
     /**
      * @see org.apache.avalon.framework.service.ServiceManager#hasService(java.lang.String)
      */
-    public synchronized boolean hasService(String name)
+    public boolean hasService(String name)
     {
         Validate.notEmpty( name, "name" );
 
-        ServiceComponent serviceComponent =
-            (ServiceComponent) this. getServiceMap().get(name);
+        Object lock = null;
+        
+        try
+        {
+            lock = this.getReadLock();
+            
+            ServiceComponent serviceComponent =
+                (ServiceComponent) this. getServiceMap().get(name);
 
-        return ( serviceComponent != null ? true : false );
+            return ( serviceComponent != null ? true : false );
+        }
+        finally
+        {
+            this.releaseLock(lock);
+        }
     }
 
     /**
      * @see org.apache.avalon.framework.service.ServiceManager#lookup(java.lang.String)
      */
-    public synchronized Object lookup(String name) throws ServiceException
+    public Object lookup(String name) throws ServiceException
     {
         Validate.notEmpty( name, "name" );
 
+        Object lock = null;
         Object result = null;
-        ServiceComponent serviceComponent = this.getServiceComponentEx(name);
+        ServiceComponent serviceComponent = null;
 
         try
         {
+            lock = this.getReadLock();
+            serviceComponent = this.getServiceComponentEx(name);
             result = serviceComponent.getInstance();
         }
-        catch (Exception e)
+        catch (ServiceException e)
         {
             String msg = "Failed to lookup the service " + serviceComponent.getShorthand();
             this.getLogger().error( msg, e );
             throw new ServiceException( serviceComponent.getShorthand(), msg, e );
         }
-
+        catch( Throwable t )
+        {
+            String msg = "Failed to lookup a service " + name;
+            this.getLogger().error( msg, t );
+            throw new ServiceException( name, msg, t );   
+        }
+		finally
+		{
+		    this.releaseLock(lock);
+		}
+        
         return result;
     }
 
     /**
      * @see org.apache.avalon.framework.service.ServiceManager#release(java.lang.Object)
      */
-    public synchronized void release(Object arg0)
+    public void release(Object arg0)
     {
         // AFAIK this is only useful for lifecycle management regarding
         // lifestyle other than singleton.
@@ -544,10 +673,20 @@ public class ServiceContainerImpl
     /**
      * @see org.apache.fulcrum.yaafi.framework.container.ServiceContainer#decommision(java.lang.String)
      */
-    public synchronized void decommision(String name) throws ServiceException
+    public void decommision(String name) throws ServiceException
     {
-        ServiceComponent serviceComponent = this.getServiceComponentEx(name);
-        this.decommision(serviceComponent);
+        Object lock = null;
+        
+        try
+        {
+            lock = this.getWriteLock();
+            ServiceComponent serviceComponent = this.getServiceComponentEx(name);
+            this.decommision(serviceComponent);
+        }
+        finally
+        {
+            this.releaseLock(lock);
+        }
     }
 
     /**
@@ -555,42 +694,71 @@ public class ServiceContainerImpl
      */
     public Parameters getParameters()
     {
-        return this.parameters;
+        Object lock = null;
+        
+        try
+        {
+            lock = this.getReadLock();
+            return this.parameters;
+        }
+        finally
+        {
+            this.releaseLock(lock);
+        }
     }
-    
+
     /////////////////////////////////////////////////////////////////////////
     // Service Implementation
     /////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Creates an absolute path for the given filename based on the application
+     * root directory.
+     *
+     * @param fileName the file name
+     * @return abolsute file
+     */
     private File makeAbsolutePath( String fileName )
     {
         return this.makeAbsolutePath( new File(fileName) );
     }
 
+    /**
+     * Creates an absolute path for the given file based on the application
+     * root directory.
+     *
+     * @param file the relative file
+     * @return absolute file
+     */
     private File makeAbsolutePath( File file )
     {
-        File result = file;       
-        
+        File result = file;
+
         if( result.isAbsolute() == false )
         {
             String temp = file.getPath() + "/" + file.getName();
-            result = new File( this.getApplicationRootDir(), temp ); 
+            result = new File( this.getApplicationRootDir(), temp );
         }
-        
+
         return result;
     }
 
+    /**
+     * Create a role configuration parser based on the container flavour.
+     */
     private RoleConfigurationParser createRoleConfigurationParser()
     {
         return new RoleConfigurationParserImpl(
             this.getComponentRolesFlavour()
             );
     }
-    
+
     /**
-     * @see org.apache.fulcrum.yaafi.framework.container.ServiceLifecycleManager#reconfigure(java.lang.String)
+     * Reconfigure a single service
+     *
+     * @param name the name of the service to be reconfigured
      */
-    private synchronized void reconfigureNow(String name)
+    private void reconfigure(String name)
         throws ServiceException, ConfigurationException
     {
         Validate.notEmpty( name, "name" );
@@ -672,7 +840,7 @@ public class ServiceContainerImpl
     /**
      * @return Returns the serviceMap.
      */
-    private Hashtable getServiceMap()
+    private HashMap getServiceMap()
     {
         return this.serviceMap;
     }
@@ -714,22 +882,30 @@ public class ServiceContainerImpl
             );
 
         RoleEntry roleEntry = serviceComponent.getRoleEntry();
+        String componentFlavour = roleEntry.getComponentFlavour();
         
-        Context serviceComponentContext = mapper.mapTo(
+        DefaultContext serviceComponentContext = mapper.mapTo(
             this.getContext(),
-            roleEntry.getComponentFlavour()
+            componentFlavour
+            );
+        
+        // add the read/write lock to the context
+        
+        serviceComponentContext.put(
+            URN_YAAFI_KERNELLOCK,
+            this.readWriteLock
+            );            
+
+        // create the remaining Avalon artifacts for the service component
+
+        Logger serviceComponentLogger = this.getLogger().getChildLogger(
+            roleEntry.getLogCategory()
             );
 
-        // create the remaining Avalon artifcats for the service component
-        
-        Logger serviceComponentLogger = this.getLogger().getChildLogger( 
-            roleEntry.getShorthand() 
-            ); 
-        
         Configuration serviceComponentConfiguraton = this.getServiceConfiguration().getChild(
-            roleEntry.getShorthand() 
+            roleEntry.getShorthand()
             );
-        
+
         Parameters serviceComponentParameters = this.getParameters();
 
         // process the Avalon lifecycle definition
@@ -739,7 +915,7 @@ public class ServiceContainerImpl
         serviceComponent.setContext(serviceComponentContext);
         serviceComponent.setConfiguration(serviceComponentConfiguraton);
         serviceComponent.setParameters(serviceComponentParameters);
-        
+
         serviceComponent.incarnate();
     }
 
@@ -759,7 +935,7 @@ public class ServiceContainerImpl
 
     /**
      * Decommision of a single service component. Decommision consists of running the
-     * whole Avalon decommision lifecycle process for a service component. After 
+     * whole Avalon decommision lifecycle process for a service component. After
      * decommision the service is not operational any longer. During decommisioning
      * we ignore any exceptions since it is quite common that something goes wrong.
      *
@@ -817,28 +993,47 @@ public class ServiceContainerImpl
         Validate.notNull(logger,"logger");
 
         ArrayList result = new ArrayList();
-        ServiceComponent serviceComponent = null;       
-                
-        // create an appropriate instance of rol configuration parser
-        
-        RoleConfigurationParser roleConfigurationParser = 
+        ServiceComponent serviceComponent = null;
+
+        // create an appropriate instance of role configuration parser
+
+        RoleConfigurationParser roleConfigurationParser =
             this.createRoleConfigurationParser();
-        
+
         // extract the role entries
-        
+
         RoleEntry[] roleEntryList = roleConfigurationParser.parse(roleConfiguration);
-        
+
+        // get the default interceptors defined for the container
+
+        ArrayList defaultInterceptorList = this.getDefaultInterceptorServiceList();
+
+        // create the service components based on the role entries
+
         for ( int i=0; i<roleEntryList.length; i++ )
         {
             try
             {
-                // create the service components
+                // add the default interceptors to all role entries
+
+                RoleEntry roleEntry = roleEntryList[i];
                 
+                if( this.hasDynamicProxies() )
+                {                   
+                    roleEntry.addInterceptors(defaultInterceptorList);
+                }
+                else
+                {
+                    roleEntry.setHasDynamicProxy(false);
+                }
+
                 serviceComponent = new AvalonServiceComponentImpl(
-                    roleEntryList[i],
-                    logger
+                    roleEntry,
+                    this.getLogger(),
+                    logger,
+                    this.readWriteLock
                     );
-                
+
                 result.add( serviceComponent );
             }
             catch( Throwable t )
@@ -877,7 +1072,7 @@ public class ServiceContainerImpl
                 }
 
                 result = builder.build( is );
-                
+
                 is.close();
                 is = null;
             }
@@ -899,8 +1094,8 @@ public class ServiceContainerImpl
      * @return The loaded configuration
      * @throws Exception Something went wrong
      */
-    private Parameters loadParameters( String location, String isEncrypted ) 
-    	throws Exception
+    private Parameters loadParameters( String location, String isEncrypted )
+        throws Exception
     {
         InputStreamLocator locator = this.createInputStreamLocator();
         InputStream is = locator.locate( location );
@@ -940,7 +1135,7 @@ public class ServiceContainerImpl
     private File setApplicationRootDir(File dir)
     {
         this.getLogger().debug( "Setting applicationRootDir to " + dir.getAbsolutePath() );
-        
+
         Validate.notNull(dir,"applicationRootDir is <null>");
         Validate.isTrue(dir.exists(),"applicationRootDir does not exist");
 
@@ -962,11 +1157,11 @@ public class ServiceContainerImpl
     private File setTempRootDir(File dir)
     {
         this.getLogger().debug( "Setting tempRootDir to " + dir.getAbsolutePath() );
-        
+
         Validate.notNull(dir,"tempRootDir is <null>");
         Validate.isTrue(dir.exists(),"tempRootDir does not exist");
         Validate.isTrue(dir.canWrite(),"tempRootDir is not writeable");
-        
+
         this.tempRootDir = dir;
         return this.tempRootDir;
     }
@@ -1040,7 +1235,7 @@ public class ServiceContainerImpl
         throws IOException, GeneralSecurityException
     {
         InputStream result = null;
-        
+
         if( isEncrypted.equalsIgnoreCase("true") )
         {
             result = CryptoStreamFactoryImpl.getInstance().getInputStream(is);
@@ -1079,7 +1274,7 @@ public class ServiceContainerImpl
     {
         return componentRolesFlavour;
     }
-    
+
     /**
      * @param componentRolesFlavour The componentRolesFlavour to set.
      */
@@ -1087,7 +1282,7 @@ public class ServiceContainerImpl
     {
         this.componentRolesFlavour = componentRolesFlavour;
     }
-    
+
     /**
      * @return Returns the context.
      */
@@ -1095,16 +1290,76 @@ public class ServiceContainerImpl
     {
         return context;
     }
-        
-    private void waitForReconfiguration()
+    
+    /**
+     * @return Returns the hasDynamicProxies.
+     */
+    private final boolean hasDynamicProxies()
+    {
+        return this.hasDynamicProxies;
+    }
+    
+    /**
+     * @return Returns the defaultInterceptorServiceList.
+     */
+    private ArrayList getDefaultInterceptorServiceList()
+    {
+        return defaultInterceptorServiceList;
+    }
+    
+    /**
+     * @return a read lock
+     */
+    private final Object getReadLock()
     {
         try
         {
-            Thread.sleep(this.reconfigurationDelay);
+            return this.readWriteLock.getReadLock(AVALON_CONTAINER_YAAFI);
         }
         catch (InterruptedException e)
         {
-            ; // ignore
+            String msg = "Interrupted while getting read lock";
+            throw new RuntimeException(msg);
         }
+    }
+    
+    /**
+     * @return a write lock
+     */
+    private final Object getWriteLock()
+    {
+        Object result = null;
+        
+        try
+        {
+            result = this.readWriteLock.getWriteLock(AVALON_CONTAINER_YAAFI);
+            
+            // wait for a certain time to get non-proxied services
+            // either finished or blocked
+            
+            try
+            {
+                Thread.sleep( this.reconfigurationDelay );
+            }
+            catch (InterruptedException e)
+            {
+                // nothing to do
+            }
+
+            return result;
+        }
+        catch (InterruptedException e)
+        {
+            String msg = "Interrupted while getting read lock";
+            throw new RuntimeException(msg);
+        }
+    }
+    
+    /**
+     * @return a write lock
+     */
+    private final void releaseLock(Object lock)
+    {
+        this.readWriteLock.releaseLock(lock, AVALON_CONTAINER_YAAFI);
     }
 }

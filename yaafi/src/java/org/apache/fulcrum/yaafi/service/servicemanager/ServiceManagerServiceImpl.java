@@ -36,29 +36,29 @@ import org.apache.avalon.framework.service.Serviceable;
  * This is a sort of "edelhack" to solve the problem of accessing
  * the Avalon infrastructure without having an instance of the
  * container. The implementation stores the very first instance
- * of itself in a static variable which can be accessed using 
+ * of itself in a static variable which can be accessed using
  * getInstance().
- * 
+ *
  * This allows access to the various Avalon artifacts.
- * 
+ *
  *  @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
 public class ServiceManagerServiceImpl
-	extends AbstractLogEnabled
-	implements ServiceManagerService, Contextualizable, Parameterizable, Serviceable, Disposable
+    extends AbstractLogEnabled
+    implements ServiceManagerService, Contextualizable, Parameterizable, Serviceable, Disposable
 {
-    /** The one and only instance */    
+    /** The one and only instance */
     private static ServiceManagerServiceImpl instance;
-    
+
     /** Store the ServiceContainer on a per instance base */
     private ServiceManager serviceManager;
-    
-    /** Store the passed parameters on a per instance base */
-    private Parameters parameters;    
 
     /** Store the passed parameters on a per instance base */
-    private Context context;    
+    private Parameters parameters;
+
+    /** Store the passed parameters on a per instance base */
+    private Context context;
 
     /**
      * Constructor
@@ -67,8 +67,8 @@ public class ServiceManagerServiceImpl
     {
         setInstance(this);
     }
-    
-    /** 
+
+    /**
      * @return the one and only instance of this class
      */
     public static synchronized ServiceManagerService getInstance()
@@ -76,7 +76,7 @@ public class ServiceManagerServiceImpl
         return instance;
     }
 
-    /** 
+    /**
      * Create the one and only instance
      */
     protected static synchronized void setInstance( ServiceManagerServiceImpl instance )
@@ -95,18 +95,18 @@ public class ServiceManagerServiceImpl
      * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
      */
     public void service(ServiceManager serviceManager) throws ServiceException
-    {       
-	    this.serviceManager = serviceManager;
+    {
+        this.serviceManager = serviceManager;
     }
-    
+
     /**
      * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
      */
     public void contextualize(Context context) throws ContextException
-    {   
-        this.context = context;    
+    {
+        this.context = context;
     }
-    
+
     /**
      * @see org.apache.avalon.framework.parameters.Parameterizable#parameterize(org.apache.avalon.framework.parameters.Parameters)
      */
@@ -114,7 +114,7 @@ public class ServiceManagerServiceImpl
     {
         this.parameters = parameters;
     }
-    
+
     /**
      * @see org.apache.avalon.framework.activity.Disposable#dispose()
      */
@@ -129,7 +129,7 @@ public class ServiceManagerServiceImpl
     /////////////////////////////////////////////////////////////////////////
     // ServiceContainer Implementation
     /////////////////////////////////////////////////////////////////////////
-    
+
     /**
      * @see org.apache.avalon.framework.service.ServiceManager#hasService(java.lang.String)
      */
@@ -137,24 +137,24 @@ public class ServiceManagerServiceImpl
     {
         return this.serviceManager.hasService(name);
     }
-    
+
     /**
      * @see org.apache.avalon.framework.service.ServiceManager#lookup(java.lang.String)
      */
     public Object lookup(String name) throws ServiceException
     {
-        return this.serviceManager.lookup(name);    
+        return this.serviceManager.lookup(name);
     }
-    
+
     /**
      * @see org.apache.avalon.framework.service.ServiceManager#release(java.lang.Object)
      */
     public void release(Object object)
     {
-        this.serviceManager.release(object);   
+        this.serviceManager.release(object);
     }
-    
-    /** 
+
+    /**
      * @return the ServiceManager for the container
      */
     public ServiceManager getServiceManager()
@@ -162,7 +162,7 @@ public class ServiceManagerServiceImpl
         return this.serviceManager;
     }
 
-    /** 
+    /**
      * @return the Paramters for the container
      */
     public Parameters getParameters()
@@ -170,14 +170,14 @@ public class ServiceManagerServiceImpl
         return this.parameters;
     }
 
-    /** 
+    /**
      * @return the Context for the container
      */
     public Context getContext()
     {
         return this.context;
-    }    
-    
+    }
+
     /**
      * @see org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerService#getAvalonLogger()
      */

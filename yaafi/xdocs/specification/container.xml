@@ -3,7 +3,7 @@
 <document>
 
   <properties>
-    <title>Specification</title>
+    <title>Fulcrum YAAFI Avalon Container Specification</title>
     <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
   </properties>
 
@@ -107,12 +107,37 @@
               values are ["true"|"false"|"auto"]
             </td>
           </tr>
+          <tr>
+            <td>hasDynamicProxies</td>
+            <td>Boolean</td>
+            <td>[true|false]</td>
+            <td>
+              Enable the usage of dynamic proxies for the whole container. When 
+          	  the no dynamic proxies are used no interceptors will be installed.
+            </td>
+          </tr>
+          <tr>
+            <td>interceptors</td>
+            <td>Tree</td>
+            <td>[0|1]</td>
+            <td>
+              Contains a list of container specific interceptors
+            </td>
+          </tr>
+          <tr>
+            <td>interceptors/interceptor</td>
+            <td>String</td>
+            <td>[0..n]</td>
+            <td>
+              Contains the service name of an interceptor
+            </td>
+          </tr>
         </table>
       </subsection>
 
-      <subsection name="Example">
+      <subsection name="Example 1">
         <source>
-          <![CDATA[
+          <![CDATA[          
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <fulcrum-yaafi>
@@ -134,9 +159,29 @@
           ]]>
         </source>
       </subsection>
-            
+
+      <subsection name="Example 2">
+        <source>
+          <![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<fulcrum-yaafi>
+  <componentRoles>
+    <location>./src/test/componentRoles.xml</location>
+  </componentRoles>
+  <componentConfiguration>
+    <location>./src/test/componentConfiguration.xml</location>
+  </componentConfiguration>
+  <interceptors>
+    <interceptor>org.apache.fulcrum.yaafi.interceptor.performance.PerformanceInterceptorService</interceptor>
+    <interceptor>org.apache.fulcrum.yaafi.interceptor.logging.LoggingInterceptorService</interceptor>
+  </interceptors>
+</fulcrum-yaafi>
+          ]]>
+        </source>
+      </subsection>
+      
     </section>
-
+    
   </body>
-
+  
 </document>

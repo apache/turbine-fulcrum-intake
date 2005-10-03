@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Fulcrum YAAFI Avalon Container Interceptors</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+  <body>
+    <section name="Interceptor Design Notes">
+      <p> YAAFI supports Dynamic Proxies (introduced with JDK 1.3) and Interceptors which
+        was inspired by <a href="http://jakarta.apache.org/hivemind/index.html/">HiveMind</a>. The intention for
+        implementing these features is to provide better debugging and diagnostic support such as
+        method invocation tracing, error logs or performance monitoring. </p>
+      <subsection name="Dynamic Proxies and Interceptors for Rookies">
+        <p> A dynamic proxy is a dynamically created class implementing a list of interfaces and
+          using an invocation handler. For the caller there is no difference between the real objext
+          and the proxy object but invoking an interface method allows the invocation handler to
+          delegate the method invocation to the real object. A dynamic proxy only intercepts methods
+          defined in an interface but not abstract methods defined in a base class. This limitation
+          is not relevant since you are accessing your services only by their interface, aren't
+          you?! </p>
+      </subsection>
+      <subsection name="Related Concepts">
+        <p>
+          To make interceptors really useful some more infrastructure is needed
+          <table>
+            <tr>
+              <th>Item</th>
+              <th>Description</th>
+            </tr>
+            <tr>
+              <td>AvalonInterceptorInvocationHandler</td>
+              <td>
+                Delegates the invocation of the dynamic proxy to the service instance and
+                doing most of the work such as creating an AvalonInterceptorContext and
+                invoking the registered interceptors in the correct order
+              </td>
+            </tr>
+            <tr>
+              <td>AvalonInterceptorContext</td>
+              <td>
+                For each intercepted service invocation a new AvalonInterceptorContext
+                is created which is passed to all registered interceptors. The
+                AvalonInterceptorContext contains information about the service
+                and method being invoked and allows access to a request context,
+                a thread context using thread local storage and a transaction id.
+              </td>
+            </tr>
+            <tr>
+              <td>BaseInterceptorServiceImpl</td>
+              <td>
+                Is the base class of all existing interceptors to factor out
+                common functionality.
+              </td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
+      <subsection name="YAAFI and Interceptors">
+        <p>A few things to keep in mind when working with interceptors <ul>
+            <li>Interceptors only work in conjunction with dynamic proxies. If you turn off the proxy
+              creation no interceptor will be invoked for the service </li>
+            <li>Interceptors can be defined on the container level thereby applying the interceptors
+              to all services</li>
+            <li>Interceptors can be alos defined on the service level thereby applying the
+              interceptors to this service. The service inherits all interceptors defined on the
+              container level. </li>
+            <li>Interceptors are implemented as Avalon services giving you access to all of the
+              infrastructure and functionality such as dynamic reconfiguration</li>
+            <li>For an interceptor there is never an dynamic proxy created no matter what you define
+              in role configuration file</li>
+          </ul>
+        </p>
+      </subsection>
+    </section>
+  </body>
+</document>

@@ -1,6 +1,5 @@
 package org.apache.fulcrum.jce.crypto;
 
-
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -22,10 +21,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-
-import org.apache.fulcrum.jce.crypto.CryptoParameters;
-import org.apache.fulcrum.jce.crypto.CryptoStreamFactoryImpl;
-import org.apache.fulcrum.jce.crypto.CryptoUtil;
 
 import junit.framework.TestCase;
 

@@ -29,15 +29,15 @@ public class Shutdown implements Runnable
 {
     /** The service manager tobe disposed */
     private Disposable disposable;
-    
+
     /** use System.exit() to shutdown the JVM */
     private boolean useSystemExit;
-    
+
     /**
      * Constructor.
      * @param disposable the instance to be disposed
      * @param useSystemExit call System.exit()?
-     * 
+     *
      */
     public Shutdown( Disposable disposable, boolean useSystemExit )
     {
@@ -49,7 +49,7 @@ public class Shutdown implements Runnable
      * @see java.lang.Runnable#run()
      */
     public void run()
-    {        
+    {
         try
         {
             this.disposable.dispose();
@@ -58,12 +58,12 @@ public class Shutdown implements Runnable
         {
             t.printStackTrace();
         }
-        
+
         this.disposable = null;
-        
+
         if( this.useSystemExit )
         {
             System.exit(0);
         }
-    }        
+    }
 }

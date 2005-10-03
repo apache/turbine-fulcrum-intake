@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <fulcrum-yaafi>
+  <reconfigurationDelay>0</reconfigurationDelay>
+  <hasDynamicProxies>true</hasDynamicProxies>
   <componentRoles>
     <location>./src/test/TestRoleConfig.xml</location>
   </componentRoles>
@@ -10,4 +11,9 @@
   <parameters>
     <location>./src/test/TestParameters.properties</location>
   </parameters>
-</fulcrum-yaafi>              
+  <hasDynamicProxies>false</hasDynamicProxies>
+  <interceptors>
+    <interceptor>org.apache.fulcrum.yaafi.interceptor.performance.PerformanceInterceptorService</interceptor>
+    <interceptor>org.apache.fulcrum.yaafi.interceptor.logging.LoggingInterceptorService</interceptor>
+  </interceptors>
+</fulcrum-yaafi>

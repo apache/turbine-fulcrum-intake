@@ -21,63 +21,63 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/** 
+/**
  * The implementation supplies a default password in the case that
  * the programmer don't want to have additional hassles. It is easy to
  * reengineer the password being used but much better than a hard-coded
  * password in the application.
- * 
+ *
  * The code uses parts from Markus Hahn's Blowfish library found at
  * http://blowfishj.sourceforge.net/
- * 
+ *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl </a>
  * @author <a href="mailto:maakus@earthlink.net">Markus Hahn</a>
  */
 
 public class PasswordFactory implements PasswordParameters
-{      
+{
     /**
      * @return a default password using "xxxx-xxxx-xxxx-xxxxx"
      */
-    public static final char[] create() 
-    	throws NoSuchAlgorithmException, UnsupportedEncodingException
-	{
-        return create( 
+    public static final char[] create()
+        throws NoSuchAlgorithmException, UnsupportedEncodingException
+    {
+        return create(
             PasswordParameters.DEFAULTPASSWORD,
             PasswordParameters.SALT,
             PasswordParameters.COUNT
             );
-	}
+    }
 
     /**
      * @param seed the default password supplied by the caller
      * @return a password using "xxxx-xxxx-xxxx-xxxxx"
      */
-    public static final char[] create( String seed ) 
-    	throws NoSuchAlgorithmException, UnsupportedEncodingException
-	{
-        return create( 
+    public static final char[] create( String seed )
+        throws NoSuchAlgorithmException, UnsupportedEncodingException
+    {
+        return create(
             seed.toCharArray()
             );
-	}
+    }
 
     /**
      * @param seed the default password supplied by the caller
      * @return a password using "xxxx-xxxx-xxxx-xxxxx"
      */
-    public static final char[] create( char[] seed ) 
-    	throws NoSuchAlgorithmException, UnsupportedEncodingException
-	{
-        return create( 
+    public static final char[] create( char[] seed )
+        throws NoSuchAlgorithmException, UnsupportedEncodingException
+    {
+        return create(
             seed,
             PasswordParameters.SALT,
             PasswordParameters.COUNT
             );
-	}
+    }
 
     /**
      * Creates a default password using "xxxx-xxxx-xxxx-xxxxx".
-     * 
+     *
      * @param salt the password salt
      * @param password the default password
      * @param count number of MessageDigest iterations
@@ -86,15 +86,15 @@ public class PasswordFactory implements PasswordParameters
      * @throws NoSuchAlgorithmException
      * @throws UnsupportedEncodingException
      */
-    public static final char [] create( char[] password, byte[] salt, int count ) 
-    	throws NoSuchAlgorithmException, UnsupportedEncodingException
+    public static final char [] create( char[] password, byte[] salt, int count )
+        throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
         char [] result = null;
         MessageDigest sha1 = MessageDigest.getInstance( "SHA1" );
         byte [] passwordMask = new String( password ).getBytes( "UTF-8" );
         byte [] temp = new byte[salt.length + passwordMask.length];
         byte [] digest = null;
-        
+
         StringBuffer stringBuffer = new StringBuffer();
 
         // combine the password with the salt string into a byte[9
@@ -112,7 +112,7 @@ public class PasswordFactory implements PasswordParameters
             digest = sha1.digest();
         }
 
-        // build a well-formed password string to be usable 
+        // build a well-formed password string to be usable
         // by a human
 
         long long1 = createLong( digest, 0 );
@@ -149,21 +149,21 @@ public class PasswordFactory implements PasswordParameters
 
     /**
      * Gets bytes from an array into a long.
-     * 
+     *
      * @param buf where to get the bytes
      * @param nOfs index from where to read the data
      * @return the 64bit integer
      */
     private static final long createLong(byte [] buf, int nOfs)
     {
-		return
-			((long)(( buf[nOfs    ]          << 24) |
-		            ((buf[nOfs + 1] & 0x0ff) << 16) |
-		   		    ((buf[nOfs + 2] & 0x0ff) <<  8) |
-		   		    ( buf[nOfs + 3] & 0x0ff       )) << 32) |
-		    ((long)(( buf[nOfs + 4]          << 24) |
-		            ((buf[nOfs + 5] & 0x0ff) << 16) |
-		            ((buf[nOfs + 6] & 0x0ff) <<  8) |
-		            ( buf[nOfs + 7] & 0x0ff       )) & 0x0ffffffffL);
-    }        
+        return
+            ((long)(( buf[nOfs    ]          << 24) |
+                    ((buf[nOfs + 1] & 0x0ff) << 16) |
+                    ((buf[nOfs + 2] & 0x0ff) <<  8) |
+                    ( buf[nOfs + 3] & 0x0ff       )) << 32) |
+            ((long)(( buf[nOfs + 4]          << 24) |
+                    ((buf[nOfs + 5] & 0x0ff) << 16) |
+                    ((buf[nOfs + 6] & 0x0ff) <<  8) |
+                    ( buf[nOfs + 7] & 0x0ff       )) & 0x0ffffffffL);
+    }
 }

@@ -1,58 +1,19 @@
-package org.apache.fulcrum.yaafi.framework.util;
-
-/* ====================================================================
- * The Apache Software License, Version 1.1
+/*
+ * Copyright 2002-2005 The Apache Software Foundation.
  *
- * Copyright (c) 2002-2003 The Apache Software Foundation.  All rights
- * reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *
- * 3. The end-user documentation included with the redistribution, if
- *    any, must include the following acknowledgement:
- *       "This product includes software developed by the
- *        Apache Software Foundation (http://www.apache.org/)."
- *    Alternately, this acknowledgement may appear in the software itself,
- *    if and wherever such third-party acknowledgements normally appear.
- *
- * 4. The names "The Jakarta Project", "Commons", and "Apache Software
- *    Foundation" must not be used to endorse or promote products derived
- *    from this software without prior written permission. For written
- *    permission, please contact apache@apache.org.
- *
- * 5. Products derived from this software may not be called "Apache"
- *    nor may "Apache" appear in their names without prior written
- *    permission of the Apache Software Foundation.
- *
- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
- * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
- * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+package org.apache.fulcrum.yaafi.framework.util;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -72,14 +33,19 @@ import java.util.Map;
  * @author <a href="mailto:ola.berg@arkitema.se">Ola Berg</a>
  * @author Stephen Colebourne
  * @author Gary Gregory
+ * @author Norm Deane
  * @since 2.0
+ * @version $Id$
  */
-public class Validate {
+public class Validate
+{
+    // Validate has no dependencies on other classes in Commons Lang at present
 
     /**
      * Constructor. This class should not normally be instantiated.
      */
-    public Validate() {
+    public Validate()
+    {
         // nothing to do
     }
 
@@ -107,9 +73,11 @@ public class Validate {
      * @param value  the value to append to the message in case of error
      * @throws IllegalArgumentException if expression is <code>false</code>
      */
-    public static void isTrue(boolean expression, String message, Object value) {
-        if (expression == false) {
-            throw new IllegalArgumentException(message + value);
+    public static void isTrue(boolean expression, String message, Object value)
+    {
+        if (expression == false)
+        {
+            throw new IllegalArgumentException( message + value );
         }
     }
 
@@ -125,7 +93,7 @@ public class Validate {
      * Validate.isTrue( i > 0, "The value must be greater than zero: ", i);
      * </pre>
      *
-     * <p>For performance reasons, the object is passed as a separate parameter and
+     * <p>For performance reasons, the long value is passed as a separate parameter and
      * appended to the message string only in the case of an error.</p>
      *
      * @param expression  a boolean expression
@@ -133,9 +101,11 @@ public class Validate {
      * @param value  the value to append to the message in case of error
      * @throws IllegalArgumentException if expression is <code>false</code>
      */
-    public static void isTrue(boolean expression, String message, long value) {
-        if (expression == false) {
-            throw new IllegalArgumentException(message + value);
+    public static void isTrue(boolean expression, String message, long value)
+    {
+        if (expression == false)
+        {
+            throw new IllegalArgumentException( message + value );
         }
     }
 
@@ -151,7 +121,7 @@ public class Validate {
      * Validate.isTrue( d > 0.0, "The value must be greater than zero: ", d);
      * </pre>
      *
-     * <p>For performance reasons, the object is passed as a separate parameter and
+     * <p>For performance reasons, the double value is passed as a separate parameter and
      * appended to the message string only in the case of an error.</p>
      *
      * @param expression  a boolean expression
@@ -160,9 +130,11 @@ public class Validate {
      * @param value  the value to append to the message in case of error
      * @throws IllegalArgumentException if expression is <code>false</code>
      */
-    public static void isTrue(boolean expression, String message, double value) {
-        if (expression == false) {
-            throw new IllegalArgumentException(message + value);
+    public static void isTrue(boolean expression, String message, double value)
+    {
+        if (expression == false)
+        {
+            throw new IllegalArgumentException( message + value );
         }
     }
 
@@ -187,9 +159,11 @@ public class Validate {
      *  is <code>false</code>
      * @throws IllegalArgumentException if expression is <code>false</code>
      */
-    public static void isTrue(boolean expression, String message) {
-        if (expression == false) {
-            throw new IllegalArgumentException(message);
+    public static void isTrue(boolean expression, String message)
+    {
+        if (expression == false)
+        {
+            throw new IllegalArgumentException( message );
         }
     }
 
@@ -211,9 +185,12 @@ public class Validate {
      * @param expression  a boolean expression
      * @throws IllegalArgumentException if expression is <code>false</code>
      */
-    public static void isTrue(boolean expression) {
-        if (expression == false) {
-            throw new IllegalArgumentException("The validated expression is false");
+    public static void isTrue(boolean expression)
+    {
+        if (expression == false)
+        {
+            throw new IllegalArgumentException(
+                            "The validated expression is false" );
         }
     }
 
@@ -233,9 +210,11 @@ public class Validate {
      *  if the object is <code>null</code>
      * @throws IllegalArgumentException if the object is <code>null</code>
      */
-    public static void notNull(Object object, String message) {
-        if (object == null) {
-            throw new IllegalArgumentException(message);
+    public static void notNull(Object object, String message)
+    {
+        if (object == null)
+        {
+            throw new IllegalArgumentException( message );
         }
     }
 
@@ -252,9 +231,11 @@ public class Validate {
      * @param object  the object to check is not <code>null</code>
      * @throws IllegalArgumentException if the object is <code>null</code>
      */
-    public static void notNull(Object object) {
-        if (object == null) {
-            throw new IllegalArgumentException("The validated object is null");
+    public static void notNull(Object object)
+    {
+        if (object == null)
+        {
+            throw new IllegalArgumentException( "The validated object is null" );
         }
     }
 
@@ -273,9 +254,11 @@ public class Validate {
      * @param message  the exception message you would like to see if the array is empty
      * @throws IllegalArgumentException if the array is empty
      */
-    public static void notEmpty(Object[] array, String message) {
-        if (array == null || array.length == 0) {
-            throw new IllegalArgumentException(message);
+    public static void notEmpty(Object [] array, String message)
+    {
+        if (array == null || array.length == 0)
+        {
+            throw new IllegalArgumentException( message );
         }
     }
 
@@ -292,9 +275,11 @@ public class Validate {
      * @param array  the array to check is not empty
      * @throws IllegalArgumentException if the array is empty
      */
-    public static void notEmpty(Object[] array) {
-        if (array == null || array.length == 0) {
-            throw new IllegalArgumentException("The validated array is empty");
+    public static void notEmpty(Object [] array)
+    {
+        if (array == null || array.length == 0)
+        {
+            throw new IllegalArgumentException( "The validated array is empty" );
         }
     }
 
@@ -313,9 +298,11 @@ public class Validate {
      * @param message  the exception message you would like to see if the collection is empty
      * @throws IllegalArgumentException if the collection is empty
      */
-    public static void notEmpty(Collection collection, String message) {
-        if (collection == null || collection.size() == 0) {
-            throw new IllegalArgumentException(message);
+    public static void notEmpty(Collection collection, String message)
+    {
+        if (collection == null || collection.size() == 0)
+        {
+            throw new IllegalArgumentException( message );
         }
     }
 
@@ -332,9 +319,12 @@ public class Validate {
      * @param collection  the collection to check is not empty
      * @throws IllegalArgumentException if the collection is empty
      */
-    public static void notEmpty(Collection collection) {
-        if (collection == null || collection.size() == 0) {
-            throw new IllegalArgumentException("The validated collection is empty");
+    public static void notEmpty(Collection collection)
+    {
+        if (collection == null || collection.size() == 0)
+        {
+            throw new IllegalArgumentException(
+                            "The validated collection is empty" );
         }
     }
 
@@ -346,16 +336,18 @@ public class Validate {
      * if the argument Map is empty (<code>null</code> or no elements).</p>
      *
      * <pre>
-     * Validate.notEmpty(myMap, "The collection must not be empty");
+     * Validate.notEmpty(myMap, "The map must not be empty");
      * </pre>
      *
      * @param map  the map to check is not empty
      * @param message  the exception message you would like to see if the map is empty
      * @throws IllegalArgumentException if the map is empty
      */
-    public static void notEmpty(Map map, String message) {
-        if (map == null || map.size() == 0) {
-            throw new IllegalArgumentException(message);
+    public static void notEmpty(Map map, String message)
+    {
+        if (map == null || map.size() == 0)
+        {
+            throw new IllegalArgumentException( message );
         }
     }
 
@@ -372,9 +364,11 @@ public class Validate {
      * @param map  the map to check is not empty
      * @throws IllegalArgumentException if the map is empty
      */
-    public static void notEmpty(Map map) {
-        if (map == null || map.size() == 0) {
-            throw new IllegalArgumentException("The validated map is empty");
+    public static void notEmpty(Map map)
+    {
+        if (map == null || map.size() == 0)
+        {
+            throw new IllegalArgumentException( "The validated map is empty" );
         }
     }
 
@@ -393,9 +387,11 @@ public class Validate {
      * @param message  the exception message you would like to see if the string is empty
      * @throws IllegalArgumentException if the string is empty
      */
-    public static void notEmpty(String string, String message) {
-        if (string == null || string.length() == 0) {
-            throw new IllegalArgumentException(message);
+    public static void notEmpty(String string, String message)
+    {
+        if (string == null || string.length() == 0)
+        {
+            throw new IllegalArgumentException( message );
         }
     }
 
@@ -412,9 +408,11 @@ public class Validate {
      * @param string  the string to check is not empty
      * @throws IllegalArgumentException if the string is empty
      */
-    public static void notEmpty(String string) {
-        if (string == null || string.length() == 0) {
-            throw new IllegalArgumentException("The validated string is empty");
+    public static void notEmpty(String string)
+    {
+        if (string == null || string.length() == 0)
+        {
+            throw new IllegalArgumentException( "The validated string is empty" );
         }
     }
 
@@ -427,8 +425,10 @@ public class Validate {
      * <code>null</code>.</p>
      *
      * <pre>
-     * Validate.notEmpty(myArray, "The array must not contain null elements");
+     * Validate.noNullElements(myArray, "The array must not contain null elements");
      * </pre>
+     *
+     * <p>If the array is null then the message in the exception is 'The validated object is null'.</p>
      *
      * @param array  the array to check
      * @param message  the exception message if the array has
@@ -436,11 +436,14 @@ public class Validate {
      * @throws IllegalArgumentException if the array has <code>null</code>
      *  elements or is <code>null</code>
      */
-    public static void noNullElements(Object[] array, String message) {
-        Validate.notNull(array);
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == null) {
-                throw new IllegalArgumentException(message);
+    public static void noNullElements(Object [] array, String message)
+    {
+        Validate.notNull( array );
+        for (int i = 0; i < array.length; i++)
+        {
+            if (array[i] == null)
+            {
+                throw new IllegalArgumentException( message );
             }
         }
     }
@@ -451,20 +454,28 @@ public class Validate {
      * <code>null</code>.</p>
      *
      * <pre>
-     * Validate.notEmpty(myArray);
+     * Validate.noNullElements(myArray);
      * </pre>
      *
-     * <p>The message in the exception is 'The validated array contains null element at index: '.</p>
+     * <p>If the array has a null element the message in the exception is
+     * 'The validated array contains null element at index: '.</p>
+     *
+     * <p>If the array is null then the message in the exception is 'The validated object is null'.</p>
      *
      * @param array  the array to check
      * @throws IllegalArgumentException if the array has <code>null</code>
      *  elements or is <code>null</code>
      */
-    public static void noNullElements(Object[] array) {
-        Validate.notNull(array);
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == null) {
-                throw new IllegalArgumentException("The validated array contains null element at index: " + i);
+    public static void noNullElements(Object [] array)
+    {
+        Validate.notNull( array );
+        for (int i = 0; i < array.length; i++)
+        {
+            if (array[i] == null)
+            {
+                throw new IllegalArgumentException(
+                                "The validated array contains null element at index: "
+                                                + i );
             }
         }
     }
@@ -474,52 +485,127 @@ public class Validate {
 
     /**
      * <p>Validate an argument, throwing <code>IllegalArgumentException</code>
-     * if the argument collection has <code>null</code> elements or is
+     * if the argument Collection has <code>null</code> elements or is
      * <code>null</code>.</p>
      *
      * <pre>
-     * Validate.notEmpty(myCollection, "The collection must not contain null elements");
+     * Validate.noNullElements(myCollection, "The collection must not contain null elements");
      * </pre>
      *
+     * <p>If the collection is null then the message in the exception is 'The validated object is null'.</p>
+     *
      * @param collection  the collection to check
-     * @param message  the exception message if the array has
+     * @param message  the exception message if the collection has
      *  <code>null</code> elements
      * @throws IllegalArgumentException if the collection has
      *  <code>null</code> elements or is <code>null</code>
      */
-    public static void noNullElements(Collection collection, String message) {
-        Validate.notNull(collection);
-        int i = 0;
-        for (Iterator it = collection.iterator(); it.hasNext(); i++) {
-            if (it.next() == null) {
-                throw new IllegalArgumentException(message);
+    public static void noNullElements(Collection collection, String message)
+    {
+        Validate.notNull( collection );
+        for (Iterator it = collection.iterator(); it.hasNext();)
+        {
+            if (it.next() == null)
+            {
+                throw new IllegalArgumentException( message );
             }
         }
     }
 
     /**
      * <p>Validate an argument, throwing <code>IllegalArgumentException</code>
-     * if the argument collection has <code>null</code> elements or is
+     * if the argument Collection has <code>null</code> elements or is
      * <code>null</code>.</p>
      *
      * <pre>
-     * Validate.notEmpty(myCollection);
+     * Validate.noNullElements(myCollection);
      * </pre>
      *
      * <p>The message in the exception is 'The validated collection contains null element at index: '.</p>
+     *
+     * <p>If the collection is null then the message in the exception is 'The validated object is null'.</p>
      *
      * @param collection  the collection to check
      * @throws IllegalArgumentException if the collection has
      *  <code>null</code> elements or is <code>null</code>
      */
-    public static void noNullElements(Collection collection) {
-        Validate.notNull(collection);
+    public static void noNullElements(Collection collection)
+    {
+        Validate.notNull( collection );
         int i = 0;
-        for (Iterator it = collection.iterator(); it.hasNext(); i++) {
-            if (it.next() == null) {
-                throw new IllegalArgumentException("The validated collection contains null element at index: " + i);
+        for (Iterator it = collection.iterator(); it.hasNext(); i++)
+        {
+            if (it.next() == null)
+            {
+                throw new IllegalArgumentException(
+                                "The validated collection contains null element at index: "
+                                                + i );
             }
         }
     }
 
+    /**
+     * <p>Validate an argument, throwing <code>IllegalArgumentException</code>
+     * if the argument collection  is <code>null</code> or has elements that
+     * are not of type <code>clazz</code> or a subclass.</p>
+     *
+     * <pre>
+     * Validate.allElementsOfType(collection, String.class, "Collection has invalid elements");
+     * </pre>
+     *
+     * @param collection  the collection to check, not null
+     * @param clazz  the <code>Class</code> which the collection's elements are expected to be, not null
+     * @param message  the exception message if the <code>Collection</code> has elements not of type <code>clazz</code>
+     * @since 2.1
+     */
+    public static void allElementsOfType(Collection collection, Class clazz,
+        String message)
+    {
+        Validate.notNull( collection );
+        Validate.notNull( clazz );
+        for (Iterator it = collection.iterator(); it.hasNext();)
+        {
+            if (clazz.isInstance( it.next() ) == false)
+            {
+                throw new IllegalArgumentException( message );
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Validate an argument, throwing <code>IllegalArgumentException</code> if the argument collection is
+     * <code>null</code> or has elements that are not of type <code>clazz</code> or a subclass.
+     * </p>
+     *
+     * <pre>
+     * Validate.allElementsOfType(collection, String.class);
+     * </pre>
+     *
+     * <p>
+     * The message in the exception is 'The validated collection contains an element not of type clazz at index: '.
+     * </p>
+     *
+     * @param collection
+     *            the collection to check, not null
+     * @param clazz
+     *            the <code>Class</code> which the collection's elements are expected to be, not null
+     * @since 2.1
+     */
+    public static void allElementsOfType(Collection collection, Class clazz)
+    {
+        Validate.notNull( collection );
+        Validate.notNull( clazz );
+        int i = 0;
+        for (Iterator it = collection.iterator(); it.hasNext(); i++)
+        {
+            if (clazz.isInstance( it.next() ) == false)
+            {
+                throw new IllegalArgumentException(
+                                "The validated collection contains an element not of type "
+                                                + clazz.getName()
+                                                + " at index: " + i );
+            }
+        }
+    }
 }

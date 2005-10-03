@@ -2,9 +2,9 @@
 
 <componentConfig>  
  
- <test>
+ <TestComponent>
     <FOO>YAAFI</FOO>
-  </test>
+  </TestComponent>
  
  <SystemPropertyService>
     <property name="FOO">YAAFI</property>

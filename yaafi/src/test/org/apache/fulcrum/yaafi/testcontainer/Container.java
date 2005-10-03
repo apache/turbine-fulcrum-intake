@@ -34,17 +34,17 @@ import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
  * This is a simple YAAFI based container that can be used in unit test
  * of the fulcrum components.
  *
- * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a> 
+ * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 public class Container extends AbstractLogEnabled implements Initializable, Disposable
 {
     /** The YAAFI configuration */
     private ServiceContainerConfiguration config;
-    
+
     /** Component manager */
-    private ServiceContainer manager;        
-    
-    /** 
+    private ServiceContainer manager;
+
+    /**
      * Constructor
      */
     public Container()
@@ -53,29 +53,29 @@ public class Container extends AbstractLogEnabled implements Initializable, Disp
         this.enableLogging( new ConsoleLogger( ConsoleLogger.LEVEL_DEBUG ) );
         this.config = new ServiceContainerConfiguration();
     }
-        
+
     /**
      * Starts up the container and initializes it.
      *
      * @param configFileName Name of the component configuration file
      * @param roleFileName Name of the role configuration file
      */
-    public void startup( 
-        String configFileName, 
-        String roleFileName, 
+    public void startup(
+        String configFileName,
+        String roleFileName,
         String parametersFileName )
     {
-        getLogger().debug("Starting container...");        
-                
+        getLogger().debug("Starting container...");
+
         this.config.setComponentConfigurationLocation( configFileName );
         this.config.setComponentRolesLocation( roleFileName );
         this.config.setParametersLocation( parametersFileName );
-        this.config.setLogger( new ConsoleLogger( ConsoleLogger.LEVEL_DEBUG ) );        
+        this.config.setLogger( new ConsoleLogger( ConsoleLogger.LEVEL_DEBUG ) );
 
-        File configFile = new File(configFileName);        
-        
+        File configFile = new File(configFileName);
+
         if (!configFile.exists())
-        {            
+        {
             throw new RuntimeException(
                 "Could not initialize the container because the config file could not be found:" + configFile);
         }
@@ -89,13 +89,13 @@ public class Container extends AbstractLogEnabled implements Initializable, Disp
         {
             getLogger().error("Could not initialize the container", e);
             throw new RuntimeException("Could not initialize the container");
-        }    
+        }
     }
-    
+
     // -------------------------------------------------------------
     // Avalon lifecycle interfaces
     // -------------------------------------------------------------
-    
+
     /**
      * Initializes the container
      *
@@ -164,7 +164,7 @@ public class Container extends AbstractLogEnabled implements Initializable, Disp
      * @param name the name of the service
      */
     protected void decommision( String name )
-    	throws ServiceException, Exception
+        throws ServiceException, Exception
     {
         if( this.manager != null )
         {

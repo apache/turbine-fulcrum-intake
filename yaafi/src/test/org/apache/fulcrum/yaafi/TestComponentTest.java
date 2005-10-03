@@ -1,6 +1,5 @@
 package org.apache.fulcrum.yaafi;
 
-
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -45,15 +44,28 @@ public class TestComponentTest extends BaseUnitTest
             );
 
         testComponent.test();
+        testComponent.doSomething(100, new Object[10]);
 
-        assertEquals( ((TestComponentImpl) testComponent).bar, "BAR" );
-        assertEquals( ((TestComponentImpl) testComponent).foo, "FOO" );
+        assertEquals( testComponent.getBar(), "BAR" );
+        assertEquals( testComponent.getFoo(), "FOO" );
 
-        assertNotNull( ((TestComponentImpl) testComponent).urnAvalonClassLoader );
-        assertNotNull( ((TestComponentImpl) testComponent).urnAvaloneHome );
-        assertNotNull( ((TestComponentImpl) testComponent).urnAvaloneTemp );
-        assertNotNull( ((TestComponentImpl) testComponent).urnAvalonName );
-        assertNotNull( ((TestComponentImpl) testComponent).urnAvalonPartition );
+        assertNotNull( testComponent.getUrnAvalonClassLoader() );
+        assertNotNull( testComponent.getUrnAvaloneHome() );
+        assertNotNull( testComponent.getUrnAvaloneTemp() );
+        assertNotNull( testComponent.getUrnAvalonName() );
+        assertNotNull( testComponent.getUrnAvalonPartition() );
+
+        Object [] temp = new Object[10];
+        System.out.println(temp.toString());
+        
+        try
+        {
+            testComponent.createException("enforce exception", this);
+        }
+        catch( Exception e )
+        {
+            // nothing to do
+        }
     }
 
     /**
@@ -66,17 +78,19 @@ public class TestComponentTest extends BaseUnitTest
         TestComponent testComponent = (TestComponent) this.lookup(
             TestComponent.ROLE
             );
-        assertFalse( TestComponentImpl.decomissioned );
+
+        assertFalse( testComponent.isDecomissioned() );
 
         // decommision the test component
         this.decommision( TestComponent.ROLE );
-        assertTrue( TestComponentImpl.decomissioned );
+        assertTrue( testComponent.isDecomissioned() );
 
         // resurrect the test component - resurrecting a decommisioned service
         // might need some reviewing but I'm quite happy with the semantics
         testComponent = (TestComponent) this.lookup(
             TestComponent.ROLE
             );
-        assertFalse( TestComponentImpl.decomissioned );
+
+        assertFalse( testComponent.isDecomissioned() );
     }
 }

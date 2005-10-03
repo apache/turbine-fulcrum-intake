@@ -25,39 +25,39 @@ public class Getopt
 {
     /** the prefix for determining command line parameters, e.g "-" or "--" */
     private String prefix;
-    
+
     /** the command line parameters */
-	private String[] args;
+    private String[] args;
 
-	/**
-	 * Constructor
-	 * @param args the command line parameters
-	 */
-	public Getopt( String[] args )
-	{
-	    this(args,"--");
-	}
+    /**
+     * Constructor
+     * @param args the command line parameters
+     */
+    public Getopt( String[] args )
+    {
+        this(args,"--");
+    }
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param args the command line parameters
-	 * @param prefix the prefix for command line paramters
-	 */
-	public Getopt( String[] args, String prefix )
-	{
-	    this.prefix = prefix;
-	    
-	    if( args == null )
-	    {
-	        this.args = new String[0];
-	    }
-	    else
-	    {
-	        this.args = args;
-	    }
-	}
-	
+    /**
+     * Constructor.
+     *
+     * @param args the command line parameters
+     * @param prefix the prefix for command line paramters
+     */
+    public Getopt( String[] args, String prefix )
+    {
+        this.prefix = prefix;
+
+        if( args == null )
+        {
+            this.args = new String[0];
+        }
+        else
+        {
+            this.args = args;
+        }
+    }
+
     /**
      * @param option the option we are looking for
      * @return is the given option contained in the command line arguments?
@@ -68,14 +68,14 @@ public class Getopt
         return( this.find(option) >= 0 ? true : false );
     }
 
-    /** 
+    /**
      * @return the number of command line arguments
      */
     public int length()
     {
         return this.args.length;
     }
-    
+
     /**
      * Returns the string value for the given option.
      * @param option the option
@@ -123,15 +123,15 @@ public class Getopt
     /**
      * Get the given argument.
      * @param index the index of the command line argument
-     * @return the commandl ine argument 
+     * @return the commandl ine argument
      */
     private String getArg( int index )
     {
         return this.args[index];
     }
-    
+
     /**
-     * @option the option 
+     * @option the option
      * @return the index of the give option or -1 otherwise
      */
     private int find( String option )
@@ -152,7 +152,7 @@ public class Getopt
     }
 
     /**
-     * Determines if a value is defined for the given option 
+     * Determines if a value is defined for the given option
      * @param option the given option
      * @return true if a value is defined
      */
@@ -162,18 +162,18 @@ public class Getopt
     }
 
     /**
-     * Determines if a value is defined for the given option 
+     * Determines if a value is defined for the given option
      * @param option the given option
      * @return true if a value is defined
      */
     private boolean hasValue( int index )
     {
         String value = null;
-        
+
         if( (index+1) < this.length() )
         {
             value = this.getArg(index+1);
-            
+
             if( value.startsWith(this.prefix) )
             {
                 return false;
@@ -186,7 +186,7 @@ public class Getopt
         else
         {
             return false;
-        }        
+        }
     }
 
     /**
@@ -198,7 +198,7 @@ public class Getopt
     private String getValue( String option )
     {
         String value = this.getValue(option,null);
-        
+
         if( value == null )
         {
             // the options is there but no value was defined by the caller
@@ -210,7 +210,7 @@ public class Getopt
             return value;
         }
     }
-    
+
     /**
      * Get the value of a command line option
      * @param option the option
@@ -220,13 +220,13 @@ public class Getopt
     private String getValue( String option, String defaultValue )
     {
         int index = this.find(option);
-        
+
         if( index < 0 )
         {
             // the option is not found
             return defaultValue;
         }
-        
+
         if( this.hasValue(index) )
         {
             // a value is available for this option
@@ -238,6 +238,6 @@ public class Getopt
             String msg = "No value supplied for " + this.prefix + option;
             throw new IllegalArgumentException( msg );
         }
-    }    
+    }
 }
 

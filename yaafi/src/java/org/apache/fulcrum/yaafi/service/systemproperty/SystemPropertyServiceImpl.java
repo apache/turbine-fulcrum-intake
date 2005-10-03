@@ -30,7 +30,7 @@ import org.apache.avalon.framework.logger.AbstractLogEnabled;
  */
 
 public class SystemPropertyServiceImpl
-	extends AbstractLogEnabled
+    extends AbstractLogEnabled
     implements SystemPropertyService, Reconfigurable
 {
     /**
@@ -46,17 +46,17 @@ public class SystemPropertyServiceImpl
      */
     public void configure(Configuration configuration) throws ConfigurationException
     {
-        String key 		= null;
-        String value 	= null;
-        String oldValue	= null;
+        String key      = null;
+        String value    = null;
+        String oldValue = null;
         Configuration[] systemProperties = configuration.getChildren("property");
-        
+
         for( int i=0; i<systemProperties.length; i++ )
         {
-            key 		= systemProperties[i].getAttribute("name");
-            value		= systemProperties[i].getValue();
-            oldValue 	= System.getProperty(key);
-            
+            key         = systemProperties[i].getAttribute("name");
+            value       = systemProperties[i].getValue();
+            oldValue    = System.getProperty(key);
+
             if( oldValue != null )
             {
                 this.getLogger().debug(
@@ -69,14 +69,14 @@ public class SystemPropertyServiceImpl
                     "Setting the value of " + key + " to " + value
                     );
             }
-            
-            System.setProperty( key, value ); 
-            
+
+            System.setProperty( key, value );
+
         }
 
         this.getLogger().debug( "Processed the following number of properties : " + systemProperties.length );
     }
-    
+
     /**
      * @see org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.apache.avalon.framework.configuration.Configuration)
      */

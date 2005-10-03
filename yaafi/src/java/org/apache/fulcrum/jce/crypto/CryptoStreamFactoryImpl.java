@@ -35,18 +35,18 @@ import javax.crypto.spec.PBEParameterSpec;
  * implementation uses the JCE (Java Crypto Extension) either supplied
  * by SUN (using SunJCE 1.42) or an custom provider such as BouncyCastle
  * or the newer Cryptix libraries.
- * 
+ *
  * The implementation uses as PBEWithMD5AndTripleDES for encryption which
  * should be sufficent for most applications.
- * 
+ *
  * The implementation also supplies a default password in the case that
  * the programmer don't want to have additional hassles. It is easy to
  * reengineer the password being used but much better than a hard-coded
  * password in the application.
- * 
+ *
  * The code uses parts from Markus Hahn's Blowfish library found at
  * http://blowfishj.sourceforge.net/
- * 
+ *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl </a>
  * @author <a href="mailto:maakus@earthlink.net">Markus Hahn</a>
  */
@@ -55,16 +55,16 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
 {
     /** the salt for the PBE algorithm */
     private byte[] salt;
-        
+
     /** the count paramter for the PBE algorithm */
     private int count;
-    
+
     /** the name of the JCE provider */
     private String providerName;
-    
+
     /** the algorithm to use */
     private String algorithm;
-    
+
     /** the default instance */
     private static CryptoStreamFactory instance;
 
@@ -83,7 +83,7 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
                 }
             }
         }
-        
+
         return instance;
     }
 
@@ -95,12 +95,12 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
     {
         CryptoStreamFactoryImpl.instance = instance;
     }
-    
+
     /**
      * Constructor
      */
     public CryptoStreamFactoryImpl()
-    {        
+    {
         this.salt = CryptoParameters.SALT;
         this.count = CryptoParameters.COUNT;
         this.providerName = CryptoParameters.PROVIDERNAME;
@@ -109,48 +109,48 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
 
     /**
      * Constructor
-     * 
-     * @param salt the salt for the PBE algorithm 
+     *
+     * @param salt the salt for the PBE algorithm
      * @param count the iteration for PBEParameterSpec
      * @param algorithm the algorithm to be used
      * @param providerName the name of the JCE provide to b used
      */
-    public CryptoStreamFactoryImpl( 
-        byte[] salt,  
-        int count, 
-        String algorithm, 
+    public CryptoStreamFactoryImpl(
+        byte[] salt,
+        int count,
+        String algorithm,
         String providerName )
-    {        
+    {
         this.salt = salt;
         this.count = count;
         this.algorithm = algorithm;
-        this.providerName = providerName;        
+        this.providerName = providerName;
     }
 
     /**
      * @param is the input stream to be wrapped
      * @return a decrypting input stream
      */
-    public InputStream getInputStream( InputStream is )     
-    	throws GeneralSecurityException, IOException
-	{
+    public InputStream getInputStream( InputStream is )
+        throws GeneralSecurityException, IOException
+    {
         Cipher cipher = this.createCipher( Cipher.DECRYPT_MODE, PasswordFactory.create() );
-        CipherInputStream cis = new CipherInputStream( is, cipher );      
+        CipherInputStream cis = new CipherInputStream( is, cipher );
         return cis;
-	}
-    
+    }
+
     /**
      * @param is the input stream to be wrapped
      * @param password the password for decryption
      * @return a decrypting input stream
      */
-    public InputStream getInputStream( InputStream is, char[] password )     
-    	throws GeneralSecurityException, IOException
-	{
+    public InputStream getInputStream( InputStream is, char[] password )
+        throws GeneralSecurityException, IOException
+    {
         Cipher cipher = this.createCipher( Cipher.DECRYPT_MODE, password );
-        CipherInputStream cis = new CipherInputStream( is, cipher );      
+        CipherInputStream cis = new CipherInputStream( is, cipher );
         return cis;
-	}
+    }
 
     /**
      * @see org.apache.fulcrum.jce.crypto.CryptoStreamFactory#getSmartInputStream(java.io.InputStream)
@@ -161,7 +161,7 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
         return this.getSmartInputStream(
             is,
             PasswordFactory.create()
-            );            
+            );
     }
 
     /**
@@ -171,31 +171,31 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
         throws GeneralSecurityException, IOException
     {
         SmartDecryptingInputStream result = null;
-        
+
         result = new SmartDecryptingInputStream(
             getInstance(),
             is,
-    		password 
-    		);
-        
+            password
+            );
+
         return result;
     }
 
-    
+
     /**
      * @param os the output stream to be wrapped
      * @param password the password for encryption
-     *  
+     *
      * @return a encrypting output stream
      */
-    public OutputStream getOutputStream( OutputStream os, char[] password )     
-    	throws GeneralSecurityException, IOException
-	{
+    public OutputStream getOutputStream( OutputStream os, char[] password )
+        throws GeneralSecurityException, IOException
+    {
         Cipher cipher = this.createCipher( Cipher.ENCRYPT_MODE, password );
-        CipherOutputStream cos = new CipherOutputStream( os, cipher );      
-	    return cos;
-	}
-       
+        CipherOutputStream cos = new CipherOutputStream( os, cipher );
+        return cos;
+    }
+
     /**
      * @return Returns the algorithm.
      */
@@ -203,7 +203,7 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
     {
         return algorithm;
     }
-    
+
     /**
      * @return Returns the count.
      */
@@ -211,7 +211,7 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
     {
         return count;
     }
-    
+
     /**
      * @return Returns the providerName.
      */
@@ -219,7 +219,7 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
     {
         return providerName;
     }
-    
+
     /**
      * @return Returns the salt.
      */
@@ -227,59 +227,59 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
     {
         return salt;
     }
-    
+
     /**
      * Create a PBE key.
-     * 
+     *
      * @param password the password to use.
      * @return the key
      * @throws NoSuchAlgorithmException
      * @throws InvalidKeySpecException
      */
     private final Key createKey( char[] password )
-    	throws GeneralSecurityException
+        throws GeneralSecurityException
     {
         SecretKeyFactory keyFactory = null;
-        String algorithm = this.getAlgorithm();	    
-	    PBEKeySpec keySpec =  new PBEKeySpec(password);	 	    
-	    
-	    if( this.getProviderName() == null )
-	    {
-	        keyFactory = SecretKeyFactory.getInstance( algorithm );
-	    }
-	    else
-	    {
-	        keyFactory = SecretKeyFactory.getInstance( algorithm, this.getProviderName() );
-	    }
-	    
-	    Key key = keyFactory.generateSecret(keySpec);
-	    return key;
+        String algorithm = this.getAlgorithm();
+        PBEKeySpec keySpec =  new PBEKeySpec(password);
+
+        if( this.getProviderName() == null )
+        {
+            keyFactory = SecretKeyFactory.getInstance( algorithm );
+        }
+        else
+        {
+            keyFactory = SecretKeyFactory.getInstance( algorithm, this.getProviderName() );
+        }
+
+        Key key = keyFactory.generateSecret(keySpec);
+        return key;
     }
-    
+
     /**
-     * Create a Cipher. 
-     * 
+     * Create a Cipher.
+     *
      * @param mode the cipher mode
      * @param password the password
      * @return an instance of a cipher
      */
     private final Cipher createCipher( int mode, char[] password )
-    	throws GeneralSecurityException, IOException    
+        throws GeneralSecurityException, IOException
     {
         Cipher cipher = null;
-	    PBEParameterSpec paramSpec = new PBEParameterSpec( this.getSalt(), this.getCount() );        
-	    Key key = this.createKey( password );	    
-	    
-	    if( this.getProviderName() == null )
-	    {
-	        cipher = Cipher.getInstance( this.getAlgorithm() );
-	    }
-	    else
-	    {
-	        cipher = Cipher.getInstance( this.getAlgorithm(), this.getProviderName() );
-	    }
-	    
-	    cipher.init( mode, key, paramSpec );	    
-	    return cipher;    
-    }    
+        PBEParameterSpec paramSpec = new PBEParameterSpec( this.getSalt(), this.getCount() );
+        Key key = this.createKey( password );
+
+        if( this.getProviderName() == null )
+        {
+            cipher = Cipher.getInstance( this.getAlgorithm() );
+        }
+        else
+        {
+            cipher = Cipher.getInstance( this.getAlgorithm(), this.getProviderName() );
+        }
+
+        cipher.init( mode, key, paramSpec );
+        return cipher;
+    }
 }

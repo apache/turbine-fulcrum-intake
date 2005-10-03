@@ -1,6 +1,5 @@
 package org.apache.fulcrum.yaafi.baseservice;
 
-
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -28,8 +27,8 @@ import org.apache.fulcrum.yaafi.service.baseservice.BaseServiceImpl;
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  */
 public class DerivedServiceImpl
-	extends BaseServiceImpl
-	implements DerivedService
+    extends BaseServiceImpl
+    implements DerivedService
 {
     /**
      * @see org.apache.fulcrum.yaafi.baseservice.DerivedService#test()
@@ -38,7 +37,7 @@ public class DerivedServiceImpl
     {
         this.getLogger().debug(this.toString());
     }
-    
+
     /**
      * @see org.apache.fulcrum.yaafi.service.baseservice.BaseServiceImpl#createAbsoluteFile(java.lang.String)
      */
@@ -46,7 +45,7 @@ public class DerivedServiceImpl
     {
         return super.createAbsoluteFile( fileName );
     }
-    
+
     /**
      * @see org.apache.fulcrum.yaafi.service.baseservice.BaseServiceImpl#createAbsolutePath(java.lang.String)
      */

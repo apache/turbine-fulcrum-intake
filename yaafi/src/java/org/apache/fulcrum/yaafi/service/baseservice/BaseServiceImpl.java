@@ -38,21 +38,21 @@ import org.apache.avalon.framework.service.ServiceManager;
  */
 
 public abstract class BaseServiceImpl
-	extends AbstractLogEnabled
+    extends AbstractLogEnabled
     implements BaseService
 {
     /** The name of the service as defined in the role configuration file */
     private String serviceName;
-    
+
     /** The context supplied by the Avalon framework */
     private Context serviceContext;
-    
+
     /** The service manager supplied by the Avalon framework */
     private ServiceManager serviceManager;
-    
+
     /** The configuraton supplied by the Avalon framework */
     private Configuration serviceConfiguration;
-    
+
     /** The parameters supplied by the avalon framework */
     private Parameters serviceParameters;
 
@@ -61,10 +61,10 @@ public abstract class BaseServiceImpl
 
     /** the Avalon temp directory */
     private File serviceTempDir;
-    
+
     /** the Avalon partition name */
     private String servicePartitionName;
-    
+
     /** the class loader for this service */
     private ClassLoader serviceClassLoader;
 
@@ -79,7 +79,7 @@ public abstract class BaseServiceImpl
     {
         // nothing to do
     }
-    
+
     /**
      * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
      */
@@ -100,7 +100,7 @@ public abstract class BaseServiceImpl
     {
         this.serviceManager = serviceManager;
     }
-    
+
     /**
      * @see org.apache.avalon.framework.serviceConfiguration.Configurable#configure(org.apache.avalon.framework.serviceConfiguration.Configuration)
      */
@@ -116,7 +116,7 @@ public abstract class BaseServiceImpl
     {
         this.serviceParameters = parameters;
     }
-        
+
     /**
      * @see org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.apache.avalon.framework.configuration.Configuration)
      */
@@ -124,7 +124,7 @@ public abstract class BaseServiceImpl
     {
         this.serviceConfiguration = configuration;
     }
-    
+
     /**
      * @see org.apache.avalon.framework.activity.Disposable#dispose()
      */
@@ -144,7 +144,7 @@ public abstract class BaseServiceImpl
     /////////////////////////////////////////////////////////////////////////
     // Service Implementation
     /////////////////////////////////////////////////////////////////////////
-    
+
     /**
      * @see java.lang.Object#toString()
      */
@@ -155,7 +155,7 @@ public abstract class BaseServiceImpl
         result.append( getClass().getName() + "@" + Integer.toHexString(hashCode()));
 
         result.append("{");
-        
+
         result.append("serviceName: ");
         result.append(this.getServiceName());
         result.append(";");
@@ -196,10 +196,10 @@ public abstract class BaseServiceImpl
         result.append(this.getServiceManager());
 
         result.append("}");
-        
+
         return result.toString();
-    }    
-    
+    }
+
     /**
      * @see org.apache.avalon.framework.service.ServiceManager#hasService(java.lang.String)
      */
@@ -207,7 +207,7 @@ public abstract class BaseServiceImpl
     {
         return this.getServiceManager().hasService(key);
     }
-    
+
     /**
      * @see org.apache.avalon.framework.service.ServiceManager#lookup(java.lang.String)
      */
@@ -232,33 +232,33 @@ public abstract class BaseServiceImpl
     {
         this.release(object);
     }
-    
+
     /**
-     * Determines the absolute file based on the application directory 
-     * @param fileName the filename 
+     * Determines the absolute file based on the application directory
+     * @param fileName the filename
      * @return the absolute file
      */
     protected File createAbsoluteFile( String fileName )
     {
-        File result = new File(fileName);       
-        
+        File result = new File(fileName);
+
         if( result.isAbsolute() == false )
         {
-            result = new File( this.getServiceApplicationDir(), fileName ); 
+            result = new File( this.getServiceApplicationDir(), fileName );
         }
-        
+
         return result;
-    }    
+    }
 
     /**
-     * Determines the absolute path based on the application directory 
-     * @param fileName the filename 
+     * Determines the absolute path based on the application directory
+     * @param fileName the filename
      * @return the absolute path
      */
     protected String createAbsolutePath( String fileName )
     {
         return this.createAbsoluteFile(fileName).getAbsolutePath();
-    }    
+    }
 
     /**
      * @return Returns the serviceApplicationDir.
@@ -267,7 +267,7 @@ public abstract class BaseServiceImpl
     {
         return serviceApplicationDir;
     }
-    
+
     /**
      * @return Returns the serviceClassLoader.
      */
@@ -275,7 +275,7 @@ public abstract class BaseServiceImpl
     {
         return serviceClassLoader;
     }
-    
+
     /**
      * @return Returns the serviceConfiguration.
      */
@@ -283,7 +283,7 @@ public abstract class BaseServiceImpl
     {
         return serviceConfiguration;
     }
-    
+
     /**
      * @return Returns the serviceContext.
      */
@@ -291,7 +291,7 @@ public abstract class BaseServiceImpl
     {
         return serviceContext;
     }
-    
+
     /**
      * @return Returns the serviceManager.
      */
@@ -299,7 +299,7 @@ public abstract class BaseServiceImpl
     {
         return serviceManager;
     }
-    
+
     /**
      * @return Returns the serviceName.
      */
@@ -307,7 +307,7 @@ public abstract class BaseServiceImpl
     {
         return serviceName;
     }
-    
+
     /**
      * @return Returns the serviceParameters.
      */
@@ -315,7 +315,7 @@ public abstract class BaseServiceImpl
     {
         return serviceParameters;
     }
-    
+
     /**
      * @return Returns the servicePartitionName.
      */
@@ -323,12 +323,12 @@ public abstract class BaseServiceImpl
     {
         return servicePartitionName;
     }
-    
+
     /**
      * @return Returns the serviceTempDir.
      */
     protected File getServiceTempDir()
     {
         return serviceTempDir;
-    }    
+    }
 }

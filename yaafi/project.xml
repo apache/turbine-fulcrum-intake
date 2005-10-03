@@ -3,7 +3,7 @@
   <extend>${basedir}/../project.xml</extend>
   <id>fulcrum-yaafi</id>
   <name>Fulcrum's YAAFI</name>
-  <currentVersion>1.0.4</currentVersion>
+  <currentVersion>1.0.5-dev</currentVersion>
   <versions>
     <version>
       <id>1.0.4</id>
@@ -16,7 +16,7 @@
       <tag>FULCRUM_YAAFI_1_0_3</tag>
     </version>
   </versions>
-  <dependencies> 
+  <dependencies>
 
   </dependencies>
 
@@ -28,7 +28,7 @@
           <include>**/*.xinfo</include>
         </includes>
       </resource>
-    </resources>      
+    </resources>
     <unitTest>
       <includes>
         <include>**/*Test.java</include>
@@ -36,7 +36,7 @@
       <excludes>
         <exclude>**/BaseUnitTest.java</exclude>
       </excludes>
-    </unitTest>    
+    </unitTest>
   </build>
 
 </project>

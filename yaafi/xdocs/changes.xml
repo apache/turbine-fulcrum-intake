@@ -1,17 +1,40 @@
 <?xml version="1.0"?>
 <document>
   <properties>
-    <title>Changes</title>
+    <title>Fulcrum YAAFI Avalon Container</title>
     <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
   </properties>
 
   <body>
-    <release version="1.0.4" date="2005-05-13">
+    <release version="1.0.5-dev" date="as in SVN">
+      <action dev="sgoeschl" type="update">
+        Updating to avalon-framework-api/impl-4.3.0.jar
+      </action>
+      <action dev="sgoeschl" type="add">
+        Adding interceptor services to YAAFI. This allows
+        to add interceptors for the whole container or
+        individual services.
+      </action>
+      <action dev="sgoeschl" type="add">
+        Using ReadWriteLocks for reconfiguring YAAFI on the fly
+      </action>
+      <action dev="sgoeschl" type="add">
+        Added a "logger" attribute to the role configuration
+        file to simplify setting up Log4j loggers.
+      </action>
+      <action dev="sgoeschl" type="update">
+        For logging during initializing of a service we use
+        the parent logger (=container's logger) instead of the service
+        logger. This is an issue when writing CSV files otherwise the
+        layout is messed up.
+      </action>
+    </release>
+    <release version="1.0.4" date="as in CVS">
       <action dev="sgoeschl" type="add">
         Added a simple tutorial
       </action>
       <action dev="sgoeschl" type="fix">
-        Fixed bug in ShutdownService reslulting in excessive CPU usage.
+        Fixed bug in ShutdownService resulting in excessive CPU usage.
       </action>
       <action dev="sgoeschl" type="update">
         Improved the implementation of BaseServiceImpl
@@ -58,7 +81,7 @@
         configuration file has changed
       </action>
       <action dev="sgoeschl" type="add">
-        Provide context mapping in the case that YAAFI is embedded in another 
+        Provide context mapping in the case that YAAFI is embedded in another
         Avalon container (experimental)
       </action>
       <action dev="sgoeschl" type="add">
@@ -78,7 +101,7 @@
         Refactored some code into AvalonContextHelper and InputStreamLocator
       </action>
       <action dev="sgoeschl" type="add">
-        Parsing a "component-type" element for the future 
+        Parsing a "component-type" element for the future
       </action>
       <action dev="sgoeschl" type="add">
         Parsing a "description" element of the role configuration file
@@ -93,7 +116,7 @@
       <action dev="sgoeschl" type="add">
         Setting proper context to achive compatibility with Phoenix container. YAAFI
         now works embedded into JAMES.
-      </action>    
+      </action>
     </release>
     <release version="1.0.3" date="2004-11-24">
       <action dev="sgoeschl" type="add">
@@ -101,11 +124,11 @@
       </action>
       <action dev="sgoeschl" type="fix">
         Fixed most of the Eclipse complaints about coding conventions
-      </action>        
+      </action>
       <action dev="epugh" type="fix" due-to="Siegfried Goeschl">
         Container was missing call to decomission objects, therefore
         Disposeable interface never working.
-      </action>        
+      </action>
       <action dev="epugh" type="update">
         Initial import to Fulcrum project.
       </action>

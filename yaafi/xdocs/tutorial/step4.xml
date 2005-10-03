@@ -3,7 +3,7 @@
 <document>
 
   <properties>
-    <title>Avalon Service Tutorial Step 4</title>
+    <title>Fulcrum YAAFI Avalon Container Tutorial Step 4</title>
     <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
   </properties>
 
@@ -132,7 +132,7 @@ public class Application implements Runnable
         try
         {
             this.cli.initialize();
-            this.cli.getLogger().info( "The application is up and running ..." );			
+            this.cli.getLogger().info( "The application is up and running ..." );     
             this.cli.onWait();
         }
         catch (Throwable t)

@@ -19,31 +19,31 @@ package org.apache.fulcrum.yaafi.framework.constant;
 
 /**
  * Commonly used constants.
- * 
+ *
  *  @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
 public interface AvalonMerlinConstants
 {
-	/** The Merlin Container */
-	String AVALON_CONTAINER_MERLIN = "merlin";
+    /** The Merlin Container */
+    String AVALON_CONTAINER_MERLIN = "merlin";
 
-	/////////////////////////////////////////////////////////////////////////
-	// Merlin keys for Context
-	/////////////////////////////////////////////////////////////////////////
-	
+    /////////////////////////////////////////////////////////////////////////
+    // Merlin keys for Context
+    /////////////////////////////////////////////////////////////////////////
+
     /** define the Merlin application root (File) */
     String URN_AVALON_HOME = "urn:avalon:home";
 
     /** define the Merlin temporary directory (File) */
-    String URN_AVALON_TEMP = "urn:avalon:temp";    	
+    String URN_AVALON_TEMP = "urn:avalon:temp";
 
     /** define the Merlin component name (String) */
-    String URN_AVALON_NAME = "urn:avalon:name";    
-    
+    String URN_AVALON_NAME = "urn:avalon:name";
+
     /** define the Merlin partition name (String) */
-    String URN_AVALON_PARTITION = "urn:avalon:partition";    	
-    
+    String URN_AVALON_PARTITION = "urn:avalon:partition";
+
     /** define the Merlin component classloader (ClassLoader) */
     String URN_AVALON_CLASSLOADER = "urn:avalon:classloader";
 }

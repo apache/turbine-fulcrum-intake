@@ -1,5 +1,12 @@
 package org.apache.fulcrum.yaafi.framework.role;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+import org.apache.fulcrum.yaafi.framework.util.ToStringBuilder;
+import org.apache.fulcrum.yaafi.framework.util.Validate;
+
 /*
  * Copyright 2004 Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
@@ -47,6 +54,15 @@ public class RoleEntryImpl implements RoleEntry
     /** the type of service component if any, e.g. "merlin", "phoenix" or "fortress*/
     private String componentFlavour;
     
+    /** do we use a dynamic proxy when invoking the service */
+    private boolean hasDynamicProxy;
+    
+    /** the list of interceptors to be invoked when using a dynamic proxy */
+    private ArrayList interceptorList;
+    
+    /** the optional category for creating a logger */
+    private String logCategory;
+    
     /**
      * YAAFI role entry
      * 
@@ -57,6 +73,9 @@ public class RoleEntryImpl implements RoleEntry
      * @param description a description for the service component if any
      * @param componentType the type of service component
      * @param componentFlavour the flavour of the gicen component type
+     * @param hasDynamicProxy create a dynamic proxy
+     * @param interceptorList the list of service interceptor to be invoked
+     * @param logCategory the category for creating the logger
      */
     public RoleEntryImpl( String name,
         String defaultClass,
@@ -64,8 +83,20 @@ public class RoleEntryImpl implements RoleEntry
         boolean earlyInit,
         String description,
         String componentType,
-        String componentFlavour )
+        String componentFlavour,
+        boolean hasProxy,
+        ArrayList interceptorList,
+        String logCategory
+        )
     {
+        Validate.notEmpty(name,"name");
+        Validate.notEmpty(defaultClass,"defaultClass");
+        Validate.notEmpty(shorthand,"shorthand");
+        Validate.notEmpty(componentType,"componentType");
+        Validate.notEmpty(componentFlavour,"componentFlavour");
+        Validate.notNull(interceptorList,"interceptorList");
+        Validate.notEmpty(logCategory,"logCategory");
+        
         this.name = name;
         this.implementationClazzName = defaultClass;
         this.shorthand = shorthand;
@@ -73,6 +104,9 @@ public class RoleEntryImpl implements RoleEntry
         this.description = description;
         this.componentType = componentType;
         this.componentFlavour = componentFlavour;
+        this.hasDynamicProxy = hasProxy;
+        this.interceptorList = interceptorList;
+        this.logCategory = logCategory;
     }
             
     /**
@@ -132,42 +166,100 @@ public class RoleEntryImpl implements RoleEntry
     }
     
     /**
+     * @return Returns the hasDynamicProxy.
+     */
+    public boolean hasDynamicProxy()
+    {
+        return hasDynamicProxy;
+    }
+    
+    /**
+     * @param hasDynamicProxy The hasDynamicProxy to set.
+     */
+    public void setHasDynamicProxy(boolean hasProxy)
+    {
+        this.hasDynamicProxy = hasProxy;
+    }
+    
+    /**
+     * Determines if the given name of the interceptor is already defined.
+     * 
+     * @param interceptorName the name of the interceptor
+     * @return true if it is already defined
+     */
+    public boolean hasInterceptor( String interceptorName )
+    {
+        String currInterceptorName = null;
+        Iterator iterator = this.interceptorList.iterator();
+        
+        while( iterator.hasNext() )
+        {
+            currInterceptorName = (String) iterator.next();
+            
+            if( currInterceptorName.equals(interceptorName) )
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Adds all given interceptors but avoiding duplicates.
+     * 
+     * @param collection the interceptors to be added
+     */
+    public void addInterceptors( Collection collection )
+    {
+        String currInterceptorName = null;
+        Iterator iterator = collection.iterator();
+        
+        while( iterator.hasNext() )
+        {
+            currInterceptorName = (String) iterator.next();
+            
+            if( this.hasInterceptor(currInterceptorName) == false )
+            {
+                this.interceptorList.add(currInterceptorName);
+            }
+        }
+    }
+    
+    /**
+     * @return Returns the interceptorList.
+     */
+    public String[] getInterceptorList()
+    {
+        return (String[]) interceptorList.toArray(
+            new String[interceptorList.size()]
+            );
+    }
+    
+    /**
+     * @return Returns the logCategory.
+     */
+    public String getLogCategory()
+    {
+        return logCategory;
+    }
+    
+    /**
      * @see java.lang.Object#toString()
      */
     public String toString()
     {
-        StringBuffer result = new StringBuffer();
-
-        final String newLine = System.getProperty("line.separator");
-
-        result.append(this.getClass().getName() + " Object {");
-        result.append(newLine);
-        result.append(this.getName());
-        result.append(";");
-
-        result.append(" class: ");
-        result.append(this.getImplementationClazzName());
-        result.append(";");
-
-        result.append(" componentType: ");
-        result.append(this.getComponentType());
-        result.append(";");
-
-        result.append(" componentFlavour: ");
-        result.append(this.getComponentFlavour());
-        result.append(";");
-
-        result.append(" shorthand: ");
-        result.append(this.getShorthand());
-        result.append(";");
-
-        result.append(" description: ");
-        result.append(this.getDescription());
-        result.append(";");
-
-        result.append("}");
-        
-        return result.toString();
+        ToStringBuilder toStringBuilder = new ToStringBuilder(this);
+        toStringBuilder.append("name",this.name);
+        toStringBuilder.append("shorthand",this.shorthand);
+        toStringBuilder.append("implementationClazzName",this.implementationClazzName);
+        toStringBuilder.append("isEarlyInit",this.isEarlyInit);
+        toStringBuilder.append("hasDynamicProxy",this.hasDynamicProxy);
+        toStringBuilder.append("componentType",this.componentType);
+        toStringBuilder.append("componentFlavour",this.componentFlavour);
+        toStringBuilder.append("interceptorList",this.interceptorList);
+        toStringBuilder.append("logCategory",this.logCategory);
+        toStringBuilder.append("description",this.description);
+        return toStringBuilder.toString();
     }
-
 }

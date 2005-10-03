@@ -29,7 +29,7 @@ public class Shutdown implements Runnable
 {
     /** The service manager tobe disposed */
     private Disposable disposable;
-    
+
     /**
      * Constructor
      * @param disposable The service manager to be disposed
@@ -43,7 +43,7 @@ public class Shutdown implements Runnable
      * @see java.lang.Runnable#run()
      */
     public void run()
-    {        
+    {
         this.disposable.dispose();
         this.disposable = null;
     }

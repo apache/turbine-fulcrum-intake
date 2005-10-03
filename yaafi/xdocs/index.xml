@@ -3,7 +3,7 @@
 <document>
 
   <properties>
-    <title>Fulcrum YAAFI</title>
+    <title>Fulcrum YAAFI Avalon Container</title>
     <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
   </properties>
 
@@ -12,28 +12,29 @@
     <section name="What is YAAFI?">
 
       <p>
-        The Yet Another Avalon Framework Implementation.
+        The Yet Another Avalon Framework Implementation.of an Avalon container.
       </p>
 
       <p>
         YAAFI is a light-weight implementation of a service framework using the
-        Avalon service lifecycle interfaces. There are a few other implementations
-        out there such as Excalibur, Fortress and most notably Merlin but
-        YAAFI gives you a lot of bells and whistles with minimal baggage.
-        The goal of the implementation to implement light-weight Avalon container
+        Avalon service lifecycle interfaces aka Avalon container. There are a 
+        few other implementations out there such as Phoenix, Fortress, Loom, 
+        Keel and Merlin but YAAFI gives you a lot of bells and whistles with minimal baggage.
+        The goal of the implementation is to provide a light-weight Avalon container
         to be embedded into existing applications and/or other containers.
       </p>
      
       <subsection name="What we left out">
         <p>
           <ul>
-            <li>logger manager implementation</li>
+            <li>logger manager implementation since this is done by log4j quite nicely</li>
             <li>run-time instrumentation to monitor application health</li>
             <li>service implementation versioning</li>
             <li>service initialization in a background thread</li>
             <li>support for singleton lifestyle only</li>
             <li>classloader hierarchies for components</li>
             <li>service selector implementation</li>
+            <li>no javadoc tag support for automatically creating component decriptors</li>
           </ul>
         </p>  
       </subsection>
@@ -44,14 +45,43 @@
             <li>a light-weight Avalon container only depending an the Avalone Framwork libraries</li>
             <li>a container which can run components written for ECM, Fortress, Phoenix and Merlin</li>
             <li>ability to be embedded in other Avalon containers such as Phoenix</li>
-            <li>support for automatic reconfiguration for the whole Avalon container or individual services</li>
-            <li>support for automatic shotdown of the whole Avalon container</li>
+            <li>automatic reconfiguration for the whole Avalon container or individual services</li>
+            <li>automatic shutdown of the whole Avalon container</li>
             <li>support for early or on-demand initialization</li>
             <li>support for encrypted configuration files</li>
+            <li>dynamic proxies and service interceptors</li>
           </ul>
         </p>  
       </subsection>
-           
+
+      <subsection name="The rest of the Avalon universe">
+        <p>
+          <ul>
+            <li>
+              <a href="http://excalibur.apache.org/fortress/">Fortress</a> is another Avalon container under the
+              Jakarta umbrella. It is also targeted to be embedded into existing
+              applications.
+            </li>
+            <li>
+              <a href="http://loom.codehaus.org/">Loom</a> is another Avalon based micro-kernel 
+              derived from Phoenix
+            </li>
+            <li>
+              <a href="http://dpml.net/metro/latest/index.html">Metro</a> was meant as unification
+              of Avalon containers but moved away from Jakarta.
+            </li>
+            <li>
+              <a href="http://plexus.codehaus.org/">Plexus</a> another light-weight being 
+              able to run Avalon components.
+            </li>
+            <li>
+              <a href="http://xingu.sourceforge.net/">Xingu</a> is a Avalon-based
+              component repository.
+            </li>
+          </ul>
+        </p>  
+      </subsection>
+      
     </section>
 
   </body>

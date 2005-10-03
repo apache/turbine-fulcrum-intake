@@ -3,7 +3,7 @@
 <document>
 
   <properties>
-    <title>Specification</title>
+    <title>Fulcrum YAAFI Avalon Container Specification</title>
     <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
   </properties>
 
@@ -88,11 +88,46 @@
             </td>
           </tr>
           <tr>
+            <td>role@has-proxy</td>
+            <td>boolean</td>
+            <td>[0|1]</td>
+            <td>
+              Defines if an dynamic proxy will be used for the service instance. If
+              no value is defined thant <b>true</b> will be used.
+            </td>
+          </tr>
+          <tr>
+            <td>role@logger</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              The name of the logging category for the service. The logging
+              catetegory being constructed is concatenated with the logging
+              category of the service container, e.g "YAAFI.MyLogCategory".
+            </td>
+          </tr>
+          <tr>
             <td>role@description</td>
             <td>String</td>
             <td>[0|1]</td>
             <td>
               A description what the service is actually doing. 
+            </td>
+          </tr>
+          <tr>
+            <td>role/interceptors</td>
+            <td>Tree</td>
+            <td>[0|1]</td>
+            <td>
+              Contains a list of service specific interceptors
+            </td>
+          </tr>
+          <tr>
+            <td>role/interceptors/interceptor</td>
+            <td>String</td>
+            <td>[0..n]</td>
+            <td>
+              Contains the service name of an interceptor
             </td>
           </tr>
         </table>
@@ -132,7 +167,30 @@
           ]]>
         </source>
       </subsection>
-            
+
+      <subsection name="Example 3">
+        <source>
+          <![CDATA[
+<?xml version="1.0" encoding="ISO-8859-1"?>
+          
+<role-list>
+  <role
+    name="org.apache.fulcrum.yaafi.TestComponent"
+    shorthand="test"
+    default-class="org.apache.fulcrum.yaafi.TestComponentImpl"
+    early-init="true"
+    component-type="merlin"
+    description="A simple test component">
+    <interceptors>
+      <interceptor>org.apache.fulcrum.yaafi.interceptor.performance.PerformanceInterceptorService</interceptor>
+      <interceptor>org.apache.fulcrum.yaafi.interceptor.logging.LoggingInterceptorService</interceptor>
+    </interceptors>
+  </role>
+</role-list>          
+          ]]>
+        </source>
+      </subsection>
+      
     </section>
 
   </body>

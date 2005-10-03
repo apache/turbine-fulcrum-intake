@@ -23,71 +23,60 @@ import org.apache.avalon.framework.service.ServiceException;
 import org.apache.fulcrum.yaafi.framework.role.RoleEntry;
 
 /**
- * Interface for managing the lifecycle of services. It provides 
+ * Interface for managing the lifecycle of services. It provides
  * methods to get
- * 
+ *
  * <ul>
  *   <li>metadata about the service components</li>
  *   <li>reconfiguring a single service</li>
  *   <li>decommissioning a signle service</li>
  * </ul>
- * 
+ *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
 public interface ServiceLifecycleManager
-{    	
-    /** 
+{
+    /**
      * Get a RoleEntryImpl for a given service
-     * 
+     *
      * @param name the name of the service component
      * @return the RoleEntryImpl
+     * @throws ServiceException the service was not found
      */
     RoleEntry getRoleEntry( String name )
-    	throws ServiceException;
+        throws ServiceException;
 
-    /** 
+    /**
      * Get a list of all RoleEntries.
-     * 
+     *
      * @return a list of RoleEntries
      */
-    RoleEntry[] getRoleEntries()
-    	throws ServiceException;        
-    
-    /**
-     * Reconfigures a service by calling Suspendable.suspend(),
-     * Reconfigurable.reconfigure() and Suspendable.resume(). 
-     *
-     * @param name the name of the service to be reconfigured
-     * @exception ServiceException the service was not found
-     * @throws ConfigurationException the reconfiguration failed
-     */
-    void reconfigure( String name )
-    	throws ServiceException, ConfigurationException;
+    RoleEntry[] getRoleEntries();
 
     /**
      * Reconfigures a set of services  by calling Suspendable.suspend(),
-     * Reconfigurable.reconfigure() and Suspendable.resume(). 
+     * Reconfigurable.reconfigure() and Suspendable.resume().
      *
      * @param names the set of services to be reconfigured
      * @exception ServiceException one of the service was not found
      * @throws ConfigurationException the reconfiguration failed
      */
     void reconfigure( String[] names )
-    	throws ServiceException, ConfigurationException;
+        throws ServiceException, ConfigurationException;
 
     /**
-     * Decommision the given service by calling Startable.stop() 
-     * and Disposable.dispose(). 
-     * 
-     * The state of the service component is the same as using lazy 
+     * Decommision the given service by calling Startable.stop()
+     * and Disposable.dispose().
+     *
+     * The state of the service component is the same as using lazy
      * initialization. Therefore a new service instance will be created
      * if the service is reused again. If you are keeping an instance
      * of the service you are out of luck.
-     *     
+     *
      * @param name the name of the service
      * @exception ServiceException the service was not found
      */
     void decommision( String name )
-    	throws ServiceException;
+        throws ServiceException;
 }

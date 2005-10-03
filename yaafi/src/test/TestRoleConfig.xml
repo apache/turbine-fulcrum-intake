@@ -1,54 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <role-list>
-  <!-- Use minimal role entry --> 
+  <!-- Define an interceptor service  -->
+  <role
+    name="org.apache.fulcrum.yaafi.interceptor.logging.LoggingInterceptorService"
+    shorthand="LoggingInterceptorService"
+    default-class="org.apache.fulcrum.yaafi.interceptor.logging.LoggingInterceptorServiceImpl"
+    logger="tracing"
+  />
+  <role
+    name="org.apache.fulcrum.yaafi.interceptor.performance.PerformanceInterceptorService"
+    shorthand="PerformanceInterceptorService"
+    default-class="org.apache.fulcrum.yaafi.interceptor.performance.PerformanceInterceptorServiceImpl"
+    logger="performance"
+  />
+  <!-- Use minimal role entry -->
   <role
     name="org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerService"
     default-class="org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerServiceImpl"
-  />    
-  <!-- For the rest of the services use a full-blown role entry --> 
+  />
+  <!-- For the rest of the services use a full-blown role entry -->
   <role
     name="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyService"
     shorthand="SystemPropertyService"
     default-class="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyServiceImpl"
     early-init="true"
     description="Copies name/value pairs into the SystemProperties"
-  />   
-  <!-- 
+  />
+  <!--
     This ReconfigurationService is instantiated during the first access. Until
     then it is doing nothing.
-  --> 
+  -->
   <role
     name="org.apache.fulcrum.yaafi.service.reconfiguration.ReconfigurationService"
     shorthand="ReconfigurationService"
     default-class="org.apache.fulcrum.yaafi.service.reconfiguration.ReconfigurationServiceImpl"
     early-init="false"
     component-type="avalon"
-    component-flavour="yaafi"    
+    component-flavour="yaafi"
     description="Monitors the componentConfiguration.xml to reconfigure YAAFI"
-  />   
+  />
   <role
     name="org.apache.fulcrum.yaafi.service.shutdown.ShutdownService"
     shorthand="ShutdownService"
     default-class="org.apache.fulcrum.yaafi.service.shutdown.ShutdownServiceImpl"
     early-init="true"
     component-type="avalon"
-    component-flavour="yaafi"    
+    component-flavour="yaafi"
     description="Monitors a resource to force a disposal of the Avalon container"
-  />   
+  />
   <role
     name="org.apache.fulcrum.yaafi.TestComponent"
-    shorthand="test"
+    shorthand="TestComponent"
     default-class="org.apache.fulcrum.yaafi.TestComponentImpl"
     early-init="true"
     component-type="merlin"
-    description="A simple test component"
-  />        
+    description="A simple test component">
+    <!-- interceptors>
+      <interceptor>org.apache.fulcrum.yaafi.interceptor.performance.PerformanceInterceptorService</interceptor>
+      <interceptor>org.apache.fulcrum.yaafi.interceptor.logging.LoggingInterceptorService</interceptor>
+    </interceptors -->
+  </role>
   <role
     name="org.apache.fulcrum.yaafi.baseservice.DerivedService"
     shorthand="DerivedService"
     default-class="org.apache.fulcrum.yaafi.baseservice.DerivedServiceImpl"
     early-init="false"
     description="A simple service deriving from BaseService"
-  />          
+  />
 </role-list>

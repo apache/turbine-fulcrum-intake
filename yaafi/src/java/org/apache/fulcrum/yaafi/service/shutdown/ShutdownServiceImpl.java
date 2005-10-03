@@ -44,27 +44,27 @@ import org.apache.avalon.framework.service.Serviceable;
 
 public class ShutdownServiceImpl
     extends AbstractLogEnabled
-    implements ShutdownService, Serviceable, Contextualizable, 
-    	Reconfigurable, Initializable, Runnable, Startable, Disposable
-{    
+    implements ShutdownService, Serviceable, Contextualizable,
+        Reconfigurable, Initializable, Runnable, Startable, Disposable
+{
     /** the interval between two checks in ms */
     private int interval;
-        
+
     /** shall the worker thread terminate immediately */
     private boolean terminateNow;
-    
+
     /** the worker thread polling the resource */
     private Thread workerThread;
-    
+
     /** the ServiceManager to use */
     private ServiceManager serviceManager;
-    
+
     /** the application directory */
     private File applicationDir;
-    
+
     /** our own and only shutdown entry */
     private ShutdownEntry shutdownEntry;
-    
+
     /////////////////////////////////////////////////////////////////////////
     // Avalon Service Lifecycle Implementation
     /////////////////////////////////////////////////////////////////////////
@@ -84,7 +84,7 @@ public class ShutdownServiceImpl
     {
         this.serviceManager = manager;
     }
-    
+
     /**
      * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
      */
@@ -92,59 +92,59 @@ public class ShutdownServiceImpl
     {
         this.applicationDir  = (File) context.get("urn:avalon:home");
     }
-    
+
     /**
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
     public void configure(Configuration configuration) throws ConfigurationException
     {
         // limit to minimum interval of 1 second
-        
-        this.interval = Math.max( configuration.getAttributeAsInteger("interval",5000), 1000 );    
-        
-        this.getLogger().debug( "Monitoring the resources every " + this.interval + " ms" );        
-        
+
+        this.interval = Math.max( configuration.getAttributeAsInteger("interval",5000), 1000 );
+
+        this.getLogger().debug( "Monitoring the resources every " + this.interval + " ms" );
+
         if( configuration.getChild("entry",false) != null )
         {
-            Configuration shutdownConfig = configuration.getChild("entry");    
-            
+            Configuration shutdownConfig = configuration.getChild("entry");
+
             String shutdownEntryLocation = shutdownConfig.getChild("location").getValue();
-            
+
             this.shutdownEntry = new ShutdownEntry(
                 this.getLogger(),
                 this.applicationDir,
                 shutdownEntryLocation,
                 shutdownConfig.getChild("useSystemExit").getValueAsBoolean(false)
                 );
-            
-            this.getLogger().debug( "Using a shutdown entry : " + shutdownEntryLocation );            
-        }        
+
+            this.getLogger().debug( "Using a shutdown entry : " + shutdownEntryLocation );
+        }
         else
         {
             this.shutdownEntry = null;
-            this.getLogger().debug( "No shutdown entry defined" );    
+            this.getLogger().debug( "No shutdown entry defined" );
         }
     }
-    
+
     /**
      * @see org.apache.avalon.framework.activity.Initializable#initialize()
      */
     public void initialize() throws Exception
-    {               
+    {
         // request a SHA-1 to make sure that it is supported
-        
+
         MessageDigest.getInstance( "SHA1" );
-                
+
         // check that the ServiceManager inplements Disposable
-        
+
         if( (this.serviceManager instanceof Disposable) == false )
         {
             String msg = "The ServiceManager instance does not implement Disposable?!";
             throw new IllegalArgumentException( msg );
         }
-        
+
         // create the worker thread polling the target
-        
+
         this.workerThread = new Thread( this, "ShutdownService" );
     }
 
@@ -156,7 +156,7 @@ public class ShutdownServiceImpl
         this.getLogger().debug( "Starting worker thread ..." );
         this.workerThread.start();
     }
-    
+
     /**
      * @see org.apache.avalon.framework.activity.Startable#stop()
      */
@@ -167,7 +167,7 @@ public class ShutdownServiceImpl
         this.workerThread.interrupt();
         this.workerThread.join( 10000 );
     }
-    
+
     /**
      * @see org.apache.avalon.framework.activity.Disposable#dispose()
      */
@@ -175,10 +175,10 @@ public class ShutdownServiceImpl
     {
         this.terminateNow = false;
         this.applicationDir = null;
-    	this.workerThread = null;
-    	this.serviceManager = null;
+        this.workerThread = null;
+        this.serviceManager = null;
     }
-    
+
     /**
      * @see org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.apache.avalon.framework.configuration.Configuration)
      */
@@ -187,7 +187,7 @@ public class ShutdownServiceImpl
     {
         this.configure(configuration);
     }
-    
+
     /////////////////////////////////////////////////////////////////////////
     // Service interface implementation
     /////////////////////////////////////////////////////////////////////////
@@ -205,9 +205,9 @@ public class ShutdownServiceImpl
             }
             catch (InterruptedException e)
             {
-                ; // nothing to do
-            } 
-            
+                // nothing to do
+            }
+
             if( this.hasShutdownEntry() && this.getShutdownEntry().hasChanged() )
             {
                 if( this.serviceManager instanceof Disposable )
@@ -220,22 +220,22 @@ public class ShutdownServiceImpl
                     {
                         this.getLogger().warn( "Forcing a shutdown ..." );
                     }
-                    
+
                     // create a demon thread to shutdown the container
-                    
-                    Shutdown shutdown = new Shutdown( 
+
+                    Shutdown shutdown = new Shutdown(
                         (Disposable) this.serviceManager,
                         this.getShutdownEntry().isUseSystemExit()
                         );
-                    
-        	        Thread shutdownThread = new Thread( shutdown, "ShutdownServiceThread" );
-        	        shutdownThread.setDaemon(true);
-        	        shutdownThread.start();
-                }                
+
+                    Thread shutdownThread = new Thread( shutdown, "ShutdownServiceThread" );
+                    shutdownThread.setDaemon(true);
+                    shutdownThread.start();
+                }
             }
         }
-    }    
-    
+    }
+
     /////////////////////////////////////////////////////////////////////////
     // Service implementation
     /////////////////////////////////////////////////////////////////////////

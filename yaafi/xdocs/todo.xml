@@ -3,7 +3,7 @@
 <document>
 
   <properties>
-    <title>TODO</title>
+    <title>Fulcrum YAAFI Avalon Container</title>
     <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
   </properties>
 
@@ -11,16 +11,7 @@
 
     <section name="TODO">
 
-      <subsection name="Using a Proxy">            
-        <p>
-          Currently the caller of a service uses the instance
-          implementing the service interface directly. It would
-          be useful to hand out a proxy object to delegate the 
-          service invocation similiar to EJB and HiveMind.
-        </p>
-      </subsection>
-
-      <subsection name="Long-term Compatibilty with Fortress">            
+      <subsection name="Long-term Compatibilty with Fortress">
         <p>
           Since Fortress is the only other remaining Avalon container
           within Jakarta we try to achieve compatibility with Fortress
@@ -30,7 +21,7 @@
         </p>
       </subsection>
 
-      <subsection name="Testing the cross-container portabilty">            
+      <subsection name="Testing the cross-container portabilty">
         <p>
           YAAFI actually maps the Avalon context depending on the container
           flavour of the service component. We still need to test this
@@ -38,7 +29,7 @@
         </p>
       </subsection>
 
-      <subsection name="Use URLConnection for InputStreamLocator">            
+      <subsection name="Use URLConnection for InputStreamLocator">
         <p>
           Using a URLConnection enables downloading the configuration
           files from a HTTP server therefore allowing to run a set
@@ -46,7 +37,7 @@
           configuration file.
         </p>
       </subsection>
-            
+
     </section>
 
   </body>

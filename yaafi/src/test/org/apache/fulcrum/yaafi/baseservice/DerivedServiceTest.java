@@ -1,6 +1,5 @@
 package org.apache.fulcrum.yaafi.baseservice;
 
-
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -50,18 +49,18 @@ public class DerivedServiceTest extends BaseUnitTest
             );
 
         // invoke the test() method on the service
-        
+
         derivedService.test();
-        
+
         // determine absolute paths and files
-        
+
         String fileName = "./src/test/TestRoleConfig.xml";
         String absolutePath = derivedService.createAbsolutePath(fileName);
         File absoluteFile = derivedService.createAbsoluteFile(fileName);
-        
+
         assertTrue(absoluteFile.isAbsolute());
         assertTrue(absoluteFile.exists());
         assertTrue(new File(absolutePath).isAbsolute());
-        assertTrue(new File(absolutePath).exists());        
+        assertTrue(new File(absolutePath).exists());
     }
 }

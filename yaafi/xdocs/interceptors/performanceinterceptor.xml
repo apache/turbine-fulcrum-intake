@@ -1,0 +1,253 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>Fulcrum YAAFI Avalon Container Interceptors</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Overview">
+      <p>
+        The service solves a simple problem - how to monitor the execution time of
+        service invocations in a production environment. It allows to monitor a
+        a user-defined list of services and tresholds which affects the trace
+        level of the logger being used to write the performance data.
+      </p>
+    </section>
+
+    <section name="Captured Information">
+      <p>
+        During the execution the service captures the following information for
+        producing a meaning log
+        <table>
+          <tr>
+            <th>Item</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>Transaction ID (TID)</td>
+            <td>the number of times the invocationDepth was zero</td>
+          </tr>
+          <tr>
+            <td>Invocation ID (IID)</td>
+            <td>the current number of inovking a service method</td>
+          </tr>
+          <tr>
+            <td>InvocationDepth (ID)</td>
+            <td>
+              the service invocation depth, e.g a value of "1" that
+              the currently invoked service method was invoked by
+              another service. A value of "0" indicates that the service
+              method was directly invoked from the caller therefore
+              starting a new transaction
+            </td>
+          </tr>
+          <tr>
+            <td>Mode (M)</td>
+            <td>
+              the invocation mode of the interceptor
+              <ul>
+                <li>0 ==> entering the service method</li>
+                <li>1 ==> leaving the the service method</li>
+                <li>2 ==> an exception occured</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td>ServiceName</td>
+            <td>the shorthand of the service being invoked</td>
+          </tr>
+          <tr>
+            <td>ServiceMethod</td>
+            <td>the name of the service method being invoked</td>
+          </tr>
+          <tr>
+            <td>Millis</td>
+            <td>the execution time in milliseconds</td>
+          </tr>
+          <tr>
+            <td>Method Signature</td>
+            <td>the name of the executing thread</td>
+          </tr>
+        </table>
+      </p>
+    </section>
+
+    <section name="Example Logfile">
+      <p>
+        Looking at the following <a href="performance.csv">example</a> you see that
+        <ul>
+          <li>that this was the 18th transaction during the lifetime of the container</li>
+          <li>the transaction spanned eight Avalon service invocations</li>
+          <li>SignatureService.sign is the top-level service invocation taking 140 ms</li>
+          <li>PdfSignatureService.isSupported is invoked by SignatureService.sign hence the invocation depth of "1"</li>
+          <li>PdfSignatureService.sign is also invoked by SignatureService.sign and took 140 ms</li>
+          <li>PdfSignatureService.sign invokes five other Avalon service methods to do its work</li>
+        </ul>
+      </p>
+      <source>
+        <![CDATA[
+TID IID ID M ServiceName             ServiceMethod        Millis
+18  28  0  1 SignatureService        sign                 140
+18  29  1  1 PdfSignatureService     isSupported          0
+18  30  1  1 PdfSignatureService     sign                 140
+18  31  2  1 CommandDispatcher       exists               0
+18  32  2  1 ResourceManagerService  exists               0
+18  33  2  1 ResourceManagerService  exists               0
+18  34  2  1 ResourceManagerService  read                 0
+18  35  2  1 PKCS12KeyStore          getCertificateEntry  0
+        ]]>
+      </source>
+    </section>
+
+    <section name="Configuration">
+      <subsection name="Component Configuration">
+        <table>
+          <tr>
+            <th>Item</th>
+            <th>Datatype</th>
+            <th>Cardinality</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>isEnabled</td>
+            <td>Boolean</td>
+            <td>[0|1]</td>
+            <td>
+              Turn the interceptor. If no value is supplied then "false" is used
+              thereby disabling all interceptor invocations.
+            </td>
+          </tr>
+          <tr>
+            <td>tresholds</td>
+            <td>Tree</td>
+            <td>[0|1]</td>
+            <td>
+              Contains a list of mappings from execution time to tracelevel
+             </td>
+          </tr>
+          <tr>
+            <td>tresholds/debug</td>
+            <td>Integer</td>
+            <td>[0|1]</td>
+            <td>
+              The minimum exeuction time for debug output
+            </td>
+          </tr>
+          <tr>
+            <td>tresholds/info</td>
+            <td>Integer</td>
+            <td>[0|1]</td>
+            <td>
+              The minimum exeuction time for info output
+            </td>
+          </tr>
+          <tr>
+            <td>tresholds/warn</td>
+            <td>Integer</td>
+            <td>[0|1]</td>
+            <td>
+              The minimum exeuction time for warn output
+            </td>
+          </tr>
+          <tr>
+            <td>tresholds/error</td>
+            <td>Integer</td>
+            <td>[0|1]</td>
+            <td>
+              The minimum exeuction time for error output
+            </td>
+          </tr>
+          <tr>
+            <td>tresholds/fatal</td>
+            <td>Integer</td>
+            <td>[0|1]</td>
+            <td>
+              The minimum exeuction time for fatal output
+            </td>
+          </tr>
+          <tr>
+            <td>services</td>
+            <td>Tree</td>
+            <td>[0|1]</td>
+            <td>
+              Contains a list of services to be monitored.
+            </td>
+          </tr>
+          <tr>
+            <td>services/service@name</td>
+            <td>String</td>
+            <td>[1..n]</td>
+            <td>
+              The name of an individual service to be monitored.
+            </td>
+          </tr>
+        </table>
+      </subsection>
+      <subsection name="Role Configuration">
+        <source><![CDATA[
+<role
+  name="org.apache.fulcrum.yaafi.interceptor.performance.PerformanceInterceptorService"
+  shorthand="PerformanceInterceptorService"
+  default-class="org.apache.fulcrum.yaafi.interceptor.performance.PerformanceInterceptorServiceImpl"
+  logger="performance"
+/>
+            ]]></source>
+      </subsection>
+
+      <subsection name="Log4J Configuration">
+        <p>
+          The following Log4J configuration defines a custom
+          appender for the PerformanceInterceptorService. For
+          the layout we just add a timestamp since we produce
+          a CSV file to be analyzed with EXCEL or your tool
+          of choice
+        </p>
+        <source><![CDATA[
+#
+# Custom logfiles
+#
+
+log4j.category.yaafi.performance = DEBUG, performance
+log4j.additivity.yaafi.performance = false
+
+#
+# Performance Appender
+#
+
+log4j.appender.performance = org.apache.log4j.FileAppender
+log4j.appender.performance.file = ./temp/performance.csv
+log4j.appender.performance.layout = org.apache.log4j.PatternLayout
+log4j.appender.performance.layout.conversionPattern = %d;%m%n
+log4j.appender.performance.append = true
+          ]]></source>
+      </subsection>
+    </section>
+
+    <section name="Usage">
+      <p>
+        Monitor all exection times
+      </p>
+      <source>
+        <![CDATA[
+<PerformanceInterceptorService>
+  <isEnabled>true</isEnabled>
+  <tresholds>
+    <debug millis="0"/>
+    <info  millis="100"/>
+    <warn  millis="500"/>
+    <error millis="1000"/>
+    <fatal millis="5000"/>
+  </tresholds>
+  <services>
+    <service name="*"/>
+  </services>
+</PerformanceInterceptorService>
+        ]]>
+      </source>
+    </section>
+
+  </body>
+</document>
