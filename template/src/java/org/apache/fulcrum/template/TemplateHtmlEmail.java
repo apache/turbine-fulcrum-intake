@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.Hashtable;
 import javax.mail.MessagingException;
 
+import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 
 /**
@@ -126,10 +127,11 @@ public class TemplateHtmlEmail
     /**
      * Actually send the mail.
      *
-     * @exception MessagingException.
+     * @return the message id of the sent email
+     * @exception EmailException the sending of the message failed
      */
-    public void send()
-        throws MessagingException
+    public String send()
+        throws EmailException
     {
         context.put("mail",this);
 
@@ -153,13 +155,13 @@ public class TemplateHtmlEmail
         }
         catch( Exception e)
         {
-            throw new MessagingException("Cannot parse template", e);
+            throw new EmailException("Cannot parse template", e);
         }
 
         setHtmlMsg(htmlbody);
         setTextMsg(textbody);
 
-        super.send();
+        return super.send();
     }
 
     /**

@@ -6,7 +6,15 @@
   </properties>
 
   <body>
-    <release version="1.0-alpha-2" date="in CVS">
+    <release version="1.0-alpha-2" date="in SVN">
+     <action dev="sgoeschl" type="update">
+        Changed the signature of TemplateHtmlEmail.send() since it inherits
+        from Mail.send(). The method now throws an EmailException instead
+        of MessagingException which might break existing code.
+      </action>                  
+     <action dev="sgoeschl" type="update">
+        Upgrading to javamail-1.3.2 and commons-email-1.0
+      </action>                  
      <action dev="epugh" type="add">
         Fix EmailTemplate and HtmlEmailTemplate by providing a templateService
         that can be manually passed in.  Should be avalon components instead.
