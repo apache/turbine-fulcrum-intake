@@ -37,7 +37,7 @@
         <source>
         <![CDATA[
   <ResourceManagerService>
-    <domain name="groovy" type="file">
+    <domain name="groovy" type="org.apache.fulcrum.resourcemanager.impl.FileResourceManager">
       <suffix>groovy</suffix>
       <location>./src/test/scripts</location>
       <useLocator>true</useLocator>

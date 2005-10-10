@@ -52,10 +52,10 @@ public class GroovyServiceImpl
         Contextualizable, Disposable, Serviceable, Reconfigurable
 {
     /** use precompiled and cached Groovy scripts */
-    public final String CONFIG_USECACHE = "useCache";
+    public final static String CONFIG_USECACHE = "useCache";
 
     /** the resource domain to look up Groovy scripts */
-    public final String CONFIG_DOMAIN = "domain";
+    public final static String CONFIG_DOMAIN = "domain";
 
     /** maps from a script name to a script */
     private GroovyScriptCache scriptCache;
@@ -64,7 +64,7 @@ public class GroovyServiceImpl
     private boolean useCache;
 
     /** maximumline lengthfor dumping arguments */
-    private final int MAX_LINE_LENGTH = 1000;
+    private final static int MAX_LINE_LENGTH = 1000;
 
     /** the resource domain to look up Groovy scripts */
     private String domain;
@@ -85,6 +85,15 @@ public class GroovyServiceImpl
     }
 
     /**
+     * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
+     */
+    public void service(ServiceManager serviceManager) throws ServiceException
+    {
+        super.service( serviceManager );
+        this.getServiceManager().lookup( ResourceManagerService.class.getName() );
+    }
+
+    /**
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
     public void configure(Configuration cfg) throws ConfigurationException
@@ -93,20 +102,11 @@ public class GroovyServiceImpl
 
         // do we cache the Groovy scripts to improve performance ?
 
-        this.useCache = cfg.getAttributeAsBoolean(CONFIG_USECACHE);
+        this.useCache = cfg.getAttributeAsBoolean(CONFIG_USECACHE,true);
 
         // get the domain for the Groovy Scrips
 
         this.domain = cfg.getAttribute( CONFIG_DOMAIN, "groovy" );
-    }
-
-    /**
-     * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
-     */
-    public void service(ServiceManager serviceManager) throws ServiceException
-    {
-        super.service( serviceManager );
-        this.getServiceManager().lookup( ResourceManagerService.class.getName() );
     }
 
     /**
@@ -122,8 +122,9 @@ public class GroovyServiceImpl
      */
     public void reconfigure(Configuration cfg) throws ConfigurationException
     {
-        super.reconfigure(cfg);
+        super.reconfigure(cfg);        
         this.scriptCache.clear();
+        this.configure(cfg);
     }
 
     /**
@@ -239,10 +240,15 @@ public class GroovyServiceImpl
      */
     public boolean exists(String scriptName)
     {
-        return this.getResourceManagerService().exists(
-            this.getDomain(),
-            scriptName 
-            );
+        if( this.getResourceManagerService().exists(this.getDomain()) &&            
+            this.getResourceManagerService().exists(this.getDomain(), scriptName) )
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /**
@@ -459,12 +465,6 @@ public class GroovyServiceImpl
         catch (CompilationFailedException e)
         {
             String msg = "Compilation failed : " + scriptName;
-            this.getLogger().error( msg, e );
-            throw e;
-        }
-        catch (IOException e)
-        {
-            String msg = "Parsing the script failed : " + scriptName;
             this.getLogger().error( msg, e );
             throw e;
         }

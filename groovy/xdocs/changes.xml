@@ -8,6 +8,9 @@
   <body>
     <release version="1.0.1-dev" date="in SVN">
       <action dev="goeschsi" type="fix">
+        Upgrading from groovy-all-1.0-beta9 to groovy-all-1.0-jsr-03
+      </action>
+      <action dev="goeschsi" type="fix">
         Using the newest fulcrum-resourcemanager-service
       </action>
     </release>

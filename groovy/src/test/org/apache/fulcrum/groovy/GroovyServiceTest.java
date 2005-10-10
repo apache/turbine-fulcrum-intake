@@ -256,7 +256,7 @@ public class GroovyServiceTest extends BaseUnitTest
         try
         {
             // compile a invalid Groovy script
-            this.getService().compile( "test", "tryz{} caught[]" );
+            this.getService().compile( "test", "import foo.*." );
             fail( "This script shouldn't compile" );
         }
         catch (CompilationFailedException e)
