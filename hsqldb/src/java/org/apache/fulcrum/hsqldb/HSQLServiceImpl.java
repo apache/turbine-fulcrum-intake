@@ -17,22 +17,16 @@ package org.apache.fulcrum.hsqldb;
  * limitations under the License.
  */
 
-import java.io.File;
-
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.activity.Startable;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.context.Context;
-import org.apache.avalon.framework.context.ContextException;
-import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
-
-import org.hsqldb.HsqlProperties;
 import org.hsqldb.Server;
 import org.hsqldb.ServerConstants;
+import org.hsqldb.persist.HsqlProperties;
 
 /**
  * The originial implementation was taken from
@@ -71,17 +65,14 @@ import org.hsqldb.ServerConstants;
  */
 public class HSQLServiceImpl 
 	extends AbstractLogEnabled 
-	implements HSQLService, Configurable, Initializable, Contextualizable, Startable, Disposable
+	implements HSQLService, Configurable, Initializable, Startable, Disposable
 {
     /** the HSQLDB server instance */
     private Server server;
     
     /** the configuration properties */
     private HsqlProperties serverProperties;
-    
-    /** the application directory */
-    private File applicationDir;
-    
+        
     /////////////////////////////////////////////////////////////////////////
     // Avalon Service Lifecycle Implementation
     /////////////////////////////////////////////////////////////////////////
@@ -91,6 +82,7 @@ public class HSQLServiceImpl
      */
     public HSQLServiceImpl()
     {
+        // nothing to do
     }
     
     public boolean isRunning() {
@@ -98,14 +90,6 @@ public class HSQLServiceImpl
         return server.getState() == ServerConstants.SERVER_STATE_ONLINE;
     }    
     
-    /**
-     * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
-     */
-    public void contextualize(Context context) throws ContextException
-    {
-        this.applicationDir = (File) context.get("urn:avalon:home");
-    }
-
     /**
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
@@ -124,6 +108,7 @@ public class HSQLServiceImpl
         this.serverProperties.setProperty("server.trace", cfg.getAttributeAsBoolean("trace"));
         this.serverProperties.setProperty("server.silent", cfg.getAttributeAsBoolean("silent"));        
         this.serverProperties.setProperty("server.port", cfg.getAttribute("port"));
+        this.serverProperties.setProperty("server.tls", cfg.getAttribute("tls","false"));
     }
     
     /**
@@ -181,7 +166,6 @@ public class HSQLServiceImpl
     {
         this.server = null;
         this.serverProperties = null;
-        this.applicationDir = null;
     }   
     
     /**

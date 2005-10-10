@@ -8,10 +8,10 @@
   <dependencies>
   
     <dependency>
-        <groupId>hsqldb</groupId>
-        <artifactId>hsqldb</artifactId>
-        <version>1.7.2.2</version>
-        <url>http://hsqldb.sourceforge.net/</url>
+      <groupId>hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>1.8.0.1</version>
+      <url>http://hsqldb.sourceforge.net/</url>
     </dependency> 
     
     <!--  Needed only for testing -->

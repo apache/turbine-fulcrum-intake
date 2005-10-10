@@ -108,9 +108,15 @@ public class HSQLServiceTest extends BaseUnitTest
     public void testIsRunning() throws Exception {
 
         assertTrue("Server was not started", service.isRunning());
-        ((HSQLServiceImpl)service).stop();
-        assertFalse("Server is still running", service.isRunning());
-       
+        service.stop();
+        assertFalse("Server is still running", service.isRunning());       
     }
- 
+
+    public void testShutdown() throws Exception {
+
+        Connection conn = this.getConnection("test"); 
+        Statement stmt = conn.createStatement();
+        stmt.execute("SHUTDOWN;");        
+        assertFalse("Server is still running", service.isRunning());
+    }
 }

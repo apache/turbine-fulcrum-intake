@@ -4,17 +4,33 @@
     <title>Fulcrum HSQLDB Service</title>
     <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
   </properties>
-
   <body>
+    <release version="1.0.1-dev" date="as in SVN">
+      <action dev="sgoeschl" type="update">
+      	Removing the access to the Avalon context since it was never used.
+      </action>
+      <action dev="sgoeschl" type="update">
+        Using HSQLDB 1.8.0.1 which also fixes the GUMP spam about broken
+        builds.
+      </action>
+      <action dev="sgoeschl" type="add">
+        Using org.apache.avalon.framework.activity.Startable in the
+        service interface to start/stop the service.
+      </action>
+      <action dev="sgoeschl" type="update">
+        Got rid of the cast to the service implementation class to
+        stop the database since the cast fails when using dynamic
+        proxies
+      </action>
+    </release>
     <release version="1.0.0" date="as in CVS">
-     <action dev="epugh" type="update">
+      <action dev="epugh" type="update">
         Add additional tests submitted by Peter Tillemans in Scarab version of
         this service.
-      </action>        
-     <action dev="goeschsi" type="update">
+      </action>
+      <action dev="sgoeschl" type="update">
         Initial release
-      </action>      
-    </release>    
+      </action>
+    </release>
   </body>
 </document>
-
