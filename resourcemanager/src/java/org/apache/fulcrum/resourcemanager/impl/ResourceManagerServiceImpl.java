@@ -59,8 +59,7 @@ public class ResourceManagerServiceImpl
     
     /** The list of registered domains */
     private Hashtable domainList;
-        
-    
+            
     /////////////////////////////////////////////////////////////////////////
     // Avalon Service Lifecycle Implementation
     /////////////////////////////////////////////////////////////////////////
@@ -268,7 +267,7 @@ public class ResourceManagerServiceImpl
     /**
      * @return Returns the domainList.
      */
-    public Hashtable getDomainList()
+    protected Hashtable getDomainList()
     {
         return domainList;
     }
@@ -282,15 +281,11 @@ public class ResourceManagerServiceImpl
         ResourceManager result = null;
         
         String domainName = domainConfiguration.getAttribute("name");
-        String domainType = domainConfiguration.getAttribute("type");
-        
+        String domainType = domainConfiguration.getAttribute("type",FileResourceManager.class.getName()); 
+            
         // create an instance dynamically
         
-        this.getLogger().debug( "Creating a resource manager for " 
-            + domainName
-            + "@"
-            + domainType
-            );
+        this.getLogger().debug( "Creating a resource manager for " + domainName);
           
         result = this.createResourceManager( domainType, domainName );
         

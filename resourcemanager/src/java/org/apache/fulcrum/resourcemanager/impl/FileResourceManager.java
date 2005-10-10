@@ -44,7 +44,7 @@ public class FileResourceManager
     private String suffix;
     
     /** try to locate a resource automagically? */
-    private boolean useLocator = true;
+    private boolean useLocator;
 
     /** the location where all resources are located */
     private File resourceDir;
@@ -52,8 +52,8 @@ public class FileResourceManager
     /** the cached list of all available resources */
     private String[] resourceFileNameList;
     
-    /** the name of the subversion metadata directory */
-    private static final String SVN_DIRNAME = ".svn";
+    /** the directory names we usually want to exclude  */
+    private String[] defaultDirectoryExcludes;
     
     /////////////////////////////////////////////////////////////////////////
     // Avalon Service Lifecycle Implementation
@@ -65,6 +65,9 @@ public class FileResourceManager
     public FileResourceManager()
     { 
         super();
+        
+        this.useLocator = true;
+        this.defaultDirectoryExcludes =  new String[] { "CVS", ".svn" };
     }
 
     /**
@@ -152,7 +155,7 @@ public class FileResourceManager
     /**
      * @see org.apache.fulcrum.resourcemanager.ResourceManager#exists(java.lang.String)
      */
-    public boolean exists(String resourceName)
+    public synchronized boolean exists(String resourceName)
     {
         File resourceFile = this.findResourceFile( resourceName, this.resourceFileNameList );
         
@@ -273,7 +276,7 @@ public class FileResourceManager
     /**
      * @see org.apache.fulcrum.resourcemanager.ResourceManager#read(java.lang.String[], java.lang.String)
      */
-    public byte [] read( String[] context, String resourceName )
+    public synchronized byte[] read( String[] context, String resourceName )
         throws IOException
     {
         String resourceFileName = this.createResourceFileName( context, resourceName );
@@ -283,7 +286,7 @@ public class FileResourceManager
     /**
      * @see org.apache.fulcrum.resourcemanager.ResourceManager#locate(java.lang.String[], java.lang.String)
      */
-    public String locate( String[] context, String resourceName )
+    public synchronized String locate( String[] context, String resourceName )
     {
         String result = null;
         String resourceDirName = this.getResourceDir().getAbsolutePath();
@@ -308,7 +311,7 @@ public class FileResourceManager
     /**
      * @see org.apache.fulcrum.resourcemanager.ResourceManager#getResourceURL(java.lang.String[], java.lang.String)
      */
-    public URL getResourceURL(String [] context, String resourceName)
+    public synchronized URL getResourceURL(String [] context, String resourceName)
     {
         String resourceFileName = this.createResourceFileName( context, resourceName );
         File resourceFile = this.findResourceFile( resourceFileName, this.resourceFileNameList );
@@ -334,6 +337,27 @@ public class FileResourceManager
     // Service Implementation
     /////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Check if the given directory name is excluded from the search.
+     * 
+     * @param directory the directory
+     * @return true if the directory name is excluded
+     */
+    private boolean isDirectoryExcluded( File directory )
+    {
+        String directoryName = directory.getName();
+        
+        for( int i=0; i<this.defaultDirectoryExcludes.length; i++ )
+        {
+            if(this.defaultDirectoryExcludes[i].equals(directoryName))
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     /**
      * Creates a sorted list of resource file names using the user-supplied 
      * suffix.
@@ -460,11 +484,16 @@ public class FileResourceManager
 
             for( int i=0; i<list.length; i++ )
             {
-                // skip the subversion directories otherwise we pick up unexpected files 
+                // recursive search for all subdirectories 
                 
-                if( list[i].isDirectory() && (list[i].getName().equalsIgnoreCase(SVN_DIRNAME) == false) )
+                if( list[i].isDirectory() )
                 {
-                    this.findAllResources( list[i], suffix, result );
+                    // check that the subdirectory is not excluded from the seach
+                    
+                    if( !this.isDirectoryExcluded(list[i]) )
+                    {
+                        this.findAllResources( list[i], suffix, result );
+                    }
                 }
                 else
                 {

@@ -55,6 +55,9 @@ public abstract class BaseResourceManager
     implements Contextualizable, Serviceable, Configurable,  
     	Initializable, Disposable, Reconfigurable, ResourceManager
 {
+    /** the buffer size for copying streams */
+    private static final int BUF_SIZE = 1024;
+    
     /** The context supplied by the avalon framework */
     private Context context;
     
@@ -181,7 +184,7 @@ public abstract class BaseResourceManager
     /**
      * @return Returns the applicationDir.
      */
-    public File getApplicationDir()
+    protected File getApplicationDir()
     {
         return applicationDir;
     }
@@ -189,7 +192,7 @@ public abstract class BaseResourceManager
     /**
      * @return Returns the tempDir.
      */
-    public File getTempDir()
+    protected File getTempDir()
     {
         return tempDir;
     }
@@ -326,9 +329,9 @@ public abstract class BaseResourceManager
 	}
     
     /**
-     * Reads the given file and decrypts it if required
-     * @param source the source file
-     * @return the content of the file
+     * Reads the given input stream and decrypts it if required
+     * @param is the input stream to be read
+     * @return the content of the input stream
      */
     protected byte[] read( InputStream is )
     	throws IOException
@@ -429,10 +432,11 @@ public abstract class BaseResourceManager
     }
 
     /**
-     * Write the given file and encrypts it if required
-     * @param target the target file
-     * @parwm content the content to be written
-     * @return
+     * Write the given output stream and encrypts it if required. If the 
+     * encryption mode is "auto" we also encryt it.
+     * 
+     * @param os the output stream to be written
+     * @param content the content to be written
      */
     protected void write( OutputStream os, byte[] content )
     	throws IOException
@@ -504,7 +508,7 @@ public abstract class BaseResourceManager
     private void copy( InputStream is, OutputStream os )
         throws IOException
     {
-        byte[] buf = new byte[1024];
+        byte[] buf = new byte[BUF_SIZE];
         int n = 0;
         int total = 0;
 

@@ -2,15 +2,30 @@
 <document>
   <properties>
     <title>Fulcrum ResourceManager Service</title>
-    <author email="sgoeschl@apache.org">Siegfried Goeschl</author>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
   </properties>
 
   <body>
     <release version="1.0.1-dev" date="in SVN">
+      <action dev="sgoeschl" type="update">
+      	Using the FileResourceManager as default for the configuration
+      </action>
+      <action dev="sgoeschl" type="fix">
+      	Fixed a few JavaDoc warnings
+      </action>
+      <action dev="sgoeschl" type="fix">
+        Restricting the access of context-specific information in
+        BaseResourceManagerImpl to protected instead of public
+      </action>
+      <action dev="sgoeschl" type="fix">
+        In response to the suggestions of the mailing list the implementation
+        provides a list of excluded directory names. This list is currently not
+        configurable but hard-coded and contains "CVS" and ".svn".
+      </action>
       <action dev="sgoeschl" type="fix">
         Skipping all ".svn" directories otherwise we pick up arbitrary files
       </action>
-    </release>  
+    </release>    
     <release version="1.0.0" date="in CVS">
       <action dev="sgoeschl" type="add">
         Initial version
