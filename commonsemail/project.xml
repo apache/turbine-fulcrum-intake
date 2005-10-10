@@ -4,7 +4,7 @@
   <extend>${basedir}/../project.xml</extend>
   <id>fulcrum-commonsemail</id>
   <name>Fulcrum CommonsEmail Service</name>
-  <currentVersion>1.0.0</currentVersion>
+  <currentVersion>1.0.1-dev</currentVersion>
   
   <dependencies>
     <dependency>
@@ -17,7 +17,7 @@
     <dependency>
         <groupId>commons-email</groupId>
         <artifactId>commons-email</artifactId>
-        <version>20050601.114714</version>
+        <version>1.0</version>
         <url>http://jakarta.apache.org/commons/email.html</url>
         <properties/>
     </dependency>

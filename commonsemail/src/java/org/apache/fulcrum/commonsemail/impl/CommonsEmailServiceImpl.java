@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Properties;
 
 import javax.activation.DataSource;
 import javax.mail.Address;
@@ -45,6 +46,7 @@ import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
@@ -67,7 +69,8 @@ import org.apache.fulcrum.commonsemail.CommonsEmailService;
 
 public class CommonsEmailServiceImpl
     extends AbstractLogEnabled
-    implements CommonsEmailService, Contextualizable, Reconfigurable, Initializable, Disposable, TransportListener
+    implements CommonsEmailService, Contextualizable, Reconfigurable, Initializable, Disposable, 
+    	TransportListener, CommonsEmailConstants
 {    
     /** the Avalon home directory */
     private File serviceHomeDir;
@@ -158,6 +161,73 @@ public class CommonsEmailServiceImpl
     /////////////////////////////////////////////////////////////////////////
     
     /**
+     * @see org.apache.fulcrum.commonsemail.CommonsEmailService#isMailDoNotSend(java.lang.String)
+     */
+    public boolean isMailDoNotSend(String domainName)
+    {
+        CommonsEmailDomainEntry domain = this.getDomain(domainName);
+        return domain.isMailDoNotSend();
+    }
+    
+    /**
+     * @see org.apache.fulcrum.commonsemail.CommonsEmailService#createSmtpSession(java.lang.String)
+     */
+    public Session createSmtpSession(String domainName)
+    {
+        CommonsEmailDomainEntry domain = this.getDomain(domainName);
+
+        return this.createSmtpSession(
+            domainName,
+            domain.getAuthUsername(),
+            domain.getAuthPassword()
+            );
+    }
+
+    /**
+     * @see org.apache.fulcrum.commonsemail.CommonsEmailService#createSmtpSession(java.lang.String, java.lang.String, java.lang.String)
+     */
+    public Session createSmtpSession(String domainName, String username,
+        String password)
+    {
+        Session result = null;
+        CommonsEmailDomainEntry domain = this.getDomain(domainName);
+        Properties properties = new Properties(System.getProperties());
+        DefaultAuthenticator authenticator = null;
+
+        properties.setProperty(MAIL_DEBUG, Boolean.toString(domain.isMailDebug()));
+        properties.setProperty(MAIL_TRANSPORT_PROTOCOL, "smtp");
+        properties.setProperty(MAIL_SMTP_HOST, domain.getMailSmtpHost());
+        properties.setProperty(MAIL_SMTP_PORT, Integer.toString(domain.getMailSmtpPort()));
+        properties.setProperty(MAIL_SMTP_CONNECTIONTIMEOUT, Integer.toString(domain.getMailSmtpConnectionTimeout()));
+        properties.setProperty(MAIL_SMTP_TIMEOUT, Integer.toString(domain.getMailSmtpTimeout()));
+        properties.setProperty(MAIL_SMTP_SENTPARTIAL, Boolean.toString(domain.isMailSmtpSendPartial()));
+        
+        properties.setProperty(MAIL_SMTP_FROM,domain.getMailBounceAddress());
+        
+        // if SMTP AUTH is enabled create a default authenticator 
+        
+        if( domain.hasSmtpAuthentication() )
+        {
+            properties.setProperty(MAIL_SMTP_AUTH, "true");
+
+            authenticator = new DefaultAuthenticator(
+                username,
+                password
+                );
+        }
+
+        if( domain.hasSmtpAuthentication() )
+        {
+            result = Session.getInstance(properties, authenticator);
+        }
+        else
+        {
+            result = Session.getInstance(properties);
+        }
+        
+        return result;
+    }
+    /**
      * @see org.apache.fulcrum.commonsemail.CommonsEmailService#createHtmlEmail(java.lang.String)
      */
     public HtmlEmail createHtmlEmail(String domainName) throws EmailException
@@ -222,7 +292,8 @@ public class CommonsEmailServiceImpl
             this.send(
                 domain, 
                 email.getMailSession(),
-                mimeMessage
+                mimeMessage,
+                mimeMessage.getAllRecipients()
                 );
                 
             return mimeMessage;
@@ -271,11 +342,40 @@ public class CommonsEmailServiceImpl
         this.send(
             domain, 
             session,
-            mimeMessage
+            mimeMessage,
+            mimeMessage.getAllRecipients()
             );
         
-        return result;         
+        return result;            
+    }
+    
+    /**
+     * @see org.apache.fulcrum.commonsemail.CommonsEmailService#send(java.lang.String, javax.mail.Session, javax.mail.internet.MimeMessage, javax.mail.Address[])
+     */
+    public MimeMessage send(String domainName, Session session,
+        MimeMessage mimeMessage, Address [] recipients)
+        throws MessagingException
+    {
+        MimeMessage result = null;
         
+        // get the configuration of this domain
+        
+        CommonsEmailDomainEntry domain = this.getDomain(domainName);
+        
+        //	update the MimeMessage based on the domain configuration
+        
+        result = this.updateMimeMessage(domain, mimeMessage);
+        
+        // send the MimeMessage 
+        
+        this.send(
+            domain, 
+            session,
+            mimeMessage,
+            recipients
+            );
+        
+        return result;            
     }
     
     /**
@@ -288,7 +388,13 @@ public class CommonsEmailServiceImpl
          
          // determine the domain name
          
-         String domainName = ((InternetAddress) (mimeMessage.getFrom()[0])).getAddress();
+         if( ( mimeMessage.getFrom() == null ) || ( mimeMessage.getFrom().length == 0 ) )
+         {
+             throw new MessagingException("No from address defined - unable to determine a domain configuration");
+         }
+         
+         InternetAddress fromAddress = (InternetAddress) mimeMessage.getFrom()[0];
+         String domainName = fromAddress.getAddress();
          
          // get the configuration of this domain
          
@@ -303,7 +409,8 @@ public class CommonsEmailServiceImpl
          this.send(
              domain, 
              session,
-             mimeMessage
+             mimeMessage,
+             mimeMessage.getAllRecipients()
              );
          
          return result;         
@@ -493,11 +600,14 @@ public class CommonsEmailServiceImpl
      * Sends a MimeMessage. We use a Transport instance to register
      * a transport listener to track invalid email addresses.
      * 
+     * @param domain the domain configuration
+     * @param sesssion the mail sessoin
      * @param mimeMessage the MimeMessage to be sent
+     * @param recipients the list of recipients
      * @throws MessagingException sending the MimeMessage failed
      */
     private void send(
-        CommonsEmailDomainEntry domain, Session session, MimeMessage mimeMessage) 
+        CommonsEmailDomainEntry domain, Session session, MimeMessage mimeMessage, Address[] recipients) 
     	throws MessagingException
     {        
         if( this.getLogger().isDebugEnabled() )
@@ -524,8 +634,17 @@ public class CommonsEmailServiceImpl
                 Transport transport = session.getTransport("smtp");
                 
                 transport.addTransportListener(this);
-                transport.connect();	        
-                transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
+                transport.connect();	      
+                
+                if( (recipients == null) || (recipients.length == 0) )
+                {
+                    transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
+                }
+                else
+                {
+                    transport.sendMessage(mimeMessage, recipients);
+                }
+                
                 transport.close();                
                 
                 long endTime = System.currentTimeMillis();

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <document>
   <properties>
-    <title>IT20one PDF Service</title>
+    <title>Fulcrum CommonsEmail Service</title>
     <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
   </properties>
   <body>
@@ -15,7 +15,7 @@
     default-class="org.apache.fulcrum.commonsemail.impl.CommonsEmailServiceImpl"
     early-init="true"
     description="Simplifies the usage of commons-email"
-  />        
+  />
 
           ]]></source>
       </subsection>
@@ -33,7 +33,7 @@
             <td>String</td>
             <td>[0|1]</td>
             <td>
-              The default domain to use if the caller-supplied 
+              The default domain to use if the caller-supplied
               domain name was not found
             </td>
           </tr>
@@ -66,7 +66,7 @@
             <td>String</td>
             <td>[0|1]</td>
             <td>
-              This field is used to match a given argument to 
+              This field is used to match a given argument to
               a domain. If no value is supplied than the
               'domainName' is used
             </td>
@@ -87,6 +87,24 @@
             <td>[0|1]</td>
             <td>
               The SMTP port being used for creating the underlying mail session.
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\mailSmtpConnectionTimeout</td>
+            <td>Integer</td>
+            <td>[0|1]</td>
+            <td>
+              The socket connection timeout value in milliseconds. This settings
+              is only applicable for javamail-1.3.3 or higer.
+            </td>
+          </tr>
+          <tr>
+            <td>domains\domain\mailSmtpTimeout</td>
+            <td>Integer</td>
+            <td>[0|1]</td>
+            <td>
+              The socket I/O timeout value in milliseconds. This settings
+              is only applicable for javamail-1.3.3 or higer.
             </td>
           </tr>
           <tr>
@@ -136,7 +154,7 @@
             <td>Boolean</td>
             <td>[0|1]</td>
             <td>
-              Setting the 'mail.debug' property for the underlying mail session. 
+              Setting the 'mail.debug' property for the underlying mail session.
               If it is not set the default value 'false' is used.
             </td>
           </tr>
@@ -154,7 +172,7 @@
             <td>Boolean</td>
             <td>[0|1]</td>
             <td>
-              Skip sending of the MimeMessage? 
+              Skip sending of the MimeMessage?
             </td>
           </tr>
           <tr>
@@ -254,7 +272,7 @@
             <td>
               Contains the enforced BCC address
             </td>
-          </tr>          
+          </tr>
           <tr>
             <td>domains\domain\overwrites\mailBccEmail</td>
             <td>String</td>
@@ -262,7 +280,7 @@
             <td>
               Contains the enforced BCC address
             </td>
-          </tr>          
+          </tr>
           <tr>
             <td>domains\domain\hooks</td>
             <td>Complex</td>
@@ -270,7 +288,7 @@
             <td>
               Contains the configuration for the application hooks
             </td>
-          </tr>          
+          </tr>
           <tr>
             <td>domains\domain\hooks\onSuccess@enable</td>
             <td>Boolean</td>
@@ -278,7 +296,7 @@
             <td>
               Is the hook for a sucscessfully send email enabled?
             </td>
-          </tr>                    
+          </tr>
           <tr>
             <td>domains\domain\hooks\onFailure@enable</td>
             <td>Boolean</td>
@@ -286,7 +304,7 @@
             <td>
               Is the hook for an undeliverd email enabled?
             </td>
-          </tr>                    
+          </tr>
           <tr>
             <td>domains\domain\hooks\onNotSend@enable</td>
             <td>Boolean</td>
@@ -294,7 +312,7 @@
             <td>
               Is the hook for an unsent email enabled?
             </td>
-          </tr>                    
+          </tr>
         </table>
       </subsection>
 
@@ -323,16 +341,16 @@
   </CommonsEmailService>
         ]]></source>
       </subsection>
-      
+
       <subsection name="Component Configuration Example 2">
         <p>
           This is a full blown example. We define a domain 'test'
           using the SMTP server on localhost:6025 using SMTP
           auhtentication. We also define the 'from' and 'replyTo'
           since it can be overwritten by the application. Furthermore
-          all mail recipients are overwritten to ensure that the 
+          all mail recipients are overwritten to ensure that the
           emails are delivered to a test account.
-        </p>      
+        </p>
         <source><![CDATA[
   <CommonsEmailService>
     <defaultDomain>test</defaultDomain>
@@ -356,9 +374,9 @@
           <password>demo</password>
         </authentication>
         <headers>
-          <property name="X-Mailer">Sendmail</property>        
-          <property name="X-Priority">1</property>        
-          <property name="Disposition-Notification-To">demo@it20one.at</property>        
+          <property name="X-Mailer">Sendmail</property>
+          <property name="X-Priority">1</property>
+          <property name="Disposition-Notification-To">demo@it20one.at</property>
         </headers>
         <overwrites>
           <mailToEmail>demo@it20one.at</mailToEmail>
@@ -370,7 +388,7 @@
   </CommonsEmailService>
         ]]></source>
       </subsection>
-      
+
     </section>
   </body>
 </document>

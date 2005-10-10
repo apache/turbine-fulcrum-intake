@@ -10,7 +10,13 @@ import java.io.FileOutputStream;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailAttachment;
@@ -20,8 +26,9 @@ import org.apache.commons.mail.MultiPartEmail;
 import org.apache.commons.mail.SimpleEmail;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
+
 /**
- * PBEServiceTest
+ * CommonsEmailServiceTest
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
@@ -45,7 +52,10 @@ public class CommonsEmailServiceTest extends BaseUnitTest
     /** the generated MimeMessage */
     private MimeMessage result;
     
+    /** default plain text content */
     private static final String PLAIN_CONTENT = "Hello World";
+    
+    /** default HTML text content */
     private static final String HTML_CONTENT = "<h1>Hello World</h1>";
 
     /**
@@ -81,7 +91,7 @@ public class CommonsEmailServiceTest extends BaseUnitTest
         }
     }
     
-    /* (non-Javadoc)
+    /**
      * @see junit.framework.TestCase#tearDown()
      */
     protected void tearDown()
@@ -98,17 +108,37 @@ public class CommonsEmailServiceTest extends BaseUnitTest
             }
             catch (Exception e)
             {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
             }            
         }
-        // TODO Auto-generated method stub
+        
         super.tearDown();
     }
     
     /**
-     * @return the PDF service to be used
+     * Add all of our test suites
+     */
+    public static Test suite()
+    {
+        TestSuite suite= new TestSuite();
+        
+        suite.addTest( new CommonsEmailServiceTest("testDefaultDomain") );      
+        suite.addTest( new CommonsEmailServiceTest("testDerivedDomain") );      
+        suite.addTest( new CommonsEmailServiceTest("testHtmlEmail") );      
+        suite.addTest( new CommonsEmailServiceTest("testHtmlEmailWithHashtable") );      
+        suite.addTest( new CommonsEmailServiceTest("testMultiPartEmail") );      
+        suite.addTest( new CommonsEmailServiceTest("testSendEmailToUnknownServer") );      
+        suite.addTest( new CommonsEmailServiceTest("testSendMimeMessage") );      
+        suite.addTest( new CommonsEmailServiceTest("testSimpleEmail") );      
+        suite.addTest( new CommonsEmailServiceTest("testSimpleEmailWithHashtable") );      
+        suite.addTest( new CommonsEmailServiceTest("testCreateMimeMessageWithSession") );      
+        
+        return suite;
+    }
+
+    /**
+     * @return the CommonsEmailService service to be used
      */
     protected CommonsEmailService getService()
     {
@@ -116,7 +146,7 @@ public class CommonsEmailServiceTest extends BaseUnitTest
     }
     
     /**
-     * @return Returns the subject.
+     * @return Returns the mail subject.
      */
     protected String getSubject()
     {
@@ -124,7 +154,7 @@ public class CommonsEmailServiceTest extends BaseUnitTest
     }
         
     /**
-     * @return Returns the domain.
+     * @return Returns the domain name.
      */
     protected String getDomain()
     {
@@ -147,6 +177,9 @@ public class CommonsEmailServiceTest extends BaseUnitTest
         return mailFrom;
     }
     
+    /**
+     * @return a preconfigured attachment
+     */
     protected EmailAttachment getEmailAttachment()
     {
         EmailAttachment attachment = new EmailAttachment();
@@ -207,7 +240,7 @@ public class CommonsEmailServiceTest extends BaseUnitTest
     }           
     
     /**
-     * Use an undefined domain therefore reverting to the default domin.
+     * Use an undefined domain therefore reverting to the default domain.
      * 
      * @throws Exception
      */
@@ -240,7 +273,7 @@ public class CommonsEmailServiceTest extends BaseUnitTest
     }
     
     /**
-     * Create an email using a Hashtable as input.
+     * Create a HTML email using a Hashtable as input.
      * 
      * @throws Exception
      */
@@ -310,8 +343,12 @@ public class CommonsEmailServiceTest extends BaseUnitTest
         
         try
         {
-            this.result = this.getService().send(email);  
-            // fail();
+            this.result = this.getService().send(email);
+            
+            if( this.getService().isMailDoNotSend(email.getFromAddress().getAddress()) == false )
+            {
+                fail();
+            }
         }
         catch( EmailException e )
         {
@@ -319,6 +356,26 @@ public class CommonsEmailServiceTest extends BaseUnitTest
         }
     }
     
+    /**
+     * Create a mail session and simple MimeMessage and sent it 
+     * @throws Exception the test failed
+     */
+    public void testCreateMimeMessageWithSession() throws Exception
+    {
+        MimeMessage mimeMessage = null;
+        Session session = this.getService().createSmtpSession("test","foo","bar");
+        
+        mimeMessage = new MimeMessage(session);
+        mimeMessage.setFrom(new InternetAddress(this.mailFrom));
+        mimeMessage.setSubject(this.getSubject());
+        mimeMessage.setText(PLAIN_CONTENT);
+        mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(this.mailTo));
+
+        this. result = this.getService().send(
+            session,
+            mimeMessage
+            );
+    }
     /**
      * Use commons-email to build a MimeMessage and send it directly
      * 

@@ -72,7 +72,16 @@ public class CommonsEmailDomainEntry
 
     /** the port of the mail server */
     private int mailSmtpPort;
-
+    
+    /** socket connection timeout value in milliseconds */
+    private int mailSmtpConnectionTimeout;
+    
+	/** socket I/O timeout value in millisecond */
+    private int mailSmtpTimeout;
+    
+    /** if the message has some valid and some invalid addresses, send the message anyway */
+    private boolean mailSmtpSendPartial;
+    
     /** the email address of the sender */
     private String mailFromEmail;
 
@@ -154,6 +163,7 @@ public class CommonsEmailDomainEntry
      * Initialize this instance.
      * 
      * @param conf the domain configuration 
+     * @return the fully configured instance
      * @throws ConfigurationException the configuration failed
      */
     public CommonsEmailDomainEntry initialize( Configuration conf )
@@ -169,8 +179,10 @@ public class CommonsEmailDomainEntry
         this.mailCharset = conf.getChild("mailCharset").getValue(null);
         
         this.mailSmtpHost = conf.getChild("mailSmtpHost").getValue(
-            System.getProperty("mail.smtp.host")
+            System.getProperty("mail.smtp.host","localhost")
             );
+        
+        // determine SMTP port either from the configuration or from the system properties
         
         this.mailSmtpPort = conf.getChild("mailSmtpPort").getValueAsInteger(0);    
         
@@ -181,6 +193,9 @@ public class CommonsEmailDomainEntry
                 );
         }
         
+        this.mailSmtpConnectionTimeout = conf.getChild("mailSmtpConnectionTimeout").getValueAsInteger(Integer.MAX_VALUE);
+        this.mailSmtpTimeout = conf.getChild("mailSmtpConnectionTimeout").getValueAsInteger(Integer.MAX_VALUE);
+        this.mailSmtpSendPartial = conf.getChild("mailSmtpSendPartial").getValueAsBoolean(false);
         this.mailFromEmail = conf.getChild("mailFromEmail").getValue(null);
         this.mailFromName = conf.getChild("mailFromName").getValue(null);
         this.mailReplyToEmail = conf.getChild("mailReplyToEmail").getValue(this.mailFromEmail);
@@ -278,7 +293,6 @@ public class CommonsEmailDomainEntry
             this.onNotSendHookConfiguration = hookConf.getChild("onNotSend");
         }
         
-        
         return this;
     }
  
@@ -292,8 +306,6 @@ public class CommonsEmailDomainEntry
         result.append(getClass().getName() + "@" + Integer.toHexString(hashCode()));
         
         result.append('[');
-        result.append("authPassword=" + this.getAuthPassword());        
-        result.append(',');
         result.append("authPopHost=" + this.getAuthPopHost());
         result.append(',');
         result.append("authType=" + this.getAuthType());
@@ -331,6 +343,12 @@ public class CommonsEmailDomainEntry
         result.append("mailSmtpHost=" + this.getMailSmtpHost());                
         result.append(',');
         result.append("mailSmtpPort=" + this.getMailSmtpPort());                
+        result.append(',');
+        result.append("mailSmtpConnectionTimeout=" + this.getMailSmtpConnectionTimeout());                
+        result.append(',');
+        result.append("mailSmtpTimeout=" + this.getMailSmtpTimeout());                
+        result.append(',');
+        result.append("mailSmtpSendPartial=" + this.isMailSmtpSendPartial());                
         result.append(',');
         result.append("overwriteBcc=" + this.getOverwriteBcc());                
         result.append(',');
@@ -496,7 +514,31 @@ public class CommonsEmailDomainEntry
     }
     
     /**
-     * Is any type of authentication used for this domain?
+     * @return Returns the mailSmtpConnectionTimeout.
+     */
+    public int getMailSmtpConnectionTimeout()
+    {
+        return mailSmtpConnectionTimeout;
+    }
+    
+    /**
+     * @return Returns the mailSmtpTimeout.
+     */
+    public int getMailSmtpTimeout()
+    {
+        return mailSmtpTimeout;
+    }
+    
+    /**
+     * @return Returns the mailSmtpSendPartial.
+     */
+    public boolean isMailSmtpSendPartial()
+    {
+        return mailSmtpSendPartial;
+    }
+    
+    /**
+     * @return Is any type of authentication used for this domain?
      */
     public boolean hasAuthentication()
     {
@@ -511,7 +553,7 @@ public class CommonsEmailDomainEntry
     }
 
     /**
-     * Is SMTP authentication used for this domain?
+     * @return Is SMTP authentication used for this domain?
      */
     public boolean hasSmtpAuthentication()
     {
@@ -526,7 +568,7 @@ public class CommonsEmailDomainEntry
     }
 
     /**
-     * Is PopBeforeSMTP authentication used for this domain?
+     * @return Is PopBeforeSMTP authentication used for this domain?
      */
     public boolean hasPopBeforeSmtpAuthentication()
     {

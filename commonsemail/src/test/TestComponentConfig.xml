@@ -2,15 +2,18 @@
 
 <componentConfig>
 
-  <!-- 
+  <!--
     CommonsEmailService
-    
+
     defaultDomain := the name of the default domain if no match was found
     domains\domain := a single domain configuration
     domains\domain\domainName := the name of the domain (mandatory)
-    domains\domain\domainMatch := the match field of the domain (mandatory)
+    domains\domain\domainMatch := the match field of the domain (optinonal)
     domains\domain\mailSmtpHost := the SMTP server (optional)
     domains\domain\mailSmtpPort := the SMTP port (optional)
+    domains\domain\mailSmtpConnectionTimeout := socket connection timeout value in milliseconds
+    domains\domain\mailSmtpTimeout := socket I/O timeout value in milliseconds
+    domains\domain\mailSmtpSendPartial := send the email to the recipients even if one address is rejected
     domains\domain\mailFromEmail := the sender address of the email (optional)
     domains\domain\mailFromName := the sender name of the email (optional)
     domains\domain\bounceAddress := the bounce address if the email can't be delivered (optional)
@@ -25,7 +28,7 @@
     domains\domain\headers\property := the single email header
     domains\domain\overwrites\mailToEmail := overwrite the TO recipients
     domains\domain\overwrites\mailCcEmail := overwrite the CC recipients
-    domains\domain\overwrites\mailBccEmail := overwrite the BCC recipients    
+    domains\domain\overwrites\mailBccEmail := overwrite the BCC recipients
     domains\domain\hooks\onSuccess@enabled := is the 'onSuccess' application hook enabled
     domains\domain\hooks\onSuccess\directory := the directory to store the message
     domains\domain\hooks\onFailure@enabled := is the 'onFailure' application hook enabled
@@ -33,7 +36,7 @@
     domains\domain\hooks\onNotSend@enabled := is the 'onNotSend' application hook enabled
     domains\domain\hooks\onNotSend\directory := the directory to store the message
   -->
-    
+
   <CommonsEmailService>
     <defaultDomain>test</defaultDomain>
     <domains>
@@ -42,6 +45,9 @@
         <domainMatch>test</domainMatch>
         <mailSmtpHost>localhost</mailSmtpHost>
         <mailSmtpPort>6025</mailSmtpPort>
+        <mailSmtpConnectionTimeout>60000</mailSmtpConnectionTimeout>
+        <mailSmtpTimeout>60000</mailSmtpTimeout>
+        <mailSmtpSendPartial>true</mailSmtpSendPartial>
         <mailFromEmail>demo@it20one.at</mailFromEmail>
         <mailFromName>E-Billing Test</mailFromName>
         <mailReplyToEmail>demo@it20one.at</mailReplyToEmail>
@@ -56,15 +62,15 @@
           <password>demo</password>
         </authentication>
         <headers>
-          <property name="X-Test-Domain">test</property>        
-          <property name="X-Mailer">Sendmail</property>        
-          <property name="X-Priority">1</property>        
-          <property name="Disposition-Notification-To">demo@it20one.at</property>        
+          <property name="X-Test-Domain">test</property>
+          <property name="X-Mailer">Sendmail</property>
+          <property name="X-Priority">1</property>
+          <property name="Disposition-Notification-To">demo@it20one.at</property>
         </headers>
         <overwrites>
           <mailToEmail>demo@it20one.at</mailToEmail>
           <mailCcEmail></mailCcEmail>
-          <mailBccEmail></mailBccEmail>        
+          <mailBccEmail></mailBccEmail>
         </overwrites>
         <hooks>
           <onSuccess enabled="true">
@@ -76,7 +82,7 @@
           <onNotSend enabled="true">
             <directory>./temp/archive/broken/eml</directory>
           </onNotSend>
-        </hooks>        
+        </hooks>
       </domain>
       <domain>
         <domainName>it20one.at</domainName>
@@ -88,7 +94,7 @@
           <username>demo</username>
           <password>demo</password>
         </authentication>
-      </domain>      
+      </domain>
     </domains>
   </CommonsEmailService>
 
