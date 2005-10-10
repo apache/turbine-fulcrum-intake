@@ -122,7 +122,7 @@ public class LoggingInterceptorServiceImpl
     /////////////////////////////////////////////////////////////////////////
 
     /**
-     * @see org.apache.fulcrum.yaafi.framework.proxy.AvalonInterceptorService#onEntry(java.lang.String, java.lang.Object, java.lang.reflect.Method, java.lang.Object[])
+     * @see org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorService#onEntry(org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorContext)
      */
     public void onEntry(AvalonInterceptorContext interceptorContext)
     {
@@ -138,7 +138,7 @@ public class LoggingInterceptorServiceImpl
     }
 
     /**
-     * @see org.apache.fulcrum.yaafi.framework.proxy.AvalonInterceptorService#onError(java.lang.String, java.lang.Object, java.lang.reflect.Method, java.lang.Object[], java.lang.Throwable)
+     * @see org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorService#onError(org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorContext, java.lang.Throwable)
      */
     public void onError(AvalonInterceptorContext interceptorContext,Throwable t)
     {
@@ -152,7 +152,7 @@ public class LoggingInterceptorServiceImpl
     }
 
     /**
-     * @see org.apache.fulcrum.yaafi.framework.proxy.AvalonInterceptorService#onExit(java.lang.String, java.lang.Object, java.lang.reflect.Method, java.lang.Object[], java.lang.Object)
+     * @see org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorService#onExit(org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorContext, java.lang.Object)
      */
     public void onExit(AvalonInterceptorContext interceptorContext, Object result)
     {
@@ -366,8 +366,8 @@ public class LoggingInterceptorServiceImpl
     /**
      * Create a String representation for an excpeption.
      *
-     * @param object the object
-     * @return string representation
+     * @param throwable the Throwable
+     * @return the string representation
      */
     protected String toString(Throwable throwable)
     {

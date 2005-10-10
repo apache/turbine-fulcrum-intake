@@ -7,6 +7,23 @@
 
   <body>
     <release version="1.0.5-dev" date="as in SVN">
+      <action dev="sgoeschl" type="fix">
+      	Fixed a few JavaDoc warnings
+      </action>
+      <action dev="sgoeschl" type="add">
+        Using the parent ServiceManager (if available) during
+        lookup() and hasService()
+      </action>
+      <action dev="sgoeschl" type="update">
+        Adding Fortress context variables to enable a smooth
+        transition when making all Fulcrum service compatible
+        to a Fortress container
+      </action>
+      <action dev="sgoeschl" type="update">
+        Incarnating service is done in two steps now. This
+        allows to declare the services in any order in the
+        roleConfiguration.xml
+      </action>
       <action dev="sgoeschl" type="update">
         Updating to avalon-framework-api/impl-4.3.0.jar
       </action>

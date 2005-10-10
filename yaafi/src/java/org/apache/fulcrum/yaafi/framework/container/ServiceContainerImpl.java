@@ -36,6 +36,7 @@ import org.apache.avalon.framework.logger.Logger;
 import org.apache.avalon.framework.parameters.ParameterException;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.service.ServiceException;
+import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.fulcrum.jce.crypto.CryptoStreamFactoryImpl;
 import org.apache.fulcrum.yaafi.framework.component.AvalonServiceComponentImpl;
 import org.apache.fulcrum.yaafi.framework.component.ServiceComponent;
@@ -92,6 +93,9 @@ public class ServiceContainerImpl
     /** The logger to be used passed by the caller */
     private Logger logger;
 
+    /** The service manager passed to the container */
+    private ServiceManager parentServiceManager;
+    
     /** The list of services instantiated */
     private List serviceList;
 
@@ -184,6 +188,15 @@ public class ServiceContainerImpl
         this.callerContext = context;
     }
 
+    
+    /** 
+     * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
+     */
+    public void service(ServiceManager serviceManager) throws ServiceException
+    {
+        this.parentServiceManager = serviceManager;
+    }
+    
     /**
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
@@ -197,7 +210,12 @@ public class ServiceContainerImpl
             configuration.getChild(RECONFIGURATION_DELAY_KEY).getValueAsInteger(
                 RECONFIGURATION_DELAY
                 );
-            
+
+        // evaluate if we are using dynamic proxies
+        
+        this.hasDynamicProxies = 
+            configuration.getChild(DYNAMICPROXY_ENABLED_KEY).getValueAsBoolean(false);
+
         // retrieve the container flavour
 
         this.setContainerFlavour(
@@ -216,7 +234,8 @@ public class ServiceContainerImpl
 
             AvalonToYaafiContextMapper mapper = new AvalonToYaafiContextMapper(
                 this.getTempRootDir(),
-                this.callerContext
+                this.callerContext,
+                this.getClassLoader()
                 );
 
             // do the magic mapping
@@ -283,11 +302,6 @@ public class ServiceContainerImpl
             currParameters.getChild(COMPONENT_ISENCRYPTED_KEY).getValue(
                 "false" )
                 );
-
-        // evaluate if we are using dynamic proxies
-        
-        this.hasDynamicProxies = 
-            configuration.getChild(DYNAMICPROXY_ENABLED_KEY).getValueAsBoolean(false);
         
         // evaluate the default interceptors
 
@@ -377,7 +391,7 @@ public class ServiceContainerImpl
 
         this.setServiceList( currServiceList );
 
-        // fill the service map
+        // fill the service map mapping from a service name to an instance
 
         for( int i=0; i<this.getServiceList().size(); i++ )
         {
@@ -387,7 +401,7 @@ public class ServiceContainerImpl
 
         // run the various lifecycle stages
 
-        this.incarnate( this.getServiceList() );
+        this.incarnateAll( this.getServiceList() );
 
         // we are up and running
 
@@ -421,7 +435,11 @@ public class ServiceContainerImpl
             
             // decommision all servcies
 
-            this.decommision( this.getServiceList() );
+            this.decommisionAll( this.getServiceList() );
+
+            // dispose all servcies
+
+            this.disposeAll( this.getServiceList() );
 
             // clean up
 
@@ -515,8 +533,8 @@ public class ServiceContainerImpl
     }
 
     /**
-     * @see org.apache.fulcrum.yaafi.framework.container.ServiceLifecycleManager#getServiceComponent(java.lang.String)
-     */
+     * @see org.apache.fulcrum.yaafi.framework.container.ServiceLifecycleManager#getRoleEntry(java.lang.String)
+     */    
     public RoleEntry getRoleEntry(String name)
         throws ServiceException
     {
@@ -532,9 +550,9 @@ public class ServiceContainerImpl
             this.releaseLock(lock);
         }
     }
-
+    
     /**
-     * @see org.apache.fulcrum.yaafi.framework.container.ServiceLifecycleManager#getServiceComponents()
+     * @see org.apache.fulcrum.yaafi.framework.container.ServiceLifecycleManager#getRoleEntries()
      */
     public RoleEntry[] getRoleEntries()
     {
@@ -607,21 +625,31 @@ public class ServiceContainerImpl
     {
         Validate.notEmpty( name, "name" );
 
+        boolean result = false;
         Object lock = null;
+        ServiceComponent serviceComponent = null;
+        
+        // look at our available service 
         
         try
         {
-            lock = this.getReadLock();
-            
-            ServiceComponent serviceComponent =
-                (ServiceComponent) this. getServiceMap().get(name);
-
-            return ( serviceComponent != null ? true : false );
+            lock = this.getReadLock();            
+            serviceComponent = this.getLocalServiceComponent(name);
+            result = ( serviceComponent != null ? true : false );
         }
         finally
         {
             this.releaseLock(lock);
         }
+        
+        // if we haven't found anything ask the parent ServiceManager
+        
+        if( ( result == false ) && ( this.hasParentServiceManager() ) )
+        {
+            result = this.getParentServiceManager().hasService(name);
+        }
+        
+        return result;            
     }
 
     /**
@@ -635,17 +663,17 @@ public class ServiceContainerImpl
         Object result = null;
         ServiceComponent serviceComponent = null;
 
+        // look at our available service
+        
         try
         {
             lock = this.getReadLock();
-            serviceComponent = this.getServiceComponentEx(name);
-            result = serviceComponent.getInstance();
-        }
-        catch (ServiceException e)
-        {
-            String msg = "Failed to lookup the service " + serviceComponent.getShorthand();
-            this.getLogger().error( msg, e );
-            throw new ServiceException( serviceComponent.getShorthand(), msg, e );
+            serviceComponent = this.getLocalServiceComponent(name);
+            
+            if( serviceComponent != null )
+            {
+                result = serviceComponent.getInstance();
+            }
         }
         catch( Throwable t )
         {
@@ -657,14 +685,33 @@ public class ServiceContainerImpl
 		{
 		    this.releaseLock(lock);
 		}
+
+        // if we haven't found anything ask the parent ServiceManager
         
+        if( result == null )
+        {
+            if( this.hasParentServiceManager() )
+	        {
+	            result = this.getParentServiceManager().lookup(name);
+	        }
+        }
+        
+        // if we still haven't found anything then complain
+        
+        if( result == null )
+        {
+            String msg = "The following component does not exist : " + name;
+            this.getLogger().error(msg);
+            throw new ServiceException( AvalonYaafiConstants.AVALON_CONTAINER_YAAFI, name );
+        }
+
         return result;
     }
 
     /**
      * @see org.apache.avalon.framework.service.ServiceManager#release(java.lang.Object)
      */
-    public void release(Object arg0)
+    public void release(Object object)
     {
         // AFAIK this is only useful for lifecycle management regarding
         // lifestyle other than singleton.
@@ -785,7 +832,11 @@ public class ServiceContainerImpl
     }
 
     /**
-     * Enforce that a service is known to simplify error handling
+     * Enforce that a service is known to simplify error handling.
+     * 
+     * @param name the name of the service component
+     * @return the service component
+     * @throws ServiceException the service was not found
      */
     private ServiceComponent getServiceComponentEx(String name)
         throws ServiceException
@@ -797,12 +848,23 @@ public class ServiceContainerImpl
         {
             String msg = "The following component does not exist : " + name;
             this.getLogger().error(msg);
-            throw new ServiceException( "yaafi", name );
+            throw new ServiceException( AvalonYaafiConstants.AVALON_CONTAINER_YAAFI, name );
         }
-        else
-        {
-            return result;
-        }
+
+        return result;
+    }
+
+    /**
+     * Try to get a local service component
+     * 
+     * @param name the name of the service component
+     * @return the service component if any
+     */
+    private ServiceComponent getLocalServiceComponent(String name)
+    {
+        Validate.notEmpty( name, "name" );
+        ServiceComponent result = (ServiceComponent) this. getServiceMap().get(name);
+        return result;
     }
 
     /**
@@ -846,31 +908,43 @@ public class ServiceContainerImpl
     }
 
     /**
-     * Incarnation of a list of services
+     * Incarnation of a list of services.
+     * 
+     * @param serviceList the list of available services
      */
-    private void incarnate(List serviceList)
+    private void incarnateAll(List serviceList)
         throws Exception
     {
         ServiceComponent serviceComponent = null;
 
+        // configure all services 
+        
         for( int i=0; i<serviceList.size(); i++ )
         {
-            serviceComponent = (ServiceComponent) this.getServiceList().get(i);
+            serviceComponent = (ServiceComponent) this.getServiceList().get(i);            
+            this.configure( serviceComponent );
+        }
+
+        // incarnate all services
+        
+        for( int i=0; i<serviceList.size(); i++ )
+        {
+            serviceComponent = (ServiceComponent) this.getServiceList().get(i);            
             this.incarnate( serviceComponent );
         }
+
     }
 
     /**
-     * Incarnation of a single service component. Incarnation consists of running the
-     * whole Avalon incarnation lifecycle process for a service component. After the
-     * incarnation the service component is operational.
+     * Configure a single service component. After the invocation
+     * the service component is ready to be incarnated.
      *
-     * @param serviceComponent The service component to incarnate
+     * @param serviceComponent The service component to be configured
      */
-    private void incarnate( ServiceComponent serviceComponent )
+    private void configure( ServiceComponent serviceComponent )
         throws Exception
     {
-        this.getLogger().debug( "Incarnating the service "
+        this.getLogger().debug( "Configuring the service component "
             + serviceComponent.getShorthand()
             );
 
@@ -878,7 +952,7 @@ public class ServiceContainerImpl
 
         YaafiToAvalonContextMapper mapper = new YaafiToAvalonContextMapper(
             serviceComponent.getName(),
-            serviceComponent.getClass().getClassLoader()
+            this.getClassLoader()
             );
 
         RoleEntry roleEntry = serviceComponent.getRoleEntry();
@@ -908,13 +982,33 @@ public class ServiceContainerImpl
 
         Parameters serviceComponentParameters = this.getParameters();
 
-        // process the Avalon lifecycle definition
+        // configure the service component with all the artifacts
 
         serviceComponent.setLogger(serviceComponentLogger);
         serviceComponent.setServiceManager(this);
         serviceComponent.setContext(serviceComponentContext);
         serviceComponent.setConfiguration(serviceComponentConfiguraton);
         serviceComponent.setParameters(serviceComponentParameters);
+        
+        // load the implementation class of the service
+        
+        serviceComponent.loadImplemtationClass(
+           this.getClassLoader()
+            );
+    }
+    
+    /**
+     * Incarnation of a configured service component. After the
+     * incarnation the service component is operational.
+     *
+     * @param serviceComponent The service component to incarnate
+     */
+    private void incarnate( ServiceComponent serviceComponent )
+        throws Exception
+    {
+        this.getLogger().debug( "Incarnating the service "
+            + serviceComponent.getShorthand()
+            );
 
         serviceComponent.incarnate();
     }
@@ -922,7 +1016,7 @@ public class ServiceContainerImpl
     /**
      * Decommision a ist of services
      */
-    private void decommision(List serviceList)
+    private void decommisionAll(List serviceList)
     {
         ServiceComponent serviceComponent = null;
 
@@ -957,6 +1051,40 @@ public class ServiceContainerImpl
     }
 
     /**
+     * Disposing a ist of services
+     */
+    private void disposeAll(List serviceList)
+    {
+        ServiceComponent serviceComponent = null;
+
+        for( int i=serviceList.size()-1; i>=0; i-- )
+        {
+            serviceComponent = (ServiceComponent) serviceList.get(i);
+            this.dispose( serviceComponent );
+        }
+    }
+
+    /**
+     * Disposing of a single service component.
+     
+     * @param serviceComponent The service component to decommision
+     */
+    private void dispose( ServiceComponent serviceComponent )
+    {
+        this.getLogger().debug( "Disposing the service " + serviceComponent.getShorthand() );
+
+        try
+        {
+            serviceComponent.dispose();
+        }
+        catch (Throwable e)
+        {
+            String msg = "Disposing the following service failed : " + serviceComponent.getName();
+            this.getLogger().error( msg, e );
+        }
+    }
+
+    /**
      * @return The list of currently know services
      */
     private List getServiceList()
@@ -981,11 +1109,13 @@ public class ServiceContainerImpl
     }
 
     /**
-     * Factory method for creating services
-     * @param serviceList
-     * @throws Exception
+     * Factory method for creating services. The service 
+     * instances are not initialized at this point.
+     * 
+     * @param roleConfiguration the role configuration file
+     * @param logger the logger 
+     * @throws Exception creating the service instance failed
      */
-
     private List createServiceComponents(Configuration roleConfiguration, Logger logger )
         throws ConfigurationException
     {
@@ -1150,7 +1280,22 @@ public class ServiceContainerImpl
     {
         return this.applicationRootDir;
     }
-
+    
+    /**
+     * @return Returns the serviceManager of the parent container
+     */
+    private ServiceManager getParentServiceManager()
+    {
+        return this.parentServiceManager;
+    }
+    
+    /** 
+     * @return is a parent ServiceManager available
+     */
+    private boolean hasParentServiceManager()
+    {
+        return (this.getParentServiceManager() != null ? true : false );
+    }
     /**
      * @param tempRootDir The tempRootDir to set.
      */
@@ -1361,5 +1506,13 @@ public class ServiceContainerImpl
     private final void releaseLock(Object lock)
     {
         this.readWriteLock.releaseLock(lock, AVALON_CONTAINER_YAAFI);
+    }
+    
+    /**
+     * @return the containers class loader
+     */
+    private ClassLoader getClassLoader()
+    {
+        return this.getClass().getClassLoader();
     }
 }

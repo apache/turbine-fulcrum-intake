@@ -32,7 +32,7 @@
         <item name="Container Configuration"        href="/specification/container.html"/>
         <item name="Role Configuration"             href="/specification/role.html"/>
         <item name="Component Configuration"        href="/specification/component.html"/>
-        <item name="Avalon Context"                 href="/specification/context.html"/>
+        <item name="Context"                        href="/specification/context.html"/>
         <item name="Lifecycle Contract"             href="/specification/lifecycle.html"/>
       </item>
       <item name="Tutorial"                       href="/tutorial/index.html" collapse="true">
@@ -42,6 +42,7 @@
         <item name="Step 4"                         href="/tutorial/step4.html"/>
         <item name="Step 5"                         href="/tutorial/step5.html"/>
       </item>
+      <item name="Design Considerations"          href="/design.html"/>
       <item name="Todo's"                         href="/todo.html"/>
     </menu>
 

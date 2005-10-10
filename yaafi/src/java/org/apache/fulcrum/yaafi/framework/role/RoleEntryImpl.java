@@ -73,7 +73,7 @@ public class RoleEntryImpl implements RoleEntry
      * @param description a description for the service component if any
      * @param componentType the type of service component
      * @param componentFlavour the flavour of the gicen component type
-     * @param hasDynamicProxy create a dynamic proxy
+     * @param hasProxy create a dynamic proxy
      * @param interceptorList the list of service interceptor to be invoked
      * @param logCategory the category for creating the logger
      */
@@ -174,7 +174,7 @@ public class RoleEntryImpl implements RoleEntry
     }
     
     /**
-     * @param hasDynamicProxy The hasDynamicProxy to set.
+     * @param hasProxy The hasDynamicProxy to set.
      */
     public void setHasDynamicProxy(boolean hasProxy)
     {

@@ -102,7 +102,7 @@ public abstract class BaseServiceImpl
     }
 
     /**
-     * @see org.apache.avalon.framework.serviceConfiguration.Configurable#configure(org.apache.avalon.framework.serviceConfiguration.Configuration)
+     * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
     public void configure(Configuration configuration) throws ConfigurationException
     {
@@ -110,8 +110,8 @@ public abstract class BaseServiceImpl
     }
 
     /**
-     * @see org.apache.avalon.framework.servieParameters.Parameterizable#parameterize(org.apache.avalon.framework.servieParameters.Parameters)
-     */
+     * @see org.apache.avalon.framework.parameters.Parameterizable#parameterize(org.apache.avalon.framework.parameters.Parameters)
+     */    
     public void parameterize(Parameters parameters) throws ParameterException
     {
         this.serviceParameters = parameters;

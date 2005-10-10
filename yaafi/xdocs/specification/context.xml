@@ -13,9 +13,9 @@
 
       <p>
         The components are initialized with an Avalon Context if the implementation
-        class implements the Contextualizable interface
+        class implements the Contextualizable interface.
       </p>
-      
+
       <subsection name="Specification">
         <table>
           <tr>
@@ -67,6 +67,35 @@
               Fulcrum services and will be removed as soon as possible.
             </td>
           </tr>
+          <tr>
+            <td>component.id</td>
+            <td>String</td>
+            <td>
+              Fortress alias for "urn:avalon:partition"
+            </td>
+          </tr>
+          <tr>
+            <td>component.logger</td>
+            <td>String</td>
+            <td>
+              Fortress alias for "urn:avalon:name"
+            </td>
+          </tr>
+          <tr>
+            <td>context-root</td>
+            <td>File</td>
+            <td>
+              Fortress alias for "urn:avalon:home"
+            </td>
+          </tr>
+          <tr>
+            <td>impl.workDir</td>
+            <td>File</td>
+            <td>
+              Fortress alias for "urn:avalon:temp"
+            </td>
+          </tr>
+
         </table>
       </subsection>
 
@@ -100,10 +129,27 @@
             <td>componentAppRoot</td>
             <td>W:\work\it20one\service\it20one-service-framework</td>
           </tr>
-        </table>            
+          <tr>
+            <td>component.id</td>
+            <td>root</td>
+          </tr>
+          <tr>
+            <td>component.logger</td>
+            <td>org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyService</td>
+          </tr>
+          <tr>
+            <td>context-root</td>
+            <td>W:\work\it20one\service\it20one-service-framework</td>
+          </tr>
+          <tr>
+            <td>impl.workDir</td>
+            <td>C:\DOKUME~1\Sigi\LOKALE~1\Temp</td>
+          </tr>
+
+        </table>
 
       </subsection>
-            
+
     </section>
 
   </body>

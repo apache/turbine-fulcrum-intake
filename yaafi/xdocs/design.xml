@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Fulcrum YAAFI Avalon Container</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Design Considerations">
+
+      <subsection name="Using the Avalon Context">
+        <p>
+          There is a big specification big gap regarding the content found in
+          the Avalon Context. The pure Avalon approach is that you always
+          have the right stuff since this part of the IOC approach. Consequently
+          there is now way to check for the existence of a name/value pair.
+          On the down side each Avalon container has its own ideas about the
+          variable name to use resulting in non-reusable Avalon services.
+        </p>
+        <p>
+          YAAFI use a pragmatic approach to provide all Merlin and Fortess
+          names in the context. Therefore is should be easy to use existing
+          Fortress services within YAAFI. It is also a good idea to stick to
+          the Fortress names leaving you the option to switch Avalon containers
+          in the future.
+        </p>
+      </subsection>
+
+      <subsection name="Decommisiong of an Avalon Service">
+        <p>
+          YAAFI allows to decommision an Avalon service programmatically. Since
+          the services are singletons you might ending up with a stale reference.
+          Therefore it is not a good idea to decommision services you keep a
+          reference on ... :-). In the case your application design depends
+          on such a feature you should lookup the decommissioned service again
+          resulting in creating a brand new instance.
+        </p>
+      </subsection>
+
+      <subsection name="The Reconfiguration Quest">
+        <p>
+          Some people find it funny but YAAFI is used in 24x7 server
+          applications. Consequently our applications must be reconfigurable
+          on the fly to reduce downtime which is managed by Reconfiguration
+          Service.
+        </p>
+      </subsection>
+
+    </section>
+
+  </body>
+
+</document>

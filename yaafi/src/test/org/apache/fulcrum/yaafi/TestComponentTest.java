@@ -36,7 +36,6 @@ public class TestComponentTest extends BaseUnitTest
         super(name);
     }
 
-
     public void testTestComponent() throws Exception
     {
         TestComponent testComponent = (TestComponent) this.lookup(

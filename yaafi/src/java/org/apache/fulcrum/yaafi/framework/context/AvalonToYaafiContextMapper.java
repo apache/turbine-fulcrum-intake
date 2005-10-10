@@ -42,6 +42,9 @@ public class AvalonToYaafiContextMapper
 
     /** Our default context */
     private DefaultContext defaultContext;
+    
+    /** our defaul class loader */
+    private ClassLoader classLoader;
 
     /**
      * Constructor
@@ -51,12 +54,26 @@ public class AvalonToYaafiContextMapper
      */
     public AvalonToYaafiContextMapper(
         File tempRootDir,
-        Context context )
+        Context context,
+        ClassLoader classLoader)
     {
         Validate.notNull( tempRootDir, "tempRootDir" );
-
+        Validate.notNull( context, "context" );
+        Validate.notNull( classLoader, "classLoader" );
+        
         this.tempRootDir = tempRootDir;
-        this.defaultContext = new DefaultContext( context );
+        this.classLoader = classLoader;
+        
+        // avoid creating a default context if we already have one 
+        
+        if( context instanceof DefaultContext )
+        {
+            this.defaultContext = (DefaultContext) context;
+        }
+        else
+        {
+            this.defaultContext = new DefaultContext( context );
+        }        
     }
 
     /**
@@ -116,14 +133,29 @@ public class AvalonToYaafiContextMapper
     {
         DefaultContext result = this.getDefaultContext();
 
+        String urnAvalonName = AvalonYaafiConstants.AVALON_CONTAINER_YAAFI;
         String urnAvalonPartition = (String) context.get( AvalonPhoenixConstants.PHOENIX_APP_NAME );
         File urnAvalonHome = (File) context.get( AvalonPhoenixConstants.PHOENIX_APP_HOME );
-        File urnAvalonTemp = this.tempRootDir;
+        File urnAvalonTemp = this.getTempRootDir();
 
+        // add the Merlin specific parameters
+        
+        result.put( AvalonYaafiConstants.URN_AVALON_NAME, urnAvalonName );
         result.put( AvalonYaafiConstants.URN_AVALON_PARTITION, urnAvalonPartition );
         result.put( AvalonYaafiConstants.URN_AVALON_HOME, urnAvalonHome );
         result.put( AvalonYaafiConstants.URN_AVALON_TEMP, urnAvalonTemp );
-        result.put( AvalonYaafiConstants.COMPONENT_APP_ROOT, urnAvalonHome.getAbsolutePath() );
+        result.put( AvalonYaafiConstants.URN_AVALON_CLASSLOADER, this.getClassLoader() );
+
+        // add the deprecated ECM parameter
+        
+        result.put(AvalonYaafiConstants.COMPONENT_APP_ROOT, urnAvalonHome.getAbsolutePath());
+
+        // add the Fortress specific parameters
+
+        result.put(AvalonFortressConstants.FORTRESS_COMPONENT_ID,urnAvalonPartition);
+        result.put(AvalonFortressConstants.FORTRESS_COMPONENT_LOGGER,urnAvalonName);
+        result.put(AvalonFortressConstants.FORTRESS_CONTEXT_ROOT,urnAvalonHome);
+        result.put(AvalonFortressConstants.FORTRESS_IMPL_WORKDIR,urnAvalonTemp);
 
         return result;
     }
@@ -144,10 +176,18 @@ public class AvalonToYaafiContextMapper
         File urnAvalonHome = (File) context.get( AvalonFortressConstants.FORTRESS_CONTEXT_ROOT );
         File urnAvalonTemp = (File) context.get( AvalonFortressConstants.FORTRESS_IMPL_WORKDIR );
 
+        // add the Merlin specific parameters
+        
+        result.put( AvalonYaafiConstants.URN_AVALON_NAME, AvalonYaafiConstants.AVALON_CONTAINER_YAAFI );
         result.put( AvalonYaafiConstants.URN_AVALON_PARTITION, urnAvalonPartition );
         result.put( AvalonYaafiConstants.URN_AVALON_HOME, urnAvalonHome );
         result.put( AvalonYaafiConstants.URN_AVALON_TEMP, urnAvalonTemp );
-        result.put( AvalonYaafiConstants.COMPONENT_APP_ROOT, urnAvalonHome.getAbsolutePath() );
+        result.put( AvalonYaafiConstants.URN_AVALON_CLASSLOADER, this.getClassLoader() );
+
+        // add the deprecated ECM parameter
+        
+        result.put(AvalonYaafiConstants.COMPONENT_APP_ROOT, urnAvalonHome.getAbsolutePath());
+
 
         return result;
     }
@@ -168,21 +208,43 @@ public class AvalonToYaafiContextMapper
         File urnAvalonHome = (File) context.get(AvalonYaafiConstants.URN_AVALON_HOME);
         File urnAvalonTemp = (File) context.get(AvalonYaafiConstants.URN_AVALON_TEMP);
         String urnAvalonName = (String) (String) context.get(AvalonYaafiConstants.URN_AVALON_NAME);
-        ClassLoader urnAvalonClossLoader = (ClassLoader) context.get(AvalonYaafiConstants.URN_AVALON_CLASSLOADER);
 
-        result.put(AvalonMerlinConstants.URN_AVALON_PARTITION,urnAvalonPartition);
-        result.put(AvalonMerlinConstants.URN_AVALON_NAME,urnAvalonName);
-        result.put(AvalonMerlinConstants.URN_AVALON_HOME,urnAvalonHome);
-        result.put(AvalonMerlinConstants.URN_AVALON_TEMP,urnAvalonTemp);
-        result.put(AvalonMerlinConstants.URN_AVALON_CLASSLOADER,urnAvalonClossLoader);
+        // add the Fortress specific parameters
+
+        result.put(AvalonFortressConstants.FORTRESS_COMPONENT_ID,urnAvalonPartition);
+        result.put(AvalonFortressConstants.FORTRESS_COMPONENT_LOGGER,urnAvalonName);
+        result.put(AvalonFortressConstants.FORTRESS_CONTEXT_ROOT,urnAvalonHome);
+        result.put(AvalonFortressConstants.FORTRESS_IMPL_WORKDIR,urnAvalonTemp);
+
+        // add the deprecated ECM parameter
+        
         result.put(AvalonYaafiConstants.COMPONENT_APP_ROOT, urnAvalonHome.getAbsolutePath());
 
         return result;
 
     }
 
+    /**
+     * @return Returns the classLoader.
+     */
+    private ClassLoader getClassLoader()
+    {
+        return this.classLoader;
+    }
+    
+    /**
+     * @return Returns the defaultContext.
+     */
     private DefaultContext getDefaultContext()
     {
         return this.defaultContext;
     }
+    
+    /**
+     * @return Returns the tempRootDir.
+     */
+    private File getTempRootDir()
+    {
+        return this.tempRootDir;
+    }    
 }

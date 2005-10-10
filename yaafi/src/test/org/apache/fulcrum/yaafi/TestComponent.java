@@ -19,8 +19,6 @@ package org.apache.fulcrum.yaafi;
 
 import java.io.File;
 
-import org.apache.avalon.framework.component.Component;
-
 /**
  * This is a simple component that is only used to test the avalon component
  * service.
@@ -28,7 +26,6 @@ import org.apache.avalon.framework.component.Component;
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  */
 public interface TestComponent
-        extends Component
 {
     /** the role name of the service */
     static final String ROLE = "org.apache.fulcrum.yaafi.TestComponent";

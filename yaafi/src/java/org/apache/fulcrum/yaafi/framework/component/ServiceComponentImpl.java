@@ -98,6 +98,41 @@ public abstract class ServiceComponentImpl
     /////////////////////////////////////////////////////////////////////////
 
     /**
+     * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentLifecycle#loadImplemtationClass(java.lang.ClassLoader)
+     */
+    public void loadImplemtationClass(ClassLoader classLoader)
+    	throws ClassNotFoundException
+    {
+        ClassLoader currClassLoader = null;
+        
+        if( classLoader != null )
+        {
+            currClassLoader = classLoader;
+        }
+        else
+        {
+            currClassLoader = this.getClass().getClassLoader();
+        }
+        
+        try
+        {
+            this.implementationClazz = currClassLoader.loadClass(
+                this.getRoleEntry().getImplementationClazzName()
+                );
+        }
+        
+        catch(ClassNotFoundException e)
+        {
+            String msg = "Failed to load the implementation class "
+                + this.getRoleEntry().getImplementationClazzName();
+
+            this.getParentLogger().error(msg,e);
+            
+            throw e;
+        }        
+    }
+    
+    /**
      * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentLifecycle#getInstance()
      */
     public Object getInstance()
@@ -119,10 +154,6 @@ public abstract class ServiceComponentImpl
     {
         try
         {
-            this.implementationClazz = this.getClass().getClassLoader().loadClass(
-                this.getRoleEntry().getImplementationClazzName()
-                );
-
             if( this.getRoleEntry().isEarlyInit() )
             {
                 this.getInstance();
@@ -151,6 +182,24 @@ public abstract class ServiceComponentImpl
         this.proxy = null;
     }
 
+    /**
+     * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentLifecycle#dispose()
+     */
+    public void dispose()
+    {
+        this.roleEntry = null;
+        this.implementationClazz = null;
+        this.instance = null;
+        this.proxy = null;
+        this.parentLogger = null;
+        this.logger = null;
+        this.serviceManager = null;
+        this.context = null;
+        this.configuration = null;
+        this.parameters = null;
+        this.readWriteLock = null;
+    }
+    
     /**
      * @param logger The logger to set.
      */
@@ -350,7 +399,7 @@ public abstract class ServiceComponentImpl
     }
 
     /**
-     * @param instance the service instance
+     * @param proxy the service proxy instance
      */
     protected void setProxyInstance(Object proxy)
     {

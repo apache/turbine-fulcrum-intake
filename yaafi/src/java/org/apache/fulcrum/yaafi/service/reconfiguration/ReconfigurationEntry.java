@@ -35,6 +35,9 @@ import org.apache.fulcrum.yaafi.framework.util.InputStreamLocator;
 
 public class ReconfigurationEntry
 {
+    /** buffer size for copy() */
+    private static final int BUF_SIZE = 1024;
+    
     /** the location to monitor for changes */
     private String location;
 
@@ -247,7 +250,7 @@ public class ReconfigurationEntry
     private static void copy( InputStream is, OutputStream os )
         throws IOException
     {
-        byte[] buf = new byte[1024];
+        byte[] buf = new byte[BUF_SIZE];
         int n = 0;
         int total = 0;
 

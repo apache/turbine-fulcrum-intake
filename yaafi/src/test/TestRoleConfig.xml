@@ -50,16 +50,18 @@
     description="Monitors a resource to force a disposal of the Avalon container"
   />
   <role
+    name="org.apache.fulcrum.yaafi.DependentTestComponent"
+    shorthand="DependentTestComponent"
+    default-class="org.apache.fulcrum.yaafi.DependentTestComponentImpl"
+    early-init="true"
+    description="A simple test component depending on TestComponent">
+  </role>
+  <role
     name="org.apache.fulcrum.yaafi.TestComponent"
     shorthand="TestComponent"
     default-class="org.apache.fulcrum.yaafi.TestComponentImpl"
-    early-init="true"
-    component-type="merlin"
+    early-init="false"
     description="A simple test component">
-    <!-- interceptors>
-      <interceptor>org.apache.fulcrum.yaafi.interceptor.performance.PerformanceInterceptorService</interceptor>
-      <interceptor>org.apache.fulcrum.yaafi.interceptor.logging.LoggingInterceptorService</interceptor>
-    </interceptors -->
   </role>
   <role
     name="org.apache.fulcrum.yaafi.baseservice.DerivedService"

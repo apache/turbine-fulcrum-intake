@@ -25,6 +25,7 @@ import org.apache.avalon.framework.logger.LogEnabled;
 import org.apache.avalon.framework.parameters.Parameterizable;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.service.ServiceManager;
+import org.apache.avalon.framework.service.Serviceable;
 
 /**
  * Interface exposed by the ServiceContainerImpl
@@ -33,7 +34,7 @@ import org.apache.avalon.framework.service.ServiceManager;
  */
 
 public interface ServiceContainer
-    extends LogEnabled, Contextualizable, Parameterizable, Initializable, Reconfigurable, Disposable,
+    extends LogEnabled, Contextualizable, Serviceable, Parameterizable, Initializable, Reconfigurable, Disposable,
         ServiceManager, ServiceLifecycleManager
 {
     /**

@@ -32,6 +32,14 @@ import org.apache.avalon.framework.service.ServiceManager;
 public interface ServiceComponentLifecycle
 {
     /**
+     * Loads the implementaion class.
+     * 
+     * @param classLoader the classloader to use for loading the implementation class
+     * @throws ClassNotFoundException loading of the class failed
+     */
+    void loadImplemtationClass(ClassLoader classLoader) throws ClassNotFoundException;
+    
+    /**
      * Incarnates a service component instance.
      * @throws Exception the operation failed
      */
@@ -44,10 +52,15 @@ public interface ServiceComponentLifecycle
     void reconfigure() throws Exception;
 
     /**
-     * Decommisions a service component instance
+     * Decommisions a service component instance.
      * @throws Exception the operation failed
      */
     void decommision() throws Exception;
+
+    /**
+     * Dispose a service component instance.
+     */
+    void dispose();
 
     /**
      * @return Returns the instance of the singleton
