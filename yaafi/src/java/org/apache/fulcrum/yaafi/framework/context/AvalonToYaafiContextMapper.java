@@ -64,16 +64,10 @@ public class AvalonToYaafiContextMapper
         this.tempRootDir = tempRootDir;
         this.classLoader = classLoader;
         
-        // avoid creating a default context if we already have one 
+        // here we have to create a new DefaultContext since
+        // it contains service specific entries
         
-        if( context instanceof DefaultContext )
-        {
-            this.defaultContext = (DefaultContext) context;
-        }
-        else
-        {
-            this.defaultContext = new DefaultContext( context );
-        }        
+        this.defaultContext = new DefaultContext( context );        
     }
 
     /**
