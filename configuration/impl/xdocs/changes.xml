@@ -8,6 +8,10 @@
   <body>
     <release version="1.0.3" date="">
       <action dev="epugh" type="update">
+        Upgrade to commons-configuration-1.1, remove deprecated
+        getVector() methods.
+      </action>        
+      <action dev="epugh" type="update">
         Bump versions of dependencies.
       </action>         
       <action dev="epugh" type="update">

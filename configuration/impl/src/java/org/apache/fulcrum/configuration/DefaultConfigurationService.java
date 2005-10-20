@@ -20,7 +20,6 @@ import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
@@ -52,9 +51,6 @@ public class DefaultConfigurationService
 	 * path from.
 	 */
     String CONFIGURATION_PATH = "configurationPath";
-
-    /** The Avalon Context */
-    private Context context = null;
 
     private String applicationRoot;
 
@@ -347,24 +343,6 @@ public class DefaultConfigurationService
         return configuration.getStringArray(arg0);
     }
 
-    /**
-	 * @see org.apache.commons.configuration.Configuration
-	 * @return
-	 */
-    public Vector getVector(String arg0)
-    {
-        return configuration.getVector(arg0);
-    }
-
-    /**
-	 * @see org.apache.commons.configuration.Configuration
-	 * @return
-	 */
-    public Vector getVector(String arg0, Vector arg1)
-    {
-        return configuration.getVector(arg0, arg1);
-    }
-
     /*
 	 * (non-Javadoc)
 	 * 
@@ -499,8 +477,12 @@ public class DefaultConfigurationService
      */
     public void contextualize(Context context) throws ContextException
     {
-        this.context = context;
         this.applicationRoot = context.get( "urn:avalon:home" ).toString();
     }
+
+	public void clear() {
+		configuration.clear();
+		
+	}
 
 }
