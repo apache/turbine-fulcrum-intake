@@ -6,6 +6,11 @@
   </properties>
 
   <body>
+    <release version="1.1" date="">
+     <action dev="epugh" type="update">
+        Upgrade to Quartz 1.5, update for the new xstream xml format for CronTrigger.
+      </action>              
+    </release>   
     <release version="1.0" date="2004-11-24">
      <action dev="epugh" type="add">
         If you provide a jobName and jobGroup for a trigger it will autoschedule

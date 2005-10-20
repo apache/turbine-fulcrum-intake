@@ -3,7 +3,7 @@
   <extend>${basedir}/../project.xml</extend>
   <id>fulcrum-quartz</id>
   <name>Fulcrum Quartz Component</name>
-  <currentVersion>1.0</currentVersion>
+  <currentVersion>1.1-dev</currentVersion>
   <versions>
     <version>
       <id>1.0</id>
@@ -12,7 +12,11 @@
     </version>
   </versions>
   <dependencies>
-  
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.1</version>
+    </dependency>   
     <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
@@ -22,12 +26,12 @@
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.0.3</version>
-    </dependency>       
-
+    </dependency> 
+          
     <dependency>
       <groupId>xstream</groupId>
       <artifactId>xstream</artifactId>
-      <version>1.0.2</version>
+      <version>1.1.2</version>
       <url>http://xstream.codehaus.org/</url>
     </dependency>         
      
@@ -35,7 +39,7 @@
     <dependency>
       <groupId>opensymphony</groupId>
       <artifactId>quartz</artifactId>
-      <version>1.4.0</version>
+      <version>1.5.0</version>
     </dependency>  
     
     <!--  Needed only for testing -->
