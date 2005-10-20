@@ -45,12 +45,6 @@
     <developerConnection>scm:svn:http://svn.apache.org/repos/asf/jakarta/turbine/fulcrum/trunk/</developerConnection>
     <url>http://svn.apache.org/repos/asf/jakarta/turbine/fulcrum/trunk</url>
   </repository>
-  <releases>
-    <release>
-      <version>3.0.0</version>
-      <tag>FULCRUM_3_0_0</tag>
-    </release>
-  </releases>
   <mailingLists>
     <mailingList>
       <name>Turbine User List</name>
@@ -132,7 +126,6 @@
   <contributors>
     <contributor>
       <name>Dan Diephouse</name>
-      <id>dandiep</id>
       <email>dan@envoisolutions.com</email>
       <organization>Envoi solutions</organization>
       <roles>
@@ -141,7 +134,6 @@
     </contributor>
     <contributor>
        <name>Pete Kazmier</name>
-       <id>kaz</id>
        <email></email>
        <organization></organization>
        <roles>
@@ -150,7 +142,6 @@
     </contributor>
     <contributor>
       <name>Mike Manner</name>
-      <id>mmanner</id>
       <email>test0001@oreka.com</email>
       <organization></organization>
       <roles>
@@ -159,7 +150,6 @@
     </contributor>
     <contributor>
       <name>Kasper Nielsen</name>
-      <id>kasper</id>
       <email>apache@kav.dk</email>
       <organization></organization>
       <roles>
@@ -168,7 +158,6 @@
     </contributor>
     <contributor>
        <name>James Taylor</name>
-       <id>jtaylor</id>
        <email>james@jamestaylor.org</email>
        <organization></organization>
        <roles>
@@ -177,7 +166,6 @@
     </contributor>
     <contributor>
       <name>Ronald</name>
-      <id>ronald</id>
       <email>ronald@innovation.ch</email>
       <roles>
         <role>Developer</role>
