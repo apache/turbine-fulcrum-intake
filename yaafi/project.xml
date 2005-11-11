@@ -16,8 +16,21 @@
       <tag>FULCRUM_YAAFI_1_0_3</tag>
     </version>
   </versions>
+  
   <dependencies>
-
+   <!-- you need to download the JAMON library manually to enable the interceptor -->
+   <!--
+   <dependency>
+      <groupId>jamon</groupId>
+      <artifactId>jamon</artifactId>
+      <version>1.01</version>
+      <url>http://jamonapi.sourceforge.net/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+        <ear.bundle>true</ear.bundle>
+      </properties>
+    </dependency>
+    -->
   </dependencies>
 
   <build>

@@ -12,6 +12,7 @@
         <ant:include name="*.pdf" />
         <ant:include name="*.xml" />
         <ant:include name="*.zip" />
+        <ant:include name="*.html" />        
       </ant:fileset>
     </ant:delete>    
   </postGoal>
