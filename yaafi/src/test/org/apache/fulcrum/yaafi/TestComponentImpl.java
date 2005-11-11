@@ -166,7 +166,7 @@ public class TestComponentImpl
     }
 
     /**
-     * @see org.apache.fulcrum.yaafi.TestComponent#createException()
+     * @see org.apache.fulcrum.yaafi.TestComponent#createException(String,Object)
      */
     public void createException(String reason, Object caller)
     {

@@ -59,7 +59,7 @@ public class ThreadLocalStorageImpl implements ThreadLocalStorage
     }
 
     /**
-     * Gets the thread local variable and registers the listener with {@link ThreadEventNotifier}
+     * Gets the thread local variable and registers the listener with ThreadEventNotifier
      * if the thread local variable has been initialized. The registration cannot be done from
      * within {@link CleanableThreadLocal#initialValue()} because the notifier's thread local
      * variable will be overwritten and the listeners for the thread will be lost.

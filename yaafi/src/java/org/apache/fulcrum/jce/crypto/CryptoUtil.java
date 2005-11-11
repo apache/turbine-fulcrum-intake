@@ -219,6 +219,10 @@ public final class CryptoUtil
      *  <li>ByteArrayOutputStream</li>
      *  <li>InputStream</li>
      * </ul>
+     * 
+     * @param source the source object
+     * @return the created input stream
+     * @throws IOException creating the input stream failed
      */
     private static InputStream createInputStream( Object source )
         throws IOException
@@ -265,6 +269,10 @@ public final class CryptoUtil
      *  <li>File</li>
      *  <li>OutputStream</li>
      * </ul>
+     * 
+     * @param target the target object
+     * @return the output stream
+     * @throws IOException creating the output stream failed
      */
     private static OutputStream createOutputStream( Object target )
         throws IOException

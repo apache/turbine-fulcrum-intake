@@ -116,6 +116,14 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
     }
 
     /**
+     * @return Returns the transaction id
+     */
+    public Long getTransactionId()
+    {
+        return transactionId;
+    }
+
+    /**
      * @see java.lang.Object#toString()
      */
     public String toString()
@@ -186,8 +194,7 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
     /**
      * Invoke the onEntry method on all service interceptors.
      *
-     * @param method the method
-     * @param args the arguments
+     * @param context the current interceptor context
      */
     private void onEntry( AvalonInterceptorContext context )
     {
@@ -200,8 +207,7 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
     /**
      * Invoke the onExit method on all service interceptors.
      *
-     * @param method the method
-     * @param args the arguments
+     * @param context the current interceptor context
      * @param result the result
      */
     private void onExit( AvalonInterceptorContext context, Object result )
@@ -215,9 +221,8 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
     /**
      * Invoke the onError method on all service interceptors.
      *
-     * @param method the method
-     * @param args the arguments
-     * @param result the result
+     * @param context the current interceptor context
+     * @param t the resulting exception
      */
     private void onError( AvalonInterceptorContext context, Throwable t )
     {

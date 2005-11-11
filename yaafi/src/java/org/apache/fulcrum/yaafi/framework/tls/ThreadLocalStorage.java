@@ -36,6 +36,7 @@ public interface ThreadLocalStorage
 	 * if no such object exists. 
 	 * 
 	 * @param key the key for the lookup
+	 * @return the object
 	 */
 	public Object get(String key);
 	
@@ -55,6 +56,7 @@ public interface ThreadLocalStorage
 	 * Checks if the thread-local object for the given key exists
 	 * 
 	 * @param key the key for the lookup
+	 * @return true the object exists
 	 */
 	public boolean containsKey(String key);
 

@@ -273,6 +273,7 @@ public class CryptoUtilTest extends TestCase
         char[] result = null;
         result = PasswordFactory.create();
         result = PasswordFactory.create( this.getPassword() );
+        assertNotNull(result);
         return;
     }
 

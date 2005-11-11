@@ -103,6 +103,8 @@ public class ServiceContainerFactoryTest extends TestCase
         config.loadContainerConfiguration( "./src/test/TestYaafiContainerConfig.xml" );
         this.container = ServiceContainerFactory.create( config );
         this.checkTestComponent();
+        System.out.println(this.container.toString());
+        return;
     }
 
     /**
@@ -148,7 +150,6 @@ public class ServiceContainerFactoryTest extends TestCase
      */
     public void testCreationWithPhoenixContext() throws Exception
     {
-        ServiceContainer container = null;
         ServiceContainerConfiguration config = new ServiceContainerConfiguration();
         DefaultContext context = new DefaultContext();
 
@@ -176,7 +177,6 @@ public class ServiceContainerFactoryTest extends TestCase
      */
     public void testCreationWithFortressContext() throws Exception
     {
-        ServiceContainer container = null;
         ServiceContainerConfiguration config = new ServiceContainerConfiguration();
         DefaultContext context = new DefaultContext();
 

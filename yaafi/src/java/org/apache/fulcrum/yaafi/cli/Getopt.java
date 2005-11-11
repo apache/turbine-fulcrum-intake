@@ -156,16 +156,6 @@ public class Getopt
      * @param option the given option
      * @return true if a value is defined
      */
-    private boolean hasValue( String option )
-    {
-        return this.hasValue( this.find(option) );
-    }
-
-    /**
-     * Determines if a value is defined for the given option
-     * @param option the given option
-     * @return true if a value is defined
-     */
     private boolean hasValue( int index )
     {
         String value = null;

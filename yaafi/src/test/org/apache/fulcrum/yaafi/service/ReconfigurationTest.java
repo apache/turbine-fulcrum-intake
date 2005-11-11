@@ -85,6 +85,8 @@ public class ReconfigurationTest extends TestCase
             ReconfigurationService.class.getName()
             );
 
+        assertNotNull(reconfigurationService);
+        
         // comment out if you want to tinker with componentConfiguration manually
 
         // Thread.sleep(60000);

@@ -35,6 +35,8 @@ public interface CryptoStreamFactory
      *
      * @param is the input stream to be wrapped
      * @return an decrypting input stream
+     * @throws GeneralSecurityException creating the input stream failed
+     * @throws IOException creating the input stream failed
      */
     InputStream getInputStream(InputStream is)
         throws GeneralSecurityException, IOException;
@@ -45,6 +47,8 @@ public interface CryptoStreamFactory
      * @param is the input stream to be wrapped
      * @param password the password to be used
      * @return an decrypting input stream
+     * @throws GeneralSecurityException creating the input stream failed
+     * @throws IOException creating the input stream failed 
      */
     InputStream getInputStream(InputStream is, char[] password)
         throws GeneralSecurityException, IOException;
@@ -54,6 +58,8 @@ public interface CryptoStreamFactory
      *
      * @param is the input stream to be wrapped
      * @return an decrypting input stream
+     * @throws GeneralSecurityException creating the input stream failed
+     * @throws IOException creating the input stream failed 
      */
     InputStream getSmartInputStream(InputStream is)
         throws GeneralSecurityException, IOException;
@@ -64,6 +70,8 @@ public interface CryptoStreamFactory
      * @param is the input stream to be wrapped
      * @param password the password to be used
      * @return an decrypting input stream
+     * @throws GeneralSecurityException creating the input stream failed
+     * @throws IOException creating the input stream failed 
      */
     InputStream getSmartInputStream(InputStream is, char[] password)
         throws GeneralSecurityException, IOException;
@@ -75,6 +83,8 @@ public interface CryptoStreamFactory
      * @param os the output stream to be wrapped
      * @param password the password to be used
      * @return an decrypting input stream
+     * @throws GeneralSecurityException creating the ouptut stream failed
+     * @throws IOException creating the ouptut stream failed 
      */
     OutputStream getOutputStream(OutputStream os, char[] password)
         throws GeneralSecurityException, IOException;

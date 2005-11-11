@@ -22,7 +22,6 @@ import junit.framework.TestSuite;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
-import org.apache.avalon.framework.service.ServiceException;
 import org.apache.fulcrum.yaafi.TestComponent;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerConfiguration;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
@@ -106,16 +105,6 @@ public class ServiceLifecycleManagerTest extends TestCase
         assertNotNull( testComponent.getUrnAvaloneTemp() );
         assertNotNull( testComponent.getUrnAvalonName() );
         assertNotNull( testComponent.getUrnAvalonPartition() );
-    }
-
-    private RoleEntry getRoleEntry( String name )
-        throws ServiceException
-    {
-        RoleEntry result =  this.container.getRoleEntry(
-            name
-            );
-
-        return result;
     }
 
     /**

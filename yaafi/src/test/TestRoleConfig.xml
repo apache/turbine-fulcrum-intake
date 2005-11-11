@@ -14,11 +14,21 @@
     default-class="org.apache.fulcrum.yaafi.interceptor.performance.PerformanceInterceptorServiceImpl"
     logger="performance"
   />
+  <role
+    name="org.apache.fulcrum.yaafi.interceptor.jamon.JamonInterceptorService"
+    shorthand="JamonInterceptorService"
+    default-class="org.apache.fulcrum.yaafi.interceptor.jamon.JamonInterceptorServiceImpl"
+  />
   <!-- Use minimal role entry -->
   <role
     name="org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerService"
     default-class="org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerServiceImpl"
   />
+  <role
+    name="org.apache.fulcrum.yaafi.service.advice.AdviceService"
+    shorthand="AdviceService"
+    default-class="org.apache.fulcrum.yaafi.service.advice.AdviceServiceImpl"
+  />  
   <!-- For the rest of the services use a full-blown role entry -->
   <role
     name="org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyService"

@@ -74,7 +74,7 @@ public class ShutdownEntry
     }
 
     /**
-     * Has the monitored location changed?
+     * @return has the monitored location changed
      */
     public boolean hasChanged()
     {

@@ -53,6 +53,7 @@ public class RoleConfigurationParserImpl
      *
      * @param roleConfiguration the role configuration file to parse
      * @return the parsed RoleEntries
+     * @throws ConfigurationException the configuration couldn't be processsed
      */
     public RoleEntry[] parse( Configuration roleConfiguration )
         throws ConfigurationException
@@ -83,6 +84,10 @@ public class RoleConfigurationParserImpl
 
     /**
      * Parses a YAAFI role configuration file.
+     * 
+     * @param roleConfiguration the role configuration
+     * @return the role entries from the configuration file
+     * @throws ConfigurationException the configuration couldn't be processsed
      */
     private RoleEntry[] mapFromYaafi( Configuration roleConfiguration )
         throws ConfigurationException

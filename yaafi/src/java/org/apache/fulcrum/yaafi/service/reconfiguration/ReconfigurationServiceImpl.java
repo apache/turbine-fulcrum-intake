@@ -278,6 +278,7 @@ public class ReconfigurationServiceImpl
      * method is called within a seperate worker thred.
      *
      * @param reconfigurationEntry the configuration what to reconfigure
+     * @throws Exception the reconfiguration failed
      */
     protected void onReconfigure( ReconfigurationEntry reconfigurationEntry )
         throws Exception

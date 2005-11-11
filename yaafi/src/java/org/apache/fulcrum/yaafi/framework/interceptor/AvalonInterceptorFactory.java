@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
+import org.apache.fulcrum.yaafi.framework.constant.AvalonYaafiConstants;
 import org.apache.fulcrum.yaafi.framework.reflection.Clazz;
 import org.apache.fulcrum.yaafi.framework.util.ReadWriteLock;
 import org.apache.fulcrum.yaafi.framework.util.Validate;
@@ -111,7 +112,17 @@ public class AvalonInterceptorFactory
         for( int i=0; i<interceptorList.length; i++ )
         {
             interceptorServiceName = interceptorList[i];
-            result[i] = (AvalonInterceptorService) serviceManager.lookup(interceptorServiceName);
+            Object currService = serviceManager.lookup(interceptorServiceName);
+
+            if (currService instanceof AvalonInterceptorService)
+            {
+                result[i] = (AvalonInterceptorService) currService;
+            }
+            else
+            {
+                String msg = "The following service is not an AvalonInterceptorService : " + interceptorServiceName;
+                throw new ServiceException(AvalonYaafiConstants.AVALON_CONTAINER_YAAFI,msg);
+            }
         }
 
         return result;

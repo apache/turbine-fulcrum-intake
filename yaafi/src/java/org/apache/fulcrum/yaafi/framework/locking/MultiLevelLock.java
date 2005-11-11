@@ -1,7 +1,7 @@
 /*
- * $Header: /usr/local/cvsroot/it20one/service/it20one-service-framework/src/java/org/apache/fulcrum/yaafi/framework/locking/MultiLevelLock.java,v 1.1 2005/09/22 11:04:12 sigi Exp $
- * $Revision: 1.1 $
- * $Date: 2005/09/22 11:04:12 $
+ * $Header: /usr/local/cvsroot/it20one/service/it20one-service-framework/src/java/org/apache/fulcrum/yaafi/framework/locking/MultiLevelLock.java,v 1.2 2005/11/11 10:48:17 sigi Exp $
+ * $Revision: 1.2 $
+ * $Date: 2005/11/11 10:48:17 $
  *
  * ====================================================================
  *
@@ -27,8 +27,7 @@ package org.apache.fulcrum.yaafi.framework.locking;
  * 
  * A multi level lock. Depending on the implementation more than one owner may own a certain lock level on the same lock.
  * 
- * @version $Revision: 1.1 $
- * @see LockManager
+ * @version $Revision: 1.2 $
  */
 public interface MultiLevelLock {
 

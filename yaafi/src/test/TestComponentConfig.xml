@@ -1,18 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <componentConfig>
 
+  <!--
+    LoggingInterceptorService
+
+    isEnabled := is the interceptor enabled
+    maxArgLength := maximum argument length for debug output
+    monitorAllExceptions := monitor all exceptions ignoring the configured services
+    services := the list of services being monitored
+    services/service@name := the name of the service being monitored
+  -->
+
   <LoggingInterceptorService>
     <isEnabled>true</isEnabled>
     <maxArgLength>2000</maxArgLength>
-    <useReflection>false</useReflection>
     <monitorAllExceptions>true</monitorAllExceptions>
     <services>
       <service name="*"/>
     </services>
   </LoggingInterceptorService>
 
+  <!--
+    PerformanceInterceptorService
+
+    isEnabled := is the interceptor enabled
+    tresholds := list of tresholds determining the trace level
+    tresholds/debug@millis := the treshold for the debug trace level
+    tresholds/info@millis := the treshold for the info trace level
+    tresholds/warn@millis := the treshold for the warn trace level
+    tresholds/error@millis := the treshold for the error trace level
+    tresholds/fatal@millis := the treshold for the fatal trace level    
+    services := the list of services being monitored
+    services/service@name := the name of the service being monitored
+  -->
+
   <PerformanceInterceptorService>
     <isEnabled>true</isEnabled>
+    <maxArgLength>2000</maxArgLength>
     <tresholds>
       <debug millis="0"/>
       <info  millis="100"/>
@@ -24,6 +48,41 @@
       <service name="*"/>
     </services>
   </PerformanceInterceptorService>
+
+  <!--
+    JamonInterceptorService
+
+    isEnabled := is the interceptor enabled
+    reportTimeout := the timeout between generating a JAMON report (No report = 0)
+    reportFile := the file for the JAMON report
+    reportOnExit := create a HTML report on disposal
+    services := the list of services being monitored
+    services/service@name := the name of the service being monitored    
+  -->
+
+  <JamonInterceptorService>
+    <isEnabled>true</isEnabled>
+    <reportTimeout>60000</reportTimeout>
+    <reportFile>./temp/jamon.html</reportFile>
+    <reportOnExit>true</reportOnExit>
+    <services>
+      <service name="*"/>
+    </services>
+  </JamonInterceptorService>
+
+  <!--
+    AdviceService
+
+    interceptors := the list of interceptors for an advised object
+    interceptors/interceptor := the name of an interceptor service
+  -->
+  
+  <AdviceService>
+    <interceptors>
+      <interceptor>org.apache.fulcrum.yaafi.interceptor.performance.PerformanceInterceptorService</interceptor>
+      <interceptor>org.apache.fulcrum.yaafi.interceptor.logging.LoggingInterceptorService</interceptor>
+    </interceptors>
+  </AdviceService>
 
   <TestComponent>
     <FOO>FOO</FOO>

@@ -62,6 +62,10 @@ public class BaseInterceptorServiceImpl
 
     /** the Avalon temp directory */
     private File serviceTempDir;
+    
+    /** the supplied class loader */
+    private ClassLoader classLoader;
+    
 
     /////////////////////////////////////////////////////////////////////////
     // Avalon Service Lifecycle Implementation
@@ -83,6 +87,7 @@ public class BaseInterceptorServiceImpl
         this.serviceName = (String) context.get("urn:avalon:name");
         this.serviceApplicationDir = (File) context.get("urn:avalon:home");
         this.serviceTempDir = (File) context.get("urn:avalon:temp");
+        this.classLoader = (ClassLoader) context.get("urn:avalon:classloader");
     }
 
     /**
@@ -232,6 +237,33 @@ public class BaseInterceptorServiceImpl
     {
         return serviceTempDir;
     }
+    
+    /**
+		 * @return Returns the classLoader.
+		 */
+		protected ClassLoader getClassLoader() {
+			return this.classLoader;
+		}
+
+		/**
+     * Determines the file location of the given name. If the name denotes
+     * a relative file location it will be resolved using the application
+     * home directory.
+     *
+     * @param name the filename
+     * @return the file
+     */
+    protected File makeAbsoluteFile( String name )
+    {
+        File result = new File(name);
+
+        if( result.isAbsolute() == false )
+        {
+            result = new File( this.getServiceApplicationDir(), name );
+        }
+
+        return result;
+    }
 
     /**
      * @return Returns the serviceMap.
@@ -239,6 +271,5 @@ public class BaseInterceptorServiceImpl
     private HashSet getServiceSet()
     {
         return serviceSet;
-    }
-
+    }      
 }

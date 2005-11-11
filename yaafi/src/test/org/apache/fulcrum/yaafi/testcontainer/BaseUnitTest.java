@@ -67,7 +67,7 @@ public abstract class BaseUnitTest extends TestCase
      * Override the parameter file name for the container should use for this test. By default it is
      * src/test/TestRoleConfig.
      *
-     * @param roleFileName
+     * @param parameterFileName the name of the parameter file
      */
     protected void setParameterFileName(String parameterFileName)
     {

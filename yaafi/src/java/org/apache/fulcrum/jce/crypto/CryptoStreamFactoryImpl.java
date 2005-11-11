@@ -70,6 +70,7 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
 
     /**
      * Factory method to get a default instance
+     * @return an instance of the CryptoStreamFactory
      */
     public static CryptoStreamFactory getInstance()
     {
@@ -128,8 +129,7 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
     }
 
     /**
-     * @param is the input stream to be wrapped
-     * @return a decrypting input stream
+     * @see org.apache.fulcrum.jce.crypto.CryptoStreamFactory#getInputStream(java.io.InputStream)
      */
     public InputStream getInputStream( InputStream is )
         throws GeneralSecurityException, IOException
@@ -140,9 +140,7 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
     }
 
     /**
-     * @param is the input stream to be wrapped
-     * @param password the password for decryption
-     * @return a decrypting input stream
+     * @see org.apache.fulcrum.jce.crypto.CryptoStreamFactory#getInputStream(java.io.InputStream,char[])
      */
     public InputStream getInputStream( InputStream is, char[] password )
         throws GeneralSecurityException, IOException
@@ -165,7 +163,7 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
     }
 
     /**
-     * @see org.apache.fulcrum.jce.crypto.CryptoStreamFactory#getSmartInputStream(java.io.InputStream)
+     * @see org.apache.fulcrum.jce.crypto.CryptoStreamFactory#getSmartInputStream(java.io.InputStream,char[])
      */
     public InputStream getSmartInputStream(InputStream is, char[] password )
         throws GeneralSecurityException, IOException
@@ -181,12 +179,8 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
         return result;
     }
 
-
     /**
-     * @param os the output stream to be wrapped
-     * @param password the password for encryption
-     *
-     * @return a encrypting output stream
+     * @see org.apache.fulcrum.jce.crypto.CryptoStreamFactory#getOutputStream(java.io.OutputStream, char[])
      */
     public OutputStream getOutputStream( OutputStream os, char[] password )
         throws GeneralSecurityException, IOException
@@ -233,8 +227,7 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
      *
      * @param password the password to use.
      * @return the key
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeySpecException
+     * @throws GeneralSecurityException creating the key failed
      */
     private final Key createKey( char[] password )
         throws GeneralSecurityException
@@ -262,6 +255,8 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
      * @param mode the cipher mode
      * @param password the password
      * @return an instance of a cipher
+     * @throws GeneralSecurityException creating a cipher failed
+     * @throws IOException creating a cipher failed
      */
     private final Cipher createCipher( int mode, char[] password )
         throws GeneralSecurityException, IOException

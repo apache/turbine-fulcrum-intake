@@ -26,7 +26,8 @@ import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.thread.ThreadSafe;
 import org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorContext;
 import org.apache.fulcrum.yaafi.interceptor.baseservice.BaseInterceptorServiceImpl;
-import org.apache.fulcrum.yaafi.interceptor.util.MethodToStringBuilder;
+import org.apache.fulcrum.yaafi.interceptor.util.ArgumentToStringBuilderImpl;
+import org.apache.fulcrum.yaafi.interceptor.util.MethodToStringBuilderImpl;
 import org.apache.fulcrum.yaafi.interceptor.util.StopWatch;
 
 /**
@@ -39,15 +40,21 @@ public class PerformanceInterceptorServiceImpl
     extends BaseInterceptorServiceImpl
     implements PerformanceInterceptorService, Reconfigurable, Contextualizable, ThreadSafe
 {
+	  /** the maximum length of a dumped argument */
+	  private static final int MAX_ARG_LENGTH = 100;
+
     /** default length of the StringBuffer */
-    private static final int BUFFER_LENGTH = 1000;
+    private static final int BUFFER_LENGTH = 2000;
 
     /** seperator for the arguments in the logfile */
     private static final String SEPERATOR = ";";
 
     /** the tresholds in milliseconds to determine the loglevel */
     private int[] tresholdList;
-    
+
+    /** maximum argument length for dumping arguments */
+    private int maxArgLength;
+
     /////////////////////////////////////////////////////////////////////////
     // Avalon Service Lifecycle Implementation
     /////////////////////////////////////////////////////////////////////////
@@ -68,6 +75,7 @@ public class PerformanceInterceptorServiceImpl
     {
         super.configure(configuration);
         
+        this.maxArgLength = configuration.getChild("maxArgLength").getValueAsInteger(MAX_ARG_LENGTH);
         Configuration tresholdConfiguration = configuration.getChild("tresholds");
         this.tresholdList[0] = tresholdConfiguration.getChild("fatal").getAttributeAsInteger("millis", 5000);
         this.tresholdList[1] = tresholdConfiguration.getChild("error").getAttributeAsInteger("millis", 1000);
@@ -180,7 +188,7 @@ public class PerformanceInterceptorServiceImpl
         {
             if( this.getLogger().isFatalErrorEnabled() )
             {
-	            msg = this.toString(mode,interceptorContext,stopWatch);
+	            msg = this.toString(interceptorContext,stopWatch,mode);
 	            this.getLogger().fatalError(msg);
             }
         }
@@ -188,7 +196,7 @@ public class PerformanceInterceptorServiceImpl
         {
             if( this.getLogger().isErrorEnabled() )
             {
-	            msg = this.toString(mode,interceptorContext,stopWatch);
+	            msg = this.toString(interceptorContext,stopWatch,mode);
 	            this.getLogger().error(msg);
             }
         }
@@ -196,7 +204,7 @@ public class PerformanceInterceptorServiceImpl
         {
             if( this.getLogger().isWarnEnabled() )
             {
-	            msg = this.toString(mode,interceptorContext,stopWatch);
+	            msg = this.toString(interceptorContext,stopWatch,mode);
 	            this.getLogger().warn(msg);
             }
         }
@@ -204,7 +212,7 @@ public class PerformanceInterceptorServiceImpl
         {
             if( this.getLogger().isInfoEnabled() )
             {
-	            msg = this.toString(mode,interceptorContext,stopWatch);
+	            msg = this.toString(interceptorContext,stopWatch,mode);
 	            this.getLogger().info(msg);
             }
         }
@@ -212,13 +220,9 @@ public class PerformanceInterceptorServiceImpl
         {
             if( this.getLogger().isDebugEnabled() )
             {
-	            msg = this.toString(mode,interceptorContext,stopWatch);
+	            msg = this.toString(interceptorContext,stopWatch,mode);
 	            this.getLogger().debug(msg);
             }            
-        }
-        else
-        {
-            // nothing to do
         }
     }
     
@@ -227,16 +231,18 @@ public class PerformanceInterceptorServiceImpl
      * 
      * @param interceptorContext the context
      * @param stopWatch the stopwatch
+     * @param mode the mode (onEntry, onExit, onError)
      * @return the log message
      */
     protected String toString(
-        int mode,
         AvalonInterceptorContext interceptorContext, 
-        StopWatch stopWatch 
+        StopWatch stopWatch,
+        int mode
         )
     {
         Method method = interceptorContext.getMethod();
-        MethodToStringBuilder methodToStringBuilder = new MethodToStringBuilder(method);
+        Object[] args = interceptorContext.getArgs();
+        MethodToStringBuilderImpl methodToStringBuilder = new MethodToStringBuilderImpl(method);
         StringBuffer result = new StringBuffer(BUFFER_LENGTH);
 
         result.append(interceptorContext.getTransactionId());
@@ -254,7 +260,41 @@ public class PerformanceInterceptorServiceImpl
         result.append(stopWatch.getTime());        
         result.append(SEPERATOR);
         result.append(methodToStringBuilder.toString());
+        result.append(SEPERATOR);
+        result.append(this.toString(args));
 
         return result.toString();
     }
+    
+    /**
+     * Prints the argument list.
+     * 
+     * @return the debug output
+     */
+    protected String toString( Object[] args )
+    {
+        StringBuffer result = new StringBuffer();
+        ArgumentToStringBuilderImpl toStringBuilder = null;
+
+        if( args == null )
+        {
+            args = new Object[0];
+        }
+
+        for( int i=0; i<args.length; i++ )
+        {
+            toStringBuilder = new ArgumentToStringBuilderImpl(args[i],this.maxArgLength,1);
+            result.append("arg[" + i + "]:={");
+            result.append( toStringBuilder.toString());
+            result.append("}");
+            
+            if( i<args.length-1)
+            {
+            		result.append(SEPERATOR);
+            }
+        }
+        
+        return result.toString();
+    }   
+    
 }

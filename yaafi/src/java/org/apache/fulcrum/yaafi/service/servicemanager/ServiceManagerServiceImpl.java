@@ -78,6 +78,7 @@ public class ServiceManagerServiceImpl
 
     /**
      * Create the one and only instance
+     * @param instance the instance
      */
     protected static synchronized void setInstance( ServiceManagerServiceImpl instance )
     {

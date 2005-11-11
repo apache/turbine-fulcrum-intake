@@ -75,9 +75,14 @@ public class ServiceManagerServiceTest extends TestCase
         assertNotNull( serviceManagerService.getAvalonLogger() );
         assertNotNull( serviceManagerService.getContext().get("urn:avalon:home") );
         assertNotNull( serviceManagerService.getContext().get("urn:avalon:temp") );
+        
+        // get the parameters
         serviceManagerService.getParameters();
-        serviceManagerService.lookup( ServiceManagerService.class.getName() );
+        
+        // lookup the servuce
+        serviceManagerService = (ServiceManagerService) serviceManagerService.lookup( ServiceManagerService.class.getName() );
         assertTrue( serviceManagerService.hasService( ServiceManagerService.class.getName() ) );
         assertTrue( serviceManagerService.getServiceManager() instanceof ServiceManager );
+        serviceManagerService.release(serviceManagerService);
     }
 }

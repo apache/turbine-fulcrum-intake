@@ -588,8 +588,6 @@ public class Main implements Runnable, Disposable
 
     /**
      * Terminates the instance
-     *
-     * @throws Exception the termination failed
      */
     protected void shutdown()
     {
@@ -598,7 +596,7 @@ public class Main implements Runnable, Disposable
             return;
         }
 
-        this.getLogger().info( "Terminating " + this.getClass().getName() );
+        this.getLogger().debug( "Terminating " + this.getClass().getName() );
 
         try
         {

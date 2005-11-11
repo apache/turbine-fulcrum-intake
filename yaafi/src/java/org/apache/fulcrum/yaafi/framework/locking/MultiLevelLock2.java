@@ -1,7 +1,7 @@
 /*
- * $Header: /usr/local/cvsroot/it20one/service/it20one-service-framework/src/java/org/apache/fulcrum/yaafi/framework/locking/MultiLevelLock2.java,v 1.1 2005/09/22 11:04:12 sigi Exp $
- * $Revision: 1.1 $
- * $Date: 2005/09/22 11:04:12 $
+ * $Header: /usr/local/cvsroot/it20one/service/it20one-service-framework/src/java/org/apache/fulcrum/yaafi/framework/locking/MultiLevelLock2.java,v 1.2 2005/11/11 10:48:17 sigi Exp $
+ * $Revision: 1.2 $
+ * $Date: 2005/11/11 10:48:17 $
  *
  * ====================================================================
  *
@@ -28,8 +28,7 @@ package org.apache.fulcrum.yaafi.framework.locking;
  * Extended multi level lock. Compared to basic {@link MultiLevelLock} allows for more flexible
  * locking including preference and more compatibility modes.
  * 
- * @version $Revision: 1.1 $
- * @see LockManager2
+ * @version $Revision: 1.2 $
  * @see MultiLevelLock
  * @see GenericLock
  * @since 1.1

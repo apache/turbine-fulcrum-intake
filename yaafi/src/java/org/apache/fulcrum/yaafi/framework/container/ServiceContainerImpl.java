@@ -49,6 +49,7 @@ import org.apache.fulcrum.yaafi.framework.role.RoleEntry;
 import org.apache.fulcrum.yaafi.framework.util.InputStreamLocator;
 import org.apache.fulcrum.yaafi.framework.util.ReadWriteLock;
 import org.apache.fulcrum.yaafi.framework.util.StringUtils;
+import org.apache.fulcrum.yaafi.framework.util.ToStringBuilder;
 import org.apache.fulcrum.yaafi.framework.util.Validate;
 
 /**
@@ -406,7 +407,7 @@ public class ServiceContainerImpl
         // we are up and running
 
         this.isDisposed = false;
-        this.getLogger().info( "YAAFI Avalon Service Container is up and running");
+        this.getLogger().debug( "YAAFI Avalon Service Container is up and running");
     }
 
 
@@ -532,6 +533,10 @@ public class ServiceContainerImpl
         }
     }
 
+    /////////////////////////////////////////////////////////////////////////
+    // Server Interface Implementation
+    /////////////////////////////////////////////////////////////////////////
+
     /**
      * @see org.apache.fulcrum.yaafi.framework.container.ServiceLifecycleManager#getRoleEntry(java.lang.String)
      */    
@@ -613,10 +618,6 @@ public class ServiceContainerImpl
             this.release(lock);
         }
     }
-
-    /////////////////////////////////////////////////////////////////////////
-    // Service Interface Implementation
-    /////////////////////////////////////////////////////////////////////////
 
     /**
      * @see org.apache.avalon.framework.service.ServiceManager#hasService(java.lang.String)
@@ -753,45 +754,37 @@ public class ServiceContainerImpl
             this.releaseLock(lock);
         }
     }
+    
+    /**
+     * @see java.lang.Object#toString()
+     */
+    public String toString()
+    {
+        ToStringBuilder toStringBuilder = new ToStringBuilder(this);
 
+        toStringBuilder.append("applicationRootDir", this.getApplicationRootDir());
+        toStringBuilder.append("tempRootDir", this.getTempRootDir());               
+        toStringBuilder.append("componentRolesLocation", this.componentRolesLocation);
+        toStringBuilder.append("componentConfigurationLocation", this.componentConfigurationLocation);
+        toStringBuilder.append("parametersLocation", parametersLocation);
+        toStringBuilder.append("logger", this.getLogger().getClass().getName());
+        toStringBuilder.append("hasDynamicProxies", this.hasDynamicProxies);
+        toStringBuilder.append("containerFlavour", this.containerFlavour);        
+        toStringBuilder.append("componentRolesFlavour", this.componentRolesFlavour);
+        toStringBuilder.append("isComponentRolesEncrypted", this.isComponentRolesEncrypted);
+        toStringBuilder.append("isComponentConfigurationEncrypted", this.isComponentConfigurationEncrypted);
+        toStringBuilder.append("isParametersEncrypted", this.isParametersEncrypted);
+
+        return toStringBuilder.toString();
+    }
+    
     /////////////////////////////////////////////////////////////////////////
     // Service Implementation
     /////////////////////////////////////////////////////////////////////////
 
     /**
-     * Creates an absolute path for the given filename based on the application
-     * root directory.
-     *
-     * @param fileName the file name
-     * @return abolsute file
-     */
-    private File makeAbsolutePath( String fileName )
-    {
-        return this.makeAbsolutePath( new File(fileName) );
-    }
-
-    /**
-     * Creates an absolute path for the given file based on the application
-     * root directory.
-     *
-     * @param file the relative file
-     * @return absolute file
-     */
-    private File makeAbsolutePath( File file )
-    {
-        File result = file;
-
-        if( result.isAbsolute() == false )
-        {
-            String temp = file.getPath() + "/" + file.getName();
-            result = new File( this.getApplicationRootDir(), temp );
-        }
-
-        return result;
-    }
-
-    /**
      * Create a role configuration parser based on the container flavour.
+     * @return the role configuration parser
      */
     private RoleConfigurationParser createRoleConfigurationParser()
     {
@@ -804,6 +797,8 @@ public class ServiceContainerImpl
      * Reconfigure a single service
      *
      * @param name the name of the service to be reconfigured
+     * @param ServiceException the service was not found
+     * @param ConfigurationException the reconfiguration failed
      */
     private void reconfigure(String name)
         throws ServiceException, ConfigurationException
@@ -911,6 +906,7 @@ public class ServiceContainerImpl
      * Incarnation of a list of services.
      * 
      * @param serviceList the list of available services
+     * @throws Exception the incarnation of a service failed
      */
     private void incarnateAll(List serviceList)
         throws Exception
@@ -1114,7 +1110,7 @@ public class ServiceContainerImpl
      * 
      * @param roleConfiguration the role configuration file
      * @param logger the logger 
-     * @throws Exception creating the service instance failed
+     * @throws ConfigurationException creating the service instance failed
      */
     private List createServiceComponents(Configuration roleConfiguration, Logger logger )
         throws ConfigurationException
@@ -1260,7 +1256,9 @@ public class ServiceContainerImpl
     }
 
     /**
-     * @param applicationRootDir The applicationRootDir to set.
+     * Set the application directory of the container.
+     * 
+     * @param dir The applicationRootDir to set.
      */
     private File setApplicationRootDir(File dir)
     {
@@ -1297,7 +1295,9 @@ public class ServiceContainerImpl
         return (this.getParentServiceManager() != null ? true : false );
     }
     /**
-     * @param tempRootDir The tempRootDir to set.
+     * Set the temporary directory of the container.
+     * 
+     * @param dir The tempRootDir to set.
      */
     private File setTempRootDir(File dir)
     {
@@ -1371,8 +1371,8 @@ public class ServiceContainerImpl
     /**
      * Create a decrypting input stream using the default password.
      *
-     * @param is
-     * @return
+     * @param is the input stream to be decrypted 
+     * @return an decrypting input stream
      * @throws IOException
      * @throws GeneralSecurityException
      */
@@ -1501,7 +1501,7 @@ public class ServiceContainerImpl
     }
     
     /**
-     * @return a write lock
+     * Release the read/write lock.
      */
     private final void releaseLock(Object lock)
     {

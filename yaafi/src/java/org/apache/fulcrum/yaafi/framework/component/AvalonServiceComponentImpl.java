@@ -37,7 +37,6 @@ import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
-import org.apache.fulcrum.yaafi.framework.constant.AvalonYaafiConstants;
 import org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorFactory;
 import org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorService;
 import org.apache.fulcrum.yaafi.framework.role.RoleEntry;
@@ -125,9 +124,7 @@ public class AvalonServiceComponentImpl
                 this.getParentLogger().debug( "Creating a dynamic proxy for " + this.getShorthand() );
             }
             
-            ReadWriteLock readWriteLock = (ReadWriteLock) this.getContext().get(
-                AvalonYaafiConstants.URN_YAAFI_KERNELLOCK
-                );
+            ReadWriteLock readWriteLock = this.getReadWriteLock();
             
             Object proxyInstance = AvalonInterceptorFactory.create(
                 this.getName(),
@@ -205,6 +202,8 @@ public class AvalonServiceComponentImpl
     }
 
     /**
+     * Stop and dispose the service implementation.
+     * 
      * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponent#decommision()
      */
     public void decommision() throws Exception
@@ -223,7 +222,24 @@ public class AvalonServiceComponentImpl
 
         try
         {
-            this.dispose();
+            Object rawInstance = this.getRawInstance(false);
+
+            // dispose the service implementation class
+            
+            if( rawInstance instanceof Disposable )
+            {
+                try
+                {
+                    this.getParentLogger().debug( "Disposable.dispose() for " + this.getShorthand() );
+                    ((Disposable) rawInstance).dispose();
+                }
+                catch (Exception e)
+                {
+                    String msg = "Disposing the following service failed : " + this.getShorthand();
+                    this.getParentLogger().error(msg,e);
+                    throw new RuntimeException(msg);
+                }
+            }
         }
         catch (Throwable e)
         {
@@ -562,36 +578,5 @@ public class AvalonServiceComponentImpl
                 throw new RuntimeException(msg);
             }
         }
-    }
-
-    /**
-     * @see org.apache.avalon.framework.activity.Disposable#dispose()
-     */
-    public void dispose()
-    {
-        Object rawInstance = this.getRawInstance(false);
-
-        if( rawInstance instanceof Disposable )
-        {
-            try
-            {
-                this.getParentLogger().debug( "Disposable.dispose() for " + this.getShorthand() );
-                ((Disposable) rawInstance).dispose();
-            }
-            catch (Exception e)
-            {
-                String msg = "Disposing the following service failed : " + this.getShorthand();
-                this.getParentLogger().error(msg,e);
-                throw new RuntimeException(msg);
-            }
-        }
-    }
-
-    /**
-     * @see java.lang.Object#toString()
-     */
-    public String toString()
-    {
-        return super.toString();
     }
 }

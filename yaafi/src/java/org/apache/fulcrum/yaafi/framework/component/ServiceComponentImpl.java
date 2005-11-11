@@ -154,7 +154,7 @@ public abstract class ServiceComponentImpl
     {
         try
         {
-            if( this.getRoleEntry().isEarlyInit() )
+            if( this.isEarlyInit() )
             {
                 this.getInstance();
             }

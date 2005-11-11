@@ -82,9 +82,8 @@ public class PasswordFactory implements PasswordParameters
      * @param password the default password
      * @param count number of MessageDigest iterations
      * @return the default password
-     * @throws NoSuchProviderException
-     * @throws NoSuchAlgorithmException
-     * @throws UnsupportedEncodingException
+     * @throws NoSuchAlgorithmException the encryption algorithm is not supported
+     * @throws UnsupportedEncodingException the requested encoding is not supported
      */
     public static final char [] create( char[] password, byte[] salt, int count )
         throws NoSuchAlgorithmException, UnsupportedEncodingException

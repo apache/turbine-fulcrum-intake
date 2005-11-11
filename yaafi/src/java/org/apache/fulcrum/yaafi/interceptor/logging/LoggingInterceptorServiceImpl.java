@@ -25,10 +25,10 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.Reconfigurable;
 import org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorContext;
 import org.apache.fulcrum.yaafi.framework.reflection.Clazz;
-import org.apache.fulcrum.yaafi.framework.util.ExceptionUtils;
-import org.apache.fulcrum.yaafi.framework.util.StringUtils;
 import org.apache.fulcrum.yaafi.interceptor.baseservice.BaseInterceptorServiceImpl;
-import org.apache.fulcrum.yaafi.interceptor.util.MethodToStringBuilder;
+import org.apache.fulcrum.yaafi.interceptor.util.InterceptorToStringBuilder;
+import org.apache.fulcrum.yaafi.interceptor.util.MethodToStringBuilderImpl;
+import org.apache.fulcrum.yaafi.interceptor.util.ArgumentToStringBuilderImpl;
 import org.apache.fulcrum.yaafi.interceptor.util.StopWatch;
 
 /**
@@ -45,18 +45,14 @@ public class LoggingInterceptorServiceImpl
     /** the maximum length of a dumped argument */
     private static final int MAX_ARG_LENGTH = 2000;
 
-    /** this matches all services */
-    private static final String STRING_BUILDER_CLASS =
-        "org.apache.commons.lang.builder.ReflectionToStringBuilder";
-
     /** seperator for the arguments in the logfile */
     private static final String SEPERATOR = ";";
 
-    /** maximumline lengthfor dumping arguments */
+    /** maximum argument length for dumping arguments */
     private int maxArgLength;
 
-    /** use ReflectionToStringBuilder if available */
-    boolean useReflection;
+    /** the class name of the string builder to use */
+    private String toStringBuilderClassName;
 
     /** monitor all excpetions independent from the monitored services */
     private boolean monitorAllExceptions;
@@ -75,7 +71,6 @@ public class LoggingInterceptorServiceImpl
     {
         super();
         this.maxArgLength = MAX_ARG_LENGTH;
-        this.useReflection = false;
     }
 
     /**
@@ -86,7 +81,7 @@ public class LoggingInterceptorServiceImpl
         super.configure(configuration);
         
         this.maxArgLength = configuration.getChild("maxArgLength").getValueAsInteger(MAX_ARG_LENGTH);
-        this.useReflection = configuration.getChild("useReflection").getValueAsBoolean(false);
+        this.toStringBuilderClassName = configuration.getChild("toStringBuilderClass").getValue(ArgumentToStringBuilderImpl.class.getName());
         this.monitorAllExceptions = configuration.getChild("monitorAllExceptions").getValueAsBoolean(true);
     }
 
@@ -95,17 +90,25 @@ public class LoggingInterceptorServiceImpl
      */
     public void initialize() throws Exception
     {
-        // load the ReflectionToStringBuilder class if available
+        // load the string builder class
 
         ClassLoader classLoader = this.getClass().getClassLoader();
 
-        if( Clazz.hasClazz(classLoader, STRING_BUILDER_CLASS) )
+        if( Clazz.hasClazz(classLoader, this.getToStringBuilderClassName()) )
         {
             this.toStringBuilderClass = Clazz.getClazz(
                 classLoader,
-                STRING_BUILDER_CLASS
+                this.getToStringBuilderClassName()
                 );
         }
+        
+        // create an instance of the StringBuilder to see if everything works
+        
+        InterceptorToStringBuilder interceptorToStringBuilder = this.createArgumentToStringBuilder(
+            this
+            );
+            
+        interceptorToStringBuilder.toString();        
     }
 
     /**
@@ -142,12 +145,15 @@ public class LoggingInterceptorServiceImpl
      */
     public void onError(AvalonInterceptorContext interceptorContext,Throwable t)
     {
-        if( this.isMonitorAllExceptions() || this.isServiceMonitored(interceptorContext) )
+        if( this.getLogger().isErrorEnabled() )
         {
-            StopWatch stopWatch = this.getStopWatch(interceptorContext);
-            stopWatch.stop();
-            String msg = this.toString(interceptorContext, stopWatch, t);
-            this.getLogger().error(msg);
+	        if( this.isMonitorAllExceptions() || this.isServiceMonitored(interceptorContext) )
+	        {
+	            StopWatch stopWatch = this.getStopWatch(interceptorContext);
+	            stopWatch.stop();
+	            String msg = this.toString(interceptorContext, stopWatch, t);
+	            this.getLogger().error(msg);
+	        }
         }
     }
 
@@ -231,19 +237,48 @@ public class LoggingInterceptorServiceImpl
     {
         return toStringBuilderClass;
     }
-
+    
     /**
-     * @return Returns the useReflection.
+     * @return Returns the toStringBuilderClassName.
      */
-    protected boolean isUseReflection()
+    protected String getToStringBuilderClassName()
     {
-        return useReflection;
+        return toStringBuilderClassName;
     }
-
+    
+    /**
+     * Create an instance of an InterceptorToStringBuilder
+     * 
+     * @param target the object to stringify
+     * @return the string builder
+     */
+    protected InterceptorToStringBuilder createArgumentToStringBuilder(Object target)
+    {
+        InterceptorToStringBuilder result = null;
+        
+        try
+        {
+            result = (InterceptorToStringBuilder) 
+            	this.getToStringBuilderClass().newInstance();
+        }
+        catch (Exception e)
+        {
+            String msg = "Unable to create an instance for " + this.getToStringBuilderClassName();
+            this.getLogger().error(msg,e);
+        }
+     
+        result.setTarget(target);
+        result.setMaxArgLength(this.getMaxArgLength());
+        result.setMode(1);
+        
+        return result;
+    }
+    
     /**
      * Create a string representation of a service invocation returning a result.
      *
      * @param avalonInterceptorContext the interceptor context
+     * @param stopWatch the stopwatch for the execution time
      * @param result the result of the service invocation
      * @return the string representation of the result
      */
@@ -253,11 +288,12 @@ public class LoggingInterceptorServiceImpl
         Object result )
     {
         StringBuffer methodSignature = new StringBuffer();
+        InterceptorToStringBuilder toStringBuilder = this.createArgumentToStringBuilder(result);
 
         methodSignature.append( this.toString(avalonInterceptorContext, stopWatch, ON_EXIT) );
         methodSignature.append(SEPERATOR);
         methodSignature.append( "result={" );
-        methodSignature.append( this.toString(result) );
+        methodSignature.append( toStringBuilder.toString() );
         methodSignature.append( "}" );
         
         return methodSignature.toString();
@@ -267,6 +303,7 @@ public class LoggingInterceptorServiceImpl
      * Create a string representation of a service invocation throwing a Throwable
      *
      * @param avalonInterceptorContext the interceptor context
+     * @param stopWatch the stopwatch for the execution time
      * @param throwable the result of the service invocation
      * @return the string representation of the result
      */
@@ -276,144 +313,23 @@ public class LoggingInterceptorServiceImpl
         Throwable throwable )
     {
         StringBuffer methodSignature = new StringBuffer();
+        InterceptorToStringBuilder toStringBuilder = this.createArgumentToStringBuilder(throwable);
 
         methodSignature.append( this.toString(avalonInterceptorContext, stopWatch, ON_ERROR) );
         methodSignature.append(SEPERATOR);
         methodSignature.append( throwable.getClass().getName() );
         methodSignature.append(SEPERATOR);
-        methodSignature.append( this.toString(throwable) );
+        methodSignature.append( toStringBuilder.toString() );
 
         return methodSignature.toString();
-    }
-
-    /**
-     * Create a String representation for an arbitrary object.
-     *
-     * @param object the object
-     * @return string representation
-     */
-    protected String toString(Object object)
-    {
-        StringBuffer stringBuffer = new StringBuffer();
-        boolean isTruncated = false;
-
-        if( object == null )
-        {
-            stringBuffer.append("<null>");
-        }
-        else
-        {
-            String temp = null;
-
-            // invoke ReflectionToStringBuilder.toString() if desired
-            // otherwise plain Object.toString()
-            
-            if( this.isUseReflection() && (this.getToStringBuilderClass() != null) )
-            {
-                String methodName = "toString";
-                Class[] signature = { Object.class };
-                Object[] args = { object };
-
-                try
-                {
-                    temp = (String) Clazz.invoke( this.getToStringBuilderClass(),
-                        methodName,
-                        signature,
-                        args
-                        );
-                }
-                catch (Throwable t)
-                {
-                    String msg = "Using ReflectionToStringBuilder failed";
-                    this.getLogger().error(msg,t);
-                    temp = object.toString();
-                }
-            }
-            else
-            {
-                temp = object.toString();
-            }
-
-            // trim the string to avoid dumping tons of data
-
-            if( temp.length() > this.getMaxArgLength() )
-            {
-                temp = temp.substring(0,this.getMaxArgLength()+1);
-                isTruncated = true;
-            }
-
-            // remove the line breaks and tabs for logging output and replace
-
-            temp = StringUtils.replaceChars(temp,"\r\n\t"," ");
-            temp = StringUtils.replaceChars(temp,SEPERATOR,"|");
-
-            // show the user that we truncated the ouptut
-
-            if( isTruncated )
-            {
-                stringBuffer.append( temp );
-                stringBuffer.append( "..." );
-            }
-            else
-            {
-                stringBuffer.append(temp);
-            }
-        }
-
-        return stringBuffer.toString();
-    }
-
-    /**
-     * Create a String representation for an excpeption.
-     *
-     * @param throwable the Throwable
-     * @return the string representation
-     */
-    protected String toString(Throwable throwable)
-    {
-        StringBuffer stringBuffer = new StringBuffer();
-
-        if( throwable == null )
-        {
-            stringBuffer.append("<null>");
-        }
-        else
-        {
-            stringBuffer.append('[');
-            String temp = ExceptionUtils.getStackTrace(throwable);
-
-            // trim the string to avoid dumping tons of data
-
-            if( temp.length() > this.getMaxArgLength() )
-            {
-                temp = temp.substring(0,this.getMaxArgLength()+1);
-            }
-
-            // show the user that we truncated the ouptut
-
-            if( temp.length() > this.getMaxArgLength() )
-            {                stringBuffer.append( temp );
-                stringBuffer.append( " ..." );
-                stringBuffer.append(']');
-
-            }
-            else
-            {
-                stringBuffer.append(temp);
-            }
-        }
-
-        String temp = stringBuffer.toString();        
-        temp = StringUtils.replaceChars(temp,"\r\n\t"," ");
-        temp = StringUtils.replaceChars(temp,SEPERATOR,"|");
-
-        return temp;
     }
 
     /**
      * Create a method signature.
      *
      * @param interceptorContext the avalonInterceptorContext
+     * @param stopWatch the stopwatch for the execution time
+     * @param mode the mode (onEntry, onExit, onError)
      * @return the debug output
      */
     protected String toString( 
@@ -422,7 +338,8 @@ public class LoggingInterceptorServiceImpl
         StringBuffer result = new StringBuffer();
         Method method = interceptorContext.getMethod();
         Object[] args = interceptorContext.getArgs();
-        MethodToStringBuilder methodToStringBuilder = new MethodToStringBuilder(method);
+        InterceptorToStringBuilder toStringBuilder = null;
+        MethodToStringBuilderImpl methodToStringBuilder = new MethodToStringBuilderImpl(method);
 
         if( args == null )
         {
@@ -458,9 +375,10 @@ public class LoggingInterceptorServiceImpl
         {
 	        for( int i=0; i<args.length; i++ )
 	        {
+	            toStringBuilder = this.createArgumentToStringBuilder(args[i]);
 	            result.append(SEPERATOR);
 	            result.append("arg[" + i + "]:={");
-	            result.append( this.toString(args[i]));
+	            result.append( toStringBuilder.toString());
 	            result.append("}");
 	        }
         }

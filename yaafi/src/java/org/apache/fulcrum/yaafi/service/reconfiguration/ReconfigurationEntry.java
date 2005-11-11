@@ -74,7 +74,7 @@ public class ReconfigurationEntry
     }
 
     /**
-     * Has the monitored location changed?
+     * @return has the monitored location changed
      */
     public boolean hasChanged()
     {
@@ -177,7 +177,9 @@ public class ReconfigurationEntry
     }
 
     /**
-     * Creates an InputStream
+     * Creates an InputStream.
+     * @return the input stream
+     * @throws IOException the creation failed
      */
     public InputStream locate() throws IOException
     {
@@ -185,7 +187,11 @@ public class ReconfigurationEntry
     }
 
     /**
-     * Creates a message digest
+     * Creates a message digest.
+     * 
+     * @param is the input stream as input for the message digest
+     * @return the message digest
+     * @throws Exception the creation failed
      */
     private byte[] getDigest( InputStream is )
         throws Exception
@@ -215,6 +221,10 @@ public class ReconfigurationEntry
 
     /**
      * Compares two byte[] for equality
+     * 
+     * @param lhs the left-hand side
+     * @param rhs the right-hand side
+     * @return true if the byte[] are equal
      */
     private static boolean equals(byte[] lhs, byte[] rhs)
     {
