@@ -18,6 +18,33 @@
       </p>
     </section>
 
+    <section name="Filtering using the Logger">
+      <p>
+        The service implementation uses the trace level of its logger to control
+        the generated output. E.g. setting the tracelevel to INFO would result in
+        tracing method invocations and exceptions but would ignore the results from
+        the mehtod invocation.
+        <table>
+          <tr>
+            <th>Trace Level</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>ERROR</td>
+            <td>Dumps the context information for an onError invocation</td>
+          </tr>
+          <tr>
+            <td>INFO</td>
+            <td>Dumps the context information for an onEntry invocation</td>
+          </tr>
+          <tr>
+            <td>DEBUG</td>
+            <td>Dumps the context information for an onExit invocation</td>
+          </tr>
+        </table>
+      </p>
+    </section>  
+      
     <section name="Captured Information">
       <p>
         During the execution the service captures the following information for
@@ -149,7 +176,7 @@ TID IID ID M Service             Method Signature
           </tr>
           <tr>
             <td>maxArgLength</td>
-            <td>Integrer</td>
+            <td>Integer</td>
             <td>[0|1]</td>
             <td>
               The maximum length of an method argument to avoid dumping megabytes
@@ -157,14 +184,13 @@ TID IID ID M Service             Method Signature
              </td>
           </tr>
           <tr>
-            <td>useReflection</td>
-            <td>Boolean</td>
+            <td>toStringBuilderClass</td>
+            <td>String</td>
             <td>[0|1]</td>
             <td>
-              Enabling this flags results in using 
-              org.apache.commons.lang.ReflectionToSTringBuilder instead
-              of Object.toString() if commons-lang is found in the classpath.
-              If no value is supplied then "false" is used.
+              The class name of the string builder to use to format the method
+              parematers and the result. If no value is supplied the 
+              SmartToStringBuilder is used.
             </td>
           </tr>
           <tr>
@@ -247,12 +273,12 @@ log4j.appender.tracing.append = true
 <LoggingInterceptorService>
   <isEnabled>true</isEnabled>
   <maxArgLength>2000</maxArgLength>
-  <useReflection>true</useReflection>
-  <monitorAllExceptions>false</monitorAllExceptions>
+  <toStringBuilderClass>org.apache.fulcrum.yaafi.interceptor.util.SmartToStringBuilderImpl</toStringBuilderClass>
+  <monitorAllExceptions>true</monitorAllExceptions>
   <services>
     <service name="*"/>
   </services>
-</LoggingInterceptorService>      
+</LoggingInterceptorService>
         ]]>
       </source>
     </section>

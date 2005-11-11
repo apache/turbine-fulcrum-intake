@@ -42,7 +42,7 @@
       <subsection name="What we actually implemented">
         <p>
           <ul>
-            <li>a light-weight Avalon container only depending an the Avalone Framwork libraries</li>
+            <li>a light-weight Avalon container only depending an the Avalon Framework libraries</li>
             <li>a container which can run components written for ECM, Fortress, Phoenix and Merlin</li>
             <li>ability to be embedded in other Avalon containers such as Phoenix</li>
             <li>automatic reconfiguration for the whole Avalon container or individual services</li>

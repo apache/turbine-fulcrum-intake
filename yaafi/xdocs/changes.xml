@@ -7,6 +7,20 @@
 
   <body>
     <release version="1.0.5-dev" date="as in SVN">
+      <action dev="sgoeschl" type="add">
+        Added JamonInterceptorService to capture statistical performance data
+      </action>     
+      <action dev="sgoeschl" type="update">
+        The SmartToStringBuilder was renamed to ArgumentStringBuilder
+      </action>
+      <action dev="sgoeschl" type="add">
+        Added AdviceService to provide interceptors for any
+        arbitrary object.
+      </action>
+      <action dev="sgoeschl" type="add">
+        Added SmartToStringBuilder to get more information out
+        of the LoggingInterceptorService.
+      </action>
       <action dev="sgoeschl" type="fix">
       	Fixed a few JavaDoc warnings
       </action>
@@ -46,7 +60,7 @@
         layout is messed up.
       </action>
     </release>
-    <release version="1.0.4" date="as in CVS">
+    <release version="1.0.4" date="2005-05-13">
       <action dev="sgoeschl" type="add">
         Added a simple tutorial
       </action>

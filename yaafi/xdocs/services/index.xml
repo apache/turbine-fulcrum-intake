@@ -12,10 +12,10 @@
     <section name="YAAFI Services">
 
       <p>
-        
+
         YAAFI comes already with the following services since they are generally useful and
         do not add any dependencies
-        
+
         <table>
           <tr>
             <th>Name</th>
@@ -45,10 +45,16 @@
               Automatic shutdown after changes of an arbitrary configuration file
             </td>
           </tr>
+          <tr>
+            <td><a href="adviceservice.html">AdviceService</a></td>
+            <td>
+              Using dynamic proxies for arbtrary Java  object to add interceptor support
+            </td>
+          </tr>
         </table>
-        
+
       </p>
-            
+
     </section>
 
   </body>

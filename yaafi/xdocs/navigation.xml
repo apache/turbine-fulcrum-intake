@@ -21,12 +21,14 @@
       <item name="Interceptors"                   href="/interceptors/index.html" collapse="true">
         <item name="Logging"                        href="/interceptors/logginginterceptor.html"/>
         <item name="Performance"                    href="/interceptors/performanceinterceptor.html"/>
+        <item name="JAMon"                          href="/interceptors/jamoninterceptor.html"/>
       </item>
       <item name="Services"                       href="/services/index.html" collapse="true">
         <item name="ServiceManager"                 href="/services/servicemanagerservice.html"/>
         <item name="SystemProperty"                 href="/services/systempropertyservice.html"/>
         <item name="Reconfiguration"                href="/services/reconfigurationservice.html"/>
         <item name="Shutdown"                       href="/services/shutdownservice.html"/>
+        <item name="Advice"                         href="/services/adviceservice.html"/>
       </item>
       <item name="Specification"                  href="/specification/index.html" collapse="true">
         <item name="Container Configuration"        href="/specification/container.html"/>

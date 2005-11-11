@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Fulcrum YAAFI Avalon Container Interceptors</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+  <body>
+    <section name="Overview">
+      <p> This service uses <a href="http://jamonapi.sourceforge.net/">JAMon</a> to capture statistical performance
+        data. This performance data can be exported as HTML report into the file system or viewed using a browser when
+        your application runs in a servlet container. </p>
+      <p> Have a look at an a <a href="http://jamonapi.sourceforge.net/JAMonAdmin.html"> HTML example report</a>
+        available from the JAMon homepage. </p>
+      <p> The implementation uses reflection to invoke the JAMon library to avoid compile-time coupling. If the
+        interceptor is enabled while the JAMON library is not found in the classpath the implementation silently ignores
+        all intercepted calls. </p>
+      <p> The service is by default disabled since the JAMon library are currently not hosted on IBIBLIO</p>
+    </section>
+    <section name="Configuration">
+      <subsection name="Component Configuration">
+        <table>
+          <tr>
+            <th>Item</th>
+            <th>Datatype</th>
+            <th>Cardinality</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>isEnabled</td>
+            <td>Boolean</td>
+            <td>[0|1]</td>
+            <td> Turn the interceptor. If no value is supplied then "false" is used thereby disabling all interceptor
+              invocations. </td>
+          </tr>
+          <tr>
+            <td>reportTimeout</td>
+            <td>Long</td>
+            <td>[0|1]</td>
+            <td> The report timeout to generate a HTML report. If the value "0" is used than no periodic reports are
+              generated. If no value is supplied than "0" is used. </td>
+          </tr>
+          <tr>
+            <td>reportFile</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td> The report file being used. If a relative file name is used it will be resolved relative to application
+              directory. </td>
+          </tr>
+          <tr>
+            <td>reportOnExit</td>
+            <td>Boolean</td>
+            <td>[0|1]</td>
+            <td> Dump a HTML report when disposing the service, e.g. during shutdown of your application. </td>
+          </tr>
+          <tr>
+            <td>services</td>
+            <td>Tree</td>
+            <td>[0|1]</td>
+            <td> Contains a list of services to be monitored. </td>
+          </tr>
+          <tr>
+            <td>services/service@name</td>
+            <td>String</td>
+            <td>[1..n]</td>
+            <td> The name of an individual service to be monitored. </td>
+          </tr>
+        </table>
+      </subsection>
+      <subsection name="Role Configuration">
+        <source><![CDATA[
+<role
+  name="org.apache.fulcrum.yaafi.interceptor.jamon.JamonInterceptorService"
+  shorthand="JamonInterceptorService"
+  default-class="org.apache.fulcrum.yaafi.interceptor.jamon.JamonInterceptorServiceImpl"
+/>]]>
+        </source>
+      </subsection>
+    </section>
+    <section name="Usage">
+      <p> The JamonInterceptorService is enabled and monitors all services. The service writes every minute a HTML
+        report and in addition when disposing the service </p>
+      <source><![CDATA[
+<JamonInterceptorService>
+  <isEnabled>true</isEnabled>
+  <reportTimeout>60000</reportTimeout>
+  <reportFile>./temp/jamon.html</reportFile>
+  <reportOnExit>true</reportOnExit>
+  <services>
+    <service name="*"/>
+  </services>
+</JamonInterceptorService>]]>
+      </source>
+    </section>
+  </body>
+</document>

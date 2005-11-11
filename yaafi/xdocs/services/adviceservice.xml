@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>Fulcrum YAAFI Avalon Container AdviceService</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Overview">
+      <p>
+        The service reuses YAAFI infrastructure to add Avalon interceptor services
+        to any Java object. This service is useful if you would like to extend the
+        existing interceptor services (e.g. logging) to non-Avalon services.
+      </p>
+    </section>
+
+    <section name="Configuration">
+      <subsection name="Role Configuration">
+        <source><![CDATA[
+<role
+  name="org.apache.fulcrum.yaafi.service.advice.AdviceService"
+  shorthand="AdviceService"
+  default-class="org.apache.fulcrum.yaafi.service.advice.AdviceServiceImpl"
+  has-proxy="false"
+/>
+            ]]></source>
+      </subsection>
+
+      <subsection name="Component Configuration">
+        <table>
+          <tr>
+            <th>Item</th>
+            <th>Datatype</th>
+            <th>Optional</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>interceptors</td>
+            <td>Tree</td>
+            <td>Y</td>
+            <td>Contains a list of interceptors</td>
+          </tr>
+          <tr>
+            <td>interceptors/interceptor</td>
+            <td>String</td>
+            <td>Y</td>
+            <td>The name of the interceptor</td>
+          </tr>
+        </table>
+      </subsection>
+
+    </section>
+
+  </body>
+</document>
