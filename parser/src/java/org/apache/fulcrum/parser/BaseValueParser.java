@@ -29,6 +29,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Set;
 
 import org.apache.fulcrum.pool.Recyclable;
 
@@ -291,15 +292,14 @@ public class BaseValueParser implements ValueParser, Recyclable
         return parameters.containsKey(convert((String) key));
     }
 
-    /*
-     * Get an enumerator for the parameter keys. Wraps to the
-     * contained <code>Hashtable.keys()</code>.
+    /**
+     * Gets the set of keys
      *
-     * @return An <code>enumerator</code> of the keys.
+     * @return A <code>Set</code> of the keys.
      */
-    public Enumeration keys()
+    public Set keySet()
     {
-        return parameters.keys();
+        return parameters.keySet();
     }
 
     /*

@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Set;
 
 /**
  * ValueParser is a base interface for classes that need to parse
@@ -153,13 +154,12 @@ public interface ValueParser
      */
     public boolean containsKey( Object key );
 
-    /*
-     * Get an enumerator for the parameter keys. Wraps to the
-     * contained <code>Hashtable.keys()</code>.
+    /**
+     * Gets the keys.
      *
-     * @return An <code>enumerator</code> of the keys.
+     * @return A <code>Set</code> of the keys.
      */
-    public Enumeration keys();
+    Set keySet();
 
     /*
      * Returns all the available parameter names.
