@@ -22,7 +22,6 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.Set;
 
 /**
@@ -84,8 +83,7 @@ public interface ValueParser
      * @param name A String with the name.
      * @param value A double with the value.
      */
-    public void add ( String name,
-                      double value );
+    void add(String name, double value);
 
     /**
      * Add a name/value pair into this object.
@@ -93,8 +91,7 @@ public interface ValueParser
      * @param name A String with the name.
      * @param value An int with the value.
      */
-    public void add ( String name,
-                      int value );
+    void add(String name, int value);
 
     /**
      * Add a name/value pair into this object.
@@ -102,8 +99,7 @@ public interface ValueParser
      * @param name A String with the name.
      * @param value An Integer with the value.
      */
-    public void add ( String name,
-                      Integer value );
+    void add(String name, Integer value);
 
     /**
      * Add a name/value pair into this object.
@@ -111,8 +107,7 @@ public interface ValueParser
      * @param name A String with the name.
      * @param value A long with the value.
      */
-    public void add ( String name,
-                      long value );
+    void add(String name, long value);
 
     /**
      * Add a name/value pair into this object.
@@ -120,19 +115,27 @@ public interface ValueParser
      * @param name A String with the name.
      * @param value A long with the value.
      */
-    public void add ( String name,
-                      String value );
+    void add(String name, String value);
 
     /**
-     * Add a String parameters.  If there are any Strings already
+     * Add a String parameter.  If there are any Strings already
      * associated with the name, append to the array.  This is used
      * for handling parameters from mulitipart POST requests.
      *
      * @param name A String with the name.
      * @param value A String with the value.
      */
-    public void append( String name,
-                        String value );
+    void append(String name, String value);
+
+    /**
+     * Add an array of Strings for a key. This
+     * is simply adding all the elements in the
+     * array one by one.
+     *
+     * @param name A String with the name.
+     * @param value A String Array.
+     */
+    void add(String name, String [] value);
 
     /**
      * Removes the named parameter from the contained hashtable. Wraps to the
@@ -142,7 +145,7 @@ public interface ValueParser
      * @return The value that was mapped to the key (a <code>String[]</code>)
      *         or <code>null</code> if the key was not mapped.
      */
-    public Object remove(String name);
+    Object remove(String name);
 
     /**
      * Determine whether a given key has been inserted.  All keys are
@@ -152,7 +155,7 @@ public interface ValueParser
      * @param key An Object with the key to search for.
      * @return True if the object is found.
      */
-    public boolean containsKey( Object key );
+    boolean containsKey(Object key);
 
     /**
      * Gets the keys.
@@ -161,12 +164,12 @@ public interface ValueParser
      */
     Set keySet();
 
-    /*
+    /**
      * Returns all the available parameter names.
      *
      * @return A object array with the keys.
      */
-    public Object[] getKeys();
+    Object[] getKeys();
 
     /**
      * Return a boolean for the given name.  If the name does not
@@ -176,8 +179,7 @@ public interface ValueParser
      * @param defaultValue The default value.
      * @return A boolean.
      */
-    public boolean getBoolean(String name,
-                              boolean defaultValue);
+    boolean getBoolean(String name, boolean defaultValue);
 
     /**
      * Return a boolean for the given name.  If the name does not
@@ -186,27 +188,36 @@ public interface ValueParser
      * @param name A String with the name.
      * @return A boolean.
      */
-    public boolean getBoolean(String name);
+    boolean getBoolean(String name);
 
     /**
-     * Return a Boolean for the given name.  If the name does not
-     * exist, return defaultValue.
-     *
-     * @param name A String with the name.
-     * @param defaultValue The default value.
-     * @return A Boolean.
-     */
-    public Boolean getBool(String name,
-                           boolean defaultValue);
-
-    /**
-     * Return a Boolean for the given name.  If the name does not
-     * exist, return false.
+     * Returns a Boolean object for the given name.  If the parameter
+     * does not exist or can not be parsed as a boolean, null is returned.
+     * <p>
+     * Valid values for true: true, on, 1, yes<br>
+     * Valid values for false: false, off, 0, no<br>
+     * <p>
+     * The string is compared without reguard to case.
      *
      * @param name A String with the name.
      * @return A Boolean.
      */
-    public Boolean getBool(String name);
+    Boolean getBooleanObject(String name);
+
+    /**
+     * Returns a Boolean object for the given name.  If the parameter
+     * does not exist or can not be parsed as a boolean, the defaultValue
+     * is returned.
+     * <p>
+     * Valid values for true: true, on, 1, yes<br>
+     * Valid values for false: false, off, 0, no<br>
+     * <p>
+     * The string is compared without reguard to case.
+     *
+     * @param name A String with the name.
+     * @return A Boolean.
+     */
+    Boolean getBooleanObject(String name, Boolean defaultValue);
 
     /**
      * Return a double for the given name.  If the name does not
@@ -216,8 +227,7 @@ public interface ValueParser
      * @param defaultValue The default value.
      * @return A double.
      */
-    public double getDouble(String name,
-                            double defaultValue);
+    double getDouble(String name, double defaultValue);
 
     /**
      * Return a double for the given name.  If the name does not
@@ -226,7 +236,44 @@ public interface ValueParser
      * @param name A String with the name.
      * @return A double.
      */
-    public double getDouble(String name);
+    double getDouble(String name);
+
+    /**
+     * Return an array of doubles for the given name.  If the name does
+     * not exist, return null.
+     *
+     * @param name A String with the name.
+     * @return A double[].
+     */
+    double[] getDoubles(String name);
+
+    /**
+     * Return a Double for the given name.  If the name does not
+     * exist, return defaultValue.
+     *
+     * @param name A String with the name.
+     * @param defaultValue The default value.
+     * @return A double.
+     */
+    Double getDoubleObject(String name, Double defaultValue);
+
+    /**
+     * Return a Double for the given name.  If the name does not
+     * exist, return null.
+     *
+     * @param name A String with the name.
+     * @return A double.
+     */
+    Double getDoubleObject(String name);
+
+    /**
+     * Return an array of doubles for the given name.  If the name does
+     * not exist, return null.
+     *
+     * @param name A String with the name.
+     * @return A double[].
+     */
+    Double[] getDoubleObjects(String name);
 
     /**
      * Return a float for the given name.  If the name does not
@@ -236,8 +283,7 @@ public interface ValueParser
      * @param defaultValue The default value.
      * @return A float.
      */
-    public float getFloat(String name,
-                            float defaultValue);
+    float getFloat(String name, float defaultValue);
 
     /**
      * Return a float for the given name.  If the name does not
@@ -246,7 +292,44 @@ public interface ValueParser
      * @param name A String with the name.
      * @return A float.
      */
-    public float getFloat(String name);
+    float getFloat(String name);
+
+    /**
+     * Return an array of floats for the given name.  If the name does
+     * not exist, return null.
+     *
+     * @param name A String with the name.
+     * @return A float[].
+     */
+    float[] getFloats(String name);
+
+    /**
+     * Return a Float for the given name.  If the name does not
+     * exist, return defaultValue.
+     *
+     * @param name A String with the name.
+     * @param defaultValue The default value.
+     * @return A Float.
+     */
+    Float getFloatObject(String name, Float defaultValue);
+
+    /**
+     * Return a float for the given name.  If the name does not
+     * exist, return null.
+     *
+     * @param name A String with the name.
+     * @return A Float.
+     */
+    Float getFloatObject(String name);
+
+    /**
+     * Return an array of floats for the given name.  If the name does
+     * not exist, return null.
+     *
+     * @param name A String with the name.
+     * @return A float[].
+     */
+    Float[] getFloatObjects(String name);
 
     /**
      * Return a BigDecimal for the given name.  If the name does not
@@ -256,17 +339,16 @@ public interface ValueParser
      * @param defaultValue The default value.
      * @return A BigDecimal.
      */
-    public BigDecimal getBigDecimal(String name,
-                                    BigDecimal defaultValue);
+    BigDecimal getBigDecimal(String name, BigDecimal defaultValue);
 
     /**
      * Return a BigDecimal for the given name.  If the name does not
-     * exist, return 0.0.
+     * exist, return <code>null</code>.
      *
      * @param name A String with the name.
      * @return A BigDecimal.
      */
-    public BigDecimal getBigDecimal(String name);
+    BigDecimal getBigDecimal(String name);
 
     /**
      * Return an array of BigDecimals for the given name.  If the name
@@ -275,7 +357,7 @@ public interface ValueParser
      * @param name A String with the name.
      * @return A BigDecimal[].
      */
-    public BigDecimal[] getBigDecimals(String name);
+    BigDecimal[] getBigDecimals(String name);
 
     /**
      * Return an int for the given name.  If the name does not exist,
@@ -285,8 +367,7 @@ public interface ValueParser
      * @param defaultValue The default value.
      * @return An int.
      */
-    public int getInt(String name,
-                      int defaultValue );
+    int getInt(String name, int defaultValue);
 
     /**
      * Return an int for the given name.  If the name does not exist,
@@ -295,39 +376,26 @@ public interface ValueParser
      * @param name A String with the name.
      * @return An int.
      */
-    public int getInt(String name);
+    int getInt(String name);
 
     /**
-     * Return an Integer for the given name.  If the name does not
-     * exist, return defaultValue.
+     * Return an Integer for the given name.  If the name does not exist,
+     * return defaultValue.
      *
      * @param name A String with the name.
      * @param defaultValue The default value.
      * @return An Integer.
      */
-    public Integer getInteger(String name,
-                              int defaultValue);
+    Integer getIntObject(String name, Integer defaultValue);
 
     /**
-     * Return an Integer for the given name.  If the name does not
-     * exist, return defaultValue.  You cannot pass in a null here for
-     * the default value.
-     *
-     * @param name A String with the name.
-     * @param defaultValue The default value.
-     * @return An Integer.
-     */
-    public Integer getInteger(String name,
-                              Integer def);
-
-    /**
-     * Return an Integer for the given name.  If the name does not
-     * exist, return 0.
+     * Return an Integer for the given name.  If the name does not exist,
+     * return null.
      *
      * @param name A String with the name.
      * @return An Integer.
      */
-    public Integer getInteger(String name);
+    Integer getIntObject(String name);
 
     /**
      * Return an array of ints for the given name.  If the name does
@@ -336,7 +404,7 @@ public interface ValueParser
      * @param name A String with the name.
      * @return An int[].
      */
-    public int[] getInts(String name);
+    int[] getInts(String name);
 
     /**
      * Return an array of Integers for the given name.  If the name
@@ -345,7 +413,7 @@ public interface ValueParser
      * @param name A String with the name.
      * @return An Integer[].
      */
-    public Integer[] getIntegers(String name);
+    Integer[] getIntObjects(String name);
 
     /**
      * Return a long for the given name.  If the name does not exist,
@@ -355,8 +423,7 @@ public interface ValueParser
      * @param defaultValue The default value.
      * @return A long.
      */
-    public long getLong(String name,
-                        long defaultValue );
+    long getLong(String name, long defaultValue);
 
     /**
      * Return a long for the given name.  If the name does not exist,
@@ -365,7 +432,26 @@ public interface ValueParser
      * @param name A String with the name.
      * @return A long.
      */
-    public long getLong(String name);
+    long getLong(String name);
+
+    /**
+     * Return a Long for the given name.  If the name does not exist,
+     * return defaultValue.
+     *
+     * @param name A String with the name.
+     * @param defaultValue The default value.
+     * @return A Long.
+     */
+    Long getLongObject(String name, Long defaultValue);
+
+    /**
+     * Return a Long for the given name.  If the name does not exist,
+     * return null.
+     *
+     * @param name A String with the name.
+     * @return A Long.
+     */
+    Long getLongObject(String name);
 
     /**
      * Return an array of longs for the given name.  If the name does
@@ -374,7 +460,7 @@ public interface ValueParser
      * @param name A String with the name.
      * @return A long[].
      */
-    public long[] getLongs(String name);
+    long[] getLongs(String name);
 
     /**
      * Return an array of Longs for the given name.  If the name does
@@ -383,7 +469,7 @@ public interface ValueParser
      * @param name A String with the name.
      * @return A Long[].
      */
-    public Long[] getLongObjects(String name);
+    Long[] getLongObjects(String name);
 
     /**
      * Return a byte for the given name.  If the name does not exist,
@@ -393,8 +479,7 @@ public interface ValueParser
      * @param defaultValue The default value.
      * @return A byte.
      */
-    public byte getByte(String name,
-                        byte defaultValue );
+    byte getByte(String name, byte defaultValue);
 
     /**
      * Return a byte for the given name.  If the name does not exist,
@@ -403,7 +488,7 @@ public interface ValueParser
      * @param name A String with the name.
      * @return A byte.
      */
-    public byte getByte(String name);
+    byte getByte(String name);
 
     /**
      * Return an array of bytes for the given name.  If the name does
@@ -412,10 +497,28 @@ public interface ValueParser
      *
      * @param name A String with the name.
      * @return A byte[].
-     * @exception UnsupportedEncodingException.
+     * @exception UnsupportedEncodingException
      */
-    public byte[] getBytes(String name)
-        throws UnsupportedEncodingException;
+    byte[] getBytes(String name) throws UnsupportedEncodingException;
+
+    /**
+     * Return a byte for the given name.  If the name does not exist,
+     * return defaultValue.
+     *
+     * @param name A String with the name.
+     * @param defaultValue The default value.
+     * @return A byte.
+     */
+    Byte getByteObject(String name, Byte defaultValue);
+
+    /**
+     * Return a byte for the given name.  If the name does not exist,
+     * return 0.
+     *
+     * @param name A String with the name.
+     * @return A byte.
+     */
+    Byte getByteObject(String name);
 
     /**
      * Return a String for the given name.  If the name does not
@@ -424,7 +527,7 @@ public interface ValueParser
      * @param name A String with the name.
      * @return A String.
      */
-    public String getString(String name);
+    String getString(String name);
 
     /**
      * Return a String for the given name.  If the name does not
@@ -438,7 +541,7 @@ public interface ValueParser
      * @param name A String with the name.
      * @return A String.
      */
-    public String get (String name);
+    String get(String name);
 
     /**
      * Return a String for the given name.  If the name does not
@@ -448,8 +551,7 @@ public interface ValueParser
      * @param defaultValue The default value.
      * @return A String.
      */
-    public String getString(String name,
-                            String defaultValue);
+    String getString(String name, String defaultValue);
 
     /**
      * Set a parameter to a specific value.
@@ -459,7 +561,7 @@ public interface ValueParser
      * @param name The name of the parameter.
      * @param value The value to set.
      */
-    public void setString(String name, String value);
+    void setString(String name, String value);
 
     /**
      * Return an array of Strings for the given name.  If the name
@@ -468,7 +570,7 @@ public interface ValueParser
      * @param name A String with the name.
      * @return A String[].
      */
-    public String[] getStrings(String name);
+    String[] getStrings(String name);
 
     /**
      * Return an array of Strings for the given name.  If the name
@@ -478,8 +580,7 @@ public interface ValueParser
      * @param defaultValue The default value.
      * @return A String[].
      */
-    public String[] getStrings(String name,
-                               String[] defaultValue);
+    String[] getStrings(String name, String[] defaultValue);
 
     /**
      * Set a parameter to a specific value.
@@ -489,7 +590,7 @@ public interface ValueParser
      * @param name The name of the parameter.
      * @param values The value to set.
      */
-    public void setStrings(String name, String[] values);
+    void setStrings(String name, String[] values);
 
     /**
      * Return an Object for the given name.  If the name does not
@@ -498,7 +599,7 @@ public interface ValueParser
      * @param name A String with the name.
      * @return An Object.
      */
-    public Object getObject(String name);
+    Object getObject(String name);
 
     /**
      * Return an array of Objects for the given name.  If the name
@@ -507,7 +608,7 @@ public interface ValueParser
      * @param name A String with the name.
      * @return An Object[].
      */
-    public Object[] getObjects(String name);
+    Object[] getObjects(String name);
 
     /**
      * Returns a java.util.Date object.  String is parsed by supplied
@@ -519,9 +620,7 @@ public interface ValueParser
      * @param defaultValue The default value.
      * @return A Date.
      */
-    public Date getDate(String name,
-                        DateFormat df,
-                        Date defaultValue);
+    Date getDate(String name, DateFormat df, Date defaultValue);
 
     /**
      * Returns a java.util.Date object.  If there are DateSelector
@@ -532,7 +631,7 @@ public interface ValueParser
      * @param name A String with the name.
      * @return A Date.
      */
-    public Date getDate(String name);
+    Date getDate(String name);
 
     /**
      * Returns a java.util.Date object.  String is parsed by supplied
@@ -542,8 +641,7 @@ public interface ValueParser
      * @param df A DateFormat.
      * @return A Date.
      */
-    public Date getDate(String name,
-                        DateFormat df);
+    Date getDate(String name, DateFormat df);
 
     /**
      * Uses bean introspection to set writable properties of bean from
@@ -551,10 +649,9 @@ public interface ValueParser
      * the bean property and the parameter is looked for.
      *
      * @param bean An Object.
-     * @exception Exception, a generic exception.
+     * @exception Exception a generic exception.
      */
-    public void setProperties(Object bean)
-        throws Exception;
+    void setProperties(Object bean) throws Exception;
 
     /**
      * Simple method that attempts to get a toString() representation
@@ -562,5 +659,5 @@ public interface ValueParser
      *
      * @return A String.
      */
-    public String toString();
+    String toString();
 }
