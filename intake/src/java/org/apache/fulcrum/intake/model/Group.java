@@ -31,7 +31,7 @@ import org.apache.fulcrum.intake.Retrievable;
 import org.apache.fulcrum.intake.xmlmodel.AppData;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 import org.apache.fulcrum.intake.xmlmodel.XmlGroup;
-import org.apache.turbine.util.parser.ValueParser;
+import org.apache.fulcrum.parser.ValueParser;
 
 /**
  * Holds a group of Fields

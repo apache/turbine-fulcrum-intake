@@ -18,29 +18,23 @@ package org.apache.fulcrum.intake.model;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
 import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import org.apache.fulcrum.intake.Retrievable;
-
 import org.apache.fulcrum.intake.IntakeError;
 import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.IntakeServiceFacade;
+import org.apache.fulcrum.intake.Retrievable;
 import org.apache.fulcrum.intake.validator.DefaultValidator;
 import org.apache.fulcrum.intake.validator.InitableByConstraintMap;
 import org.apache.fulcrum.intake.validator.ValidationException;
 import org.apache.fulcrum.intake.validator.Validator;
 import org.apache.fulcrum.intake.xmlmodel.Rule;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
-
-
-import org.apache.turbine.util.parser.ParameterParser;
-import org.apache.turbine.util.parser.ValueParser;
+import org.apache.fulcrum.parser.ParameterParser;
+import org.apache.fulcrum.parser.ValueParser;
 
 /**
  * Base class for Intake generated input processing classes.

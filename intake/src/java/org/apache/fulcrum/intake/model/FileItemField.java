@@ -17,14 +17,13 @@ package org.apache.fulcrum.intake.model;
  */
 
 import org.apache.commons.fileupload.FileItem;
-
 import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.IntakeRuntimeException;
 import org.apache.fulcrum.intake.validator.FileValidator;
 import org.apache.fulcrum.intake.validator.ValidationException;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
-import org.apache.turbine.util.parser.ParameterParser;
-import org.apache.turbine.util.parser.ValueParser;
+import org.apache.fulcrum.parser.ParameterParser;
+import org.apache.fulcrum.parser.ValueParser;
 
 /**
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>

@@ -6,11 +6,7 @@
   <currentVersion>1.0.4-dev</currentVersion>
 
   <dependencies>
-    <dependency>
-      <groupId>turbine</groupId>    
-      <artifactId>turbine</artifactId>
-      <version>2.3.1</version>
-    </dependency>
+
     <dependency>
       <groupId>fulcrum</groupId>    
       <artifactId>fulcrum-localization</artifactId>
@@ -21,7 +17,22 @@
       <groupId>fulcrum</groupId>    
       <artifactId>fulcrum-factory</artifactId>
       <version>1.0.3</version>
-    </dependency>         
+    </dependency> 
+     <dependency>
+      <groupId>fulcrum</groupId>    
+      <artifactId>fulcrum-pool</artifactId>
+      <version>1.0.3</version>
+    </dependency>            
+    <dependency>
+      <groupId>fulcrum</groupId>    
+      <artifactId>fulcrum-parser</artifactId>
+      <version>1.0.2-dev</version>
+    </dependency>       
+    <dependency>
+      <groupId>fulcrum</groupId>    
+      <artifactId>fulcrum-upload</artifactId>
+      <version>1.0.3</version>
+    </dependency>               
     
     <dependency>
       <groupId>commons-fileupload</groupId>    
