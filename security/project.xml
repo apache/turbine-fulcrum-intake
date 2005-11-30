@@ -8,14 +8,12 @@
   <versions>
     <version>
       <id>1.0.7</id>
-      <name>1.0.7</name>
       <tag>FULCRUM_SECURITY_1_0_7</tag>
     </version>
   </versions>
  <contributors>
     <contributor>
       <name>Ben Gidley</name>
-      <id>bgidley</id>
       <email>ben.gidley@anite.com</email>
       <organization>Anite</organization>
       <roles>
@@ -24,7 +22,6 @@
     </contributor> 
     <contributor>
       <name>Michael Jones</name>
-      <id>mjones</id>
       <email>michael.jones@anite.com</email>
       <organization>Anite</organization>
       <roles>
@@ -33,7 +30,6 @@
     </contributor>
     <contributor>
       <name>Kostyantyn Shchekotykhin</name>
-      <id>kshchekotykhin</id>
       <email>kostya@ifit.uni-klu.ac.at</email>
       <roles>
         <role>Developer</role>
@@ -66,14 +62,15 @@
       <version>1.0.4</version>
     </dependency>     
   </dependencies>
-  <resources>
-    <resource>
-      <directory>/</directory>
-      <includes>
-        <include>incl_nav.xml</include>
-      </includes>
-    </resource>
-  </resources>  
-
+  <build>
+      <resources>
+        <resource>
+          <directory>/</directory>
+          <includes>
+            <include>incl_nav.xml</include>
+          </includes>
+        </resource>
+      </resources>  
+  </build>
 </project>
 
