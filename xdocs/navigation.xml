@@ -50,6 +50,7 @@
     </menu>
 
     <menu name="Sandbox Components">      
+      <item name="CommonsEmail"          href="/fulcrum-commonsemail/index.html"/>
       <item name="PBE"                   href="/fulcrum-pbe/index.html"/>
       <item name="Groovy"                href="/fulcrum-groovy/index.html"/>
       <item name="ResourceManager"       href="/fulcrum-resourcemanager/index.html"/>
