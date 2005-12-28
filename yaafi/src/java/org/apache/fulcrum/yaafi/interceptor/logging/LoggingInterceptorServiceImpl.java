@@ -26,6 +26,7 @@ import org.apache.avalon.framework.configuration.Reconfigurable;
 import org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorContext;
 import org.apache.fulcrum.yaafi.framework.reflection.Clazz;
 import org.apache.fulcrum.yaafi.interceptor.baseservice.BaseInterceptorServiceImpl;
+import org.apache.fulcrum.yaafi.interceptor.util.DefaultToStringBuilderImpl;
 import org.apache.fulcrum.yaafi.interceptor.util.InterceptorToStringBuilder;
 import org.apache.fulcrum.yaafi.interceptor.util.MethodToStringBuilderImpl;
 import org.apache.fulcrum.yaafi.interceptor.util.ArgumentToStringBuilderImpl;
@@ -265,6 +266,7 @@ public class LoggingInterceptorServiceImpl
         {
             String msg = "Unable to create an instance for " + this.getToStringBuilderClassName();
             this.getLogger().error(msg,e);
+            result = new DefaultToStringBuilderImpl();
         }
      
         result.setTarget(target);
