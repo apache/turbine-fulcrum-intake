@@ -1,0 +1,48 @@
+<project default="local:build" xmlns:deploy="deploy" xmlns:ant="jelly:ant">
+
+  <!-- ################################################################## -->
+  <!-- M A V E N  G O A L S                                               -->
+  <!-- ################################################################## -->
+
+  <goal name ="local:all" description="Creates everything for this project">
+    <attainGoal name="local:build"/>
+    <attainGoal name="local:site"/>
+  </goal>
+
+  <goal name ="local:clover-build" description="Builds all project artifacts with Clover instrumentation">
+    <attainGoal name="clover:on"/>
+    <attainGoal name="local:build"/>
+  </goal>
+
+  <goal name ="local:build" description="Builds all project artifacts">
+    <attainGoal name="clean"/>
+   <attainGoal name="jar:install"/>
+  </goal>
+
+  <goal name ="local:site" description="Builds the project site">
+    <attainGoal name="clean"/>
+    <attainGoal name="site"/>
+  </goal>
+
+  <goal name ="local:copy-deps" description="Copies the dependent JARs into lib">
+      <deploy:copy-deps todir="lib"/>
+  </goal>
+
+
+  <!-- ################################################################## -->
+  <!-- M A V E N  H O O K S                                               -->
+  <!-- ################################################################## -->
+
+  <postGoal name="clean:clean">
+    <echo>Deleting Eclipse directories</echo>
+    <ant:delete dir="classes"/>
+    <ant:delete file="temp/karma.txt"/>
+  </postGoal>
+
+  <preGoal name="jar:jar">
+    <ant:delete file="target/classes/componentRoles.xml"/>
+    <ant:delete file="target/classes/componentConfiguration.xml"/>
+    <ant:delete file="target/classes/log4j.properties"/>
+  </preGoal>
+
+</project>

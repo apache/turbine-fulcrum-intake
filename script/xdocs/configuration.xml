@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Fulcrum Script Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Configuration">
+
+      <subsection name="Component Configuration">
+        <table>
+          <tr>
+            <th>Item</th>
+            <th>Datatype</th>
+            <th>Cardinality</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>scriptEngines</td>
+            <td>Complex</td>
+            <td>[1]</td>
+            <td>
+            	The list of available script engines
+            </td>
+          </tr>
+          <tr>
+            <td>scriptEngines\scriptEngine</td>
+            <td>Complex</td>
+            <td>[1..n]</td>
+            <td>
+              Metadata about a particular script engine
+            </td>
+          </tr>
+          <tr>
+            <td>scriptEngines\scriptEngine\name</td>
+            <td>String</td>
+            <td>[1]</td>
+            <td>
+              The name of the script engine to lookup the implementation
+              using the ScriptEngineManager.getEngineByName()
+            </td>
+          </tr>
+          <tr>
+            <td>scriptEngines\scriptEngine\isCached</td>
+            <td>boolean</td>
+            <td>[0|1]</td>
+            <td>
+            	Is the script cached or reloaded from the resource service
+            	each time? This setting is useful for debugging when you edit
+            	the script on the fly since the changes take place immediatly.
+            </td>
+          </tr>
+          <tr>
+            <td>scriptEngines\scriptEngine\isCompiled</td>
+            <td>boolean</td>
+            <td>[0|1]</td>
+            <td>
+            	Is the script compiled to an internal representation before being
+            	executed. Using a compiled script improves the performance together
+            	with cached scripts (see above)
+            </td>
+          </tr>
+          <tr>
+            <td>scriptEngines\scriptEngine\location</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+            	The location of the scripts regarding the resource service. If no 
+              value is supplied than &lt;name&gt; is used.
+            </td>
+          </tr>
+          <tr>
+            <td>scriptEngines\scriptEngine\preLoad</td>
+            <td>Complex</td>
+            <td>[0|1]</td>
+            <td>
+              A list of scripts to preload during startup.
+            </td>
+          </tr>
+          <tr>
+            <td>scriptEngines\scriptEngine\preLoad\script</td>
+            <td>String</td>
+            <td>[0..n]</td>
+            <td>
+              A script to preload during startup.
+            </td>
+          </tr>
+          <tr>
+            <td>scriptConfiguration</td>
+            <td>Complex</td>
+            <td>[0|1]</td>
+            <td>
+              Contains the user-defined configuration to pass
+              to the executed script using the AvalonScriptContext.
+            </td>
+          </tr>          
+        </table>
+      </subsection>
+
+      <subsection name="Component Configuration Example">
+
+        <source>
+          <![CDATA[
+<ResourceManagerService>
+  <domain name="js">
+    <suffix>js</suffix>
+    <location>./src/test/scripts/js</location>
+    <useLocator>true</useLocator>
+  </domain>
+</ResourceManagerService>
+
+<ScriptService>
+  <scriptEngines>
+    <scriptEngine>
+      <name>js</name>
+      <isCached>true</isCached>
+      <isCompiled>true</isCompiled>
+      <location>js</location>
+      <preLoad>
+        <script>InvocableIntf.js</script>
+      </preLoad>
+    </scriptEngine>
+  </scriptEngines>
+  <scriptConfiguration>
+    <isDebug>true</isDebug>
+  </scriptConfiguration>
+</ScriptService>
+          ]]>
+        </source>
+      </subsection>
+
+      <subsection name="Role Configuration Example">
+        <source>
+          <![CDATA[
+<role
+    name="org.apache.fulcrum.resourcemanager.ResourceManagerService"
+    default-class="org.apache.fulcrum.resourcemanager.impl.ResourceManagerServiceImpl"
+    shorthand="ResourceManagerService"
+    early-init="true"
+    description="Handles the management of resources"
+ />
+<role
+    name="org.apache.fulcrum.script.ScriptService"
+    default-class="org.apache.fulcrum.script.impl.ScriptServiceImpl"
+    shorthand="ScriptService"
+    early-init="true"
+    description="Handles the execution of scripts"
+ />
+          ]]>
+        </source>
+      </subsection>
+    </section>
+
+  </body>
+
+</document>

@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Fulcrum Script Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="Script Compilation">
+      <p>
+        Depending on the ScriptEngine of your choice you have 
+        various options to compile a script
+        <ul>
+          <li>transforming the script into an AST (abstract syntax tree) on the fly</li>
+          <li>compiling the script into Java bytecode on the fly thereby creating a Java class dynamically</li>
+          <li>precompile the script to Java bytecode thereby creating a Java class file</li>
+        </ul>
+      </p>      
+    </section>
+    
+    <section name="Script Management">
+      <p>
+        The scripts are managesd by the Fulcrum ResourcManager Service. This
+        gives you the locator functionality, optional decryption and location
+        transparency
+      </p>
+    </section>
+
+    <section name="Locator">
+      
+      <p>
+        The locator gives you easy customization of scripts. Let's
+        say you would like to invoke the script 'foo.js' for a customer
+        'BAR' using the following script layout
+      </p>      
+      
+      <source>
+        <![CDATA[
+scripts
+  -- foo.js
+  -- BAR
+     -- foo.js
+        ]]>
+      </source>
+      
+      <p>
+        In the case of invoking 'foo.js' the script 'foo.js' would be executed.
+        In the case of invoking 'BAR/foo.js' the script 'BAR/foo.js' would be executed.
+        In the case of invoking 'FOO/foo.js' the locator is looking for 'FOO/foo.js'. Since
+        it isn't found it steps up a directory to execute 'foo.js'. The trick was taken from 
+        the Fulcrum XSLT service which uses a simlilar fallback mechanism.
+      </p>      
+      
+    </section>
+    
+  </body>
+
+</document>

@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Fulcrum Script Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="What is the Fulcrum Script Service?">
+
+      <p>
+      	The Fulcrum Script Service provides an integration of the 
+      	JSR 223 specifiation to integrate scripting languages. 
+      	Basically this is the successor of the existing Fulcrum BSF 
+      	and Fulcrum Groovy service.
+      </p>
+
+      <subsection name="Features">
+        <p>
+          The Fulcrum Script Service provides the following features:       
+          <ul>
+            <li>optional caching of scripts to improve performance</li>
+            <li>optional script compilation depending on the scripting engine</li>
+            <li>seamless integration with the existing Avalon infrastructure</li>
+          </ul>
+        </p>  
+      </subsection>
+
+      <subsection name="Scripting Language Support">
+        <table>
+          <tr>
+            <th>Language</th>
+            <th>Status</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td><a href="http://www.mozilla.org/rhino">Rhino JavaScript</a></td>
+            <td>Done</td>
+            <td>Works nicely</td>
+          </tr>
+          <tr>
+            <td><a href="http://groovy.codehaus.org">Groovy</a></td>
+            <td>Done</td>
+            <td>Currently no support for Invocable</td>
+          </tr>
+          <tr>
+            <td><a href="https://pnuts.dev.java.net">pnuts</a></td>
+            <td>Open</td>
+            <td>Currently no JDK 1.4 support for JSR 223 integration</td>
+          </tr>
+          <tr>
+            <td><a href="http://www.beanshell.org">Beanshell</a></td>
+            <td>Open</td>
+            <td>Currently no JSR 223 integration available</td>
+          </tr>          
+        </table>
+      </subsection>
+      
+    </section>
+
+  </body>
+
+</document>

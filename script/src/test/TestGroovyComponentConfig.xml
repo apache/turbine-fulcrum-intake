@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<componentConfig>
+
+  <ResourceManagerService>
+    <domain name="groovy">
+      <suffix>groovy</suffix>
+      <location>./src/test/scripts/groovy</location>
+      <useLocator>true</useLocator>
+    </domain>
+  </ResourceManagerService>
+
+	<!--
+		ScriptService
+
+		scriptEngines := the list of available script engines
+		scriptEngines/scriptEngine := configuration of a single script engine
+		scriptEngines/scriptEngine/name := the name of the script engine
+		scriptEngines/scriptEngine/isCached := cache the scripts or reload it each time from the ResourceManagerService
+		scriptEngines/scriptEngine/isCompiled := precompile the script
+		scriptEngines/scriptEngine/location := the location of the scripts
+		scriptEngines/scriptEngine/preLoad := a list of scripts to load on startup
+		scriptEngines/scriptEngine/preLoad/script := the script to preload
+	-->
+
+  <ScriptService>
+  	<scriptEngines>
+  		<scriptEngine>
+  			<name>groovy</name>
+  			<isCached>true</isCached>
+  			<isCompiled>true</isCompiled>
+  			<location>groovy</location>
+  		</scriptEngine>
+  	</scriptEngines>
+  	<scriptConfiguration>
+  	  <isDebug>true</isDebug>
+  	</scriptConfiguration>
+  </ScriptService>
+
+</componentConfig>

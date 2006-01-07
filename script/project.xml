@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<project>
+  <extend>${basedir}/../project.xml</extend>
+  <id>fulcrum-script</id>
+  <name>Fulcrum Script Component</name>
+  <currentVersion>1.0.1-dev</currentVersion>
+
+  <dependencies>
+  
+    <!--  test dependencies -->
+    
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-testcontainer</artifactId>
+      <version>1.0.5</version>
+      <url>http://jakarta.apache.org/turbine/fulcrum/</url>
+    </dependency>
+    
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-yaafi</artifactId>
+      <version>1.0.5-dev</version>
+      <url>http://jakarta.apache.org/turbine/fulcrum/</url>
+    </dependency>
+
+    <dependency>
+      <groupId>groovy</groupId>
+      <artifactId>groovy-all</artifactId>
+      <version>1.0-jsr-04</version>
+      <url>http://groovy.codehaus.org</url>
+    </dependency>
+
+    <dependency>
+      <groupId>rhino</groupId>
+      <artifactId>js</artifactId>
+      <version>1.6R2</version>
+      <url>http://www.mozilla.org/rhino</url>
+    </dependency>
+
+    <!-- compile/runtime dependencies -->
+    
+    <dependency>
+      <groupId>javax.script</groupId>
+      <artifactId>script</artifactId>
+      <version>1.0</version>
+      <url>http://jakarta.apache.org/turbine/fulcrum/</url>
+      http://www.jcp.org/aboutJava/communityprocess/pr/jsr223/
+    </dependency>
+
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-resourcemanager</artifactId>
+      <version>1.0.1-dev</version>
+      <url>http://jakarta.apache.org/turbine/fulcrum/</url>
+    </dependency>
+
+  </dependencies>
+
+</project>

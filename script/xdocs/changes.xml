@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Fulcrum Script Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+    <release version="1.0.0" date="in SVN">
+      <action dev="sgoeschl" type="add">
+        Initial version
+      </action>
+    </release>
+  </body>
+</document>
+

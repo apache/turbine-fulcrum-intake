@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Fulcrum Script Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+
+  <body>
+
+      <section name="Invoking a script">
+
+      <p>
+        For invoking a script you have two options - either you invoke the
+        script directly using the ScriptService or you can use a ScriptRunnable
+        (which relies on the ScriptService).
+      </p>
+
+        <subsection name="Using the ScriptService">
+          <p>
+            This example invokes a script called "CompilableInterface" and
+            passed two parameters for executing the script.
+          </p>
+          <source>
+            <![CDATA[
+Object result = null;        
+SimpleNamespace args = new SimpleNamespace();
+args.put("count",new Integer(i));
+args.put("currentTime",new Long(System.currentTimeMillis()));
+result = scriptService.eval("CompilableInterface", args);
+            ]]>
+          </source>
+        </subsection>
+        
+        <subsection name="Using the ScriptRunnable">
+          <p>
+            This example creates a ScriptRunnable to invoke a
+            script called "MultiThreaded".
+          </p>          
+          <source>
+            <![CDATA[
+Hashtable args = new Hashtable();
+args.put("foo", new Double(0));        
+ScriptRunnable runnable = scriptService.createRunnable( scriptService, "MultiThreaded", args );
+runnable.run();
+result = runnable.getResult();
+            ]]>
+        </source>
+        </subsection>
+
+    </section>
+
+    <section name="Accessing Avalon Infrastructure from within a script">
+      <p>
+        The Fulcrum Script Service passes a ScriptAvalonContext to the script
+      </p>      
+      <source>
+        <![CDATA[
+var logger = avalonContext.getLogger();
+var applicationDir = avalonContext.getApplicationDir();
+var tempDir = avalonContext.getTempDir();
+var serviceManager = avalonContext.getServiceManager();
+var parameters = avalonContext.getParameters();
+var configuration = avalonContext.getConfiguration();
+var isDebug = configuration.getChild("isDebug").getValueAsBoolean(false);
+serviceManager.lookup("org.apache.fulcrum.script.ScriptService").exists("Avalon");
+        ]]>
+      </source>
+
+    </section>      
+      
+  </body>
+
+</document>

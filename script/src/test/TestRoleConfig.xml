@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<role-list>
+
+    <role
+        name="org.apache.fulcrum.resourcemanager.ResourceManagerService"
+        default-class="org.apache.fulcrum.resourcemanager.impl.ResourceManagerServiceImpl"
+        shorthand="ResourceManagerService"
+        early-init="true"
+        description="Handles the management of resources"
+     />
+
+    <role
+        name="org.apache.fulcrum.script.ScriptService"
+        default-class="org.apache.fulcrum.script.impl.ScriptServiceImpl"
+        shorthand="ScriptService"
+        early-init="true"
+        description="Handles the execution of scripts"
+     />
+
+</role-list>

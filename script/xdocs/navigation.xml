@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+  name="Fulcrum Groovy Service"
+  href="http://jakarta.apache.org/turbine/fulcrum/yaafi/">
+
+  <body>
+    <links>
+      <item name="Home"                href="../../../it20one-service-maven/target/docs/index.html"/>
+      <item name="Fulcrum"             href="http://jakarta.apache.org/turbine/fulcrum/"/>
+      <item name="JSR 223"             href="http://www.jcp.org/aboutJava/communityprocess/pr/jsr223/"/>
+    </links>
+    
+    <menu name="Overview">
+      <item name="Overview"            href="/index.html"/>
+      <item name="Configuration"       href="/configuration.html"/>
+      <item name="Integration"         href="/integration.html"/>
+      <item name="Technical"           href="/technical.html"/>
+      <item name="Resources"           href="/resources.html"/>
+    </menu>
+  </body>
+</project>
