@@ -48,10 +48,10 @@ public abstract class ScriptBaseService
     implements Contextualizable, Serviceable, Configurable, Parameterizable, Reconfigurable, Disposable
 {
     /** context key for persistent directory */
-    private final static String URN_AVALON_HOME = "context-root";
+    private final static String URN_AVALON_HOME = "urn:avalon:home";
 
     /** context key for temporary directory */
-    private final static String URN_AVALON_TEMP = "impl.workDir";
+    private final static String URN_AVALON_TEMP = "urn:avalon:temp";
 
     /** The context supplied by the avalon framework */
     private Context context;
