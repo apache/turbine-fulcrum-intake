@@ -186,12 +186,14 @@
       <groupId>avalon-framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
       <version>4.3</version>
+      <url>http://excalibur.apache.org/</url>
     </dependency>
 
     <dependency>
       <groupId>avalon-framework</groupId>
       <artifactId>avalon-framework-impl</artifactId>
       <version>4.3</version>
+      <url>http://excalibur.apache.org/</url>
     </dependency>
 
     <!--
