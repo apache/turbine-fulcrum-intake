@@ -37,9 +37,9 @@
      
    <!-- QUARTZ -->
     <dependency>
-      <groupId>opensymphony</groupId>
+      <groupId>quartz</groupId>
       <artifactId>quartz</artifactId>
-      <version>1.5.0</version>
+      <version>1.5.1</version>
     </dependency>  
     
     <!--  Needed only for testing -->

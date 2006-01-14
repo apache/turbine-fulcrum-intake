@@ -8,6 +8,9 @@
   <body>
     <release version="1.1" date="">
      <action dev="epugh" type="update">
+        Bump to Quartz 1.5.1.
+      </action>
+     <action dev="epugh" type="update">
         Upgrade to Quartz 1.5, update for the new xstream xml format for CronTrigger.
       </action>              
     </release>   

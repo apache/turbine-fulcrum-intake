@@ -74,8 +74,6 @@ public class DefaultQuartzScheduler implements QuartzScheduler, Configurable, Se
 
     private Configuration triggersConf;
 
-    private Configuration scheduledJobs;
-
     private Map jobDetailsMap;
 
     private Map triggersMap;
@@ -87,7 +85,6 @@ public class DefaultQuartzScheduler implements QuartzScheduler, Configurable, Se
 
         jobDetailsConf = conf.getChild("jobDetails").getChild("list");
         triggersConf = conf.getChild("triggers").getChild("list");
-        scheduledJobs = conf.getChild("scheduledJobs");
         Configuration child = conf.getChild("globalJobListener", false);
         if (child != null) {
             globalJobListenerClassName = conf.getChild("globalJobListener").getAttribute("className");
@@ -160,6 +157,8 @@ public class DefaultQuartzScheduler implements QuartzScheduler, Configurable, Se
             Trigger trigger = (Trigger) triggersMap.get(key);
             if (trigger instanceof CronTrigger) {
                 if (trigger.getJobGroup() != null & trigger.getJobName() != null) {
+                	   Trigger t = scheduler.getTrigger(trigger.getName(),trigger.getGroup());
+                	   if (t==null){
                     CronTrigger triggerToSchedule = new CronTrigger(trigger.getName(),trigger.getGroup(),trigger.getJobName(),trigger.getJobGroup(),((CronTrigger)trigger).getCronExpression());
                     logger.debug("Scheduling trigger [" + triggerToSchedule.getFullName() + "] for  job ["
                             + triggerToSchedule.getFullJobName() + "] using cron " + triggerToSchedule.getCronExpression());
@@ -168,6 +167,7 @@ public class DefaultQuartzScheduler implements QuartzScheduler, Configurable, Se
                    // CronTrigger cronTrigger = new CronTrigger("someTriggerCron", Scheduler.DEFAULT_GROUP,
                    //         "simpleJob","DEFAULT_GROUP" ,"* * * * * ?");
                     scheduler.scheduleJob(triggerToSchedule);
+                	   }
                  /*   Trigger rightNow = new SimpleTrigger("someTrigger", Scheduler.DEFAULT_GROUP,
                             "notSoSimpleJob","DEFAULT_GROUP" ,new Date(), null, 0,0L);
 
