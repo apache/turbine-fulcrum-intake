@@ -25,6 +25,10 @@ import org.apache.avalon.framework.component.Component;
 
 /**
  * GlobalCacheService interface.
+ * 
+ * @todo This GlobalCacheService should be usable by both the DefaultEHCacheService
+ * and the DefaultGlobalCache.   The CacheObject class from GCS and the Element class
+ * from EHCS are very similar.
  *
  * @author <a href="mailto:mbryson@mont.mindspring.com">Dave Bryson</a>
  * @author <a href="mailto:peter@courcoux.biz">Peter Courcoux</a>

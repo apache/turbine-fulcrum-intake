@@ -11,6 +11,11 @@
 
   <section name="Overview">
     <p>
+      <b>NEW:</b> There are now two caches, GlobalCacheService and EHCacheService.  GlobalCacheService
+      was built on internal foundations and EHCacheService was built on the EHCache project from
+      <a href="http://ehcache.sourceforge.net/">ehcache.sourceforge.net</a>
+    </p>
+    <p>
      This Service functions as a Global Cache.  A global cache is a good
      place to store items that you may need to access often but don't
      necessarily need (or want) to fetch from the database everytime.  A
@@ -28,7 +33,36 @@
     </p>    
   </section>
   
-<section name="Configuration">
+<section name="Configuration for EHCacheService">
+
+    <p>
+      First, here is the role configuration.
+    </p>
+
+    <source>
+    <![CDATA[
+        <role
+            name="org.apache.fulcrum.cache.EHCacheService"
+            shorthand="ehcache"
+            default-class="org.apache.fulcrum.cache.impl.DefaultEHCacheService"/>
+    ]]>
+    </source>
+
+      <p>
+        And here is the configuration:
+      </p>
+    <source>
+
+    <![CDATA[
+ <ehcache>   
+          
+    </ehcache>
+    ]]>
+    </source>
+
+  </section>
+    
+<section name="Configuration for GlobalCacheService">
 
     <p>
       First, here is the role configuration.

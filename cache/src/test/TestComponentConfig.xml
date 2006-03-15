@@ -1,3 +1,4 @@
 <componentConfig>
     <cache cacheInitialSize="20" cacheCheckFrequency="5"/>
+    <ehcache/>
 </componentConfig>

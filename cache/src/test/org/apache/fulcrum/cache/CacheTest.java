@@ -220,12 +220,10 @@ public class CacheTest extends BaseUnitTest
     public void testCacheFlush() throws Exception
     {
         String testString = new String("This is a test");
-        Object retrievedObject = null;
         CachedObject cacheObject = null;
         // Create and add Object that expires in 1 turbine Refresh + 1 millis 
         cacheObject = new CachedObject(testString, (getCacheRefresh() * 5) + 1);
         assertNotNull("Failed to create a cachable object", cacheObject);
-        long addTime = System.currentTimeMillis();
         globalCache.addObject(cacheKey, cacheObject);
         // 1 Refresh
         Thread.sleep(getCacheRefresh() + 1);
@@ -270,7 +268,6 @@ public class CacheTest extends BaseUnitTest
      */
     public void testRefreshableObject() throws Exception
     {
-        String testString = new String("This is a test");
         Object retrievedObject = null;
         RefreshableCachedObject cacheObject = null;
         // Create and add Object that expires in TEST_EXPIRETIME millis.
@@ -378,7 +375,6 @@ public class CacheTest extends BaseUnitTest
             LOG.warn("Running testRefreshableTimeToLive test due to property " + SKIP_TESTS_KEY + " being false.");
         }
 
-        String testString = new String("This is a test");
         Object retrievedObject = null;
         RefreshableCachedObject cacheObject = null;
         // Create and add Object that expires in TEST_EXPIRETIME millis.

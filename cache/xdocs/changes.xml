@@ -2,10 +2,15 @@
 <document>
   <properties>
     <title>Fulcrum Cache</title>
-    <author email="epugh@upstate.com">Eric Pugh</author>
+    <author email="epugh@opensourceconnections.com">Eric Pugh</author>
   </properties>
 
   <body>
+    <release version="1.1" date="">
+     <action dev="epugh" type="add">
+        Add new EHCacheService based on EHCache from http://ehcache.sourceforge.net/
+      </action>    
+    </release>
     <release version="1.0.5" date="2004-11-24">
      <action dev="epugh" type="remove">
         Remove CacheServiceFacade.  It was a code smell.
