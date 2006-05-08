@@ -29,7 +29,7 @@
     </p>
     <p>
       For more detailed information how the server works and its capabilities,
-      visit the <a href="ws.apache.org/xmlrpc">xlm-rpc project site</a>
+      visit the <a href="/ws.apache.org/xmlrpc">xlm-rpc project site</a>
     </p>
   </section>
 
@@ -141,7 +141,7 @@
     <p>
       The final part of the configuration is telling the server about your
       handlers.  For information on how to write handlers, refer
-      to the <a href="ws.apache.org/xmlrpc/server.html">
+      to the <a href="/ws.apache.org/xmlrpc/server.html">
       xml-rpc server docs</a>
     </p>
     <p>
