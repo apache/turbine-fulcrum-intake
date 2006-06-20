@@ -7,6 +7,9 @@
 
   <body>
     <release version="1.0-alpha-2" date="in SVN">
+     <action dev="seade" type="fix" issue="FULS10">
+        TemplateEmail.sendMultiple() was setting the character set to late.
+     </action>                  
      <action dev="sgoeschl" type="update">
         Changed the signature of TemplateHtmlEmail.send() since it inherits
         from Mail.send(). The method now throws an EmailException instead

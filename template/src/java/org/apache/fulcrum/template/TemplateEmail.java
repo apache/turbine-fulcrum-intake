@@ -435,6 +435,10 @@ public class TemplateEmail
         }
 
         SimpleEmail se = new SimpleEmail();
+        if (charset != null) 
+        {
+            se.setCharset(charset);            
+        }
         se.setFrom(fromEmail, fromName);
         se.setTo(toList);
         if (ccList != null && !ccList.isEmpty())
@@ -442,10 +446,6 @@ public class TemplateEmail
             se.setCc(ccList);
         }
         addReplyTo(se);
-        if (charset != null) 
-        {
-            se.setCharset(charset);            
-        }
         se.setSubject(subject);
         se.setMsg(body);
 
