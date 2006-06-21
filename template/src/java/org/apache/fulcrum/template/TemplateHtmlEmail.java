@@ -2,7 +2,7 @@ package org.apache.fulcrum.template;
 
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -185,12 +185,12 @@ public class TemplateHtmlEmail
      * @param surl A String.
      * @param name A String.
      * @return A String with the cid of the embedded file.
-     * @exception MessagingException.
+     * @exception EmailException.
      * @see HtmlEmail#embed(URL surl, String name) embed.
      */
     public String embed(String surl,
                         String name)
-        throws MessagingException
+        throws EmailException
     {
         String cid ="";
         try
