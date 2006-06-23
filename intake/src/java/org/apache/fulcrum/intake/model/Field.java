@@ -1,7 +1,7 @@
 package org.apache.fulcrum.intake.model;
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ import org.apache.fulcrum.parser.ValueParser;
  * @author <a href="mailto:dlr@finemaltcoding.com>Daniel Rall</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
+ * @author <a href="mailto:jh@byteaction.de">J&uuml;rgen Hoffmann</a>
  * @version $Id$
  */
 public abstract class Field
@@ -192,7 +193,7 @@ public abstract class Field
         }
 
         String validatorClassName = field.getValidator();
-        if (validatorClassName == null && field.getRules().size() > 0)
+        if (validatorClassName == null)
         {
             validatorClassName = getDefaultValidator();
         }

@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE input-data SYSTEM
-           "http://jakarta.apache.org/turbine/dtd/intake_2_3.dtd">
+<!DOCTYPE input-data SYSTEM "http://jakarta.apache.org/turbine/dtd/intake_2_3.dtd">
 <input-data basePackage="org.apache.fulcrum.intake.test.">
-<group name="LoginGroup" key="loginGroupKey" mapToObject="LoginForm">
-<field name="Username" key="loginUsernameKey" type="String"
-        mapToProperty="Username">
+	<group name="LoginGroup" key="loginGroupKey" mapToObject="LoginForm">
+		<field name="Username" key="loginUsernameKey" type="String"
+			mapToProperty="Username">
+			
+		</field>
+	</group>
 	
-</field>
-</group>
-
-
+	<group name="BooleanTest" key="bt">
+		<field name="EmptyBooleanTestField" key="ebtf" type="boolean"/>
+		<field name="BooleanTestField" key="btf" type="boolean">
+			<rule value="false" name="required">ValidValue</rule>
+		</field>
+		<field name="RequiredBooleanTestField" key="rbtf" type="boolean">
+			<rule value="true" name="required">ValidValue</rule>
+		</field>
+	</group>
+	
 </input-data>
-

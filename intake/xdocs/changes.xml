@@ -7,7 +7,11 @@
   </properties>
 
   <body>
-  	 <release version="1.0.3" date="CVS">
+  	 <release version="1.0.3" date="in Subversion">
+      <action type="fix" dev="eade" issue="TRB-14" due-to="J&uuml;rgen Hoffmann">
+      	Intake was not loading the correct Default Validators when the rules for
+      	a field are empty.
+      </action>
       <action dev="epugh" type="update">
       	Update to Apache License 2.0
       </action>

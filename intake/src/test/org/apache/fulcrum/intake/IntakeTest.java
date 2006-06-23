@@ -1,7 +1,7 @@
 package org.apache.fulcrum.intake;
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,14 @@ package org.apache.fulcrum.intake;
  */
 
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.intake.model.Field;
 import org.apache.fulcrum.intake.model.Group;
+import org.apache.fulcrum.intake.validator.BooleanValidator;
 /**
  * Test the facade class for the service
  *
  * @author <a href="epugh@upstate.com">Eric Pugh</a>
+ * @author <a href="mailto:jh@byteaction.de">J&uuml;rgen Hoffmann</a>
  * @version $Id$
  */
 public class IntakeTest extends BaseUnitTest
@@ -61,4 +64,39 @@ public class IntakeTest extends BaseUnitTest
 		assertNotNull(group);
     }
 
+    public void testEmptyBooleanField() throws Exception
+    {   
+        IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
+        Group group = is.getGroup("BooleanTest");
+        assertNotNull(group);
+        assertTrue(Intake.isInitialized());
+        group = Intake.getGroup("BooleanTest");
+        Field booleanField = group.get("EmptyBooleanTestField");
+        assertTrue("The Default Validator of an intake Field type boolean should be BooleanValidator", (booleanField.getValidator() instanceof BooleanValidator));
+        assertFalse("An Empty intake Field type boolean should not be required", booleanField.isRequired());
+    }
+    
+    public void testBooleanField() throws Exception
+    {        
+        IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
+        Group group = is.getGroup("BooleanTest");
+        assertNotNull(group);
+        assertTrue(Intake.isInitialized());
+        group = Intake.getGroup("BooleanTest");
+        Field booleanField = group.get("BooleanTestField");
+        assertTrue("The Default Validator of an intake Field type boolean should be BooleanValidator", (booleanField.getValidator() instanceof BooleanValidator));
+        assertFalse("An intake Field type boolean, which is not required, should not be required", booleanField.isRequired());
+    }
+    
+    public void testRequiredBooleanField() throws Exception
+    {        
+        IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
+        Group group = is.getGroup("BooleanTest");
+        assertNotNull(group);
+        assertTrue(Intake.isInitialized());
+        group = Intake.getGroup("BooleanTest");
+        Field booleanField = group.get("RequiredBooleanTestField");
+        assertTrue("The Default Validator of an intake Field type boolean should be BooleanValidator", (booleanField.getValidator() instanceof BooleanValidator));
+        assertTrue("An intake Field type boolean, which is required, should be required", booleanField.isRequired());
+    }
 }
