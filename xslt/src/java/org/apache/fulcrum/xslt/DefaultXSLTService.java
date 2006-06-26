@@ -1,8 +1,7 @@
 package org.apache.fulcrum.xslt;
 
-
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -17,13 +16,14 @@ package org.apache.fulcrum.xslt;
  * limitations under the License.
  */
 
-
-import java.io.File;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Hashtable;
-
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -44,42 +44,38 @@ import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
+import org.w3c.dom.Node;
 
 /**
  * Implementation of the Turbine XSLT Service. It transforms xml with a given
- * xsl file.  XSL stylesheets are compiled and cached (if the service property
- * is set) to improve speeds.
+ * xsl file. XSL stylesheets are compiled and cached (if the service property is
+ * set) to improve speeds.
  *
  * @author <a href="mailto:leon@opticode.co.za">Leon Messerschmidt</a>
  * @author <a href="mailto:rubys@us.ibm.com">Sam Ruby</a>
  * @author <a href="mailto:epugh@opensourceconnections.com">Eric Pugh</a>
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
+ * @version $Id:$
  */
-public class DefaultXSLTService
-    extends AbstractLogEnabled
-    implements XSLTService,Initializable,Configurable,Contextualizable,Serviceable
-
+public class DefaultXSLTService extends AbstractLogEnabled implements
+        XSLTService, Initializable, Configurable, Contextualizable, Serviceable
 {
     /**
      * The application root
      */
     private String applicationRoot;
-    
+
     /**
      * Property to control the caching of Templates.
      */
     protected boolean caching = false;
 
     /**
-     * Path to style sheets used for tranforming well-formed
-     * XML documents. The path is relative to the webapp context.
+     * Path to style sheets used for tranforming well-formed XML documents. The
+     * path is relative to the webapp context.
      */
-    protected  String path;
+    protected String path;
 
-    /**
-     * What the configured value was
-     */
-    private  String styleSheetPath;    
-    
     /**
      * Cache of compiled Templates.
      */
@@ -94,82 +90,86 @@ public class DefaultXSLTService
      */
     private static TransformerFactory tfactory;
 
-
-
     /**
-     * Get a valid and existing filename from a template name.
-     * The extension is removed and replaced with .xsl.  If this
-     * file does not exist the method attempts to find default.xsl.
-     * If it fails to find default.xsl it returns null.
+     * Try to create a valid url object from the style parameter.
+     *
+     * @param style
+     *            the xsl-Style
+     * @return a <code>URL</code> object or null if the style sheet could not
+     *         be found
      */
-    protected String getFileName (String templateName)
+    private URL getStyleURL(String style)
     {
-        // First we chop of the existing extension
-        int colon = templateName.lastIndexOf (".");
+        StringBuffer sb = new StringBuffer(128);
+
+        sb.append(path);
+
+        // we chop off the existing extension
+        int colon = style.lastIndexOf(".");
+
         if (colon > 0)
         {
-            templateName = templateName.substring (0,colon);
-        }
-
-        // Now we try to find the file ...
-        File f = new File (path+templateName+".xsl");
-        if (f.exists())
-        {
-            return path+templateName+".xsl";
+            sb.append(style.substring(0, colon));
         }
         else
         {
-            // ... or the default file
-            f = new File (path+"default.xsl");
-            if (f.exists())
-            {
-                return path+"default.xsl";
-            }
-            else
-            {
-                return null;
-            }
+            sb.append(style);
         }
+
+        sb.append(".xsl");
+
+        URL url = null;
+
+        try
+        {
+            url = new URL(sb.toString());
+        }
+        catch (MalformedURLException e)
+        {
+            getLogger().error("Malformed URL: " + sb, e);
+        }
+
+        return url;
     }
 
     /**
      * Compile Templates from an input file.
      */
-    protected Templates compileTemplates (String source) throws Exception
+    protected Templates compileTemplates(URL source) throws Exception
     {
-        StreamSource xslin = new StreamSource(new File(source));
+        StreamSource xslin = new StreamSource(source.openStream());
         Templates root = tfactory.newTemplates(xslin);
         return root;
     }
 
     /**
-     * Retrieves Templates.  If caching is switched on the
-     * first attempt is to load Templates from the cache.
-     * If caching is switched of or if the Stylesheet is not found
-     * in the cache new Templates are compiled from an input
-     * file.
+     * Retrieves Templates. If caching is switched on the first attempt is to
+     * load Templates from the cache. If caching is switched of or if the
+     * Stylesheet is not found in the cache new Templates are compiled from an
+     * input file.
      * <p>
-     * This method is synchronized on the xsl cache so that a thread
-     * does not attempt to load Templates from the cache while
-     * it is still being compiled.
+     * This method is synchronized on the xsl cache so that a thread does not
+     * attempt to load Templates from the cache while it is still being
+     * compiled.
      */
     protected Templates getTemplates(String xslName) throws Exception
     {
         synchronized (cache)
         {
-            String fn = getFileName (xslName);
-            if (fn == null) return null;
+            URL fn = getStyleURL(xslName);
+            if (fn == null)
+                return null;
 
-            if (caching && cache.containsKey (fn))
+            if (caching && cache.containsKey(fn))
             {
-                return (Templates)cache.get(fn);
+                return (Templates) cache.get(fn);
             }
 
-            Templates sr = compileTemplates (fn);
+            Templates sr = compileTemplates(fn);
 
             if (caching)
             {
-                cache.put (fn,sr);
+                cache.put(fn, sr);
             }
 
             return sr;
@@ -177,67 +177,183 @@ public class DefaultXSLTService
 
     }
 
-    protected void transform (String xslName, Source xmlin, Result xmlout)
-        throws Exception
+    protected void transform(String xslName, Source xmlin, Result xmlout, Map params)
+            throws Exception
     {
-        Transformer transformer = getTransformer( xslName );
+        Transformer transformer = getTransformer(xslName);
+
+        if (params != null)
+        {
+            for (Iterator it = params.entrySet().iterator(); it.hasNext(); )
+            {
+                Map.Entry entry = (Map.Entry) it.next();
+                transformer.setParameter(String.valueOf(entry.getKey()), entry.getValue());
+            }
+        }
 
         transformer.transform(xmlin, xmlout);
     }
 
     /**
-     * Execute an xslt
+     * Uses an xsl file to transform xml input from a reader and writes the
+     * output to a writer.
+     *
+     * @param xslName
+     *            The name of the file that contains the xsl stylesheet.
+     * @param in
+     *            The reader that passes the xml to be transformed
+     * @param out
+     *            The writer for the transformed output
      */
-    public void transform (String xslName, Reader in, Writer out)
-        throws Exception
+    public void transform(String xslName, Reader in, Writer out)
+            throws Exception
     {
         Source xmlin = new StreamSource(in);
         Result xmlout = new StreamResult(out);
-        transform (xslName,xmlin,xmlout);
+        transform(xslName, xmlin, xmlout, null);
     }
 
     /**
-     * Execute an xslt
+     * Uses an xsl file to transform xml input from a reader and returns a
+     * string containing the transformed output.
+     *
+     * @param xslName
+     *            The name of the file that contains the xsl stylesheet.
+     * @param in
+     *            The reader that passes the xml to be transformed
      */
-    public String transform (String xslName, Reader in)
-        throws Exception
+    public String transform(String xslName, Reader in) throws Exception
     {
         StringWriter sw = new StringWriter();
-        transform (xslName,in,sw);
+        transform(xslName, in, sw, null);
         return sw.toString();
     }
 
-
     /**
-     * Execute an xslt
+     * Uses an xsl file to transform xml input from a DOM note and writes the
+     * output to a writer.
+     *
+     * @param xslName
+     *            The name of the file that contains the xsl stylesheet.
+     * @param in
+     *            The DOM Node to be transformed
+     * @param out
+     *            The writer for the transformed output
      */
-    public void transform (String xslName, org.w3c.dom.Node in, Writer out)
-        throws Exception
+    public void transform(String xslName, org.w3c.dom.Node in, Writer out)
+            throws Exception
     {
         Source xmlin = new DOMSource(in);
         Result xmlout = new StreamResult(out);
-        transform (xslName,xmlin,xmlout);
+        transform(xslName, xmlin, xmlout, null);
     }
 
     /**
-     * Execute an xslt
+     * Uses an xsl file to transform xml input from a DOM note and returns a
+     * string containing the transformed output.
+     *
+     * @param xslName
+     *            The name of the file that contains the xsl stylesheet.
+     * @param in
+     *            The DOM Node to be transformed
      */
-    public String transform (String xslName, org.w3c.dom.Node in)
-        throws Exception
+    public String transform(String xslName, org.w3c.dom.Node in)
+            throws Exception
     {
         StringWriter sw = new StringWriter();
-        transform (xslName,in,sw);
+        transform(xslName, in, sw);
         return sw.toString();
     }
 
     /**
-     * Retrieve a transformer for the given stylesheet name. If no stylesheet
-     * is available for the provided name, an identity transformer will be
+     * Uses an xsl file to transform xml input from a reader and writes the
+     * output to a writer.
+     *
+     * @param xslName
+     *            The name of the file that contains the xsl stylesheet.
+     * @param in
+     *            The reader that passes the xml to be transformed
+     * @param out
+     *            The writer for the transformed output
+     * @param params
+     *            A set of parameters that will be forwarded to the XSLT
+     */
+    public void transform(String xslName, Reader in, Writer out, Map params)
+            throws Exception
+    {
+        Source xmlin = new StreamSource(in);
+        Result xmlout = new StreamResult(out);
+        transform(xslName, xmlin, xmlout, params);
+    }
+
+    /**
+     * Uses an xsl file to transform xml input from a reader and returns a
+     * string containing the transformed output.
+     *
+     * @param xslName
+     *            The name of the file that contains the xsl stylesheet.
+     * @param in
+     *            The reader that passes the xml to be transformed
+     * @param params
+     *            A set of parameters that will be forwarded to the XSLT
+     */
+    public String transform(String xslName, Reader in, Map params)
+            throws Exception
+    {
+        StringWriter sw = new StringWriter();
+        transform(xslName, in, sw, params);
+        return sw.toString();
+    }
+
+    /**
+     * Uses an xsl file to transform xml input from a DOM note and writes the
+     * output to a writer.
+     *
+     * @param xslName
+     *            The name of the file that contains the xsl stylesheet.
+     * @param in
+     *            The DOM Node to be transformed
+     * @param out
+     *            The writer for the transformed output
+     * @param params
+     *            A set of parameters that will be forwarded to the XSLT
+     */
+    public void transform(String xslName, Node in, Writer out, Map params)
+            throws Exception
+    {
+        Source xmlin = new DOMSource(in);
+        Result xmlout = new StreamResult(out);
+        transform(xslName, xmlin, xmlout, params);
+    }
+
+    /**
+     * Uses an xsl file to transform xml input from a DOM note and returns a
+     * string containing the transformed output.
+     *
+     * @param xslName
+     *            The name of the file that contains the xsl stylesheet.
+     * @param in
+     *            The DOM Node to be transformed
+     * @param params
+     *            A set of parameters that will be forwarded to the XSLT
+     */
+    public String transform(String xslName, Node in, Map params)
+            throws Exception
+    {
+        StringWriter sw = new StringWriter();
+        transform(xslName, in, sw, params);
+        return sw.toString();
+    }
+
+    /**
+     * Retrieve a transformer for the given stylesheet name. If no stylesheet is
+     * available for the provided name, an identity transformer will be
      * returned. This allows clients of this service to perform more complex
      * transformations (for example, where parameters must be set). When
      * possible prefer using one of the forms of {@link #transform}.
      *
-     * @param xslName Identifies stylesheet to get transformer for
+     * @param xslName
+     *            Identifies stylesheet to get transformer for
      * @return A transformer for that stylesheet
      */
     public Transformer getTransformer(String xslName) throws Exception
@@ -253,70 +369,58 @@ public class DefaultXSLTService
             return sr.newTransformer();
         }
     }
-    
-    /**
-     * @see org.apache.fulcrum.ServiceBroker#getRealPath(String)
-     */
-    public String getRealPath(String path)
-    {
-        String absolutePath = null;
-        if (applicationRoot == null) 
-        {
-            absolutePath = new File(path).getAbsolutePath();
-        }
-        else 
-        {
-            absolutePath = new File(applicationRoot, path).getAbsolutePath();
-        }
-        
-        return absolutePath;
-    }        
+
     // ---------------- Avalon Lifecycle Methods ---------------------
     /**
      * Avalon component lifecycle method
+     *
+     * This method processes the repository path, to make it relative to the web
+     * application root, if neccessary. It supports URL-style repositories.
      */
-    public void configure(Configuration conf)  throws ConfigurationException
+    public void configure(Configuration conf) throws ConfigurationException
     {
-        styleSheetPath =conf.getAttribute(STYLESHEET_PATH);       
-        caching = conf.getAttributeAsBoolean(STYLESHEET_CACHING);
+        StringBuffer sb = new StringBuffer(conf.getAttribute(STYLESHEET_PATH,
+                "/"));
 
+        // is URL?
+        if (!sb.toString().matches("[a-zA-Z]{3,}://.*"))
+        {
+            // No
+            if (sb.charAt(0) != '/')
+            {
+                sb.insert(0, '/');
+            }
+            sb.insert(0, applicationRoot);
+            sb.insert(0, "file:");
+        }
+
+        if (sb.charAt(sb.length() - 1) != '/')
+        {
+            sb.append('/');
+        }
+
+        path = sb.toString();
+        caching = conf.getAttributeAsBoolean(STYLESHEET_CACHING, false);
     }
-    
+
     /**
      * Initializes the service.
-     *
-     * This method processes the repository path, to make it relative to the
-     * web application root, if neccessary
      */
     public void initialize() throws Exception
     {
-        path = getRealPath(styleSheetPath);
-        if (!path.endsWith("/") && !path.endsWith ("\\"))
-        {
-            path=path+File.separator;
-        }
-        
         tfactory = TransformerFactory.newInstance();
-    }    
-    
-    public void contextualize(Context context) throws ContextException {
-        this.applicationRoot = context.get( "urn:avalon:home" ).toString();
-    }  
-    
-    /**
-     * Avalon component lifecycle method
-     */
-    public void service( ServiceManager manager) {        
-        
-        XSLTServiceFacade.setService(this);
-        
-    }    
-    /**
-     * Avalon component lifecycle method
-     */
-    public void dispose()
-    {
-        
-    }       
+    }
 
+    public void contextualize(Context context) throws ContextException
+    {
+        this.applicationRoot = context.get("urn:avalon:home").toString();
+    }
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void service(ServiceManager manager)
+    {
+        XSLTServiceFacade.setService(this);
+    }
 }

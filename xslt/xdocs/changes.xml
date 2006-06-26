@@ -6,6 +6,12 @@
   </properties>
 
   <body>
+    <release version="1.0.4" date="in Subversion">
+      <action type="update" dev="seade" issue="TRB-19" due-to="Thomas Vandahl">
+      	Synced with 2_3 branch (excluding the replacement of the cache Map()
+      	with a LRUMap()).  Thanks to Thomas Vandahl for the patches.
+      </action>
+    </release>    
     <release version="1.0.3" date="2004-11-24">
      <action dev="epugh" type="update">
         Clean up dependencies.

@@ -1,8 +1,7 @@
 package org.apache.fulcrum.xslt;
 
-
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -17,9 +16,10 @@ package org.apache.fulcrum.xslt;
  * limitations under the License.
  */
 
-
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Map;
+
 import org.w3c.dom.Node;
 
 /**
@@ -28,10 +28,12 @@ import org.w3c.dom.Node;
  *
  *
  * @author <a href="mailto:leon@opticode.co.za">Leon Messerschmidt</a>
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
+ * @version $Id:$
  */
 public interface XSLTService
 {
-    public static final String ROLE = XSLTService.class.getName();
+    String ROLE = XSLTService.class.getName();
 
     /**
      * Uses an xsl file to transform xml input from a reader and writes the
@@ -41,7 +43,7 @@ public interface XSLTService
      * @param in The reader that passes the xml to be transformed
      * @param out The writer for the transformed output
      */
-    public void transform (String xslName, Reader in, Writer out) throws Exception;
+    void transform (String xslName, Reader in, Writer out) throws Exception;
 
     /**
      * Uses an xsl file to transform xml input from a reader and returns a
@@ -50,7 +52,7 @@ public interface XSLTService
      * @param xslName The name of the file that contains the xsl stylesheet.
      * @param in The reader that passes the xml to be transformed
      */
-    public String transform (String xslName, Reader in) throws Exception;
+    String transform (String xslName, Reader in) throws Exception;
 
     /**
      * Uses an xsl file to transform xml input from a DOM note and writes the
@@ -60,7 +62,7 @@ public interface XSLTService
      * @param in The DOM Node to be transformed
      * @param out The writer for the transformed output
      */
-    public void transform (String xslName, Node in, Writer out) throws Exception;
+    void transform (String xslName, Node in, Writer out) throws Exception;
 
     /**
      * Uses an xsl file to transform xml input from a DOM note and returns a
@@ -69,5 +71,47 @@ public interface XSLTService
      * @param xslName The name of the file that contains the xsl stylesheet.
      * @param out The writer for the transformed output
      */
-    public String transform (String xslName, Node in) throws Exception;
+    String transform (String xslName, Node in) throws Exception;
+
+    /**
+     * Uses an xsl file to transform xml input from a reader and writes the
+     * output to a writer.
+     *
+     * @param xslName The name of the file that contains the xsl stylesheet.
+     * @param in The reader that passes the xml to be transformed
+     * @param out The writer for the transformed output
+     * @param params A set of parameters that will be forwarded to the XSLT
+     */
+    void transform(String xslName, Reader in, Writer out, Map params) throws Exception;
+
+    /**
+     * Uses an xsl file to transform xml input from a reader and returns a
+     * string containing the transformed output.
+     *
+     * @param xslName The name of the file that contains the xsl stylesheet.
+     * @param in The reader that passes the xml to be transformed
+     * @param params A set of parameters that will be forwarded to the XSLT
+     */
+    String transform(String xslName, Reader in, Map params) throws Exception;
+
+    /**
+     * Uses an xsl file to transform xml input from a DOM note and writes the
+     * output to a writer.
+     *
+     * @param xslName The name of the file that contains the xsl stylesheet.
+     * @param in The DOM Node to be transformed
+     * @param out The writer for the transformed output
+     * @param params A set of parameters that will be forwarded to the XSLT
+     */
+    void transform(String xslName, Node in, Writer out, Map params) throws Exception;
+
+    /**
+     * Uses an xsl file to transform xml input from a DOM note and returns a
+     * string containing the transformed output.
+     *
+     * @param xslName The name of the file that contains the xsl stylesheet.
+     * @param in The DOM Node to be transformed
+     * @param params A set of parameters that will be forwarded to the XSLT
+     */
+    String transform(String xslName, Node in, Map params) throws Exception;
 }
