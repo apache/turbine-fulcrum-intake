@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +35,8 @@
   <shortDescription>Component Repository</shortDescription>
   <description>Fulcrum is a component repository for Turbine.</description>
   <url>http://jakarta.apache.org/turbine/fulcrum/${pom.artifactId}/</url>
-  <issueTrackingUrl>http://issues.apache.org/scarab/servlet/scarab/</issueTrackingUrl>
-  <siteAddress>jakarta.apache.org</siteAddress>
+  <issueTrackingUrl>http://issues.apache.org/jira/browse/TRB</issueTrackingUrl>
+  <siteAddress>people.apache.org</siteAddress>
   <siteDirectory>/www/jakarta.apache.org/turbine/fulcrum/</siteDirectory>
   <distributionSite>www.apache.org</distributionSite>
   <distributionDirectory>/www/www.apache.org/dist/java-repository/</distributionDirectory>
@@ -50,13 +50,13 @@
       <name>Turbine User List</name>
       <subscribe>turbine-user-subscribe@jakarta.apache.org</subscribe>
       <unsubscribe>turbine-user-unsubscribe@jakarta.apache.org</unsubscribe>
-      <archive>http://mail-archives.apache.org/eyebrowse/SummarizeList?listName=turbine-user@jakarta.apache.org</archive>
+      <archive>http://mail-archives.apache.org/mod_mbox/jakarta-turbine-user/</archive>
     </mailingList>
     <mailingList>
       <name>Turbine Developer List</name>
       <subscribe>turbine-dev-subscribe@jakarta.apache.org</subscribe>
       <unsubscribe>turbine-dev-unsubscribe@jakarta.apache.org</unsubscribe>
-      <archive>http://mail-archives.apache.org/eyebrowse/SummarizeList?listName=turbine-dev@jakarta.apache.org</archive>
+      <archive>http://mail-archives.apache.org/mod_mbox/jakarta-turbine-dev/</archive>
     </mailingList>
   </mailingLists>
   <developers>
@@ -122,6 +122,16 @@
       <email>siegfried.goeschl@it20one.at</email>
       <organization>IT20one</organization>
     </developer>
+    <developer>
+      <name>Scott Eade</name>
+      <id>seade</id>
+      <email>seade@backstagetech.com.au</email>
+      <organization>Backstage Technologies Pty. Ltd.</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+      <timezone>+10</timezone>
+    </developer>
   </developers>
   <contributors>
     <contributor>
@@ -131,6 +141,14 @@
       <roles>
         <role>Developer</role>
       </roles>
+    </contributor>
+    <contributor>
+       <name>J&#252;rgen Hoffmann</name>
+       <email>jh@byteaction.de</email>
+       <organization></organization>
+       <roles>
+         <role>Developer</role>
+       </roles>
     </contributor>
     <contributor>
        <name>Pete Kazmier</name>
@@ -163,6 +181,16 @@
        <roles>
          <role>Developer</role>
        </roles>
+    </contributor>
+    <contributor>
+      <name>Thomas Vandahl</name>
+      <id>tv</id>
+      <email>tv@apache.org</email>
+      <organization>TeWiSoft GmbH</organization>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>+1</timezone>
     </contributor>
     <contributor>
       <name>Ronald</name>
