@@ -44,7 +44,7 @@
       <artifactId>script</artifactId>
       <version>1.0</version>
       <url>http://jakarta.apache.org/turbine/fulcrum/</url>
-      http://www.jcp.org/aboutJava/communityprocess/pr/jsr223/
+      <url>http://www.jcp.org/aboutJava/communityprocess/pr/jsr223/</url>
     </dependency>
 
     <dependency>
