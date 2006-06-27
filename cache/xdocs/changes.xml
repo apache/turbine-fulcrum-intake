@@ -6,7 +6,10 @@
   </properties>
 
   <body>
-    <release version="1.1" date="">
+    <release version="1.1" date="in Subversion">
+      <action type="update" dev="seade" issue="TRB-17" due-to="Thomas Vandahl">
+        Added new JCSCacheService.  Thanks to Thomas Vandahl.
+      </action>
      <action dev="epugh" type="add">
         Add new EHCacheService based on EHCache from http://ehcache.sourceforge.net/
       </action>    

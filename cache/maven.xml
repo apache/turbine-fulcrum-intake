@@ -1,7 +1,15 @@
-<project default="jar:jar" xmlns:maven="jelly:maven" xmlns:j="jelly:core" xmlns:util="jelly:util">
+<project default="jar:jar" xmlns:maven="jelly:maven" xmlns:j="jelly:core" xmlns:util="jelly:util" xmlns:ant="jelly:ant">
 
   <preGoal name="site">
     <attainGoal name="maven-jcoverage-plugin:deregister"/>
+  </preGoal>
+
+  <preGoal name="test:test">
+    <ant:copy todir="${maven.test.dest}">
+      <ant:fileset dir="${basedir}/src/test">
+        <ant:include name="*.ccf" />
+      </ant:fileset>
+    </ant:copy>
   </preGoal>
 
 </project>

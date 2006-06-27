@@ -3,7 +3,7 @@
   <extend>${basedir}/../project.xml</extend>
   <id>fulcrum-cache</id>
   <name>Fulcrum Cache Component</name>
-  <currentVersion>1.0.5</currentVersion>
+  <currentVersion>1.1-dev</currentVersion>
   <versions>
     <version>
       <id>1.0.5</id>
@@ -18,26 +18,49 @@
       <version>3.1</version>
       <url>http://jakarta.apache.org/commons/collections.html</url>
     </dependency>
-    
+
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.1</version>
+    </dependency> 
+
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.0.3</version>
     </dependency> 
-          
+
+  <!--  For a more recent release of JCS:
+    <dependency>
+      <groupId>concurrent</groupId>
+      <artifactId>concurrent</artifactId>
+      <version>1.0</version>
+      <type>jar</type>
+    </dependency>
+  -->
+
     <dependency>
       <groupId>ehcache</groupId>
       <artifactId>ehcache</artifactId>
       <version>1.2beta4</version>
     </dependency>         
-    
+
+    <dependency>
+      <groupId>jcs</groupId>
+      <artifactId>jcs</artifactId>
+      <!-- version>1.2.7.7</version -->
+      <version>20030822.182132</version>
+      <type>jar</type>
+    </dependency>
+
     <!--  Needed only for testing -->
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
       <version>1.0.5</version>
     </dependency>
-    
+
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
@@ -61,9 +84,6 @@
     <report>maven-jxr-plugin</report>      
     <report>maven-junit-report-plugin</report>
 
-    
-    
   </reports> 
 
 </project>
-

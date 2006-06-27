@@ -1,4 +1,9 @@
 <componentConfig>
     <cache cacheInitialSize="20" cacheCheckFrequency="5"/>
     <ehcache/>
+    <jcscache>
+    	<cacheCheckFrequency>5000</cacheCheckFrequency>
+        <region>Cache_Test</region>
+        <configurationFile>/cache.ccf</configurationFile>
+    </jcscache>
 </componentConfig>

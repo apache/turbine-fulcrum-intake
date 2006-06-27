@@ -9,4 +9,9 @@
         name="org.apache.fulcrum.cache.EHCacheService"
         shorthand="ehcache"
         default-class="org.apache.fulcrum.cache.impl.DefaultEHCacheService"/>        
+
+    <role
+        name="org.apache.fulcrum.cache.GlobalCacheService_JCS"
+        shorthand="jcscache"
+        default-class="org.apache.fulcrum.cache.impl.JCSCacheService"/>
 </role-list>

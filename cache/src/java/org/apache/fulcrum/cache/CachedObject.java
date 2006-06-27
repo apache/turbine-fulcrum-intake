@@ -1,8 +1,7 @@
 package org.apache.fulcrum.cache;
 
-
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -16,7 +15,6 @@ package org.apache.fulcrum.cache;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 import java.io.Serializable;
 
@@ -35,6 +33,11 @@ import java.io.Serializable;
 public class CachedObject
     implements Serializable
 {
+
+    /**
+     * Serialization key
+     */
+    private static final long serialVersionUID = -9107764093769042092L;
 
     /** Cache the object with the Default TTL */
     public static final int DEFAULT = 0;

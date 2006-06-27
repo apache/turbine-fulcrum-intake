@@ -1,8 +1,7 @@
 package org.apache.fulcrum.cache;
 
-
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -16,7 +15,6 @@ package org.apache.fulcrum.cache;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 /**
  * The idea of the RefreshableCachedObject is that, rather than
@@ -37,6 +35,11 @@ package org.apache.fulcrum.cache;
 public class RefreshableCachedObject
     extends CachedObject
 {
+
+    /**
+     * Serialization key
+     */
+    private static final long serialVersionUID = 4072572956381768087L;
 
     /**
      * How long to wait before removing an untouched object from the cache.
