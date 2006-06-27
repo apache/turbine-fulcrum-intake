@@ -279,6 +279,68 @@
       <url>http://avalon.apache.org</url>
     </dependency-->
 
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-jar-plugin</artifactId>
+      <version>1.8</version>
+      <type>plugin</type>
+    </dependency>
+
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-java-plugin</artifactId>
+      <version>1.6</version>
+      <type>plugin</type>
+    </dependency>
+
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-javadoc-plugin</artifactId>
+      <version>1.8</version>
+      <type>plugin</type>
+    </dependency>
+
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-multiproject-plugin</artifactId>
+      <version>1.5</version>
+      <type>plugin</type>
+    </dependency>
+
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-plugin-plugin</artifactId>
+      <version>1.7</version>
+      <type>plugin</type>
+    </dependency>
+
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-pmd-plugin</artifactId>
+      <version>1.9</version>
+      <type>plugin</type>
+    </dependency>
+
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-scm-plugin</artifactId>
+      <version>1.6</version>
+      <type>plugin</type>
+    </dependency>
+
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-site-plugin</artifactId>
+      <version>1.7</version>
+      <type>plugin</type>
+    </dependency>
+
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-xdoc-plugin</artifactId>
+      <version>1.9.2</version>
+      <type>plugin</type>
+    </dependency>
   </dependencies>
 
 
