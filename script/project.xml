@@ -26,7 +26,7 @@
     <dependency>
       <groupId>groovy</groupId>
       <artifactId>groovy-all</artifactId>
-      <version>1.0-jsr-04</version>
+      <version>1.0-jsr-05</version>
       <url>http://groovy.codehaus.org</url>
     </dependency>
 
@@ -43,7 +43,6 @@
       <groupId>javax.script</groupId>
       <artifactId>script</artifactId>
       <version>1.0</version>
-      <url>http://jakarta.apache.org/turbine/fulcrum/</url>
       <url>http://www.jcp.org/aboutJava/communityprocess/pr/jsr223/</url>
     </dependency>
 

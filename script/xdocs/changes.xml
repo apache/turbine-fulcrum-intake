@@ -7,6 +7,9 @@
 
   <body>
     <release version="1.0.0" date="in SVN">
+      <action dev="seade" type="update">
+        Updated Groovy dependency to 1.0-jsr-05.
+      </action>
       <action dev="sgoeschl" type="add">
         Initial version
       </action>
