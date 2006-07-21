@@ -19,11 +19,11 @@
       API.
     </p>
     <p>
-      It is written for use in any container compatible 
-      with Avalon's ECM container.
-    </p>    
+      It is written for use in any container compatible
+      with Avalon's Merlin or ECM container.
+    </p>
   </section>
-  
+
 <section name="Configuration">
 
     <p>
@@ -32,26 +32,78 @@
 
 <source>
 <![CDATA[
-  <role
-    name="org.apache.fulcrum.configuration.Config"
-    shorthand="config"
-    default-class="org.apache.fulcrum.configuration.DefaultConfigurationService"/>
+    <role
+        name="org.apache.commons.configuration.Configuration"
+        shorthand="config"
+        default-class="org.apache.fulcrum.configuration.DefaultConfigurationService"/>
 ]]>
 </source>
 
   <p>
-    Now comes the basic configuration of the component.  Here will will
-    configure the various encryption providers
+    Now comes the basic configuration of the component. Here we will
+    configure the various configuration sources.
   </p>
 <source>
 
 <![CDATA[
-    <config configurationPath="src/test/configuration.xml"/>
+    <config>
+      <properties fileName="src/test/org/test.properties"/>
+      <xml fileName="src/test/org/test.xml" optional="true"/>
+      <key>value</key>
+    </config>
 ]]>
 </source>
 
+  <p>
+    The component supports the following sources of configuration which can be
+    used as a list in arbitrary sequence. The order in that list is important. See
+    <a href="http://jakarta.apache.org/commons/configuration/">the Commons Configuration Site</a>
+    for details on the configuration sources.
+  </p>
+  <table>
+      <tr>
+          <th>Name</th>
+          <th>Attributes</th>
+          <th>Description</th>
+      </tr>
+      <tr>
+          <td>properties</td>
+          <td><code>fileName="/path/to/file.properties"</code> (req.)<br />
+              <code>optional="true"</code> (opt.)
+          </td>
+          <td>Load config from a Java Properties file. If optional is set to true,
+           do not complain if the file is missing.</td>
+      </tr>
+      <tr>
+          <td>xml</td>
+          <td><code>fileName="/path/to/file.xml"</code> (req.)<br />
+              <code>optional="true"</code> (opt.)
+          </td>
+          <td>Load config from a XML file. If optional is set to true,
+           do not complain if the file is missing.</td>
+      </tr>
+      <tr>
+          <td>jndi</td>
+          <td><code>prefix="java:comp/env"</code> (req.)</td>
+          <td>Load config from a JNDI context.</td>
+      </tr>
+      <tr>
+          <td>system</td>
+          <td>none</td>
+          <td>Load config from the System Properties</td>
+      </tr>
+      <tr>
+          <td>everything else</td>
+          <td>none</td>
+          <td>Add contents of this tag as a property to the configuration.</td>
+      </tr>
+  </table>
+  <p>
+    The old syntax with the attribute <code>configurationPath="somepath"</code>
+    still works for reasons of backward compatibility.
+  </p>
   </section>
-  
+
 <section name="Usage">
 
 <p>
@@ -60,7 +112,7 @@ This then returns your Configuration object.
 </p>
 
 <p>
-To see an example, look at the test case 
+To see an example, look at the test case
 <a href="xref-test/org/apache/fulcrum/configuration/ConfigTest.html">ConfigTest</a>.
 </p>
 

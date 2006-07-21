@@ -1,3 +1,7 @@
 <componentConfig>
-    <config configurationPath="src/test/configuration.xml"/>
+    <config>
+      <properties fileName="src/test/org/test.properties"/>
+      <xml fileName="src/test/org/test.xml" optional="true"/>
+      <key>value</key>
+    </config>
 </componentConfig>
