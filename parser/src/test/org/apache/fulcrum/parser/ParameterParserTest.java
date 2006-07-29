@@ -52,14 +52,21 @@ public class ParameterParserTest extends BaseUnitTest
             fail(e.getMessage());
         }
     }
+    
+    public void testConfiguredUrlCaseFolding() throws Exception
+    {
+        assertTrue(parameterParser.getUrlFolding() == ParameterParser.URL_CASE_FOLDING_NONE);
+    }
+    
     /**
-     * Simple test that verify an object can be created and deleted.
+     * Simple test to verify that URL Case Folding works properly
+     * 
      * @throws Exception
      */
     public void testRepositoryExists() throws Exception
     {
-        assertEquals("trimmed_and_lower_case",parameterParser.convertAndTrim(" TRIMMED_and_Lower_Case "));
-        
-
+        assertEquals("TRIMMED_and_Not_Modified",parameterParser.convertAndTrim(" TRIMMED_and_Not_Modified ", ParameterParser.URL_CASE_FOLDING_NONE));
+        assertEquals("trimmed_and_lower_case",parameterParser.convertAndTrim(" TRIMMED_and_Lower_Case ", ParameterParser.URL_CASE_FOLDING_LOWER));
+        assertEquals("TRIMMED_AND_UPPER_CASE",parameterParser.convertAndTrim(" TRIMMED_and_Upper_Case ", ParameterParser.URL_CASE_FOLDING_UPPER));
     }
 }

@@ -10,4 +10,14 @@
         shorthand="parser"
         default-class="org.apache.fulcrum.parser.DefaultParameterParser"
     />
+    <role
+        name="org.apache.fulcrum.parser.CookieParser"
+        shorthand="cookie"
+        default-class="org.apache.fulcrum.parser.DefaultCookieParser"
+    />
+    <role
+        name="org.apache.fulcrum.parser.ValueParser"
+        shorthand="base"
+        default-class="org.apache.fulcrum.parser.BaseValueParser"
+    />
 </role-list>

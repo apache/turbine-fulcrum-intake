@@ -31,9 +31,13 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.commons.collections.iterators.ArrayIterator;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.pool.Recyclable;
 
 
@@ -63,16 +67,26 @@ import org.apache.fulcrum.pool.Recyclable;
  * @author <a href="mailto:jon@clearink.com">Jon S. Stevens</a>
  * @author <a href="mailto:sean@informage.net">Sean Legassick</a>
  * @author <a href="mailto:jvanzyl@periapt.com">Jason van Zyl</a>
+ * @author <a href="mailto:jh@byteaction.de">J&#252;rgen Hoffmann</a>
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
-public class BaseValueParser implements ValueParser, Recyclable
+public class BaseValueParser
+    extends AbstractLogEnabled
+    implements ValueParser, 
+               Recyclable, Configurable
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(BaseValueParser.class);
-    
-    public BaseValueParser(){
+    /** The folding from the configuration */
+    private int folding = URL_CASE_FOLDING_NONE;
+
+    /** The automaticUpload setting from the configuration */
+    private boolean automaticUpload = AUTOMATIC_DEFAULT;
+
+    public BaseValueParser()
+    {
         recycle();
     }
+
     /**
      * Random access storage for parameter data.
      */
@@ -82,37 +96,6 @@ public class BaseValueParser implements ValueParser, Recyclable
      * The character encoding to use when converting to byte arrays
      */
     private String characterEncoding = "US-ASCII";
-
-    public String convertAndTrim(String value)
-    {
-        return convertAndTrim(value, URL_CASE_FOLDING_LOWER);
-    }
-
-    /**
-     * A static version of the convert method, which
-     * trims the string data and applies the conversion specified in
-     * the property given by URL_CASE_FOLDING.  It returns a new
-     * string so that it does not destroy the value data.
-     *
-     * @param value A String to be processed.
-     * @return A new String converted to lowercase and trimmed.
-     */
-    public String convertAndTrim(String value, String fold)
-    {
-        String tmp = value.trim();
-
-        if (URL_CASE_FOLDING_LOWER.equals(fold))
-        {
-            tmp = tmp.toLowerCase();
-        }
-        else if (URL_CASE_FOLDING_UPPER.equals(fold))
-        {
-            tmp = tmp.toUpperCase();
-        }
-
-        return (tmp);
-    }
-
 
     /**
      * Constructor that takes a character encoding
@@ -208,7 +191,10 @@ public class BaseValueParser implements ValueParser, Recyclable
      */
     public void add(String name, Integer value)
     {
-        add(name, value.toString());
+        if (value != null)
+        {
+            add(name, value.toString());
+        }
     }
 
     /**
@@ -230,7 +216,12 @@ public class BaseValueParser implements ValueParser, Recyclable
      */
     public void add(String name, String value)
     {
-        append(name, value);
+        if (value != null)
+        {
+            String [] items = getParam(name);
+            items = (String []) ArrayUtils.add(items, value);
+            putParam(name, items);
+        }
     }
 
     /**
@@ -243,35 +234,17 @@ public class BaseValueParser implements ValueParser, Recyclable
      */
     public void add(String name, String [] value)
     {
-        for (int i = 0 ; i < value.length; i++)
+        // ArrayUtils.addAll() looks promising but it would also add
+        // null values into the parameters array, so we can't use that.
+        if (value != null)
         {
-            add(name, value[i]);
-        }
-    }
-
-    /**
-     * Add a String parameters.  If there are any Strings already
-     * associated with the name, append to the array.  This is used
-     * for handling parameters from multipart POST requests.
-     *
-     * @param name A String with the name.
-     * @param value A String with the value.
-     */
-    public void append(String name, String value)
-    {
-        String[] items = this.getStrings(name);
-        if (items == null)
-        {
-            items = new String[1];
-            items[0] = value;
-            parameters.put(convert(name), items);
-        }
-        else
-        {
-            String[] newItems = new String[items.length + 1];
-            System.arraycopy(items, 0, newItems, 0, items.length);
-            newItems[items.length] = value;
-            parameters.put(convert(name), newItems);
+            for (int i = 0 ; i < value.length; i++)
+            {
+                if (value[i] != null)
+                {
+                    add(name, value[i]);
+                }
+            }
         }
     }
 
@@ -286,6 +259,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     {
         return parameters.remove(convert(name));
     }
+
     /**
      * Trims the string data and applies the conversion specified in
      * the property given by URL_CASE_FOLDING.  It returns a new
@@ -298,6 +272,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     {
         return convertAndTrim(value);
     }
+
     /**
      * Determine whether a given key has been inserted.  All keys are
      * stored in lowercase strings, so override method to account for
@@ -308,7 +283,7 @@ public class BaseValueParser implements ValueParser, Recyclable
      */
     public boolean containsKey(Object key)
     {
-        return parameters.containsKey(convert((String)key));
+        return parameters.containsKey(convert(String.valueOf(key)));
     }
 
     /**
@@ -328,7 +303,7 @@ public class BaseValueParser implements ValueParser, Recyclable
      */
     public Object[] getKeys()
     {
-        return parameters.keySet().toArray();
+        return keySet().toArray();
     }
 
     /**
@@ -373,6 +348,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     {
         Boolean result = null;
         String value = getString(name);
+
         if (StringUtils.isNotEmpty(value))
         {
             if (value.equals("1") ||
@@ -413,7 +389,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     public Boolean getBooleanObject(String name, Boolean defaultValue)
     {
         Boolean result = getBooleanObject(name);
-        return (result==null ? defaultValue : result);
+        return (result == null ? defaultValue : result);
     }
 
     /**
@@ -428,11 +404,12 @@ public class BaseValueParser implements ValueParser, Recyclable
     {
         double result = defaultValue;
         String value = getString(name);
+
         if (StringUtils.isNotEmpty(value))
         {
             try
             {
-                result = Double.valueOf(value).doubleValue();
+                result = Double.parseDouble(StringUtils.trim(value));
             }
             catch (NumberFormatException e)
             {
@@ -464,7 +441,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     public double[] getDoubles(String name)
     {
         double[] result = null;
-        String value[] = getStrings(name);
+        String value[] = getParam(name);
         if (value != null)
         {
             result = new double[value.length];
@@ -497,7 +474,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     public Double getDoubleObject(String name, Double defaultValue)
     {
         Double result = getDoubleObject(name);
-        return (result==null ? defaultValue : result);
+        return (result == null ? defaultValue : result);
     }
 
     /**
@@ -511,11 +488,12 @@ public class BaseValueParser implements ValueParser, Recyclable
     {
         Double result = null;
         String value = getString(name);
+
         if (StringUtils.isNotEmpty(value))
         {
             try
             {
-                result = new Double(value);
+                result = new Double(StringUtils.trim(value));
             }
             catch(NumberFormatException e)
             {
@@ -535,7 +513,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     public Double[] getDoubleObjects(String name)
     {
         Double[] result = null;
-        String value[] = getStrings(convert(name));
+        String value[] = getParam(name);
         if (value != null)
         {
             result = new Double[value.length];
@@ -569,11 +547,12 @@ public class BaseValueParser implements ValueParser, Recyclable
     {
         float result = defaultValue;
         String value = getString(name);
+
         if (StringUtils.isNotEmpty(value))
         {
             try
             {
-                result = Float.valueOf(value).floatValue();
+                result = Float.parseFloat(StringUtils.trim(value));
             }
             catch (NumberFormatException e)
             {
@@ -605,7 +584,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     public float[] getFloats(String name)
     {
         float[] result = null;
-        String value[] = getStrings(name);
+        String value[] = getParam(name);
         if (value != null)
         {
             result = new float[value.length];
@@ -638,7 +617,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     public Float getFloatObject(String name, Float defaultValue)
     {
         Float result = getFloatObject(name);
-        return (result==null ? defaultValue : result);
+        return (result == null ? defaultValue : result);
     }
 
     /**
@@ -652,17 +631,19 @@ public class BaseValueParser implements ValueParser, Recyclable
     {
         Float result = null;
         String value = getString(name);
+
         if (StringUtils.isNotEmpty(value))
         {
             try
             {
-                result = new Float(value);
+                result = new Float(StringUtils.trim(value));
             }
             catch(NumberFormatException e)
             {
                 logConversionFailure(name, value, "Float");
             }
         }
+
         return result;
     }
 
@@ -676,7 +657,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     public Float[] getFloatObjects(String name)
     {
         Float[] result = null;
-        String value[] = getStrings(convert(name));
+        String value[] = getParam(name);
         if (value != null)
         {
             result = new Float[value.length];
@@ -710,17 +691,19 @@ public class BaseValueParser implements ValueParser, Recyclable
     {
         BigDecimal result = defaultValue;
         String value = getString(name);
+
         if (StringUtils.isNotEmpty(value))
         {
             try
             {
-                result = new BigDecimal(value);
+                result = new BigDecimal(StringUtils.trim(value));
             }
             catch (NumberFormatException e)
             {
                 logConversionFailure(name, value, "BigDecimal");
             }
         }
+
         return result;
     }
 
@@ -746,13 +729,13 @@ public class BaseValueParser implements ValueParser, Recyclable
     public BigDecimal[] getBigDecimals(String name)
     {
         BigDecimal[] result = null;
-        String value[] = getStrings(name);
+        String value[] = getParam(name);
         if (value != null)
         {
             result = new BigDecimal[value.length];
             for (int i = 0; i < value.length; i++)
             {
-                if(StringUtils.isNotEmpty(value[i]))
+                if (StringUtils.isNotEmpty(value[i]))
                 {
                     try
                     {
@@ -780,17 +763,19 @@ public class BaseValueParser implements ValueParser, Recyclable
     {
         int result = defaultValue;
         String value = getString(name);
+
         if (StringUtils.isNotEmpty(value))
         {
             try
             {
-                result = Integer.valueOf(value).intValue();
+                result = Integer.parseInt(StringUtils.trim(value));
             }
             catch (NumberFormatException e)
             {
                 logConversionFailure(name, value, "Integer");
             }
         }
+
         return result;
     }
 
@@ -816,7 +801,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     public int[] getInts(String name)
     {
         int[] result = null;
-        String value[] = getStrings(name);
+        String value[] = getParam(name);
         if (value != null)
         {
             result = new int[value.length];
@@ -849,7 +834,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     public Integer getIntObject(String name, Integer defaultValue)
     {
         Integer result = getIntObject(name);
-        return (result==null ? defaultValue : result);
+        return (result == null ? defaultValue : result);
     }
 
     /**
@@ -863,17 +848,19 @@ public class BaseValueParser implements ValueParser, Recyclable
     {
         Integer result = null;
         String value = getString(name);
+
         if (StringUtils.isNotEmpty(value))
         {
             try
             {
-                result = new Integer(value);
+                result = new Integer(StringUtils.trim(value));
             }
             catch(NumberFormatException e)
             {
                 logConversionFailure(name, value, "Integer");
             }
         }
+
         return result;
     }
 
@@ -887,7 +874,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     public Integer[] getIntObjects(String name)
     {
         Integer[] result = null;
-        String value[] = getStrings(convert(name));
+        String value[] = getParam(name);
         if (value != null)
         {
             result = new Integer[value.length];
@@ -921,17 +908,19 @@ public class BaseValueParser implements ValueParser, Recyclable
     {
         long result = defaultValue;
         String value = getString(name);
+
         if (StringUtils.isNotEmpty(value))
         {
             try
             {
-                result = Long.valueOf(value).longValue();
+                result = Long.parseLong(StringUtils.trim(value));
             }
             catch (NumberFormatException e)
             {
                 logConversionFailure(name, value, "Long");
             }
         }
+
         return result;
     }
 
@@ -957,7 +946,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     public long[] getLongs(String name)
     {
         long[] result = null;
-        String value[] = getStrings(name);
+        String value[] = getParam(name);
         if (value != null)
         {
             result = new long[value.length];
@@ -989,7 +978,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     public Long[] getLongObjects(String name)
     {
         Long[] result = null;
-        String value[] = getStrings(convert(name));
+        String value[] = getParam(name);
         if (value != null)
         {
             result = new Long[value.length];
@@ -1022,17 +1011,19 @@ public class BaseValueParser implements ValueParser, Recyclable
     {
         Long result = null;
         String value = getString(name);
+
         if (StringUtils.isNotEmpty(value))
         {
             try
             {
-                result = new Long(value);
+                result = new Long(StringUtils.trim(value));
             }
             catch(NumberFormatException e)
             {
                 logConversionFailure(name, value, "Long");
             }
         }
+
         return result;
     }
 
@@ -1047,7 +1038,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     public Long getLongObject(String name, Long defaultValue)
     {
         Long result = getLongObject(name);
-        return (result==null ? defaultValue : result);
+        return (result == null ? defaultValue : result);
     }
 
     /**
@@ -1062,17 +1053,19 @@ public class BaseValueParser implements ValueParser, Recyclable
     {
         byte result = defaultValue;
         String value = getString(name);
+
         if (StringUtils.isNotEmpty(value))
         {
             try
             {
-                result = Byte.valueOf(value).byteValue();
+                result = Byte.parseByte(StringUtils.trim(value));
             }
             catch (NumberFormatException e)
             {
                 logConversionFailure(name, value, "Byte");
             }
         }
+
         return result;
     }
 
@@ -1102,7 +1095,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     {
         byte result[] = null;
         String value = getString(name);
-        if (StringUtils.isNotEmpty(value))
+        if (value != null)
         {
             result = value.getBytes(getCharacterEncoding());
         }
@@ -1120,7 +1113,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     public Byte getByteObject(String name, Byte defaultValue)
     {
         Byte result = getByteObject(name);
-        return (result==null ? defaultValue : result);
+        return (result == null ? defaultValue : result);
     }
 
     /**
@@ -1134,17 +1127,19 @@ public class BaseValueParser implements ValueParser, Recyclable
     {
         Byte result = null;
         String value = getString(name);
+
         if (StringUtils.isNotEmpty(value))
         {
             try
             {
-                result = new Byte(value);
+                result = new Byte(StringUtils.trim(value));
             }
             catch(NumberFormatException e)
             {
                 logConversionFailure(name, value, "Byte");
             }
         }
+
         return result;
     }
 
@@ -1153,31 +1148,15 @@ public class BaseValueParser implements ValueParser, Recyclable
      * exist, return null.
      *
      * @param name A String with the name.
-     * @return A String.
+     * @return A String or null if the key is unknown.
      */
     public String getString(String name)
     {
-        String result = null;
-        try
-        {
-            Object value = parameters.get(convert(name));
-            if (value != null)
-            {
-                value = ((String[]) value)[0];
-            }
-            if (value == null || value.equals("null"))
-            {
-                return null;
-            }
-            result = (String) value;
-        }
-        catch (ClassCastException e)
-        {
-            log.fatal("Parameter ("
-                    + name + ") wasn not stored as a String", e);
-        }
+        String [] value = getParam(name);
 
-        return result;
+        return (value == null
+                || value.length == 0)
+                ? null : value[0];
     }
 
     /**
@@ -1224,7 +1203,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     {
         if (value != null)
         {
-            parameters.put(convert(name), new String[]{value});
+            putParam(name, new String[]{value});
         }
     }
 
@@ -1237,7 +1216,7 @@ public class BaseValueParser implements ValueParser, Recyclable
      */
     public String[] getStrings(String name)
     {
-        return (String[]) parameters.get(convert(name));
+        return getParam(name);
     }
 
     /**
@@ -1250,7 +1229,7 @@ public class BaseValueParser implements ValueParser, Recyclable
      */
     public String[] getStrings(String name, String[] defaultValue)
     {
-        String[] value = getStrings(name);
+        String[] value = getParam(name);
 
         return (value == null || value.length == 0)
             ? defaultValue : value;
@@ -1268,7 +1247,7 @@ public class BaseValueParser implements ValueParser, Recyclable
     {
         if (values != null)
         {
-            parameters.put(convert(name), values);
+            putParam(name, values);
         }
     }
 
@@ -1293,13 +1272,13 @@ public class BaseValueParser implements ValueParser, Recyclable
      */
     public Object[] getObjects(String name)
     {
-        return getStrings(name);
+        return getParam(name);
     }
 
     /**
      * Returns a {@link java.util.Date} object.  String is parsed by supplied
-     * DateFormat.  If the name does not exist, return the
-     * defaultValue.
+     * DateFormat.  If the name does not exist or the value could not be
+     * parsed into a date return the defaultValue.
      *
      * @param name A String with the name.
      * @param df A DateFormat.
@@ -1308,24 +1287,39 @@ public class BaseValueParser implements ValueParser, Recyclable
      */
     public Date getDate(String name, DateFormat df, Date defaultValue)
     {
-        Date date = null;
+        Date result = defaultValue;
+        String value = getString(name);
 
-        if (containsKey(name))
+        if (StringUtils.isNotEmpty(value))
         {
             try
             {
                 // Reject invalid dates.
                 df.setLenient(false);
-                date = df.parse(getString(name));
+                result = df.parse(value);
             }
             catch (ParseException e)
             {
-                // Thrown if couldn't parse date.
-                date = defaultValue;
+                logConversionFailure(name, value, "Date");
             }
         }
-        else
-            date = defaultValue;
+
+        return result;
+    }
+
+    /**
+     * Returns a {@link java.util.Date} object.  If there are DateSelector or
+     * TimeSelector style parameters then these are used.  If not and there
+     * is a parameter 'name' then this is parsed by DateFormat.  If the
+     * name does not exist, return null.
+     *
+     * @param name A String with the name.
+     * @return A Date.
+     */
+    public Date getDate(String name)
+    {
+        DateFormat df = DateFormat.getDateInstance();
+        Date date = getDate(name, df, null);
 
         return date;
     }
@@ -1343,25 +1337,19 @@ public class BaseValueParser implements ValueParser, Recyclable
         return getDate(name, df, null);
     }
 
-    public Date getDate(String name)
-    {
-        DateFormat df = DateFormat.getDateInstance();
-        return getDate(name, df, null);
-    }
-
     /**
      * Uses bean introspection to set writable properties of bean from
      * the parameters, where a (case-insensitive) name match between
      * the bean property and the parameter is looked for.
      *
      * @param bean An Object.
-     * @exception Exception, a generic exception.
+     * @exception Exception a generic exception.
      */
     public void setProperties(Object bean) throws Exception
     {
         Class beanClass = bean.getClass();
-        PropertyDescriptor[] props =
-            Introspector.getBeanInfo(beanClass).getPropertyDescriptors();
+        PropertyDescriptor[] props
+                = Introspector.getBeanInfo(beanClass).getPropertyDescriptors();
 
         for (int i = 0; i < props.length; i++)
         {
@@ -1387,47 +1375,50 @@ public class BaseValueParser implements ValueParser, Recyclable
         for (Iterator iter = keySet().iterator(); iter.hasNext();)
         {
             String name = (String) iter.next();
-            try
+
+            sb.append('{');
+            sb.append(name);
+            sb.append('=');
+            Object [] params = getToStringParam(name);
+
+            if (params == null)
             {
-                sb.append('{');
-                sb.append(name);
-                sb.append('=');
-                String[] params = this.getStrings(name);
-                if (params.length <= 1)
+                sb.append("unknown?");
+            }
+            else if (params.length == 0)
+            {
+                sb.append("empty");
+            }
+            else
+            {
+                sb.append('[');
+                for (Iterator it = new ArrayIterator(params); it.hasNext(); )
                 {
-                    sb.append(params[0]);
-                }
-                else
-                {
-                    for (int i = 0; i < params.length; i++)
+                    sb.append(it.next());
+                    if (it.hasNext())
                     {
-                        if (i != 0)
-                        {
-                            sb.append(", ");
-                        }
-                        sb.append('[')
-                                .append(params[i])
-                                .append(']');
+                        sb.append(", ");
                     }
                 }
-                sb.append("}\n");
+                sb.append(']');
             }
-            catch (Exception ee)
-            {
-                try
-                {
-                    sb.append('{');
-                    sb.append(name);
-                    sb.append('=');
-                    sb.append("ERROR?");
-                    sb.append("}\n");
-                }
-                catch (Exception eee)
-                {
-                }
-            }
+            sb.append("}\n");
         }
+
         return sb.toString();
+    }
+
+    /**
+     * This method is only used in toString() and can be used by
+     * derived classes to add their local parameters to the toString()
+
+     * @param name A string with the name
+     *
+     * @return the value object array or null if not set
+     */
+    protected Object [] getToStringParam(final String name)
+    {
+        return getParam(name);
     }
 
     /**
@@ -1515,14 +1506,49 @@ public class BaseValueParser implements ValueParser, Recyclable
 
         setter.invoke(bean, args);
     }
+
+    /**
+     * Puts a key into the parameters map. Makes sure that the name is always
+     * mapped correctly. This method also enforces the usage of arrays for the
+     * parameters.
+     *
+     * @param name A String with the name.
+     * @param value An array of Objects with the values.
+     *
+     */
+    protected void putParam(final String name, final String [] value)
+    {
+        String key = convert(name);
+        if (key != null)
+        {
+            parameters.put(key, value);
+        }
+    }
+
+    /**
+     * fetches a key from the parameters map. Makes sure that the name is
+     * always mapped correctly.
+     *
+     * @param name A string with the name
+     *
+     * @return the value object array or null if not set
+     */
+    protected String [] getParam(final String name)
+    {
+        String key = convert(name);
+
+        return (key != null) ? (String []) parameters.get(key) : null;
+    }
     
     
-    /** recylable supprot **/
+    /** recylable support **/
 
     /**
      * The disposed flag.
      */
     private boolean disposed;
+
+    protected String parameterEncoding;
 
 
 
@@ -1565,10 +1591,127 @@ public class BaseValueParser implements ValueParser, Recyclable
     private void logConversionFailure(String paramName,
                                       String value, String type)
     {
-        log.warn("Parameter (" + paramName
+        getLogger().warn("Parameter (" + paramName
                 + ") with value of ("
                 + value + ") could not be converted to a " + type);
     }
 
+    /**
+     * Convert a String value according to the url-case-folding property.
+     *
+     * @param value the String to convert
+     *
+     * @return a new String.
+     *
+     */
+    public String convertAndTrim(String value)
+    {
+        return convertAndTrim(value, getUrlFolding());
+    }
 
+    /**
+     * A static version of the convert method, which
+     * trims the string data and applies the conversion specified in
+     * the property given by URL_CASE_FOLDING.  It returns a new
+     * string so that it does not destroy the value data.
+     *
+     * @param value A String to be processed.
+     * @return A new String converted to lowercase and trimmed.
+     */
+    public String convertAndTrim(String value, int fold)
+    {
+        if(value == null) return "";
+        
+        String tmp = value.trim();
+
+        switch (fold)
+        {
+            case URL_CASE_FOLDING_NONE:
+            {
+                break;
+            }
+
+            case URL_CASE_FOLDING_LOWER:
+            {
+                tmp = tmp.toLowerCase();
+                break;
+            }
+
+            case URL_CASE_FOLDING_UPPER:
+            {
+                tmp = tmp.toUpperCase();
+                break;
+            }
+        
+            default:
+            {
+                getLogger().error("Passed " + fold + " as fold rule, which is illegal!");
+                break;
+            }
+        }
+        return tmp;
+    }
+
+    /**
+     * Gets the folding value from the configuration
+     *
+     * @return The current Folding Value
+     */
+    public int getUrlFolding()
+    {
+        return folding;
+    }
+
+    /**
+     * Gets the automaticUpload value from the configuration
+     *
+     * @return The current automaticUpload Value
+     */
+    public boolean getAutomaticUpload()
+    {
+        return automaticUpload;
+    }
+
+    /**
+     * Avalon component lifecycle method
+     */
+    public void configure(Configuration conf) throws ConfigurationException
+    {
+        if (folding == URL_CASE_FOLDING_UNSET)
+        {
+            String foldString = conf.getChild(URL_CASE_FOLDING_KEY).getValue(URL_CASE_FOLDING_NONE_VALUE).toLowerCase();
+    
+            folding = URL_CASE_FOLDING_NONE;
+    
+            getLogger().debug("Setting folding from " + foldString);
+    
+            if (StringUtils.isNotEmpty(foldString))
+            {
+                if (foldString.equals(URL_CASE_FOLDING_NONE_VALUE))
+                {
+                    folding = URL_CASE_FOLDING_NONE;
+                }
+                else if (foldString.equals(URL_CASE_FOLDING_LOWER_VALUE))
+                {
+                    folding = URL_CASE_FOLDING_LOWER;
+                }
+                else if (foldString.equals(URL_CASE_FOLDING_UPPER_VALUE))
+                {
+                    folding = URL_CASE_FOLDING_UPPER;
+                }
+                else
+                {
+                    getLogger().error("Got " + foldString + " from " + URL_CASE_FOLDING_KEY + " property, which is illegal!");
+                    throw new ConfigurationException("Value " + foldString + " is illegal!");
+                }
+            }
+        }
+        
+        parameterEncoding = conf.getChild(PARAMETER_ENCODING_KEY)
+                            .getValue(PARAMETER_ENCODING_DEFAULT).toLowerCase();
+
+        automaticUpload = conf.getAttributeAsBoolean(
+                            AUTOMATIC_KEY, 
+                            AUTOMATIC_DEFAULT);
+    }
 }

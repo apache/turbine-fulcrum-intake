@@ -46,20 +46,24 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author <a href="mailto:ilkka.priha@simsoft.fi">Ilkka Priha</a>
  * @author <a href="mailto:leon@opticode.co.za">Leon Messerschmidt</a>
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
 public interface CookieParser
     extends ValueParser
 {
-    public static final int AGE_SESSION = -1;
-    public static final int AGE_DELETE = 0;
+    /** Avalon Identifier **/
+    String ROLE = CookieParser.class.getName();
+    
+    static final int AGE_SESSION = -1;
+    static final int AGE_DELETE = 0;
 
     /**
      * Gets the parsed RunData.
      *
      * @return the parsed RunData object or null.
      */
-    public HttpServletRequest getRequest();
+    HttpServletRequest getRequest();
 
     /**
      * Sets the RunData to be parsed.
@@ -67,23 +71,23 @@ public interface CookieParser
      *
      * @param data the RunData object.
      */
-    public void setData (HttpServletRequest request, 
-                         HttpServletResponse response);
+    void setData (HttpServletRequest request, 
+                  HttpServletResponse response);
 
     /**
      * Set a cookie that will be stored on the client for
      * the duration of the session.
      */
-    public void set (String name, String value);
+    void set (String name, String value);
 
     /**
      * Set a persisten cookie on the client that will expire
      * after a maximum age (given in seconds).
      */
-    public void set (String name, String value, int seconds_age);
+    void set (String name, String value, int seconds_age);
 
     /**
      * Remove a previously set cookie from the client machine.
      */
-    public void unset (String name);
+    void unset (String name);
 }

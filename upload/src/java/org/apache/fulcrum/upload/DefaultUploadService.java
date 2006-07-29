@@ -19,7 +19,6 @@ package org.apache.fulcrum.upload;
 
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +30,7 @@ import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.framework.service.ServiceException;
 import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileUploadException;
 
@@ -57,9 +57,9 @@ import org.apache.commons.fileupload.FileUploadException;
  */
 public class DefaultUploadService
     extends AbstractLogEnabled
-    implements UploadService, Initializable,Configurable, Contextualizable
+    implements UploadService, Initializable, Configurable, Contextualizable
 {
-    protected DiskFileUpload fileUpload;
+    private DiskFileUpload fileUpload;
 
     private int sizeThreshold;
     private int sizeMax;
@@ -70,21 +70,13 @@ public class DefaultUploadService
      */
     private String applicationRoot;
 
-
-    public DiskFileUpload getFileUpload()
-    {
-        return fileUpload;
-    }
-
-
     /**
      * The maximum allowed upload size
      */
     public long getSizeMax()
     {
-        return getFileUpload().getSizeMax();
+        return fileUpload.getSizeMax();
     }
-
 
     /**
      * The threshold beyond which files are written directly to disk.
@@ -109,19 +101,21 @@ public class DefaultUploadService
      *
      * @param req The servlet request to be parsed.
      * @param path The location where the files should be stored.
-     * @exception FileUploadException Problems reading/parsing the
+     * @exception ServiceException Problems reading/parsing the
      * request or storing the uploaded file(s).
      */
-    public ArrayList parseRequest(HttpServletRequest req, String path)
-            throws FileUploadException
+    public List parseRequest(HttpServletRequest req, String path)
+        throws ServiceException
     {
-       
-        return (ArrayList)
-            (getFileUpload())
-            .parseRequest(req, sizeThreshold, sizeMax, path);
-       
+        try
+        {
+            return fileUpload.parseRequest(req, sizeThreshold, sizeMax, path);
+        }
+        catch (FileUploadException e)
+        {
+            throw new ServiceException(UploadService.ROLE, e.getMessage(), e);
+        }
     }
-
 
     /**
      * <p>Parses a <a href="http://rf.cx/rfc1867.html">RFC 1867</a>
@@ -131,23 +125,27 @@ public class DefaultUploadService
      * @param sizeThreshold the max size in bytes to be stored in memory
      * @param sizeMax the maximum allowed upload size in bytes
      * @param path The location where the files should be stored.
-     * @exception FileUploadException Problems reading/parsing the
+     * @exception ServiceException Problems reading/parsing the
      * request or storing the uploaded file(s).
      */
     public List parseRequest(HttpServletRequest req, int sizeThreshold,
                                   int sizeMax, String path)
-            throws FileUploadException
+            throws ServiceException
     {
-       
-        return getFileUpload()
-            .parseRequest(req, sizeThreshold, sizeMax, path);
-   
+        try
+        {
+            return fileUpload.parseRequest(req, sizeThreshold, sizeMax, path);
+        }
+        catch (FileUploadException e)
+        {
+            throw new ServiceException(UploadService.ROLE, e.getMessage(), e);
+        }
     }
 
     /**
      * @see org.apache.fulcrum.ServiceBroker#getRealPath(String)
      */
-    public String getRealPath(String path)
+    private String getRealPath(String path)
     {
         String absolutePath = null;
         if (applicationRoot == null)
@@ -162,14 +160,6 @@ public class DefaultUploadService
         return absolutePath;
     }
 
-    /**
-     * @return Returns the repositoryPath.
-     */
-    public String getRepositoryPath()
-    {
-        return repositoryPath;
-    }
-
     // ---------------- Avalon Lifecycle Methods ---------------------
     /**
      * Avalon component lifecycle method
@@ -180,7 +170,6 @@ public class DefaultUploadService
                 UploadService.REPOSITORY_KEY,
                 UploadService.REPOSITORY_DEFAULT);
 
-
         sizeMax = conf.getAttributeAsInteger(
                 UploadService.SIZE_MAX_KEY,
                 UploadService.SIZE_MAX_DEFAULT);
@@ -188,7 +177,6 @@ public class DefaultUploadService
         sizeThreshold = conf.getAttributeAsInteger(
                 UploadService.SIZE_THRESHOLD_KEY,
                 UploadService.SIZE_THRESHOLD_DEFAULT);
-
     }
 
     /**
@@ -199,8 +187,6 @@ public class DefaultUploadService
      */
     public void initialize() throws Exception
     {
-
-
         // test for the existence of the path within the webapp directory.
         // if it does not exist, assume the path was to be used as is.
         String testPath = getRealPath(repositoryPath);
@@ -210,24 +196,18 @@ public class DefaultUploadService
             repositoryPath = testPath;
         }
 
-
         getLogger().debug(
                 "Upload Service: REPOSITORY_KEY => " + repositoryPath);
 
-        DiskFileUpload diskFileUpload = new DiskFileUpload();
+        fileUpload = new DiskFileUpload();
 
-
-        diskFileUpload.setSizeMax(sizeMax);
-        diskFileUpload.setSizeThreshold(sizeThreshold);
-
-        diskFileUpload.setRepositoryPath( repositoryPath);
-
-        fileUpload = diskFileUpload;
+        fileUpload.setSizeMax(sizeMax);
+        fileUpload.setSizeThreshold(sizeThreshold);
+        fileUpload.setRepositoryPath(repositoryPath);
     }
 
-    public void contextualize(Context context) throws ContextException {
+    public void contextualize(Context context) throws ContextException 
+    {
         this.applicationRoot = context.get( "urn:avalon:home" ).toString();
     }
-
-
 }

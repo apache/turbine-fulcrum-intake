@@ -22,10 +22,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.fulcrum.pool.Recyclable;
-
 /**
  * CookieParser is used to get and set values of Cookies on the Client
  * Browser.  You can use CookieParser to convert Cookie values to
@@ -51,23 +47,19 @@ import org.apache.fulcrum.pool.Recyclable;
  *
  * @author <a href="mailto:ilkka.priha@simsoft.fi">Ilkka Priha</a>
  * @author <a href="mailto:leon@opticode.co.za">Leon Messerschmidt</a>
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
 public class DefaultCookieParser
     extends BaseValueParser
-    implements CookieParser,
-               Recyclable
+    implements CookieParser
+               
 {
     /**
      * The run data to parse.
      */
     private HttpServletRequest request;
     private HttpServletResponse response;
-
-    /**
-     * Logger to use
-     */
-    Log log = LogFactory.getLog(DefaultCookieParser.class);
 
     /**
      * Constructs a new CookieParser.
@@ -112,13 +104,13 @@ public class DefaultCookieParser
 
         Cookie[] cookies = request.getCookies();
 
-        log.debug ("Number of Cookies "+cookies.length);
+        getLogger().debug ("Number of Cookies "+cookies.length);
 
         for (int i=0; i<cookies.length; i++)
         {
             String name = convert (cookies[i].getName());
             String value = cookies[i].getValue();
-            log.debug ("Adding "+name+"="+value);
+            getLogger().debug ("Adding "+name+"="+value);
             add (name,value);
         }
 

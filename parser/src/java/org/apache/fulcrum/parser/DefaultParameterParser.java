@@ -19,20 +19,17 @@ package org.apache.fulcrum.parser;
 
 
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.StringTokenizer;
-import java.io.UnsupportedEncodingException;
+
 import javax.servlet.http.HttpServletRequest;
-import org.apache.fulcrum.pool.Recyclable;
-import org.apache.fulcrum.upload.UploadService;
+
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.fulcrum.upload.UploadService;
 
 /**
  * DefaultParameterParser is a utility object to handle parsing and
@@ -56,12 +53,13 @@ import org.apache.commons.logging.LogFactory;
  * @author <a href="mailto:ilkka.priha@simsoft.fi">Ilkka Priha</a>
  * @author <a href="mailto:jon@clearink.com">Jon S. Stevens</a>
  * @author <a href="mailto:sean@informage.net">Sean Legassick</a>
+ * @author <a href="mailto:jh@byteaction.de">J&#252;rgen Hoffmann</a>
  * @version $Id$
  */
 public class DefaultParameterParser
     extends BaseValueParser
     implements ParameterParser,
-               Recyclable, Serviceable
+               Serviceable
 {
     /**
      * The servlet request to parse.
@@ -76,11 +74,7 @@ public class DefaultParameterParser
     /**
      * The upload service component to use
      */
-    private UploadService uploadService;
-    /**
-     * Logger to use
-     */
-    Log log = LogFactory.getLog(DefaultParameterParser.class);
+    private UploadService uploadService = null;
 
     /**
      * Create a new empty instance of ParameterParser.  Uses the
@@ -127,107 +121,86 @@ public class DefaultParameterParser
      */
     public HttpServletRequest getRequest()
     {
-        return this.request;
+        return request;
     }
 
     /**
-     * Sets the servlet request to be parser.  This requires a
+     * Sets the servlet request to the parser.  This requires a
      * valid HttpServletRequest object.  It will attempt to parse out
-     * the GET/POST/PATH_INFO data and store the data into a Hashtable.
+     * the GET/POST/PATH_INFO data and store the data into a Map.
      * There are convenience methods for retrieving the data as a
      * number of different datatypes.  The PATH_INFO data must be a
      * URLEncoded() string.
-     *
-     * <p>To add name/value pairs to this set of parameters, use the
+     * <p>
+     * To add name/value pairs to this set of parameters, use the
      * <code>add()</code> methods.
      *
-     * @param req An HttpServletRequest.
+     * @param request An HttpServletRequest.
      */
-    public void setRequest(HttpServletRequest req)
+    public void setRequest(HttpServletRequest request)
     {
         clear();
 
         uploadData = null;
 
-        String enc = req.getCharacterEncoding();
-        setCharacterEncoding(enc != null ? enc : "US-ASCII");
+        String enc = request.getCharacterEncoding();
+        setCharacterEncoding(enc != null
+                ? enc
+                : parameterEncoding);
 
-        // String object re-use at its best.
-        String tmp = null;
+        String contentType = request.getHeader("Content-type");
 
-        tmp = req.getHeader("Content-type");
-        if (tmp != null && tmp.startsWith("multipart/form-data"))
+        if (uploadService != null 
+                && getAutomaticUpload() 
+                && contentType != null 
+                && contentType.startsWith("multipart/form-data"))
         {
+            if (getLogger().isDebugEnabled())
+            {
+                getLogger().debug("Running the Turbine Upload Service");
+            }
+
             try
             {
-                ArrayList items = uploadService.parseRequest(req,getRepository());
-                Iterator i = items.iterator();
-
-                while (i.hasNext())
-                {
-                    FileItem item = (FileItem) i.next();
-
-                    if (item.isFormField())
-                    {
-                        String value = null;
-                        try
-                        {
-                            value = item.getString(getCharacterEncoding());
-                        }
-                        catch (UnsupportedEncodingException e)
-                        {
-                            log.error(getCharacterEncoding() + 
-                                "encoding is not supported.  Used the default "
-                                + "when reading form data.");
-                            value = item.getString();
-                        }
-                        append(item.getFieldName(), value);
-                    }
-                    else
-                    {
-                        append(item.getFieldName(), item);
-                    }
-                }
+                uploadService.parseRequest(request, uploadService.getRepository());
             }
-            catch(Exception e)
+            catch (ServiceException e)
             {
-                log.error(new Exception("File upload failed", e));
+                getLogger().error("File upload failed", e);
             }
         }
 
-        Enumeration names = req.getParameterNames();
-        if ( names != null )
+        for (Enumeration names = request.getParameterNames();
+             names.hasMoreElements();)
         {
-            while(names.hasMoreElements())
-            {
-                tmp = (String) names.nextElement();
-                parameters.put( convert(tmp), req.getParameterValues(tmp) );
-            }
+            String paramName = (String) names.nextElement();
+            add(paramName,
+                    request.getParameterValues(paramName));
         }
 
         // Also cache any pathinfo variables that are passed around as
         // if they are query string data.
         try
         {
-            // the lines below can be substituted with the method
-            // parse(req.getPathInfo(), '/', true);
-            // if DefaultParameterParser extended StringParser
-            StringTokenizer st = new StringTokenizer(req.getPathInfo(), "/");
             boolean isNameTok = true;
-            String pathPart = null;
-            while (st.hasMoreTokens())
+            String paramName = null;
+            String paramValue = null;
+
+            for ( StringTokenizer st =
+                          new StringTokenizer(request.getPathInfo(), "/");
+                  st.hasMoreTokens();)
             {
                 if (isNameTok)
                 {
-                    tmp = URLDecoder.decode(st.nextToken());
+                    paramName = URLDecoder.decode(st.nextToken());
                     isNameTok = false;
                 }
                 else
                 {
-                    pathPart = URLDecoder.decode(st.nextToken());
-                    if (tmp.length() > 0)
+                    paramValue = URLDecoder.decode(st.nextToken());
+                    if (paramName.length() > 0)
                     {
-                        add (convert(tmp), pathPart);
+                        add(paramName, paramValue);
                     }
                     isNameTok = true;
                 }
@@ -241,7 +214,17 @@ public class DefaultParameterParser
             // and should be caught later.
         }
 
-        this.request = req;
+        this.request = request;
+
+        if (getLogger().isDebugEnabled())
+        {
+            getLogger().debug("Parameters found in the Request:");
+            for (Iterator it = keySet().iterator(); it.hasNext();)
+            {
+                String key = (String) it.next();
+                getLogger().debug("Key: " + key + " -> " + getString(key));
+            }
+        }
     }
 
     /**
@@ -259,7 +242,7 @@ public class DefaultParameterParser
      *
      * @returns uploadData A byte[] with data.
      */
-    public byte[] setUploadData ()
+    public byte[] getUploadData ()
     {
         return this.uploadData;
     }
@@ -337,31 +320,28 @@ public class DefaultParameterParser
         }
     }
     
-    /**
-     * <p> Retrieves the value of the <code>repository</code> property of
-     * {@link org.apache.fulcrum.upload.UploadService}.
-     *
-     * @return The repository.
-     */
-    public String getRepository()
-    {
-        return uploadService.getFileUpload().getRepositoryPath();
-    }    
-    
-    public void setUploadService(UploadService uploadService){
-        this.uploadService = uploadService;
-    }
-    
-    public UploadService getUploadService(){
-        return uploadService;
-    }
     // ---------------- Avalon Lifecycle Methods ---------------------    
     /**
      * Avalon component lifecycle method
      */
-    public void service( ServiceManager manager) throws ServiceException{        
-        
-        setUploadService((UploadService)manager.lookup(UploadService.class.getName()));
-        
-    }      
+    public void service(ServiceManager manager) throws ServiceException
+    {        
+        if (manager.hasService(UploadService.ROLE))
+        {
+            uploadService = (UploadService)manager.lookup(UploadService.ROLE);
+        }
+        else
+        {
+            /*
+             * Automatic parsing of uploaded file items was requested but no
+             * UploadService is available
+             */ 
+            if (getAutomaticUpload())
+            {
+                throw new ServiceException(ParameterParser.ROLE, 
+                        AUTOMATIC_KEY + " = true requires " +
+                        UploadService.ROLE + " to be available");
+            }
+        }
+    }
 }

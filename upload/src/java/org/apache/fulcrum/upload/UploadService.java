@@ -18,11 +18,11 @@ package org.apache.fulcrum.upload;
  */
 
 
-import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.fileupload.DiskFileUpload;
-import org.apache.commons.fileupload.FileUploadException;
+import org.apache.avalon.framework.service.ServiceException;
 
 /**
  * <p> This service handles parsing <code>multipart/form-data</code>
@@ -39,78 +39,55 @@ public interface UploadService
     
 {
     /** Avalon Identifier **/
-    public String ROLE = UploadService.class.getName();
+    String ROLE = UploadService.class.getName();
     
     /**
      * HTTP header.
      */
-    public static final String CONTENT_TYPE = "Content-type";
+    static final String CONTENT_TYPE = "Content-type";
 
     /**
      * HTTP header.
      */
-    public static final String CONTENT_DISPOSITION = "Content-disposition";
+    static final String CONTENT_DISPOSITION = "Content-disposition";
 
     /**
      * HTTP header base type.
      */
-    public static final String MULTIPART = "multipart";
+    static final String MULTIPART = "multipart";
 
     /**
      * HTTP header base type modifier.
      */
-    public static final String FORM_DATA = "form-data";
+    static final String FORM_DATA = "form-data";
 
     /**
      * HTTP header base type modifier.
      */
-    public static final String MIXED = "mixed";
+    static final String MIXED = "mixed";
 
     /**
      * HTTP header.
      */
-    public static final String MULTIPART_FORM_DATA =
+    static final String MULTIPART_FORM_DATA =
         MULTIPART + '/' + FORM_DATA;
 
     /**
      * HTTP header.
      */
-    public static final String MULTIPART_MIXED = MULTIPART + '/' + MIXED;
-
-    /**
-     * The key in the TurbineResources.properties that references this
-     * service.
-     */
-    public static final String SERVICE_NAME = "UploadService";
-
-    /**
-     * The key in UploadService properties in
-     * TurbineResources.properties 'automatic' property.
-     */
-    public static final String AUTOMATIC_KEY = "automatic";
-
-    /**
-     * <p> The default value of 'automatic' property
-     * (<code>false</code>).  If set to <code>true</code>, parsing the
-     * multipart request will be performed automaticaly by {@link
-     * org.apache.fulcrum.util.parser.ParameterParser}.  Otherwise, an {@link
-     * org.apache.turbine.modules.Action} may decide to to parse the
-     * request by calling {@link #parseRequest(HttpServletRequest, String)
-     * parseRequest} manually.
-     */
-    public static final boolean AUTOMATIC_DEFAULT = false;
+    static final String MULTIPART_MIXED = MULTIPART + '/' + MIXED;
 
     /**
      * The request parameter name for overriding 'repository' property
      * (path).
      */
-    public static final String REPOSITORY_PARAMETER = "path";
+    static final String REPOSITORY_PARAMETER = "path";
 
     /**
      * The key in UploadService properties in
      * TurbineResources.properties 'repository' property.
      */
-    public static final String REPOSITORY_KEY = "repository";
+    static final String REPOSITORY_KEY = "repository";
 
     /**
      * <p> The default value of 'repository' property (.).  This is
@@ -118,13 +95,13 @@ public interface UploadService
      * Note that "."  is whatever the servlet container chooses to be
      * it's 'current directory'.
      */
-    public static final String REPOSITORY_DEFAULT = ".";
+    static final String REPOSITORY_DEFAULT = ".";
 
     /**
      * w The key in UploadService properties in
      * service configuration 'sizeMax' property.
      */
-    public static final String SIZE_MAX_KEY = "sizeMax";
+    static final String SIZE_MAX_KEY = "sizeMax";
 
     /**
      * <p> The default value of 'sizMax' property (1 megabyte =
@@ -134,13 +111,13 @@ public interface UploadService
      * value, and use an action + no auto upload to enforce limits.
      *
      */
-    public static final int SIZE_MAX_DEFAULT = 1048576;
+    static final int SIZE_MAX_DEFAULT = 1048576;
 
     /**
      * The key in UploadService properties in
      * TurbineResources.properties 'sizeThreshold' property.
      */
-    public static final String SIZE_THRESHOLD_KEY = "sizeThreshold";
+    static final String SIZE_THRESHOLD_KEY = "sizeThreshold";
 
     /**
      * <p> The default value of 'sizeThreshold' property (10
@@ -148,7 +125,7 @@ public interface UploadService
      * request that will have it's components stored temporarily in
      * memory, instead of disk.
      */
-    public static final int SIZE_THRESHOLD_DEFAULT = 10240;
+    static final int SIZE_THRESHOLD_DEFAULT = 10240;
 
     /**
      * <p>Parses a <a href="http://rf.cx/rfc1867.html">RFC 1867</a>
@@ -159,8 +136,23 @@ public interface UploadService
      * @exception ServiceException Problems reading/parsing the
      * request or storing the uploaded file(s).
      */
-    public ArrayList parseRequest(HttpServletRequest req, String path)
-            throws FileUploadException;
+    List parseRequest(HttpServletRequest req, String path)
+        throws ServiceException;
+
+    /**
+     * <p>Parses a <a href="http://rf.cx/rfc1867.html">RFC 1867</a>
+     * compliant <code>multipart/form-data</code> stream.</p>
+     *
+     * @param req The servlet request to be parsed.
+     * @param sizeThreshold the max size in bytes to be stored in memory
+     * @param sizeMax the maximum allowed upload size in bytes
+     * @param path The location where the files should be stored.
+     * @exception ServiceException Problems reading/parsing the
+     * request or storing the uploaded file(s).
+     */
+    List parseRequest(HttpServletRequest req, int sizeThreshold,
+        int sizeMax, String path)
+        throws ServiceException;
 
     /**
      * <p> Retrieves the value of <code>size.max</code> property of the
@@ -168,7 +160,7 @@ public interface UploadService
      *
      * @return The maximum upload size.
      */
-    public long getSizeMax();
+    long getSizeMax();
 
     /**
      * <p> Retrieves the value of <code>size.threshold</code> property of
@@ -176,7 +168,7 @@ public interface UploadService
      *
      * @return The threshold beyond which files are written directly to disk.
      */
-    public long getSizeThreshold();
+    long getSizeThreshold();
 
     /**
      * <p> Retrieves the value of the <code>repository</code> property of
@@ -184,7 +176,5 @@ public interface UploadService
      *
      * @return The repository.
      */
-    public String getRepository();
-
-    public DiskFileUpload getFileUpload();
+    String getRepository();
 }

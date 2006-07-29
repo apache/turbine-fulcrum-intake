@@ -19,8 +19,8 @@ package org.apache.fulcrum.parser;
 
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
@@ -56,11 +56,6 @@ import org.apache.commons.logging.LogFactory;
 public abstract class DataStreamParser
     implements Iterator
 {
-    /**
-     * Conditional compilation flag.
-     */
-    private static final boolean DEBUG = false;
-
     /**
      * The list of column names.
      */
@@ -216,7 +211,7 @@ public abstract class DataStreamParser
             {
                 String colname = it.next().toString();
                 String colval  = tokenizer.sval;
-                if (DEBUG)
+                if (log.isDebugEnabled())
                 {
                     log.debug("DataStreamParser.nextRow(): " +
                               colname + '=' + colval);

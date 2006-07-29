@@ -14,34 +14,37 @@
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
-      <version>1.0</version>
+      <version>1.1</version>
       <url>http://jakarta.apache.org/commons/fileupload/index.html</url>
+    </dependency>
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.1</version>
+      <url>http://jakarta.apache.org/commons/collections/index.html</url>
     </dependency>
     <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
-      <version>2.0</version>
+      <version>2.1</version>
       <url>http://jakarta.apache.org/commons/lang/index.html</url>
     </dependency>       
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
-      <version>1.0.3</version>
+      <version>1.0.4</version>
       <url>http://jakarta.apache.org/commons/logging/index.html</url>
     </dependency>     
-    
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-pool</artifactId>
       <version>1.0.3</version>
     </dependency>     
-    
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-factory</artifactId>
       <version>1.0.3</version>
     </dependency>      
- 
     <dependency>
       <groupId>servletapi</groupId>
       <artifactId>servletapi</artifactId>

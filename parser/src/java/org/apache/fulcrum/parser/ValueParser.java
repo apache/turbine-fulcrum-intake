@@ -24,6 +24,9 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
+
 /**
  * ValueParser is a base interface for classes that need to parse
  * name/value Parameters, for example GET/POST data or Cookies
@@ -39,33 +42,73 @@ import java.util.Set;
  * @author <a href="mailto:jon@clearink.com">Jon S. Stevens</a>
  * @author <a href="mailto:sean@informage.net">Sean Legassick</a>
  * @author <a href="mailto:jvanzyl@periapt.com">Jason van Zyl</a>
+ * @author <a href="mailto:jh@byteaction.de">J&#252;rgen Hoffmann</a>
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
 public interface ValueParser
 {
+    /** Avalon Identifier **/
+    String ROLE = ValueParser.class.getName();
+    
+    /** Default Encoding for Parameter Parser */
+    static final String PARAMETER_ENCODING_DEFAULT = "ISO-8859-1";
+
+    /** Key for the Parameter Parser Encoding */
+    static final String PARAMETER_ENCODING_KEY = "parameterEncoding";
+
+    /** Property for setting the URL folding value */
+    static final String URL_CASE_FOLDING_KEY = "urlCaseFolding";
+
+    /** No folding */
+    static final String URL_CASE_FOLDING_NONE_VALUE  = "none";
+
+    /** Fold to lower case */
+    static final String URL_CASE_FOLDING_LOWER_VALUE = "lower";
+
+    /** Fold to upper case */
+    static final String URL_CASE_FOLDING_UPPER_VALUE = "upper";
+
+    /** No folding set */
+    static final int URL_CASE_FOLDING_UNSET = 0;
+
+    /** Folding set to "no folding" */
+    static final int URL_CASE_FOLDING_NONE  = 1;
+
+    /** Folding set to "lowercase" */
+    static final int URL_CASE_FOLDING_LOWER = 2;
+
+    /** Folding set to "uppercase" */
+    static final int URL_CASE_FOLDING_UPPER = 3;
+
+    /** Parse file upload items automatically */
+    static final String AUTOMATIC_KEY = "automaticUpload";
+
     /**
-     * The case folding property specifying the case folding
-     * to apply to value keys of the parser.
+     * <p> The default value of 'automaticUpload' property
+     * (<code>false</code>).  If set to <code>true</code>, parsing the
+     * multipart request will be performed automatically by {@link
+     * org.apache.fulcrum.parser.ParameterParser}.  Otherwise, an {@link
+     * org.apache.turbine.modules.Action} may decide to parse the
+     * request by calling {@link #parseRequest(HttpServletRequest, String)
+     * parseRequest} manually.
      */
-    public static final String URL_CASE_FOLDING = "url.case.folding";
-    public static final String URL_CASE_FOLDING_NONE = "none";
-    public static final String URL_CASE_FOLDING_LOWER = "lower";
-    public static final String URL_CASE_FOLDING_UPPER = "upper";
+    static final boolean AUTOMATIC_DEFAULT = false;
 
     /**
      * Clear all name/value pairs out of this object.
      */
-    public void clear();
+    void clear();
 
     /**
      * Set the character encoding that will be used by this ValueParser.
      */
-    public void setCharacterEncoding (String s);
+    void setCharacterEncoding(String s);
 
     /**
      * Get the character encoding that will be used by this ValueParser.
      */
-    public String getCharacterEncoding ();
+    String getCharacterEncoding();
 
     /**
      * Trims the string data and applies the conversion specified in
@@ -75,7 +118,7 @@ public interface ValueParser
      * @param value A String to be processed.
      * @return A new String converted to lowercase and trimmed.
      */
-    public String convert ( String value );
+    String convert(String value);
 
     /**
      * Add a name/value pair into this object.
@@ -116,16 +159,6 @@ public interface ValueParser
      * @param value A long with the value.
      */
     void add(String name, String value);
-
-    /**
-     * Add a String parameter.  If there are any Strings already
-     * associated with the name, append to the array.  This is used
-     * for handling parameters from mulitipart POST requests.
-     *
-     * @param name A String with the name.
-     * @param value A String with the value.
-     */
-    void append(String name, String value);
 
     /**
      * Add an array of Strings for a key. This
@@ -660,4 +693,40 @@ public interface ValueParser
      * @return A String.
      */
     String toString();
+
+    /**
+     * Convert a String value according to the url-case-folding property.
+     *
+     * @param value the String to convert
+     *
+     * @return a new String.
+     *
+     */
+    String convertAndTrim(String s);
+    
+    /**
+     * A static version of the convert method, which
+     * trims the string data and applies the conversion specified in
+     * the property given by URL_CASE_FOLDING.  It returns a new
+     * string so that it does not destroy the value data.
+     *
+     * @param value A String to be processed.
+     * @return A new String converted to lowercase and trimmed.
+     */
+    String convertAndTrim(String s, int folding);
+
+    /**
+     * Gets the folding value from the configuration
+     *
+     * @return The current Folding Value
+     */
+    int getUrlFolding();
+
+    /**
+     * Gets the automaticUpload value from the configuration
+     *
+     * @return The current automaticUpload Value
+     */
+    boolean getAutomaticUpload();
 }
+

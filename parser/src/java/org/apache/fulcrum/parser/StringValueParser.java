@@ -18,8 +18,8 @@ package org.apache.fulcrum.parser;
  */
 
 
-import java.util.StringTokenizer;
 import java.net.URLDecoder;
+import java.util.StringTokenizer;
 
 /**
  * An extension that parses a String for name/value pairs.
