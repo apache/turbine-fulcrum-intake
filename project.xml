@@ -132,6 +132,16 @@
       </roles>
       <timezone>+10</timezone>
     </developer>
+    <developer>
+      <name>Thomas Vandahl</name>
+      <id>tv</id>
+      <email>tv@apache.org</email>
+      <organization>TeWiSoft GmbH</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
   </developers>
   <contributors>
     <contributor>
@@ -143,7 +153,7 @@
       </roles>
     </contributor>
     <contributor>
-       <name>J&#252;rgen Hoffmann</name>
+       <name>Jürgen Hoffmann</name>
        <email>jh@byteaction.de</email>
        <organization></organization>
        <roles>
@@ -183,16 +193,6 @@
        </roles>
     </contributor>
     <contributor>
-      <name>Thomas Vandahl</name>
-      <id>tv</id>
-      <email>tv@apache.org</email>
-      <organization>TeWiSoft GmbH</organization>
-      <roles>
-        <role>Developer</role>
-      </roles>
-      <timezone>+1</timezone>
-    </contributor>
-    <contributor>
       <name>Ronald</name>
       <email>ronald@innovation.ch</email>
       <roles>
@@ -230,28 +230,7 @@
      |
      -->
 
-    <!--dependency>
-      <groupId>excalibur-component</groupId>
-      <artifactId>excalibur-component</artifactId>
-      <version>1.1</version>
-      <url>http://excalibur.apache.org/</url>
-    </dependency>
-
-    <dependency>
-      <groupId>excalibur-instrument</groupId>
-      <artifactId>excalibur-instrument</artifactId>
-      <version>1.0</version>
-      <url>http://excalibur.apache.org/</url>
-    </dependency>
-
-    <dependency>
-      <groupId>excalibur-logger</groupId>
-      <artifactId>excalibur-logger</artifactId>
-      <version>1.1</version>
-      <url>http://excalibur.apache.org/</url>
-    </dependency>
-
-    <dependency>
+    <!-- dependency>
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
       <version>3.1</version>
@@ -263,13 +242,6 @@
       <artifactId>log4j</artifactId>
       <version>1.2.8</version>
       <url>http://jakarta.apache.org/log4j/</url>
-    </dependency>
-
-    <dependency>
-      <groupId>excalibur-pool</groupId>
-      <artifactId>excalibur-pool-api</artifactId>
-      <version>2.0.0</version>
-      <url>http://excalibur.apache.org/</url>
     </dependency>
 
     <dependency>
@@ -383,8 +355,6 @@
     <report>maven-developer-activity-plugin</report>
     <report>maven-file-activity-plugin</report>
 
-
-
     <report>maven-multiproject-plugin</report>
     <report>maven-faq-plugin</report>
     <report>maven-pmd-plugin</report>
@@ -394,8 +364,6 @@
     <report>maven-jxr-plugin</report>
     <report>maven-junit-report-plugin</report>
     <report>maven-jcoverage-plugin</report>
-
-
   </reports>
 
 </project>
