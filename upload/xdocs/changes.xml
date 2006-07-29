@@ -6,6 +6,11 @@
   </properties>
 
   <body>
+    <release version="1.0.4-dev" date="in SVN">
+     <action dev="tv" type="update" issue="TRB-32" due-to="Juergen Hofmann">
+        Port parser fixes of  Turbine 2.3.2 over to the component.
+      </action>        
+    </release>
     <release version="1.0.3" date="2004-11-24">
      <action dev="epugh" type="remove">
         Remove UploadServiceFacade..  Facades are very use specific, and

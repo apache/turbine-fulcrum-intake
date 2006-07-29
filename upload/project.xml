@@ -3,7 +3,7 @@
   <extend>${basedir}/../project.xml</extend>
   <id>fulcrum-upload</id>
   <name>Fulcrum Upload Component</name>
-  <currentVersion>1.0.3</currentVersion>
+  <currentVersion>1.0.4-dev</currentVersion>
   <versions>
     <version>
       <id>1.0.3</id>
@@ -16,7 +16,7 @@
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
-      <version>1.0</version>
+      <version>1.1</version>
       <url>http://jakarta.apache.org/commons/fileupload/index.html</url>
     </dependency>          
     
