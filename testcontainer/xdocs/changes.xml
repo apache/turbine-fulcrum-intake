@@ -13,8 +13,6 @@
         since the initalization changed.
       </action>             
     </release>     
-    <release version="1.0.5" date="">    
-    </release>  
     <release version="1.0.4" date="2004-11-24">    
       <action dev="epugh" type="add">
         By default use Yaafi as the Test container, but you can swap to ECM for

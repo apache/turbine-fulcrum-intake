@@ -45,12 +45,12 @@
       <artifactId>turbine</artifactId>
       <version>2.3.2</version>
     </dependency>   
+
     <dependency>
       <groupId>xstream</groupId>
       <artifactId>xstream</artifactId>
       <version>1.1.2</version>
       <url>http://xstream.codehaus.org/</url>
-
     </dependency>
 
     <dependency>
@@ -59,6 +59,7 @@
       <version>2.3</version>
       <url>http://java.sun.com/products/servlet/</url>
     </dependency>   
+
     <dependency>
       <groupId>torque</groupId>
       <artifactId>torque</artifactId>
@@ -108,24 +109,24 @@
     </dependency> 
     
 	<!-- ECM dependencies -->
-	<dependency>
+    <dependency>
       <groupId>excalibur-component</groupId>
       <artifactId>excalibur-component</artifactId>
-      <version>1.1</version>
+      <version>2.1</version>
       <url>http://excalibur.apache.org/</url>
     </dependency>
     
     <dependency>
       <groupId>excalibur-instrument</groupId>
-      <artifactId>excalibur-instrument</artifactId>
-      <version>1.0</version>
+      <artifactId>excalibur-instrument-api</artifactId>
+      <version>2.1</version>
       <url>http://excalibur.apache.org/</url>
     </dependency>    
     
     <dependency>
       <groupId>excalibur-logger</groupId>
       <artifactId>excalibur-logger</artifactId>
-      <version>1.1</version>
+      <version>2.1</version>
       <url>http://excalibur.apache.org/</url>
     </dependency>    
     
@@ -146,20 +147,18 @@
     <dependency>
       <groupId>excalibur-pool</groupId>
       <artifactId>excalibur-pool-api</artifactId>
-      <version>2.0.0</version>
+      <version>2.1</version>
       <url>http://excalibur.apache.org/</url>
     </dependency>
     
     <dependency>
       <groupId>avalon-logkit</groupId>
       <artifactId>avalon-logkit</artifactId>
-      <version>2.0.0</version>
-      <url>http://avalon.apache.org</url>
+      <version>2.1</version>
+      <url>http://excalibur.apache.org</url>
     </dependency>  	
     
   </dependencies>
   
-
-
 </project>
 

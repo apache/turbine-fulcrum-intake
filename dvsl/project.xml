@@ -70,7 +70,7 @@
     <dependency>
       <groupId>avalon-logkit</groupId>
       <artifactId>avalon-logkit</artifactId>
-      <version>2.0.0</version>
+      <version>2.1</version>
       <url>http://avalon.apache.org</url>
     </dependency>   
 
