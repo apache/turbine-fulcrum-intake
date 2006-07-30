@@ -247,10 +247,11 @@
     <dependency>
       <groupId>avalon-logkit</groupId>
       <artifactId>avalon-logkit</artifactId>
-      <version>2.0.0</version>
-      <url>http://avalon.apache.org</url>
+      <version>2.1</version>
+      <url>http://excalibur.apache.org</url>
     </dependency-->
 
+<!--
     <dependency>
       <groupId>maven</groupId>
       <artifactId>maven-jar-plugin</artifactId>
@@ -313,8 +314,8 @@
       <version>1.9.2</version>
       <type>plugin</type>
     </dependency>
+-->
   </dependencies>
-
 
  <build>
     <nagEmailAddress>turbine-dev@jakarta.apache.org</nagEmailAddress>
@@ -356,6 +357,7 @@
     <report>maven-file-activity-plugin</report>
 
     <report>maven-multiproject-plugin</report>
+    <report>maven-multichanges-plugin</report>
     <report>maven-faq-plugin</report>
     <report>maven-pmd-plugin</report>
     <!-- report>maven-simian-plugin</report -->
