@@ -7,6 +7,9 @@
 
   <body>
     <release version="1.0.8" date="">
+      <action dev="tv" type="fix">
+        Fixed hash code generation and equals() for security entities.
+      </action>     
       <action dev="epugh" type="add" due-to="Kostyantyn Shchekotykhin">
         Updated nt impl, turbine and opensymphony adapters to use released versions
         of memory impl.
