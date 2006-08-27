@@ -32,7 +32,8 @@ import org.apache.fulcrum.security.util.PermissionSet;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @version $Id$
  */
-public class TurbineRole extends SecurityEntityImpl implements Role {
+public class TurbineRole extends SecurityEntityImpl implements Role
+{
     private Set permissionSet = new PermissionSet();
 
     private Set userGroupRoleSet = new HashSet();
@@ -40,10 +41,12 @@ public class TurbineRole extends SecurityEntityImpl implements Role {
     /**
      * @return
      */
-    public PermissionSet getPermissions() {
+    public PermissionSet getPermissions()
+    {
         if (permissionSet instanceof PermissionSet)
             return (PermissionSet) permissionSet;
-        else {
+        else
+        {
             permissionSet = new PermissionSet(permissionSet);
             return (PermissionSet) permissionSet;
         }
@@ -52,19 +55,21 @@ public class TurbineRole extends SecurityEntityImpl implements Role {
     /**
      * @return
      */
-    public Set getPermissionsAsSet() {
+    public Set getPermissionsAsSet()
+    {
         return permissionSet;
     }
 
-    public void setPermissionsAsSet(Set permissions) {
+    public void setPermissionsAsSet(Set permissions)
+    {
         this.permissionSet = permissions;
-        ;
     }
 
     /**
      * @param permissionSet
      */
-    public void setPermissions(PermissionSet permissionSet) {
+    public void setPermissions(PermissionSet permissionSet)
+    {
         if (permissionSet != null)
             this.permissionSet = permissionSet;
         else
@@ -76,7 +81,8 @@ public class TurbineRole extends SecurityEntityImpl implements Role {
      * 
      * @param permission
      */
-    public void addPermission(Permission permission) {
+    public void addPermission(Permission permission)
+    {
         getPermissions().add(permission);
     }
 
@@ -85,14 +91,16 @@ public class TurbineRole extends SecurityEntityImpl implements Role {
      * 
      * @param permission
      */
-    public void removePermission(Permission permission) {
+    public void removePermission(Permission permission)
+    {
         getPermissions().remove(permission);
     }
 
     /**
      * @return
      */
-    public Set getUserGroupRoleSet() {
+    public Set getUserGroupRoleSet()
+    {
 
         return userGroupRoleSet;
     }
@@ -100,7 +108,8 @@ public class TurbineRole extends SecurityEntityImpl implements Role {
     /**
      * @param userGroupRoleSet
      */
-    public void setUserGroupRoleSet(Set userGroupRoleSet) {
+    public void setUserGroupRoleSet(Set userGroupRoleSet)
+    {
 
         this.userGroupRoleSet = userGroupRoleSet;
 
@@ -111,7 +120,8 @@ public class TurbineRole extends SecurityEntityImpl implements Role {
      * 
      * @param group
      */
-    public void addUserGroupRole(TurbineUserGroupRole userGroupRole) {
+    public void addUserGroupRole(TurbineUserGroupRole userGroupRole)
+    {
         getUserGroupRoleSet().add(userGroupRole);
     }
 
@@ -120,9 +130,9 @@ public class TurbineRole extends SecurityEntityImpl implements Role {
      * 
      * @param group
      */
-    public void removeUserGroupRole(TurbineUserGroupRole userGroupRole) {
+    public void removeUserGroupRole(TurbineUserGroupRole userGroupRole)
+    {
         getUserGroupRoleSet().remove(userGroupRole);
     }
 
-   
 }

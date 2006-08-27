@@ -21,8 +21,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.User;
@@ -42,102 +40,113 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @author <a href="mailto:ben@gidley.co.uk">Ben Gidley </a>
  * @version $Id$
  */
-public class DynamicACLFactory extends AbstractManager implements ACLFactory {
+public class DynamicACLFactory extends AbstractManager implements ACLFactory
+{
+    /**
+     * Construct a new ACL object.
+     * 
+     * This constructs a new ACL object from the configured class and
+     * initializes it with the supplied roles and permissions.
+     * 
+     * @param roles
+     *            The roles that this ACL should contain
+     * @param permissions
+     *            The permissions for this ACL
+     * 
+     * @return an object implementing ACL interface.
+     * @throws UnknownEntityException
+     *             if the object could not be instantiated.
+     */
+    private AccessControlList getAclInstance(Map roles, Map permissions)
+            throws UnknownEntityException
+    {
+        // Object[] objects = { roles, permissions };
+        // String[] signatures = { Map.class.getName(), Map.class.getName() };
+        AccessControlList accessControlList;
+        try
+        {
+            /*
+             * 
+             * @todo I think this is overkill for now.. accessControlList =
+             * (AccessControlList)
+             * aclFactoryService.getInstance(aclClass.getName(), objects,
+             * signatures);
+             */
+            accessControlList = new DynamicAccessControlListImpl(roles,
+                    permissions);
+        }
+        catch (Exception e)
+        {
+            throw new UnknownEntityException(
+                    "Failed to instantiate an ACL implementation object", e);
+        }
+        return accessControlList;
+    }
 
-	/** Logging */
-	private static Log log = LogFactory.getLog(DynamicACLFactory.class);
+    public AccessControlList getAccessControlList(User user)
+    {
+        Map roleSets = new HashMap();
+        Map permissionSets = new HashMap();
 
-	/**
-	 * Construct a new ACL object.
-	 * 
-	 * This constructs a new ACL object from the configured class and
-	 * initializes it with the supplied roles and permissions.
-	 * 
-	 * @param roles
-	 *            The roles that this ACL should contain
-	 * @param permissions
-	 *            The permissions for this ACL
-	 * 
-	 * @return an object implementing ACL interface.
-	 * @throws UnknownEntityException
-	 *             if the object could not be instantiated.
-	 */
-	private AccessControlList getAclInstance(Map roles, Map permissions)
-			throws UnknownEntityException {
-		Object[] objects = { roles, permissions };
-		String[] signatures = { Map.class.getName(), Map.class.getName() };
-		AccessControlList accessControlList;
-		try {
-			/*
-			 * 
-			 * @todo I think this is overkill for now.. accessControlList =
-			 * (AccessControlList)
-			 * aclFactoryService.getInstance(aclClass.getName(), objects,
-			 * signatures);
-			 */
-			accessControlList = new DynamicAccessControlListImpl(roles,
-					permissions);
-		} catch (Exception e) {
-			throw new UnknownEntityException(
-					"Failed to instantiate an ACL implementation object", e);
-		}
-		return accessControlList;
-	}
+        Set users = new HashSet();
+        // add the root user
+        users.add(user);
+        addDelegators((DynamicUser) user, users);
 
-	public AccessControlList getAccessControlList(User user) {
-		Map roleSets = new HashMap();
-		Map permissionSets = new HashMap();
+        Iterator i = users.iterator();
+        while (i.hasNext())
+        {
+            DynamicUser aUser = (DynamicUser) i.next();
+            addRolesAndPermissions(aUser, roleSets, permissionSets);
+        }
 
-		Set users = new HashSet();
-		// add the root user
-		users.add(user);
-		addDelegators((DynamicUser) user, users);
+        try
+        {
+            return getAclInstance(roleSets, permissionSets);
+        }
+        catch (UnknownEntityException uue)
+        {
+            throw new RuntimeException(uue.getMessage(), uue);
+        }
+    }
 
-		Iterator i = users.iterator();
-		while (i.hasNext()) {
-			DynamicUser aUser = (DynamicUser) i.next();
-			addRolesAndPermissions(aUser, roleSets, permissionSets);
-		}
+    public void addDelegators(DynamicUser user, Set users)
+    {
+        for (Iterator iter = user.getDelegators().iterator(); iter.hasNext();)
+        {
+            DynamicUser delegatorUser = (DynamicUser) iter.next();
 
-		try {
-			return getAclInstance(roleSets, permissionSets);
-		} catch (UnknownEntityException uue) {
-			throw new RuntimeException(uue.getMessage(), uue);
-		}
-	}
+            if (users.add(delegatorUser))
+            {
+                // Only come here if user NOT in users
+                addDelegators(delegatorUser, users);
+            }
+        }
+    }
 
-	public void addDelegators(DynamicUser user, Set users) {
-		for (Iterator iter = user.getDelegators().iterator(); iter.hasNext();) {
-			DynamicUser delegatorUser = (DynamicUser) iter.next();
-
-			if (users.add(delegatorUser)) {
-				// Only come here if user NOT in users
-				addDelegators(delegatorUser, users);
-			}
-		}
-	}
-
-	/**
-	 * Adds the passed users roles and permissions to the sets As maps overwrite
-	 * duplicates we just put it in an let it overwrite it is probably quicker
-	 * than checking for duplicates
-	 * 
-	 * @param user
-	 * @param roleSets
-	 * @param permissionSets
-	 */
-	private void addRolesAndPermissions(User user, Map roleSets,
-			Map permissionSets) {
-		for (Iterator i = ((DynamicUser) user).getGroups().iterator(); i
-				.hasNext();) {
-			Group group = (Group) i.next();
-			RoleSet roleSet = (RoleSet) ((DynamicGroup) group).getRoles();
-			roleSets.put(group, roleSet);
-			for (Iterator j = roleSet.iterator(); j.hasNext();) {
-				DynamicRole role = (DynamicRole) j.next();
-				permissionSets.put(role, role.getPermissions());
-			}
-		}
-	}
-
+    /**
+     * Adds the passed users roles and permissions to the sets As maps overwrite
+     * duplicates we just put it in an let it overwrite it is probably quicker
+     * than checking for duplicates
+     * 
+     * @param user
+     * @param roleSets
+     * @param permissionSets
+     */
+    private void addRolesAndPermissions(User user, Map roleSets,
+            Map permissionSets)
+    {
+        for (Iterator i = ((DynamicUser) user).getGroups().iterator(); i
+                .hasNext();)
+        {
+            Group group = (Group) i.next();
+            RoleSet roleSet = (RoleSet) ((DynamicGroup) group).getRoles();
+            roleSets.put(group, roleSet);
+            for (Iterator j = roleSet.iterator(); j.hasNext();)
+            {
+                DynamicRole role = (DynamicRole) j.next();
+                permissionSets.put(role, role.getPermissions());
+            }
+        }
+    }
 }

@@ -37,6 +37,11 @@ public class GroupSet
         extends SecuritySet
 {
     /**
+     * Serial number 
+     */
+    private static final long serialVersionUID = 6882240173053961011L;
+
+    /**
      * Constructs an empty GroupSet
      */
     public GroupSet()

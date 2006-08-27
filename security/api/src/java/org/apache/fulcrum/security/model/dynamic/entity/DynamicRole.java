@@ -59,7 +59,7 @@ public class DynamicRole extends SecurityEntityImpl implements Role
 
     public void setPermissionsAsSet(Set permissions)
     {
-        this.permissionSet = permissions;;
+        this.permissionSet = permissions;
     }
     /**
      * @param permissionSet

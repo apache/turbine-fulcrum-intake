@@ -24,8 +24,6 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.crypto.CryptoAlgorithm;
 import org.apache.fulcrum.crypto.CryptoService;
 import org.apache.fulcrum.security.entity.User;
@@ -39,10 +37,9 @@ import org.apache.fulcrum.security.util.DataBackendException;
  * @avalon.component name="crypto-authenticator"
  * @avalon.service type="org.apache.fulcrum.security.authenticator.Authenticator"
  */
-public class CryptoAuthenticator extends AbstractLogEnabled implements Authenticator, Serviceable, Disposable,Configurable
+public class CryptoAuthenticator extends AbstractLogEnabled 
+    implements Authenticator, Serviceable, Disposable, Configurable
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(CryptoAuthenticator.class);
     boolean composed = false;
     protected CryptoService cryptoService = null;
     private String algorithm;
@@ -81,22 +78,26 @@ public class CryptoAuthenticator extends AbstractLogEnabled implements Authentic
     }
     
 	// ---------------- Avalon Lifecycle Methods ---------------------
-	   /**
-		* Avalon component lifecycle method
-		*/
-	   public void configure(Configuration conf) throws ConfigurationException
-	   {
-		   
-		algorithm = conf.getChild("algorithm").getValue();
-		cipher = conf.getChild("cipher").getValue();
-	   }    
     /**
-      * Avalon component lifecycle method
-      */
+ 	 * Avalon component lifecycle method
+	 */
+    public void configure(Configuration conf) throws ConfigurationException
+    {
+    	algorithm = conf.getChild("algorithm").getValue();
+    	cipher = conf.getChild("cipher").getValue();
+    }    
+
+    /**
+     * Avalon component lifecycle method
+     */
     public void service(ServiceManager manager) throws ServiceException
     {
         this.cryptoService = (CryptoService)manager.lookup(CryptoService.ROLE);
     }
+    
+    /**
+     * Avalon component lifecycle method
+     */
     public void dispose()
     {
         cryptoService = null;

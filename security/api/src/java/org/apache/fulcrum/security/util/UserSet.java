@@ -33,6 +33,11 @@ public class UserSet
         extends SecuritySet
 {
     /**
+     * Serial number 
+     */
+    private static final long serialVersionUID = 4415634631270197073L;
+
+    /**
      * Constructs an empty UserSet
      */
     public UserSet()

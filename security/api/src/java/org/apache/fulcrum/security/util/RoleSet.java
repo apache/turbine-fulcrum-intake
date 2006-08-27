@@ -37,6 +37,11 @@ public class RoleSet
         extends SecuritySet
 {
     /**
+     * Serial number 
+     */
+    private static final long serialVersionUID = -7878336668034575930L;
+
+    /**
      * Constructs an empty RoleSet
      */
     public RoleSet()

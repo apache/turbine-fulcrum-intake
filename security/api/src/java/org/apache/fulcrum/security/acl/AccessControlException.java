@@ -27,6 +27,11 @@ public class AccessControlException
     extends TurbineSecurityException
 {
     /**
+     * Serial number
+     */
+    private static final long serialVersionUID = 1053699577313013739L;
+
+    /**
      * Construct an AccessControlException with specified detail message.
      *
      * @param msg The detail message.

@@ -17,6 +17,7 @@ package org.apache.fulcrum.security.model.basic.entity;
 
 import java.util.Set;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
@@ -31,6 +32,11 @@ import org.apache.fulcrum.security.util.GroupSet;
  */
 public class BasicUser extends SecurityEntityImpl implements User
 {
+    /**
+     * Serial number 
+     */
+    private static final long serialVersionUID = 7911631916604987203L;
+
     private String password;
     private Set groupSet = new GroupSet();
 
@@ -85,5 +91,18 @@ public class BasicUser extends SecurityEntityImpl implements User
     public Set getGroupsAsSet()
     {
         return groupSet;
+    }
+
+    /**
+     * Calculate a hash code for this object
+     * 
+     * @see org.apache.fulcrum.security.entity.impl.SecurityEntityImpl#hashCode()
+     */
+    public int hashCode()
+    {
+        return new HashCodeBuilder(43, 19)
+                    .append(getPassword())
+                    .appendSuper(super.hashCode())
+                    .toHashCode();
     }
 }

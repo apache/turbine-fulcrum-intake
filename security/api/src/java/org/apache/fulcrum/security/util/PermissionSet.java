@@ -37,6 +37,11 @@ public class PermissionSet
     extends SecuritySet
 {
     /**
+     * Serial number 
+     */
+    private static final long serialVersionUID = 4532868341893924965L;
+
+    /**
      * Constructs an empty PermissionSet
      */
     public PermissionSet()

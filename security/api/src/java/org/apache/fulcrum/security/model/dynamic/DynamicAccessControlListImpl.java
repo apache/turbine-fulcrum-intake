@@ -35,6 +35,11 @@ import org.apache.fulcrum.security.util.RoleSet;
  */
 public class DynamicAccessControlListImpl implements DynamicAccessControlList
 {
+    /**
+     * Serial number 
+     */
+    private static final long serialVersionUID = -5180551537096244085L;
+    
     /** The sets of roles that the user has in different groups */
     private Map roleSets;
     /** The sets of permissions that the user has in different groups */

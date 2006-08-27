@@ -15,8 +15,6 @@ package org.apache.fulcrum.security.authenticator;
  *  limitations under the License.
  */
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.DataBackendException;
 /**
@@ -30,8 +28,6 @@ import org.apache.fulcrum.security.util.DataBackendException;
  */
 public class TextMatchAuthenticator extends AbstractLogEnabled implements Authenticator
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(TextMatchAuthenticator.class);
     /**
      * Authenticate an username with the specified password.  Returns true
      * if the user password plain text matches the passed in password.

@@ -26,6 +26,11 @@ public class PasswordMismatchException
     extends TurbineSecurityException
 {
     /**
+     * Serial number 
+     */
+    private static final long serialVersionUID = -5152999977039562720L;
+
+    /**
      * Construct an PasswordMismatchException with specified detail message.
      *
      * @param msg The detail message.

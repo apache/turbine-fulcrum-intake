@@ -26,6 +26,11 @@ public class TurbineSecurityException
     extends Exception
 {
     /**
+     * Serial number 
+     */
+    private static final long serialVersionUID = 1768881827472257142L;
+
+    /**
      * Construct an SecurityException with specified detail message.
      *
      * @param msg The detail message.

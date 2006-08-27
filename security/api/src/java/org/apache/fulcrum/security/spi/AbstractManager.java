@@ -20,8 +20,6 @@ import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 import org.apache.avalon.framework.thread.ThreadSafe;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.PermissionManager;
 import org.apache.fulcrum.security.RoleManager;
@@ -40,10 +38,7 @@ public abstract class AbstractManager
     extends AbstractLogEnabled
     implements Serviceable, Disposable, ThreadSafe
 {
-
     boolean composed = false;
-    /** Logging */
-    private static Log log = LogFactory.getLog(AbstractManager.class);
 
     private ServiceManager manager = null;
     private PermissionManager permissionManager;
@@ -78,6 +73,7 @@ public abstract class AbstractManager
         }
         return userManager;
     }
+
     /**
      * @return
      */
@@ -99,6 +95,7 @@ public abstract class AbstractManager
         }
         return permissionManager;
     }
+
     /**
      * @return
      */
@@ -118,6 +115,7 @@ public abstract class AbstractManager
         }
         return roleManager;
     }
+
     /**
      * @return
      */
@@ -137,6 +135,7 @@ public abstract class AbstractManager
         }
         return groupManager;
     }
+
     /**
     * Avalon Service lifecycle method
     */
@@ -145,6 +144,7 @@ public abstract class AbstractManager
         this.manager = manager;
 
     }
+
     public void dispose()
     {
 		release(roleManager);
@@ -154,12 +154,12 @@ public abstract class AbstractManager
         manager = null;       
     }
     
-    protected void release(Object obj){
+    protected void release(Object obj)
+    {
         if(obj!=null){
             manager.release(obj);
             obj = null;
         }
-        
     }
 
 
@@ -174,7 +174,6 @@ public abstract class AbstractManager
             try
             {
                 component = manager.lookup(lookup);
-
             }
             catch (ServiceException ce)
             {

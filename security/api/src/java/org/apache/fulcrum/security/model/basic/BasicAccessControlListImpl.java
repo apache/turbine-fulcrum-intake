@@ -28,7 +28,11 @@ import org.apache.fulcrum.security.util.GroupSet;
  */
 public class BasicAccessControlListImpl implements BasicAccessControlList
 {
-    
+    /**
+     * Serial number 
+     */
+    private static final long serialVersionUID = 2911747448261740381L;
+
     /** The distinct list of groups that this user is part of */
     private GroupSet groupSet = new GroupSet();
     
@@ -51,7 +55,6 @@ public class BasicAccessControlListImpl implements BasicAccessControlList
     public BasicAccessControlListImpl(GroupSet groupSet)
     {
         this.groupSet = groupSet;
-        
     }
     
     /**
@@ -74,6 +77,7 @@ public class BasicAccessControlListImpl implements BasicAccessControlList
     {
         return groupSet.contains(group);
     }
+
     /**
      * Checks if the user is assigned a specific Group
      *
@@ -91,4 +95,4 @@ public class BasicAccessControlListImpl implements BasicAccessControlList
             return false;
         }
     }
-    }
+}

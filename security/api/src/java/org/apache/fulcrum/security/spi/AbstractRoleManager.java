@@ -15,8 +15,6 @@ package org.apache.fulcrum.security.spi;
  *  limitations under the License.
  */
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -35,9 +33,6 @@ public abstract class AbstractRoleManager
     extends AbstractEntityManager
     implements RoleManager
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(AbstractRoleManager.class);
-
 	protected abstract Role persistNewRole(Role role) throws DataBackendException;
 	
     /**
@@ -65,33 +60,35 @@ public abstract class AbstractRoleManager
 
         return role;
     }
+
     /**
-    	* Construct a blank Role object.
-    	*
-    	* This method calls getRoleClass, and then creates a new object using
-    	* the default constructor.
-    	*
-    	* @param roleName The name of the role.
-    	*
-    	* @return an object implementing Role interface.
-    	*
-    	* @throws DataBackendException if the object could not be instantiated.
-    	*/
+	* Construct a blank Role object.
+	*
+	* This method calls getRoleClass, and then creates a new object using
+	* the default constructor.
+	*
+	* @param roleName The name of the role.
+	*
+	* @return an object implementing Role interface.
+	*
+	* @throws DataBackendException if the object could not be instantiated.
+	*/
     public Role getRoleInstance(String roleName) throws DataBackendException
     {
         Role role = getRoleInstance();
         role.setName(roleName);
         return role;
     }
+
     /**
-    	* Retrieve a Role object with specified name.
-    	*
-    	* @param name the name of the Role.
-    	* @return an object representing the Role with specified name.
-    	* @throws DataBackendException if there was an error accessing the
-    	*         data backend.
-    	* @throws UnknownEntityException if the role does not exist.
-    	*/
+	* Retrieve a Role object with specified name.
+	*
+	* @param name the name of the Role.
+	* @return an object representing the Role with specified name.
+	* @throws DataBackendException if there was an error accessing the
+	*         data backend.
+	* @throws UnknownEntityException if the role does not exist.
+	*/
     public Role getRoleByName(String name)
         throws DataBackendException, UnknownEntityException
     {
@@ -102,18 +99,19 @@ public abstract class AbstractRoleManager
         }
         return role;
     }
+
     /**
-    	* Retrieve a Role object with specified Id.
-    	*
-    	* @param name the name of the Role.
-    	*
-    	* @return an object representing the Role with specified name.
-    	*
-    	* @throws UnknownEntityException if the permission does not
-    	*            exist in the database.
-    	* @throws DataBackendException if there is a problem accessing the
-    	*            storage.
-    	*/
+	* Retrieve a Role object with specified Id.
+	*
+	* @param name the name of the Role.
+	*
+	* @return an object representing the Role with specified name.
+	*
+	* @throws UnknownEntityException if the permission does not
+	*            exist in the database.
+	* @throws DataBackendException if there is a problem accessing the
+	*            storage.
+	*/
     public Role getRoleById(Object id)
         throws DataBackendException, UnknownEntityException
     {
@@ -126,14 +124,14 @@ public abstract class AbstractRoleManager
     }
 
     /**
-    	* Creates a new role with specified attributes.
-    	*
-    	* @param role the object describing the role to be created.
-    	* @return a new Role object that has id set up properly.
-    	* @throws DataBackendException if there was an error accessing the data
-    	*         backend.
-    	* @throws EntityExistsException if the role already exists.
-    	*/
+	* Creates a new role with specified attributes.
+	*
+	* @param role the object describing the role to be created.
+	* @return a new Role object that has id set up properly.
+	* @throws DataBackendException if there was an error accessing the data
+	*         backend.
+	* @throws EntityExistsException if the role already exists.
+	*/
     public synchronized Role addRole(Role role)
         throws DataBackendException, EntityExistsException
     {
@@ -158,9 +156,7 @@ public abstract class AbstractRoleManager
         {
             throw new DataBackendException("addRole(Role) failed", e);
         }
-        finally
-        {
-        }
+
         // the only way we could get here without return/throw tirggered
         // is that the roleExists was true.
         throw new EntityExistsException("Role '" + role + "' already exists");

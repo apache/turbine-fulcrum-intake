@@ -15,8 +15,6 @@ package org.apache.fulcrum.security.spi;
  *  limitations under the License.
  */
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.PermissionManager;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -32,9 +30,6 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public abstract class AbstractPermissionManager extends AbstractEntityManager implements PermissionManager
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(AbstractPermissionManager.class);
-    
 	protected abstract Permission persistNewPermission(Permission permission) throws DataBackendException;
 
     /**
@@ -61,6 +56,7 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
         }
         return permission;
     }
+
     /**
 	 * Construct a blank Permission object.
 	 * 
@@ -78,6 +74,7 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
         perm.setName(permName);
         return perm;
     }
+
     /**
 	 * Retrieve a Permission object with specified name.
 	 * 
@@ -96,6 +93,7 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
         }
         return permission;
     }
+
     /**
 	 * Retrieve a Permission object with specified Id.
 	 * 
@@ -116,7 +114,8 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
         }
         return permission;
     }
-        /**
+
+    /**
 	 * Creates a new permission with specified attributes.
 	 * 
 	 * @param permission the object describing the permission to be created.

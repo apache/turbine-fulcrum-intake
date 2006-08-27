@@ -27,6 +27,11 @@ public class DataBackendException
     extends TurbineSecurityException
 {
     /**
+     * Serial number 
+     */
+    private static final long serialVersionUID = 4037968846303489743L;
+
+    /**
      * Construct an DataBackendException with specified detail message.
      *
      * @param msg The detail message.

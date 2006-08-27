@@ -15,8 +15,6 @@ package org.apache.fulcrum.security.spi;
  *  limitations under the License.
  */
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.authenticator.Authenticator;
@@ -39,13 +37,8 @@ public abstract class AbstractUserManager
     extends AbstractEntityManager
     implements UserManager
 {
-
     protected abstract User persistNewUser(User user)
         throws DataBackendException;
-
-    /** Logging */
-    private static Log log = LogFactory.getLog(AbstractUserManager.class);
-   
 
 	private ACLFactory aclFactory;
 	private Authenticator authenticator;
@@ -53,19 +46,18 @@ public abstract class AbstractUserManager
     public AccessControlList getACL(User user) throws UnknownEntityException
     {
         return getACLFactory().getAccessControlList(user);
-
     }
 
     /**
-    	* Check whether a specified user's account exists.
-    	*
-    	* The login name is used for looking up the account.
-    	*
-    	* @param user The user to be checked.
-    	* @return true if the specified account exists
-    	* @throws DataBackendException if there was an error accessing
-    	*         the data backend.
-    	*/
+	* Check whether a specified user's account exists.
+	*
+	* The login name is used for looking up the account.
+	*
+	* @param user The user to be checked.
+	* @return true if the specified account exists
+	* @throws DataBackendException if there was an error accessing
+	*         the data backend.
+	*/
     public boolean checkExists(User user) throws DataBackendException
     {
         return checkExists(user.getName());
@@ -128,6 +120,7 @@ public abstract class AbstractUserManager
     	}
     	return user;
 	}    
+
     /**
      * Authenticate an User with the specified password. If authentication
      * is successful the method returns nothing. If there are any problems,
@@ -155,6 +148,7 @@ public abstract class AbstractUserManager
             throw new PasswordMismatchException("Can not authenticate user.");
         }
     }
+
     /**
      * Change the password for an User. The user must have supplied the
      * old password to allow the change.
@@ -193,6 +187,7 @@ public abstract class AbstractUserManager
         // before it is saved at session's expiry.
         saveUser(user);
     }
+
     /**
      * Forcibly sets new password for an User.
      *
@@ -222,6 +217,7 @@ public abstract class AbstractUserManager
         // is lost somehow before it is saved at session's expiry.
         saveUser(user);
     }
+
     /**
      * Construct a blank User object.
      *
@@ -248,6 +244,7 @@ public abstract class AbstractUserManager
 
         return user;
     }
+
     /**
      * Construct a blank User object.
      *

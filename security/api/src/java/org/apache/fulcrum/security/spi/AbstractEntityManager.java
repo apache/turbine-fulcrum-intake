@@ -17,8 +17,6 @@ package org.apache.fulcrum.security.spi;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * 
@@ -35,16 +33,14 @@ public abstract class AbstractEntityManager
     private String className;
     private static final String CLASS_NAME_KEY = "className";
     
-    /** Logging */
-    private static Log log = LogFactory.getLog(AbstractEntityManager.class);
-
-        /**
+    /**
      * Avalon Service lifecycle method
      */
     public void configure(Configuration conf) throws ConfigurationException
     {
         className = conf.getChild(CLASS_NAME_KEY).getValue();
     }
+
     /**
      * @return Returns the className.
      */
@@ -60,6 +56,5 @@ public abstract class AbstractEntityManager
     {
         this.className = className;
     }
-
     
 }

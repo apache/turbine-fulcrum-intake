@@ -27,6 +27,11 @@ public class UnknownEntityException
     extends TurbineSecurityException
 {
     /**
+     * Serial number 
+     */
+    private static final long serialVersionUID = 6902116254535728203L;
+
+    /**
      * Construct an UnknownEntityException with specified detail message.
      *
      * @param msg The detail message.

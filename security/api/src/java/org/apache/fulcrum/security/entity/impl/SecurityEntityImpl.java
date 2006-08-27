@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.entity.impl;
+
 /*
  *  Copyright 2001-2004 The Apache Software Foundation
  *
@@ -15,22 +16,23 @@ package org.apache.fulcrum.security.entity.impl;
  *  limitations under the License.
  */
 
-
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.fulcrum.security.entity.SecurityEntity;
 
 /**
- * Base class for all objects implementing SecurityEnitity.  This
- * class automatically lowercases the name.  So the permission "EDIT"
- * will equal "eDit" and "edit";
- *
+ * Base class for all objects implementing SecurityEnitity. This class
+ * automatically lowercases the name. So the permission "EDIT" will equal "eDit"
+ * and "edit";
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public class SecurityEntityImpl implements SecurityEntity
 {
     private String name;
+
     private Object id;
+
     /**
      * @return
      */
@@ -38,6 +40,7 @@ public class SecurityEntityImpl implements SecurityEntity
     {
         return id;
     }
+
     /**
      * @param id
      */
@@ -45,6 +48,7 @@ public class SecurityEntityImpl implements SecurityEntity
     {
         this.id = id;
     }
+
     /**
      * @return
      */
@@ -52,23 +56,35 @@ public class SecurityEntityImpl implements SecurityEntity
     {
         return name;
     }
+
     /**
-     * Pass in the name for this entity.  Also lowercases it.
+     * Pass in the name for this entity. Also lowercases it.
+     * 
      * @param name
      */
     public void setName(String name)
     {
-        if (name !=null){
-          // throw new InvalidParameterException("Must provide a valid name for all SecurityEntities.");
-		   name = name.toLowerCase();
+        if (name != null)
+        {
+            // throw new InvalidParameterException("Must provide a valid name
+            // for all SecurityEntities.");
+            name = name.toLowerCase();
         }
-		this.name = name;
-		//this.name = name.toLowerCase();
+        this.name = name;
+        // this.name = name.toLowerCase();
     }
+
     public String toString()
     {
-        return getClass().getName() + " (id:" + getId() + " name:" + getName()+")";
+        return getClass().getName() + " (id:" + getId() + " name:" + getName()
+                + ")";
     }
+
+    /**
+     * Check if this object is equal to another
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     public boolean equals(Object o)
     {
         boolean equals = true;
@@ -78,12 +94,18 @@ public class SecurityEntityImpl implements SecurityEntity
         }
         else
         {
-            equals = (getId() == ((SecurityEntityImpl) o).getId());
+            equals = (getId().equals(((SecurityEntityImpl) o).getId()));
         }
         return equals;
     }
-    public int hashCode(Object o)
+
+    /**
+     * Calculate a hash code for this object
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode()
     {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return new HashCodeBuilder(47, 11).append(getId()).append(getName()).toHashCode();
     }
 }

@@ -40,7 +40,6 @@ public class BaseSecurityService
     extends AbstractLogEnabled
     implements SecurityService, Configurable, Initializable, Serviceable, ThreadSafe
 {
-    private boolean disposed = false;
     private ServiceManager manager = null;
     // management of Groups/Role/Permissions
 

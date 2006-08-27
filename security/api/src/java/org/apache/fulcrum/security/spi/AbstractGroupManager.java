@@ -15,8 +15,6 @@ package org.apache.fulcrum.security.spi;
  *  limitations under the License.
  */
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -34,9 +32,6 @@ public abstract class AbstractGroupManager
     extends AbstractEntityManager
     implements GroupManager
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(AbstractGroupManager.class);
-
     protected abstract Group persistNewGroup(Group group) throws DataBackendException;
 
     /**
@@ -64,18 +59,19 @@ public abstract class AbstractGroupManager
 
         return group;
     }
+
     /**
-    	* Construct a blank Group object.
-    	*
-    	* This method calls getGroupClass, and then creates a new object using
-    	* the default constructor.
-    	*
-    	* @param groupName The name of the Group
-    	*
-    	* @return an object implementing Group interface.
-    	*
-    	* @throws DataBackendException if the object could not be instantiated.
-    	*/
+	* Construct a blank Group object.
+	*
+	* This method calls getGroupClass, and then creates a new object using
+	* the default constructor.
+	*
+	* @param groupName The name of the Group
+	*
+	* @return an object implementing Group interface.
+	*
+	* @throws DataBackendException if the object could not be instantiated.
+	*/
     public Group getGroupInstance(String groupName) throws DataBackendException
     {
         Group group = getGroupInstance();
@@ -102,6 +98,7 @@ public abstract class AbstractGroupManager
         }
         return group;
     }
+
     /**
      * Retrieve a Group object with specified Id.
      *

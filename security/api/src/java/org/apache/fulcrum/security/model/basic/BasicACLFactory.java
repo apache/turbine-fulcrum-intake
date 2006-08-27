@@ -14,8 +14,6 @@ package org.apache.fulcrum.security.model.basic;
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.ACLFactory;
@@ -32,9 +30,6 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public class BasicACLFactory extends AbstractManager implements ACLFactory
 {
-
-    /** Logging */
-    private static Log log = LogFactory.getLog(BasicACLFactory.class);
 	 /**
      * Construct a new ACL object.
      *
@@ -50,8 +45,8 @@ public class BasicACLFactory extends AbstractManager implements ACLFactory
     private AccessControlList getAclInstance(GroupSet groupSet)
         throws UnknownEntityException
     {
-        Object[] objects = { groupSet};
-        String[] signatures = { GroupSet.class.getName()};
+//        Object[] objects = { groupSet};
+//        String[] signatures = { GroupSet.class.getName()};
         AccessControlList accessControlList;
         try
         {
@@ -72,6 +67,7 @@ public class BasicACLFactory extends AbstractManager implements ACLFactory
         }
         return accessControlList;
     }
+
     public AccessControlList getAccessControlList(User user)
     {
         GroupSet groupSet = ((BasicUser)user).getGroups();
@@ -85,5 +81,4 @@ public class BasicACLFactory extends AbstractManager implements ACLFactory
             throw new RuntimeException(uue.getMessage(), uue);
         }
     }
-
 }

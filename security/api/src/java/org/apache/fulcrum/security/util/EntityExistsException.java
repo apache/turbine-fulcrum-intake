@@ -27,6 +27,11 @@ public class EntityExistsException
     extends TurbineSecurityException
 {
     /**
+     * Serial number 
+     */
+    private static final long serialVersionUID = 7525944855557287853L;
+
+    /**
      * Construct an EntityExistsException with specified detail message.
      *
      * @param msg The detail message.
