@@ -88,13 +88,19 @@ public class SecurityEntityImpl implements SecurityEntity
     public boolean equals(Object o)
     {
         boolean equals = true;
-        if (o == null)
+        Object id  = getId();
+        
+        if (o == null || id == null)
+        {
+            equals = false;
+        }
+        else if (!(o instanceof SecurityEntity))
         {
             equals = false;
         }
         else
         {
-            equals = (getId().equals(((SecurityEntityImpl) o).getId()));
+            equals = id.equals(((SecurityEntity) o).getId());
         }
         return equals;
     }
