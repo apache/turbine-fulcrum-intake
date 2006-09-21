@@ -1,0 +1,21 @@
+<project default="jar:jar" xmlns:maven="jelly:maven" xmlns:j="jelly:core" xmlns:util="jelly:util">
+
+  <preGoal name="java:compile">
+    <attainGoal name="torque-gen:prepare"/>
+    <attainGoal name="torque:om"/>
+  </preGoal>
+
+  <goal name="torque-gen:prepare">
+    <property file="project.properties" />
+    
+    <copy todir="${torque.schema.dir}">
+      <fileset dir="schema">
+        <include name="*" />
+      </fileset>
+      <filterset>
+        <filter token="DATABASE_DEFAULT" value="${torque.project}"/>
+      </filterset>
+    </copy>
+  </goal>
+
+</project>

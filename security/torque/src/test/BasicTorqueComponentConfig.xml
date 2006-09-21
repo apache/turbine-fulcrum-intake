@@ -1,0 +1,17 @@
+<my-system>
+    <securityService/>
+    <authenticator/>
+    <modelManager/>
+    <aclFactory/>
+    
+    <userManager>
+      	<className>org.apache.fulcrum.security.model.basic.entity.BasicUser</className>
+    </userManager> 
+    <groupManager>
+      	<className>org.apache.fulcrum.security.model.basic.entity.BasicGroup</className>
+    </groupManager>    
+  
+    <torqueService>
+        <configfile>/src/test/Torque.properties</configfile>
+    </torqueService>
+</my-system>

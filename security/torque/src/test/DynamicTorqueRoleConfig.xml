@@ -1,0 +1,41 @@
+<!-- This configuration file for Avalon components is used for testing the TestComponent -->
+<role-list>
+    <role
+        name="org.apache.fulcrum.security.SecurityService"
+        shorthand="securityService"
+        default-class="org.apache.fulcrum.security.BaseSecurityService"/>
+    <role
+        name="org.apache.fulcrum.security.UserManager"
+        shorthand="userManager"
+        early-init="true"
+        default-class="org.apache.fulcrum.security.torque.dynamic.TorqueDynamicUserManagerImpl"/>
+    <role
+        name="org.apache.fulcrum.security.GroupManager"
+        shorthand="groupManager"
+        default-class="org.apache.fulcrum.security.torque.dynamic.TorqueDynamicGroupManagerImpl"/>
+    <role
+        name="org.apache.fulcrum.security.RoleManager"
+        shorthand="roleManager"
+        default-class="org.apache.fulcrum.security.torque.dynamic.TorqueDynamicRoleManagerImpl"/>
+    <role
+        name="org.apache.fulcrum.security.PermissionManager"
+        shorthand="permissionManager"
+        default-class="org.apache.fulcrum.security.torque.dynamic.TorqueDynamicPermissionManagerImpl"/>
+    <role
+        name="org.apache.fulcrum.security.ModelManager"
+        shorthand="modelManager"
+        default-class="org.apache.fulcrum.security.torque.dynamic.TorqueDynamicModelManagerImpl"/>                                
+    <role
+        name="org.apache.fulcrum.security.authenticator.Authenticator"
+        shorthand="authenticator"
+        default-class="org.apache.fulcrum.security.authenticator.TextMatchAuthenticator"/>                                
+    <role
+        name="org.apache.fulcrum.security.model.ACLFactory"
+        shorthand="aclFactory"
+        default-class="org.apache.fulcrum.security.model.dynamic.DynamicACLFactory"/>                                
+    <role
+        name="org.apache.torque.avalon.Torque"
+        shorthand="torqueService"
+        default-class="org.apache.torque.avalon.TorqueComponent"/>                                
+</role-list>
+ 

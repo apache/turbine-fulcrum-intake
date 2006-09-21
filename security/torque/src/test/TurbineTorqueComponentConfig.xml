@@ -1,0 +1,23 @@
+<my-system>
+    <securityService/>
+    <authenticator/>
+    <modelManager/>
+    <aclFactory/>
+    
+    <userManager>
+        <className>org.apache.fulcrum.security.model.turbine.entity.TurbineUser</className>
+    </userManager> 
+    <groupManager>
+        <className>org.apache.fulcrum.security.model.turbine.entity.TurbineGroup</className>
+    </groupManager>    
+    <roleManager>
+        <className>org.apache.fulcrum.security.model.turbine.entity.TurbineRole</className>
+    </roleManager>   
+    <permissionManager>
+        <className>org.apache.fulcrum.security.model.turbine.entity.TurbinePermission</className>
+    </permissionManager> 
+  
+    <torqueService>
+        <configfile>/src/test/Torque.properties</configfile>
+    </torqueService>
+</my-system>
