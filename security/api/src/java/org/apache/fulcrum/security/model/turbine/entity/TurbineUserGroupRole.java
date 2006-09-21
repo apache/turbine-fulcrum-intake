@@ -18,6 +18,7 @@ package org.apache.fulcrum.security.model.turbine.entity;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
@@ -152,41 +153,47 @@ public class TurbineUserGroupRole implements Serializable
     {
         if (!hashCodeGenerated)
         {
-            StringBuffer sb = new StringBuffer();
-            if (null != this.getRole())
+            HashCodeBuilder hcBuilder = new HashCodeBuilder(39, 17);
+            
+            Role role = getRole();
+            if (null != role)
             {
-                sb.append(this.getRole().hashCode());
-                sb.append(":");
+                hcBuilder.append(role.getId());
+                hcBuilder.append(role.getName());
             }
-            else
+
+            User user = getUser();
+            if (null != user)
             {
-                return super.hashCode();
+                hcBuilder.append(user.getId());
+                hcBuilder.append(user.getName());
+                hcBuilder.append(user.getPassword());
             }
-            if (null != this.getUser())
+
+            Group group = getGroup();
+            if (null != group)
             {
-                sb.append(this.getUser().hashCode());
-                sb.append(":");
+                hcBuilder.append(group.getId());
+                hcBuilder.append(group.getName());
             }
-            else
-            {
-                return super.hashCode();
-            }
-            if (null != this.getGroup())
-            {
-                sb.append(this.getGroup().hashCode());
-                sb.append(":");
-            }
-            else
-            {
-                return super.hashCode();
-            }
-            this.hashCode = sb.toString().hashCode();
+
+            this.hashCode = hcBuilder.toHashCode();
         }
+        
         return this.hashCode;
     }
 
     public String toString()
     {
-        return super.toString();
+        StringBuffer sb = new StringBuffer();
+        
+        sb.append(null != getUser() ? getUser().toString() : "null");
+        sb.append('\n');
+        sb.append(null != getGroup() ? getGroup().toString() : "null");
+        sb.append('\n');
+        sb.append(null != getRole() ? getRole().toString() : "null");
+        sb.append('\n');
+        
+        return sb.toString();
     }
 }
