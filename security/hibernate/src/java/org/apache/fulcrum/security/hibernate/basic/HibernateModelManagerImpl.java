@@ -17,8 +17,6 @@ package org.apache.fulcrum.security.hibernate.basic;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.hibernate.PersistenceHelper;
@@ -36,9 +34,6 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public class HibernateModelManagerImpl extends AbstractManager implements BasicModelManager
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(HibernateModelManagerImpl.class);
-    
     private PersistenceHelper persistenceHelper;
 
     /**

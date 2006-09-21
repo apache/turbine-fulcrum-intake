@@ -19,8 +19,6 @@ import java.util.List;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.spi.AbstractGroupManager;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -34,8 +32,6 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public class HibernateGroupManagerImpl extends AbstractGroupManager
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(HibernateGroupManagerImpl.class);
     private PersistenceHelper persistenceHelper;
 
     /**
@@ -114,7 +110,6 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager
     public synchronized void removeGroup(Group group)
         throws DataBackendException, UnknownEntityException
     {
-        boolean groupExists = false;
 		getPersistenceHelper().removeEntity(group);
     }
     /**

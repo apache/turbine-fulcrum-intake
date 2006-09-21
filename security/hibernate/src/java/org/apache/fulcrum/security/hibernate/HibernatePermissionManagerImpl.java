@@ -19,8 +19,6 @@ import java.util.List;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.spi.AbstractPermissionManager;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -34,8 +32,6 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public class HibernatePermissionManagerImpl extends AbstractPermissionManager 
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(HibernatePermissionManagerImpl.class);
 	private PersistenceHelper persistenceHelper;
     
     /**

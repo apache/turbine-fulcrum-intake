@@ -16,8 +16,6 @@ package org.apache.fulcrum.security.hibernate.turbine;
  */
 import java.util.Iterator;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
@@ -40,9 +38,6 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public class HibernateModelManagerImpl extends AbstractTurbineModelManager implements TurbineModelManager
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(HibernateModelManagerImpl.class);
-
     private PersistenceHelper persistenceHelper;
     /**
 	 * Grants a Role a Permission

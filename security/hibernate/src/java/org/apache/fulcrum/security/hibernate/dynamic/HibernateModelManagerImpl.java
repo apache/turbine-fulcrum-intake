@@ -17,8 +17,6 @@ package org.apache.fulcrum.security.hibernate.dynamic;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
@@ -40,9 +38,6 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public class HibernateModelManagerImpl extends AbstractDynamicModelManager implements DynamicModelManager
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(HibernateModelManagerImpl.class);
-
     private PersistenceHelper persistenceHelper;
     /**
 	 * Revokes a Role from a Group.

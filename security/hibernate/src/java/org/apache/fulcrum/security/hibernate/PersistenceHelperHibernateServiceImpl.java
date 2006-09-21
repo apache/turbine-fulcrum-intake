@@ -20,8 +20,6 @@ import net.sf.hibernate.Transaction;
 import net.sf.hibernate.avalon.HibernateService;
 
 import org.apache.avalon.framework.component.Component;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.SecurityEntity;
 import org.apache.fulcrum.security.spi.AbstractManager;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -37,9 +35,6 @@ public class PersistenceHelperHibernateServiceImpl
     extends AbstractManager
     implements PersistenceHelper, Component
 {
-
-    /** Logging */
-    private static Log log = LogFactory.getLog(PersistenceHelperHibernateServiceImpl.class);
     protected HibernateService hibernateService;
     private Session session;
     protected Transaction transaction;

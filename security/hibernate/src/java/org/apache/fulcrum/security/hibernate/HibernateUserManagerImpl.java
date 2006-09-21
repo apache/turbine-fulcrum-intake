@@ -19,8 +19,6 @@ import java.util.List;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.spi.AbstractUserManager;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -34,9 +32,6 @@ import org.apache.fulcrum.security.util.UserSet;
  */
 public class HibernateUserManagerImpl extends AbstractUserManager
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(HibernateUserManagerImpl.class);
-
 	private PersistenceHelper persistenceHelper;
    
     /**
