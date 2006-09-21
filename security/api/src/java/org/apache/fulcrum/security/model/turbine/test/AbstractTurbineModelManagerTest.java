@@ -159,6 +159,7 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
         assertEquals(1, userGroupRoleSet2.size());
 
         modelManager.revokeAll(user);
+        group = groupManager.getGroupById(group.getId());
         assertEquals(0, ((TurbineGroup) group).getUserGroupRoleSet().size());
         role = securityService.getRoleManager().getRoleByName(
                 "TEST_REVOKEALLUSER_ROLE");
