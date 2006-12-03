@@ -30,14 +30,22 @@ import org.apache.torque.util.Criteria;
 
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
+ * @author <a href="jh@byteaction.de">J&#252;rgen Hoffmann</a>
+ * 
  * @version $Id:$
  */
 public class TorqueUserManagerTest extends AbstractUserManagerTest
 {
+    protected static HsqlDB hsqlDB = null;
+
     public void setUp()
     {
         try
         {
+            this.hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-schema.sql");
+            hsqlDB.addSQL("src/test/id-table-schema.sql");
+            hsqlDB.addSQL("src/test/fulcrum-schema-idtable-init.sql");
+
             this.setRoleFileName("src/test/DynamicTorqueRoleConfig.xml");
             this.setConfigurationFileName("src/test/DynamicTorqueComponentConfig.xml");
             securityService = (SecurityService) lookup(SecurityService.ROLE);

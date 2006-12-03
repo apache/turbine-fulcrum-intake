@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.torque.basic;
+
 /*
  *  Copyright 2001-2004 The Apache Software Foundation
  *
@@ -19,6 +20,7 @@ import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 import org.apache.fulcrum.security.model.basic.test.AbstractModelManagerTest;
+import org.apache.fulcrum.security.torque.HsqlDB;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueUserPeer;
@@ -27,25 +29,35 @@ import org.apache.torque.util.Criteria;
 
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
+ * @author <a href="jh@byteaction.de">J&#252;rgen Hoffmann</a>
  * @version $Id:$
  */
 public class TorqueBasicModelManagerTest extends AbstractModelManagerTest
 {
+    protected static HsqlDB hsqlDB = null;
+
     public void setUp() throws Exception
     {
+        if(hsqlDB == null)
+        {
+            this.hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-schema.sql");
+            hsqlDB.addSQL("src/test/id-table-schema.sql");
+            hsqlDB.addSQL("src/test/fulcrum-schema-idtable-init.sql");
+        }
         this.setRoleFileName("src/test/BasicTorqueRoleConfig.xml");
         this.setConfigurationFileName("src/test/BasicTorqueComponentConfig.xml");
+
         securityService = (SecurityService) lookup(SecurityService.ROLE);
         super.setUp();
     }
-    
-	public void testRevokeAllUser() throws Exception
+
+    public void testRevokeAllUser() throws Exception
     {
-	    super.testRevokeAllUser();
-		User user = userManager.getUserInstance("Clint2");
-		assertEquals(0, ((BasicUser) user).getGroups().size());
-	}
-    
+        super.testRevokeAllUser();
+        User user = userManager.getUserInstance("Clint2");
+        assertEquals(0, ((BasicUser) user).getGroups().size());
+    }
+
     public void tearDown()
     {
         // cleanup tables
@@ -55,11 +67,11 @@ public class TorqueBasicModelManagerTest extends AbstractModelManagerTest
             criteria.add(TorqueBasicUserGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
             criteria.add(TorqueBasicUserGroupPeer.USER_ID, 0, Criteria.GREATER_THAN);
             TorqueBasicUserGroupPeer.doDelete(criteria);
-            
+
             criteria.clear();
             criteria.add(TorqueUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
             TorqueUserPeer.doDelete(criteria);
-            
+
             criteria.clear();
             criteria.add(TorqueGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
             TorqueGroupPeer.doDelete(criteria);
@@ -74,7 +86,7 @@ public class TorqueBasicModelManagerTest extends AbstractModelManagerTest
 
     /**
      * Constructor for TorqueBasicModelManagerTest.
-     *
+     * 
      * @param arg0
      */
     public TorqueBasicModelManagerTest(String arg0)

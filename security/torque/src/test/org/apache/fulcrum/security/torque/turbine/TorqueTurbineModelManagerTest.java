@@ -17,6 +17,7 @@ package org.apache.fulcrum.security.torque.turbine;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.turbine.test.AbstractTurbineModelManagerTest;
+import org.apache.fulcrum.security.torque.HsqlDB;
 import org.apache.fulcrum.security.torque.om.TorqueGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorquePermissionPeer;
 import org.apache.fulcrum.security.torque.om.TorqueRolePeer;
@@ -28,17 +29,23 @@ import org.apache.torque.util.Criteria;
 
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
+ * @author <a href="jh@byteaction.de">J&#252;rgen Hoffmann</a>
  * @version $Id:$
  */
 public class TorqueTurbineModelManagerTest
     extends AbstractTurbineModelManagerTest
 {
+    protected static HsqlDB hsqlDB = null;
 
     public void setUp() throws Exception
     {
 
         try
         {
+            this.hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-schema.sql");
+            hsqlDB.addSQL("src/test/id-table-schema.sql");
+            hsqlDB.addSQL("src/test/fulcrum-schema-idtable-init.sql");
+
             this.setRoleFileName("src/test/TurbineTorqueRoleConfig.xml");
             this.setConfigurationFileName("src/test/TurbineTorqueComponentConfig.xml");
             securityService = (SecurityService) lookup(SecurityService.ROLE);

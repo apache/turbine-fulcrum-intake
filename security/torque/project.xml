@@ -102,9 +102,9 @@
     </dependency>
 
     <dependency>
-      <artifactId>mysql-connector-java</artifactId>
-      <groupId>mysql</groupId>
-      <version>3.1.12</version>
+      <artifactId>hsqldb</artifactId>
+      <groupId>hsqldb</groupId>
+      <version>1.8.0.7</version>
     </dependency> 
 
   </dependencies>

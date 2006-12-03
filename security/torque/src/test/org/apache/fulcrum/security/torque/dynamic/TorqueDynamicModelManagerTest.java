@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.torque.dynamic;
+
 /*
  *  Copyright 2001-2004 The Apache Software Foundation
  *
@@ -17,6 +18,7 @@ package org.apache.fulcrum.security.torque.dynamic;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.dynamic.test.AbstractDynamicModelManagerTest;
+import org.apache.fulcrum.security.torque.HsqlDB;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupRolePeer;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePermissionPeer;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUserDelegatesPeer;
@@ -30,15 +32,21 @@ import org.apache.torque.util.Criteria;
 
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
+ * @author <a href="jh@byteaction.de">J&#252;rgen Hoffmann</a>
  * @version $Id:$
  */
-public class TorqueDynamicModelManagerTest
-    extends AbstractDynamicModelManagerTest
+public class TorqueDynamicModelManagerTest extends AbstractDynamicModelManagerTest
 {
+    protected static HsqlDB hsqlDB = null;
+
     public void setUp()
     {
         try
         {
+            this.hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-schema.sql");
+            hsqlDB.addSQL("src/test/id-table-schema.sql");
+            hsqlDB.addSQL("src/test/fulcrum-schema-idtable-init.sql");
+
             this.setRoleFileName("src/test/DynamicTorqueRoleConfig.xml");
             this.setConfigurationFileName("src/test/DynamicTorqueComponentConfig.xml");
             securityService = (SecurityService) lookup(SecurityService.ROLE);
@@ -58,11 +66,11 @@ public class TorqueDynamicModelManagerTest
             Criteria criteria = new Criteria();
             criteria.add(TorqueDynamicUserGroupPeer.USER_ID, 0, Criteria.GREATER_THAN);
             TorqueDynamicUserGroupPeer.doDelete(criteria);
-            
+
             criteria.clear();
             criteria.add(TorqueDynamicGroupRolePeer.GROUP_ID, 0, Criteria.GREATER_THAN);
             TorqueDynamicGroupRolePeer.doDelete(criteria);
-            
+
             criteria.clear();
             criteria.add(TorqueDynamicRolePermissionPeer.ROLE_ID, 0, Criteria.GREATER_THAN);
             TorqueDynamicRolePermissionPeer.doDelete(criteria);
@@ -74,7 +82,7 @@ public class TorqueDynamicModelManagerTest
             criteria.clear();
             criteria.add(TorqueUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
             TorqueUserPeer.doDelete(criteria);
-            
+
             criteria.clear();
             criteria.add(TorqueGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
             TorqueGroupPeer.doDelete(criteria);
@@ -82,7 +90,7 @@ public class TorqueDynamicModelManagerTest
             criteria.clear();
             criteria.add(TorqueRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN);
             TorqueRolePeer.doDelete(criteria);
-            
+
             criteria.clear();
             criteria.add(TorquePermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN);
             TorquePermissionPeer.doDelete(criteria);
@@ -97,7 +105,7 @@ public class TorqueDynamicModelManagerTest
 
     /**
      * Constructor for TorqueDynamicModelManagerTest.
-     *
+     * 
      * @param arg0
      */
     public TorqueDynamicModelManagerTest(String arg0)

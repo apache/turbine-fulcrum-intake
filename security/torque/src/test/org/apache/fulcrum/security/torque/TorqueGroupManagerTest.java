@@ -34,10 +34,16 @@ import org.apache.torque.util.Criteria;
  */
 public class TorqueGroupManagerTest extends AbstractGroupManagerTest
 {
+    protected static HsqlDB hsqlDB = null;
+
     public void setUp()
     {
         try
         {
+            this.hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-schema.sql");
+            hsqlDB.addSQL("src/test/id-table-schema.sql");
+            hsqlDB.addSQL("src/test/fulcrum-schema-idtable-init.sql");
+
             this.setRoleFileName("src/test/DynamicTorqueRoleConfig.xml");
             this.setConfigurationFileName("src/test/DynamicTorqueComponentConfig.xml");
             securityService = (SecurityService) lookup(SecurityService.ROLE);
