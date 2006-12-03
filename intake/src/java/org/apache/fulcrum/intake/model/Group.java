@@ -314,7 +314,7 @@ public class Group
         else
         {
             throw new IntakeException("Intake Field name: " + fieldName +
-                    " not found!");
+                    " not found in Group " + name);
         }
     }
 
