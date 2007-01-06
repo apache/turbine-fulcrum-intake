@@ -31,14 +31,13 @@
       <version>1.0.4</version>
     </dependency> 
 
-  <!--  For a more recent release of JCS:
+    <!--  For a more recent release of JCS and to make gump happy: -->
     <dependency>
       <groupId>concurrent</groupId>
       <artifactId>concurrent</artifactId>
       <version>1.0</version>
       <type>jar</type>
     </dependency>
-  -->
 
     <dependency>
       <groupId>ehcache</groupId>
@@ -49,7 +48,7 @@
     <dependency>
       <groupId>jcs</groupId>
       <artifactId>jcs</artifactId>
-      <!-- version>1.2.7.7</version -->
+      <!-- version>1.2.7.9.2</version -->
       <version>20030822.182132</version>
       <type>jar</type>
     </dependency>
