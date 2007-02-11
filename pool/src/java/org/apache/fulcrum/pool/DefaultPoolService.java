@@ -631,7 +631,7 @@ public class DefaultPoolService extends AbstractLogEnabled implements PoolServic
         catch (Exception e)
         {
             throw new Exception(
-               "TurbineCryptoService.init: Failed to get a Factory object", e);
+               "DefaultPoolService.initialize: Failed to get a Factory object", e);
         }
     }
 
