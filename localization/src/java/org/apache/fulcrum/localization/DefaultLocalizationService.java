@@ -309,7 +309,7 @@ public class DefaultLocalizationService
     }
     /**
      * Caches the named bundle for fast lookups.  This operation is
-     * relatively expesive in terms of memory use, but is optimized
+     * relatively expensive in terms of memory use, but is optimized
      * for run-time speed in the usual case.
      *
      * @exception MissingResourceException Bundle not found.
