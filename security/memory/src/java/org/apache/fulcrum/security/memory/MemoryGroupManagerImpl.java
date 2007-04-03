@@ -17,8 +17,6 @@ package org.apache.fulcrum.security.memory;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.spi.AbstractGroupManager;
@@ -38,12 +36,10 @@ public class MemoryGroupManagerImpl
     extends AbstractGroupManager
     implements GroupManager
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(MemoryGroupManagerImpl.class);
     private static List groups = new ArrayList();
 
     /** Our Unique ID counter */
-    private static int uniqueId = 0;
+    // private static int uniqueId = 0;
 
     /**
     	 * Retrieves all groups defined in the system.
@@ -84,12 +80,8 @@ public class MemoryGroupManagerImpl
         }
         catch (Exception e)
         {
-            log.error("Failed to delete a Group");
-            log.error(e);
+            getLogger().error("Failed to delete a Group", e);
             throw new DataBackendException("removeGroup(Group) failed", e);
-        }
-        finally
-        {
         }
     }
     /**
@@ -123,9 +115,6 @@ public class MemoryGroupManagerImpl
         catch (Exception e)
         {
             throw new DataBackendException("renameGroup(Group,String)", e);
-        }
-        finally
-        {
         }
     }
     

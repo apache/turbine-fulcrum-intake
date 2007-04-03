@@ -15,8 +15,6 @@ package org.apache.fulcrum.security.memory.turbine;
  *  limitations under the License.
  */
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.memory.MemoryUserManagerImpl;
 import org.apache.fulcrum.security.model.turbine.TurbineUserManager;
@@ -35,10 +33,6 @@ public class MemoryTurbineUserManagerImpl
     extends MemoryUserManagerImpl
     implements TurbineUserManager
 {
-    /** Logging */
-    private static Log log =
-        LogFactory.getLog(MemoryTurbineUserManagerImpl.class);
-
     /**
     	   * Constructs an User object to represent an anonymous user of the
     	   * application.

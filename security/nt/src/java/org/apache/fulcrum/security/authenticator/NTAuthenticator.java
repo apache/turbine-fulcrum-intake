@@ -18,8 +18,6 @@ package org.apache.fulcrum.security.authenticator;
 import javax.security.auth.login.LoginException;
 
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.nt.ParseUtils;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -34,8 +32,6 @@ import com.tagish.auth.win32.NTSystem;
  */
 public class NTAuthenticator extends AbstractLogEnabled implements Authenticator
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(NTAuthenticator.class);
     /**
      * Authenticate an username with the specified password. If authentication
      * is successful the method returns true. If it fails, it returns false

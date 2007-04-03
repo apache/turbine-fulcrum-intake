@@ -17,8 +17,6 @@ package org.apache.fulcrum.security.memory;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.spi.AbstractPermissionManager;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -35,12 +33,10 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public class MemoryPermissionManagerImpl extends AbstractPermissionManager
 {
-    /** Logging */
-    private static Log log =
-        LogFactory.getLog(MemoryPermissionManagerImpl.class);
     private static List permissions = new ArrayList();
+
     /** Our Unique ID counter */
-    private static int uniqueId = 0;
+    // private static int uniqueId = 0;
 
    
     /**

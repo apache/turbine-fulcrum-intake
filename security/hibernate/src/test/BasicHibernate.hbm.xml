@@ -5,7 +5,7 @@
 
   <hibernate-mapping auto-import="true">
   
-    <class name="org.apache.fulcrum.security.model.basic.entity.BasicGroup" table="GROUPS" >
+    <class name="org.apache.fulcrum.security.model.basic.entity.impl.BasicGroupImpl" table="GROUPS" >
       <id name="id" type="long" column="GROUP_ID" unsaved-value="0">
            <generator class="native"/>
         </id>
@@ -13,11 +13,11 @@
       
       <set name="usersAsSet" lazy="true" table="HIBUSER_GROUP" cascade="none" >
         <key column="GROUP_ID"/>
-        <many-to-many class="org.apache.fulcrum.security.model.basic.entity.BasicUser" column="USER_ID"/> 
+        <many-to-many class="org.apache.fulcrum.security.model.basic.entity.impl.BasicUserImpl" column="USER_ID"/> 
       </set>        
     </class>   
 
-    <class name="org.apache.fulcrum.security.model.basic.entity.BasicUser" table="HIBUSER" >
+    <class name="org.apache.fulcrum.security.model.basic.entity.impl.BasicUserImpl" table="HIBUSER" >
       <id name="id" type="long" column="HIBUSER_ID" unsaved-value="0">
            <generator class="native"/>
         </id>
@@ -26,7 +26,7 @@
       
       <set name="groupsAsSet" lazy="true" table="HIBUSER_GROUP" inverse="true" cascade="none">
         <key column="USER_ID"/>
-        <many-to-many class="org.apache.fulcrum.security.model.basic.entity.BasicGroup" column="GROUP_ID"/> 
+        <many-to-many class="org.apache.fulcrum.security.model.basic.entity.impl.BasicGroupImpl" column="GROUP_ID"/> 
       </set>
     </class>    
 

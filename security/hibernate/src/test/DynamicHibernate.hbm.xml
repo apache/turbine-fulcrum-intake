@@ -4,7 +4,7 @@
    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd"> 
 
   <hibernate-mapping auto-import="true">
-    <class name="org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission" table="PERMISSION" >
+    <class name="org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicPermissionImpl" table="PERMISSION" >
       <id name="id" type="long" column="PERMISSION_ID" unsaved-value="0">
            <generator class="native"/>
         </id>
@@ -12,11 +12,11 @@
       
       <set name="rolesAsSet" lazy="true" table="ROLE_PERMISSION" inverse="true" cascade="none">
         <key column="PERMISSION_ID"/>
-        <many-to-many class="org.apache.fulcrum.security.model.dynamic.entity.DynamicRole" column="ROLE_ID"/> 
+        <many-to-many class="org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicRoleImpl" column="ROLE_ID"/> 
       </set>           
     </class>
     
-    <class name="org.apache.fulcrum.security.model.dynamic.entity.DynamicRole" table="ROLE" >
+    <class name="org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicRoleImpl" table="ROLE" >
       <id name="id" type="long" column="ROLE_ID" unsaved-value="0">
            <generator class="native"/>
         </id>
@@ -24,16 +24,16 @@
       
     <set name="permissionsAsSet" lazy="true" table="ROLE_PERMISSION" cascade="none">
         <key column="ROLE_ID"/>
-        <many-to-many class="org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission" column="PERMISSION_ID"/> 
+        <many-to-many class="org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicPermissionImpl" column="PERMISSION_ID"/> 
       </set>
       
     <set name="groupsAsSet" lazy="true" table="GROUP_ROLE" inverse="true" cascade="none">
         <key column="ROLE_ID"/>
-        <many-to-many class="org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup" column="GROUP_ID"/> 
+        <many-to-many class="org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicGroupImpl" column="GROUP_ID"/> 
       </set>         
     </class>   
 
-    <class name="org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup" table="GROUPS" >
+    <class name="org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicGroupImpl" table="GROUPS" >
       <id name="id" type="long" column="GROUP_ID" unsaved-value="0">
            <generator class="native"/>
         </id>
@@ -41,16 +41,16 @@
       
     <set name="rolesAsSet" lazy="true" table="GROUP_ROLE" cascade="none" >
         <key column="GROUP_ID"/>
-        <many-to-many class="org.apache.fulcrum.security.model.dynamic.entity.DynamicRole" column="ROLE_ID"/> 
+        <many-to-many class="org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicRoleImpl" column="ROLE_ID"/> 
       </set>
       
     <set name="usersAsSet" lazy="true" table="HIBUSER_GROUP" cascade="none" >
         <key column="GROUP_ID"/>
-        <many-to-many class="org.apache.fulcrum.security.model.dynamic.entity.DynamicUser" column="USER_ID"/> 
+        <many-to-many class="org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl" column="USER_ID"/> 
       </set>        
     </class>   
 
-	<class name="org.apache.fulcrum.security.model.dynamic.entity.DynamicUser" 
+	<class name="org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl" 
 		table="HIBUSER" >
 		<id name="id" type="long" column="HIBUSER_ID" unsaved-value="0">
 			<generator class="native"/>
@@ -61,7 +61,7 @@
 			inverse="true" cascade="none">
 			<key column="USER_ID"/>
 			<many-to-many 
-				class="org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup" 
+				class="org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicGroupImpl" 
 				column="GROUP_ID"/>
 		</set>
 		<set name="delegators" 
@@ -70,7 +70,7 @@
 			cascade="save-update">
 			<key column="DELEGATOR_USER_ID"/>
 			<many-to-many 
-				class="org.apache.fulcrum.security.model.dynamic.entity.DynamicUser" 
+				class="org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl" 
 				column="DELEGATEE_USER_ID"/>
 		</set>
 		<set name="delegatees" 
@@ -80,7 +80,7 @@
 			inverse="true">
 			<key column="DELEGATEE_USER_ID"/>
 			<many-to-many 
-				class="org.apache.fulcrum.security.model.dynamic.entity.DynamicUser" 
+				class="org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl" 
 				column="DELEGATOR_USER_ID"/>
 		</set>
 	</class>

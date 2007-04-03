@@ -1,4 +1,4 @@
-package org.apache.fulcrum.security;
+package org.apache.fulcrum.security.hibernate;
 /*
  *  Copyright 2001-2004 The Apache Software Foundation
  *
@@ -15,11 +15,8 @@ package org.apache.fulcrum.security;
  *  limitations under the License.
  */
 
+import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
-import org.apache.fulcrum.security.hibernate.HibernateGroupManagerImpl;
-import org.apache.fulcrum.security.hibernate.HibernatePermissionManagerImpl;
-import org.apache.fulcrum.security.hibernate.HibernateRoleManagerImpl;
-import org.apache.fulcrum.security.hibernate.HibernateUserManagerImpl;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**

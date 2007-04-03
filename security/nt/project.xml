@@ -8,7 +8,7 @@
     <dependency>
       <groupId>fulcrum</groupId>   
       <artifactId>fulcrum-security-api</artifactId>
-      <version>1.0.7</version>
+      <version>1.0.8-dev</version>
     </dependency>      
     <dependency>
       <groupId>fulcrum</groupId>   

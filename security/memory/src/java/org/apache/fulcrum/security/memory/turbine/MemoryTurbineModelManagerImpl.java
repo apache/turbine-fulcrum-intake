@@ -17,13 +17,10 @@ package org.apache.fulcrum.security.memory.turbine;
  */
 import java.util.Iterator;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.memory.dynamic.MemoryModelManagerImpl;
 import org.apache.fulcrum.security.model.turbine.AbstractTurbineModelManager;
 import org.apache.fulcrum.security.model.turbine.TurbineModelManager;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineGroup;
@@ -42,10 +39,8 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @version $Id: MemoryTurbineModelManagerImpl.java,v 1.2 2004/07/07 16:51:27
  *          epugh Exp $
  */
-public class MemoryTurbineModelManagerImpl extends AbstractTurbineModelManager implements TurbineModelManager {
-    /** Logging */
-    private static Log log = LogFactory.getLog(MemoryModelManagerImpl.class);
-
+public class MemoryTurbineModelManagerImpl extends AbstractTurbineModelManager implements TurbineModelManager 
+{
     /**
      * Grants a Role a Permission
      * 

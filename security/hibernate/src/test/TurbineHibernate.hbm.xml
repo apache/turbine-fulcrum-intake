@@ -4,7 +4,7 @@
    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd"> 
 
   <hibernate-mapping auto-import="true">
-    <class name="org.apache.fulcrum.security.model.turbine.entity.TurbinePermission" table="PERMISSION" >
+    <class name="org.apache.fulcrum.security.model.turbine.entity.impl.TurbinePermissionImpl" table="PERMISSION" >
       <id name="id" type="long" column="PERMISSION_ID" unsaved-value="0">
            <generator class="native"/>
         </id>
@@ -12,11 +12,11 @@
       
       <set name="rolesAsSet" lazy="true" table="ROLE_PERMISSION" inverse="true" cascade="none">
         <key column="PERMISSION_ID"/>
-        <many-to-many class="org.apache.fulcrum.security.model.turbine.entity.TurbineRole" column="ROLE_ID"/> 
+        <many-to-many class="org.apache.fulcrum.security.model.turbine.entity.impl.TurbineRoleImpl" column="ROLE_ID"/> 
       </set>           
     </class>
     
-    <class name="org.apache.fulcrum.security.model.turbine.entity.TurbineRole" table="ROLE" >
+    <class name="org.apache.fulcrum.security.model.turbine.entity.impl.TurbineRoleImpl" table="ROLE" >
       <id name="id" type="long" column="ROLE_ID" unsaved-value="0">
            <generator class="native"/>
         </id>
@@ -24,7 +24,7 @@
       
     <set name="permissionsAsSet" lazy="true" table="ROLE_PERMISSION" cascade="none">
         <key column="ROLE_ID"/>
-        <many-to-many class="org.apache.fulcrum.security.model.turbine.entity.TurbinePermission" column="PERMISSION_ID"/> 
+        <many-to-many class="org.apache.fulcrum.security.model.turbine.entity.impl.TurbinePermissionImpl" column="PERMISSION_ID"/> 
       </set>
       
     <set inverse="true" name="userGroupRoleSet">
@@ -34,7 +34,7 @@
            
     </class>   
 
-    <class name="org.apache.fulcrum.security.model.turbine.entity.TurbineGroup" table="GROUPS" >
+    <class name="org.apache.fulcrum.security.model.turbine.entity.impl.TurbineGroupImpl" table="GROUPS" >
       <id name="id" type="long" column="GROUP_ID" unsaved-value="0">
            <generator class="native"/>
         </id>
@@ -46,7 +46,7 @@
     </set>  
     </class>   
 
-	<class name="org.apache.fulcrum.security.model.turbine.entity.TurbineUser" 
+	<class name="org.apache.fulcrum.security.model.turbine.entity.impl.TurbineUserImpl" 
 		table="HIBUSER" >
 		<id name="id" type="long" column="HIBUSER_ID" unsaved-value="0">
 			<generator class="native"/>
@@ -65,13 +65,13 @@
 
     <composite-id>
         <key-many-to-one name="Role" column="role_id" 
-            class="org.apache.fulcrum.security.model.turbine.entity.TurbineRole" 
+            class="org.apache.fulcrum.security.model.turbine.entity.impl.TurbineRoleImpl" 
             />
         <key-many-to-one name="User" column="user_id" 
-            class="org.apache.fulcrum.security.model.turbine.entity.TurbineUser" 
+            class="org.apache.fulcrum.security.model.turbine.entity.impl.TurbineUserImpl" 
             />
         <key-many-to-one name="Group" column="group_id" 
-            class="org.apache.fulcrum.security.model.turbine.entity.TurbineGroup" 
+            class="org.apache.fulcrum.security.model.turbine.entity.impl.TurbineGroupImpl" 
             />
     </composite-id>
   </class>    

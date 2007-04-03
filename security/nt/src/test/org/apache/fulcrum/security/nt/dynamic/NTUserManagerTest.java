@@ -20,6 +20,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
+import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
 import org.apache.fulcrum.security.model.test.AbstractUserManagerTest;
 import org.apache.fulcrum.security.util.DataBackendException;
 
@@ -84,7 +85,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     {
         try
         {
-            user = new DynamicUser();
+            user = new DynamicUserImpl();
             user.setName("MCD\\Ronald Mcdonaled");
             ((DynamicUser) user).setPassword("");
             assertFalse(userManager.checkExists(user));

@@ -16,8 +16,6 @@ package org.apache.fulcrum.security.nt;
  */
 import javax.security.auth.login.LoginException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
@@ -38,9 +36,6 @@ import com.tagish.auth.win32.NTSystem;
  */
 public class NTUserManagerImpl extends AbstractUserManager
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(NTUserManagerImpl.class);
-
     protected User persistNewUser(User user) throws DataBackendException
     {
         throw new RuntimeException("This method is not supported.");

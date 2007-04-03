@@ -4,8 +4,8 @@
     <modelManager/>
     <aclFactory/>
     
-      <userManager><className>org.apache.fulcrum.security.model.basic.entity.BasicUser</className></userManager> 
-      <groupManager><className>org.apache.fulcrum.security.model.basic.entity.BasicGroup</className></groupManager>    
+      <userManager><className>org.apache.fulcrum.security.model.basic.entity.impl.BasicUserImpl</className></userManager> 
+      <groupManager><className>org.apache.fulcrum.security.model.basic.entity.impl.BasicGroupImpl</className></groupManager>    
   
     <persistenceHelper/>
     <hibernateService>

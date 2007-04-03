@@ -4,10 +4,10 @@
     <modelManager/>
     <aclFactory/>
     
-      <userManager><className>org.apache.fulcrum.security.model.dynamic.entity.DynamicUser</className></userManager> 
-      <groupManager><className>org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup</className></groupManager>    
-      <roleManager><className>org.apache.fulcrum.security.model.dynamic.entity.DynamicRole</className></roleManager>   
-      <permissionManager><className>org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission</className></permissionManager> 
+      <userManager><className>org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl</className></userManager> 
+      <groupManager><className>org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicGroupImpl</className></groupManager>    
+      <roleManager><className>org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicRoleImpl</className></roleManager>   
+      <permissionManager><className>org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicPermissionImpl</className></permissionManager> 
   
     <persistenceHelper/>
     <hibernateService>

@@ -16,8 +16,6 @@ package org.apache.fulcrum.security.memory.basic;
  */
 import java.util.Iterator;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.basic.BasicModelManager;
@@ -39,10 +37,6 @@ public class MemoryModelManagerImpl
     extends AbstractManager
     implements BasicModelManager
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(MemoryModelManagerImpl.class);
-    
-
     /**
 	 * Puts a user in a group.
 	 * 

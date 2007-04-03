@@ -15,7 +15,7 @@ package org.apache.fulcrum.security.hibernate.dynamic.entity;
  *  limitations under the License.
  */
 									 
-import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
+import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
 
 /**
  * User to test subclassing an existing class and then persiting with
@@ -24,7 +24,7 @@ import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class ExtendedUser extends DynamicUser
+public class ExtendedUser extends DynamicUserImpl
 {
     private String NTDomain;
     private String NTName;

@@ -17,8 +17,6 @@ package org.apache.fulcrum.security.memory;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.spi.AbstractUserManager;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -36,14 +34,11 @@ import org.apache.fulcrum.security.util.UserSet;
  */
 public class MemoryUserManagerImpl
     extends AbstractUserManager
-    
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(MemoryUserManagerImpl.class);
     private static List users = new ArrayList();
    
     /** Our Unique ID counter */
-    private static int uniqueId = 0;
+    // private static int uniqueId = 0;
 
     /**
      * Check whether a specified user's account exists.

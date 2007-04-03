@@ -14,8 +14,6 @@ package org.apache.fulcrum.security.memory.dynamic;
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
@@ -40,10 +38,6 @@ public class MemoryModelManagerImpl
     extends AbstractDynamicModelManager
     implements DynamicModelManager
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(MemoryModelManagerImpl.class);
-
-
     /**
 	 * Puts a user in a group.
 	 * 

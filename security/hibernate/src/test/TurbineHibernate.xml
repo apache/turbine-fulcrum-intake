@@ -7,24 +7,24 @@
   <component
     role="org.apache.fulcrum.security.UserManager"
     class="org.apache.fulcrum.security.hibernate.HibernateUserManagerImpl"> 
-    <className>org.apache.fulcrum.security.model.turbine.entity.TurbineUser</className>  
+    <className>org.apache.fulcrum.security.model.turbine.entity.impl.TurbineUserImpl</className>  
   </component>   
   <component
     role="org.apache.fulcrum.security.GroupManager"
     class="org.apache.fulcrum.security.hibernate.HibernateGroupManagerImpl">   
-    <className>org.apache.fulcrum.security.model.turbine.entity.TurbineGroup</className>    
+    <className>org.apache.fulcrum.security.model.turbine.entity.impl.TurbineGroupImpl</className>    
   </component>     
 
   <component
     role="org.apache.fulcrum.security.RoleManager"
     class="org.apache.fulcrum.security.hibernate.HibernateRoleManagerImpl">   
-    <className>org.apache.fulcrum.security.model.turbine.entity.TurbineRole</className>
+    <className>org.apache.fulcrum.security.model.turbine.entity.impl.TurbineRoleImpl</className>
   </component>     
 
   <component
     role="org.apache.fulcrum.security.PermissionManager"
     class="org.apache.fulcrum.security.hibernate.HibernatePermissionManagerImpl">  
-    <className>org.apache.fulcrum.security.model.turbine.entity.TurbinePermission</className>    
+    <className>org.apache.fulcrum.security.model.turbine.entity.impl.TurbinePermissionImpl</className>    
   </component>     
   
   <component

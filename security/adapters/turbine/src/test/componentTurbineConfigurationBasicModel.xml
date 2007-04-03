@@ -3,10 +3,10 @@ classes for Dynamic. -->
 <componentConfig>
     <securityService/>
     <userManager>    
-      	<className>org.apache.fulcrum.security.model.basic.entity.BasicUser</className>
+      	<className>org.apache.fulcrum.security.model.basic.entity.impl.BasicUserImpl</className>
    	</userManager>
     <groupManager>    
- 	    <className>org.apache.fulcrum.security.model.basic.entity.BasicGroup</className>
+ 	    <className>org.apache.fulcrum.security.model.basic.entity.impl.BasicGroupImpl</className>
    	</groupManager>
     <modelManager/> 
     <aclFactory/>                

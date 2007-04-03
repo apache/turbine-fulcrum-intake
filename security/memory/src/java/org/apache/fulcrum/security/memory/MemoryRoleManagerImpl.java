@@ -17,8 +17,6 @@ package org.apache.fulcrum.security.memory;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.spi.AbstractRoleManager;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -36,12 +34,11 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public class MemoryRoleManagerImpl extends AbstractRoleManager
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(MemoryRoleManagerImpl.class);
     /** List to store all our roles in */
     private static List roles = new ArrayList();
+
     /** Our Unique ID counter */
-    private static int uniqueId = 0;
+    // private static int uniqueId = 0;
 
     /**
     	* Renames an existing Role.
