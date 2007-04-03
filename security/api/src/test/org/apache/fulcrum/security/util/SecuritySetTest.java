@@ -17,7 +17,7 @@ package org.apache.fulcrum.security.util;
 import junit.framework.TestCase;
 
 import org.apache.fulcrum.security.entity.Group;
-import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
+import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicGroupImpl;
 /**
  * Test using a SecuritySet.  Useing various subclasses since it is
  * Abstract.
@@ -52,7 +52,7 @@ public class SecuritySetTest extends TestCase
     {
         SecuritySet securitySet = new GroupSet();
         assertFalse(securitySet.containsName(null));
-        Group g = new DynamicGroup();
+        Group g = new DynamicGroupImpl();
         g.setName("BOB");
 
         ((GroupSet) securitySet).add(g);
@@ -65,7 +65,7 @@ public class SecuritySetTest extends TestCase
     {
         SecuritySet securitySet = new GroupSet();
         assertFalse(securitySet.containsName(null));
-        Group g = new DynamicGroup();
+        Group g = new DynamicGroupImpl();
         g.setName("BOB");
         g.setId("BOB");
 
@@ -73,7 +73,7 @@ public class SecuritySetTest extends TestCase
 
         SecuritySet securitySet2 = new GroupSet();
         assertFalse(securitySet.containsName(null));
-        g = new DynamicGroup();
+        g = new DynamicGroupImpl();
         g.setName("BOB");
         g.setId("BOB");
 
@@ -96,7 +96,7 @@ public class SecuritySetTest extends TestCase
     public void testAdd() throws Exception
     {
         GroupSet securitySet = (GroupSet)getTestData();
-        Group g = new DynamicGroup();
+        Group g = new DynamicGroupImpl();
         g.setName("Michael");
         g.setId("Michael");
         assertTrue(securitySet.add(g));
@@ -106,11 +106,11 @@ public class SecuritySetTest extends TestCase
     {
         SecuritySet securitySet = new GroupSet();
         assertFalse(securitySet.containsName(null));
-        Group g = new DynamicGroup();
+        Group g = new DynamicGroupImpl();
         g.setName("JOE");
         g.setId("JOE");
 
-        Group g2 = new DynamicGroup();
+        Group g2 = new DynamicGroupImpl();
         g2.setName("RICK");
         g2.setId("RICK");
 

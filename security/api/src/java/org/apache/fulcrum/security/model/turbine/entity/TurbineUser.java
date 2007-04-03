@@ -16,12 +16,9 @@ package org.apache.fulcrum.security.model.turbine.entity;
  *  limitations under the License.
  */
 
-import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
 
 /**
  * Represents the "turbine" model where permissions are in a many to many
@@ -31,69 +28,33 @@ import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class TurbineUser extends SecurityEntityImpl implements User
+public interface TurbineUser extends User
 {
     /**
-     * Serial number
-     */
-    private static final long serialVersionUID = -7309619325167081811L;
-
-    private Set userGroupRoleSet = new HashSet();
-
-    private String password;
-
-    /**
-     * @return
-     */
-    public Set getUserGroupRoleSet()
-    {
-        return userGroupRoleSet;
-    }
-
-    /**
-     * @param userGroupRoleSet
-     */
-    public void setUserGroupRoleSet(Set userGroupRoleSet)
-    {
-        this.userGroupRoleSet = userGroupRoleSet;
-    }
-
-    /**
-     * @return
-     */
-    public String getPassword()
-    {
-        return password;
-    }
-
-    /**
-     * @param password
-     */
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
-
-    public void addUserGroupRole(TurbineUserGroupRole userGroupRole)
-    {
-        getUserGroupRoleSet().add(userGroupRole);
-    }
-
-    public void removeUserGroupRole(TurbineUserGroupRole userGroupRole)
-    {
-        getUserGroupRoleSet().remove(userGroupRole);
-    }
-
-    /**
-     * Calculate a hash code for this object
+     * Get the User/Group/Role set associated with this user
      * 
-     * @see org.apache.fulcrum.security.entity.impl.SecurityEntityImpl#hashCode()
+     * @return a set of User/GRoup/Role relations
      */
-    public int hashCode()
-    {
-        return new HashCodeBuilder(41, 15)
-                    .append(getPassword())
-                    .appendSuper(super.hashCode())
-                    .toHashCode();
-    }
+    public Set getUserGroupRoleSet();
+
+    /**
+     * Get the User/Group/Role set associated with this user
+     * 
+     * @param userGroupRoleSet a set of User/GRoup/Role relations
+     */
+    public void setUserGroupRoleSet(Set userGroupRoleSet);
+    
+    /**
+     * Add a User/Group/Role relation to this user
+     * 
+     * @param userGroupRole a User/GRoup/Role relation to add
+     */
+    public void addUserGroupRole(TurbineUserGroupRole userGroupRole);
+
+    /**
+     * Remove a User/Group/Role relation from this user
+     * 
+     * @param userGroupRole a User/GRoup/Role relation to remove
+     */
+    public void removeUserGroupRole(TurbineUserGroupRole userGroupRole);
 }

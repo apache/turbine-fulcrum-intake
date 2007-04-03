@@ -19,7 +19,6 @@ import java.util.Set;
 
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
 import org.apache.fulcrum.security.util.RoleSet;
 
 /**
@@ -30,64 +29,47 @@ import org.apache.fulcrum.security.util.RoleSet;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class DynamicPermission extends SecurityEntityImpl implements Permission
+public interface DynamicPermission extends Permission
 {
-
-    private Set roleSet = new RoleSet();
-
-
     /**
-     * @return
+     * Get the roles that this permission belongs to
+     * 
+     * @return a set of roles
      */
-    public RoleSet getRoles() {
-        if (roleSet instanceof RoleSet)
-            return (RoleSet) roleSet;
-        else {
-            roleSet = new RoleSet(roleSet);
-            return (RoleSet) roleSet;
-        }
-    }
+    public RoleSet getRoles();
 
     /**
-     * @param roleSet
+     * Set the roles that this permission belongs to
+     * 
+     * @param roleSet a set of roles
      */
-    public void setRoles(RoleSet roleSet) {
-        if (roleSet != null)
-            this.roleSet = roleSet;
-        else
-            this.roleSet = new RoleSet();
-    }
+    public void setRoles(RoleSet roleSet);
 
     /**
-     * Add a role to the RoleSet
+     * Add a role to this permission
+     * 
      * @param role the role to add
      */
-    public void addRole(Role role) {
-        getRoles().add(role);
-    }
+    public void addRole(Role role);
 
     /**
-     * Remove a role from the RoleSet
+     * Remove a role from this permission
+     * 
      * @param role the role to remove
      */
-    public void removeRole(Role role) {
-        getRoles().remove(role);
-    }
+    public void removeRole(Role role);
 
     /**
+     * Set the roles that this permission belongs to as Set
      * 
-     * @param roles
+     * @param roles a set of roles
      */
-    public void setRolesAsSet(Set roles) {
-        this.roleSet = roles;
-    }
+    public void setRolesAsSet(Set roles);
 
     /**
+     * Get the roles that this permission belongs to as Set
      * 
-     * @return
+     * @return a set of roles
      */
-    public Set getRolesAsSet() {
-        return roleSet;
-    }
-
+    public Set getRolesAsSet();
 }

@@ -19,7 +19,6 @@ import java.util.Set;
 
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
 import org.apache.fulcrum.security.util.UserSet;
 
 /**
@@ -29,59 +28,47 @@ import org.apache.fulcrum.security.util.UserSet;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class BasicGroup extends SecurityEntityImpl implements Group
+public interface BasicGroup extends Group
 {
-	private Set userSet = new UserSet();
-	/**
-	 * @return
-	 */
-	public UserSet getUsers()
-	{
-	    if( userSet instanceof UserSet )
-	        return (UserSet) userSet;
-	    else {
-	        userSet = new UserSet(userSet);
-	        return (UserSet)userSet;
-	    }
-	}
+    /**
+     * Get the users that are part of this group
+     * 
+     * @return a set of users
+     */
+	public UserSet getUsers();
 
-	/**
-	 * @param userSet
+    /**
+     * Set the users that are part of this group
+     * 
+	 * @param userSet a set of users
 	 */
-	public void setUsers(UserSet userSet)
-	{
-	    if( userSet != null )
-	        this.userSet = userSet;
-	    else
-	        this.userSet = new UserSet();
-	}
+	public void setUsers(UserSet userSet);
     
-	/**
-	 * @return
-	 */
-	public Set getUsersAsSet()
-	{
-	    return userSet;
-	}
+    /**
+     * Get the users that are part of this group as a Set
+     * 
+     * @return a set of users
+     */
+	public Set getUsersAsSet();
 
-	/**
-	 * @param userSet
-	 */
-	public void setUsersAsSet(Set users)
-	{
-	    this.userSet = users;
-	}    
-
+    /**
+     * Set the users that are part of this group as a Set
+     * 
+     * @param userSet a set of users
+     */
+	public void setUsersAsSet(Set users);
 	
-	
-	public void addUser(User user)
-	{
-		getUsers().add(user);
-	}
-	public void removeUser(User user)
-	{
-		getUsers().remove(user);
-	}
+    /**
+     * Add a user to this group
+     * 
+     * @param user the user to add
+     */
+	public void addUser(User user);
     
-	
+    /**
+     * Remove a user from this group
+     * 
+     * @param user the user to remove
+     */
+	public void removeUser(User user);
 }

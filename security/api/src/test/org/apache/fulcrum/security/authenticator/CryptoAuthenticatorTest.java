@@ -16,7 +16,7 @@ package org.apache.fulcrum.security.authenticator;
  */
 
 import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
+import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
@@ -50,7 +50,7 @@ public class CryptoAuthenticatorTest extends BaseUnitTest
     }
     public void testAuthenticate() throws Exception
     {
-        User user = new DynamicUser();
+        User user = new DynamicUserImpl();
         user.setName("Bob");
         user.setPassword(preDefinedResult);
         Authenticator authenticator = (Authenticator)lookup(Authenticator.ROLE);

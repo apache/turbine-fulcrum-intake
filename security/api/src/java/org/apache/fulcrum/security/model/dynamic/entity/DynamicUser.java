@@ -16,14 +16,9 @@ package org.apache.fulcrum.security.model.dynamic.entity;
  *  limitations under the License.
  */
 
-import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.fulcrum.security.entity.Group;
-import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
-import org.apache.fulcrum.security.util.GroupSet;
+import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 
 /**
  * Represents the "simple" model where permissions are related to roles, roles
@@ -37,126 +32,27 @@ import org.apache.fulcrum.security.util.GroupSet;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class DynamicUser extends SecurityEntityImpl implements User
+public interface DynamicUser extends BasicUser
 {
-    /**
-     * Serial number
-     */
-    private static final long serialVersionUID = 2841311062371647853L;
-
-    private String password;
-
-    private Set groupSet = new GroupSet();
-
-    private Set delegators = new HashSet();
-
-    private Set delegatees = new HashSet();
-
     /**
      * @return Returns the delegatees.
      */
-    public Set getDelegatees()
-    {
-        return delegatees;
-    }
+    public Set getDelegatees();
 
     /**
      * @param delegatees
      *            The delegatees to set.
      */
-    public void setDelegatees(Set delegatees)
-    {
-        this.delegatees = delegatees;
-    }
+    public void setDelegatees(Set delegatees);
 
     /**
      * @return Returns the delegators.
      */
-    public Set getDelegators()
-    {
-        return delegators;
-    }
+    public Set getDelegators();
 
     /**
      * @param delegates
      *            The delegators to set.
      */
-    public void setDelegators(Set delegates)
-    {
-        this.delegators = delegates;
-    }
-
-    /**
-     * @return
-     */
-    public String getPassword()
-    {
-        return password;
-    }
-
-    /**
-     * @param password
-     */
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
-
-    /**
-     * @return
-     */
-    public GroupSet getGroups()
-    {
-        if (groupSet instanceof GroupSet)
-            return (GroupSet) groupSet;
-        else
-        {
-            groupSet = new GroupSet(groupSet);
-            return (GroupSet) groupSet;
-        }
-    }
-
-    /**
-     * @param groups
-     */
-    public void setGroups(GroupSet groups)
-    {
-        if (groups != null)
-            this.groupSet = groups;
-        else
-            this.groupSet = new GroupSet();
-    }
-
-    public void removeGroup(Group group)
-    {
-        getGroups().remove(group);
-    }
-
-    public void addGroup(Group group)
-    {
-        getGroups().add(group);
-    }
-
-    public void setGroupsAsSet(Set groups)
-    {
-        this.groupSet = groups;
-    }
-
-    public Set getGroupsAsSet()
-    {
-        return groupSet;
-    }
-
-    /**
-     * Calculate a hash code for this object
-     * 
-     * @see org.apache.fulcrum.security.entity.impl.SecurityEntityImpl#hashCode()
-     */
-    public int hashCode()
-    {
-        return new HashCodeBuilder(45, 13)
-                    .append(getPassword())
-                    .appendSuper(super.hashCode())
-                    .toHashCode();
-    }
+    public void setDelegators(Set delegates);
 }

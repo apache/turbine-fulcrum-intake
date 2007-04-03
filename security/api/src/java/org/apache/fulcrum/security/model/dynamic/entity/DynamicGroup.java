@@ -17,12 +17,9 @@ package org.apache.fulcrum.security.model.dynamic.entity;
 
 import java.util.Set;
 
-import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
+import org.apache.fulcrum.security.model.basic.entity.BasicGroup;
 import org.apache.fulcrum.security.util.RoleSet;
-import org.apache.fulcrum.security.util.UserSet;
 
 /**
  * Represents the "dynamic" model where permissions are related to roles,
@@ -32,96 +29,47 @@ import org.apache.fulcrum.security.util.UserSet;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class DynamicGroup extends SecurityEntityImpl implements Group
+public interface DynamicGroup extends BasicGroup
 {
-    private Set roleSet = new RoleSet();
-    private Set userSet = new UserSet();
     /**
-     * @return
+     * Get the roles that are part of this group
+     * 
+     * @return a set of roles
      */
-    public UserSet getUsers()
-    {
-    	if( userSet instanceof UserSet )
-    		return (UserSet) userSet;
-    	else {
-    		userSet = new UserSet(userSet);
-    		return (UserSet)userSet;
-    	}
-    }
+    public RoleSet getRoles();
 
     /**
-     * @param userSet
+     * Set the roles that are part of this group
+     * 
+     * @param roleSet a set of roles
      */
-    public void setUsers(UserSet userSet)
-    {
-    	if( userSet != null )
-    		this.userSet = userSet;
-    	else
-    		this.userSet = new UserSet();
-    }
-    
-	/**
-	 * @return
-	 */
-	public Set getUsersAsSet()
-	{
-		return userSet;
-	}
-
-	/**
-	 * @param userSet
-	 */
-	public void setUsersAsSet(Set users)
-	{
-		this.userSet = users;
-	}    
+    public void setRoles(RoleSet roleSet);
 
     /**
-     * @return
+     * Add a role to this group
+     * 
+     * @param role the role to add
      */
-    public RoleSet getRoles()
-    {
-    	if( roleSet instanceof RoleSet )
-    		return (RoleSet) roleSet;
-    	else {
-    		roleSet = new RoleSet(roleSet);
-    		return (RoleSet)roleSet;
-    	}
-    }
-    /**
-     * @param roleSet
-     */
-    public void setRoles(RoleSet roleSet)
-    {
-    	if( roleSet != null )
-    		this.roleSet = roleSet;
-    	else
-    		this.roleSet = new RoleSet();
-    }
-    public void addRole(Role role)
-    {
-        getRoles().add(role);
-    }
-    public void removeRole(Role role)
-    {
-        getRoles().remove(role);
-    }
+    public void addRole(Role role);
 
-    public void addUser(User user)
-    {
-        getUsers().add(user);
-    }
-    public void removeUser(User user)
-    {
-        getUsers().remove(user);
-    }
-    
-	public void setRolesAsSet(Set roles)
-	{
-		this.roleSet = roles;
-	}
-	public Set getRolesAsSet()
-	{
-		return roleSet;
-	}    
+    /**
+     * Remove a role from this group
+     * 
+     * @param role the role to remove
+     */
+    public void removeRole(Role role);
+
+    /**
+     * Set the roles that are part of this group as Set
+     * 
+     * @param roles a set of roles
+     */
+	public void setRolesAsSet(Set roles);
+
+    /**
+     * Get the roles that are part of this group as Set
+     * 
+     * @return a set of roles
+     */
+    public Set getRolesAsSet();
 }

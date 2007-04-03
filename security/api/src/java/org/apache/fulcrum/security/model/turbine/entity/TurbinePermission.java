@@ -20,7 +20,6 @@ import java.util.Set;
 
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
 import org.apache.fulcrum.security.util.RoleSet;
 
 /**
@@ -31,61 +30,47 @@ import org.apache.fulcrum.security.util.RoleSet;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @version $Id$
  */
-public class TurbinePermission extends SecurityEntityImpl implements Permission {
-    private Set roleSet = new RoleSet();
-
+public interface TurbinePermission extends Permission 
+{
     /**
-     * @return
-     */
-    public RoleSet getRoles() {
-        if (roleSet instanceof RoleSet)
-            return (RoleSet) roleSet;
-        else {
-            roleSet = new RoleSet(roleSet);
-            return (RoleSet) roleSet;
-        }
-    }
-
-    /**
-     * @return
-     */
-    public Set getRolesAsSet() {
-        return roleSet;
-    }
-
-    public void setRolesAsSet(Set roles) {
-        this.roleSet = roles;
-    }
-
-    /**
-     * @param roleSet
-     */
-    public void setRoles(RoleSet roleSet) {
-        if (roleSet != null)
-            this.roleSet = roleSet;
-        else
-            this.roleSet = new RoleSet();
-    }
-
-    /**
-     * This method should only be used by a RoleManager. Not directly.
+     * Get the roles that this permission belongs to
      * 
-     * @param permission
+     * @return a set of roles
      */
-    public void addRole(Role role) {
-        getRoles().add(role);
-    }
+    public RoleSet getRoles();
 
     /**
-     * This method should only be used by a RoleManager. Not directly.
+     * Set the roles that this permission belongs to
      * 
-     * @param permission
+     * @param roleSet a set of roles
      */
-    public void removeRole(Role role) {
-        getRoles().remove(role);
-    }
+    public void setRoles(RoleSet roleSet);
 
-   
+    /**
+     * Add a role to this permission
+     * 
+     * @param role the role to add
+     */
+    public void addRole(Role role);
 
-   
+    /**
+     * Remove a role from this permission
+     * 
+     * @param role the role to remove
+     */
+    public void removeRole(Role role);
+
+    /**
+     * Set the roles that this permission belongs to as Set
+     * 
+     * @param roles a set of roles
+     */
+    public void setRolesAsSet(Set roles);
+
+    /**
+     * Get the roles that this permission belongs to as Set
+     * 
+     * @return a set of roles
+     */
+    public Set getRolesAsSet();
 }

@@ -16,11 +16,9 @@ package org.apache.fulcrum.security.model.turbine.entity;
  *  limitations under the License.
  */
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.fulcrum.security.entity.Group;
-import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
 
 /**
  * Represents the "turbine" model where permissions are in a many to many
@@ -30,31 +28,33 @@ import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @version $Id$
  */
-public class TurbineGroup extends SecurityEntityImpl implements Group {
-    private Set userGroupRoleSet = new HashSet();
+public interface TurbineGroup extends Group 
+{
+    /**
+     * Get the User/Group/Role set associated with this group
+     * 
+     * @return a set of User/GRoup/Role relations
+     */
+    public Set getUserGroupRoleSet();
 
     /**
-     * @return
+     * Get the User/Group/Role set associated with this group
+     * 
+     * @param userGroupRoleSet a set of User/GRoup/Role relations
      */
-    public Set getUserGroupRoleSet() {
-
-        return userGroupRoleSet;
-    }
+    public void setUserGroupRoleSet(Set userGroupRoleSet);
+    
+    /**
+     * Add a User/Group/Role relation to this group
+     * 
+     * @param userGroupRole a User/GRoup/Role relation to add
+     */
+    public void addUserGroupRole(TurbineUserGroupRole userGroupRole);
 
     /**
-     * @param userGroupRoleSet
+     * Remove a User/Group/Role relation from this group
+     * 
+     * @param userGroupRole a User/GRoup/Role relation to remove
      */
-    public void setUserGroupRoleSet(Set userGroupRoleSet) {
-        this.userGroupRoleSet = userGroupRoleSet;
-
-    }
-
-    public void addUserGroupRole(TurbineUserGroupRole userGroupRole) {
-        getUserGroupRoleSet().add(userGroupRole);
-    }
-
-    public void removeUserGroupRole(TurbineUserGroupRole userGroupRole) {
-        getUserGroupRoleSet().remove(userGroupRole);
-    }
-
+    public void removeUserGroupRole(TurbineUserGroupRole userGroupRole);
 }

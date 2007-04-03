@@ -19,8 +19,8 @@ import junit.framework.TestCase;
 
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
-import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
+import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicGroupImpl;
+import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicRoleImpl;
 
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
@@ -50,7 +50,7 @@ public class GroupSetTest extends TestCase
     
     public void testAddGroups() throws Exception
     {
-        Group group = new DynamicGroup();
+        Group group = new DynamicGroupImpl();
         group.setId(new Integer(1));
         group.setName("Eric");
         GroupSet groupSet = new GroupSet();
@@ -58,12 +58,12 @@ public class GroupSetTest extends TestCase
         assertFalse(groupSet.add(group));
         assertTrue(groupSet.contains(group));
 
-        Group group2 = new DynamicGroup();
+        Group group2 = new DynamicGroupImpl();
         group2.setName("Kate");
         group2.setId(new Integer(2));
         groupSet.add(group2);
 
-        Group group3 = new DynamicGroup();
+        Group group3 = new DynamicGroupImpl();
         group3.setId(new Integer(1));
         group3.setName("Eric");
         groupSet.add(group3);
@@ -73,7 +73,7 @@ public class GroupSetTest extends TestCase
         assertTrue(groupSet.contains(group3));
         assertTrue(groupSet.contains(group));
         
-        Role role = new DynamicRole();
+        Role role = new DynamicRoleImpl();
         role.setName("role");
         role.setId("role");
         try {
@@ -102,14 +102,14 @@ public class GroupSetTest extends TestCase
         groupSet.add(group);
         assertTrue(groupSet.contains(group));
 
-        Group group2 = new DynamicGroup();
+        Group group2 = new DynamicGroupImpl();
         group2.setId(new Integer(1));
         group2.setName("Eric");
         assertTrue(groupSet.contains(group2));
 
     }
 
-    class GroupSubClass extends DynamicGroup
+    class GroupSubClass extends DynamicGroupImpl
     {
         private String extraGroupData;
 

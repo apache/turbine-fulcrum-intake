@@ -31,48 +31,57 @@ import org.apache.fulcrum.security.entity.User;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @version $Id$
  */
-public class TurbineUserGroupRole implements Serializable
+public class TurbineUserGroupRole 
+    implements Serializable
 {
     /**
      * Serial number
      */
     private static final long serialVersionUID = 265670888102016829L;
-
+    
     private User user;
-
+    
     private Group group;
-
+    
     private Role role;
-
+    
     private int hashCode;
-
+    
     private boolean hashCodeGenerated = false;
-
+    
     /**
+     * Get the group
+     * 
      * @return Returns the group.
      */
     public Group getGroup()
     {
         return group;
     }
-
+    
     /**
+     * Get the role
+     * 
      * @return Returns the role.
      */
     public Role getRole()
     {
         return role;
     }
-
+    
     /**
+     * Get the user
+     * 
      * @return Returns the user.
      */
     public User getUser()
     {
         return user;
     }
-
+    
     /**
+     * Set the group
+     * 
      * @param group
      *            The group to set.
      */
@@ -80,8 +89,10 @@ public class TurbineUserGroupRole implements Serializable
     {
         this.group = group;
     }
-
+    
     /**
+     * Set the role
+     * 
      * @param role
      *            The role to set.
      */
@@ -89,8 +100,10 @@ public class TurbineUserGroupRole implements Serializable
     {
         this.role = role;
     }
-
+    
     /**
+     * Set the user
+     * 
      * @param user
      *            The user to set.
      */
@@ -98,7 +111,7 @@ public class TurbineUserGroupRole implements Serializable
     {
         this.user = user;
     }
-
+    
     public boolean equals(Object obj)
     {
         if (null == obj)
@@ -148,7 +161,7 @@ public class TurbineUserGroupRole implements Serializable
             return true;
         }
     }
-
+    
     public int hashCode()
     {
         if (!hashCodeGenerated)
@@ -161,7 +174,7 @@ public class TurbineUserGroupRole implements Serializable
                 hcBuilder.append(role.getId());
                 hcBuilder.append(role.getName());
             }
-
+    
             User user = getUser();
             if (null != user)
             {
@@ -169,20 +182,20 @@ public class TurbineUserGroupRole implements Serializable
                 hcBuilder.append(user.getName());
                 hcBuilder.append(user.getPassword());
             }
-
+    
             Group group = getGroup();
             if (null != group)
             {
                 hcBuilder.append(group.getId());
                 hcBuilder.append(group.getName());
             }
-
+    
             this.hashCode = hcBuilder.toHashCode();
         }
         
         return this.hashCode;
     }
-
+    
     public String toString()
     {
         StringBuffer sb = new StringBuffer();

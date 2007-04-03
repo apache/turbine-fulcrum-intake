@@ -18,7 +18,7 @@ package org.apache.fulcrum.security.util;
 import junit.framework.TestCase;
 
 import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
+import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
 /**
  * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
@@ -43,19 +43,19 @@ public class UserSetTest extends TestCase
 
     public void testAddUsers() throws Exception
     {
-        User user = new DynamicUser();
+        User user = new DynamicUserImpl();
         user.setId(new Integer(1));
         user.setName("Eric");
         UserSet userSet = new UserSet();
         userSet.add(user);
         assertTrue(userSet.contains(user));
 
-        User user2 = new DynamicUser();
+        User user2 = new DynamicUserImpl();
         user2.setName("Kate");
         user2.setId(new Integer(2));
         userSet.add(user2);
 
-        User user3 = new DynamicUser();
+        User user3 = new DynamicUserImpl();
         user3.setId(new Integer(1));
         user3.setName("Eric");
         assertTrue(userSet.contains(user));

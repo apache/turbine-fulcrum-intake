@@ -17,10 +17,8 @@ package org.apache.fulcrum.security.model.basic.entity;
 
 import java.util.Set;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
 import org.apache.fulcrum.security.util.GroupSet;
 
 /**
@@ -30,79 +28,47 @@ import org.apache.fulcrum.security.util.GroupSet;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class BasicUser extends SecurityEntityImpl implements User
+public interface BasicUser extends User
 {
     /**
-     * Serial number 
-     */
-    private static final long serialVersionUID = 7911631916604987203L;
-
-    private String password;
-    private Set groupSet = new GroupSet();
-
-    /**
-     * @return
-     */
-    public String getPassword()
-    {
-        return password;
-    }
-    /**
-     * @param password
-     */
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
-    /**
-    * @return
-    */
-    public GroupSet getGroups()
-    {
-        if( groupSet instanceof GroupSet )
-            return (GroupSet) groupSet;
-        else {
-            groupSet = new GroupSet(groupSet);
-            return (GroupSet)groupSet;
-        }
-    }
-    /**
-     * @param groups
-     */
-    public void setGroups(GroupSet groups)
-    {
-        if( groups != null )
-            this.groupSet = groups;
-        else
-            this.groupSet = new GroupSet();
-    }
-    public void removeGroup(Group group)
-    {
-        getGroups().remove(group);
-    }
-    public void addGroup(Group group)
-    {
-        getGroups().add(group);
-    }
-    public void setGroupsAsSet(Set groups)
-    {
-        this.groupSet = groups;
-    }
-    public Set getGroupsAsSet()
-    {
-        return groupSet;
-    }
-
-    /**
-     * Calculate a hash code for this object
+     * Get the groups this user is part of
      * 
-     * @see org.apache.fulcrum.security.entity.impl.SecurityEntityImpl#hashCode()
+     * @return a set of groups
      */
-    public int hashCode()
-    {
-        return new HashCodeBuilder(43, 19)
-                    .append(getPassword())
-                    .appendSuper(super.hashCode())
-                    .toHashCode();
-    }
+    public GroupSet getGroups();
+
+    /**
+     * Set the groups this user is part of
+     * 
+     * @param groups the set of groups
+     */
+    public void setGroups(GroupSet groups);
+
+    /**
+     * Remove the group from the list of groups 
+     * 
+     * @param group the group to remove
+     */
+    public void removeGroup(Group group);
+
+    /**
+     * Add the group to the list of groups 
+     * 
+     * @param group the group to add
+     */
+    public void addGroup(Group group);
+
+    /**
+     * Set the groups this user is part of as a Set
+     * 
+     * @param groups the set of groups
+     */
+    public void setGroupsAsSet(Set groups);
+
+    /**
+     * Get the groups this user is part of as a Set
+     * 
+     * @return a set of groups
+     */
+    public Set getGroupsAsSet();
 }

@@ -15,10 +15,10 @@ package org.apache.fulcrum.security.authenticator;
  *  limitations under the License.
  */
 
-import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
-
 import junit.framework.TestCase;
+
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
 
 /**
  *
@@ -29,7 +29,7 @@ public class NoOpAuthenticatorTest extends TestCase
 {
     public void testAuthenticate() throws Exception
     {
-    	User user = new DynamicUser();
+    	User user = new DynamicUserImpl();
     	user.setName("Bob");
     	user.setPassword("myPassword");
     	Authenticator authenticator = new NoOpAuthenticator();

@@ -19,11 +19,17 @@ import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.model.basic.BasicAccessControlList;
 import org.apache.fulcrum.security.model.basic.entity.BasicGroup;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
+import org.apache.fulcrum.security.model.basic.entity.impl.BasicGroupImpl;
+import org.apache.fulcrum.security.model.basic.entity.impl.BasicUserImpl;
 import org.apache.fulcrum.security.model.dynamic.DynamicAccessControlList;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
+import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicGroupImpl;
+import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicPermissionImpl;
+import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicRoleImpl;
+import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
@@ -46,16 +52,16 @@ public class ACLFactoryTest extends BaseUnitTest
         this.setConfigurationFileName("src/test/ACLComponentConfig.xml");
 
         ACLFactory factory = (ACLFactory) lookup(ACLFactory.ROLE);
-        DynamicUser user = new DynamicUser();
+        DynamicUser user = new DynamicUserImpl();
         user.setName("bob");
         user.setId(new Integer(1));
-        DynamicGroup group = new DynamicGroup();
+        DynamicGroup group = new DynamicGroupImpl();
         group.setName("group1");
         group.setId(new Integer(1));
-        DynamicRole role = new DynamicRole();
+        DynamicRole role = new DynamicRoleImpl();
         role.setName("role1");
         role.setId(new Integer(1));
-        DynamicPermission permission = new DynamicPermission();
+        DynamicPermission permission = new DynamicPermissionImpl();
         permission.setName("permission1");
         permission.setId(new Integer(1));
         role.addPermission(permission);
@@ -74,10 +80,10 @@ public class ACLFactoryTest extends BaseUnitTest
         this.setConfigurationFileName("src/test/ACLComponentConfig.xml");
 
         ACLFactory factory = (ACLFactory) lookup(ACLFactory.ROLE);
-        BasicUser user = new BasicUser();
+        BasicUser user = new BasicUserImpl();
         user.setName("bob");
         user.setId(new Integer(1));
-        BasicGroup group = new BasicGroup();
+        BasicGroup group = new BasicGroupImpl();
         group.setName("group1");
         group.setId(new Integer(1));
         user.addGroup(group);

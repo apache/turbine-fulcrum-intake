@@ -18,7 +18,7 @@ package org.apache.fulcrum.security.util;
 import junit.framework.TestCase;
 
 import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
+import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicRoleImpl;
 
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
@@ -48,19 +48,19 @@ public class RoleSetTest extends TestCase
     
     public void testAddRoles() throws Exception
     {
-        Role role = new DynamicRole();
+        Role role = new DynamicRoleImpl();
         role.setId(new Integer(1));
         role.setName("Eric");
         RoleSet roleSet = new RoleSet();
         assertTrue(roleSet.add(role));
         assertTrue(roleSet.contains(role));
 
-        Role role2 = new DynamicRole();
+        Role role2 = new DynamicRoleImpl();
         role2.setName("Kate");
         role2.setId(new Integer(2));
         roleSet.add(role2);
 
-        Role role3 = new DynamicRole();
+        Role role3 = new DynamicRoleImpl();
         role3.setId(new Integer(1));
         role3.setName("Eric");
         roleSet.add(role3);
@@ -81,14 +81,14 @@ public class RoleSetTest extends TestCase
         roleSet.add(role);
         assertTrue(roleSet.contains(role));
 
-        Role role2 = new DynamicRole();
+        Role role2 = new DynamicRoleImpl();
         role2.setId(new Integer(1));
         role2.setName("Eric");
         assertTrue(roleSet.contains(role2));
 
     }
 
-    class RoleSubClass extends DynamicRole
+    class RoleSubClass extends DynamicRoleImpl
     {
         private String extraRoleData;
 
