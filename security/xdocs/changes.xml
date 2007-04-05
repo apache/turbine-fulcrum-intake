@@ -7,6 +7,17 @@
 
   <body>
     <release version="1.0.8" date="">
+      <action dev="tv" type="update" fixes="TRB-40">
+        Changed BasicUser, BasicGroup, DynamicUser, DynamicGroup, DynamicRole, 
+        DynamicPermission, TurbineUser, TurbineGroup, TurbineRole and TurbinePermission to
+        interfaces. Added default implementations for existing security services.
+        Changed all occurences of these classes to use BasicUserImpl, BasicGroupImpl, 
+        DynamicUserImpl, DynamicGroupImpl, DynamicRoleImpl, DynamicPermissionImpl, 
+        TurbineUserImpl, TurbineGroupImpl, TurbineRoleImpl and TurbinePermissionImpl instead.
+      </action>     
+      <action dev="tv" type="add">
+        Implemented a security service based on Torque.
+      </action>     
       <action dev="tv" type="fix">
         Fixed hash code generation and equals() for security entities.
       </action>     

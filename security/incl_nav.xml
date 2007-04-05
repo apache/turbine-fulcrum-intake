@@ -17,6 +17,7 @@
         <item name="Security API"          href="http://jakarta.apache.org/turbine/fulcrum/fulcrum-security-api/index.html"/>
         <item name="Memory Impl"           href="http://jakarta.apache.org/turbine/fulcrum/fulcrum-security-memory/index.html"/>
         <item name="Hibernate Impl"        href="http://jakarta.apache.org/turbine/fulcrum/fulcrum-security-hibernate/index.html"/>
+        <item name="Torque Impl"           href="http://jakarta.apache.org/turbine/fulcrum/fulcrum-security-torque/index.html"/>
         <item name="NT Impl"               href="http://jakarta.apache.org/turbine/fulcrum/fulcrum-security-nt/index.html"/>
         <item name="Adapter Turbine"       href="http://jakarta.apache.org/turbine/fulcrum/fulcrum-security-adapter-turbine/index.html"/>
         <item name="Adapter OpenSymphony"  href="http://jakarta.apache.org/turbine/fulcrum/fulcrum-security-adapter-opensymphony/index.html"/>
