@@ -5,16 +5,16 @@
     <aclFactory/>
     
     <userManager>
-        <className>org.apache.fulcrum.security.model.dynamic.entity.DynamicUser</className>
+        <className>org.apache.fulcrum.security.torque.om.TorqueDynamicUser</className>
     </userManager> 
     <groupManager>
-        <className>org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup</className>
+        <className>org.apache.fulcrum.security.torque.om.TorqueDynamicGroup</className>
     </groupManager>    
     <roleManager>
-        <className>org.apache.fulcrum.security.model.dynamic.entity.DynamicRole</className>
+        <className>org.apache.fulcrum.security.torque.om.TorqueDynamicRole</className>
     </roleManager>   
     <permissionManager>
-        <className>org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission</className>
+        <className>org.apache.fulcrum.security.torque.om.TorqueDynamicPermission</className>
     </permissionManager> 
  
     <torqueService>

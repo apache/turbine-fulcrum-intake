@@ -14,6 +14,8 @@ package org.apache.fulcrum.security.torque.dynamic;
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+import java.sql.Connection;
+
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
@@ -24,18 +26,11 @@ import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupRole;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupRolePeer;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePermission;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePermissionPeer;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicUserDelegates;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicUserDelegatesPeer;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicUserGroup;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicUserGroupPeer;
+import org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.torque.TorqueException;
-import org.apache.torque.util.Criteria;
+import org.apache.torque.util.Transaction;
 /**
  * This implementation persists to a database via Torque.
  *
@@ -55,27 +50,39 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
     public synchronized void revoke(Group group, Role role)
         throws DataBackendException, UnknownEntityException
     {
-        boolean groupExists = false;
-        boolean roleExists = false;
-        try
-        {
-            groupExists = getGroupManager().checkExists(group);
-            roleExists = getRoleManager().checkExists(role);
+        boolean groupExists = getGroupManager().checkExists(group);
+        boolean roleExists = getRoleManager().checkExists(role);
 
-            if (groupExists && roleExists)
+        if (groupExists && roleExists)
+        {
+            ((DynamicGroup) group).removeRole(role);
+            ((DynamicRole) role).removeGroup(group);
+
+            Connection con = null;
+            
+            try
             {
-                ((DynamicGroup) group).removeRole(role);
-                ((DynamicRole) role).removeGroup(group);
-
-                Criteria criteria = new Criteria();
-                criteria.add(TorqueDynamicGroupRolePeer.ROLE_ID, (Integer)role.getId());
-                criteria.add(TorqueDynamicGroupRolePeer.GROUP_ID, (Integer)group.getId());
-                TorqueDynamicGroupRolePeer.doDelete(criteria);
+                con = Transaction.begin(((TorqueAbstractSecurityEntity)role).getDatabaseName());
+                
+                ((TorqueAbstractSecurityEntity)role).update(con);
+                ((TorqueAbstractSecurityEntity)group).update(con);
+                
+                Transaction.commit(con);
+                con = null;
             }
-        }
-        catch (TorqueException e)
-        {
-            throw new DataBackendException("revoke('" + group.getName() + "', '" + role.getName() + "') failed", e);
+            catch (TorqueException e)
+            {
+                throw new DataBackendException("revoke('" + group.getName() + "', '" + role.getName() + "') failed", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
+            }
+            
+            return;
         }
 
         if (!groupExists)
@@ -100,28 +107,39 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
     public synchronized void grant(Role role, Permission permission)
         throws DataBackendException, UnknownEntityException
     {
-        boolean roleExists = false;
-        boolean permissionExists = false;
+        boolean roleExists = getRoleManager().checkExists(role);
+        boolean permissionExists = getPermissionManager().checkExists(permission);
 
-        try
+        if (roleExists && permissionExists)
         {
-            roleExists = getRoleManager().checkExists(role);
-            permissionExists = getPermissionManager().checkExists(permission);
+            ((DynamicRole) role).addPermission(permission);
+            ((DynamicPermission) permission).addRole(role);
 
-            if (roleExists && permissionExists)
+            Connection con = null;
+            
+            try
             {
-                ((DynamicRole) role).addPermission(permission);
-                ((DynamicPermission) permission).addRole(role);
-
-                TorqueDynamicRolePermission rp = new TorqueDynamicRolePermission();
-                rp.setPermissionId((Integer)permission.getId());
-                rp.setRoleId((Integer)role.getId());
-                rp.save();
+                con = Transaction.begin(((TorqueAbstractSecurityEntity)role).getDatabaseName());
+                
+                ((TorqueAbstractSecurityEntity)role).update(con);
+                ((TorqueAbstractSecurityEntity)permission).update(con);
+                
+                Transaction.commit(con);
+                con = null;
             }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("grant('" + role.getName() + "', '" + permission.getName() + "') failed", e);
+            catch (TorqueException e)
+            {
+                throw new DataBackendException("grant('" + role.getName() + "', '" + permission.getName() + "') failed", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
+            }
+            
+            return;
         }
 
         if (!roleExists)
@@ -146,28 +164,39 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
     public synchronized void revoke(Role role, Permission permission)
         throws DataBackendException, UnknownEntityException
     {
-        boolean roleExists = false;
-        boolean permissionExists = false;
+        boolean roleExists = getRoleManager().checkExists(role);
+        boolean permissionExists = getPermissionManager().checkExists(permission);
 
-        try
+        if (roleExists && permissionExists)
         {
-            roleExists = getRoleManager().checkExists(role);
-            permissionExists = getPermissionManager().checkExists(permission);
+            ((DynamicRole) role).removePermission(permission);
+            ((DynamicPermission) permission).removeRole(role);
 
-            if (roleExists && permissionExists)
+            Connection con = null;
+            
+            try
             {
-                ((DynamicRole) role).removePermission(permission);
-                ((DynamicPermission) permission).removeRole(role);
-
-                Criteria criteria = new Criteria();
-                criteria.add(TorqueDynamicRolePermissionPeer.ROLE_ID, (Integer)role.getId());
-                criteria.add(TorqueDynamicRolePermissionPeer.PERMISSION_ID, (Integer)permission.getId());
-                TorqueDynamicRolePermissionPeer.doDelete(criteria);
+                con = Transaction.begin(((TorqueAbstractSecurityEntity)role).getDatabaseName());
+                
+                ((TorqueAbstractSecurityEntity)role).update(con);
+                ((TorqueAbstractSecurityEntity)permission).update(con);
+                
+                Transaction.commit(con);
+                con = null;
             }
-        }
-        catch (TorqueException e)
-        {
-            throw new DataBackendException("revoke('" + role.getName() + "', '" + permission.getName() + "') failed", e);
+            catch (TorqueException e)
+            {
+                throw new DataBackendException("revoke('" + role.getName() + "', '" + permission.getName() + "') failed", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
+            }
+            
+            return;
         }
         
         if (!roleExists)
@@ -192,30 +221,39 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
      */
     public synchronized void grant(User user, Group group) throws DataBackendException, UnknownEntityException
     {
-        boolean groupExists = false;
-        boolean userExists = false;
+        boolean groupExists = getGroupManager().checkExists(group);
+        boolean userExists = getUserManager().checkExists(user);
         
-        try
+        if (groupExists && userExists)
         {
-            groupExists = getGroupManager().checkExists(group);
-            userExists = getUserManager().checkExists(user);
-
-            if (groupExists && userExists)
+            ((DynamicUser) user).addGroup(group);
+            ((DynamicGroup) group).addUser(user);
+            
+            Connection con = null;
+            
+            try
             {
-                ((DynamicUser) user).addGroup(group);
-                ((DynamicGroup) group).addUser(user);
+                con = Transaction.begin(((TorqueAbstractSecurityEntity)user).getDatabaseName());
                 
-                TorqueDynamicUserGroup ug = new TorqueDynamicUserGroup();
-                ug.setGroupId((Integer)group.getId());
-                ug.setUserId((Integer)user.getId());
-                ug.save();
-
-                return;
+                ((TorqueAbstractSecurityEntity)user).update(con);
+                ((TorqueAbstractSecurityEntity)group).update(con);
+                
+                Transaction.commit(con);
+                con = null;
             }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("grant('" + user.getName() + "', '" + group.getName() + "') failed", e);
+            catch (TorqueException e)
+            {
+                throw new DataBackendException("grant('" + user.getName() + "', '" + group.getName() + "') failed", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
+            }
+
+            return;
         }
 
         if (!groupExists)
@@ -240,30 +278,39 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
      */
     public synchronized void revoke(User user, Group group) throws DataBackendException, UnknownEntityException
     {
-        boolean groupExists = false;
-        boolean userExists = false;
+        boolean groupExists = getGroupManager().checkExists(group);
+        boolean userExists = getUserManager().checkExists(user);
         
-        try
+        if (groupExists && userExists)
         {
-            groupExists = getGroupManager().checkExists(group);
-            userExists = getUserManager().checkExists(user);
-
-            if (groupExists && userExists)
+            ((DynamicUser) user).removeGroup(group);
+            ((DynamicGroup) group).removeUser(user);
+            
+            Connection con = null;
+            
+            try
             {
-                ((DynamicUser) user).removeGroup(group);
-                ((DynamicGroup) group).removeUser(user);
+                con = Transaction.begin(((TorqueAbstractSecurityEntity)user).getDatabaseName());
                 
-                Criteria criteria = new Criteria();
-                criteria.add(TorqueDynamicUserGroupPeer.GROUP_ID, (Integer)group.getId());
-                criteria.add(TorqueDynamicUserGroupPeer.USER_ID, (Integer)user.getId());
-                TorqueDynamicUserGroupPeer.doDelete(criteria);
-
-                return;
+                ((TorqueAbstractSecurityEntity)user).update(con);
+                ((TorqueAbstractSecurityEntity)group).update(con);
+                
+                Transaction.commit(con);
+                con = null;
             }
-        }
-        catch (TorqueException e)
-        {
-            throw new DataBackendException("revoke('" + user.getName() + "', '" + group.getName() + "') failed", e);
+            catch (TorqueException e)
+            {
+                throw new DataBackendException("revoke('" + user.getName() + "', '" + group.getName() + "') failed", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
+            }
+
+            return;
         }
 
         if (!groupExists)
@@ -288,27 +335,39 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
     public synchronized void grant(Group group, Role role)
         throws DataBackendException, UnknownEntityException
     {
-        boolean groupExists = false;
-        boolean roleExists = false;
+        boolean groupExists = getGroupManager().checkExists(group);
+        boolean roleExists = getRoleManager().checkExists(role);
         
-        try
+        if (groupExists && roleExists)
         {
-            groupExists = getGroupManager().checkExists(group);
-            roleExists = getRoleManager().checkExists(role);
-            if (groupExists && roleExists)
+            ((DynamicGroup) group).addRole(role);
+            ((DynamicRole) role).addGroup(group);
+            
+            Connection con = null;
+            
+            try
             {
-                ((DynamicGroup) group).addRole(role);
-                ((DynamicRole) role).addGroup(group);
+                con = Transaction.begin(((TorqueAbstractSecurityEntity)role).getDatabaseName());
                 
-                TorqueDynamicGroupRole gr = new TorqueDynamicGroupRole();
-                gr.setGroupId((Integer)group.getId());
-                gr.setRoleId((Integer)role.getId());
-                gr.save();
+                ((TorqueAbstractSecurityEntity)role).update(con);
+                ((TorqueAbstractSecurityEntity)group).update(con);
+                
+                Transaction.commit(con);
+                con = null;
             }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("grant('" + group.getName() + "', '" + role.getName() + "') failed", e);
+            catch (TorqueException e)
+            {
+                throw new DataBackendException("grant('" + group.getName() + "', '" + role.getName() + "') failed", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
+            }
+            
+            return;
         }
 
         if (!groupExists)
@@ -330,29 +389,40 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
     public synchronized void addDelegate(User delegator, User delegatee)
             throws DataBackendException, UnknownEntityException 
     {
-        boolean delegatorExists = false;
-        boolean delegateeExists = false;
+        boolean delegatorExists = getUserManager().checkExists(delegator);
+        boolean delegateeExists = getUserManager().checkExists(delegatee);
         
-        try
+        if (delegatorExists && delegateeExists)
         {
-            delegatorExists = getUserManager().checkExists(delegator);
-            delegateeExists = getUserManager().checkExists(delegatee);
+            super.addDelegate(delegator, delegatee);
 
-            if (delegatorExists && delegateeExists)
+            Connection con = null;
+            
+            try
             {
-                super.addDelegate(delegator, delegatee);
-
-                TorqueDynamicUserDelegates d = new TorqueDynamicUserDelegates();
-                d.setDelegatorUserId((Integer)delegator.getId());
-                d.setDelegateeUserId((Integer)delegatee.getId());
-                d.save();
+                con = Transaction.begin(((TorqueAbstractSecurityEntity)delegator).getDatabaseName());
+                
+                ((TorqueAbstractSecurityEntity)delegator).update(con);
+                ((TorqueAbstractSecurityEntity)delegatee).update(con);
+                
+                Transaction.commit(con);
+                con = null;
             }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("addDelegate('" 
-                    + delegator.getName() + "', '" 
-                    + delegatee.getName() + "') failed", e);
+            catch (TorqueException e)
+            {
+                throw new DataBackendException("addDelegate('" 
+                        + delegator.getName() + "', '" 
+                        + delegatee.getName() + "') failed", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
+            }
+            
+            return;
         }
 
         if (!delegatorExists)
@@ -374,29 +444,40 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
     public synchronized void removeDelegate(User delegator, User delegatee)
             throws DataBackendException, UnknownEntityException 
     {
-        boolean delegatorExists = false;
-        boolean delegateeExists = false;
+        boolean delegatorExists = getUserManager().checkExists(delegator);
+        boolean delegateeExists = getUserManager().checkExists(delegatee);
         
-        try
+        if (delegatorExists && delegateeExists)
         {
-            delegatorExists = getUserManager().checkExists(delegator);
-            delegateeExists = getUserManager().checkExists(delegatee);
+            super.removeDelegate(delegator, delegatee);
 
-            if (delegatorExists && delegateeExists)
+            Connection con = null;
+            
+            try
             {
-                super.removeDelegate(delegator, delegatee);
-
-                Criteria criteria = new Criteria();
-                criteria.add(TorqueDynamicUserDelegatesPeer.DELEGATOR_USER_ID, (Integer)delegator.getId());
-                criteria.add(TorqueDynamicUserDelegatesPeer.DELEGATEE_USER_ID, (Integer)delegatee.getId());
-                TorqueDynamicUserDelegatesPeer.doDelete(criteria);
+                con = Transaction.begin(((TorqueAbstractSecurityEntity)delegator).getDatabaseName());
+                
+                ((TorqueAbstractSecurityEntity)delegator).update(con);
+                ((TorqueAbstractSecurityEntity)delegatee).update(con);
+                
+                Transaction.commit(con);
+                con = null;
             }
-        }
-        catch (TorqueException e)
-        {
-            throw new DataBackendException("removeDelegate('" 
-                    + delegator.getName() + "', '" 
-                    + delegatee.getName() + "') failed", e);
+            catch (TorqueException e)
+            {
+                throw new DataBackendException("removeDelegate('" 
+                        + delegator.getName() + "', '" 
+                        + delegatee.getName() + "') failed", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
+            }
+            
+            return;
         }
 
         if (!delegatorExists)

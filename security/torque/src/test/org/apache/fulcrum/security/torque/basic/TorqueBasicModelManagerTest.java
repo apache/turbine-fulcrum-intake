@@ -20,10 +20,10 @@ import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 import org.apache.fulcrum.security.model.basic.test.AbstractModelManagerTest;
+import org.apache.fulcrum.security.torque.om.TorqueBasicGroupPeer;
 import org.apache.fulcrum.security.torque.HsqlDB;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroupPeer;
-import org.apache.fulcrum.security.torque.om.TorqueGroupPeer;
-import org.apache.fulcrum.security.torque.om.TorqueUserPeer;
+import org.apache.fulcrum.security.torque.om.TorqueBasicUserPeer;
 import org.apache.torque.TorqueException;
 import org.apache.torque.util.Criteria;
 
@@ -40,9 +40,9 @@ public class TorqueBasicModelManagerTest extends AbstractModelManagerTest
     {
         if(hsqlDB == null)
         {
-            this.hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-schema.sql");
+            hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-basic-schema.sql");
             hsqlDB.addSQL("src/test/id-table-schema.sql");
-            hsqlDB.addSQL("src/test/fulcrum-schema-idtable-init.sql");
+            hsqlDB.addSQL("src/test/fulcrum-basic-schema-idtable-init.sql");
         }
         this.setRoleFileName("src/test/BasicTorqueRoleConfig.xml");
         this.setConfigurationFileName("src/test/BasicTorqueComponentConfig.xml");
@@ -69,12 +69,12 @@ public class TorqueBasicModelManagerTest extends AbstractModelManagerTest
             TorqueBasicUserGroupPeer.doDelete(criteria);
 
             criteria.clear();
-            criteria.add(TorqueUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
-            TorqueUserPeer.doDelete(criteria);
-
+            criteria.add(TorqueBasicUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
+            TorqueBasicUserPeer.doDelete(criteria);
+            
             criteria.clear();
-            criteria.add(TorqueGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
-            TorqueGroupPeer.doDelete(criteria);
+            criteria.add(TorqueBasicGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
+            TorqueBasicGroupPeer.doDelete(criteria);
         }
         catch (TorqueException e)
         {

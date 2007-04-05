@@ -5,10 +5,10 @@
     <aclFactory/>
     
     <userManager>
-      	<className>org.apache.fulcrum.security.model.basic.entity.BasicUser</className>
+      	<className>org.apache.fulcrum.security.torque.om.TorqueBasicUser</className>
     </userManager> 
     <groupManager>
-      	<className>org.apache.fulcrum.security.model.basic.entity.BasicGroup</className>
+      	<className>org.apache.fulcrum.security.torque.om.TorqueBasicGroup</className>
     </groupManager>    
   
     <torqueService>

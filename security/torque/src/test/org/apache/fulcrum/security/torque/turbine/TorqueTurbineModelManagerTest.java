@@ -17,13 +17,13 @@ package org.apache.fulcrum.security.torque.turbine;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.turbine.test.AbstractTurbineModelManagerTest;
+import org.apache.fulcrum.security.torque.om.TorqueTurbineGroupPeer;
+import org.apache.fulcrum.security.torque.om.TorqueTurbinePermissionPeer;
+import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePeer;
 import org.apache.fulcrum.security.torque.HsqlDB;
-import org.apache.fulcrum.security.torque.om.TorqueGroupPeer;
-import org.apache.fulcrum.security.torque.om.TorquePermissionPeer;
-import org.apache.fulcrum.security.torque.om.TorqueRolePeer;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePermissionPeer;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRolePeer;
-import org.apache.fulcrum.security.torque.om.TorqueUserPeer;
+import org.apache.fulcrum.security.torque.om.TorqueTurbineUserPeer;
 import org.apache.torque.TorqueException;
 import org.apache.torque.util.Criteria;
 
@@ -42,9 +42,9 @@ public class TorqueTurbineModelManagerTest
 
         try
         {
-            this.hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-schema.sql");
+            hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-turbine-schema.sql");
             hsqlDB.addSQL("src/test/id-table-schema.sql");
-            hsqlDB.addSQL("src/test/fulcrum-schema-idtable-init.sql");
+            hsqlDB.addSQL("src/test/fulcrum-turbine-schema-idtable-init.sql");
 
             this.setRoleFileName("src/test/TurbineTorqueRoleConfig.xml");
             this.setConfigurationFileName("src/test/TurbineTorqueComponentConfig.xml");
@@ -72,27 +72,27 @@ public class TorqueTurbineModelManagerTest
             TorqueTurbineRolePermissionPeer.doDelete(criteria);
 
             criteria.clear();
-            criteria.add(TorqueUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
-            TorqueUserPeer.doDelete(criteria);
+            criteria.add(TorqueTurbineUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
+            TorqueTurbineUserPeer.doDelete(criteria);
             
             criteria.clear();
-            criteria.add(TorqueGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
-            TorqueGroupPeer.doDelete(criteria);
+            criteria.add(TorqueTurbineGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
+            TorqueTurbineGroupPeer.doDelete(criteria);
 
             criteria.clear();
-            criteria.add(TorqueRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN);
-            TorqueRolePeer.doDelete(criteria);
+            criteria.add(TorqueTurbineRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN);
+            TorqueTurbineRolePeer.doDelete(criteria);
             
             criteria.clear();
-            criteria.add(TorquePermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN);
-            TorquePermissionPeer.doDelete(criteria);
+            criteria.add(TorqueTurbinePermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN);
+            TorqueTurbinePermissionPeer.doDelete(criteria);
         }
         catch (TorqueException e)
         {
             fail(e.toString());
         }
 
-		modelManager = null;
+        modelManager = null;
         securityService = null;
     }
 

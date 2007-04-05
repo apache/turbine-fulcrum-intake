@@ -14,6 +14,7 @@ package org.apache.fulcrum.security.torque.basic;
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -24,12 +25,11 @@ import org.apache.fulcrum.security.model.basic.BasicModelManager;
 import org.apache.fulcrum.security.model.basic.entity.BasicGroup;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 import org.apache.fulcrum.security.spi.AbstractManager;
-import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroup;
-import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroupPeer;
+import org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.torque.TorqueException;
-import org.apache.torque.util.Criteria;
+import org.apache.torque.util.Transaction;
 /**
  * This implementation persists to a database via Torque.
  *
@@ -49,29 +49,39 @@ public class TorqueBasicModelManagerImpl extends AbstractManager implements Basi
      */
     public synchronized void grant(User user, Group group) throws DataBackendException, UnknownEntityException
     {
-        boolean groupExists = false;
-        boolean userExists = false;
+        boolean groupExists = getGroupManager().checkExists(group);
+        boolean userExists = getUserManager().checkExists(user);
         
-        try
+        if (groupExists && userExists)
         {
-            groupExists = getGroupManager().checkExists(group);
-            userExists = getUserManager().checkExists(user);
-            if (groupExists && userExists)
+            ((BasicUser) user).addGroup(group);
+            ((BasicGroup) group).addUser(user);
+            
+            Connection con = null;
+            
+            try
             {
-                ((BasicUser) user).addGroup(group);
-                ((BasicGroup) group).addUser(user);
+                con = Transaction.begin(((TorqueAbstractSecurityEntity)user).getDatabaseName());
                 
-                TorqueBasicUserGroup ug = new TorqueBasicUserGroup();
-                ug.setGroupId((Integer)group.getId());
-                ug.setUserId((Integer)user.getId());
-                ug.save();
-
-                return;
+                ((TorqueAbstractSecurityEntity)user).update(con);
+                ((TorqueAbstractSecurityEntity)group).update(con);
+                
+                Transaction.commit(con);
+                con = null;
             }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("grant('" + user.getName() + user.getId() + "', '" + group.getName() + group.getId() + "') failed", e);
+            catch (TorqueException e)
+            {
+                throw new DataBackendException("grant('" + user.getName() + user.getId() + "', '" + group.getName() + group.getId() + "') failed", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
+            }
+
+            return;
         }
 
         if (!groupExists)
@@ -96,29 +106,39 @@ public class TorqueBasicModelManagerImpl extends AbstractManager implements Basi
      */
     public synchronized void revoke(User user, Group group) throws DataBackendException, UnknownEntityException
     {
-        boolean groupExists = false;
-        boolean userExists = false;
+        boolean groupExists = getGroupManager().checkExists(group);
+        boolean userExists = getUserManager().checkExists(user);
         
-        try
+        if (groupExists && userExists)
         {
-            groupExists = getGroupManager().checkExists(group);
-            userExists = getUserManager().checkExists(user);
-            if (groupExists && userExists)
+            ((BasicUser) user).removeGroup(group);
+            ((BasicGroup) group).removeUser(user);
+            
+            Connection con = null;
+            
+            try
             {
-                ((BasicUser) user).removeGroup(group);
-                ((BasicGroup) group).removeUser(user);
+                con = Transaction.begin(((TorqueAbstractSecurityEntity)user).getDatabaseName());
                 
-                Criteria criteria = new Criteria();
-                criteria.add(TorqueBasicUserGroupPeer.GROUP_ID, (Integer)group.getId());
-                criteria.add(TorqueBasicUserGroupPeer.USER_ID, (Integer)user.getId());
-                TorqueBasicUserGroupPeer.doDelete(criteria);
-
-                return;
+                ((TorqueAbstractSecurityEntity)user).update(con);
+                ((TorqueAbstractSecurityEntity)group).update(con);
+                
+                Transaction.commit(con);
+                con = null;
             }
-        }
-        catch (TorqueException e)
-        {
-            throw new DataBackendException("revoke('" + user.getName() + "', '" + group.getName() + "') failed", e);
+            catch (TorqueException e)
+            {
+                throw new DataBackendException("grant('" + user.getName() + user.getId() + "', '" + group.getName() + group.getId() + "') failed", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
+            }
+            
+            return;
         }
 
         if (!groupExists)
@@ -144,8 +164,8 @@ public class TorqueBasicModelManagerImpl extends AbstractManager implements Basi
     public synchronized void revokeAll(User user)
         throws DataBackendException, UnknownEntityException
     {
-        boolean userExists = false;
-        userExists = getUserManager().checkExists(user);
+        boolean userExists = getUserManager().checkExists(user);
+        
         if (userExists)
         {
             BasicUser u = (BasicUser) user;
@@ -158,16 +178,28 @@ public class TorqueBasicModelManagerImpl extends AbstractManager implements Basi
                 Group group = (Group)i.next();
                 u.removeGroup(group);
             }
-
+            
+            Connection con = null;
+            
             try
             {
-                Criteria criteria = new Criteria();
-                criteria.add(TorqueBasicUserGroupPeer.USER_ID, (Integer)user.getId());
-                TorqueBasicUserGroupPeer.doDelete(criteria);
+                con = Transaction.begin(((TorqueAbstractSecurityEntity)user).getDatabaseName());
+                
+                ((TorqueAbstractSecurityEntity)user).update(con);
+                
+                Transaction.commit(con);
+                con = null;
             }
             catch (TorqueException e)
             {
-                throw new DataBackendException("revokeAll('" + user.getName() + "') failed", e);
+                throw new DataBackendException("revokeAll('" + user.getName() + user.getId() + "') failed", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
             }
 
             return;

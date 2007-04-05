@@ -5,16 +5,16 @@
     <aclFactory/>
     
     <userManager>
-        <className>org.apache.fulcrum.security.model.turbine.entity.TurbineUser</className>
+        <className>org.apache.fulcrum.security.torque.om.TorqueTurbineUser</className>
     </userManager> 
     <groupManager>
-        <className>org.apache.fulcrum.security.model.turbine.entity.TurbineGroup</className>
+        <className>org.apache.fulcrum.security.torque.om.TorqueTurbineGroup</className>
     </groupManager>    
     <roleManager>
-        <className>org.apache.fulcrum.security.model.turbine.entity.TurbineRole</className>
+        <className>org.apache.fulcrum.security.torque.om.TorqueTurbineRole</className>
     </roleManager>   
     <permissionManager>
-        <className>org.apache.fulcrum.security.model.turbine.entity.TurbinePermission</className>
+        <className>org.apache.fulcrum.security.torque.om.TorqueTurbinePermission</className>
     </permissionManager> 
   
     <torqueService>

@@ -1,8 +1,11 @@
 <project default="jar:jar" xmlns:maven="jelly:maven" xmlns:j="jelly:core" xmlns:util="jelly:util">
 
   <preGoal name="java:compile">
-    <attainGoal name="torque-gen:prepare"/>
     <attainGoal name="torque:om"/>
+  </preGoal>
+
+  <preGoal name="torque:init">
+    <attainGoal name="torque-gen:prepare"/>
   </preGoal>
 
   <goal name="torque-gen:prepare">

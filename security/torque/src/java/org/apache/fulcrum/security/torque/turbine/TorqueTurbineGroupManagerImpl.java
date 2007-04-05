@@ -15,26 +15,13 @@ package org.apache.fulcrum.security.torque.turbine;
  *  limitations under the License.
  */
 import java.sql.Connection;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
-import org.apache.fulcrum.security.RoleManager;
-import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.entity.Group;
-import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.model.turbine.entity.TurbineGroup;
-import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
 import org.apache.fulcrum.security.torque.TorqueAbstractGroupManager;
-import org.apache.fulcrum.security.torque.om.TorqueRole;
-import org.apache.fulcrum.security.torque.om.TorqueRolePeer;
-import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRole;
-import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRolePeer;
-import org.apache.fulcrum.security.torque.om.TorqueUser;
-import org.apache.fulcrum.security.torque.om.TorqueUserPeer;
-import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.torque.om.TorqueTurbineGroupPeer;
+import org.apache.torque.NoRowsException;
+import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
 import org.apache.torque.util.Criteria;
 /**
@@ -46,46 +33,40 @@ import org.apache.torque.util.Criteria;
 public class TorqueTurbineGroupManagerImpl extends TorqueAbstractGroupManager
 {
     /**
-     * Provides the user/group/role-relations for the given group
-     *  
-     * @param group the group for which the relations should be retrieved  
-     * @param con a database connection
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractGroupManager#doSelectAllGroups(java.sql.Connection)
      */
-    protected void attachObjectsForGroup(Group group, Connection con)
-        throws TorqueException, DataBackendException
+    protected List doSelectAllGroups(Connection con) throws TorqueException
     {
-        Set ugrSet = new HashSet();
+        Criteria criteria = new Criteria(TorqueTurbineGroupPeer.DATABASE_NAME);
+
+        return TorqueTurbineGroupPeer.doSelect(criteria, con);
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractGroupManager#doSelectById(java.lang.Integer, java.sql.Connection)
+     */
+    protected Group doSelectById(Integer id, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    {
+        return TorqueTurbineGroupPeer.retrieveByPK(id, con);
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractGroupManager#doSelectByName(java.lang.String, java.sql.Connection)
+     */
+    protected Group doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    {
+        Criteria criteria = new Criteria(TorqueTurbineGroupPeer.DATABASE_NAME);
+        criteria.add(TorqueTurbineGroupPeer.GROUP_NAME, name);
+        criteria.setIgnoreCase(true);
+        criteria.setSingleRecord(true);
         
-        Criteria criteria = new Criteria();
-        criteria.add(TorqueTurbineUserGroupRolePeer.GROUP_ID, (Integer)group.getId());
-        
-        List ugrs = TorqueTurbineUserGroupRolePeer.doSelect(criteria, con);
-        UserManager userManager = getUserManager();
-        RoleManager roleManager = getRoleManager();
-        
-        for (Iterator i = ugrs.iterator(); i.hasNext();)
+        List groups = TorqueTurbineGroupPeer.doSelect(criteria, con);
+
+        if (groups.isEmpty())
         {
-            TurbineUserGroupRole ugr = new TurbineUserGroupRole();
-            ugr.setGroup(group);
-            
-            TorqueTurbineUserGroupRole tugr = (TorqueTurbineUserGroupRole)i.next();
-
-            User user = userManager.getUserInstance();
-            TorqueUser u = TorqueUserPeer.retrieveByPK(tugr.getUserId(), con);
-            user.setId(u.getId());
-            user.setName(u.getName());
-            user.setPassword(u.getPassword());
-            ugr.setUser(user);
-
-            Role role = roleManager.getRoleInstance();
-            TorqueRole r = TorqueRolePeer.retrieveByPK(tugr.getRoleId(), con);
-            role.setId(r.getId());
-            role.setName(r.getName());
-            ugr.setRole(role);
-            
-            ugrSet.add(ugr);
+            throw new NoRowsException(name);
         }
         
-        ((TurbineGroup)group).setUserGroupRoleSet(ugrSet);
+        return (Group)groups.get(0);
     }
 }

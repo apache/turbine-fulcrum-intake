@@ -15,26 +15,13 @@ package org.apache.fulcrum.security.torque.dynamic;
  *  limitations under the License.
  */
 import java.sql.Connection;
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.fulcrum.security.GroupManager;
-import org.apache.fulcrum.security.PermissionManager;
-import org.apache.fulcrum.security.entity.Group;
-import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
 import org.apache.fulcrum.security.torque.TorqueAbstractRoleManager;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupRolePeer;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePermissionPeer;
-import org.apache.fulcrum.security.torque.om.TorqueGroup;
-import org.apache.fulcrum.security.torque.om.TorqueGroupPeer;
-import org.apache.fulcrum.security.torque.om.TorquePermission;
-import org.apache.fulcrum.security.torque.om.TorquePermissionPeer;
-import org.apache.fulcrum.security.util.DataBackendException;
-import org.apache.fulcrum.security.util.GroupSet;
-import org.apache.fulcrum.security.util.PermissionSet;
-import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePeer;
+import org.apache.torque.NoRowsException;
+import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
 import org.apache.torque.util.Criteria;
 /**
@@ -46,54 +33,40 @@ import org.apache.torque.util.Criteria;
 public class TorqueDynamicRoleManagerImpl extends TorqueAbstractRoleManager
 {
     /**
-     * Provides the groups/permissions for the given role
-     *  
-     * @param role the role for which the groups/permissions should be retrieved  
-     * @param con a database connection
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractRoleManager#doSelectAllRoles(java.sql.Connection)
      */
-    protected void attachObjectsForRole(Role role, Connection con)
-        throws TorqueException, DataBackendException, UnknownEntityException
+    protected List doSelectAllRoles(Connection con) throws TorqueException
     {
-        GroupSet groupSet = new GroupSet();
-        
-        Criteria criteria = new Criteria();
-        criteria.addJoin(TorqueDynamicGroupRolePeer.GROUP_ID, TorqueGroupPeer.GROUP_ID);
-        criteria.add(TorqueDynamicGroupRolePeer.ROLE_ID, (Integer)role.getId());
-        
-        List groups = TorqueGroupPeer.doSelect(criteria, con);
-        GroupManager groupManager = getGroupManager();
-        
-        for (Iterator i = groups.iterator(); i.hasNext();)
-        {
-            TorqueGroup g = (TorqueGroup)i.next();
-            Group group = groupManager.getGroupInstance();
-            
-            group.setId(g.getId());
-            group.setName(g.getName());
-            groupSet.add(group);
-        }
-        
-        ((DynamicRole)role).setGroups(groupSet);
+        Criteria criteria = new Criteria(TorqueDynamicRolePeer.DATABASE_NAME);
 
-        PermissionSet permissionSet = new PermissionSet();
+        return TorqueDynamicRolePeer.doSelect(criteria, con);
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractRoleManager#doSelectById(java.lang.Integer, java.sql.Connection)
+     */
+    protected Role doSelectById(Integer id, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    {
+        return TorqueDynamicRolePeer.retrieveByPK(id, con);
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractRoleManager#doSelectByName(java.lang.String, java.sql.Connection)
+     */
+    protected Role doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    {
+        Criteria criteria = new Criteria(TorqueDynamicRolePeer.DATABASE_NAME);
+        criteria.add(TorqueDynamicRolePeer.ROLE_NAME, name);
+        criteria.setIgnoreCase(true);
+        criteria.setSingleRecord(true);
+
+        List roles = TorqueDynamicRolePeer.doSelect(criteria, con);
         
-        criteria.clear();
-        criteria.addJoin(TorqueDynamicRolePermissionPeer.PERMISSION_ID, TorquePermissionPeer.PERMISSION_ID);
-        criteria.add(TorqueDynamicRolePermissionPeer.ROLE_ID, (Integer)role.getId());
-        
-        List permissions = TorquePermissionPeer.doSelect(criteria, con);
-        PermissionManager permissionManager = getPermissionManager();
-        
-        for (Iterator i = permissions.iterator(); i.hasNext();)
+        if (roles.isEmpty())
         {
-            TorquePermission p = (TorquePermission)i.next();
-            Permission permission = permissionManager.getPermissionInstance();
-            
-            permission.setId(p.getId());
-            permission.setName(p.getName());
-            permissionSet.add(permission);
+            throw new NoRowsException(name);
         }
         
-        ((DynamicRole)role).setPermissions(permissionSet);
+        return (Role)roles.get(0);
     }
 }

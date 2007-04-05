@@ -15,61 +15,142 @@ package org.apache.fulcrum.security.torque;
  *  limitations under the License.
  */
 import java.sql.Connection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.spi.AbstractGroupManager;
-import org.apache.fulcrum.security.torque.om.TorqueGroup;
-import org.apache.fulcrum.security.torque.om.TorqueGroupPeer;
 import org.apache.fulcrum.security.util.DataBackendException;
-import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.torque.NoRowsException;
+import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
-import org.apache.torque.om.SimpleKey;
-import org.apache.torque.util.Criteria;
 import org.apache.torque.util.Transaction;
+
 /**
  * This implementation persists to a database via Torque.
  *
- * The names of the group class, group peer class and the
- * columns of the group class can be overridden in a 
- * configuration like this:
- * <pre>
- * &lt;groupClass&gt;
- *     &lt;className&gt;org.fulcrum.security.torque.om.TorqueGroup&lt;/className&gt;
- *     &lt;peerName&gt;org.fulcrum.security.torque.om.TorqueGroupPeer&lt;/peerName&gt;
- *     &lt;idColumn&gt;GROUP_ID&lt;/idColumn&gt;
- *     &lt;nameColumn&gt;GROUP_NAME&lt;/nameColumn&gt;
- * &lt;/group&gt;
- * </pre>
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id:$
  */
 public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
 {
-    public static final String GROUP = "group";
-    
     /**
-     * Provides the attached object lists for the given group
-     *  
-     * @param group the group for which the lists should be retrieved  
+     * Get all specialized Groups
+     * 
      * @param con a database connection
+     * 
+     * @return a List of Group instances
+     *
+     * @throws TorqueException if any database error occurs
      */
-    protected abstract void attachObjectsForGroup(Group group, Connection con)
-        throws TorqueException, DataBackendException;
+    protected abstract List doSelectAllGroups(Connection con)
+        throws TorqueException;
+
+    /**
+     * Get a specialized Group by name
+     * 
+     * @param name the name of the group
+     * @param con a database connection
+     * 
+     * @return a Group instance
+     *
+     * @throws NoRowsException if no such group exists
+     * @throws TooManyRowsException if multiple groups with the given name exist
+     * @throws TorqueException if any other database error occurs
+     */
+    protected abstract Group doSelectByName(String name, Connection con)
+        throws NoRowsException, TooManyRowsException, TorqueException;
+
+    /**
+     * Get a specialized Group by id
+     * 
+     * @param id the id of the group
+     * @param con a database connection
+     * 
+     * @return a Group instance
+     *
+     * @throws NoRowsException if no such group exists
+     * @throws TooManyRowsException if multiple groups with the given id exist
+     * @throws TorqueException if any other database error occurs
+     */
+    protected abstract Group doSelectById(Integer id, Connection con)
+        throws NoRowsException, TooManyRowsException, TorqueException;
     
     /**
-     * @see org.apache.fulcrum.security.spi.AbstractEntityManager#configure(org.apache.avalon.framework.configuration.Configuration)
-     */
-    public void configure(Configuration conf) throws ConfigurationException
+    * Creates a new group with specified attributes.
+    *
+    * @param group the object describing the group to be created.
+    * @return a new Group object that has id set up properly.
+    * @throws DataBackendException if there was an error accessing the data
+    *         backend.
+    * @throws EntityExistsException if the group already exists.
+    */
+    protected synchronized Group persistNewGroup(Group group) throws DataBackendException
     {
-        super.configure(conf);
+        try
+        {
+            ((TorqueAbstractSecurityEntity)group).save();
+        }
+        catch (Exception e)
+        {
+            throw new DataBackendException("Adding Group '" + group.getName() + "' failed", e);
+        }
+        
+        return group;
+    }
+
+    /**
+    * Renames an existing Group.
+    *
+    * @param group The object describing the group to be renamed.
+    * @param name the new name for the group.
+    * @throws DataBackendException if there was an error accessing the data
+    *         backend.
+    * @throws UnknownEntityException if the group does not exist.
+    */
+    public synchronized void renameGroup(Group group, String name) throws DataBackendException, UnknownEntityException
+    {
+        if (checkExists(group))
+        {
+            group.setName(name);
+    
+            try
+            {
+                TorqueAbstractSecurityEntity g = (TorqueAbstractSecurityEntity)group;
+                g.setNew(false);
+                g.save();
+            }
+            catch (Exception e)
+            {
+                throw new DataBackendException("Renaming Group '" + group.getName() + "' failed", e);
+            }
+        }
+        else
+        {
+            throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
+        }
+    }
+
+    /**
+    * Removes a Group from the system.
+    *
+    * @param group The object describing the group to be removed.
+    * @throws DataBackendException if there was an error accessing the data
+    *         backend.
+    * @throws UnknownEntityException if the group does not exist.
+    */
+    public synchronized void removeGroup(Group group) throws DataBackendException, UnknownEntityException
+    {
+        try
+        {
+            ((TorqueAbstractSecurityEntity)group).delete();
+        }
+        catch (TorqueException e)
+        {
+            throw new DataBackendException("Removing Group '" + group.getName() + "' failed", e);
+        }
     }
 
     /**
@@ -81,51 +162,43 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
      *         data backend.
      * @throws UnknownEntityException if the group does not exist.
      */
-    public Group getGroupByName(String name)
-        throws DataBackendException, UnknownEntityException
+    public Group getGroupByName(String name) throws DataBackendException, UnknownEntityException
     {
-        Group group = getGroupInstance();
-        List groups = Collections.EMPTY_LIST;
+        Group group = null;
         Connection con = null;
-
+    
         try
         {
-            con = Transaction.begin(TorqueGroupPeer.DATABASE_NAME);
+            con = Transaction.begin(((TorqueAbstractSecurityEntity)getGroupInstance()).getDatabaseName());
             
-            Criteria criteria = new Criteria();
-            criteria.add(TorqueGroupPeer.GROUP_NAME, name);
-
-            groups = TorqueGroupPeer.doSelect(criteria, con);
-
-            if (groups.size() == 1)
-            {
-                TorqueGroup g = (TorqueGroup) groups.get(0);
-                
-                group.setId(g.getId());
-                group.setName(g.getName());
-                
-                // Add dependent objects if they exist
-                attachObjectsForGroup(group, con);
-            }
-
+            group = doSelectByName(name, con);
+    
+            // Add dependent objects if they exist
+            ((TorqueAbstractSecurityEntity)group).retrieveAttachedObjects(con);
+    
             Transaction.commit(con);
+            con = null;
         }
-        catch (TorqueException e)
-        {
-            Transaction.safeRollback(con);
-            throw new DataBackendException("Error retrieving group information", e);
-        }
-
-        if (groups.size() == 0)
+        catch (NoRowsException e)
         {
             throw new UnknownEntityException("Could not find group" + name);
         }
-
-        if (groups.size() > 1)
+        catch (TooManyRowsException e)
         {
             throw new DataBackendException("Multiple Groups with same name '" + name + "'");
         }
-
+        catch (TorqueException e)
+        {
+            throw new DataBackendException("Error retrieving group information", e);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
+        }
+    
         return group;
     }
 
@@ -140,91 +213,39 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
     {
         GroupSet groupSet = new GroupSet();
         Connection con = null;
-
+    
         try
         {
-            con = Transaction.begin(TorqueGroupPeer.DATABASE_NAME);
-
-            List groups = TorqueGroupPeer.doSelect(new Criteria(), con);
+            con = Transaction.begin(((TorqueAbstractSecurityEntity)getGroupInstance()).getDatabaseName());
+    
+            List groups = doSelectAllGroups(con);
             
             for (Iterator i = groups.iterator(); i.hasNext();)
             {
-                Group group = getGroupInstance();
-                TorqueGroup g = (TorqueGroup)i.next();
-                group.setId(g.getId());
-                group.setName(g.getName());
+                Group group = (Group)i.next();
                 
                 // Add dependent objects if they exist
-                attachObjectsForGroup(group, con);
-
+                ((TorqueAbstractSecurityEntity)group).retrieveAttachedObjects(con);
+    
                 groupSet.add(group);
             }
-
+    
             Transaction.commit(con);
+            con = null;
         }
         catch (TorqueException e)
         {
-            Transaction.safeRollback(con);
             throw new DataBackendException("Error retrieving group information", e);
         }
-
+        finally
+        {
+            if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
+        }
+    
         return groupSet;
-    }
-
-    /**
-        * Removes a Group from the system.
-        *
-        * @param group The object describing the group to be removed.
-        * @throws DataBackendException if there was an error accessing the data
-        *         backend.
-        * @throws UnknownEntityException if the group does not exist.
-        */
-    public synchronized void removeGroup(Group group)
-        throws DataBackendException, UnknownEntityException
-    {
-        try
-        {
-            TorqueGroupPeer.doDelete(SimpleKey.keyFor((Integer)group.getId()));
-        }
-        catch (TorqueException e)
-        {
-            throw new DataBackendException("Removing Group '" + group + "' failed", e);
-        }
-    }
-
-    /**
-        * Renames an existing Group.
-        *
-        * @param group The object describing the group to be renamed.
-        * @param name the new name for the group.
-        * @throws DataBackendException if there was an error accessing the data
-        *         backend.
-        * @throws UnknownEntityException if the group does not exist.
-        */
-    public synchronized void renameGroup(Group group, String name)
-        throws DataBackendException, UnknownEntityException
-    {
-        if (checkExists(group))
-        {
-            group.setName(name);
-
-            try
-            {
-                TorqueGroup g = new TorqueGroup();
-                g.setId((Integer)group.getId());
-                g.setName(name);
-                g.setNew(false);
-                g.save();
-            }
-            catch (Exception e)
-            {
-                throw new DataBackendException("Renaming Group '" + group + "' failed", e);
-            }
-        }
-        else
-        {
-            throw new UnknownEntityException("Unknown group '" + group + "'");
-        }
     }
 
     /**
@@ -237,55 +258,43 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
      */
     public boolean checkExists(String groupName) throws DataBackendException
     {
-        List groups;
-
+        boolean exists = false;
+    
+        Connection con = null;
+        
         try
         {
-            Criteria criteria = new Criteria();
-            criteria.add(TorqueGroupPeer.GROUP_NAME, groupName);
-
-            groups = TorqueGroupPeer.doSelect(criteria);
+            con = Transaction.begin(((TorqueAbstractSecurityEntity)getGroupInstance()).getDatabaseName());
+    
+            doSelectByName(groupName, con);
+            
+            Transaction.commit(con);
+            con = null;
+    
+            exists = true;
+        }
+        catch (NoRowsException e)
+        {
+            exists = false;
+        }
+        catch (TooManyRowsException e)
+        {
+            throw new DataBackendException(
+                    "Multiple groups with same name '" + groupName + "'");
         }
         catch (TorqueException e)
         {
             throw new DataBackendException("Error retrieving group information", e);
         }
-
-        if (groups.size() > 1)
+        finally
         {
-            throw new DataBackendException(
-                    "Multiple groups with same name '" + groupName + "'");
+            if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
         }
-
-        return (groups.size() == 1);
-    }
-
-    /**
-    * Creates a new group with specified attributes.
-    *
-    * @param group the object describing the group to be created.
-    * @return a new Group object that has id set up properly.
-    * @throws DataBackendException if there was an error accessing the data
-    *         backend.
-    * @throws EntityExistsException if the group already exists.
-    */
-    protected synchronized Group persistNewGroup(Group group)
-        throws DataBackendException
-    {
-        try
-        {
-            TorqueGroup g = new TorqueGroup();
-            g.setName(group.getName());
-            g.save();
-            
-            group.setId(g.getId());
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("Adding Group '" + group + "' failed", e);
-        }
-        
-        return group;
+    
+        return exists;
     }
 
     /**
@@ -299,45 +308,47 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
      * @throws UnknownEntityException
      *             if the group does not exist.
      */
-    public Group getGroupById(Object id)
-        throws DataBackendException, UnknownEntityException
+    public Group getGroupById(Object id) throws DataBackendException, UnknownEntityException
     {
-        Group group = getGroupInstance();
-
+        Group group;
+        
         if (id != null && id instanceof Integer)
         {
             Connection con = null;
-
+    
             try
             {
-                con = Transaction.begin(TorqueGroupPeer.DATABASE_NAME);
+                con = Transaction.begin(((TorqueAbstractSecurityEntity)getGroupInstance()).getDatabaseName());
                 
-                TorqueGroup g = TorqueGroupPeer.retrieveByPK((Integer)id, con);
-                
-                group.setId(g.getId());
-                group.setName(g.getName());
+                group = doSelectById((Integer)id, con);
                 
                 // Add dependent objects if they exist
-                attachObjectsForGroup(group, con);
-
+                ((TorqueAbstractSecurityEntity)group).retrieveAttachedObjects(con);
+    
                 Transaction.commit(con);
+                con = null;
             }
             catch (NoRowsException e)
             {
-                Transaction.safeRollback(con);
                 throw new UnknownEntityException("Group with id '" + id + "' does not exist.", e);
             }
             catch (TorqueException e)
             {
-                Transaction.safeRollback(con);
                 throw new DataBackendException("Error retrieving group information", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
             }
         }
         else
         {
-            throw new UnknownEntityException("Invalid group id '" + group.getId() + "'");
+            throw new UnknownEntityException("Invalid group id '" + id + "'");
         }
-
+    
         return group;
     }
 }

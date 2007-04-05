@@ -17,16 +17,6 @@ package org.apache.fulcrum.security.torque;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractPermissionManagerTest;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupRolePeer;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePermissionPeer;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicUserDelegatesPeer;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicUserGroupPeer;
-import org.apache.fulcrum.security.torque.om.TorqueGroupPeer;
-import org.apache.fulcrum.security.torque.om.TorquePermissionPeer;
-import org.apache.fulcrum.security.torque.om.TorqueRolePeer;
-import org.apache.fulcrum.security.torque.om.TorqueUserPeer;
-import org.apache.torque.TorqueException;
-import org.apache.torque.util.Criteria;
 
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
@@ -39,9 +29,11 @@ public class TorquePermissionManagerTest extends AbstractPermissionManagerTest
 
     public void setUp() throws Exception
     {
-        this.hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-schema.sql");
+        hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-dynamic-schema.sql");
+        hsqlDB.addSQL("src/test/fulcrum-turbine-schema.sql");
         hsqlDB.addSQL("src/test/id-table-schema.sql");
-        hsqlDB.addSQL("src/test/fulcrum-schema-idtable-init.sql");
+        hsqlDB.addSQL("src/test/fulcrum-dynamic-schema-idtable-init.sql");
+        hsqlDB.addSQL("src/test/fulcrum-turbine-schema-idtable-init.sql");
 
         this.setRoleFileName("src/test/DynamicTorqueRoleConfig.xml");
         this.setConfigurationFileName("src/test/DynamicTorqueComponentConfig.xml");
@@ -52,6 +44,7 @@ public class TorquePermissionManagerTest extends AbstractPermissionManagerTest
 
     public void tearDown()
     {
+/*
         // cleanup tables
         try
         {
@@ -91,7 +84,7 @@ public class TorquePermissionManagerTest extends AbstractPermissionManagerTest
         {
             fail(e.toString());
         }
-
+*/
         permission = null;
         permissionManager = null;
         securityService = null;

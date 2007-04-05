@@ -14,11 +14,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<!DOCTYPE database SYSTEM "http://db.apache.org/torque/dtd/database_3_2.dtd">
+<!DOCTYPE database SYSTEM "http://db.apache.org/torque/dtd/database_3_3.dtd">
 
 <!-- ====================================================================     -->
 <!--                                                                          -->
-<!-- F U L C R U M  S E C U R I T Y  S C H E M A                                      -->
+<!-- F U L C R U M  D Y N A M I C  S E C U R I T Y  S C H E M A               -->
 <!--                                                                          -->
 <!-- ====================================================================     -->
 <!-- @author: <a href="mailto:tv@apache.org">Thomas Vandahl</a> -->
@@ -27,9 +27,10 @@
 
 <database name="@DATABASE_DEFAULT@">
 
-  <table name="FULCRUM_PERMISSION" javaName="TorquePermission" idMethod="idbroker">
-    <column name="PERMISSION_ID" required="true" primaryKey="true" type="INTEGER" javaName="Id" javaType="object"/>
-    <column name="PERMISSION_NAME" required="true" size="64" type="VARCHAR" javaName="Name"/>
+  <table name="FULCRUM_DYNAMIC_PERMISSION" javaName="TorqueDynamicPermission" idMethod="idbroker"
+      baseClass="org.apache.fulcrum.security.torque.dynamic.TorqueAbstractDynamicPermission">
+    <column name="PERMISSION_ID" required="true" primaryKey="true" type="INTEGER" javaName="EntityId" javaType="object"/>
+    <column name="PERMISSION_NAME" required="true" size="64" type="VARCHAR" javaName="EntityName"/>
 
     <unique>
       <unique-column name="PERMISSION_NAME"/>
@@ -37,9 +38,10 @@
 
   </table>
 
-  <table name="FULCRUM_ROLE" javaName="TorqueRole" idMethod="idbroker">
-    <column name="ROLE_ID" required="true" primaryKey="true" type="INTEGER" javaName="Id" javaType="object"/>
-    <column name="ROLE_NAME" required="true" size="64" type="VARCHAR" javaName="Name"/>
+  <table name="FULCRUM_DYNAMIC_ROLE" javaName="TorqueDynamicRole" idMethod="idbroker"
+      baseClass="org.apache.fulcrum.security.torque.dynamic.TorqueAbstractDynamicRole">
+    <column name="ROLE_ID" required="true" primaryKey="true" type="INTEGER" javaName="EntityId" javaType="object"/>
+    <column name="ROLE_NAME" required="true" size="64" type="VARCHAR" javaName="EntityName"/>
 
     <unique>
         <unique-column name="ROLE_NAME"/>
@@ -47,9 +49,10 @@
 
   </table>
 
-  <table name="FULCRUM_GROUP" javaName="TorqueGroup" idMethod="idbroker">
-    <column name="GROUP_ID" required="true" primaryKey="true" type="INTEGER" javaName="Id" javaType="object"/>
-    <column name="GROUP_NAME" required="true" type="VARCHAR" size="64" javaName="Name"/>
+  <table name="FULCRUM_DYNAMIC_GROUP" javaName="TorqueDynamicGroup" idMethod="idbroker"
+      baseClass="org.apache.fulcrum.security.torque.dynamic.TorqueAbstractDynamicGroup">
+    <column name="GROUP_ID" required="true" primaryKey="true" type="INTEGER" javaName="EntityId" javaType="object"/>
+    <column name="GROUP_NAME" required="true" type="VARCHAR" size="64" javaName="EntityName"/>
 
     <unique>
         <unique-column name="GROUP_NAME"/>
@@ -57,9 +60,10 @@
 
   </table>
 
-  <table name="FULCRUM_USER" javaName="TorqueUser" idMethod="idbroker">
-    <column name="USER_ID" required="true" primaryKey="true" type="INTEGER" javaName="Id" javaType="object"/>
-    <column name="LOGIN_NAME" required="true" size="64" type="VARCHAR" javaName="Name"/>
+  <table name="FULCRUM_DYNAMIC_USER" javaName="TorqueDynamicUser" idMethod="idbroker"
+      baseClass="org.apache.fulcrum.security.torque.dynamic.TorqueAbstractDynamicUser">
+    <column name="USER_ID" required="true" primaryKey="true" type="INTEGER" javaName="EntityId" javaType="object"/>
+    <column name="LOGIN_NAME" required="true" size="64" type="VARCHAR" javaName="EntityName"/>
     <column name="PASSWORD_VALUE" required="true" size="16" type="VARCHAR" javaName="Password"/>
 <!--
     <column name="FIRST_NAME" required="true" size="64" type="VARCHAR"/>
@@ -77,30 +81,16 @@
 
   </table>
 
-  <!-- Basic Security Model -->
-  <table name="BASIC_USER_GROUP" javaName="TorqueBasicUserGroup">
-    <column name="USER_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
-    <column name="GROUP_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
-
-    <foreign-key foreignTable="FULCRUM_USER">
-      <reference local="USER_ID" foreign="USER_ID"/>
-    </foreign-key>
-
-    <foreign-key foreignTable="FULCRUM_GROUP">
-      <reference local="GROUP_ID" foreign="GROUP_ID"/>
-    </foreign-key>
-  </table>
-
   <!-- Dynamic Security Model -->
   <table name="DYNAMIC_ROLE_PERMISSION" javaName="TorqueDynamicRolePermission">
     <column name="ROLE_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
     <column name="PERMISSION_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
 
-    <foreign-key foreignTable="FULCRUM_ROLE">
+    <foreign-key foreignTable="FULCRUM_DYNAMIC_ROLE">
       <reference local="ROLE_ID" foreign="ROLE_ID"/>
     </foreign-key>
 
-    <foreign-key foreignTable="FULCRUM_PERMISSION">
+    <foreign-key foreignTable="FULCRUM_DYNAMIC_PERMISSION">
       <reference local="PERMISSION_ID" foreign="PERMISSION_ID"/>
     </foreign-key>
   </table>
@@ -109,11 +99,11 @@
     <column name="USER_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
     <column name="GROUP_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
 
-    <foreign-key foreignTable="FULCRUM_USER">
+    <foreign-key foreignTable="FULCRUM_DYNAMIC_USER">
       <reference local="USER_ID" foreign="USER_ID"/>
     </foreign-key>
 
-    <foreign-key foreignTable="FULCRUM_GROUP">
+    <foreign-key foreignTable="FULCRUM_DYNAMIC_GROUP">
       <reference local="GROUP_ID" foreign="GROUP_ID"/>
     </foreign-key>
   </table>
@@ -122,11 +112,11 @@
     <column name="GROUP_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
     <column name="ROLE_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
 
-    <foreign-key foreignTable="FULCRUM_GROUP">
+    <foreign-key foreignTable="FULCRUM_DYNAMIC_GROUP">
       <reference local="GROUP_ID" foreign="GROUP_ID"/>
     </foreign-key>
 
-    <foreign-key foreignTable="FULCRUM_ROLE">
+    <foreign-key foreignTable="FULCRUM_DYNAMIC_ROLE">
       <reference local="ROLE_ID" foreign="ROLE_ID"/>
     </foreign-key>
   </table>
@@ -135,44 +125,12 @@
     <column name="DELEGATOR_USER_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
     <column name="DELEGATEE_USER_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
 
-    <foreign-key foreignTable="FULCRUM_USER">
+    <foreign-key foreignTable="FULCRUM_DYNAMIC_USER">
       <reference local="DELEGATOR_USER_ID" foreign="USER_ID"/>
     </foreign-key>
 
-    <foreign-key foreignTable="FULCRUM_USER">
+    <foreign-key foreignTable="FULCRUM_DYNAMIC_USER">
       <reference local="DELEGATEE_USER_ID" foreign="USER_ID"/>
-    </foreign-key>
-  </table>
-
-  <!-- Turbine Security Model -->
-  <table name="TURBINE_ROLE_PERMISSION" javaName="TorqueTurbineRolePermission">
-    <column name="ROLE_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
-    <column name="PERMISSION_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
-
-    <foreign-key foreignTable="FULCRUM_ROLE">
-      <reference local="ROLE_ID" foreign="ROLE_ID"/>
-    </foreign-key>
-
-    <foreign-key foreignTable="FULCRUM_PERMISSION">
-      <reference local="PERMISSION_ID" foreign="PERMISSION_ID"/>
-    </foreign-key>
-  </table>
-
-  <table name="TURBINE_USER_GROUP_ROLE" javaName="TorqueTurbineUserGroupRole">
-    <column name="USER_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
-    <column name="GROUP_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
-    <column name="ROLE_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
-
-    <foreign-key foreignTable="FULCRUM_USER">
-      <reference local="USER_ID" foreign="USER_ID"/>
-    </foreign-key>
-
-    <foreign-key foreignTable="FULCRUM_GROUP">
-      <reference local="GROUP_ID" foreign="GROUP_ID"/>
-    </foreign-key>
-
-    <foreign-key foreignTable="FULCRUM_ROLE">
-      <reference local="ROLE_ID" foreign="ROLE_ID"/>
     </foreign-key>
   </table>
 

@@ -15,22 +15,18 @@ package org.apache.fulcrum.security.torque;
  *  limitations under the License.
  */
 import java.sql.Connection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.spi.AbstractRoleManager;
-import org.apache.fulcrum.security.torque.om.TorqueRole;
-import org.apache.fulcrum.security.torque.om.TorqueRolePeer;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.torque.NoRowsException;
+import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
-import org.apache.torque.om.SimpleKey;
-import org.apache.torque.util.Criteria;
 import org.apache.torque.util.Transaction;
 /**
  * This implementation persists to a database via Torque.
@@ -41,13 +37,47 @@ import org.apache.torque.util.Transaction;
 public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
 {
     /**
-     * Provides the attached object lists for the given role
-     *  
-     * @param role the role for which the lists should be retrieved  
+     * Get all specialized Roles
+     * 
      * @param con a database connection
+     * 
+     * @return a List of Role instances
+     *
+     * @throws TorqueException if any database error occurs
      */
-    protected abstract void attachObjectsForRole(Role role, Connection con)
-        throws TorqueException, DataBackendException, UnknownEntityException;
+    protected abstract List doSelectAllRoles(Connection con)
+        throws TorqueException;
+
+    /**
+     * Get a specialized Role by name
+     * 
+     * @param name the name of the group
+     * @param con a database connection
+     * 
+     * @return a Role instance
+     *
+     * @throws NoRowsException if no such group exists
+     * @throws TooManyRowsException if multiple groups with the given name exist
+     * @throws TorqueException if any other database error occurs
+     */
+    protected abstract Role doSelectByName(String name, Connection con)
+        throws NoRowsException, TooManyRowsException, TorqueException;
+
+    /**
+     * Get a specialized Role by id
+     * 
+     * @param id the id of the group
+     * @param con a database connection
+     * 
+     * @return a Role instance
+     *
+     * @throws NoRowsException if no such group exists
+     * @throws TooManyRowsException if multiple groups with the given id exist
+     * @throws TorqueException if any other database error occurs
+     */
+    protected abstract Role doSelectById(Integer id, Connection con)
+        throws NoRowsException, TooManyRowsException, TorqueException;
+    
 
     /**
     * Renames an existing Role.
@@ -58,8 +88,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
     *         backend.
     * @throws UnknownEntityException if the role does not exist.
     */
-    public synchronized void renameRole(Role role, String name)
-        throws DataBackendException, UnknownEntityException
+    public synchronized void renameRole(Role role, String name) throws DataBackendException, UnknownEntityException
     {
         if (checkExists(role))
         {
@@ -67,100 +96,19 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
             
             try
             {
-                TorqueRole r = new TorqueRole();
-                r.setId((Integer)role.getId());
-                r.setName(name);
+                TorqueAbstractSecurityEntity r = (TorqueAbstractSecurityEntity)role;
                 r.setNew(false);
                 r.save();
             }
             catch (Exception e)
             {
-                throw new DataBackendException("Renaming Role '" + role + "' failed", e);
+                throw new DataBackendException("Renaming Role '" + role.getName() + "' failed", e);
             }
         }
         else
         {
-            throw new UnknownEntityException("Unknown Role '" + role + "'");
+            throw new UnknownEntityException("Unknown Role '" + role.getName() + "'");
         }
-    }
-
-    /**
-      * Determines if the <code>Role</code> exists in the security system.
-      *
-      * @param roleName a <code>Role</code> value
-      * @return true if the role name exists in the system, false otherwise
-      * @throws DataBackendException when more than one Role with
-      *         the same name exists.
-      */
-    public boolean checkExists(String roleName) throws DataBackendException
-    {
-        List roles;
-
-        try
-        {
-            Criteria criteria = new Criteria();
-            criteria.add(TorqueRolePeer.ROLE_NAME, roleName);
-
-            roles = TorqueRolePeer.doSelect(criteria);
-        }
-        catch (TorqueException e)
-        {
-            throw new DataBackendException("Error retrieving role information", e);
-        }
-
-        if (roles.size() > 1)
-        {
-            throw new DataBackendException("Multiple roles with same name '" + roleName + "'");
-        }
-        
-        return (roles.size() == 1);
-    }
-
-    /**
-     * Retrieves all roles defined in the system.
-     *
-     * @return the names of all roles defined in the system.
-     * @throws DataBackendException if there was an error accessing the
-     *         data backend.
-     */
-    public RoleSet getAllRoles() throws DataBackendException
-    {
-        RoleSet roleSet = new RoleSet();
-        Connection con = null;
-
-        try
-        {
-            con = Transaction.begin(TorqueRolePeer.DATABASE_NAME);
-            
-            List roles = TorqueRolePeer.doSelect(new Criteria(), con);
-            
-            for (Iterator i = roles.iterator(); i.hasNext();)
-            {
-                Role role = getRoleInstance();
-                TorqueRole r = (TorqueRole)i.next();
-                role.setId(r.getId());
-                role.setName(r.getName());
-
-                // Add attached objects if they exist
-                attachObjectsForRole(role, con);
-
-                roleSet.add(role);
-            }
-
-            Transaction.commit(con);
-        }
-        catch (TorqueException e)
-        {
-            Transaction.safeRollback(con);
-            throw new DataBackendException("Error retrieving role information", e);
-        }
-        catch (UnknownEntityException e)
-        {
-            Transaction.safeRollback(con);
-            throw new DataBackendException("Error creating permission instance", e);
-        }
-        
-        return roleSet;
     }
 
     /**
@@ -176,15 +124,11 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
     {
         try
         {
-            TorqueRole r = new TorqueRole();
-            r.setName(role.getName());
-            r.save();
-            
-            role.setId(r.getId());
+            ((TorqueAbstractSecurityEntity)role).save();
         }
         catch (Exception e)
         {
-            throw new DataBackendException("Adding Role '" + role + "' failed", e);
+            throw new DataBackendException("Adding Role '" + role.getName() + "' failed", e);
         }
         
         return role;
@@ -204,17 +148,111 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
         {
             try
             {
-                TorqueRolePeer.doDelete(SimpleKey.keyFor((Integer)role.getId()));
+                ((TorqueAbstractSecurityEntity)role).delete();
             }
             catch (TorqueException e)
             {
-                throw new DataBackendException("Removing Role '" + role + "' failed", e);
+                throw new DataBackendException("Removing Role '" + role.getName() + "' failed", e);
             }
         }
         else
         {
-            throw new UnknownEntityException("Unknown role '" + role + "'");
+            throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
         }
+    }
+
+    /**
+      * Determines if the <code>Role</code> exists in the security system.
+      *
+      * @param roleName a <code>Role</code> value
+      * @return true if the role name exists in the system, false otherwise
+      * @throws DataBackendException when more than one Role with
+      *         the same name exists.
+      */
+    public boolean checkExists(String roleName) throws DataBackendException
+    {
+        boolean exists = false;
+        
+        Connection con = null;
+        
+        try
+        {
+            con = Transaction.begin(((TorqueAbstractSecurityEntity)getRoleInstance()).getDatabaseName());
+    
+            doSelectByName(roleName, con);
+            
+            Transaction.commit(con);
+            con = null;
+    
+            exists = true;
+        }
+        catch (NoRowsException e)
+        {
+            exists = false;
+        }
+        catch (TooManyRowsException e)
+        {
+            throw new DataBackendException("Multiple roles with same name '" + roleName + "'");
+        }
+        catch (TorqueException e)
+        {
+            throw new DataBackendException("Error retrieving role information", e);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
+        }
+    
+        return exists;
+    }
+
+    /**
+     * Retrieves all roles defined in the system.
+     *
+     * @return the names of all roles defined in the system.
+     * @throws DataBackendException if there was an error accessing the
+     *         data backend.
+     */
+    public RoleSet getAllRoles() throws DataBackendException
+    {
+        RoleSet roleSet = new RoleSet();
+        Connection con = null;
+    
+        try
+        {
+            con = Transaction.begin(((TorqueAbstractSecurityEntity)getRoleInstance()).getDatabaseName());
+            
+            List roles = doSelectAllRoles(con);
+            
+            for (Iterator i = roles.iterator(); i.hasNext();)
+            {
+                Role role = (Role)i.next();
+    
+                // Add attached objects if they exist
+                ((TorqueAbstractSecurityEntity)role).retrieveAttachedObjects(con);
+    
+                roleSet.add(role);
+            }
+    
+            Transaction.commit(con);
+            con = null;
+        }
+        catch (TorqueException e)
+        {
+            throw new DataBackendException("Error retrieving role information", e);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
+        }
+        
+        return roleSet;
     }
 
     /**
@@ -228,45 +266,47 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
      * @throws UnknownEntityException
      *             if the role does not exist.
      */
-    public Role getRoleById(Object id)
-        throws DataBackendException, UnknownEntityException 
+    public Role getRoleById(Object id) throws DataBackendException, UnknownEntityException
     {
-        Role role = getRoleInstance();
-
+        Role role;
+    
         if (id != null && id instanceof Integer)
         {
             Connection con = null;
-
+    
             try
             {
-                con = Transaction.begin(TorqueRolePeer.DATABASE_NAME);
+                con = Transaction.begin(((TorqueAbstractSecurityEntity)getRoleInstance()).getDatabaseName());
                 
-                TorqueRole r = 
-                    TorqueRolePeer.retrieveByPK((Integer)id, con);
-                role.setId(r.getId());
-                role.setName(r.getName());
+                role = doSelectById((Integer)id, con);
                 
                 // Add attached objects if they exist
-                attachObjectsForRole(role, con);
-
+                ((TorqueAbstractSecurityEntity)role).retrieveAttachedObjects(con);
+    
                 Transaction.commit(con);
+                con = null;
             }
             catch (NoRowsException e)
             {
-                Transaction.safeRollback(con);
                 throw new UnknownEntityException("Role with id '" + id + "' does not exist.", e);
             }
             catch (TorqueException e)
             {
-                Transaction.safeRollback(con);
                 throw new DataBackendException("Error retrieving role information", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
             }
         }
         else
         {
-            throw new UnknownEntityException("Invalid role id '" + role.getId() + "'");
+            throw new UnknownEntityException("Invalid role id '" + id + "'");
         }
-
+    
         return role;
     }
 
@@ -279,51 +319,43 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
      *         data backend.
      * @throws UnknownEntityException if the role does not exist.
      */
-    public Role getRoleByName(String name)
-        throws DataBackendException, UnknownEntityException
+    public Role getRoleByName(String name) throws DataBackendException, UnknownEntityException
     {
-        Role role = getRoleInstance();
-        List roles = Collections.EMPTY_LIST;
+        Role role = null;
         Connection con = null;
-
+    
         try
         {
-            con = Transaction.begin(TorqueRolePeer.DATABASE_NAME);
+            con = Transaction.begin(((TorqueAbstractSecurityEntity)getRoleInstance()).getDatabaseName());
             
-            Criteria criteria = new Criteria();
-            criteria.add(TorqueRolePeer.ROLE_NAME, name);
-
-            roles = TorqueRolePeer.doSelect(criteria, con);
-
-            if (roles.size() == 1)
-            {
-                TorqueRole r = (TorqueRole) roles.get(0);
-                
-                role.setId(r.getId());
-                role.setName(r.getName());
-                
-                // Add attached objects if they exist
-                attachObjectsForRole(role, con);
-            }
-
+            role = doSelectByName(name, con);
+    
+            // Add attached objects if they exist
+            ((TorqueAbstractSecurityEntity)role).retrieveAttachedObjects(con);
+    
             Transaction.commit(con);
+            con = null;
         }
-        catch (TorqueException e)
-        {
-            Transaction.safeRollback(con);
-            throw new DataBackendException("Error retrieving role information", e);
-        }
-
-        if (roles.size() == 0)
+        catch (NoRowsException e)
         {
             throw new UnknownEntityException("Could not find role" + name);
         }
-
-        if (roles.size() > 1)
+        catch (TooManyRowsException e)
         {
             throw new DataBackendException("Multiple Roles with same name '" + name + "'");
         }
-
+        catch (TorqueException e)
+        {
+            throw new DataBackendException("Error retrieving role information", e);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
+        }
+    
         return role;
     }
 }

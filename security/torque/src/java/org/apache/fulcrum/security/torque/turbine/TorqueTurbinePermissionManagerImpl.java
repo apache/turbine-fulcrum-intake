@@ -15,19 +15,13 @@ package org.apache.fulcrum.security.torque.turbine;
  *  limitations under the License.
  */
 import java.sql.Connection;
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.entity.Permission;
-import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.model.turbine.entity.TurbinePermission;
 import org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager;
-import org.apache.fulcrum.security.torque.om.TorqueRole;
-import org.apache.fulcrum.security.torque.om.TorqueRolePeer;
-import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePermissionPeer;
-import org.apache.fulcrum.security.util.DataBackendException;
-import org.apache.fulcrum.security.util.RoleSet;
+import org.apache.fulcrum.security.torque.om.TorqueTurbinePermissionPeer;
+import org.apache.torque.NoRowsException;
+import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
 import org.apache.torque.util.Criteria;
 /**
@@ -39,33 +33,40 @@ import org.apache.torque.util.Criteria;
 public class TorqueTurbinePermissionManagerImpl extends TorqueAbstractPermissionManager
 {
     /**
-     * Provides the roles for the given permission
-     *  
-     * @param permission the permission for which the roles should be retrieved  
-     * @param con a database connection
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager#doSelectAllPermissions(java.sql.Connection)
      */
-    protected void attachObjectsForPermission(Permission permission, Connection con)
-        throws TorqueException, DataBackendException
+    protected List doSelectAllPermissions(Connection con) throws TorqueException
     {
-        RoleSet roleSet = new RoleSet();
+        Criteria criteria = new Criteria(TorqueTurbinePermissionPeer.DATABASE_NAME);
         
-        Criteria criteria = new Criteria();
-        criteria.addJoin(TorqueTurbineRolePermissionPeer.ROLE_ID, TorqueRolePeer.ROLE_ID);
-        criteria.add(TorqueTurbineRolePermissionPeer.PERMISSION_ID, (Integer)permission.getId());
+        return TorqueTurbinePermissionPeer.doSelect(criteria, con);
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager#doSelectById(java.lang.Integer, java.sql.Connection)
+     */
+    protected Permission doSelectById(Integer id, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    {
+        return TorqueTurbinePermissionPeer.retrieveByPK(id, con);
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager#doSelectByName(java.lang.String, java.sql.Connection)
+     */
+    protected Permission doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    {
+        Criteria criteria = new Criteria(TorqueTurbinePermissionPeer.DATABASE_NAME);
+        criteria.add(TorqueTurbinePermissionPeer.PERMISSION_NAME, name);
+        criteria.setIgnoreCase(true);
+        criteria.setSingleRecord(true);
         
-        List roles = TorqueRolePeer.doSelect(criteria, con);
-        RoleManager roleManager = getRoleManager();
-        
-        for (Iterator i = roles.iterator(); i.hasNext();)
+        List permissions = TorqueTurbinePermissionPeer.doSelect(criteria, con);
+
+        if (permissions.isEmpty())
         {
-            TorqueRole r = (TorqueRole)i.next();
-            Role role = roleManager.getRoleInstance();
-            
-            role.setId(r.getId());
-            role.setName(r.getName());
-            roleSet.add(role);
+            throw new NoRowsException(name);
         }
         
-        ((TurbinePermission)permission).setRoles(roleSet);
+        return (Permission)permissions.get(0);
     }
 }

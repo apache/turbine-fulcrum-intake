@@ -2,7 +2,7 @@
 -----------------------------------------------------------------------------
 -- ID_TABLE
 -----------------------------------------------------------------------------
-drop table ID_TABLE if exists;
+drop table ID_TABLE if exists CASCADE;
 
 CREATE TABLE ID_TABLE
 (

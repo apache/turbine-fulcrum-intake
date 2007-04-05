@@ -14,6 +14,7 @@ package org.apache.fulcrum.security.torque.turbine;
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+import java.sql.Connection;
 import java.util.Iterator;
 
 import org.apache.fulcrum.security.entity.Group;
@@ -27,14 +28,11 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbinePermission;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineRole;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
-import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePermission;
-import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePermissionPeer;
-import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRole;
-import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRolePeer;
+import org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.torque.TorqueException;
-import org.apache.torque.util.Criteria;
+import org.apache.torque.util.Transaction;
 /**
  * This implementation persists to a database via Torque.
  *
@@ -54,28 +52,39 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
     public synchronized void grant(Role role, Permission permission)
         throws DataBackendException, UnknownEntityException
     {
-        boolean roleExists = false;
-        boolean permissionExists = false;
+        boolean roleExists = getRoleManager().checkExists(role);
+        boolean permissionExists = getPermissionManager().checkExists(permission);
 
-        try
+        if (roleExists && permissionExists)
         {
-            roleExists = getRoleManager().checkExists(role);
-            permissionExists = getPermissionManager().checkExists(permission);
+            ((TurbineRole)role).addPermission(permission);
+            ((TurbinePermission)permission).addRole(role);
 
-            if (roleExists && permissionExists)
+            Connection con = null;
+            
+            try
             {
-                ((TurbineRole) role).addPermission(permission);
-                ((TurbinePermission) permission).addRole(role);
-
-                TorqueTurbineRolePermission rp = new TorqueTurbineRolePermission();
-                rp.setPermissionId((Integer)permission.getId());
-                rp.setRoleId((Integer)role.getId());
-                rp.save();
+                con = Transaction.begin(((TorqueAbstractSecurityEntity)role).getDatabaseName());
+                
+                ((TorqueAbstractSecurityEntity)role).update(con);
+                ((TorqueAbstractSecurityEntity)permission).update(con);
+                
+                Transaction.commit(con);
+                con = null;
             }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("grant('" + role.getName() + "', '" + permission.getName() + "') failed", e);
+            catch (TorqueException e)
+            {
+                throw new DataBackendException("grant('" + role.getName() + "', '" + permission.getName() + "') failed", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
+            }
+            
+            return;
         }
 
         if (!roleExists)
@@ -100,28 +109,39 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
     public synchronized void revoke(Role role, Permission permission)
         throws DataBackendException, UnknownEntityException
     {
-        boolean roleExists = false;
-        boolean permissionExists = false;
+        boolean roleExists = getRoleManager().checkExists(role);
+        boolean permissionExists = getPermissionManager().checkExists(permission);
 
-        try
+        if (roleExists && permissionExists)
         {
-            roleExists = getRoleManager().checkExists(role);
-            permissionExists = getPermissionManager().checkExists(permission);
+            ((TurbineRole)role).removePermission(permission);
+            ((TurbinePermission)permission).removeRole(role);
 
-            if (roleExists && permissionExists)
+            Connection con = null;
+            
+            try
             {
-                ((TurbineRole) role).removePermission(permission);
-                ((TurbinePermission) permission).removeRole(role);
-
-                Criteria criteria = new Criteria();
-                criteria.add(TorqueTurbineRolePermissionPeer.ROLE_ID, (Integer)role.getId());
-                criteria.add(TorqueTurbineRolePermissionPeer.PERMISSION_ID, (Integer)permission.getId());
-                TorqueTurbineRolePermissionPeer.doDelete(criteria);
+                con = Transaction.begin(((TorqueAbstractSecurityEntity)role).getDatabaseName());
+                
+                ((TorqueAbstractSecurityEntity)role).update(con);
+                ((TorqueAbstractSecurityEntity)permission).update(con);
+                
+                Transaction.commit(con);
+                con = null;
             }
-        }
-        catch (TorqueException e)
-        {
-            throw new DataBackendException("revoke('" + role.getName() + "', '" + permission.getName() + "') failed", e);
+            catch (TorqueException e)
+            {
+                throw new DataBackendException("revoke('" + role.getName() + "', '" + permission.getName() + "') failed", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
+            }
+            
+            return;
         }
         
         if (!roleExists)
@@ -137,38 +157,49 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
 
     public synchronized void grant(User user, Group group, Role role) throws DataBackendException, UnknownEntityException
     {
-        boolean roleExists = false;
-        boolean userExists = false;
-        boolean groupExists = false;
+        boolean roleExists = getRoleManager().checkExists(role);
+        boolean userExists = getUserManager().checkExists(user);
+        boolean groupExists = getGroupManager().checkExists(group);
         
-        try
+        if (roleExists && groupExists && userExists)
         {
-            roleExists = getRoleManager().checkExists(role);
-            userExists = getUserManager().checkExists(user);
-            groupExists = getGroupManager().checkExists(group);
-            if (roleExists && groupExists && userExists)
-            {
-                TurbineUserGroupRole user_group_role = new TurbineUserGroupRole();
-                user_group_role.setUser(user);
-                user_group_role.setGroup(group);
-                user_group_role.setRole(role);
-                ((TurbineUser) user).addUserGroupRole(user_group_role);
-                ((TurbineGroup) group).addUserGroupRole(user_group_role);
-                ((TurbineRole) role).addUserGroupRole(user_group_role);
+            TurbineUserGroupRole user_group_role = new TurbineUserGroupRole();
+            user_group_role.setUser(user);
+            user_group_role.setGroup(group);
+            user_group_role.setRole(role);
+            ((TurbineUser) user).addUserGroupRole(user_group_role);
+            ((TurbineGroup) group).addUserGroupRole(user_group_role);
+            ((TurbineRole) role).addUserGroupRole(user_group_role);
 
-                TorqueTurbineUserGroupRole ugr = new TorqueTurbineUserGroupRole();
-                ugr.setUserId((Integer)user.getId());
-                ugr.setGroupId((Integer)group.getId());
-                ugr.setRoleId((Integer)role.getId());
-                ugr.save();
+            Connection con = null;
+            
+            try
+            {
+                con = Transaction.begin(((TorqueAbstractSecurityEntity)user).getDatabaseName());
+                
+                ((TorqueAbstractSecurityEntity)user).update(con);
+                ((TorqueAbstractSecurityEntity)group).update(con);
+                ((TorqueAbstractSecurityEntity)role).update(con);
+                
+                Transaction.commit(con);
+                con = null;
             }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("grant('" 
-                    + (user != null ? user.getName() : "null") + "', '" 
-                    + (group != null ? group.getName() : "null") + "', '"
-                    + (role != null ? role.getName() : "null") + "') failed", e);
+            catch (TorqueException e)
+            {
+                throw new DataBackendException("grant('" 
+                        + (user != null ? user.getName() : "null") + "', '" 
+                        + (group != null ? group.getName() : "null") + "', '"
+                        + (role != null ? role.getName() : "null") + "') failed", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
+            }
+            
+            return;
         }
 
         if (!roleExists)
@@ -190,55 +221,66 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
     public synchronized void revoke(User user, Group group, Role role)
         throws DataBackendException, UnknownEntityException
     {
-        boolean roleExists = false;
-        boolean userExists = false;
-        boolean groupExists = false;
-        try
-        {
-            roleExists = getRoleManager().checkExists(role);
-            userExists = getUserManager().checkExists(user);
-            groupExists = getGroupManager().checkExists(group);
+        boolean roleExists = getRoleManager().checkExists(role);
+        boolean userExists = getUserManager().checkExists(user);
+        boolean groupExists = getGroupManager().checkExists(group);
 
-            if (roleExists && groupExists && userExists)
+        if (roleExists && groupExists && userExists)
+        {
+            boolean ugrFound = false;
+            TurbineUserGroupRole user_group_role = null;
+
+            for (Iterator i = ((TurbineUser) user).getUserGroupRoleSet()
+                    .iterator(); i.hasNext();)
             {
-                boolean ugrFound = false;
-                TurbineUserGroupRole user_group_role = null;
-
-                for (Iterator i = ((TurbineUser) user).getUserGroupRoleSet()
-                        .iterator(); i.hasNext();)
+                user_group_role = (TurbineUserGroupRole) i.next();
+                if (user_group_role.getUser().equals(user)
+                    && user_group_role.getGroup().equals(group)
+                    && user_group_role.getRole().equals(role))
                 {
-                    user_group_role = (TurbineUserGroupRole) i.next();
-                    if (user_group_role.getUser().equals(user)
-                        && user_group_role.getGroup().equals(group)
-                        && user_group_role.getRole().equals(role))
-                    {
-                        ugrFound = true;
-                        break;
-                    }
+                    ugrFound = true;
+                    break;
                 }
-
-                if (!ugrFound)
-                {
-                    throw new UnknownEntityException("Could not find User/Group/Role");
-                }
-
-                ((TurbineUser) user).removeUserGroupRole(user_group_role);
-                ((TurbineGroup) group).removeUserGroupRole(user_group_role);
-                ((TurbineRole) role).removeUserGroupRole(user_group_role);
-
-                Criteria criteria = new Criteria();
-                criteria.add(TorqueTurbineUserGroupRolePeer.USER_ID, (Integer)user.getId());
-                criteria.add(TorqueTurbineUserGroupRolePeer.GROUP_ID, (Integer)group.getId());
-                criteria.add(TorqueTurbineUserGroupRolePeer.ROLE_ID, (Integer)role.getId());
-                TorqueTurbineUserGroupRolePeer.doDelete(criteria);
             }
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("revoke('" 
-                    + (user != null ? user.getName() : "null") + "', '" 
-                    + (group != null ? group.getName() : "null") + "', '"
-                    + (role != null ? role.getName() : "null") + "') failed", e);
+
+            if (!ugrFound)
+            {
+                throw new UnknownEntityException("Could not find User/Group/Role");
+            }
+
+            ((TurbineUser)user).removeUserGroupRole(user_group_role);
+            ((TurbineGroup)group).removeUserGroupRole(user_group_role);
+            ((TurbineRole)role).removeUserGroupRole(user_group_role);
+
+            Connection con = null;
+            
+            try
+            {
+                con = Transaction.begin(((TorqueAbstractSecurityEntity)user).getDatabaseName());
+                
+                ((TorqueAbstractSecurityEntity)user).update(con);
+                ((TorqueAbstractSecurityEntity)group).update(con);
+                ((TorqueAbstractSecurityEntity)role).update(con);
+                
+                Transaction.commit(con);
+                con = null;
+            }
+            catch (TorqueException e)
+            {
+                throw new DataBackendException("revoke('" 
+                        + (user != null ? user.getName() : "null") + "', '" 
+                        + (group != null ? group.getName() : "null") + "', '"
+                        + (role != null ? role.getName() : "null") + "') failed", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
+            }
+            
+            return;
         }
 
         if (!roleExists)

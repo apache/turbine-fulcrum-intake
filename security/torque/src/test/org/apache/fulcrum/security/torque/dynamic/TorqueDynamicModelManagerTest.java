@@ -18,15 +18,15 @@ package org.apache.fulcrum.security.torque.dynamic;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.dynamic.test.AbstractDynamicModelManagerTest;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupPeer;
 import org.apache.fulcrum.security.torque.HsqlDB;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupRolePeer;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicPermissionPeer;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePeer;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePermissionPeer;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUserDelegatesPeer;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUserGroupPeer;
-import org.apache.fulcrum.security.torque.om.TorqueGroupPeer;
-import org.apache.fulcrum.security.torque.om.TorquePermissionPeer;
-import org.apache.fulcrum.security.torque.om.TorqueRolePeer;
-import org.apache.fulcrum.security.torque.om.TorqueUserPeer;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicUserPeer;
 import org.apache.torque.TorqueException;
 import org.apache.torque.util.Criteria;
 
@@ -43,9 +43,9 @@ public class TorqueDynamicModelManagerTest extends AbstractDynamicModelManagerTe
     {
         try
         {
-            this.hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-schema.sql");
+            hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-dynamic-schema.sql");
             hsqlDB.addSQL("src/test/id-table-schema.sql");
-            hsqlDB.addSQL("src/test/fulcrum-schema-idtable-init.sql");
+            hsqlDB.addSQL("src/test/fulcrum-dynamic-schema-idtable-init.sql");
 
             this.setRoleFileName("src/test/DynamicTorqueRoleConfig.xml");
             this.setConfigurationFileName("src/test/DynamicTorqueComponentConfig.xml");
@@ -80,20 +80,20 @@ public class TorqueDynamicModelManagerTest extends AbstractDynamicModelManagerTe
             TorqueDynamicUserDelegatesPeer.doDelete(criteria);
 
             criteria.clear();
-            criteria.add(TorqueUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
-            TorqueUserPeer.doDelete(criteria);
+            criteria.add(TorqueDynamicUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
+            TorqueDynamicUserPeer.doDelete(criteria);
+            
+            criteria.clear();
+            criteria.add(TorqueDynamicGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
+            TorqueDynamicGroupPeer.doDelete(criteria);
 
             criteria.clear();
-            criteria.add(TorqueGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
-            TorqueGroupPeer.doDelete(criteria);
-
+            criteria.add(TorqueDynamicRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN);
+            TorqueDynamicRolePeer.doDelete(criteria);
+            
             criteria.clear();
-            criteria.add(TorqueRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN);
-            TorqueRolePeer.doDelete(criteria);
-
-            criteria.clear();
-            criteria.add(TorquePermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN);
-            TorquePermissionPeer.doDelete(criteria);
+            criteria.add(TorqueDynamicPermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN);
+            TorqueDynamicPermissionPeer.doDelete(criteria);
         }
         catch (TorqueException e)
         {

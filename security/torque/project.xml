@@ -42,7 +42,7 @@
     <dependency>
       <artifactId>torque</artifactId>
       <groupId>torque</groupId>
-      <version>3.2</version>
+      <version>3.3-RC1</version>
       <url>http://db.apache.org/torque</url>
     </dependency>
 
@@ -97,7 +97,7 @@
     <dependency>
       <artifactId>maven-torque-plugin</artifactId>
       <groupId>torque</groupId>
-      <version>3.2</version>
+      <version>3.3-RC1</version>
       <type>plugin</type>
     </dependency>
 

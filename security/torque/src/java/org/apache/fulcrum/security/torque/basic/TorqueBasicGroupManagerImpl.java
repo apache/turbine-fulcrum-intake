@@ -15,19 +15,13 @@ package org.apache.fulcrum.security.torque.basic;
  *  limitations under the License.
  */
 import java.sql.Connection;
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.entity.Group;
-import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.model.basic.entity.BasicGroup;
 import org.apache.fulcrum.security.torque.TorqueAbstractGroupManager;
-import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroupPeer;
-import org.apache.fulcrum.security.torque.om.TorqueUser;
-import org.apache.fulcrum.security.torque.om.TorqueUserPeer;
-import org.apache.fulcrum.security.util.DataBackendException;
-import org.apache.fulcrum.security.util.UserSet;
+import org.apache.fulcrum.security.torque.om.TorqueBasicGroupPeer;
+import org.apache.torque.NoRowsException;
+import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
 import org.apache.torque.util.Criteria;
 /**
@@ -39,34 +33,43 @@ import org.apache.torque.util.Criteria;
 public class TorqueBasicGroupManagerImpl extends TorqueAbstractGroupManager
 {
     /**
-     * Provides the users for the given group
-     *  
-     * @param group the group for which the users should be retrieved  
-     * @param con a database connection
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractGroupManager#doSelectAllGroups(java.sql.Connection)
      */
-    protected void attachObjectsForGroup(Group group, Connection con)
-        throws TorqueException, DataBackendException
+    protected List doSelectAllGroups(Connection con)
+        throws TorqueException
     {
-        UserSet userSet = new UserSet();
+        Criteria criteria = new Criteria(TorqueBasicGroupPeer.DATABASE_NAME);
+
+        return TorqueBasicGroupPeer.doSelect(criteria, con);
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractGroupManager#doSelectById(java.lang.Integer, java.sql.Connection)
+     */
+    protected Group doSelectById(Integer id, Connection con)
+        throws NoRowsException, TooManyRowsException, TorqueException
+    {
+        return TorqueBasicGroupPeer.retrieveByPK(id, con);
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractGroupManager#doSelectByName(java.lang.String, java.sql.Connection)
+     */
+    protected Group doSelectByName(String name, Connection con)
+        throws NoRowsException, TooManyRowsException, TorqueException
+    {
+        Criteria criteria = new Criteria(TorqueBasicGroupPeer.DATABASE_NAME);
+        criteria.add(TorqueBasicGroupPeer.GROUP_NAME, name);
+        criteria.setIgnoreCase(true);
+        criteria.setSingleRecord(true);
+
+        List groups = TorqueBasicGroupPeer.doSelect(criteria, con);
         
-        Criteria criteria = new Criteria();
-        criteria.addJoin(TorqueBasicUserGroupPeer.USER_ID, TorqueUserPeer.USER_ID);
-        criteria.add(TorqueBasicUserGroupPeer.GROUP_ID, (Integer)group.getId());
-        
-        List users = TorqueUserPeer.doSelect(criteria, con);
-        UserManager userManager = getUserManager();
-        
-        for (Iterator i = users.iterator(); i.hasNext();)
+        if (groups.isEmpty())
         {
-            TorqueUser u = (TorqueUser)i.next();
-            User user = userManager.getUserInstance();
-            
-            user.setId(u.getId());
-            user.setName(u.getName());
-            user.setPassword(u.getPassword());
-            userSet.add(user);
+            throw new NoRowsException(name);
         }
         
-        ((BasicGroup)group).setUsers(userSet);
+        return (Group)groups.get(0);
     }
 }

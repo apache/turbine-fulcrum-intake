@@ -15,22 +15,18 @@ package org.apache.fulcrum.security.torque;
  *  limitations under the License.
  */
 import java.sql.Connection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.spi.AbstractUserManager;
-import org.apache.fulcrum.security.torque.om.TorqueUser;
-import org.apache.fulcrum.security.torque.om.TorqueUserPeer;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.UserSet;
 import org.apache.torque.NoRowsException;
+import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
-import org.apache.torque.om.SimpleKey;
-import org.apache.torque.util.Criteria;
 import org.apache.torque.util.Transaction;
 /**
  * This implementation persists to a database via Torque.
@@ -41,149 +37,46 @@ import org.apache.torque.util.Transaction;
 public abstract class TorqueAbstractUserManager extends AbstractUserManager
 {
     /**
-     * Provides the attached object lists for the given user
-     *  
-     * @param user the user for which the lists should be retrieved  
+     * Get all specialized Users
+     * 
      * @param con a database connection
-     */
-    protected abstract void attachObjectsForUser(User user, Connection con)
-        throws TorqueException, DataBackendException;
-    
-    /**
-     * Check whether a specified user's account exists.
+     * 
+     * @return a List of User instances
      *
-     * The login name is used for looking up the account.
-     *
-     * @param userName The name of the user to be checked.
-     * @return true if the specified account exists
-     * @throws DataBackendException if there was an error accessing
-     *         the data backend.
+     * @throws TorqueException if any database error occurs
      */
-    public boolean checkExists(String userName) throws DataBackendException
-    {
-        List users;
-
-        try
-        {
-            Criteria criteria = new Criteria();
-            criteria.add(TorqueUserPeer.LOGIN_NAME, userName.toLowerCase());
-
-            users = TorqueUserPeer.doSelect(criteria);
-        }
-        catch (TorqueException e)
-        {
-            throw new DataBackendException("Error retrieving user information", e);
-        }
-
-        if (users.size() > 1)
-        {
-            throw new DataBackendException("Multiple Users with same username '" + userName + "'");
-        }
-        
-        return (users.size() == 1);
-    }
+    protected abstract List doSelectAllUsers(Connection con)
+        throws TorqueException;
 
     /**
-     * Retrieve a user from persistent storage using username as the
-     * key.
+     * Get a specialized User by name
+     * 
+     * @param name the name of the group
+     * @param con a database connection
+     * 
+     * @return a User instance
      *
-     * @param userName the name of the user.
-     * @return an User object.
-     * @exception UnknownEntityException if the user's account does not
-     *            exist in the database.
-     * @exception DataBackendException if there is a problem accessing the
-     *            storage.
+     * @throws NoRowsException if no such group exists
+     * @throws TooManyRowsException if multiple groups with the given name exist
+     * @throws TorqueException if any other database error occurs
      */
-    public User getUser(String userName) throws UnknownEntityException, DataBackendException
-    {
-        User user = getUserInstance();
-        List users = Collections.EMPTY_LIST;
-        Connection con = null;
-
-        try
-        {
-            con = Transaction.begin(TorqueUserPeer.DATABASE_NAME);
-            
-            Criteria criteria = new Criteria();
-            criteria.add(TorqueUserPeer.LOGIN_NAME, userName.toLowerCase());
-
-            users = TorqueUserPeer.doSelect(criteria, con);
-
-            if (users.size() == 1)
-            {
-                TorqueUser u = (TorqueUser) users.get(0);
-                
-                user.setId(u.getId());
-                user.setName(u.getName());
-                user.setPassword(u.getPassword());
-                
-                // Add attached objects if they exist
-                attachObjectsForUser(user, con);
-            }
-            
-            Transaction.commit(con);
-        }
-        catch (TorqueException e)
-        {
-            Transaction.safeRollback(con);
-            throw new DataBackendException("Error retrieving user information", e);
-        }
-
-        if (users.size() == 0)
-        {
-            throw new UnknownEntityException("Unknown user '" + userName + "'");
-        }
-
-        if (users.size() > 1)
-        {
-            throw new DataBackendException("Multiple Users with same username '" + userName + "'");
-        }
-
-        return user;
-    }
+    protected abstract User doSelectByName(String name, Connection con)
+        throws NoRowsException, TooManyRowsException, TorqueException;
 
     /**
-       * Retrieves all users defined in the system.
-       *
-       * @return the names of all users defined in the system.
-       * @throws DataBackendException if there was an error accessing the data
-       *         backend.
-       */
-    public UserSet getAllUsers() throws DataBackendException
-    {
-        UserSet userSet = new UserSet();
-        Connection con = null;
-
-        try
-        {
-            con = Transaction.begin(TorqueUserPeer.DATABASE_NAME);
-            
-            List users = TorqueUserPeer.doSelect(new Criteria(), con);
-
-            for (Iterator i = users.iterator(); i.hasNext();)
-            {
-                User user = getUserInstance();
-                TorqueUser u = (TorqueUser)i.next();
-                user.setId(u.getId());
-                user.setName(u.getName());
-                user.setPassword(u.getPassword());
-
-                // Add attached objects if they exist
-                attachObjectsForUser(user, con);
-                
-                userSet.add(user);
-            }
-
-            Transaction.commit(con);
-        }
-        catch (TorqueException e)
-        {
-            Transaction.safeRollback(con);
-            throw new DataBackendException("Error retrieving all users", e);
-        }
-        
-        return userSet;
-    }
+     * Get a specialized User by id
+     * 
+     * @param id the id of the group
+     * @param con a database connection
+     * 
+     * @return a User instance
+     *
+     * @throws NoRowsException if no such group exists
+     * @throws TooManyRowsException if multiple groups with the given id exist
+     * @throws TorqueException if any other database error occurs
+     */
+    protected abstract User doSelectById(Integer id, Connection con)
+        throws NoRowsException, TooManyRowsException, TorqueException;
 
     /**
     * Removes an user account from the system.
@@ -197,11 +90,11 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
     {
         try
         {
-            TorqueUserPeer.doDelete(SimpleKey.keyFor((Integer)user.getId()));
+            ((TorqueAbstractSecurityEntity)user).delete();
         }
         catch (TorqueException e)
         {
-            throw new DataBackendException("Removing User '" + user + "' failed", e);
+            throw new DataBackendException("Removing User '" + user.getName() + "' failed", e);
         }
     }
 
@@ -219,17 +112,11 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
     {
         try
         {
-            TorqueUser u = new TorqueUser();
-            
-            u.setName(user.getName());
-            u.setPassword(user.getPassword());
-            u.save();
-
-            user.setId(u.getId());
+            ((TorqueAbstractSecurityEntity)user).save();
         }
         catch (Exception e)
         {
-            throw new DataBackendException("Adding User '" + user + "' failed", e);
+            throw new DataBackendException("Adding User '" + user.getName() + "' failed", e);
         }
         
         return user;
@@ -249,23 +136,166 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
         {
             try
             {
-                TorqueUser u = new TorqueUser();
-                
-                u.setId((Integer)user.getId());
-                u.setName(user.getName());
-                u.setPassword(user.getPassword());
+                TorqueAbstractSecurityEntity u = (TorqueAbstractSecurityEntity)user;
                 u.setNew(false);
                 u.save();
             }
             catch (Exception e)
             {
-                throw new DataBackendException("Saving User '" + user + "' failed", e);
+                throw new DataBackendException("Saving User '" + user.getName() + "' failed", e);
             }
         }
         else
         {
             throw new UnknownEntityException("Unknown user '" + user + "'");
         }
+    }
+
+    /**
+     * Check whether a specified user's account exists.
+     *
+     * The login name is used for looking up the account.
+     *
+     * @param userName The name of the user to be checked.
+     * @return true if the specified account exists
+     * @throws DataBackendException if there was an error accessing
+     *         the data backend.
+     */
+    public boolean checkExists(String userName) throws DataBackendException
+    {
+        boolean exists = false;
+        
+        Connection con = null;
+        
+        try
+        {
+            con = Transaction.begin(((TorqueAbstractSecurityEntity)getUserInstance()).getDatabaseName());
+    
+            doSelectByName(userName, con);
+            
+            Transaction.commit(con);
+            con = null;
+    
+            exists = true;
+        }
+        catch (NoRowsException e)
+        {
+            exists = false;
+        }
+        catch (TooManyRowsException e)
+        {
+            throw new DataBackendException("Multiple Users with same username '" + userName + "'");
+        }
+        catch (TorqueException e)
+        {
+            throw new DataBackendException("Error retrieving user information", e);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
+        }
+    
+        return exists;
+    }
+
+    /**
+     * Retrieve a user from persistent storage using username as the
+     * key.
+     *
+     * @param userName the name of the user.
+     * @return an User object.
+     * @exception UnknownEntityException if the user's account does not
+     *            exist in the database.
+     * @exception DataBackendException if there is a problem accessing the
+     *            storage.
+     */
+    public User getUser(String userName) throws UnknownEntityException, DataBackendException
+    {
+        User user = null;
+        Connection con = null;
+    
+        try
+        {
+            con = Transaction.begin(((TorqueAbstractSecurityEntity)getUserInstance()).getDatabaseName());
+            
+            user = doSelectByName(userName.toLowerCase(), con);
+            
+            // Add attached objects if they exist
+            ((TorqueAbstractSecurityEntity)user).retrieveAttachedObjects(con);
+            
+            Transaction.commit(con);
+            con = null;
+        }
+        catch (NoRowsException e)
+        {
+            throw new UnknownEntityException("Unknown user '" + userName + "'");
+        }
+        catch (TooManyRowsException e)
+        {
+            throw new DataBackendException("Multiple Users with same username '" + userName + "'");
+        }
+        catch (TorqueException e)
+        {
+            throw new DataBackendException("Error retrieving user information", e);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
+        }
+    
+        return user;
+    }
+
+    /**
+       * Retrieves all users defined in the system.
+       *
+       * @return the names of all users defined in the system.
+       * @throws DataBackendException if there was an error accessing the data
+       *         backend.
+       */
+    public UserSet getAllUsers() throws DataBackendException
+    {
+        UserSet userSet = new UserSet();
+        Connection con = null;
+    
+        try
+        {
+            con = Transaction.begin(((TorqueAbstractSecurityEntity)getUserInstance()).getDatabaseName());
+            
+            List users = doSelectAllUsers(con);
+    
+            for (Iterator i = users.iterator(); i.hasNext();)
+            {
+                User user = (User)i.next();
+    
+                // Add attached objects if they exist
+                ((TorqueAbstractSecurityEntity)user).retrieveAttachedObjects(con);
+                
+                userSet.add(user);
+            }
+    
+            Transaction.commit(con);
+            con = null;
+        }
+        catch (TorqueException e)
+        {
+            throw new DataBackendException("Error retrieving all users", e);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
+        }
+        
+        return userSet;
     }
 
     /**
@@ -279,46 +309,47 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
      * @throws UnknownEntityException
      *             if the user does not exist.
      */
-    public User getUserById(Object id)
-        throws DataBackendException, UnknownEntityException
+    public User getUserById(Object id) throws DataBackendException, UnknownEntityException
     {
-        User user = getUserInstance();
-
+        User user;
+    
         if (id != null && id instanceof Integer)
         {
             Connection con = null;
             
             try
             {
-                con = Transaction.begin(TorqueUserPeer.DATABASE_NAME);
+                con = Transaction.begin(((TorqueAbstractSecurityEntity)getUserInstance()).getDatabaseName());
                 
-                TorqueUser u = TorqueUserPeer.retrieveByPK((Integer)id, con);
-
-                user.setId(u.getId());
-                user.setName(u.getName());
-                user.setPassword(u.getPassword());
-
+                user = doSelectById((Integer)id, con);
+    
                 // Add attached objects if they exist
-                attachObjectsForUser(user, con);
+                ((TorqueAbstractSecurityEntity)user).retrieveAttachedObjects(con);
                 
                 Transaction.commit(con);
+                con = null;
             }
             catch (NoRowsException e)
             {
-                Transaction.safeRollback(con);
                 throw new UnknownEntityException("User with id '" + id + "' does not exist.", e);
             }
             catch (TorqueException e)
             {
-                Transaction.safeRollback(con);
                 throw new DataBackendException("Error retrieving user information", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
             }
         }
         else
         {
-            throw new UnknownEntityException("Invalid user id '" + user.getId() + "'");
+            throw new UnknownEntityException("Invalid user id '" + id + "'");
         }
-
+    
         return user;
     }
 }
