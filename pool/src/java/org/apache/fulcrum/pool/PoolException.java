@@ -24,6 +24,11 @@ package org.apache.fulcrum.pool;
  */
 public class PoolException extends Exception
 {
+    /**
+     * Serial number
+     */
+    private static final long serialVersionUID = 8192045560423973532L;
+
     public PoolException(String msg)
     {
         super(msg);

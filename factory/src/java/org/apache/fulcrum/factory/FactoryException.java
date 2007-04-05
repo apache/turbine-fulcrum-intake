@@ -24,6 +24,11 @@ package org.apache.fulcrum.factory;
  */
 public class FactoryException extends Exception
 {
+    /**
+     * Serial number
+     */
+    private static final long serialVersionUID = 8954422192583295720L;
+
     public FactoryException(String msg)
     {
         super(msg);
