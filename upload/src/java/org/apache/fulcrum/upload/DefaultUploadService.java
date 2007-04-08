@@ -31,8 +31,9 @@ import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.service.ServiceException;
-import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
  * <p> This class is an implementation of {@link UploadService}.
@@ -59,12 +60,14 @@ public class DefaultUploadService
     extends AbstractLogEnabled
     implements UploadService, Initializable, Configurable, Contextualizable
 {
-    private DiskFileUpload fileUpload;
+    /** A File Item Factory object for the actual uploading */
+    private DiskFileItemFactory itemFactory;
 
     private int sizeThreshold;
     private int sizeMax;
 
     private String repositoryPath;
+
     /**
      * The application root
      */
@@ -75,7 +78,7 @@ public class DefaultUploadService
      */
     public long getSizeMax()
     {
-        return fileUpload.getSizeMax();
+        return sizeMax;
     }
 
     /**
@@ -83,7 +86,7 @@ public class DefaultUploadService
      */
     public long getSizeThreshold()
     {
-        return fileUpload.getSizeThreshold();
+        return itemFactory.getSizeThreshold();
     }
 
     /**
@@ -92,7 +95,7 @@ public class DefaultUploadService
      */
     public String getRepository()
     {
-        return fileUpload.getRepositoryPath();
+        return itemFactory.getRepository().getAbsolutePath();
     }
 
     /**
@@ -109,7 +112,9 @@ public class DefaultUploadService
     {
         try
         {
-            return fileUpload.parseRequest(req, sizeThreshold, sizeMax, path);
+            ServletFileUpload fileUpload = new ServletFileUpload(itemFactory);
+            fileUpload.setSizeMax(sizeMax);
+            return fileUpload.parseRequest(req);
         }
         catch (FileUploadException e)
         {
@@ -134,7 +139,10 @@ public class DefaultUploadService
     {
         try
         {
-            return fileUpload.parseRequest(req, sizeThreshold, sizeMax, path);
+            DiskFileItemFactory localItemFactory = new DiskFileItemFactory(sizeThreshold, new File(path));
+            ServletFileUpload fileUpload = new ServletFileUpload(localItemFactory);
+            fileUpload.setSizeMax(sizeMax);
+            return fileUpload.parseRequest(req);
         }
         catch (FileUploadException e)
         {
@@ -199,11 +207,7 @@ public class DefaultUploadService
         getLogger().debug(
                 "Upload Service: REPOSITORY_KEY => " + repositoryPath);
 
-        fileUpload = new DiskFileUpload();
-
-        fileUpload.setSizeMax(sizeMax);
-        fileUpload.setSizeThreshold(sizeThreshold);
-        fileUpload.setRepositoryPath(repositoryPath);
+        itemFactory = new DiskFileItemFactory(sizeThreshold, new File(repositoryPath));
     }
 
     public void contextualize(Context context) throws ContextException 
