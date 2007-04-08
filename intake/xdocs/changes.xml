@@ -7,7 +7,10 @@
   </properties>
 
   <body>
-  	 <release version="1.0.3" date="in Subversion">
+  	 <release version="1.0.4-dev" date="in Subversion">
+      <action type="add" dev="tv">
+        Added locale handling to Intake, added user-defined field types.
+      </action>
       <action type="update" dev="seade" issue="TRB-9" due-to="J&#252;rgen Hoffmann">
         Intake now handles the case where the mapToObject does not map to all
         fields in the group.

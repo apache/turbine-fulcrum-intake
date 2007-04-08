@@ -25,6 +25,11 @@ package org.apache.fulcrum.intake;
 public class IntakeRuntimeException extends RuntimeException
 {
     /**
+     * Serial version id
+     */
+    private static final long serialVersionUID = -6874511109052092373L;
+
+    /**
      * Constructs a new <code>TurbineException</code> without specified
      * detail message.
      */

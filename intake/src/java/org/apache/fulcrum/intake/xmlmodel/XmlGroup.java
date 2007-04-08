@@ -30,11 +30,17 @@ import org.xml.sax.Attributes;
  * A Class for holding data about a grouping of inputs used in an Application.
  *
  * @author <a href="mailto:jmcnally@collab.net>John McNally</a>
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
 public class XmlGroup
         implements Serializable
 {
+    /**
+     * Serial version id
+     */
+    private static final long serialVersionUID = 4771953823149519746L;
+    
     private List fields;
     private List mapToObjects;
     private String defaultMapToObject;

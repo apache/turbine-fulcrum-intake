@@ -26,11 +26,17 @@ import org.xml.sax.Attributes;
  * A Class for holding data about a constraint on a property.
  *
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
 public class Rule
         implements Constraint, Serializable
 {
+    /**
+     * Serial version id
+     */
+    private static final long serialVersionUID = -4059931768288150848L;
+    
     private String name;
     private String value;
     private String message;

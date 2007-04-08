@@ -17,7 +17,6 @@ package org.apache.fulcrum.intake.model;
  */
 
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.validator.FloatValidator;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
@@ -25,10 +24,11 @@ import org.apache.fulcrum.intake.xmlmodel.XmlField;
 /**
  * Processor for float fields.
  *
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
 public class FloatField
-        extends Field
+        extends AbstractNumberField
 {
     /**
      * Constructor.
@@ -125,7 +125,7 @@ public class FloatField
             for (int i = 0; i < inputs.length; i++)
             {
                 values[i] = StringUtils.isNotEmpty(inputs[i])
-                        ? new Float(inputs[i]).floatValue() 
+                        ? new Float(canonicalizeDecimalInput(inputs[i])).floatValue()
                         : ((Float) getEmptyValue()).floatValue();
             }
             setTestValue(values);
@@ -134,7 +134,8 @@ public class FloatField
         {
             String val = parser.getString(getKey());
             setTestValue(StringUtils.isNotEmpty(val) 
-                    ? new Float(val) : getEmptyValue());
+                    ? new Float(canonicalizeDecimalInput(val))
+                    : getEmptyValue());
         }
     }
     

@@ -27,6 +27,11 @@ import org.apache.commons.lang.exception.NestableError;
 public class IntakeError extends NestableError
 {
     /**
+     * Serial version id
+     */
+    private static final long serialVersionUID = 7594936180163472231L;
+
+    /**
      * Constructs a new <code>IntakeError</code> without specified
      * detail message.
      */

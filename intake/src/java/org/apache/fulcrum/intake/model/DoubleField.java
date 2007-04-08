@@ -17,7 +17,6 @@ package org.apache.fulcrum.intake.model;
  */
 
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.validator.DoubleValidator;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
@@ -25,10 +24,11 @@ import org.apache.fulcrum.intake.xmlmodel.XmlField;
 /**
  * Processor for double fields.
  *
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
 public class DoubleField
-        extends Field
+        extends AbstractNumberField
 {
     /**
      * Constructor.
@@ -125,7 +125,7 @@ public class DoubleField
             for (int i = 0; i < inputs.length; i++)
             {
                 values[i] = StringUtils.isNotEmpty(inputs[i])
-                        ? new Double(inputs[i]).doubleValue() 
+                        ? new Double(canonicalizeDecimalInput(inputs[i])).doubleValue()
                         : ((Double) getEmptyValue()).doubleValue();
             }
             setTestValue(values);
@@ -134,8 +134,8 @@ public class DoubleField
         {
             String val = parser.getString(getKey());
             setTestValue(StringUtils.isNotEmpty(val) 
-                    ? new Double(val) : (Double) getEmptyValue());
+                    ? new Double(canonicalizeDecimalInput(val))
+                    : (Double) getEmptyValue());
         }
     }
-    
 }

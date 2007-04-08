@@ -23,12 +23,18 @@ import org.apache.fulcrum.intake.IntakeException;
  *
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
 public class ValidationException
         extends IntakeException
 {
     /**
+	 * Serial version
+	 */
+	private static final long serialVersionUID = -5934465742157387249L;
+
+	/**
      * Creates a new <code>ValidationException</code> instance.
      *
      * @param message describing the reason validation failed.

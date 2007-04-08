@@ -31,11 +31,17 @@ import org.xml.sax.Attributes;
  *
  * @author <a href="mailto:jmcnally@collab.net>John McNally</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
 public class AppData
         implements Serializable
 {
+    /**
+     * Serial version id
+     */
+    private static final long serialVersionUID = -3953843038383617960L;
+
     /** List of groups */
     private List inputs;
 

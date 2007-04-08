@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE input-data SYSTEM "http://jakarta.apache.org/turbine/dtd/intake_2_3.dtd">
+<!DOCTYPE input-data SYSTEM
+           "http://jakarta.apache.org/turbine/dtd/intake_2_4.dtd">
 <input-data basePackage="org.apache.fulcrum.intake.test.">
 	<group name="LoginGroup" key="loginGroupKey" mapToObject="LoginForm">
 		<field name="Username" key="loginUsernameKey" type="String"
@@ -16,6 +17,8 @@
 		<field name="RequiredBooleanTestField" key="rbtf" type="boolean">
 			<rule value="true" name="required">ValidValue</rule>
 		</field>
+		<field name="TestCustomTypeField" key="tctf" type="custom" 
+			fieldClass="org.apache.fulcrum.intake.test.MyField" />
 	</group>
 	
 </input-data>

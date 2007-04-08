@@ -42,6 +42,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @author <a href="mailto:Colin.Chalmers@maxware.nl">Colin Chalmers</a>
  * @author <a href="mailto:jh@byteaction.de">J&uuml;rgen Hoffmann</a>
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
 public class StringValidator
@@ -99,28 +100,6 @@ public class StringValidator
             maskMessage = constraint.getMessage();
         }
 
-    }
-
-    /**
-     * Determine whether a testValue meets the criteria specified
-     * in the constraints defined for this validator
-     *
-     * @param testValue a <code>String</code> to be tested
-     * @return true if valid, false otherwise
-     */
-    public boolean isValid(String testValue)
-    {
-        boolean valid = false;
-        try
-        {
-            assertValidity(testValue);
-            valid = true;
-        }
-        catch (ValidationException ve)
-        {
-            valid = false;
-        }
-        return valid;
     }
 
     /**

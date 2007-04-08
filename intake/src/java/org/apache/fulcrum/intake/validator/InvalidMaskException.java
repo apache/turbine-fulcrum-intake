@@ -22,12 +22,18 @@ import org.apache.fulcrum.intake.IntakeException;
  * An Exception indidate an invalid field mask.
  *
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
 public class InvalidMaskException
         extends IntakeException
 {
     /**
+	 * Serial version
+	 */
+	private static final long serialVersionUID = 7190367576315674427L;
+
+	/**
      * Creates a new <code>InvalidMaskException</code> instance.
      *
      * @param message describing the reason validation failed.

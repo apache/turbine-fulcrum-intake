@@ -122,11 +122,20 @@ validator:      Name of the class used for validating the value of the
                 will be used according to the field type.
 
                 The the name of the class is not fully qualified, it will
-                be prepended with org.apache.turbine.services.intake.validator.
+                be prepended with org.apache.fulcrum.intake.validator.
                 For example: a value of "NumberValidator" will be read as
-                "org.apache.turbine.services.intake.validator.NumberValidator".
+                "org.apache.fulcrum.intake.validator.NumberValidator".
 
                 Default: default validator for the field type.
+
+fieldClass:     Name of the class used for handling the field. This is used to 
+                customize field types. The attribute is only interpreted if the 
+                type attribute is set to "custom".
+
+                The the name of the class is not fully qualified, it will
+                be prepended with org.apache.fulcrum.intake.model.
+                For example: a value of "CurrencyField" will be read as
+                "org.apache.fulcrum.intake.model.CurrencyField".
 
 mapToObject:    Class name of the mapped object.  This will override the
                 mapToObject attribute of the enclosing group element.
@@ -168,8 +177,9 @@ Used in:        group
   displaySize CDATA #IMPLIED
   type ( boolean | BigDecimal | int  | float | FileItem
        | String | DateString  | StringKey | NumberKey
-       | ComboKey | double | short | long ) "String"
+       | ComboKey | double | short | long | custom ) "String"
   multiValued ( true | false ) "false"
+  fieldClass CDATA #IMPLIED
   mapToObject CDATA #IMPLIED
   mapToProperty CDATA #IMPLIED
   validator CDATA #IMPLIED
