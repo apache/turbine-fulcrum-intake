@@ -176,8 +176,8 @@ Used in:        group
   displayName CDATA #IMPLIED
   displaySize CDATA #IMPLIED
   type ( boolean | BigDecimal | int  | float | FileItem
-       | String | DateString  | StringKey | NumberKey
-       | ComboKey | double | short | long | custom ) "String"
+       | String | DateString  | ComboKey | double | short
+       | long | custom ) "String"
   multiValued ( true | false ) "false"
   fieldClass CDATA #IMPLIED
   mapToObject CDATA #IMPLIED

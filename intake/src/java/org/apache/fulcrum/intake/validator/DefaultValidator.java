@@ -106,7 +106,7 @@ abstract public class DefaultValidator
         if (constraint != null)
         {
             String param = constraint.getValue();
-            required = new Boolean(param).booleanValue();
+            required = Boolean.valueOf(param).booleanValue();
             requiredMessage = constraint.getMessage();
         }
 

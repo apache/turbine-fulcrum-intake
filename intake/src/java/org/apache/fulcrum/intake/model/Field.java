@@ -250,7 +250,7 @@ public abstract class Field
         Rule reqRule = (Rule) field.getRuleMap().get("required");
         if (reqRule != null)
         {
-            alwaysRequired = new Boolean(reqRule.getValue()).booleanValue();
+            alwaysRequired = Boolean.valueOf(reqRule.getValue()).booleanValue();
             ifRequiredMessage = reqRule.getMessage();
         }
 
@@ -811,6 +811,20 @@ public abstract class Field
     }
 
     /**
+     * Calls toString() on the object returned by getValue(),
+     * unless null; and then it returns "", the empty String.
+     * Escapes &quot; characters to be able to display these
+     * in HTML form fields.
+     *
+     * @return a <code>String</code> value
+     */
+    public String getHTMLString()
+    {
+        String res = toString();
+        return StringUtils.replace(res, "\"", "&quot;");
+    }
+
+    /**
      * Loads the valid value from a bean
      *
      * @throws IntakeException indicates a problem during the execution of the
@@ -1021,7 +1035,7 @@ public abstract class Field
      */
     public String getStringValue()
     {
-        return this.toString();   
+        return this.toString();
     }
     
 }
