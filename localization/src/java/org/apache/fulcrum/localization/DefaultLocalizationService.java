@@ -132,7 +132,6 @@ public class DefaultLocalizationService
             String bundleName[] = new String[nameVal.length];
             for (int i = 0; i < nameVal.length; i++)
             {
-                String key = nameVal[i].getName();
                 String val = nameVal[i].getValue();
                 getLogger().debug("Registered bundle " + val);
                 bundleName[i] = val;
