@@ -32,6 +32,7 @@
         </tr>
         <tr><th>Memory</th><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td></tr>
         <tr><th>Hibernate</th><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td></tr>
+        <tr><th>Torque</th><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td></tr>
         <tr><th>NT</th><td>X</td><td>X</td><td>X</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
       </table>
     </subsection>
@@ -51,7 +52,7 @@
       with a set of groups.  <i>note: I will try and get a diagram. any suggestions on diagram tools?</i>     
       </p>
       <p>
-      The <code>memory</code> and <code>hibernate</code>  packages currently implements this security model.
+      The <code>memory</code>, <code>hibernate</code> and <code>torque</code> packages currently implements this security model.
       </p>
     </subsection>
 
@@ -71,7 +72,7 @@
     the equivalent of roles/permissions.  
       </p>
       <p>
-      The <code>memory</code>, <code>nt</code>, and <code>hibernate</code>  packages currently implements this security model.
+      The <code>memory</code>, <code>nt</code> <code>torque</code> and <code>hibernate</code>  packages currently implements this security model.
       </p>
     </subsection>
   </section>  
@@ -172,8 +173,39 @@
 <section name="Implementation Details">
   <subsection name="Hibernate">
     <p>
-    With the Hibernate SPI, you can just subclass the BasicUser/DynamicUser class, or implement the User interface, provide your own mapping .hbm file
+    With the Hibernate SPI, you can just subclass the BasicUserImpl/DynamicUserImpl class, or implement the User interface, provide your own mapping .hbm file
     and then any additional user properties will be persisted!  Very easy customization for your environment!
+    </p>
+  </subsection>
+  <subsection name="Torque">
+    <p>
+    The Torque SPI provides three different schema mappings for the different security models (in the schema directory). You can easily adjust these to your
+    needs. If adjustments are needed, set up the <code>project.properties</code> file according to your database environment (see the
+    <a href="http://db.apache.org/torque/releases/torque-3.3/maven-plugin/index.html">Torque Maven Plugin Documentation</a> for reference) and use Maven to
+    generate the Torque-OM-classes and to re-built the JAR.
+    </p>
+    <p>
+    The component configuration must refer to the correct Torque-OM-classes as in the following example for the Dynamic model:
+    <source>
+<![CDATA[
+    <userManager>
+        <className>org.apache.fulcrum.security.torque.om.TorqueDynamicUser</className>
+    </userManager> 
+    <groupManager>
+        <className>org.apache.fulcrum.security.torque.om.TorqueDynamicGroup</className>
+    </groupManager>    
+    <roleManager>
+        <className>org.apache.fulcrum.security.torque.om.TorqueDynamicRole</className>
+    </roleManager>   
+    <permissionManager>
+        <className>org.apache.fulcrum.security.torque.om.TorqueDynamicPermission</className>
+    </permissionManager> 
+]]>
+    </source> 
+    </p>
+    <p>
+    As a default, the Torque Security Service uses <code>fulcrum</code> as the name of the connection pool for the tables used. This should be considered
+    in the Torque configuration when the service is deployed.
     </p>
   </subsection>
   <subsection name="NT">
