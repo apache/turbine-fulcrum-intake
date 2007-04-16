@@ -53,7 +53,7 @@ public class StringValueParser
             String tok = st.nextToken();
             if ( urlDecode ) 
             {
-                tok = URLDecoder.decode(tok);
+                tok = URLDecoder.decode(tok, getCharacterEncoding());
             }
             
             if (isNameTok)
@@ -95,8 +95,8 @@ public class StringValueParser
                 
                 if ( urlDecode ) 
                 {
-                    name = URLDecoder.decode(name);
-                    value = URLDecoder.decode(value);
+                    name = URLDecoder.decode(name, getCharacterEncoding());
+                    value = URLDecoder.decode(value, getCharacterEncoding());
                 }
             
                 if (name.length() > 0)

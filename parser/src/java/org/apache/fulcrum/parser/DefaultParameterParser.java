@@ -18,9 +18,11 @@ package org.apache.fulcrum.parser;
  */
 
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +31,7 @@ import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.fulcrum.upload.UploadService;
 
 /**
@@ -157,12 +160,45 @@ public class DefaultParameterParser
         {
             if (getLogger().isDebugEnabled())
             {
-                getLogger().debug("Running the Turbine Upload Service");
+                getLogger().debug("Running the Fulcrum Upload Service");
             }
 
             try
             {
-                uploadService.parseRequest(request, uploadService.getRepository());
+                List fileItems = uploadService.parseRequest(request);
+                
+                if (fileItems != null)
+                {
+                    for (Iterator it = fileItems.iterator(); it.hasNext();)
+                    {
+                        FileItem fi = (FileItem) it.next();
+                        if (fi.isFormField())
+                        {
+                            getLogger().debug("Found an simple form field: " + fi.getFieldName() +", adding value " + fi.getString());
+
+                            String value = null;
+                            try
+                            {
+                                value = fi.getString(getCharacterEncoding());
+                            }
+                            catch (UnsupportedEncodingException e)
+                            {
+                                getLogger().error(getCharacterEncoding()
+                                        + " encoding is not supported."
+                                        + "Used the default when reading form data.");
+                                value = fi.getString();
+                            }
+                            add(fi.getFieldName(), value);
+                        }
+                        else
+                        {
+                            getLogger().debug("Found an uploaded file: " + fi.getFieldName());
+                            getLogger().debug("It has " + fi.getSize() + " Bytes and is " + (fi.isInMemory() ? "" : "not ") + "in Memory");
+                            getLogger().debug("Adding FileItem as " + fi.getFieldName() + " to the params");
+                            add(fi.getFieldName(), fi);
+                        }
+                    }
+                }
             }
             catch (ServiceException e)
             {
@@ -192,12 +228,12 @@ public class DefaultParameterParser
             {
                 if (isNameTok)
                 {
-                    paramName = URLDecoder.decode(st.nextToken());
+                    paramName = URLDecoder.decode(st.nextToken(), getCharacterEncoding());
                     isNameTok = false;
                 }
                 else
                 {
-                    paramValue = URLDecoder.decode(st.nextToken());
+                    paramValue = URLDecoder.decode(st.nextToken(), getCharacterEncoding());
                     if (paramName.length() > 0)
                     {
                         add(paramName, paramValue);
@@ -256,24 +292,28 @@ public class DefaultParameterParser
      *
      * @param name A String with the name.
      * @param value A FileItem with the value.
+     * @deprecated Use add(String name, FileItem item)
      */
-    public void append( String name,
-                        FileItem value )
+    public void append(String name, FileItem value)
+    {
+        add(name, value);
+    }
+
+
+    /**
+     * Add a FileItem object as a parameters.  If there are any
+     * FileItems already associated with the name, append to the
+     * array.  The reason for this is that RFC 1867 allows multiple
+     * files to be associated with single HTML input element.
+     *
+     * @param name A String with the name.
+     * @param value A FileItem with the value.
+     */
+    public void add(String name, FileItem value)
     {
         FileItem[] items = this.getFileItems(name);
-        if(items == null)
-        {
-            items = new FileItem[1];
-            items[0] = value;
-            parameters.put( convert(name), items );
-        }
-        else
-        {
-            FileItem[] newItems = new FileItem[items.length+1];
-            System.arraycopy(items, 0, newItems, 0, items.length);
-            newItems[items.length] = value;
-            parameters.put( convert(name), newItems );
-        }
+        items = (FileItem []) ArrayUtils.add(items, value);
+        parameters.put(convert(name), items);
     }
 
 
