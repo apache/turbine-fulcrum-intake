@@ -103,6 +103,29 @@ public class DefaultUploadService
      * compliant <code>multipart/form-data</code> stream.</p>
      *
      * @param req The servlet request to be parsed.
+     * @exception ServiceException Problems reading/parsing the
+     * request or storing the uploaded file(s).
+     */
+    public List parseRequest(HttpServletRequest req)
+        throws ServiceException
+    {
+        try
+        {
+            ServletFileUpload fileUpload = new ServletFileUpload(itemFactory);
+            fileUpload.setSizeMax(sizeMax);
+            return fileUpload.parseRequest(req);
+        }
+        catch (FileUploadException e)
+        {
+            throw new ServiceException(UploadService.ROLE, e.getMessage(), e);
+        }
+    }
+
+    /**
+     * <p>Parses a <a href="http://rf.cx/rfc1867.html">RFC 1867</a>
+     * compliant <code>multipart/form-data</code> stream.</p>
+     *
+     * @param req The servlet request to be parsed.
      * @param path The location where the files should be stored.
      * @exception ServiceException Problems reading/parsing the
      * request or storing the uploaded file(s).
@@ -112,7 +135,8 @@ public class DefaultUploadService
     {
         try
         {
-            ServletFileUpload fileUpload = new ServletFileUpload(itemFactory);
+            DiskFileItemFactory localItemFactory = new DiskFileItemFactory(sizeThreshold, new File(path));
+            ServletFileUpload fileUpload = new ServletFileUpload(localItemFactory);
             fileUpload.setSizeMax(sizeMax);
             return fileUpload.parseRequest(req);
         }

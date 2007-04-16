@@ -132,6 +132,17 @@ public interface UploadService
      * compliant <code>multipart/form-data</code> stream.</p>
      *
      * @param req The servlet request to be parsed.
+     * @exception ServiceException Problems reading/parsing the
+     * request or storing the uploaded file(s).
+     */
+    List parseRequest(HttpServletRequest req)
+        throws ServiceException;
+
+    /**
+     * <p>Parses a <a href="http://rf.cx/rfc1867.html">RFC 1867</a>
+     * compliant <code>multipart/form-data</code> stream.</p>
+     *
+     * @param req The servlet request to be parsed.
      * @param path The location where the files should be stored.
      * @exception ServiceException Problems reading/parsing the
      * request or storing the uploaded file(s).
