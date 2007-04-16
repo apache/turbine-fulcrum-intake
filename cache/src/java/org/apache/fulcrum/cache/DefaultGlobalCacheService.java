@@ -87,9 +87,10 @@ public class DefaultGlobalCacheService
 	private int cacheInitialSize;
     /** thread for removing stale items from the cache */
     private Thread housekeeping;
+
     /** flag to stop the housekeeping thread when the component is disposed. */
     private boolean continueThread;
-    private boolean disposed;
+
     /**
      * @return
      */
@@ -188,7 +189,7 @@ public class DefaultGlobalCacheService
             {
                 String key = (String) itr.next();
                 try {
-                    CachedObject obj = getObject(key);
+                    /* CachedObject obj = */ getObject(key);
                 } catch (ObjectExpiredException oee) {
                     // this is OK we just do not want this key 
                     continue;
@@ -232,7 +233,7 @@ public class DefaultGlobalCacheService
      */
     public void run()
     {
-        while (true)
+        while (continueThread)
         {
             // Sleep for amount of time set in cacheCheckFrequency -
             // default = 5 seconds.
@@ -242,7 +243,9 @@ public class DefaultGlobalCacheService
             }
             catch (InterruptedException exc)
             {
+                if (!continueThread) return;
             }
+            
             clearCache();
         }
     }
@@ -325,6 +328,7 @@ public class DefaultGlobalCacheService
             }
         }
     }
+
     // ---------------- Avalon Lifecycle Methods ---------------------
     /**
      * Avalon component lifecycle method
@@ -334,6 +338,10 @@ public class DefaultGlobalCacheService
 		cacheCheckFrequency = conf.getAttributeAsLong(CACHE_CHECK_FREQUENCY, DEFAULT_CACHE_CHECK_FREQUENCY);
 		cacheInitialSize = conf.getAttributeAsInteger(INITIAL_CACHE_SIZE, DEFAULT_INITIAL_CACHE_SIZE);
     }
+
+    /**
+     * Avalon component lifecycle method
+     */
     public void initialize() throws Exception
     {
         try
@@ -354,6 +362,7 @@ public class DefaultGlobalCacheService
             throw new Exception("DefaultGlobalCacheService failed to initialize", e);
         }
     }
+
     /**
      * Avalon component lifecycle method
      */
@@ -361,8 +370,8 @@ public class DefaultGlobalCacheService
     {
         continueThread = false;
         housekeeping.interrupt();
-        disposed = true;
     }
+
     /**
      * The name used to specify this component in TurbineResources.properties 
      * @deprecated part of the pre-avalon compatibility layer

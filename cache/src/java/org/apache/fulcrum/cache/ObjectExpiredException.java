@@ -28,4 +28,9 @@ package org.apache.fulcrum.cache;
 public class ObjectExpiredException
     extends Exception
 {
+
+    /**
+     * Serial version id
+     */
+    private static final long serialVersionUID = -4331535517388875678L;
 }
