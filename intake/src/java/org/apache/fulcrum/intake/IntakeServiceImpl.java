@@ -297,7 +297,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             // this is necessary.
             in = new FileInputStream(serialDataPath);
             ObjectInputStream pin = new ObjectInputStream(in);
-            Map dummy = (Map) pin.readObject();
+            /* Map dummy = (Map) */ pin.readObject();
 
             getLogger().debug("Serializing successful");
         }
