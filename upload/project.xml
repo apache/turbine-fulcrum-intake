@@ -23,7 +23,7 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>1.3</version>
+      <version>1.3.1</version>
       <url>http://jakarta.apache.org/commons/io/index.html</url>
     </dependency>          
     
