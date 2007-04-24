@@ -79,7 +79,7 @@ public class ServiceManagerServiceTest extends TestCase
         // get the parameters
         serviceManagerService.getParameters();
         
-        // lookup the servuce
+        // lookup the service
         serviceManagerService = (ServiceManagerService) serviceManagerService.lookup( ServiceManagerService.class.getName() );
         assertTrue( serviceManagerService.hasService( ServiceManagerService.class.getName() ) );
         assertTrue( serviceManagerService.getServiceManager() instanceof ServiceManager );
