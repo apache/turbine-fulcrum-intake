@@ -215,7 +215,7 @@ public class DefaultUploadService
      * Initializes the service.
      *
      * This method processes the repository path, to make it relative to the
-     * web application root, if neccessary
+     * web application root, if necessary
      */
     public void initialize() throws Exception
     {
