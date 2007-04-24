@@ -13,15 +13,15 @@
 
     <section name="Building Fulcrum">
       <p>
-        Building Fulcrum from CVS is now very easy because it has been
+        Building Fulcrum from SVN is now very easy because it has been
         Maven-enabled.  Before you begin, you'll need to check out the
-        <code>jakarta-turbine-fulcrum</code> CVS repository (if you are
-        not familiar with the Jakarta CVS repositories, please refer to
+        <code>jakarta-turbine-fulcrum</code> SVN repository (if you are
+        not familiar with the Jakarta SVN repositories, please refer to
         the <a href="/site/cvsindex.html">documentation</a>).  
       </p>
       <p>
         Please refer to the Maven <a
-        href="http://maven.apache.org/getting-started.html">Getting
+        href="http://maven.apache.org/maven-1.x/start/index.html">Getting
         Started</a> document for instructions on how to install and
         use Maven.
       </p>      
