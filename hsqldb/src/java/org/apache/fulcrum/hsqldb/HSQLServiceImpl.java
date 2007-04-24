@@ -29,7 +29,7 @@ import org.hsqldb.ServerConstants;
 import org.hsqldb.persist.HsqlProperties;
 
 /**
- * The originial implementation was taken from
+ * The original implementation was taken from
  * http://scarab.tigris.org/source/browse/scarab/src/java/org/tigris/scarab/services/hsql/
  * and tweaked a little bit.
  *
