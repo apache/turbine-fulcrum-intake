@@ -17,7 +17,12 @@ package org.apache.fulcrum.parser;
  */
 
 
+import java.util.Iterator;
+
 import org.apache.avalon.framework.component.ComponentException;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 /**
  * Basic test that ParameterParser instantiates.
@@ -68,5 +73,44 @@ public class ParameterParserTest extends BaseUnitTest
         assertEquals("TRIMMED_and_Not_Modified",parameterParser.convertAndTrim(" TRIMMED_and_Not_Modified ", ParameterParser.URL_CASE_FOLDING_NONE));
         assertEquals("trimmed_and_lower_case",parameterParser.convertAndTrim(" TRIMMED_and_Lower_Case ", ParameterParser.URL_CASE_FOLDING_LOWER));
         assertEquals("TRIMMED_AND_UPPER_CASE",parameterParser.convertAndTrim(" TRIMMED_and_Upper_Case ", ParameterParser.URL_CASE_FOLDING_UPPER));
+    }
+
+    /**
+     * This Test method checks the DefaultParameterParser which carries two Sets inside it.
+     * The suggested problem was that pp.keySet() returns both Keys, but pp.getStrings("key")
+     * only checks for keys which are not FileItems.
+     *
+     * @throws Exception
+     */
+    public void testAddPathInfo() throws Exception
+    {
+        FileItemFactory factory = new DiskFileItemFactory(10240, null);
+
+        assertEquals("keySet() is not empty!", 0, parameterParser.keySet().size());
+
+        FileItem test = factory.createItem("upload-field", "application/octet-stream", false, null);
+        // Push this into the parser using DefaultParameterParser's add() method.
+        ((DefaultParameterParser) parameterParser).add("upload-field", test);
+
+        assertEquals("FileItem not found in keySet()!", 1, parameterParser.keySet().size());
+
+        Iterator it = parameterParser.keySet().iterator();
+        assertTrue(it.hasNext());
+
+        String name = (String) it.next();
+        assertEquals("Wrong name found", "upload-field", name);
+
+        assertFalse(it.hasNext());
+
+        parameterParser.add("other-field", "foo");
+
+        assertEquals("Wrong number of fields found ", 2, parameterParser.getKeys().length);
+
+        assertTrue(parameterParser.containsKey("upload-field"));
+        assertTrue(parameterParser.containsKey("other-field"));
+
+        // The following will actually cause a ClassCastException because getStrings() (and others) are not catering for FileItems.
+        assertNull("The returned should be null because a FileItem is not a String", parameterParser.getStrings("upload-field"));
+        assertFalse(parameterParser.containsKey("missing-field"));        
     }
 }
