@@ -105,7 +105,7 @@
         <p>
           The Startable interface is used by any component that is constantly 
           running for the duration of its life. This is the method to go if
-          you wnat to start a worker thread in the background.
+          you want to start a worker thread in the background.
         </p>
       </subsection>
 
