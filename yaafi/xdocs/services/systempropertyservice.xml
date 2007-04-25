@@ -10,7 +10,7 @@
 
         <section name="Overview">
             <p>
-              This service copies entries from the configuratio.xml into the
+              This service copies entries from the configuration.xml into the
               SystemProperties. Quite useful since you can avoid tinkering 
               with system properties in start scripts.
             </p>            
