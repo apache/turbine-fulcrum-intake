@@ -53,7 +53,7 @@ public class StringUtils
     }
 
     /**
-     * <p>Replaces all occurances of a String within another String.</p>
+     * <p>Replaces all occurrences of a String within another String.</p>
      *
      * <p>A <code>null</code> reference passed to this method is a no-op.</p>
      * 
