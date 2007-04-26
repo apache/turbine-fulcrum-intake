@@ -187,7 +187,7 @@ public class DefaultQuartzScheduler implements QuartzScheduler, Configurable, Se
         try {
             scheduler.shutdown();
         } catch (SchedulerException e) {
-            logger.warn("Problem shuting down scheduler ", e);
+            logger.warn("Problem shutting down scheduler ", e);
         }
         if(wrapper != null) {
             wrapper.dispose();
