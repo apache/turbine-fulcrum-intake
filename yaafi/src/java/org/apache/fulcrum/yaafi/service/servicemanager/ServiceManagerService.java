@@ -50,7 +50,7 @@ public interface ServiceManagerService extends ServiceManager
     ServiceManager getServiceManager();
 
     /**
-     * @return the Paramters for the container
+     * @return the Parameters for the container
      */
     Parameters getParameters();
 

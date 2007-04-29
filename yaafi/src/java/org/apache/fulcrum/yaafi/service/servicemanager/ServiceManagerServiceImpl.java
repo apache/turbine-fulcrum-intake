@@ -164,7 +164,7 @@ public class ServiceManagerServiceImpl
     }
 
     /**
-     * @return the Paramters for the container
+     * @return the Parameters for the container
      */
     public Parameters getParameters()
     {
