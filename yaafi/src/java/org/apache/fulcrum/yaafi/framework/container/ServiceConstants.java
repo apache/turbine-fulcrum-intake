@@ -45,6 +45,9 @@ public interface ServiceConstants extends AvalonYaafiConstants
     /** property to lookup the component config file */
     String COMPONENT_CONFIG_KEY = "componentConfiguration";
 
+    /** property to lookup the component config property file */
+    String COMPONENT_CONFIG_PROPERTIES_KEY = "componentConfigurationProperties";
+
     /** property to lookup the component role file */
     String COMPONENT_ROLE_KEYS = "componentRoles";
 

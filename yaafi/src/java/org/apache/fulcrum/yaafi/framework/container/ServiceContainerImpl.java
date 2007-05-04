@@ -28,7 +28,9 @@ import java.util.Properties;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
+import org.apache.avalon.framework.container.ContainerUtil;
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.DefaultContext;
@@ -40,12 +42,15 @@ import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.fulcrum.jce.crypto.CryptoStreamFactoryImpl;
 import org.apache.fulcrum.yaafi.framework.component.AvalonServiceComponentImpl;
 import org.apache.fulcrum.yaafi.framework.component.ServiceComponent;
+import org.apache.fulcrum.yaafi.framework.configuration.ComponentConfigurationPropertiesResolver;
+import org.apache.fulcrum.yaafi.framework.configuration.ComponentConfigurationPropertiesResolverImpl;
 import org.apache.fulcrum.yaafi.framework.constant.AvalonYaafiConstants;
 import org.apache.fulcrum.yaafi.framework.context.AvalonToYaafiContextMapper;
 import org.apache.fulcrum.yaafi.framework.context.YaafiToAvalonContextMapper;
 import org.apache.fulcrum.yaafi.framework.role.RoleConfigurationParser;
 import org.apache.fulcrum.yaafi.framework.role.RoleConfigurationParserImpl;
 import org.apache.fulcrum.yaafi.framework.role.RoleEntry;
+import org.apache.fulcrum.yaafi.framework.util.ConfigurationUtil;
 import org.apache.fulcrum.yaafi.framework.util.InputStreamLocator;
 import org.apache.fulcrum.yaafi.framework.util.ReadWriteLock;
 import org.apache.fulcrum.yaafi.framework.util.StringUtils;
@@ -135,6 +140,9 @@ public class ServiceContainerImpl
     
     /** Read/Write lock to synchronize acess to services */
     private ReadWriteLock readWriteLock;
+    
+    /** the configuration for running the ComponentConfigurationPropertiesResolver */
+    private Configuration componentConfigurationPropertiesResolverConfig;
     
     /////////////////////////////////////////////////////////////////////////
     // Avalon Service Lifecycle
@@ -289,7 +297,14 @@ public class ServiceContainerImpl
             currComponentConfiguration.getChild(COMPONENT_ISENCRYPTED_KEY).getValue(
                 "false" )
                 );
-
+                
+        
+        // get the configuration for componentConfigurationPropertiesResolver
+        
+        this.componentConfigurationPropertiesResolverConfig = configuration.getChild(
+            COMPONENT_CONFIG_PROPERTIES_KEY
+            );
+        
         // evaluate parameters
 
         Configuration currParameters = configuration.getChild(COMPONENT_PARAMETERS_KEY);
@@ -371,6 +386,18 @@ public class ServiceContainerImpl
         this.serviceConfiguration = loadConfiguration(
             this.componentConfigurationLocation,
             this.isComponentConfigurationEncrypted()
+            );
+
+        // create the configuration properties
+        
+        Properties componentConfigurationProperties = this.loadComponentConfigurationProperties();
+
+        // expand the componentConfiguration using the componentConfigurationProperties
+        
+        ConfigurationUtil.expand(
+            this.getLogger(),
+            (DefaultConfiguration) this.serviceConfiguration, 
+            componentConfigurationProperties
             );
 
         // create the default parameters
@@ -492,9 +519,17 @@ public class ServiceContainerImpl
             lock = this.getWriteLock();
             
 	        // 2) store the new configuration
-	
+
 	        this.serviceConfiguration = configuration;
-	
+
+            Properties componentConfigurationProperties = this.loadComponentConfigurationProperties();
+            
+            ConfigurationUtil.expand(
+                this.getLogger(),
+                (DefaultConfiguration) this.serviceConfiguration, 
+                componentConfigurationProperties
+                );
+
 	        // 3) reconfigure the services
 	
 	        for( int i=0; i<this.getServiceList().size(); i++ )
@@ -1208,6 +1243,44 @@ public class ServiceContainerImpl
                 this.getLogger().error( msg , e );
                 throw e;
             }
+        }
+
+        return result;
+    }
+
+    /**
+     * Load a configuration property file either from a file or using the class loader.
+     * @param location the location of the file
+     * @return The loaded proeperty file
+     * @throws ConfigurationException Something went wrong
+     */
+    private Properties loadComponentConfigurationProperties()
+    	throws ConfigurationException
+    {
+        Properties result = new Properties();
+        ComponentConfigurationPropertiesResolver resolver = null;
+        
+        String className = this.componentConfigurationPropertiesResolverConfig.getChild("resolver").getValue(
+            ComponentConfigurationPropertiesResolverImpl.class.getName()
+            );
+                
+        try
+        {
+            Class resolverClass = this.getClassLoader().loadClass( className );
+            resolver = (ComponentConfigurationPropertiesResolver) resolverClass.newInstance();       
+            ContainerUtil.enableLogging(resolver, this.getLogger());
+            ContainerUtil.contextualize(resolver, this.getContext());
+            ContainerUtil.configure(resolver, this.componentConfigurationPropertiesResolverConfig);
+            
+            result = resolver.resolve(null);
+            
+            this.getLogger().debug("Using the following componentConfigurationProperties: " + result);
+        }
+        catch (Exception e)
+        {
+            String msg = "Resolving componentConfigurationProperties failed using the following class : " + className;
+            this.getLogger().error(msg, e);
+            throw new ConfigurationException(msg, e);
         }
 
         return result;

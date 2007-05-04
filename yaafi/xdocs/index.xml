@@ -50,6 +50,7 @@
             <li>support for early or on-demand initialization</li>
             <li>support for encrypted configuration files</li>
             <li>dynamic proxies and service interceptors</li>
+            <li>dynamic expansion of variables found in the component configuration file</li>
           </ul>
         </p>
       </subsection>

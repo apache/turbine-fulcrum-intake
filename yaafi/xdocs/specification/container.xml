@@ -87,6 +87,32 @@
             </td>
           </tr>
           <tr>
+            <td>componentConfigurationProperties</td>
+            <td>Tree</td>
+            <td>[0|1]</td>
+            <td>
+              Information about the component configuration proeprties used
+              to resolve variables in the componentConfiguration
+            </td>
+          </tr>
+          <tr>
+            <td>componentConfigurationProperties/location</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              The location of the component configuration property file. The
+              default value is "/componentConfiguration.properties"
+            </td>
+          </tr>
+          <tr>
+            <td>componentConfigurationProperties/resolver</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td>
+              The resolver class name to load the componentConfiguration.properties.
+            </td>
+          </tr>
+          <tr>
             <td>parameters</td>
             <td>Tree</td>
             <td>[0|1]</td>

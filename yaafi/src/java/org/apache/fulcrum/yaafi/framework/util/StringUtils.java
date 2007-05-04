@@ -16,6 +16,8 @@
 
 package org.apache.fulcrum.yaafi.framework.util;
 
+import java.util.Map;
+
 
 /**
  * A subset of the utilities available in commons-lang-2.1 StringUtils.
@@ -252,5 +254,88 @@ public class StringUtils
     public static boolean isEmpty(String str)
     {
         return str == null || str.length() == 0;
+    }
+    
+    /**
+     * Perform a series of substitutions. The substitions
+     * are performed by replacing ${variable} in the target
+     * string with the value of provided by the key "variable"
+     * in the provided hashtable.
+     *
+     * @param argStr target string
+     * @param vars name/value pairs used for substitution
+     * @param isLenient ignore failures
+     * @return String target string with replacements.
+     */
+    public static StringBuffer stringSubstitution(String argStr, Map vars, boolean isLenient)
+    {
+        StringBuffer argBuf = new StringBuffer();
+        int argStrLength = argStr.length();
+
+        for (int cIdx = 0 ; cIdx < argStrLength;)
+        {
+            char ch = argStr.charAt(cIdx);
+            char del = ' ';
+
+            switch (ch)
+            {
+                case '$':
+                    StringBuffer nameBuf = new StringBuffer();
+                    del = argStr.charAt(cIdx+1);
+                    if( del == '{')
+                    {
+                        cIdx++;
+
+                        for (++cIdx ; cIdx < argStr.length(); ++cIdx)
+                        {
+                            ch = argStr.charAt(cIdx);
+                            if (ch != '}')
+                                nameBuf.append(ch);
+                            else
+                                break;
+                        }
+
+                        if (nameBuf.length() > 0)
+                        {
+                            Object value = vars.get(nameBuf.toString());
+
+                            if (value != null)
+                            {
+                                argBuf.append(value.toString());
+                            }
+                            else
+                            {
+                                if (!isLenient)
+                                {
+                                    throw new RuntimeException("No value found for : " + nameBuf );
+                                }
+                            }
+
+                            del = argStr.charAt(cIdx);
+
+                            if( del != '}')
+                            {
+                                throw new RuntimeException("Delimineter not found for : " + nameBuf );
+                            }
+                        }
+
+                        cIdx++;
+                    }
+                    else
+                    {
+                        argBuf.append(ch);
+                        ++cIdx;
+                    }
+
+                    break;
+
+                default:
+                    argBuf.append(ch);
+                    ++cIdx;
+                    break;
+            }
+        }
+
+        return argBuf;
     }
 }
