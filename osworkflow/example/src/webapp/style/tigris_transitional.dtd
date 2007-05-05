@@ -1,26 +1,44 @@
 <!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<!--
  Tigris XHTML 1.0 Transitional DTD
- 
+
  This is based on the W3C's XHTML 1.0 Transitional, which in turn is the same
- as HTML 4.0 Transitional except for changes required by the differences 
+ as HTML 4.0 Transitional except for changes required by the differences
  between XML and SGML.
 
  Further information about HTML 4.0 is available at:
   <http://www.w3.org/TR/REC-html40>
-  
+
   Further information about XHTML 1.0 is available at:
   <http://www.w3.org/TR/xhtml1/>
-   
+
  Usage:
-   
+
  <!DOCTYPE html PUBLIC "-//Tigris//DTD XHTML 1.0 Transitional//EN"
     "http://style.tigris.org/nonav/tigris_transitional.dtd">
   <html>
   ...
   </html>
-  
- Differences between W3C Transitional and Tigris Transitional 
- Document Type Definitions 
+
+ Differences between W3C Transitional and Tigris Transitional
+ Document Type Definitions
 
  Forbidden in W3C, permitted in Tigris
 
@@ -29,13 +47,13 @@
  * The border attribute has been added to input.
  * The marginwidth and marginheight attributes for body have been
  added to Tigris Transitional, as CSS equivalents are not supported in
- Netscape 4.x. 
+ Netscape 4.x.
 
 
  Optional in W3C, required in Tigris
 
  * Height and width attributes are required on img.
- * The border, cellspacing, and cellpadding attributes on table are 
+ * The border, cellspacing, and cellpadding attributes on table are
  required.
  * The body element may contain only block-level elements, as in HTML
  Strict. This encourages the use of appropriate markup for all text,
@@ -50,7 +68,7 @@
  redundant with CSS's text-align properties (which apply only to inline
  content, hence retention of the usage on blocks).
  * The valign attribute has been limited to tr, as redundant with CSS's
- vertical-align property, and takes only the "top" value, for preserving 
+ vertical-align property, and takes only the "top" value, for preserving
  intelligibility of table-based layouts with CSS off.
  * The menu and dir elements have been removed, as redundant with ul,
  and deprecated.
@@ -66,17 +84,17 @@
 
 <!--================ Character mnemonic entities =========================-->
 
-<!ENTITY %  xhtml-lat1 PUBLIC  
+<!ENTITY %  xhtml-lat1 PUBLIC
 "-//W3C//ENTITIES Latin 1 for XHTML//EN"
    "http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent">
 %xhtml-lat1;
 
-<!ENTITY % xhtml-symbol PUBLIC  
+<!ENTITY % xhtml-symbol PUBLIC
 "-//W3C//ENTITIES Symbols for XHTML//EN"
    "http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent">
  %xhtml-symbol;
 
-<!ENTITY % xhtml-special PUBLIC  
+<!ENTITY % xhtml-special PUBLIC
 "-//W3C//ENTITIES Special for XHTML//EN"
    "http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent">
 %xhtml-special;
@@ -150,7 +168,7 @@
 <!ENTITY % Coords "CDATA">
     <!-- comma separated list of lengths -->
 
-<!-- to align object, applet, img, input and iframe, use CSS's text-align property --> 
+<!-- to align object, applet, img, input and iframe, use CSS's text-align property -->
 <!-- <!ENTITY % ImgAlign "(top|middle|bottom|left|right)"> -->
 
 <!-- a color using sRGB: #RRGGBB as Hex values -->
@@ -168,8 +186,8 @@
     Fuchsia= #FF00FF    Aqua   = #00FFFF
 -->
 <!ENTITY % bodymargins "
- marginwidth CDATA  #IMPLIED 
- marginheight CDATA  #IMPLIED 
+ marginwidth CDATA  #IMPLIED
+ marginheight CDATA  #IMPLIED
  ">
 <!--=================== Generic Attributes ===============================-->
 
@@ -441,7 +459,7 @@
 <!ELEMENT body %Block;>
 <!ATTLIST body
   %attrs;
-  %bodymargins;             
+  %bodymargins;
   onload      %Script;       #IMPLIED
   onunload    %Script;       #IMPLIED
   >
@@ -594,7 +612,7 @@
 
 <!--=================== Preformatted Text ================================-->
 
-<!-- content is %Inline; excluding 
+<!-- content is %Inline; excluding
         "img|object|applet|big|small|sub|sup|font|basefont" -->
 
 <!ELEMENT pre %pre.content;>
@@ -996,7 +1014,7 @@
 
 <!--
  Content is %Flow; excluding a, form, form controls, iframe
---> 
+-->
 <!ELEMENT button %button.content;>  <!-- push button -->
 <!ATTLIST button
   %attrs;

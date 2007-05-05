@@ -1,20 +1,22 @@
 package org.apache.fulcrum.yaafi.framework.container;
 
 /*
- * Copyright 2004 Apache Software Foundation
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
- * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.io.File;
@@ -68,7 +70,7 @@ public class ServiceContainerImpl
 {
     /** the timeout after getting a write lock for reconfiguration */
     private static final int RECONFIGURATION_DELAY = 0;
-    
+
     /** The role configuration file to be used */
     private String componentRolesLocation;
 
@@ -101,7 +103,7 @@ public class ServiceContainerImpl
 
     /** The service manager passed to the container */
     private ServiceManager parentServiceManager;
-    
+
     /** The list of services instantiated */
     private List serviceList;
 
@@ -134,16 +136,16 @@ public class ServiceContainerImpl
 
     /** global flag for enabling/disabling dynamic proxies */
     private boolean hasDynamicProxies;
-    
+
     /** The list of interceptor services applied to all services */
     private ArrayList defaultInterceptorServiceList;
-    
+
     /** Read/Write lock to synchronize acess to services */
     private ReadWriteLock readWriteLock;
-    
+
     /** the configuration for running the ComponentConfigurationPropertiesResolver */
     private Configuration componentConfigurationPropertiesResolverConfig;
-    
+
     /////////////////////////////////////////////////////////////////////////
     // Avalon Service Lifecycle
     /////////////////////////////////////////////////////////////////////////
@@ -197,15 +199,15 @@ public class ServiceContainerImpl
         this.callerContext = context;
     }
 
-    
-    /** 
+
+    /**
      * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
      */
     public void service(ServiceManager serviceManager) throws ServiceException
     {
         this.parentServiceManager = serviceManager;
     }
-    
+
     /**
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
@@ -214,15 +216,15 @@ public class ServiceContainerImpl
         Validate.notNull( configuration, "configuration" );
 
         // retrieve the reconfigurationDelay
-        
-        this.reconfigurationDelay = 
+
+        this.reconfigurationDelay =
             configuration.getChild(RECONFIGURATION_DELAY_KEY).getValueAsInteger(
                 RECONFIGURATION_DELAY
                 );
 
         // evaluate if we are using dynamic proxies
-        
-        this.hasDynamicProxies = 
+
+        this.hasDynamicProxies =
             configuration.getChild(DYNAMICPROXY_ENABLED_KEY).getValueAsBoolean(false);
 
         // retrieve the container flavour
@@ -297,14 +299,14 @@ public class ServiceContainerImpl
             currComponentConfiguration.getChild(COMPONENT_ISENCRYPTED_KEY).getValue(
                 "false" )
                 );
-                
-        
+
+
         // get the configuration for componentConfigurationPropertiesResolver
-        
+
         this.componentConfigurationPropertiesResolverConfig = configuration.getChild(
             COMPONENT_CONFIG_PROPERTIES_KEY
             );
-        
+
         // evaluate parameters
 
         Configuration currParameters = configuration.getChild(COMPONENT_PARAMETERS_KEY);
@@ -318,13 +320,13 @@ public class ServiceContainerImpl
             currParameters.getChild(COMPONENT_ISENCRYPTED_KEY).getValue(
                 "false" )
                 );
-        
+
         // evaluate the default interceptors
 
-        Configuration currInterceptorList = configuration.getChild( 
-            INTERCEPTOR_LIST_KEY 
+        Configuration currInterceptorList = configuration.getChild(
+            INTERCEPTOR_LIST_KEY
             );
-                
+
         Configuration[] interceptorConfigList = currInterceptorList.getChildren(
             INTERCEPTOR_KEY
             );
@@ -332,11 +334,11 @@ public class ServiceContainerImpl
         for( int j=0; j<interceptorConfigList.length; j++ )
         {
             String interceptorServiceName = interceptorConfigList[j].getValue(null);
-                        
+
             if( !StringUtils.isEmpty(interceptorServiceName) && this.hasDynamicProxies())
             {
 	            this.defaultInterceptorServiceList.add( interceptorServiceName );
-	
+
 	            this.getLogger().debug("Using the following default interceptor service : "
 	                + interceptorServiceName
 	                );
@@ -389,14 +391,14 @@ public class ServiceContainerImpl
             );
 
         // create the configuration properties
-        
+
         Properties componentConfigurationProperties = this.loadComponentConfigurationProperties();
 
         // expand the componentConfiguration using the componentConfigurationProperties
-        
+
         ConfigurationUtil.expand(
             this.getLogger(),
-            (DefaultConfiguration) this.serviceConfiguration, 
+            (DefaultConfiguration) this.serviceConfiguration,
             componentConfigurationProperties
             );
 
@@ -446,7 +448,7 @@ public class ServiceContainerImpl
     public void dispose()
     {
         Object lock = null;
-            
+
         if( this.isDisposed )
         {
             return;
@@ -455,12 +457,12 @@ public class ServiceContainerImpl
         try
         {
             lock = this.getWriteLock();
-            
+
             if( this.getLogger() != null )
             {
                 this.getLogger().debug("Disposing all services");
             }
-            
+
             // decommision all servcies
 
             this.decommisionAll( this.getServiceList() );
@@ -515,31 +517,31 @@ public class ServiceContainerImpl
         try
         {
             // 1) lock the service container
-            
+
             lock = this.getWriteLock();
-            
+
 	        // 2) store the new configuration
 
 	        this.serviceConfiguration = configuration;
 
             Properties componentConfigurationProperties = this.loadComponentConfigurationProperties();
-            
+
             ConfigurationUtil.expand(
                 this.getLogger(),
-                (DefaultConfiguration) this.serviceConfiguration, 
+                (DefaultConfiguration) this.serviceConfiguration,
                 componentConfigurationProperties
                 );
 
 	        // 3) reconfigure the services
-	
+
 	        for( int i=0; i<this.getServiceList().size(); i++ )
 	        {
 	            serviceComponent = (ServiceComponent) this.getServiceList().get(i);
-	
+
 	            Configuration serviceComponentConfiguraton = this.getServiceConfiguration().getChild(
 	                serviceComponent.getShorthand()
 	                );
-	
+
 	            try
 	            {
 	                serviceComponent.setConfiguration(serviceComponentConfiguraton);
@@ -552,9 +554,9 @@ public class ServiceContainerImpl
 	                exceptionCounter++;
 	            }
 	        }
-	
+
 	        // 4) check the result
-	
+
 	        if( exceptionCounter > 0 )
 	        {
 	            String msg = "The reconfiguration failed with " + exceptionCounter + " exception(s)";
@@ -574,14 +576,14 @@ public class ServiceContainerImpl
 
     /**
      * @see org.apache.fulcrum.yaafi.framework.container.ServiceLifecycleManager#getRoleEntry(java.lang.String)
-     */    
+     */
     public RoleEntry getRoleEntry(String name)
         throws ServiceException
     {
         Object lock = null;
-        
+
         try
-        {	
+        {
             lock = this.getReadLock();
             return this.getServiceComponentEx(name).getRoleEntry();
         }
@@ -590,28 +592,28 @@ public class ServiceContainerImpl
             this.releaseLock(lock);
         }
     }
-    
+
     /**
      * @see org.apache.fulcrum.yaafi.framework.container.ServiceLifecycleManager#getRoleEntries()
      */
     public RoleEntry[] getRoleEntries()
     {
         Object lock = null;
-        
+
         try
         {
             lock = this.getReadLock();
-            
+
 	        List serviceList = this.getServiceList();
 	        ServiceComponent serviceComponent = null;
 	        RoleEntry[] result = new RoleEntry[serviceList.size()];
-	
+
 	        for( int i=0; i<result.length; i++ )
 	        {
 	            serviceComponent = (ServiceComponent) serviceList.get(i);
 	            result[i] = serviceComponent.getRoleEntry();
 	        }
-	
+
 	        return result;
         }
         finally
@@ -630,18 +632,18 @@ public class ServiceContainerImpl
         Validate.noNullElements(names,"names");
 
         Object lock = null;
-        
+
         try
         {
             // get exclusive access
-            
+
             lock = this.getWriteLock();
-                       
+
 	        for( int i=0; i<names.length; i++ )
 	        {
 	            // ensure that the service exists since during our reconfiguration
 	            // we might use a stle recofniguration entry
-	
+
 	            if( this.getServiceMap().get(names[i]) != null )
 	            {
 	                this.reconfigure(names[i]);
@@ -664,12 +666,12 @@ public class ServiceContainerImpl
         boolean result = false;
         Object lock = null;
         ServiceComponent serviceComponent = null;
-        
-        // look at our available service 
-        
+
+        // look at our available service
+
         try
         {
-            lock = this.getReadLock();            
+            lock = this.getReadLock();
             serviceComponent = this.getLocalServiceComponent(name);
             result = ( serviceComponent != null ? true : false );
         }
@@ -677,15 +679,15 @@ public class ServiceContainerImpl
         {
             this.releaseLock(lock);
         }
-        
+
         // if we haven't found anything ask the parent ServiceManager
-        
+
         if( ( result == false ) && ( this.hasParentServiceManager() ) )
         {
             result = this.getParentServiceManager().hasService(name);
         }
-        
-        return result;            
+
+        return result;
     }
 
     /**
@@ -700,12 +702,12 @@ public class ServiceContainerImpl
         ServiceComponent serviceComponent = null;
 
         // look at our available service
-        
+
         try
         {
             lock = this.getReadLock();
             serviceComponent = this.getLocalServiceComponent(name);
-            
+
             if( serviceComponent != null )
             {
                 result = serviceComponent.getInstance();
@@ -715,7 +717,7 @@ public class ServiceContainerImpl
         {
             String msg = "Failed to lookup a service " + name;
             this.getLogger().error( msg, t );
-            throw new ServiceException( name, msg, t );   
+            throw new ServiceException( name, msg, t );
         }
 		finally
 		{
@@ -723,7 +725,7 @@ public class ServiceContainerImpl
 		}
 
         // if we haven't found anything ask the parent ServiceManager
-        
+
         if( result == null )
         {
             if( this.hasParentServiceManager() )
@@ -731,9 +733,9 @@ public class ServiceContainerImpl
 	            result = this.getParentServiceManager().lookup(name);
 	        }
         }
-        
+
         // if we still haven't found anything then complain
-        
+
         if( result == null )
         {
             String msg = "The following component does not exist : " + name;
@@ -759,7 +761,7 @@ public class ServiceContainerImpl
     public void decommision(String name) throws ServiceException
     {
         Object lock = null;
-        
+
         try
         {
             lock = this.getWriteLock();
@@ -778,7 +780,7 @@ public class ServiceContainerImpl
     public Parameters getParameters()
     {
         Object lock = null;
-        
+
         try
         {
             lock = this.getReadLock();
@@ -789,7 +791,7 @@ public class ServiceContainerImpl
             this.releaseLock(lock);
         }
     }
-    
+
     /**
      * @see java.lang.Object#toString()
      */
@@ -798,13 +800,13 @@ public class ServiceContainerImpl
         ToStringBuilder toStringBuilder = new ToStringBuilder(this);
 
         toStringBuilder.append("applicationRootDir", this.getApplicationRootDir());
-        toStringBuilder.append("tempRootDir", this.getTempRootDir());               
+        toStringBuilder.append("tempRootDir", this.getTempRootDir());
         toStringBuilder.append("componentRolesLocation", this.componentRolesLocation);
         toStringBuilder.append("componentConfigurationLocation", this.componentConfigurationLocation);
         toStringBuilder.append("parametersLocation", parametersLocation);
         toStringBuilder.append("logger", this.getLogger().getClass().getName());
         toStringBuilder.append("hasDynamicProxies", this.hasDynamicProxies);
-        toStringBuilder.append("containerFlavour", this.containerFlavour);        
+        toStringBuilder.append("containerFlavour", this.containerFlavour);
         toStringBuilder.append("componentRolesFlavour", this.componentRolesFlavour);
         toStringBuilder.append("isComponentRolesEncrypted", this.isComponentRolesEncrypted);
         toStringBuilder.append("isComponentConfigurationEncrypted", this.isComponentConfigurationEncrypted);
@@ -812,7 +814,7 @@ public class ServiceContainerImpl
 
         return toStringBuilder.toString();
     }
-    
+
     /////////////////////////////////////////////////////////////////////////
     // Service Implementation
     /////////////////////////////////////////////////////////////////////////
@@ -863,7 +865,7 @@ public class ServiceContainerImpl
 
     /**
      * Enforce that a service is known to simplify error handling.
-     * 
+     *
      * @param name the name of the service component
      * @return the service component
      * @throws ServiceException the service was not found
@@ -886,7 +888,7 @@ public class ServiceContainerImpl
 
     /**
      * Try to get a local service component
-     * 
+     *
      * @param name the name of the service component
      * @return the service component if any
      */
@@ -939,7 +941,7 @@ public class ServiceContainerImpl
 
     /**
      * Incarnation of a list of services.
-     * 
+     *
      * @param serviceList the list of available services
      * @throws Exception the incarnation of a service failed
      */
@@ -948,19 +950,19 @@ public class ServiceContainerImpl
     {
         ServiceComponent serviceComponent = null;
 
-        // configure all services 
-        
+        // configure all services
+
         for( int i=0; i<serviceList.size(); i++ )
         {
-            serviceComponent = (ServiceComponent) this.getServiceList().get(i);            
+            serviceComponent = (ServiceComponent) this.getServiceList().get(i);
             this.configure( serviceComponent );
         }
 
         // incarnate all services
-        
+
         for( int i=0; i<serviceList.size(); i++ )
         {
-            serviceComponent = (ServiceComponent) this.getServiceList().get(i);            
+            serviceComponent = (ServiceComponent) this.getServiceList().get(i);
             this.incarnate( serviceComponent );
         }
 
@@ -988,18 +990,18 @@ public class ServiceContainerImpl
 
         RoleEntry roleEntry = serviceComponent.getRoleEntry();
         String componentFlavour = roleEntry.getComponentFlavour();
-        
+
         DefaultContext serviceComponentContext = mapper.mapTo(
             this.getContext(),
             componentFlavour
             );
-        
+
         // add the read/write lock to the context
-        
+
         serviceComponentContext.put(
             URN_YAAFI_KERNELLOCK,
             this.readWriteLock
-            );            
+            );
 
         // create the remaining Avalon artifacts for the service component
 
@@ -1020,14 +1022,14 @@ public class ServiceContainerImpl
         serviceComponent.setContext(serviceComponentContext);
         serviceComponent.setConfiguration(serviceComponentConfiguraton);
         serviceComponent.setParameters(serviceComponentParameters);
-        
+
         // load the implementation class of the service
-        
+
         serviceComponent.loadImplemtationClass(
            this.getClassLoader()
             );
     }
-    
+
     /**
      * Incarnation of a configured service component. After the
      * incarnation the service component is operational.
@@ -1097,7 +1099,7 @@ public class ServiceContainerImpl
 
     /**
      * Disposing of a single service component.
-     
+
      * @param serviceComponent The service component to decommision
      */
     private void dispose( ServiceComponent serviceComponent )
@@ -1140,11 +1142,11 @@ public class ServiceContainerImpl
     }
 
     /**
-     * Factory method for creating services. The service 
+     * Factory method for creating services. The service
      * instances are not initialized at this point.
-     * 
+     *
      * @param roleConfiguration the role configuration file
-     * @param logger the logger 
+     * @param logger the logger
      * @throws ConfigurationException creating the service instance failed
      */
     private List createServiceComponents(Configuration roleConfiguration, Logger logger )
@@ -1178,9 +1180,9 @@ public class ServiceContainerImpl
                 // add the default interceptors to all role entries
 
                 RoleEntry roleEntry = roleEntryList[i];
-                
+
                 if( this.hasDynamicProxies() )
-                {                   
+                {
                     roleEntry.addInterceptors(defaultInterceptorList);
                 }
                 else
@@ -1259,21 +1261,21 @@ public class ServiceContainerImpl
     {
         Properties result = new Properties();
         ComponentConfigurationPropertiesResolver resolver = null;
-        
+
         String className = this.componentConfigurationPropertiesResolverConfig.getChild("resolver").getValue(
             ComponentConfigurationPropertiesResolverImpl.class.getName()
             );
-                
+
         try
         {
             Class resolverClass = this.getClassLoader().loadClass( className );
-            resolver = (ComponentConfigurationPropertiesResolver) resolverClass.newInstance();       
+            resolver = (ComponentConfigurationPropertiesResolver) resolverClass.newInstance();
             ContainerUtil.enableLogging(resolver, this.getLogger());
             ContainerUtil.contextualize(resolver, this.getContext());
             ContainerUtil.configure(resolver, this.componentConfigurationPropertiesResolverConfig);
-            
+
             result = resolver.resolve(null);
-            
+
             this.getLogger().debug("Using the following componentConfigurationProperties: " + result);
         }
         catch (Exception e)
@@ -1330,7 +1332,7 @@ public class ServiceContainerImpl
 
     /**
      * Set the application directory of the container.
-     * 
+     *
      * @param dir The applicationRootDir to set.
      */
     private File setApplicationRootDir(File dir)
@@ -1351,7 +1353,7 @@ public class ServiceContainerImpl
     {
         return this.applicationRootDir;
     }
-    
+
     /**
      * @return Returns the serviceManager of the parent container
      */
@@ -1359,8 +1361,8 @@ public class ServiceContainerImpl
     {
         return this.parentServiceManager;
     }
-    
-    /** 
+
+    /**
      * @return is a parent ServiceManager available
      */
     private boolean hasParentServiceManager()
@@ -1369,7 +1371,7 @@ public class ServiceContainerImpl
     }
     /**
      * Set the temporary directory of the container.
-     * 
+     *
      * @param dir The tempRootDir to set.
      */
     private File setTempRootDir(File dir)
@@ -1444,7 +1446,7 @@ public class ServiceContainerImpl
     /**
      * Create a decrypting input stream using the default password.
      *
-     * @param is the input stream to be decrypted 
+     * @param is the input stream to be decrypted
      * @return an decrypting input stream
      * @throws IOException
      * @throws GeneralSecurityException
@@ -1508,7 +1510,7 @@ public class ServiceContainerImpl
     {
         return context;
     }
-    
+
     /**
      * @return Returns the hasDynamicProxies.
      */
@@ -1516,7 +1518,7 @@ public class ServiceContainerImpl
     {
         return this.hasDynamicProxies;
     }
-    
+
     /**
      * @return Returns the defaultInterceptorServiceList.
      */
@@ -1524,7 +1526,7 @@ public class ServiceContainerImpl
     {
         return defaultInterceptorServiceList;
     }
-    
+
     /**
      * @return a read lock
      */
@@ -1540,21 +1542,21 @@ public class ServiceContainerImpl
             throw new RuntimeException(msg);
         }
     }
-    
+
     /**
      * @return a write lock
      */
     private final Object getWriteLock()
     {
         Object result = null;
-        
+
         try
         {
             result = this.readWriteLock.getWriteLock(AVALON_CONTAINER_YAAFI);
-            
+
             // wait for a certain time to get non-proxied services
             // either finished or blocked
-            
+
             try
             {
                 Thread.sleep( this.reconfigurationDelay );
@@ -1572,7 +1574,7 @@ public class ServiceContainerImpl
             throw new RuntimeException(msg);
         }
     }
-    
+
     /**
      * Release the read/write lock.
      */
@@ -1580,7 +1582,7 @@ public class ServiceContainerImpl
     {
         this.readWriteLock.releaseLock(lock, AVALON_CONTAINER_YAAFI);
     }
-    
+
     /**
      * @return the containers class loader
      */

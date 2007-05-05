@@ -1,20 +1,22 @@
 package org.apache.fulcrum.resourcemanager;
 
 /*
- * Copyright 2004 Apache Software Foundation
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
- * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.io.IOException;
@@ -42,15 +44,15 @@ public interface ResourceManager
     /////////////////////////////////////////////////////////////////////////
     // CRUD Functionality
     /////////////////////////////////////////////////////////////////////////
-    
-    /** 
+
+    /**
      * @return the domain of this resource manager
      */
     String getDomain();
-    
+
     /**
      * List all avaible resources recursively for a domain.
-     * 
+     *
      * @return list of all available resources for the domain
      */
     String[] listResources();
@@ -62,13 +64,13 @@ public interface ResourceManager
      * @return true if the resource exists
      */
     boolean exists( String resourcePath );
-    
+
     /**
      * Saves a resource.
      *
      * @param resourcePath the path of the resource
      * @param resourceContent the content of the resource
-     * @exception IOException accessing the resource failed 
+     * @exception IOException accessing the resource failed
      */
     void create( String resourcePath, Object resourceContent )
         throws IOException;
@@ -78,7 +80,7 @@ public interface ResourceManager
      *
      * @param resourcePath the path of the resource
      * @return the content of the resource
-     * @exception IOException accessing the resource failed 
+     * @exception IOException accessing the resource failed
      */
     byte[] read(  String resourcePath )
         throws IOException;
@@ -88,7 +90,7 @@ public interface ResourceManager
      *
      * @param resourcePath the path of the resource
      * @param resourceContent the content of resource
-     * @exception IOException accessing the resource failed 
+     * @exception IOException accessing the resource failed
      */
     void update( String resourcePath, Object resourceContent )
         throws IOException;
@@ -101,7 +103,7 @@ public interface ResourceManager
      * @exception IOException accessing the resource failed
      */
     boolean delete( String resourcePath )
-        throws IOException;    
+        throws IOException;
 
     /////////////////////////////////////////////////////////////////////////
     // Locator Functionality
@@ -131,17 +133,17 @@ public interface ResourceManager
      * @param context the context to locate the resource
      * @param resourceName the name of the resource
      * @return the content of the resource
-     * @exception IOException accessing the resource failed 
+     * @exception IOException accessing the resource failed
      */
     byte[] read( String[] context, String resourceName )
     	throws IOException;
 
     /**
-     * Get the implementation specific URL of the 
+     * Get the implementation specific URL of the
      * underlying resource. Be aware that this method
      * breaks our abstraction but is required lets
      * say for a XSL to include other stylesheets.
-     * 
+     *
      * @param context the context to locate the resource
      * @param resourceName the name of the resource
      * @return the name of the resource or null

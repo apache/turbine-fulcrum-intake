@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.authenticator;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.security.NoSuchAlgorithmException;
 
@@ -37,7 +40,7 @@ import org.apache.fulcrum.security.util.DataBackendException;
  * @avalon.component name="crypto-authenticator"
  * @avalon.service type="org.apache.fulcrum.security.authenticator.Authenticator"
  */
-public class CryptoAuthenticator extends AbstractLogEnabled 
+public class CryptoAuthenticator extends AbstractLogEnabled
     implements Authenticator, Serviceable, Disposable, Configurable
 {
     boolean composed = false;
@@ -48,7 +51,7 @@ public class CryptoAuthenticator extends AbstractLogEnabled
      * Authenticate an username with the specified password. If authentication
      * is successful the method returns true. If it fails, it returns false
      * If there are any problems, an exception is thrown.
-     * 
+     *
      *
      * @param usernameAndDomain an string in the format [domain]/[username].
      * @param password the user supplied password.
@@ -59,7 +62,7 @@ public class CryptoAuthenticator extends AbstractLogEnabled
      */
     public boolean authenticate(User user, String password) throws  DataBackendException
     {
- 
+
         try
         {
             CryptoAlgorithm ca = cryptoService.getCryptoAlgorithm(algorithm);
@@ -76,7 +79,7 @@ public class CryptoAuthenticator extends AbstractLogEnabled
             throw new DataBackendException(ex.getMessage(), ex);
         }
     }
-    
+
 	// ---------------- Avalon Lifecycle Methods ---------------------
     /**
  	 * Avalon component lifecycle method
@@ -85,7 +88,7 @@ public class CryptoAuthenticator extends AbstractLogEnabled
     {
     	algorithm = conf.getChild("algorithm").getValue();
     	cipher = conf.getChild("cipher").getValue();
-    }    
+    }
 
     /**
      * Avalon component lifecycle method
@@ -94,7 +97,7 @@ public class CryptoAuthenticator extends AbstractLogEnabled
     {
         this.cryptoService = (CryptoService)manager.lookup(CryptoService.ROLE);
     }
-    
+
     /**
      * Avalon component lifecycle method
      */

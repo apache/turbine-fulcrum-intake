@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
 
 <document>
 
@@ -53,7 +71,7 @@
       </p>
       <p>
         If you are testing multiple config or role files, then just call <code>setConfigurationFileName()</code>
-        or <code>setRoleFileName()</code> before doing your first lookup. The string you pass in should be prefixed from 
+        or <code>setRoleFileName()</code> before doing your first lookup. The string you pass in should be prefixed from
         the directory the JVM is running in (e.g. src/test/YOUR_CONFIG.xml).
       </p>
 
@@ -68,14 +86,14 @@
         for more information.
       </p>
     </subsection>
-    
+
     <subsection name="Configuring the Components">
       <p>
-        There are two ways of configuring your components.  One is the 
+        There are two ways of configuring your components.  One is the
         traditional TestComponentConfig.xml and TestRoleConfig.xml files
         described below.  Or, one that integrates the two, shown at the bottom.
       </p>
-      
+
 <p>
       First, here is the role configuration.
     </p>
@@ -100,13 +118,13 @@
       <algorithm>
       	<unix>org.apache.fulcrum.crypto.provider.UnixCrypt</unix>
         <clear>org.apache.fulcrum.crypto.provider.ClearCrypt</clear>
-        <java>org.apache.fulcrum.crypto.provider.JavaCrypt</java>   
-        <oldjava>org.apache.fulcrum.crypto.provider.OldJavaCrypt</oldjava>   
-                      
+        <java>org.apache.fulcrum.crypto.provider.JavaCrypt</java>
+        <oldjava>org.apache.fulcrum.crypto.provider.OldJavaCrypt</oldjava>
+
       </algorithm>
     </crypto>
 ]]>
-</source>      
+</source>
 
   <p>
     Or, the integrated roles and components file:
@@ -117,13 +135,13 @@
 <my-system>
   <component
     role="org.apache.fulcrum.testcontainer.SimpleComponent"
-    class="org.apache.fulcrum.testcontainer.AlternativeComponentImpl">   
-  </component>  
+    class="org.apache.fulcrum.testcontainer.AlternativeComponentImpl">
+  </component>
 </my-system>
 ]]>
-</source>      
+</source>
 
-    </subsection>    
+    </subsection>
 
   </section>
 

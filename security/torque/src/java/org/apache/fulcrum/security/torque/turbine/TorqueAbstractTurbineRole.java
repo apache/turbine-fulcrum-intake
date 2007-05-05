@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.torque.turbine;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.sql.Connection;
 import java.util.HashSet;
@@ -45,19 +48,19 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractSecurityEn
 {
     /** a cache of permission objects */
     private Set permissionSet = null;
-    
+
     /** a cache of user_group_role objects */
     private Set userGroupRoleSet = null;
 
     /**
      * Forward reference to generated code
-     * 
-     * Get a list of association objects, pre-populated with their TorqueTurbinePermission 
+     *
+     * Get a list of association objects, pre-populated with their TorqueTurbinePermission
      * objects.
-     * 
+     *
      * @param criteria Criteria to define the selection of records
      * @throws TorqueException
-     * 
+     *
      * @return a list of Role/Permission relations
      */
     protected abstract List getTorqueTurbineRolePermissionsJoinTorqueTurbinePermission(Criteria criteria)
@@ -65,13 +68,13 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractSecurityEn
 
     /**
      * Forward reference to generated code
-     * 
-     * Get a list of association objects, pre-populated with their TorqueTurbineGroup 
+     *
+     * Get a list of association objects, pre-populated with their TorqueTurbineGroup
      * objects.
-     * 
+     *
      * @param criteria Criteria to define the selection of records
      * @throws TorqueException
-     * 
+     *
      * @return a list of User/Group/Role relations
      */
     protected abstract List getTorqueTurbineUserGroupRolesJoinTorqueTurbineGroup(Criteria criteria)
@@ -199,7 +202,7 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractSecurityEn
     public void retrieveAttachedObjects(Connection con) throws TorqueException
     {
         this.permissionSet = new PermissionSet();
-        
+
         // the generated method that allows a Connection parameter is missing
         List rolepermissions = getTorqueTurbineRolePermissionsJoinTorqueTurbinePermission(new Criteria());
 
@@ -210,14 +213,14 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractSecurityEn
         }
 
         this.userGroupRoleSet = new HashSet();
-        
+
         // the generated method that allows a Connection parameter is missing
         List ugrs = getTorqueTurbineUserGroupRolesJoinTorqueTurbineGroup(new Criteria());
 
         for (Iterator i = ugrs.iterator(); i.hasNext();)
         {
             TorqueTurbineUserGroupRole ttugr = (TorqueTurbineUserGroupRole)i.next();
-            
+
             TurbineUserGroupRole ugr = new TurbineUserGroupRole();
             ugr.setRole(this);
             ugr.setGroup(ttugr.getTorqueTurbineGroup());
@@ -234,7 +237,7 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractSecurityEn
         if (permissionSet != null)
         {
             Criteria criteria = new Criteria();
-            
+
             /* remove old entries */
             criteria.add(TorqueTurbineRolePermissionPeer.ROLE_ID, getEntityId());
             TorqueTurbineRolePermissionPeer.doDelete(criteria, con);
@@ -249,11 +252,11 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractSecurityEn
                 rp.save(con);
             }
         }
-        
+
         if (userGroupRoleSet != null)
         {
             Criteria criteria = new Criteria();
-            
+
             /* remove old entries */
             criteria.add(TorqueTurbineUserGroupRolePeer.ROLE_ID, getEntityId());
             TorqueTurbineUserGroupRolePeer.doDelete(criteria, con);
@@ -261,7 +264,7 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractSecurityEn
             for (Iterator i = userGroupRoleSet.iterator(); i.hasNext();)
             {
                 TurbineUserGroupRole ugr = (TurbineUserGroupRole)i.next();
-                
+
                 TorqueTurbineUserGroupRole ttugr = new TorqueTurbineUserGroupRole();
                 ttugr.setGroupId((Integer)ugr.getGroup().getId());
                 ttugr.setUserId((Integer)ugr.getUser().getId());
@@ -269,7 +272,7 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractSecurityEn
                 ttugr.save(con);
             }
         }
-        
+
         try
         {
             save(con);

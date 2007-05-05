@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.torque;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.sql.Connection;
 
@@ -30,56 +33,56 @@ public abstract class TorqueAbstractSecurityEntity extends BaseObject
 {
     /**
      * Get a numeric entity id
-     *  
-     * @return numeric id of this entity  
+     *
+     * @return numeric id of this entity
      */
     public abstract Integer getEntityId();
-    
+
     /**
      * Set a numeric entity id
-     *  
-     * @param id numeric id of this entity  
+     *
+     * @param id numeric id of this entity
      */
     public abstract void setEntityId(Integer id) throws TorqueException;
 
     /**
      * Get the name of the entity
-     *  
-     * @return name of this entity  
+     *
+     * @return name of this entity
      */
     public abstract String getEntityName();
-    
+
     /**
      * Set the name of the entity
-     *  
-     * @param name the name of the entity  
+     *
+     * @param name the name of the entity
      */
     public abstract void setEntityName(String name);
 
     /**
      * Retrieve attached objects such as users, permissions, ...
-     * 
+     *
      * @param con A database connection
      */
     public abstract void retrieveAttachedObjects(Connection con) throws TorqueException;
-    
+
     /**
      * Update this instance to the database with all dependend objects
-     * 
-     * @param con A database connection 
+     *
+     * @param con A database connection
      */
     public abstract void update(Connection con) throws TorqueException;
-    
+
     /**
      * Get the name of the connection pool associated to this object
-     * 
-     * @return the logical Torque database name 
+     *
+     * @return the logical Torque database name
      */
     public abstract String getDatabaseName();
 
     /**
      * Delete this entity
-     * 
+     *
      * @throws TorqueException if any database operation fails
      */
     public abstract void delete() throws TorqueException;

@@ -1,20 +1,22 @@
 package org.apache.fulcrum.resourcemanager;
 
 /*
- * Copyright 2004 Apache Software Foundation
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
- * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.io.FileInputStream;
@@ -107,12 +109,12 @@ public class ResourceManagerServiceTest extends BaseUnitTest
     public void testListDomains() throws Exception
     {
         // get a list of available domains
-        // 
+        //
         // -) crypto
         // -) scripts
         // -) test
         // -) xslt
-        //        
+        //
 
         String [] result = this.service.listDomains();
         assertTrue( result.length == 4 );
@@ -155,7 +157,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
         assertTrue( this.service.exists( resourceDomain, resourceContext4, "empty.groovy" ) );
         result = new String( this.service.read( resourceDomain, resourceContext4, "empty.groovy" ) );
         assertEquals( "return true;", result );
-        
+
         // search for a non-existing resource with an existing context
         String[] resourceContext5 = { "foo", "bar" };
         assertFalse( this.service.exists( resourceDomain, resourceContext5, "bogus.groovy" ) );
@@ -168,7 +170,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
         {
             // expected
         }
-        
+
         // search for a non-existing resource with a bogis context
         String[] resourceContext6 = { "bar", "foo" };
         assertFalse( this.service.exists( resourceDomain, resourceContext6, "bogus.groovy" ) );
@@ -250,7 +252,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
         // use java.util.Properties
 
         resourceName = "properties.txt";
-        Properties props = new Properties(); 
+        Properties props = new Properties();
         props.setProperty("foo","bar");
         this.service.create( resourceDomain, resourceName, props );
         this.service.delete( resourceDomain, resourceName );
@@ -277,18 +279,18 @@ public class ResourceManagerServiceTest extends BaseUnitTest
     public void testGetResourceURL() throws Exception
     {
         String resourceDomain = "groovy";
-        String[] resourceContext = { "foo" };        
+        String[] resourceContext = { "foo" };
         URL location = null;
-        
+
         // look for a non-existent resource
-        location = this.service.getResourceURL( resourceDomain, resourceContext, "bar.xsl" );  
+        location = this.service.getResourceURL( resourceDomain, resourceContext, "bar.xsl" );
         assertNull( location );
 
         // look for an existing resource
-        location = this.service.getResourceURL( resourceDomain, resourceContext, "foo.groovy" );   
+        location = this.service.getResourceURL( resourceDomain, resourceContext, "foo.groovy" );
         assertNotNull( location );
     }
-    
+
     /**
      * Create a resource file using the various input data types
      */
@@ -312,13 +314,13 @@ public class ResourceManagerServiceTest extends BaseUnitTest
         assertFalse( this.service.exists( resourceDomain, resourceName ) );
 
         // load a plain text resource
-        
+
         resourceName = "plain.txt";
         assertTrue( this.service.exists( resourceDomain, resourceName ) );
         result = new String( this.service.read( resourceDomain, resourceName ) );
-        assertTrue( result.indexOf("http://www.apache.org/licenses/LICENSE-2.0") > 0 );        
+        assertTrue( result.indexOf("http://www.apache.org/licenses/LICENSE-2.0") > 0 );
     }
-    
+
     /**
      * Use a proper limit and run the test in a seperate VM to find
      * instabilities. Don't use this in Maven since it blows up due

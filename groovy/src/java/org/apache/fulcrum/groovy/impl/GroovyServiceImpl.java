@@ -1,20 +1,22 @@
 package org.apache.fulcrum.groovy.impl;
 
 /*
- * Copyright 2004 Apache Software Foundation
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
- * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import groovy.lang.Binding;
@@ -122,7 +124,7 @@ public class GroovyServiceImpl
      */
     public void reconfigure(Configuration cfg) throws ConfigurationException
     {
-        super.reconfigure(cfg);        
+        super.reconfigure(cfg);
         this.scriptCache.clear();
         this.configure(cfg);
     }
@@ -218,7 +220,7 @@ public class GroovyServiceImpl
         {
             this.getLogger().debug( this.dumpResult(scriptName,result) );
         }
-        
+
         return result;
     }
 
@@ -240,7 +242,7 @@ public class GroovyServiceImpl
      */
     public boolean exists(String scriptName)
     {
-        if( this.getResourceManagerService().exists(this.getDomain()) &&            
+        if( this.getResourceManagerService().exists(this.getDomain()) &&
             this.getResourceManagerService().exists(this.getDomain(), scriptName) )
         {
             return true;
@@ -478,7 +480,7 @@ public class GroovyServiceImpl
 
     /**
      * Create a signature dump of the script invocation to ease debugging.
-     * 
+     *
      * @param scriptName the name of the script
      * @param args the parameters passed to the script
      * @return the debug output
@@ -537,7 +539,7 @@ public class GroovyServiceImpl
 
     /**
      * Create a result dump of the script invocation to ease debugging.
-     * 
+     *
      * @param scriptName the name of the script
      * @param result the result of the script execution
      * @return the debug output
@@ -546,23 +548,23 @@ public class GroovyServiceImpl
     protected String dumpResult( String scriptName, Object result )
     {
         StringBuffer resultSignature = new StringBuffer();
-        
+
         resultSignature.append( "Groovy" );
         resultSignature.append( "#" );
         resultSignature.append( scriptName );
         resultSignature.append( "(" );
-        
+
         if( result == null )
         {
             resultSignature.append( "<null>" );
         }
         else
-        {            
+        {
             resultSignature.append( "result=" );
 
             resultSignature.append( result.getClass().getName() );
             resultSignature.append( "[" );
-            
+
             String temp = result.toString();
 
             if( temp.length() > MAX_LINE_LENGTH )
@@ -576,14 +578,14 @@ public class GroovyServiceImpl
                 resultSignature.append( temp );
             }
         }
-        
+
         resultSignature.append( "]" );
         resultSignature.append( ")" );
 
-        
+
         return resultSignature.toString();
     }
-    
+
     /////////////////////////////////////////////////////////////////////////
     // Generated getters/setters
     /////////////////////////////////////////////////////////////////////////

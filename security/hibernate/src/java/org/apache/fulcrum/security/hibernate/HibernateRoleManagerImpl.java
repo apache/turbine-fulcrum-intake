@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.hibernate;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.util.List;
 
@@ -37,11 +40,11 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
 {
     /** Logging */
     private static Log log = LogFactory.getLog(HibernateRoleManagerImpl.class);
-    
+
 	private PersistenceHelper persistenceHelper;
-   
-   
-   
+
+
+
     /**
     * Renames an existing Role.
     *
@@ -79,7 +82,7 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
         List roles;
         try
         {
-            
+
             roles = getPersistenceHelper().retrieveSession().find("from " + Role.class.getName() + " sr where sr.name=?", roleName, Hibernate.STRING);
 
         }
@@ -114,8 +117,8 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
         }
         return roleSet;
     }
-   
-   
+
+
     /**
     * Creates a new role with specified attributes.
     *
@@ -127,7 +130,7 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
     */
     protected synchronized Role persistNewRole(Role role) throws DataBackendException
     {
-       
+
 		getPersistenceHelper().addEntity(role);
         return role;
     }
@@ -161,7 +164,7 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
             throw new DataBackendException("removeRole(Role) failed", e);
         }
     }
-    
+
 	/**
 	 * @return Returns the persistenceHelper.
 	 */
@@ -173,10 +176,10 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
 		}
 		return persistenceHelper;
 	}
-	
+
 	/**
 	 * Retrieve a Role object with specified id.
-	 * 
+	 *
 	 * @param id
 	 *            the id of the Role.
 	 * @return an object representing the Role with specified id.
@@ -187,7 +190,7 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
 	 */
 	public Role getRoleById(Object id)
 	throws DataBackendException, UnknownEntityException {
-		
+
 		Role role = null;
 
 		if (id != null)
@@ -202,13 +205,13 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
 							"Could not find role by id " + id);
 				}
 				role = (Role) roles.get(0);
-				
+
 			} catch (HibernateException e) {
 				throw new DataBackendException(
 						"Error retriving role information",
 						e);
 			}
-			
+
 		return role;
 	}
 }

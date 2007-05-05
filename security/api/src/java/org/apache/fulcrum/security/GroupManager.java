@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import org.apache.avalon.framework.component.Component;
 import org.apache.fulcrum.security.entity.Group;
@@ -34,10 +37,10 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 public interface GroupManager
 extends Component
 {
-	
+
 	/** Avalon role - used to id the component within the manager */
 	String ROLE = GroupManager.class.getName();
-	
+
     /**
      * Construct a blank Group object.
      *
@@ -70,7 +73,7 @@ extends Component
     	* @throws UnknownEntityException if the group does not exist.
     	*/
     Group getGroupByName(String name) throws DataBackendException, UnknownEntityException;
-   
+
     /**
 	* Retrieve a Group object with specified Id.
 	*
@@ -84,9 +87,9 @@ extends Component
 	*            storage.
 	*/
     Group getGroupById(Object id) throws DataBackendException, UnknownEntityException;
-    
-	 
-			
+
+
+
 	/**
 	 * Renames an existing Group.
 	 *
@@ -97,8 +100,8 @@ extends Component
 	 * @throws UnknownEntityException if the group does not exist.
 	 */
 	void renameGroup(Group group, String name)
-			throws DataBackendException, UnknownEntityException;	
-			
+			throws DataBackendException, UnknownEntityException;
+
 	/**
 	   * Removes a Group from the system.
 	   *
@@ -109,7 +112,7 @@ extends Component
 	   */
 	  void removeGroup(Group group)
 			  throws DataBackendException, UnknownEntityException;
-			  
+
 	/**
 	   * Creates a new group with specified attributes.
 	   *
@@ -121,7 +124,7 @@ extends Component
 	   */
 	  Group addGroup(Group group)
 			  throws DataBackendException, EntityExistsException;
-			  
+
 	/**
 	   * Retrieves all groups defined in the system.
 	   *
@@ -131,7 +134,7 @@ extends Component
 	   */
 	  GroupSet getAllGroups()
 			  throws DataBackendException;
-			  
+
 	/**
 		   * Determines if the <code>Group</code> exists in the security system.
 		   *
@@ -141,12 +144,12 @@ extends Component
 		   *         the same name exists.
 		   * @throws Exception A generic exception.
 		   */
-		public boolean checkExists(Group group) throws DataBackendException;	
-		
+		public boolean checkExists(Group group) throws DataBackendException;
+
 		/**
 		 * Determines if a <code>Group</code> exists in the security system
 		 * with the specified name.
-		 * 
+		 *
 		 * @param groupName the name of a <code>Group</code> to check.
 		 * @return true if the group exists in the system, false otherwise
 		 * @throws DataBackendException
@@ -154,6 +157,6 @@ extends Component
 		 * @throws Exception
 		 *             A generic exception.
 		 */
-		public boolean checkExists(String group) throws DataBackendException;		
-			  
+		public boolean checkExists(String group) throws DataBackendException;
+
 }

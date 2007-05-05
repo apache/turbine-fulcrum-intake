@@ -1,19 +1,22 @@
 package org.apache.fulcrum.security.model.dynamic;
 
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,9 +36,9 @@ import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
- * 
+ *
  * This factory creates instance of the DynamicAccessControlList
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @author <a href="mailto:ben@gidley.co.uk">Ben Gidley </a>
  * @version $Id$
@@ -44,15 +47,15 @@ public class DynamicACLFactory extends AbstractManager implements ACLFactory
 {
     /**
      * Construct a new ACL object.
-     * 
+     *
      * This constructs a new ACL object from the configured class and
      * initializes it with the supplied roles and permissions.
-     * 
+     *
      * @param roles
      *            The roles that this ACL should contain
      * @param permissions
      *            The permissions for this ACL
-     * 
+     *
      * @return an object implementing ACL interface.
      * @throws UnknownEntityException
      *             if the object could not be instantiated.
@@ -66,7 +69,7 @@ public class DynamicACLFactory extends AbstractManager implements ACLFactory
         try
         {
             /*
-             * 
+             *
              * @todo I think this is overkill for now.. accessControlList =
              * (AccessControlList)
              * aclFactoryService.getInstance(aclClass.getName(), objects,
@@ -128,7 +131,7 @@ public class DynamicACLFactory extends AbstractManager implements ACLFactory
      * Adds the passed users roles and permissions to the sets As maps overwrite
      * duplicates we just put it in an let it overwrite it is probably quicker
      * than checking for duplicates
-     * 
+     *
      * @param user
      * @param roleSets
      * @param permissionSets

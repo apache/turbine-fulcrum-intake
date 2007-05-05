@@ -1,19 +1,22 @@
 package org.apache.fulcrum.factory;
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 
@@ -44,7 +47,7 @@ public class FactoryServiceTest extends BaseUnitTest
     {
         super.setUp();
         factoryService = (FactoryService) this.resolve( FactoryService.class.getName() );
-        
+
     }
     /*
      * Class to test for Object getInstance(String)
@@ -75,7 +78,7 @@ public class FactoryServiceTest extends BaseUnitTest
         Object object = factoryService.getInstance("java.lang.StringBuffer", params, signature);
         assertTrue(object instanceof StringBuffer);
         assertEquals(sourceValue, object.toString());
-         
+
     }
     /*
      * Class to test for Object getInstance(String, ClassLoader, Object[], String[])
@@ -95,7 +98,7 @@ public class FactoryServiceTest extends BaseUnitTest
                 signature);
         assertTrue(object instanceof StringBuffer);
         assertEquals(sourceValu, object.toString());
-         
+
     }
     /**
      * @todo Need to run a test where the loader is NOT supported.
@@ -104,7 +107,7 @@ public class FactoryServiceTest extends BaseUnitTest
     public void testIsLoaderSupported() throws Exception
     {
         assertTrue(factoryService.isLoaderSupported("java.lang.String"));
-         
+
     }
     public void testGetSignature() throws Exception
     {
@@ -116,13 +119,13 @@ public class FactoryServiceTest extends BaseUnitTest
         Class[] results = factoryService.getSignature(StringBuffer.class, params, signature);
         assertEquals(1, results.length);
         assertTrue(results[0].equals(String.class));
-        
+
         Integer sourceValueInteger = new Integer(10);
         params[0] = sourceValueInteger;
         signature[0] = "java.lang.Integer";
         results = factoryService.getSignature(ArrayList.class, params, signature);
         assertEquals(1, results.length);
         assertTrue("Result:" + results[0].getName(),results[0].equals(Integer.class));
-         
+
     }
 }

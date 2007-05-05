@@ -1,20 +1,22 @@
 package org.apache.fulcrum.script.impl;
 
 /*
- * Copyright 2005 Apache Software Foundation
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
- * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.util.List;
@@ -33,7 +35,7 @@ public class ScriptEngineEntry
 
     /** is the script cached or loaded for each execution */
     private boolean isCached;
-    
+
     /** is the script compiled to improve performance */
     private boolean isCompiled;
 
@@ -42,13 +44,13 @@ public class ScriptEngineEntry
 
     /** the associated scripting engine */
     private ScriptEngine scriptEngine;
-    
+
     /** a list of scripts to execute during initialization */
     private List scriptList;
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param name the name of the script engine
      * @param isCached is the script cached or loaded for each execution
      * @param isCompiled is the script compiled to improve performance
@@ -56,21 +58,21 @@ public class ScriptEngineEntry
      * @param scriptEngine the associated scripting engine
      */
     public ScriptEngineEntry(
-        String name, 
-        boolean isCached, 
-        boolean isCompiled, 
-        String location, 
+        String name,
+        boolean isCached,
+        boolean isCompiled,
+        String location,
         ScriptEngine scriptEngine)
     {
         Validate.notEmpty(name, "name");
         Validate.notEmpty(location, "location");
         Validate.notNull(scriptEngine, "scriptEngine");
-        
+
         this.name = name;
         this.isCached = isCached;
         this.isCompiled = isCompiled;
         this.location = location;
-        this.scriptEngine = scriptEngine;                
+        this.scriptEngine = scriptEngine;
     }
 
     /**
@@ -80,7 +82,7 @@ public class ScriptEngineEntry
     {
         return isCached;
     }
-    
+
     /**
      * @return Returns the isCompiled.
      */
@@ -88,7 +90,7 @@ public class ScriptEngineEntry
     {
         return isCompiled;
     }
-    
+
     /**
      * @return Returns the location.
      */
@@ -96,7 +98,7 @@ public class ScriptEngineEntry
     {
         return location;
     }
-    
+
     /**
      * @return Returns the name.
      */
@@ -104,7 +106,7 @@ public class ScriptEngineEntry
     {
         return name;
     }
-    
+
     /**
      * @return Returns the scriptEngine.
      */
@@ -112,7 +114,7 @@ public class ScriptEngineEntry
     {
         return scriptEngine;
     }
-    
+
     /**
      * @return Returns the scriptList.
      */
@@ -120,13 +122,13 @@ public class ScriptEngineEntry
     {
         return scriptList;
     }
-    
+
     /**
      * @param scriptList The scriptList to set.
      */
     public void setScriptList(List scriptList)
     {
-        Validate.notNull(scriptList, "scriptList");        
+        Validate.notNull(scriptList, "scriptList");
         this.scriptList = scriptList;
     }
 }

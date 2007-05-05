@@ -1,19 +1,22 @@
 package org.apache.fulcrum.security.entity.impl;
 
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -23,7 +26,7 @@ import org.apache.fulcrum.security.entity.SecurityEntity;
  * Base class for all objects implementing SecurityEnitity. This class
  * automatically lowercases the name. So the permission "EDIT" will equal "eDit"
  * and "edit";
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -59,7 +62,7 @@ public class SecurityEntityImpl implements SecurityEntity
 
     /**
      * Pass in the name for this entity. Also lowercases it.
-     * 
+     *
      * @param name
      */
     public void setName(String name)
@@ -82,14 +85,14 @@ public class SecurityEntityImpl implements SecurityEntity
 
     /**
      * Check if this object is equal to another
-     * 
+     *
      * @see java.lang.Object#equals(java.lang.Object)
      */
     public boolean equals(Object o)
     {
         boolean equals = true;
         Object id  = getId();
-        
+
         if (o == null || id == null)
         {
             equals = false;
@@ -107,7 +110,7 @@ public class SecurityEntityImpl implements SecurityEntity
 
     /**
      * Calculate a hash code for this object
-     * 
+     *
      * @see java.lang.Object#hashCode()
      */
     public int hashCode()

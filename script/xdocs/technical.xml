@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
 
 <document>
 
@@ -11,16 +29,16 @@
 
     <section name="Script Compilation">
       <p>
-        Depending on the ScriptEngine of your choice you have 
+        Depending on the ScriptEngine of your choice you have
         various options to compile a script
         <ul>
           <li>transforming the script into an AST (abstract syntax tree) on the fly</li>
           <li>compiling the script into Java bytecode on the fly thereby creating a Java class dynamically</li>
           <li>precompile the script to Java bytecode thereby creating a Java class file</li>
         </ul>
-      </p>      
+      </p>
     </section>
-    
+
     <section name="Script Management">
       <p>
         The scripts are managesd by the Fulcrum ResourcManager Service. This
@@ -30,13 +48,13 @@
     </section>
 
     <section name="Locator">
-      
+
       <p>
         The locator gives you easy customization of scripts. Let's
         say you would like to invoke the script 'foo.js' for a customer
         'BAR' using the following script layout
-      </p>      
-      
+      </p>
+
       <source>
         <![CDATA[
 scripts
@@ -45,17 +63,17 @@ scripts
      -- foo.js
         ]]>
       </source>
-      
+
       <p>
         In the case of invoking 'foo.js' the script 'foo.js' would be executed.
         In the case of invoking 'BAR/foo.js' the script 'BAR/foo.js' would be executed.
         In the case of invoking 'FOO/foo.js' the locator is looking for 'FOO/foo.js'. Since
-        it isn't found it steps up a directory to execute 'foo.js'. The trick was taken from 
+        it isn't found it steps up a directory to execute 'foo.js'. The trick was taken from
         the Fulcrum XSLT service which uses a simlilar fallback mechanism.
-      </p>      
-      
+      </p>
+
     </section>
-    
+
   </body>
 
 </document>

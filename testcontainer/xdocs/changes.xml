@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
 <document>
   <properties>
     <title>Fulcrum</title>
@@ -7,32 +25,32 @@
   </properties>
 
   <body>
-    <release version="1.0.5" date="2005-05-13">    
+    <release version="1.0.5" date="2005-05-13">
       <action dev="sgoeschl" type="change">
         Changed the implementation wo work with fulcrum-yaafi 1.0.4-dev
         since the initalization changed.
-      </action>             
-    </release>     
-    <release version="1.0.4" date="2004-11-24">    
+      </action>
+    </release>
+    <release version="1.0.4" date="2004-11-24">
       <action dev="epugh" type="add">
         By default use Yaafi as the Test container, but you can swap to ECM for
         more "real" testing if required by doing <code>containerType=CONTAINER_ECM;</code>.
-      </action>             
+      </action>
       <action dev="epugh" type="add">
         Add helper "resolve" method that delegates to "lookup" to faciliate
         using in both Merlin and ECM enviroments.
-      </action>        
+      </action>
       <action dev="epugh" type="add" due-to="Ben Gidley">
         Tweak documentation to be more explicit on where config files
         are pulled from.
       </action>
-    </release>     
-    <release version="1.0-alpha-2" date="in cvs">       
+    </release>
+    <release version="1.0-alpha-2" date="in cvs">
       <action dev="epugh" type="add">
         Add additional context value urn:avalon:home to be more
         Merlin friendly.
       </action>
-    </release>  
+    </release>
     <release version="1.0-alpha-2" date="02-13-2004">
       <action dev="epugh" type="add">
         allow setup method of subclasses to throw exceptions if they want..
@@ -51,12 +69,12 @@
         the various unit tests.
       </action>
       <action dev="quintonm" type="add">
-        TestContainer component was added.  This is to be used for 
+        TestContainer component was added.  This is to be used for
         testing of the components so that we do not have a dependancy
         on Plexus.  The test container is based on ECM, which is what
         Turbine is using.  A base class for unit tests is also included.
       </action>
-     
+
     </release>
 
   </body>

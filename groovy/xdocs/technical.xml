@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
 
 <document>
 
@@ -13,28 +31,28 @@
 
       <p>
         Currently the implementation of groovy.lang.Script keeps the binding
-        (= the parameters you pass to the script) as a member variable. One 
+        (= the parameters you pass to the script) as a member variable. One
         could call it a feature ... :-(
       </p>
-      
+
       <p>
         Running a script with two threads would overwrite the
         parameters passed to the script. Therefore the Groovy Service
         uses semaphore to enforce the single-threaded execution of
         a Groovy script. This still allows executing different scipts
         in parallel with multiple threads.
-      </p>      
-      
+      </p>
+
     </section>
 
     <section name="Locator">
-    
+
       <p>
         The locator gives you easy customization of Groovy scripts. Let's
         say you would like to invoke the script 'magic.groovy' for a customer
         'ABC' and 'XYZ' using the following script layout
-      </p>      
-          
+      </p>
+
       <source>
         <![CDATA[
 scripts
@@ -47,15 +65,15 @@ scripts
       <p>
         In the case of invoking 'ABC/magic.groovy' the script 'ABC/magic.groovy' would be executed.
         In the case of invoking 'XYZ/magic.groovy' the locator is looking for 'XYZ/magic.groovy'. Since
-        it isn't found it steps up a directory to execute 'magic.groovy'. The trick was taken from 
+        it isn't found it steps up a directory to execute 'magic.groovy'. The trick was taken from
         the Fulcrum XSLT service which uses a simlilar fallback mechanism.
-      </p>      
-        
+      </p>
+
     </section>
 
     <section name="Script Management">
       <p>
-        The Groovy scripts are managesd by the Fulcrum ResourcManager Service. In the 
+        The Groovy scripts are managesd by the Fulcrum ResourcManager Service. In the
         future this might allow to store the Groovy Scripts in a database.
       </p>
     </section>
@@ -67,7 +85,7 @@ scripts
         tinkering with the more advanced features of Groovy.
       </p>
     </section>
-    
+
   </body>
 
 </document>

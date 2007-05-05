@@ -1,19 +1,22 @@
 package org.apache.fulcrum.localization;
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.text.MessageFormat;
@@ -98,7 +101,7 @@ public class DefaultLocalizationService
     private String defaultLanguage;
     /** The name of the default country to use. */
     private String defaultCountry = null;
- 
+
     /**
      * Creates a new instance.
      */
@@ -108,7 +111,7 @@ public class DefaultLocalizationService
     }
     public void configure(Configuration conf) throws ConfigurationException
     {
-        Locale jvmDefault = Locale.getDefault();        
+        Locale jvmDefault = Locale.getDefault();
         defaultLanguage =
             conf
                 .getAttribute(
@@ -377,10 +380,10 @@ public class DefaultLocalizationService
             && defaultLanguage.equals(locale.getLanguage()))
         {
             /*
-            category.debug("Requested language '" + locale.getLanguage() +
-                           "' matches default: Attempting to guess bundle " +
-                           "using default country '" + defaultCountry + '\'');
-            */
+             *            category.debug("Requested language '" + locale.getLanguage() +
+             *                           "' matches default: Attempting to guess bundle " +
+             *                           "using default country '" + defaultCountry + '\'');
+             */
             Locale withDefaultCountry =
                 new Locale(locale.getLanguage(), defaultCountry);
             rb = (ResourceBundle) bundlesByLocale.get(withDefaultCountry);
@@ -480,7 +483,7 @@ public class DefaultLocalizationService
      * @exception MissingResourceException Specified key cannot be matched.
      * @see org.apache.fulcrum.localization.LocalizationService#getString(String, Locale, String)
      */
-    public String getString(String bundleName, Locale locale, String key) 
+    public String getString(String bundleName, Locale locale, String key)
       throws MissingResourceException
     {
         String value = null;

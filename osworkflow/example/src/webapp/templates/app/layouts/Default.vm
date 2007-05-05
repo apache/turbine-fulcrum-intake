@@ -1,12 +1,28 @@
+## Licensed to the Apache Software Foundation (ASF) under one
+## or more contributor license agreements.  See the NOTICE file
+## distributed with this work for additional information
+## regarding copyright ownership.  The ASF licenses this file
+## to you under the Apache License, Version 2.0 (the
+## "License"); you may not use this file except in compliance
+## with the License.  You may obtain a copy of the License at
+##
+##   http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing,
+## software distributed under the License is distributed on an
+## "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+## KIND, either express or implied.  See the License for the
+## specific language governing permissions and limitations
+## under the License.
 <html>
  <head>
   <link rel="stylesheet" type="text/css" href="$content.getURI("style/tigris.css")"/>
  </head>
- 
-<body marginwidth="0" marginheight="0" class="composite" 
+
+<body marginwidth="0" marginheight="0" class="composite"
         #foreach( $attributeName in $page.BodyAttributes.keySet() )
           $attributeName = "$page.BodyAttributes.get($attributeName)"
-        #end  
+        #end
 >
 
 
@@ -18,25 +34,25 @@
 &nbsp;
   </td>
   <td valign="center">
-    
-    
+
+
   </td>
   <td>
   <div align="right" id="login">
-  
+
    <div>
-  
+
    </div>
   </div>
   </td>
   </tr>
   </table>
- </div>       
+ </div>
 </form>
 
-<div id="breadcrumbs"><table border="0" cellspacing="0" cellpadding="4" width="100%"><tr><td> 
+<div id="breadcrumbs"><table border="0" cellspacing="0" cellpadding="4" width="100%"><tr><td>
 
-<a href="$link.setAction("Index")">Workflow Example Home</a> > 
+<a href="$link.setAction("Index")">Workflow Example Home</a> >
 $page.title
 
 </td></tr></table></div>
@@ -45,11 +61,11 @@ $page.title
 
 
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
-    
+
     <tr>
         <td colspan=3 height="2"><img src="$content.getURI("images/spacer.gif")" width="17" height="2" alt="" border="0"></td>
     </tr>
-    
+
     <tr>
         <TD width="15%" valign="top">
             $navigation.setTemplate("/Menu.vm")
@@ -58,22 +74,22 @@ $page.title
             <img src="$content.getURI("images/spacer.gif")" width="5" height="1" alt="" border="0">
         </td>
         <TD width="100%" valign="top" align="left">
-        
+
             $navigation.setTemplate("/Messages.vm")
- 
+
       <div id="bodycol">
       <div id="apphead"><h2>$page.title</h2></div>
       </div>
 
       $screen_placeholder
-      
+
         </TD>
     </TR>
  </table>
- 
+
             $navigation.setTemplate("/DefaultBottom.vm")
 
 
 </body>
 </html>
-    
+

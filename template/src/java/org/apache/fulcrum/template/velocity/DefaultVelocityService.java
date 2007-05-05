@@ -2,19 +2,22 @@ package org.apache.fulcrum.template.velocity;
 
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 
@@ -104,7 +107,7 @@ public class DefaultVelocityService
     private EventCartridge eventCartridge;
 
     /**
-     * Whether or not to use the eventCartridge. Defaults to true. 
+     * Whether or not to use the eventCartridge. Defaults to true.
      * Can be used to turn off EC processing.
      */
     private boolean eventCartridgeEnabled = true;
@@ -397,7 +400,7 @@ public class DefaultVelocityService
         throws ConfigurationException
     {
         // put conf into object to pass to the velocity engine
-        velocityConf = 
+        velocityConf =
             new org.apache.commons.configuration.BaseConfiguration();
         List ecconfig = null;
         String logPath = null;
@@ -417,10 +420,10 @@ public class DefaultVelocityService
             {
                 getLogger().info("No Velocity EventCartridges configured.");
             }
-            
+
             // Now we have to perform a couple of path translations
             // for our log file and template paths.
-            logPath = 
+            logPath =
                 oldConf.getString(VelocityEngine.RUNTIME_LOG, null);
             if (logPath == null || logPath.length() == 0)
             {
@@ -447,27 +450,27 @@ public class DefaultVelocityService
         else
         {
             // trick compiler
-            if (true) 
+            if (true)
             {
                 throw new ConfigurationException(
-                    "Use of avalon-style configuration not completed yet");   
+                    "Use of avalon-style configuration not completed yet");
             }
-            
-            final Configuration eventCartridgeConfs = 
+
+            final Configuration eventCartridgeConfs =
                 conf.getChild("event-cartriges", false);
             if (eventCartridgeConfs == null)
             {
-                ecconfig = Collections.EMPTY_LIST; 
+                ecconfig = Collections.EMPTY_LIST;
             }
             else
             {
-                Configuration[] classNameConfs = 
+                Configuration[] classNameConfs =
                     eventCartridgeConfs.getChildren("classname");
                 if (classNameConfs == null)
                 {
-                    ecconfig = Collections.EMPTY_LIST; 
+                    ecconfig = Collections.EMPTY_LIST;
                 }
-                else 
+                else
                 {
                     ecconfig = new ArrayList(classNameConfs.length);
                     for (int i=0; i < classNameConfs.length; i++)
@@ -478,24 +481,24 @@ public class DefaultVelocityService
             }
 
             /*
-            final Configuration pathConfs = 
-                conf.getChild("event-cartriges", false);
-            if (pathConfs != null)
-            {
-                Configuration[] nameVal = ecConfs.getChildren();
-                for (int i=0; i < nameVal.length; i++)
-                {
-                    String key = nameVal[i].getName();
-                    String val = nameVal[i].getValue();
-                }
-            }
-            */
+             *            final Configuration pathConfs =
+             *                conf.getChild("event-cartriges", false);
+             *            if (pathConfs != null)
+             *            {
+             *                Configuration[] nameVal = ecConfs.getChildren();
+             *                for (int i=0; i < nameVal.length; i++)
+             *                {
+             *                    String key = nameVal[i].getName();
+             *                    String val = nameVal[i].getValue();
+             *                }
+             *            }
+             */
         }
 
         initEventCartridges(ecconfig);
 
-        // check if path to logfile needs translation to webapp root 
-        if ( !(new File(logPath).isAbsolute()) ) 
+        // check if path to logfile needs translation to webapp root
+        if ( !(new File(logPath).isAbsolute()) )
         {
             logPath = getRealPath(logPath);
         }
@@ -615,7 +618,7 @@ public class DefaultVelocityService
     }
 
     // ---------------- Avalon Lifecycle Methods ---------------------
-    
+
     /**
      * Avalon component lifecycle method
      */
@@ -625,12 +628,12 @@ public class DefaultVelocityService
         try
         {
             velocityEngine = new VelocityEngine();
-            
-            // clear the property to prepare for new value, 
+
+            // clear the property to prepare for new value,
             //is this needed?
             Iterator i = velocityConf.getKeys();
-            while (i.hasNext()) 
-            {            
+            while (i.hasNext())
+            {
                 velocityEngine.clearProperty((String)i.next());
             }
 
@@ -638,7 +641,7 @@ public class DefaultVelocityService
                     .getExtendedProperties(velocityConf));
             velocityEngine.init();
             velocityConf = null;
-        
+
         }
         catch (Exception e)
         {

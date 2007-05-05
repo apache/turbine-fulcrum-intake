@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.torque.turbine;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.sql.Connection;
 import java.util.Iterator;
@@ -61,14 +64,14 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
             ((TurbinePermission)permission).addRole(role);
 
             Connection con = null;
-            
+
             try
             {
                 con = Transaction.begin(((TorqueAbstractSecurityEntity)role).getDatabaseName());
-                
+
                 ((TorqueAbstractSecurityEntity)role).update(con);
                 ((TorqueAbstractSecurityEntity)permission).update(con);
-                
+
                 Transaction.commit(con);
                 con = null;
             }
@@ -83,7 +86,7 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
                     Transaction.safeRollback(con);
                 }
             }
-            
+
             return;
         }
 
@@ -118,14 +121,14 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
             ((TurbinePermission)permission).removeRole(role);
 
             Connection con = null;
-            
+
             try
             {
                 con = Transaction.begin(((TorqueAbstractSecurityEntity)role).getDatabaseName());
-                
+
                 ((TorqueAbstractSecurityEntity)role).update(con);
                 ((TorqueAbstractSecurityEntity)permission).update(con);
-                
+
                 Transaction.commit(con);
                 con = null;
             }
@@ -140,15 +143,15 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
                     Transaction.safeRollback(con);
                 }
             }
-            
+
             return;
         }
-        
+
         if (!roleExists)
         {
             throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
         }
-        
+
         if (!permissionExists)
         {
             throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
@@ -160,7 +163,7 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
         boolean roleExists = getRoleManager().checkExists(role);
         boolean userExists = getUserManager().checkExists(user);
         boolean groupExists = getGroupManager().checkExists(group);
-        
+
         if (roleExists && groupExists && userExists)
         {
             TurbineUserGroupRole user_group_role = new TurbineUserGroupRole();
@@ -172,22 +175,22 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
             ((TurbineRole) role).addUserGroupRole(user_group_role);
 
             Connection con = null;
-            
+
             try
             {
                 con = Transaction.begin(((TorqueAbstractSecurityEntity)user).getDatabaseName());
-                
+
                 ((TorqueAbstractSecurityEntity)user).update(con);
                 ((TorqueAbstractSecurityEntity)group).update(con);
                 ((TorqueAbstractSecurityEntity)role).update(con);
-                
+
                 Transaction.commit(con);
                 con = null;
             }
             catch (TorqueException e)
             {
-                throw new DataBackendException("grant('" 
-                        + (user != null ? user.getName() : "null") + "', '" 
+                throw new DataBackendException("grant('"
+                        + (user != null ? user.getName() : "null") + "', '"
                         + (group != null ? group.getName() : "null") + "', '"
                         + (role != null ? role.getName() : "null") + "') failed", e);
             }
@@ -198,7 +201,7 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
                     Transaction.safeRollback(con);
                 }
             }
-            
+
             return;
         }
 
@@ -253,22 +256,22 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
             ((TurbineRole)role).removeUserGroupRole(user_group_role);
 
             Connection con = null;
-            
+
             try
             {
                 con = Transaction.begin(((TorqueAbstractSecurityEntity)user).getDatabaseName());
-                
+
                 ((TorqueAbstractSecurityEntity)user).update(con);
                 ((TorqueAbstractSecurityEntity)group).update(con);
                 ((TorqueAbstractSecurityEntity)role).update(con);
-                
+
                 Transaction.commit(con);
                 con = null;
             }
             catch (TorqueException e)
             {
-                throw new DataBackendException("revoke('" 
-                        + (user != null ? user.getName() : "null") + "', '" 
+                throw new DataBackendException("revoke('"
+                        + (user != null ? user.getName() : "null") + "', '"
                         + (group != null ? group.getName() : "null") + "', '"
                         + (role != null ? role.getName() : "null") + "') failed", e);
             }
@@ -279,7 +282,7 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
                     Transaction.safeRollback(con);
                 }
             }
-            
+
             return;
         }
 

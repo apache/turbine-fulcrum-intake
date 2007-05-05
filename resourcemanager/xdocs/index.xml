@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
 
 <document>
 
@@ -13,9 +31,9 @@
 
       <p>
         The Fulcrum ResourceManager service handles the management of resources found
-        in a domain whereas multiple domains can be defined. The current implementation 
-        uses only the file system to store the resources of a domain. It should be possible 
-        to come up with an implementation using a database to store the resources 
+        in a domain whereas multiple domains can be defined. The current implementation
+        uses only the file system to store the resources of a domain. It should be possible
+        to come up with an implementation using a database to store the resources
         centralized for a cluster.
       </p>
 
@@ -24,20 +42,20 @@
     <section name="What does it provide?">
 
       <p>
-        The service provides the following features:        
+        The service provides the following features:
         <ul>
           <li>automatic location of resources running up the directory tree</li>
           <li>management API for resources</li>
         </ul>
-      </p>  
-      
+      </p>
+
       <p>
         The key motiviation is reuse the automatic location of a resource since I
         implemented it a few times over the last two years. A couple services benefit
-        from that behaviour, e.g. the fulcrum-dom4jxslt-service and fulcrum-groovy-service. 
-        Using a context and traversing up the file system allows to invoke different 
-        XSL file depending on the context. And the only thing to do is just to add 
-        a XSL file in the appropriate directory and to overwrite one or more template 
+        from that behaviour, e.g. the fulcrum-dom4jxslt-service and fulcrum-groovy-service.
+        Using a context and traversing up the file system allows to invoke different
+        XSL file depending on the context. And the only thing to do is just to add
+        a XSL file in the appropriate directory and to overwrite one or more template
         matching rules to customize the behaviour.
       </p>
 
@@ -51,25 +69,25 @@ scripts
      -- magic.groovy
             ]]>
           </source>
-    
+
           <p>
             In the case of invoking 'ABC/magic.groovy' the script 'ABC/magic.groovy' would be executed.
             In the case of invoking 'XYZ/magic.groovy' the locator is looking for 'XYZ/magic.groovy'. Since
             it isn't found it steps up a directory to execute 'magic.groovy'.
-          </p>      
-          
+          </p>
+
       </subsection>
-    
+
     </section>
-    
-    <section name="What it does not provide?">      
-      <p>      
+
+    <section name="What it does not provide?">
+      <p>
         The service does not provided the following things
         <ul>
           <li>caching of the content of resources</li>
           <li>provision of virtual file systems</li>
         </ul>
-      </p>  
+      </p>
 
       <p>
         I hate to implement any ad-hoc caching since this should be done by
@@ -77,11 +95,11 @@ scripts
         done by other services, e.g. a XSLT service caches the the compiled
         XSL files and not the file content.
       </p>
-      
-      <p> 
+
+      <p>
         And the virtual file system approach is beautiful but I don't need it.
-      </p>  
-      
+      </p>
+
     </section>
 
   </body>

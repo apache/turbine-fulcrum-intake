@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.torque;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.sql.Connection;
 import java.util.Iterator;
@@ -38,9 +41,9 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
 {
     /**
      * Get all specialized Permissions
-     * 
+     *
      * @param con a database connection
-     * 
+     *
      * @return a List of Permission instances
      *
      * @throws TorqueException if any database error occurs
@@ -50,10 +53,10 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
 
     /**
      * Get a specialized Permission by name
-     * 
+     *
      * @param name the name of the group
      * @param con a database connection
-     * 
+     *
      * @return a Permission instance
      *
      * @throws NoRowsException if no such group exists
@@ -65,10 +68,10 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
 
     /**
      * Get a specialized Permission by id
-     * 
+     *
      * @param id the id of the group
      * @param con a database connection
-     * 
+     *
      * @return a Permission instance
      *
      * @throws NoRowsException if no such group exists
@@ -95,7 +98,7 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
         if (checkExists(permission))
         {
             permission.setName(name);
-            
+
             try
             {
                 TorqueAbstractSecurityEntity p = (TorqueAbstractSecurityEntity)permission;
@@ -163,7 +166,7 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
         {
             throw new DataBackendException("Adding Permission '" + permission.getName() + "' failed", e);
         }
-    
+
         return permission;
     }
 
@@ -178,23 +181,23 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
     {
         PermissionSet permissionSet = new PermissionSet();
         Connection con = null;
-    
+
         try
         {
             con = Transaction.begin(((TorqueAbstractSecurityEntity)getPermissionInstance()).getDatabaseName());
-            
+
             List permissions = doSelectAllPermissions(con);
-            
+
             for (Iterator i = permissions.iterator(); i.hasNext();)
             {
                 Permission p = (Permission)i.next();
-    
+
                 // Add attached objects if they exist
                 ((TorqueAbstractSecurityEntity)p).retrieveAttachedObjects(con);
-    
+
                 permissionSet.add(p);
             }
-    
+
             Transaction.commit(con);
             con = null;
         }
@@ -213,7 +216,7 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
                 Transaction.safeRollback(con);
             }
         }
-    
+
         return permissionSet;
     }
 
@@ -230,18 +233,18 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
     public boolean checkExists(String permissionName) throws DataBackendException
     {
         boolean exists = false;
-        
+
         Connection con = null;
-        
+
         try
         {
             con = Transaction.begin(((TorqueAbstractSecurityEntity)getPermissionInstance()).getDatabaseName());
-    
+
             doSelectByName(permissionName, con);
-            
+
             Transaction.commit(con);
             con = null;
-    
+
             exists = true;
         }
         catch (NoRowsException e)
@@ -267,7 +270,7 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
                 Transaction.safeRollback(con);
             }
         }
-    
+
         return exists;
     }
 
@@ -285,20 +288,20 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
     public Permission getPermissionById(Object id) throws DataBackendException, UnknownEntityException
     {
         Permission permission;
-        
+
         if (id != null && id instanceof Integer)
         {
             Connection con = null;
-    
+
             try
             {
                 con = Transaction.begin(((TorqueAbstractSecurityEntity)getPermissionInstance()).getDatabaseName());
-                
+
                 permission = doSelectById((Integer)id, con);
-    
+
                 // Add attached objects if they exist
                 ((TorqueAbstractSecurityEntity)permission).retrieveAttachedObjects(con);
-    
+
                 Transaction.commit(con);
                 con = null;
             }
@@ -322,7 +325,7 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
         {
             throw new UnknownEntityException("Invalid permission id '" + id + "'");
         }
-    
+
         return permission;
     }
 
@@ -339,16 +342,16 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
     {
         Permission permission = null;
         Connection con = null;
-    
+
         try
         {
             con = Transaction.begin(((TorqueAbstractSecurityEntity)getPermissionInstance()).getDatabaseName());
-            
+
             permission = doSelectByName(name, con);
-    
+
             // Add attached objects if they exist
             ((TorqueAbstractSecurityEntity)permission).retrieveAttachedObjects(con);
-    
+
             Transaction.commit(con);
             con = null;
         }
@@ -371,7 +374,7 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
                 Transaction.safeRollback(con);
             }
         }
-    
+
         return permission;
     }
 }

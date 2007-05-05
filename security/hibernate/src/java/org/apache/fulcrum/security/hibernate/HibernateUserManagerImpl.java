@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.hibernate;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.util.List;
 
@@ -33,7 +36,7 @@ import org.apache.fulcrum.security.util.UserSet;
 public class HibernateUserManagerImpl extends AbstractUserManager
 {
 	private PersistenceHelper persistenceHelper;
-   
+
     /**
      * Check whether a specified user's account exists.
      *
@@ -98,7 +101,7 @@ public class HibernateUserManagerImpl extends AbstractUserManager
         }
         throw new UnknownEntityException("Unknown user '" + userName + "'");
     }
-  
+
 	/**
 	   * Retrieves all users defined in the system.
 	   *
@@ -125,7 +128,7 @@ public class HibernateUserManagerImpl extends AbstractUserManager
 		}
 		return userSet;
 
-	}    
+	}
     /**
 	* Removes an user account from the system.
 	*
@@ -135,7 +138,7 @@ public class HibernateUserManagerImpl extends AbstractUserManager
 	* @throws UnknownEntityException if the user account is not present.
 	*/
     public void removeUser(User user) throws DataBackendException, UnknownEntityException
-    {    
+    {
 		getPersistenceHelper().removeEntity(user);
     }
     /**
@@ -150,7 +153,7 @@ public class HibernateUserManagerImpl extends AbstractUserManager
        */
     public User persistNewUser(User user) throws DataBackendException
     {
-  
+
 		getPersistenceHelper().addEntity(user);
 		return user;
     }
@@ -175,7 +178,7 @@ public class HibernateUserManagerImpl extends AbstractUserManager
             throw new UnknownEntityException("Unknown user '" + user + "'");
         }
     }
-    
+
 	/**
 	 * @return Returns the persistenceHelper.
 	 */
@@ -186,11 +189,11 @@ public class HibernateUserManagerImpl extends AbstractUserManager
 			persistenceHelper = (PersistenceHelper)resolve(PersistenceHelper.ROLE);
 		}
 		return persistenceHelper;
-	}    
-    
+	}
+
 	/**
 	 * Retrieve a User object with specified id.
-	 * 
+	 *
 	 * @param id
 	 *            the id of the User.
 	 * @return an object representing the User with specified id.
@@ -201,7 +204,7 @@ public class HibernateUserManagerImpl extends AbstractUserManager
 	 */
 	public User getUserById(Object id)
 	throws DataBackendException, UnknownEntityException {
-		
+
 		User user = null;
 
 		if (id != null)
@@ -222,7 +225,7 @@ public class HibernateUserManagerImpl extends AbstractUserManager
 						"Error retriving user information",
 						e);
 			}
-			
+
 		return user;
 	}
 }

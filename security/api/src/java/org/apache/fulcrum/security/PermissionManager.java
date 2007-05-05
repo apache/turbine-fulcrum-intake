@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import org.apache.avalon.framework.component.Component;
 import org.apache.fulcrum.security.entity.Permission;
@@ -34,7 +37,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 public interface PermissionManager
 extends Component
 {
-	
+
 	/** Avalon role - used to id the component within the manager */
 	String ROLE = PermissionManager.class.getName();
     /**
@@ -59,7 +62,7 @@ extends Component
      * @throws UnknownEntityException if the object could not be instantiated.
      */
     Permission getPermissionInstance(String permName) throws UnknownEntityException;
- 
+
     /**
     	 * Retrieve a Permission object with specified name.
     	 *
@@ -91,7 +94,7 @@ extends Component
        *         backend.
        */
     PermissionSet getAllPermissions() throws DataBackendException;
-    
+
     /**
     	* Creates a new permission with specified attributes.
     	*
@@ -121,7 +124,7 @@ extends Component
        * @throws UnknownEntityException if the permission does not exist.
        */
     void renamePermission(Permission permission, String name) throws DataBackendException, UnknownEntityException;
-    
+
 	/**
 		   * Determines if the <code>Permission</code> exists in the security system.
 		   *
@@ -131,12 +134,12 @@ extends Component
 		   *         the same name exists.
 		   * @throws Exception A generic exception.
 		   */
-	 boolean checkExists(Permission permission) throws DataBackendException;    
-	 
+	 boolean checkExists(Permission permission) throws DataBackendException;
+
 		/**
 		 * Determines if a <code>Permission</code> exists in the security
 		 * system with the specified name.
-		 * 
+		 *
 		 * @param permissionName the name of a <code>Permission</code> to check
 		 * @return true if the permission exists in the system, false otherwise
 		 * @throws DataBackendException
@@ -144,5 +147,5 @@ extends Component
 		 * @throws Exception
 		 *             A generic exception.
 		 */
-		boolean checkExists(String permissionName) throws DataBackendException;	 
+		boolean checkExists(String permissionName) throws DataBackendException;
 }

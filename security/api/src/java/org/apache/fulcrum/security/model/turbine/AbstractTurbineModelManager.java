@@ -1,19 +1,22 @@
 package org.apache.fulcrum.security.model.turbine;
 
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import org.apache.fulcrum.security.entity.Group;
@@ -31,7 +34,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
  * Holds shared functionality between different implementations of
  * TurbineModelManager's.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @version $Id: AbstractDynamicModelManager.java,v 1.2 2004/07/07 18:18:09
  *          epugh Exp $
@@ -41,7 +44,7 @@ public abstract class AbstractTurbineModelManager extends AbstractManager
     /**
      * Provides a reference to the Group object that represents the <a
      * href="#global">global group </a>.
-     * 
+     *
      * @return A Group object that represents the global group.
      */
     public Group getGlobalGroup() throws DataBackendException {
@@ -58,12 +61,12 @@ public abstract class AbstractTurbineModelManager extends AbstractManager
 
         }
         return g;
-    }    
+    }
 	/**
 	 * Revokes all permissions and groups from a Role.
-	 * 
+	 *
 	 * This method is used when deleting a Role.
-	 * 
+	 *
 	 * @param role
 	 *            the Role
 	 * @throws DataBackendException
@@ -88,12 +91,12 @@ public abstract class AbstractTurbineModelManager extends AbstractManager
 		}
 
 	}
-    
+
     /**
      * Revokes all roles and groups from a User.
-     * 
+     *
      * This method is used when deleting a User.
-     * 
+     *
      * @param user
      *            the User
      * @throws DataBackendException
@@ -118,5 +121,5 @@ public abstract class AbstractTurbineModelManager extends AbstractManager
                     + "'");
         }
 
-    }    
+    }
 }

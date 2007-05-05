@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.model.test;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import org.apache.fulcrum.security.SecurityService;
@@ -34,7 +37,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
     protected User user;
     protected UserManager userManager;
     protected SecurityService securityService;
-    
+
     /**
      * Constructor for AbstractUserManagerTest.
      * @param arg0
@@ -53,7 +56,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
         user = userManager.getUserInstance("ImaginaryFriend");
         assertFalse(userManager.checkExists(user));
     }
-    
+
     public void testCheckExistsWithString() throws Exception
     {
         user = userManager.getUserInstance("Philip2");
@@ -74,7 +77,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
         user = userManager.getUser("QuietMike");
         assertNotNull(user);
     }
-    
+
     public void testGetUserById() throws Exception
     {
     	user = userManager.getUserInstance("QuietMike2");
@@ -82,7 +85,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
         User user2 = userManager.getUserById(user.getId());
         assertEquals(user.getName(), user2.getName());
         assertEquals(user.getId(), user2.getId());
-    }    
+    }
     /*
      * Class to test for User retrieve(String, String)
      */
@@ -111,8 +114,8 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
 		userManager.addUser(user,"");
 		UserSet userSet = userManager.getAllUsers();
 		assertEquals(size + 1, userSet.size());
-	}    
-	
+	}
+
     public void testAuthenticate() throws Exception
     {
         user = userManager.getUserInstance("Kay");
@@ -168,7 +171,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
         user = userManager.getUserInstance("Philip");
         assertEquals("philip", user.getName());
     }
-    
+
     /**
      * Need to figure out if save is something we want..
      * right now it just bloes up if you actually cahnge anything.
@@ -184,7 +187,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
         userManager.saveUser(user);
         assertEquals("kate", userManager.getUser(user.getName()).getName());
     }
-   
+
     public void testGetACL() throws Exception
     {
         user = userManager.getUserInstance("Tony");
@@ -218,7 +221,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
         assertNotNull(user.getId());
         assertNotNull(userManager.getUser(user.getName()));
     }
-    
+
     /*
      * Class to test for boolean checkExists(string)
      */
@@ -239,14 +242,14 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
         }
         catch (EntityExistsException uee){
             //good
-        }        
+        }
     }
-    
+
     public void testCheckUserCaseSensitiveExists() throws Exception {
         user = userManager.getUserInstance("borrisJohnson");
         userManager.addUser(user,"bob");
-        
+
         assertTrue(userManager.checkExists("borrisJohnson"));
     }
-   
+
 }

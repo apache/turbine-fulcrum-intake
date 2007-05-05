@@ -1,20 +1,22 @@
 package org.apache.fulcrum.yaafi.framework.context;
 
 /*
- * Copyright 2004 Apache Software Foundation
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
- * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.io.File;
@@ -42,7 +44,7 @@ public class AvalonToYaafiContextMapper
 
     /** Our default context */
     private DefaultContext defaultContext;
-    
+
     /** our defaul class loader */
     private ClassLoader classLoader;
 
@@ -60,14 +62,14 @@ public class AvalonToYaafiContextMapper
         Validate.notNull( tempRootDir, "tempRootDir" );
         Validate.notNull( context, "context" );
         Validate.notNull( classLoader, "classLoader" );
-        
+
         this.tempRootDir = tempRootDir;
         this.classLoader = classLoader;
-        
+
         // here we have to create a new DefaultContext since
         // it contains service specific entries
-        
-        this.defaultContext = new DefaultContext( context );        
+
+        this.defaultContext = new DefaultContext( context );
     }
 
     /**
@@ -133,7 +135,7 @@ public class AvalonToYaafiContextMapper
         File urnAvalonTemp = this.getTempRootDir();
 
         // add the Merlin specific parameters
-        
+
         result.put( AvalonYaafiConstants.URN_AVALON_NAME, urnAvalonName );
         result.put( AvalonYaafiConstants.URN_AVALON_PARTITION, urnAvalonPartition );
         result.put( AvalonYaafiConstants.URN_AVALON_HOME, urnAvalonHome );
@@ -141,7 +143,7 @@ public class AvalonToYaafiContextMapper
         result.put( AvalonYaafiConstants.URN_AVALON_CLASSLOADER, this.getClassLoader() );
 
         // add the deprecated ECM parameter
-        
+
         result.put(AvalonYaafiConstants.COMPONENT_APP_ROOT, urnAvalonHome.getAbsolutePath());
 
         // add the Fortress specific parameters
@@ -171,7 +173,7 @@ public class AvalonToYaafiContextMapper
         File urnAvalonTemp = (File) context.get( AvalonFortressConstants.FORTRESS_IMPL_WORKDIR );
 
         // add the Merlin specific parameters
-        
+
         result.put( AvalonYaafiConstants.URN_AVALON_NAME, AvalonYaafiConstants.AVALON_CONTAINER_YAAFI );
         result.put( AvalonYaafiConstants.URN_AVALON_PARTITION, urnAvalonPartition );
         result.put( AvalonYaafiConstants.URN_AVALON_HOME, urnAvalonHome );
@@ -179,7 +181,7 @@ public class AvalonToYaafiContextMapper
         result.put( AvalonYaafiConstants.URN_AVALON_CLASSLOADER, this.getClassLoader() );
 
         // add the deprecated ECM parameter
-        
+
         result.put(AvalonYaafiConstants.COMPONENT_APP_ROOT, urnAvalonHome.getAbsolutePath());
 
 
@@ -211,7 +213,7 @@ public class AvalonToYaafiContextMapper
         result.put(AvalonFortressConstants.FORTRESS_IMPL_WORKDIR,urnAvalonTemp);
 
         // add the deprecated ECM parameter
-        
+
         result.put(AvalonYaafiConstants.COMPONENT_APP_ROOT, urnAvalonHome.getAbsolutePath());
 
         return result;
@@ -225,7 +227,7 @@ public class AvalonToYaafiContextMapper
     {
         return this.classLoader;
     }
-    
+
     /**
      * @return Returns the defaultContext.
      */
@@ -233,12 +235,12 @@ public class AvalonToYaafiContextMapper
     {
         return this.defaultContext;
     }
-    
+
     /**
      * @return Returns the tempRootDir.
      */
     private File getTempRootDir()
     {
         return this.tempRootDir;
-    }    
+    }
 }

@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.memory;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +39,7 @@ public class MemoryUserManagerImpl
     extends AbstractUserManager
 {
     private static List users = new ArrayList();
-   
+
     /** Our Unique ID counter */
     // private static int uniqueId = 0;
 
@@ -52,20 +55,20 @@ public class MemoryUserManagerImpl
      */
     public boolean checkExists(String userName) throws DataBackendException
     {
-        return MemoryHelper.checkExists(users,userName); 
-       
+        return MemoryHelper.checkExists(users,userName);
+
     }
-    
+
 	/**
 	 * Retrieves all users defined in the system.
-	 * 
+	 *
 	 * @return the names of all users defined in the system.
 	 * @throws DataBackendException if there was an error accessing the data backend.
 	 */
 	public UserSet getAllUsers() throws DataBackendException
 	{
 		return new UserSet(users);
-	}    
+	}
     /**
     	* Removes an user account from the system.
     	*
@@ -92,12 +95,12 @@ public class MemoryUserManagerImpl
     protected User persistNewUser(User user)
         throws DataBackendException
     {
-       
+
             users.remove(user);
             user.setId(MemoryHelper.getUniqueId());
             users.add(user);
             return user;
-        
+
     }
     /**
        * Stores User attributes. The User is required to exist in the system.

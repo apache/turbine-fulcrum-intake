@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.adapter.osuser;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.util.Properties;
 
@@ -30,7 +33,7 @@ import com.opensymphony.user.provider.UserProvider;
  * provide access from OSUser to the Fulcrum Security implementation.
  * Currently, to change things you should use the Fulcrum Security system
  * directly, this is a very mimimal implementation.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -44,7 +47,7 @@ public abstract class BaseFulcrumProvider implements UserProvider
 
 	/*
 	 * Does nothing for now.
-	 * 
+	 *
 	 * @see com.opensymphony.user.provider.UserProvider#create(java.lang.String)
 	 */
 	public boolean create(String arg0)
@@ -54,7 +57,7 @@ public abstract class BaseFulcrumProvider implements UserProvider
 
 	/*
 	 * Does nothign for now.
-	 * 
+	 *
 	 * @see com.opensymphony.user.provider.UserProvider#flushCaches()
 	 */
 	public void flushCaches()
@@ -65,7 +68,7 @@ public abstract class BaseFulcrumProvider implements UserProvider
 	/*
 	 * Doesn't do anything. Init isn't required as the Fulcrum Security is
 	 * assumed to be running in an Avalon container.
-	 * 
+	 *
 	 * @see com.opensymphony.user.provider.UserProvider#init(java.util.Properties)
 	 */
 	public boolean init(Properties arg0)
@@ -75,7 +78,7 @@ public abstract class BaseFulcrumProvider implements UserProvider
 
 	/*
 	 * Sets the accessor to be mutable, and returns true.
-	 * 
+	 *
 	 * @see com.opensymphony.user.provider.UserProvider#load(java.lang.String,
 	 *      com.opensymphony.user.Entity.Accessor)
 	 */
@@ -88,7 +91,7 @@ public abstract class BaseFulcrumProvider implements UserProvider
 
 	/*
 	 * Returns false, this doesn't do anything.
-	 * 
+	 *
 	 * @see com.opensymphony.user.provider.UserProvider#remove(java.lang.String)
 	 */
 	public boolean remove(String arg0)
@@ -98,7 +101,7 @@ public abstract class BaseFulcrumProvider implements UserProvider
 
 	/*
 	 * Returns false, this doesn't do anything right now.
-	 * 
+	 *
 	 * @see com.opensymphony.user.provider.UserProvider#store(java.lang.String,
 	 *      com.opensymphony.user.Entity.Accessor)
 	 */
@@ -109,7 +112,7 @@ public abstract class BaseFulcrumProvider implements UserProvider
 
 	/**
 	  * Lazy loads the SecurityService.
-	  * 
+	  *
 	  * @return
 	  */
 	 public SecurityService getSecurityService() throws DataBackendException
@@ -128,11 +131,11 @@ public abstract class BaseFulcrumProvider implements UserProvider
 		 }
 		 return securityService;
 	 }
-	
+
 	/**
 	 * The Fulcrum Security Service that will back the Fulcrum
 	 * providers.
-	 * 
+	 *
 	 * @param securityService
 	 *            The securityService to set.
 	 */

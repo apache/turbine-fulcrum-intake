@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
 
 <document>
 
@@ -15,13 +33,13 @@
       algorithms provided by the normal Java crypto providers and 3rd party
       providers such as <a href="http://www.cryptix.org/">Cryptix</a>.
     </p>
-  
+
     <p>
-      It is written for use in Turbine but it can be used in any container compatible 
+      It is written for use in Turbine but it can be used in any container compatible
       with Avalon's ECM container.
-    </p>    
+    </p>
   </section>
-  
+
 <section name="Configuration">
 
     <p>
@@ -48,16 +66,16 @@
       <algorithm>
         <unix>org.apache.fulcrum.crypto.provider.UnixCrypt</unix>
         <clear>org.apache.fulcrum.crypto.provider.ClearCrypt</clear>
-        <java>org.apache.fulcrum.crypto.provider.JavaCrypt</java>   
-        <oldjava>org.apache.fulcrum.crypto.provider.OldJavaCrypt</oldjava>   
-                      
+        <java>org.apache.fulcrum.crypto.provider.JavaCrypt</java>
+        <oldjava>org.apache.fulcrum.crypto.provider.OldJavaCrypt</oldjava>
+
       </algorithm>
     </crypto>
 ]]>
 </source>
 
   </section>
-  
+
 <section name="Usage">
 
 <p>
@@ -84,7 +102,7 @@ public class CryptoExample
 ]]></source>
 
 <p>
-To see an example, look at the test case 
+To see an example, look at the test case
 <a href="xref-test/org/apache/fulcrum/crypto/CryptoServiceTest.html">CryptoServiceTest</a>.
 </p>
 
@@ -109,7 +127,7 @@ To see an example, look at the test case
     don't set the Cipher of this class explicitly, then SHA is used.
     </p>
 
-  </section>  
+  </section>
 
   <section name="Included Providers">
     <p>The following algorithm providers are included in the Cryptoservice:</p>
@@ -130,7 +148,7 @@ To see an example, look at the test case
     href="http://www.cryptix.org/">Cryptix</a>.
     </li>
     <li>
-    <b>JavaCrypt</b> (org.apache.fulcrum.crypto.provider.JavaCrypt).  This is the 
+    <b>JavaCrypt</b> (org.apache.fulcrum.crypto.provider.JavaCrypt).  This is the
      default crypto provider. It implements the normal Java MessageDigest ciphers
      You need not to have this, it is the default if no algorithms are given. The default
      provider gives you all the Java MessageDigest Ciphers including MD5, and SHA1.

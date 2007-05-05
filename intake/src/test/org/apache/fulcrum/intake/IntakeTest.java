@@ -1,19 +1,22 @@
 package org.apache.fulcrum.intake;
 
 /*
- * Copyright 2001-2006 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
@@ -38,7 +41,7 @@ public class IntakeTest extends BaseUnitTest
     {
         super(name);
     }
- 
+
 
     public void testFacadeNotConfigured() throws Exception
     {
@@ -65,7 +68,7 @@ public class IntakeTest extends BaseUnitTest
     }
 
     public void testEmptyBooleanField() throws Exception
-    {   
+    {
         IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
         Group group = is.getGroup("BooleanTest");
         assertNotNull(group);
@@ -75,9 +78,9 @@ public class IntakeTest extends BaseUnitTest
         assertTrue("The Default Validator of an intake Field type boolean should be BooleanValidator", (booleanField.getValidator() instanceof BooleanValidator));
         assertFalse("An Empty intake Field type boolean should not be required", booleanField.isRequired());
     }
-    
+
     public void testBooleanField() throws Exception
-    {        
+    {
         IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
         Group group = is.getGroup("BooleanTest");
         assertNotNull(group);
@@ -87,9 +90,9 @@ public class IntakeTest extends BaseUnitTest
         assertTrue("The Default Validator of an intake Field type boolean should be BooleanValidator", (booleanField.getValidator() instanceof BooleanValidator));
         assertFalse("An intake Field type boolean, which is not required, should not be required", booleanField.isRequired());
     }
-    
+
     public void testRequiredBooleanField() throws Exception
-    {        
+    {
         IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
         Group group = is.getGroup("BooleanTest");
         assertNotNull(group);

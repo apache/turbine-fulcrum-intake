@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.fulcrum.commonsemail;
 
 /*
@@ -36,13 +54,13 @@ public class CommonsEmailServiceTest extends BaseUnitTest
 {
     /** the service to test */
     private CommonsEmailService service;
-    
+
     /** the default subject */
     private String subject;
-    
+
     /** the default domain */
     private String domain;
-    
+
     /** the recipient of the email */
     private String mailTo;
 
@@ -51,10 +69,10 @@ public class CommonsEmailServiceTest extends BaseUnitTest
 
     /** the generated MimeMessage */
     private MimeMessage result;
-    
+
     /** default plain text content */
     private static final String PLAIN_CONTENT = "Hello World";
-    
+
     /** default HTML text content */
     private static final String HTML_CONTENT = "<h1>Hello World</h1>";
 
@@ -74,7 +92,7 @@ public class CommonsEmailServiceTest extends BaseUnitTest
     protected void setUp() throws Exception
     {
         super.setUp();
-        
+
         this.domain 	= "test";
         this.subject 	= this.getName();
         this.mailFrom 	= "demo@it20one.at";
@@ -90,14 +108,14 @@ public class CommonsEmailServiceTest extends BaseUnitTest
             fail(e.getMessage());
         }
     }
-    
+
     /**
      * @see junit.framework.TestCase#tearDown()
      */
     protected void tearDown()
     {
         if( this.result != null )
-        {            
+        {
             try
             {
                 File resultFile = new File( new File("temp"), this.getName()+".eml" );
@@ -110,30 +128,30 @@ public class CommonsEmailServiceTest extends BaseUnitTest
             {
                 e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
-            }            
+            }
         }
-        
+
         super.tearDown();
     }
-    
+
     /**
      * Add all of our test suites
      */
     public static Test suite()
     {
         TestSuite suite= new TestSuite();
-        
-        suite.addTest( new CommonsEmailServiceTest("testDefaultDomain") );      
-        suite.addTest( new CommonsEmailServiceTest("testDerivedDomain") );      
-        suite.addTest( new CommonsEmailServiceTest("testHtmlEmail") );      
-        suite.addTest( new CommonsEmailServiceTest("testHtmlEmailWithHashtable") );      
-        suite.addTest( new CommonsEmailServiceTest("testMultiPartEmail") );      
-        suite.addTest( new CommonsEmailServiceTest("testSendEmailToUnknownServer") );      
-        suite.addTest( new CommonsEmailServiceTest("testSendMimeMessage") );      
-        suite.addTest( new CommonsEmailServiceTest("testSimpleEmail") );      
-        suite.addTest( new CommonsEmailServiceTest("testSimpleEmailWithHashtable") );      
-        suite.addTest( new CommonsEmailServiceTest("testCreateMimeMessageWithSession") );      
-        
+
+        suite.addTest( new CommonsEmailServiceTest("testDefaultDomain") );
+        suite.addTest( new CommonsEmailServiceTest("testDerivedDomain") );
+        suite.addTest( new CommonsEmailServiceTest("testHtmlEmail") );
+        suite.addTest( new CommonsEmailServiceTest("testHtmlEmailWithHashtable") );
+        suite.addTest( new CommonsEmailServiceTest("testMultiPartEmail") );
+        suite.addTest( new CommonsEmailServiceTest("testSendEmailToUnknownServer") );
+        suite.addTest( new CommonsEmailServiceTest("testSendMimeMessage") );
+        suite.addTest( new CommonsEmailServiceTest("testSimpleEmail") );
+        suite.addTest( new CommonsEmailServiceTest("testSimpleEmailWithHashtable") );
+        suite.addTest( new CommonsEmailServiceTest("testCreateMimeMessageWithSession") );
+
         return suite;
     }
 
@@ -144,7 +162,7 @@ public class CommonsEmailServiceTest extends BaseUnitTest
     {
         return this.service;
     }
-    
+
     /**
      * @return Returns the mail subject.
      */
@@ -152,7 +170,7 @@ public class CommonsEmailServiceTest extends BaseUnitTest
     {
         return subject;
     }
-        
+
     /**
      * @return Returns the domain name.
      */
@@ -160,7 +178,7 @@ public class CommonsEmailServiceTest extends BaseUnitTest
     {
         return domain;
     }
-    
+
     /**
      * @return Returns the mailTo.
      */
@@ -168,7 +186,7 @@ public class CommonsEmailServiceTest extends BaseUnitTest
     {
         return mailTo;
     }
-    
+
     /**
      * @return Returns the mailFrom.
      */
@@ -176,7 +194,7 @@ public class CommonsEmailServiceTest extends BaseUnitTest
     {
         return mailFrom;
     }
-    
+
     /**
      * @return a preconfigured attachment
      */
@@ -187,94 +205,94 @@ public class CommonsEmailServiceTest extends BaseUnitTest
         attachment.setDisposition(EmailAttachment.ATTACHMENT);
         attachment.setName("TestComponentConfig.xml");
         attachment.setDescription("TestComponentConfig.xml");
-        
-        return attachment;        
+
+        return attachment;
     }
     /////////////////////////////////////////////////////////////////////////
     // Start of unit tests
     /////////////////////////////////////////////////////////////////////////
 
     /**
-     * Create a simple email and send it. 
+     * Create a simple email and send it.
      */
     public void testSimpleEmail() throws Exception
     {
         SimpleEmail email = this.getService().createSimpleEmail(this.getDomain());
-        
-        email.setSubject(this.getSubject());        
+
+        email.setSubject(this.getSubject());
         email.setMsg(PLAIN_CONTENT);
         email.addTo(this.getMailTo());
-        
+
         this. result = this.getService().send(this.getDomain(),email);
     }
 
     /**
-     * Create a HTML email and send it. 
+     * Create a HTML email and send it.
      */
     public void testHtmlEmail() throws Exception
     {
         HtmlEmail email = this.getService().createHtmlEmail(this.getDomain());
-        
-        email.setSubject(this.getSubject());        
+
+        email.setSubject(this.getSubject());
         email.setTextMsg(PLAIN_CONTENT);
-        email.setHtmlMsg(HTML_CONTENT);        
+        email.setHtmlMsg(HTML_CONTENT);
         email.addTo(this.getMailTo());
-        
-        this.result = this.getService().send(this.getDomain(),email);                
+
+        this.result = this.getService().send(this.getDomain(),email);
     }
-    
+
     /**
-     * Create a MultiPart email and send it. 
+     * Create a MultiPart email and send it.
      */
     public void testMultiPartEmail() throws Exception
     {
-        MultiPartEmail email = this.getService().createMultiPartEmail(this.getDomain());                       
+        MultiPartEmail email = this.getService().createMultiPartEmail(this.getDomain());
         EmailAttachment attachment = this.getEmailAttachment();
-        
+
         email.setSubject(this.getSubject());
-        email.attach(attachment);                
+        email.attach(attachment);
         email.addTo(this.getMailTo());
         email.setMsg(PLAIN_CONTENT);
 
         this.result = this.getService().send(this.getDomain(),email);
-    }           
-    
+    }
+
     /**
      * Use an undefined domain therefore reverting to the default domain.
-     * 
+     *
      * @throws Exception
      */
     public void testDefaultDomain() throws Exception
     {
         SimpleEmail email = this.getService().createSimpleEmail("grmpff");
-        
-        email.setSubject(this.getSubject());        
+
+        email.setSubject(this.getSubject());
         email.setMsg(PLAIN_CONTENT);
         email.addTo(this.getMailTo());
-        
-        this.result = this.getService().send(this.getDomain(),email);       
+
+        this.result = this.getService().send(this.getDomain(),email);
     }
-    
+
     /**
      * We pass "demo@it20one.at" therefore we should get the "it20one.at" domain
-     * 
+     *
      * @throws Exception
      */
     public void testDerivedDomain() throws Exception
     {
         SimpleEmail email = this.getService().createSimpleEmail("demo@it20one.at");
-        
+
         email.setFrom(this.getMailFrom());
-        email.setSubject(this.getSubject());        
+        email.setSubject(this.getSubject());
         email.setMsg(PLAIN_CONTENT);
         email.addTo(this.getMailTo());
-        
-        this.result = this.getService().send(email);       
+
+        this.result = this.getService().send(email);
     }
-    
+
     /**
      * Create a HTML email using a Hashtable as input.
-     * 
+     *
      * @throws Exception
      */
     public void testHtmlEmailWithHashtable() throws Exception
@@ -290,18 +308,18 @@ public class CommonsEmailServiceTest extends BaseUnitTest
         content.put(Email.SENDER_EMAIL, this.getMailFrom());
         content.put(Email.RECEIVER_EMAIL, this.getMailTo());
         content.put(Email.ATTACHMENTS, attachments);
-        
+
         HtmlEmail email = this.getService().createHtmlEmail(
             this.getMailFrom(),
             content
             );
-        
-        this.result = this.getService().send(email);       
+
+        this.result = this.getService().send(email);
     }
-    
+
     /**
      * Create a simple email using a Hashtable as input.
-     * 
+     *
      * @throws Exception
      */
     public void testSimpleEmailWithHashtable() throws Exception
@@ -311,15 +329,15 @@ public class CommonsEmailServiceTest extends BaseUnitTest
         content.put(Email.EMAIL_BODY, PLAIN_CONTENT);
         content.put(Email.SENDER_EMAIL, this.getMailFrom());
         content.put(Email.RECEIVER_EMAIL, this.getMailTo());
-        
+
         SimpleEmail email = this.getService().createSimpleEmail(
             this.getMailFrom(),
             content
             );
-        
-        this.result = this.getService().send(email);       
-    }    
-    
+
+        this.result = this.getService().send(email);
+    }
+
     /**
      * Create an email and send it to a bogus mailserver
      * resulting in an EmailException. For this test we
@@ -335,16 +353,16 @@ public class CommonsEmailServiceTest extends BaseUnitTest
         content.put(Email.RECEIVER_EMAIL, this.getMailTo());
         content.put(Email.MAIL_HOST, "localhost");
         content.put(Email.MAIL_PORT, "63178");
-        
+
         SimpleEmail email = this.getService().createSimpleEmail(
             this.getMailFrom(),
             content
             );
-        
+
         try
         {
             this.result = this.getService().send(email);
-            
+
             if( this.getService().isMailDoNotSend(email.getFromAddress().getAddress()) == false )
             {
                 fail();
@@ -355,16 +373,16 @@ public class CommonsEmailServiceTest extends BaseUnitTest
             // expected
         }
     }
-    
+
     /**
-     * Create a mail session and simple MimeMessage and sent it 
+     * Create a mail session and simple MimeMessage and sent it
      * @throws Exception the test failed
      */
     public void testCreateMimeMessageWithSession() throws Exception
     {
         MimeMessage mimeMessage = null;
         Session session = this.getService().createSmtpSession("test","foo","bar");
-        
+
         mimeMessage = new MimeMessage(session);
         mimeMessage.setFrom(new InternetAddress(this.mailFrom));
         mimeMessage.setSubject(this.getSubject());
@@ -378,21 +396,21 @@ public class CommonsEmailServiceTest extends BaseUnitTest
     }
     /**
      * Use commons-email to build a MimeMessage and send it directly
-     * 
+     *
      * @throws Exception
      */
     public void testSendMimeMessage() throws Exception
     {
         MimeMessage mimeMessage = null;
         SimpleEmail email = this.getService().createSimpleEmail(this.getDomain());
-        
-        email.setSubject(this.getSubject());        
+
+        email.setSubject(this.getSubject());
         email.setMsg(PLAIN_CONTENT);
         email.addTo(this.getMailTo());
-        
+
         email.buildMimeMessage();
         mimeMessage = email.getMimeMessage();
-        
+
         this. result = this.getService().send(
             email.getMailSession(),
             mimeMessage

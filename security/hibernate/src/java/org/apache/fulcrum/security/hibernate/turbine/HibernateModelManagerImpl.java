@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.hibernate.turbine;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.util.Iterator;
 
@@ -32,7 +35,7 @@ import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
  * This implementation persists to a database via Hibernate.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -41,7 +44,7 @@ public class HibernateModelManagerImpl extends AbstractTurbineModelManager imple
     private PersistenceHelper persistenceHelper;
     /**
 	 * Grants a Role a Permission
-	 * 
+	 *
 	 * @param role the Role.
 	 * @param permission the Permission.
 	 * @throws DataBackendException if there was an error accessing the data backend.
@@ -56,13 +59,13 @@ public class HibernateModelManagerImpl extends AbstractTurbineModelManager imple
         {
             roleExists = getRoleManager().checkExists(role);
             permissionExists = getPermissionManager().checkExists(permission);
-            
+
             if (roleExists && permissionExists)
             {
                 ((TurbineRole) role).addPermission(permission);
                 ((TurbinePermission) permission).addRole(role);
                 getPersistenceHelper().updateEntity(permission);
-                getPersistenceHelper().updateEntity(role);                
+                getPersistenceHelper().updateEntity(role);
                 return;
             }
         }
@@ -81,7 +84,7 @@ public class HibernateModelManagerImpl extends AbstractTurbineModelManager imple
     }
     /**
 	 * Revokes a Permission from a Role.
-	 * 
+	 *
 	 * @param role the Role.
 	 * @param permission the Permission.
 	 * @throws DataBackendException if there was an error accessing the data backend.
@@ -120,7 +123,7 @@ public class HibernateModelManagerImpl extends AbstractTurbineModelManager imple
         {
             throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
         }
-    }  
+    }
 
     /**
 	 * @return Returns the persistenceHelper.
@@ -133,7 +136,7 @@ public class HibernateModelManagerImpl extends AbstractTurbineModelManager imple
 		}
 		return persistenceHelper;
 	}
-    
+
      public void grant(User user, Group group, Role role) throws DataBackendException, UnknownEntityException {
             boolean roleExists = false;
             boolean userExists = false;
@@ -215,5 +218,5 @@ public class HibernateModelManagerImpl extends AbstractTurbineModelManager imple
                 throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
             }
 
-        } 
+        }
 }

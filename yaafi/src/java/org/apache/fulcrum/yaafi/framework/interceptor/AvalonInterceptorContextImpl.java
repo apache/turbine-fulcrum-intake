@@ -1,20 +1,22 @@
 package org.apache.fulcrum.yaafi.framework.interceptor;
 
 /*
- * Copyright 2004 Apache Software Foundation
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
- * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.lang.reflect.Method;
@@ -62,13 +64,13 @@ public class AvalonInterceptorContextImpl implements AvalonInterceptorContext
 
     /** context information associated with the current invocation */
     private HashMap requestContext;
-    
+
     /** context information associated with the current thread */
     private static ThreadLocalStorageImpl tls = new ThreadLocalStorageImpl();
-    
+
     /** works as invocation counter */
     private static volatile long invocationCounter = 0L;
-    
+
     /** the associated transaction id */
     private Long invocationId;
 
@@ -89,7 +91,7 @@ public class AvalonInterceptorContextImpl implements AvalonInterceptorContext
         Validate.notNull(serviceDelegate,"serviceDelegate");
         Validate.notNull(method,"method");
 
-        this.invocationId = new Long(++AvalonInterceptorContextImpl.invocationCounter);    
+        this.invocationId = new Long(++AvalonInterceptorContextImpl.invocationCounter);
         this.serviceName = serviceName;
         this.serviceShorthand = serviceShorthand;
         this.serviceDelegate = serviceDelegate;
@@ -161,7 +163,7 @@ public class AvalonInterceptorContextImpl implements AvalonInterceptorContext
     {
         return ( this.getTransactionId() != null ? true : false );
     }
-    
+
     /**
      * @return get the transaction id defined for the current thread
      */
@@ -193,7 +195,7 @@ public class AvalonInterceptorContextImpl implements AvalonInterceptorContext
     public void incrementInvocationDepth()
     {
         Integer invocationDepth = (Integer) this.getThreadContext().get(INVOCATIONDEPTH_KEY);
-        
+
         if( invocationDepth != null )
         {
             int currInvocationDepth = invocationDepth.intValue();
@@ -204,21 +206,21 @@ public class AvalonInterceptorContextImpl implements AvalonInterceptorContext
             this.getThreadContext().put(INVOCATIONDEPTH_KEY, new Integer(0));
         }
     }
-    
+
     /**
      * Decrement the current service invocation depth
      */
     public void decrementInvocationDepth()
     {
         Integer invocationDepth = (Integer) this.getThreadContext().get(INVOCATIONDEPTH_KEY);
-        
+
         if( invocationDepth != null )
         {
             int currInvocationDepth = invocationDepth.intValue();
             this.getThreadContext().put(INVOCATIONDEPTH_KEY, new Integer(--currInvocationDepth));
         }
     }
-    
+
     /**
      * Get the current service invocation depth
      * @return the current service invocation depth
@@ -226,7 +228,7 @@ public class AvalonInterceptorContextImpl implements AvalonInterceptorContext
     public int getInvocationDepth()
     {
         Integer invocationDepth = (Integer) this.getThreadContext().get(INVOCATIONDEPTH_KEY);
-        
+
         if( invocationDepth != null )
         {
             return invocationDepth.intValue();
@@ -236,7 +238,7 @@ public class AvalonInterceptorContextImpl implements AvalonInterceptorContext
             return 0;
         }
     }
-    
+
     /**
      * @return Returns the invocationId.
      */
@@ -244,14 +246,14 @@ public class AvalonInterceptorContextImpl implements AvalonInterceptorContext
     {
         return invocationId;
     }
-    
+
     /**
      * @see java.lang.Object#toString()
      */
     public String toString()
     {
         ToStringBuilder toStringBuilder = new ToStringBuilder(this);
-        
+
         toStringBuilder.append("serviceShorthand",this.serviceShorthand);
         toStringBuilder.append("serviceName",this.serviceName);
         toStringBuilder.append("serviceDelegate",this.serviceDelegate);
@@ -261,7 +263,7 @@ public class AvalonInterceptorContextImpl implements AvalonInterceptorContext
         toStringBuilder.append("invocationId",this.invocationId);
         toStringBuilder.append("invocationDepth",this.getInvocationDepth());
         toStringBuilder.append("requestContext",this.requestContext);
-        
+
         return toStringBuilder.toString();
     }
 }

@@ -1,31 +1,27 @@
 /*
- * $Header: /usr/local/cvsroot/it20one/service/it20one-service-framework/src/java/org/apache/fulcrum/yaafi/framework/locking/LockException.java,v 1.1 2005/09/22 11:04:12 sigi Exp $
- * $Revision: 1.1 $
- * $Date: 2005/09/22 11:04:12 $
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * ====================================================================
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Copyright 1999-2002 The Apache Software Foundation 
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.apache.fulcrum.yaafi.framework.locking;
 
 /**
  * Exception displaying a lock problem.
- * 
+ *
  * @version $Revision: 1.1 $
  * @since 1.1
  */
@@ -60,7 +56,7 @@ public class LockException extends RuntimeException {
 
     /**
      * Returns the formal reason for the exception.
-     * 
+     *
      * @return one of {@link #CODE_INTERRUPTED},{@link #CODE_TIMED_OUT}or
      *         {@link #CODE_DEADLOCK_VICTIM}.
      */
@@ -70,7 +66,7 @@ public class LockException extends RuntimeException {
 
     /**
      * Returns the resource the lock was tried on.
-     * 
+     *
      * @return the resource or <code>null</code> if not applicable
      */
     public Object getResourceId() {
@@ -79,7 +75,7 @@ public class LockException extends RuntimeException {
 
     /**
      * Returns the verbose for the exception.
-     * 
+     *
      * @return the reason message
      */
     public String getReason() {

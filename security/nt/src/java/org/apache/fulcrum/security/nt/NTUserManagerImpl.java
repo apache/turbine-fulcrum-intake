@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.nt;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import javax.security.auth.login.LoginException;
 
@@ -30,7 +33,7 @@ import org.apache.fulcrum.security.util.UserSet;
 import com.tagish.auth.win32.NTSystem;
 /**
  * This implementation attempts to manager users against NT.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -45,7 +48,7 @@ public class NTUserManagerImpl extends AbstractUserManager
      * Retrieve a user from persistent storage using username as the key, and
      * authenticate the user. The implementation may chose to authenticate to
      * the server as the user whose data is being retrieved.
-     * 
+     *
      * @param userName the name of the user.
      * @param password the user supplied password.
      * @return an User object.
@@ -66,9 +69,9 @@ public class NTUserManagerImpl extends AbstractUserManager
 
     /**
      * Check whether a specified user's account exists.
-     * 
+     *
      * The login name is used for looking up the account.
-     * 
+     *
      * @param user The user to be checked.
      * @return true if the specified account exists
      * @throws DataBackendException if there was an error accessing the data
@@ -94,9 +97,9 @@ public class NTUserManagerImpl extends AbstractUserManager
     }
     /**
      * Check whether a specified user's account exists.
-     * 
+     *
      * The login name is used for looking up the account.
-     * 
+     *
      * @param userName The name of the user to be checked.
      * @return true if the specified account exists
      * @throws DataBackendException if there was an error accessing the data
@@ -110,7 +113,7 @@ public class NTUserManagerImpl extends AbstractUserManager
     /**
      * Retrieve a user from persistent storage using username as the key. Not
      * supported currently.
-     * 
+     *
      * @param userName the name of the user.
      * @return an User object.
      * @exception UnknownEntityException if the user's account does not exist
@@ -129,7 +132,7 @@ public class NTUserManagerImpl extends AbstractUserManager
      * successful the method returns nothing. If there are any problems,
      * exception was thrown.  Additionally, if the User object is of type BasicUser
      * or DynamicUser, then it will populate all the group information as well!
-     * 
+     *
      * @param user an User object to authenticate.
      * @param password the user supplied password.
      * @exception PasswordMismatchException if the supplied password was
@@ -187,7 +190,7 @@ public class NTUserManagerImpl extends AbstractUserManager
 
     /**
      * Removes an user account from the system. Not supported currently.
-     * 
+     *
      * @param user the object describing the account to be removed.
      * @throws DataBackendException if there was an error accessing the data
      *             backend.
@@ -201,10 +204,10 @@ public class NTUserManagerImpl extends AbstractUserManager
     /**
      * Creates new user account with specified attributes. Not supported
      * currently.
-     * 
+     *
      * @param user the object describing account to be created.
      * @param password The password to use for the account.
-     * 
+     *
      * @throws DataBackendException if there was an error accessing the data
      *             backend.
      * @throws EntityExistsException if the user account already exists.
@@ -217,7 +220,7 @@ public class NTUserManagerImpl extends AbstractUserManager
     /**
      * Stores User attributes. The User is required to exist in the system. Not
      * supported currently.
-     * 
+     *
      * @param role The User to be stored.
      * @throws DataBackendException if there was an error accessing the data
      *             backend.
@@ -228,16 +231,16 @@ public class NTUserManagerImpl extends AbstractUserManager
     {
         throw new RuntimeException("Not supported by NT User Manager");
     }
-    
+
 	/**
 	 * Retrieves all users defined in the system.
-	 * 
+	 *
 	 * @return the names of all users defined in the system.
 	 * @throws DataBackendException if there was an error accessing the data backend.
 	 */
 	public UserSet getAllUsers() throws DataBackendException
 	{
 		throw new RuntimeException("Not supported by NT User Manager");
-	}       
+	}
 
 }

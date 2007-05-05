@@ -1,20 +1,22 @@
 package org.apache.fulcrum.yaafi.framework.interceptor;
 
 /*
- * Copyright 2004 Apache Software Foundation
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
- * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.lang.reflect.InvocationHandler;
@@ -44,13 +46,13 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
 
     /** the list of interceptors to be invoked */
     private AvalonInterceptorService [] serviceInterceptorList;
-    
+
     /** read/write lock to snychronize access to services */
     private ReadWriteLock readWriteLock;
-    
+
     /** counts the current transactions */
     private static volatile long transactionCounter = 0L;
-    
+
     /** the current transaction id */
     private Long transactionId;
 
@@ -139,9 +141,9 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
     {
         Object result = null;
         Object lock = null;
-        
+
         // create the interceptor context for current method call
-        
+
         AvalonInterceptorContext context = new AvalonInterceptorContextImpl(
             this.getServiceName(),
             this.getServiceShorthand(),
@@ -151,9 +153,9 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
             );
 
         // if no transaction id is currently define we create a new one
-        
+
         boolean hasCreatedTransaction = this.createTransactionId(context);
-        
+
         try
         {
             context.incrementInvocationDepth();
@@ -174,20 +176,20 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
         }
         finally
         {
-            // return the read lock 
-            
+            // return the read lock
+
             this.getReadWriteLock().releaseLock(lock,this.serviceName);
-            
+
             // decrement the service invocation depth
-            
+
             context.decrementInvocationDepth();
-            
+
             // reset the transaction id if we have created it before
-            
+
             if( hasCreatedTransaction )
             {
                 context.clearTransactionId();
-            }   
+            }
         }
     }
 
@@ -231,7 +233,7 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
             this.getServiceInterceptorList()[i].onError(context,t);
         }
     }
-    
+
     /**
      * @return Returns the readWriteLock.
      */
@@ -239,7 +241,7 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
     {
         return readWriteLock;
     }
-    
+
     /**
      * Creates a transaction id using the thread local storage
      * @param context current interceptor context
@@ -248,22 +250,22 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
     private boolean createTransactionId(AvalonInterceptorContext context)
     {
         Long currentTransactionId = null;
-        
+
         if( context.hasTransactionId() == false )
         {
             // create a new transaction id
-            
+
             currentTransactionId = new Long(
                 ++AvalonInterceptorInvocationHandler.transactionCounter
                 );
-            
+
             // store it in the TLS
-            
+
             context.setTransactionId(currentTransactionId);
-            
+
             return true;
         }
-        
+
         return false;
     }
 }

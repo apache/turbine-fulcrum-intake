@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.torque.dynamic;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.sql.Connection;
 import java.util.HashSet;
@@ -45,7 +48,7 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
 {
     /** a cache of group objects */
     private Set groupSet = null;
-    
+
     /** a cache of delegator (user) objects */
     private Set delegators = null;
 
@@ -54,46 +57,46 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
 
     /**
      * Forward reference to generated code
-     * 
-     * Get a list of association objects, pre-populated with their TorqueDynamicGroup 
+     *
+     * Get a list of association objects, pre-populated with their TorqueDynamicGroup
      * objects.
-     * 
+     *
      * @param criteria Criteria to define the selection of records
      * @throws TorqueException
-     * 
+     *
      * @return a list of User/Group relations
      */
-    protected abstract List getTorqueDynamicUserGroupsJoinTorqueDynamicGroup(Criteria criteria) 
+    protected abstract List getTorqueDynamicUserGroupsJoinTorqueDynamicGroup(Criteria criteria)
         throws TorqueException;
-    
+
     /**
      * Forward reference to generated code
-     * 
-     * Get a list of delegator association objects, pre-populated with their 
+     *
+     * Get a list of delegator association objects, pre-populated with their
      * TorqueDynamicUserDelegates objects.
-     * 
+     *
      * @param criteria Criteria to define the selection of records
      * @throws TorqueException
-     * 
+     *
      * @return a list of User/Delegator relations
      */
-    protected abstract List getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(Criteria criteria) 
+    protected abstract List getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(Criteria criteria)
         throws TorqueException;
-    
+
     /**
      * Forward reference to generated code
-     * 
-     * Get a list of delegatee association objects, pre-populated with their 
+     *
+     * Get a list of delegatee association objects, pre-populated with their
      * TorqueDynamicUserDelegates objects.
-     * 
+     *
      * @param criteria Criteria to define the selection of records
      * @throws TorqueException
-     * 
+     *
      * @return a list of User/Delegator relations
      */
-    protected abstract List getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(Criteria criteria) 
+    protected abstract List getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(Criteria criteria)
         throws TorqueException;
-    
+
     /**
      * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#addGroup(org.apache.fulcrum.security.entity.Group)
      */
@@ -228,32 +231,32 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
     public void retrieveAttachedObjects(Connection con) throws TorqueException
     {
         this.groupSet = new GroupSet();
-        
+
         List usergroups = getTorqueDynamicUserGroupsJoinTorqueDynamicGroup(new Criteria());
 
         for (Iterator i = usergroups.iterator(); i.hasNext();)
         {
-            TorqueDynamicUserGroup tdug = (TorqueDynamicUserGroup)i.next(); 
+            TorqueDynamicUserGroup tdug = (TorqueDynamicUserGroup)i.next();
             groupSet.add(tdug.getTorqueDynamicGroup());
         }
 
         this.delegators = new HashSet();
-        
+
         List delegatorlist = getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(new Criteria());
 
         for (Iterator i = delegatorlist.iterator(); i.hasNext();)
         {
-            TorqueDynamicUserDelegates tdud = (TorqueDynamicUserDelegates)i.next(); 
+            TorqueDynamicUserDelegates tdud = (TorqueDynamicUserDelegates)i.next();
             delegators.add(tdud.getTorqueDynamicUserRelatedByDelegatorUserId());
         }
 
         this.delegatees = new HashSet();
-        
+
         List delegateelist = getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(new Criteria());
 
         for (Iterator i = delegateelist.iterator(); i.hasNext();)
         {
-            TorqueDynamicUserDelegates tdud = (TorqueDynamicUserDelegates)i.next(); 
+            TorqueDynamicUserDelegates tdud = (TorqueDynamicUserDelegates)i.next();
             delegatees.add(tdud.getTorqueDynamicUserRelatedByDelegateeUserId());
         }
     }
@@ -266,7 +269,7 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
         if (groupSet != null)
         {
             Criteria criteria = new Criteria();
-            
+
             /* remove old entries */
             criteria.add(TorqueDynamicUserGroupPeer.USER_ID, getEntityId());
             TorqueDynamicUserGroupPeer.doDelete(criteria, con);
@@ -281,11 +284,11 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
                 ug.save(con);
             }
         }
-        
+
         if (delegators != null)
         {
             Criteria criteria = new Criteria();
-            
+
             /* remove old entries */
             criteria.add(TorqueDynamicUserDelegatesPeer.DELEGATEE_USER_ID, getEntityId());
             TorqueDynamicUserDelegatesPeer.doDelete(criteria, con);
@@ -300,11 +303,11 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
                 ud.save(con);
             }
         }
-        
+
         if (delegatees != null)
         {
             Criteria criteria = new Criteria();
-            
+
             /* remove old entries */
             criteria.add(TorqueDynamicUserDelegatesPeer.DELEGATOR_USER_ID, getEntityId());
             TorqueDynamicUserDelegatesPeer.doDelete(criteria, con);

@@ -1,20 +1,22 @@
 package org.apache.fulcrum.resourcemanager.impl;
 
 /*
- * Copyright 2004 Apache Software Foundation
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
- * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.io.BufferedInputStream;
@@ -52,40 +54,40 @@ import org.apache.fulcrum.pbe.PBEService;
 
 public abstract class BaseResourceManager
 	extends AbstractLogEnabled
-    implements Contextualizable, Serviceable, Configurable,  
+    implements Contextualizable, Serviceable, Configurable,
     	Initializable, Disposable, Reconfigurable, ResourceManager
 {
     /** the buffer size for copying streams */
     private static final int BUF_SIZE = 1024;
-    
+
     /** The context supplied by the avalon framework */
     private Context context;
-    
+
     /** The service manager supplied by the avalon framework */
     private ServiceManager serviceManager;
-    
+
     /** The configuraton supplied by the avalon framework */
     private Configuration configuration;
-    
+
     /** the Avalon application directory */
     private File applicationDir;
 
     /** the Avalon temp directory */
     private File tempDir;
-    
+
     /** the name of the domain */
     private String domain;
 
     /** the seed to generate the password */
     private String seed;
-    
+
     /** use transparent encryption/decryption */
-    private String useEncryption;   
-    
+    private String useEncryption;
+
     /////////////////////////////////////////////////////////////////////////
     // Avalon Service Lifecycle Implementation
     /////////////////////////////////////////////////////////////////////////
-    
+
     /**
      * Constructor
      */
@@ -93,7 +95,7 @@ public abstract class BaseResourceManager
     {
         // nothing to do
     }
-    
+
     /**
      * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
      */
@@ -111,7 +113,7 @@ public abstract class BaseResourceManager
     {
         this.serviceManager = serviceManager;
     }
-    
+
     /**
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
@@ -121,7 +123,7 @@ public abstract class BaseResourceManager
         this.setDomain( configuration.getAttribute("name") );
         this.seed = "resourcemanager";
     }
-    
+
     /**
      * @see org.apache.avalon.framework.activity.Initializable#initialize()
      */
@@ -129,7 +131,7 @@ public abstract class BaseResourceManager
     {
         // nothing to do
     }
-        
+
     /**
      * @see org.apache.avalon.framework.activity.Disposable#dispose()
      */
@@ -141,7 +143,7 @@ public abstract class BaseResourceManager
         this.domain = null;
         this.seed = null;
         this.serviceManager = null;
-        this.tempDir = null;        
+        this.tempDir = null;
     }
 
     /**
@@ -152,7 +154,7 @@ public abstract class BaseResourceManager
     {
         this.configure(configuration);
     }
-    
+
     /////////////////////////////////////////////////////////////////////////
     // Service Implementation
     /////////////////////////////////////////////////////////////////////////
@@ -164,7 +166,7 @@ public abstract class BaseResourceManager
     {
         return this.configuration;
     }
-    
+
     /**
      * @return Returns the context.
      */
@@ -172,7 +174,7 @@ public abstract class BaseResourceManager
     {
         return this.context;
     }
-            
+
     /**
      * @return Returns the serviceManager.
      */
@@ -180,7 +182,7 @@ public abstract class BaseResourceManager
     {
         return this.serviceManager;
     }
-    
+
     /**
      * @return Returns the applicationDir.
      */
@@ -188,7 +190,7 @@ public abstract class BaseResourceManager
     {
         return applicationDir;
     }
-    
+
     /**
      * @return Returns the tempDir.
      */
@@ -196,7 +198,7 @@ public abstract class BaseResourceManager
     {
         return tempDir;
     }
-    
+
     /**
      * @return Returns the domain.
      */
@@ -204,7 +206,7 @@ public abstract class BaseResourceManager
     {
         return domain;
     }
-    
+
     /**
      * Get the content as byte[]
      */
@@ -227,10 +229,10 @@ public abstract class BaseResourceManager
         }
         else if( content instanceof Properties )
         {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();            
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ((Properties) content).store( baos, "Created by fulcrum-resourcemanager-service" );
             result = baos.toByteArray();
-        }        
+        }
         else
         {
             String msg = "Don't know how to read " + content.getClass().getName();
@@ -239,7 +241,7 @@ public abstract class BaseResourceManager
 
         return result;
     }
-    
+
     /**
      * Extract a byte[] from the input stream.
      */
@@ -257,15 +259,15 @@ public abstract class BaseResourceManager
         {
             osWriter.write(ch);
         }
-        
+
         osWriter.flush();
         data = os.toByteArray();
         osWriter.close();
         isReader.close();
-        
+
         return data;
     }
-    
+
     /**
      * @param domain The domain to set.
      */
@@ -273,7 +275,7 @@ public abstract class BaseResourceManager
     {
         this.domain = domain;
     }
-    
+
     /**
      * @return Returns the useEncryption.
      */
@@ -281,7 +283,7 @@ public abstract class BaseResourceManager
     {
         return useEncryption;
     }
-    
+
     /**
      * @param useEncryption The useEncryption to set.
      */
@@ -289,15 +291,15 @@ public abstract class BaseResourceManager
     {
         this.useEncryption = useEncryption;
     }
-    
-    /** 
+
+    /**
      * @return the instance of the PBEService
      */
     protected PBEService getPBEService()
     {
         String service = PBEService.class.getName();
         PBEService result = null;
-        
+
         if( this.getServiceManager().hasService(service) )
         {
             try
@@ -316,18 +318,18 @@ public abstract class BaseResourceManager
             String msg = "The PBEService is not registered";
             throw new RuntimeException( msg );
         }
-        
+
         return result;
-    }    
-    
-    /** 
+    }
+
+    /**
      * @return the password for the resource manager
      */
     private char[] getPassword() throws Exception
 	{
 	    return this.getPBEService().createPassword( this.seed.toCharArray() );
 	}
-    
+
     /**
      * Reads the given input stream and decrypts it if required
      * @param is the input stream to be read
@@ -361,7 +363,7 @@ public abstract class BaseResourceManager
         byte[] result = null;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         this.copy(is,baos);
-        result = baos.toByteArray();        
+        result = baos.toByteArray();
         return result;
     }
 
@@ -432,9 +434,9 @@ public abstract class BaseResourceManager
     }
 
     /**
-     * Write the given output stream and encrypts it if required. If the 
+     * Write the given output stream and encrypts it if required. If the
      * encryption mode is "auto" we also encryt it.
-     * 
+     *
      * @param os the output stream to be written
      * @param content the content to be written
      */
@@ -465,9 +467,9 @@ public abstract class BaseResourceManager
     	throws IOException
     {
         ByteArrayInputStream bais = new ByteArrayInputStream(content);
-        this.copy( bais, os );        
+        this.copy( bais, os );
     }
-    
+
     /**
      * Write the given file and encrypt it.
      * @param target the target file
@@ -497,7 +499,7 @@ public abstract class BaseResourceManager
             throw new IOException( msg );
         }
     }
-    
+
     /**
      * Pumps the input stream to the output stream.
      *
@@ -520,5 +522,5 @@ public abstract class BaseResourceManager
 
         os.flush();
         os.close();
-    }        
+    }
 }

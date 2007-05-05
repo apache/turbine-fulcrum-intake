@@ -1,19 +1,22 @@
 package org.apache.fulcrum.cache;
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.io.ByteArrayOutputStream;
@@ -80,7 +83,7 @@ public class DefaultGlobalCacheService
      * cacheCheckFrequency (default - 5 seconds)
      */
     private long cacheCheckFrequency;
-    
+
 	/**
 	 * cacheInitialSize (default - 20)
 	 */
@@ -173,25 +176,25 @@ public class DefaultGlobalCacheService
     {
         cache.remove(id);
     }
-    
+
     /**
      * Returns a copy of keys to objects in the cache as a list.
-     * 
+     *
      * Note that keys to expired objects are not returned.
-     * 
+     *
      * @return A List of <code>String</code>'s representing the keys to objects
      * in the cache.
      */
     public List getKeys() {
         ArrayList keys = new ArrayList(cache.size());
         synchronized (this) {
-            for (Iterator itr = cache.keySet().iterator(); itr.hasNext();) 
+            for (Iterator itr = cache.keySet().iterator(); itr.hasNext();)
             {
                 String key = (String) itr.next();
                 try {
                     /* CachedObject obj = */ getObject(key);
                 } catch (ObjectExpiredException oee) {
-                    // this is OK we just do not want this key 
+                    // this is OK we just do not want this key
                     continue;
                 }
                 keys.add(new String(key));
@@ -199,25 +202,25 @@ public class DefaultGlobalCacheService
         }
         return (List)keys;
     }
-    
+
     /**
-     * Returns a copy of the non-expired CachedObjects 
+     * Returns a copy of the non-expired CachedObjects
      * in the cache as a list.
-     * 
-     * @return A List of <code>CachedObject</code> objects 
+     *
+     * @return A List of <code>CachedObject</code> objects
      * held in the cache
      */
     public List getCachedObjects() {
         ArrayList objects = new ArrayList(cache.size());
         synchronized (this) {
-            for (Iterator itr = cache.keySet().iterator(); itr.hasNext();) 
+            for (Iterator itr = cache.keySet().iterator(); itr.hasNext();)
             {
                 String key = (String) itr.next();
                 CachedObject obj = null;
                 try {
                     obj = getObject(key);
                 } catch (ObjectExpiredException oee) {
-                    // this is OK we just do not want this object 
+                    // this is OK we just do not want this object
                     continue;
                 }
                 objects.add(obj);
@@ -225,8 +228,8 @@ public class DefaultGlobalCacheService
         }
         return (List)objects;
     }
-    
-    
+
+
     /**
      * Circle through the cache and remove stale objects.  Frequency
      * is determined by the cacheCheckFrequency property.
@@ -245,7 +248,7 @@ public class DefaultGlobalCacheService
             {
                 if (!continueThread) return;
             }
-            
+
             clearCache();
         }
     }
@@ -350,7 +353,7 @@ public class DefaultGlobalCacheService
             // Start housekeeping thread.
             continueThread = true;
             housekeeping = new Thread(this);
-            // Indicate that this is a system thread. JVM will quit only when 
+            // Indicate that this is a system thread. JVM will quit only when
             // there are no more active user threads. Settings threads spawned
             // internally by Turbine as daemons allows commandline applications
             // using Turbine to terminate in an orderly manner.
@@ -373,7 +376,7 @@ public class DefaultGlobalCacheService
     }
 
     /**
-     * The name used to specify this component in TurbineResources.properties 
+     * The name used to specify this component in TurbineResources.properties
      * @deprecated part of the pre-avalon compatibility layer
      */
     protected String getName()

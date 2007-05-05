@@ -1,20 +1,22 @@
 package org.apache.fulcrum.yaafi.interceptor.baseservice;
 
 /*
- * Copyright 2004 Apache Software Foundation
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
- * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.io.File;
@@ -44,13 +46,13 @@ public class BaseInterceptorServiceImpl
 {
     /** this matches all services */
     private static final String WILDCARD = "*";
-    
+
     /** contains the services being monitored by the interceptor */
     private HashSet serviceSet;
-    
+
     /** is the interceptor service enabled */
     private boolean isEnabled;
-    
+
     /** The name of the service as defined in the role configuration file */
     private String serviceName;
 
@@ -62,10 +64,10 @@ public class BaseInterceptorServiceImpl
 
     /** the Avalon temp directory */
     private File serviceTempDir;
-    
+
     /** the supplied class loader */
     private ClassLoader classLoader;
-    
+
 
     /////////////////////////////////////////////////////////////////////////
     // Avalon Service Lifecycle Implementation
@@ -97,9 +99,9 @@ public class BaseInterceptorServiceImpl
     {
         // take care - the default is disabled which is helpful
         // for the way we use the interceptors
-        
+
         this.isEnabled = configuration.getChild("isEnabled").getValueAsBoolean(false);
-            
+
         // parse the service to be monitored
 
         Configuration[] serviceConfigList = configuration.getChild("services").getChildren("service");
@@ -155,7 +157,7 @@ public class BaseInterceptorServiceImpl
     {
         // nothing to do
     }
-    
+
     /**
      * @see org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorService#onExit(org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorContext, java.lang.Object)
      */
@@ -175,11 +177,11 @@ public class BaseInterceptorServiceImpl
     {
         return isEnabled;
     }
-    
+
     /**
      * Determine if the given service is monitored.
-     * 
-     * @param avalonInterceptorContext interceptor context 
+     *
+     * @param avalonInterceptorContext interceptor context
      * @return true if the service is monitored or false otherwise
      */
     protected boolean isServiceMonitored( AvalonInterceptorContext avalonInterceptorContext )
@@ -205,7 +207,7 @@ public class BaseInterceptorServiceImpl
             return false;
         }
     }
-           
+
     /**
      * @return Returns the serviceApplicationDir.
      */
@@ -213,7 +215,7 @@ public class BaseInterceptorServiceImpl
     {
         return serviceApplicationDir;
     }
-    
+
     /**
      * @return Returns the serviceManager.
      */
@@ -221,7 +223,7 @@ public class BaseInterceptorServiceImpl
     {
         return serviceManager;
     }
-    
+
     /**
      * @return Returns the serviceName.
      */
@@ -229,7 +231,7 @@ public class BaseInterceptorServiceImpl
     {
         return serviceName;
     }
-    
+
     /**
      * @return Returns the serviceTempDir.
      */
@@ -237,7 +239,7 @@ public class BaseInterceptorServiceImpl
     {
         return serviceTempDir;
     }
-    
+
     /**
 		 * @return Returns the classLoader.
 		 */
@@ -271,5 +273,5 @@ public class BaseInterceptorServiceImpl
     private HashSet getServiceSet()
     {
         return serviceSet;
-    }      
+    }
 }

@@ -1,19 +1,22 @@
 package org.apache.fulcrum.util;
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.util.NoSuchElementException;
@@ -22,7 +25,7 @@ import java.util.StringTokenizer;
 import org.apache.commons.lang.StringUtils;
 /**
  * <code>WordWrapUtils</code> is a utility class to assist with word wrapping.
- * 
+ *
  * @author Henri Yandell
  * @author Stephen Colebourne
  * @version $Id$
@@ -36,7 +39,7 @@ public class WordWrapUtils {
      * Wraps a block of text to a specified line length.
      * <p>
      * This method takes a block of text, which might have long lines in it
-     * and wraps the long lines based on the supplied wrapColumn parameter. 
+     * and wraps the long lines based on the supplied wrapColumn parameter.
      * It was initially implemented for use by VelocityEmail. If there are tabs
      * in inString, you are going to get results that are a bit strange,
      * since tabs are a single character but are displayed as 4 or 8
@@ -72,7 +75,7 @@ public class WordWrapUtils {
     }
 
     /**
-     * Wraps a single line of text. 
+     * Wraps a single line of text.
      * Called by wrapText() to do the real work of wrapping.
      *
      * @param line  a line which is in need of word-wrapping
@@ -121,16 +124,16 @@ public class WordWrapUtils {
     //--------------------------------------------------------------------------
 
     /**
-     * Create a word-wrapped version of a String. Wrap at 80 characters and 
-     * use newlines as the delimiter. If a word is over 80 characters long 
+     * Create a word-wrapped version of a String. Wrap at 80 characters and
+     * use newlines as the delimiter. If a word is over 80 characters long
      * use a - sign to split it.
      */
     public static String wordWrap(String str) {
         return wordWrap(str, 80, "\n", "-");
     }
     /**
-     * Create a word-wrapped version of a String. Wrap at a specified width and 
-     * use newlines as the delimiter. If a word is over the width in lenght 
+     * Create a word-wrapped version of a String. Wrap at a specified width and
+     * use newlines as the delimiter. If a word is over the width in lenght
      * use a - sign to split it.
      */
     public static String wordWrap(String str, int width) {

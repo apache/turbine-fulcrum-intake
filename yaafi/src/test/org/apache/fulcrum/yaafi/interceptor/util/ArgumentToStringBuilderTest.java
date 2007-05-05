@@ -1,19 +1,22 @@
 package org.apache.fulcrum.yaafi.interceptor.util;
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.io.File;
@@ -24,8 +27,8 @@ import java.util.Properties;
 import junit.framework.TestCase;
 
 /**
- * Test suite for the SmartToStringBuilderImpl. 
- * 
+ * Test suite for the SmartToStringBuilderImpl.
+ *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
@@ -35,8 +38,8 @@ public class ArgumentToStringBuilderTest extends TestCase
     private ArgumentToStringBuilderImpl toStringBuilder;
     private int maxArgLength = 100;
     int mode = 3;
-    
-    
+
+
     /**
      * Constructor
      * @param name the name of the test case
@@ -45,7 +48,7 @@ public class ArgumentToStringBuilderTest extends TestCase
     {
         super(name);
     }
-        
+
     /**
      * @see junit.framework.TestCase#setUp()
      */
@@ -57,7 +60,7 @@ public class ArgumentToStringBuilderTest extends TestCase
         this.toStringBuilder.setMode(this.mode);
         System.out.println( "=== " + this.getName() + " ====================================");
     }
-    
+
     /**
      * @see junit.framework.TestCase#setUp()
      */
@@ -106,7 +109,7 @@ public class ArgumentToStringBuilderTest extends TestCase
         this.toStringBuilder.setTarget(target);
         result = toStringBuilder.toString();
     }
-    
+
     /**
      * Test with a simple Integer[]
      */
@@ -116,7 +119,7 @@ public class ArgumentToStringBuilderTest extends TestCase
         this.toStringBuilder.setTarget(target);
         result = toStringBuilder.toString();
     }
-    
+
     /**
      * Test with an Exception
      */
@@ -196,7 +199,7 @@ public class ArgumentToStringBuilderTest extends TestCase
         int[] row2 = { 1, 2, 3 };
         String[] row3 = {"r3.1" };
         Object[] target = { row1, row2, row3, this.getName().toCharArray() };
-        
+
         this.toStringBuilder.setTarget(target);
         result = toStringBuilder.toString();
     }
@@ -209,7 +212,7 @@ public class ArgumentToStringBuilderTest extends TestCase
         Hashtable target = new Hashtable();
         target.put("foo","foo");
         target.put("bar","bar");
-        
+
         this.toStringBuilder.setTarget(target);
         result = toStringBuilder.toString();
     }
@@ -220,11 +223,11 @@ public class ArgumentToStringBuilderTest extends TestCase
     public void testProperties()
     {
         Properties target = System.getProperties();
-        
+
         this.toStringBuilder.setTarget(target);
         result = toStringBuilder.toString();
     }
-    
+
     /**
      * Test with an ArrayList
      */
@@ -233,7 +236,7 @@ public class ArgumentToStringBuilderTest extends TestCase
         ArrayList target = new ArrayList();
         target.add("foo");
         target.add("bar");
-        
+
         this.toStringBuilder.setTarget(target);
         result = toStringBuilder.toString();
     }
@@ -244,7 +247,7 @@ public class ArgumentToStringBuilderTest extends TestCase
     public void testIntArray()
     {
         int[] target = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-        
+
         this.toStringBuilder.setTarget(target);
         result = toStringBuilder.toString();
     }
@@ -255,7 +258,7 @@ public class ArgumentToStringBuilderTest extends TestCase
     public void testEmptyIntArray()
     {
         int[] target = {};
-        
+
         this.toStringBuilder.setTarget(target);
         result = toStringBuilder.toString();
     }
@@ -266,7 +269,7 @@ public class ArgumentToStringBuilderTest extends TestCase
     public void testBooleanArray()
     {
         boolean[] target = { true, false };
-        
+
         this.toStringBuilder.setTarget(target);
         result = toStringBuilder.toString();
     }
@@ -277,10 +280,10 @@ public class ArgumentToStringBuilderTest extends TestCase
     public void testFileArray()
     {
         File[] target = { new File("foo"), new File("bar") };
-        
+
         this.toStringBuilder.setTarget(target);
         result = toStringBuilder.toString();
     }
 
-    
+
 }

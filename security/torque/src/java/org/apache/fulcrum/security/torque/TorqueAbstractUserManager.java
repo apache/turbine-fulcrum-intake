@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.torque;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.sql.Connection;
 import java.util.Iterator;
@@ -38,9 +41,9 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
 {
     /**
      * Get all specialized Users
-     * 
+     *
      * @param con a database connection
-     * 
+     *
      * @return a List of User instances
      *
      * @throws TorqueException if any database error occurs
@@ -50,10 +53,10 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
 
     /**
      * Get a specialized User by name
-     * 
+     *
      * @param name the name of the group
      * @param con a database connection
-     * 
+     *
      * @return a User instance
      *
      * @throws NoRowsException if no such group exists
@@ -65,10 +68,10 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
 
     /**
      * Get a specialized User by id
-     * 
+     *
      * @param id the id of the group
      * @param con a database connection
-     * 
+     *
      * @return a User instance
      *
      * @throws NoRowsException if no such group exists
@@ -118,7 +121,7 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
         {
             throw new DataBackendException("Adding User '" + user.getName() + "' failed", e);
         }
-        
+
         return user;
     }
 
@@ -164,18 +167,18 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
     public boolean checkExists(String userName) throws DataBackendException
     {
         boolean exists = false;
-        
+
         Connection con = null;
-        
+
         try
         {
             con = Transaction.begin(((TorqueAbstractSecurityEntity)getUserInstance()).getDatabaseName());
-    
+
             doSelectByName(userName, con);
-            
+
             Transaction.commit(con);
             con = null;
-    
+
             exists = true;
         }
         catch (NoRowsException e)
@@ -197,7 +200,7 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
                 Transaction.safeRollback(con);
             }
         }
-    
+
         return exists;
     }
 
@@ -216,16 +219,16 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
     {
         User user = null;
         Connection con = null;
-    
+
         try
         {
             con = Transaction.begin(((TorqueAbstractSecurityEntity)getUserInstance()).getDatabaseName());
-            
+
             user = doSelectByName(userName.toLowerCase(), con);
-            
+
             // Add attached objects if they exist
             ((TorqueAbstractSecurityEntity)user).retrieveAttachedObjects(con);
-            
+
             Transaction.commit(con);
             con = null;
         }
@@ -248,7 +251,7 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
                 Transaction.safeRollback(con);
             }
         }
-    
+
         return user;
     }
 
@@ -263,23 +266,23 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
     {
         UserSet userSet = new UserSet();
         Connection con = null;
-    
+
         try
         {
             con = Transaction.begin(((TorqueAbstractSecurityEntity)getUserInstance()).getDatabaseName());
-            
+
             List users = doSelectAllUsers(con);
-    
+
             for (Iterator i = users.iterator(); i.hasNext();)
             {
                 User user = (User)i.next();
-    
+
                 // Add attached objects if they exist
                 ((TorqueAbstractSecurityEntity)user).retrieveAttachedObjects(con);
-                
+
                 userSet.add(user);
             }
-    
+
             Transaction.commit(con);
             con = null;
         }
@@ -294,7 +297,7 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
                 Transaction.safeRollback(con);
             }
         }
-        
+
         return userSet;
     }
 
@@ -312,20 +315,20 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
     public User getUserById(Object id) throws DataBackendException, UnknownEntityException
     {
         User user;
-    
+
         if (id != null && id instanceof Integer)
         {
             Connection con = null;
-            
+
             try
             {
                 con = Transaction.begin(((TorqueAbstractSecurityEntity)getUserInstance()).getDatabaseName());
-                
+
                 user = doSelectById((Integer)id, con);
-    
+
                 // Add attached objects if they exist
                 ((TorqueAbstractSecurityEntity)user).retrieveAttachedObjects(con);
-                
+
                 Transaction.commit(con);
                 con = null;
             }
@@ -349,7 +352,7 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
         {
             throw new UnknownEntityException("Invalid user id '" + id + "'");
         }
-    
+
         return user;
     }
 }

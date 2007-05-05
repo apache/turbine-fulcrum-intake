@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
 
 <document>
 
@@ -33,10 +51,10 @@
      information in the Global Cache and decrease the overhead of
      hitting the database everytime you need State information.
     </p>
-      
+
     <p>
-      It is written 
-      for use in Turbine but it can be used in any container compatible 
+      It is written
+      for use in Turbine but it can be used in any container compatible
       with Avalon's ECM container.
     </p>
 
@@ -63,7 +81,7 @@
     ]]>
     </source>
   </section>
-  
+
   <section name="EHCacheService" id="EHCacheService">
 
     <p>
@@ -85,19 +103,19 @@
     <source>
 
     <![CDATA[
- <ehcache>   
-          
+ <ehcache>
+
     </ehcache>
     ]]>
     </source>
 
   </section>
-    
+
   <section name="JCSCacheService" id="JCSCacheService">
 
 	<p>
 	  The JCS cache service implements the interface <code>GlobalCacheService</code> and thus can
-	  serve as a drop-in replacement for <code>DefaultGlobalCacheService</code>. However it is 
+	  serve as a drop-in replacement for <code>DefaultGlobalCacheService</code>. However it is
 	  possible to configure the cache behaviour in much more detail to provide disk caches or lateral TCP
 	  caches for example.
 	</p>
@@ -132,7 +150,7 @@
       <code>fulcrum</code>. JCS will store the objects in a group named <code>default_group</code> in that
       region. The configuration file parameter gives the location of the JCS configuration file. Please
       note that JCS uses a class loader to read this file, so make sure this path is part of your classpath.
-      The default values of all configuration settings are shown in the example. 
+      The default values of all configuration settings are shown in the example.
       See <a href="http://jakarta.apache.org/jcs/">the JCS site</a> for more information about configuring
       JCS.
     </p>
@@ -176,11 +194,11 @@
     You can also place an expiration time on your objects so the Service will
     automatically remove them when they expire. If you don't specify an expiration
     time, the DefaultGlobalCacheService uses 5 seconds. For JCS this value depends on values set
-    in the cache configuration file. To see an example, look at the 
+    in the cache configuration file. To see an example, look at the
     test case <a href="xref-test/org/apache/fulcrum/cache/CacheTest.html">CacheTest</a>
     </p>
 
-  </section> 
+  </section>
 
 </body>
 </document>

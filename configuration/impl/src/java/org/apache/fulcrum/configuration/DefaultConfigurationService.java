@@ -1,18 +1,21 @@
 package org.apache.fulcrum.configuration;
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.io.File;
@@ -43,7 +46,7 @@ import org.apache.commons.configuration.XMLConfiguration;
 /**
  * Starts up a commons configuration Configuration object via an
  * Avalon container.
- * 
+ *
  *
  * The component configuration is carved after the
  * <a href="http://jakarta.apache.org/commons/configuration/howto_configurationfactory.html">CompositeConfiguraton</a>
@@ -69,7 +72,7 @@ import org.apache.commons.configuration.XMLConfiguration;
  * @avalon.component name="config" lifestyle="singleton"
  * @avalon.service type="org.apache.commons.configuration.Configuration"
  * @avalon.attribute key="urn:composition:deployment.timeout" value="0"
- * 
+ *
  */
 public class DefaultConfigurationService
     extends AbstractLogEnabled
@@ -447,7 +450,7 @@ public class DefaultConfigurationService
 
         // for backward compatibility
         String confPath = conf.getAttribute(CONFIGURATION_PATH, null);
-        
+
         Configuration cfgs[] = conf.getChildren();
 
         if ((cfgs == null || cfgs.length == 0) && (confPath == null || confPath.length() == 0))
@@ -478,7 +481,7 @@ public class DefaultConfigurationService
                     e);
             }
         }
-        
+
         for (int i=0; i<cfgs.length; i++)
         {
             Configuration c = cfgs[i];
@@ -615,7 +618,7 @@ public class DefaultConfigurationService
             // try ECM, let exception throw on failure
             applicationRoot = (String)context.get("componentAppRoot");
         }
- 
+
         if (applicationRoot == null || applicationRoot.length() == 0)
         {
             throw new ContextException("Invalid Application Root");

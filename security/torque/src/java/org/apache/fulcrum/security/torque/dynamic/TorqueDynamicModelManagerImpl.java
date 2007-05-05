@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.torque.dynamic;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.sql.Connection;
 
@@ -59,14 +62,14 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
             ((DynamicRole) role).removeGroup(group);
 
             Connection con = null;
-            
+
             try
             {
                 con = Transaction.begin(((TorqueAbstractSecurityEntity)role).getDatabaseName());
-                
+
                 ((TorqueAbstractSecurityEntity)role).update(con);
                 ((TorqueAbstractSecurityEntity)group).update(con);
-                
+
                 Transaction.commit(con);
                 con = null;
             }
@@ -81,7 +84,7 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
                     Transaction.safeRollback(con);
                 }
             }
-            
+
             return;
         }
 
@@ -116,14 +119,14 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
             ((DynamicPermission) permission).addRole(role);
 
             Connection con = null;
-            
+
             try
             {
                 con = Transaction.begin(((TorqueAbstractSecurityEntity)role).getDatabaseName());
-                
+
                 ((TorqueAbstractSecurityEntity)role).update(con);
                 ((TorqueAbstractSecurityEntity)permission).update(con);
-                
+
                 Transaction.commit(con);
                 con = null;
             }
@@ -138,7 +141,7 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
                     Transaction.safeRollback(con);
                 }
             }
-            
+
             return;
         }
 
@@ -152,7 +155,7 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
             throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
         }
     }
-    
+
     /**
      * Revokes a Permission from a Role.
      *
@@ -173,14 +176,14 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
             ((DynamicPermission) permission).removeRole(role);
 
             Connection con = null;
-            
+
             try
             {
                 con = Transaction.begin(((TorqueAbstractSecurityEntity)role).getDatabaseName());
-                
+
                 ((TorqueAbstractSecurityEntity)role).update(con);
                 ((TorqueAbstractSecurityEntity)permission).update(con);
-                
+
                 Transaction.commit(con);
                 con = null;
             }
@@ -195,15 +198,15 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
                     Transaction.safeRollback(con);
                 }
             }
-            
+
             return;
         }
-        
+
         if (!roleExists)
         {
             throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
         }
-        
+
         if (!permissionExists)
         {
             throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
@@ -223,21 +226,21 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
     {
         boolean groupExists = getGroupManager().checkExists(group);
         boolean userExists = getUserManager().checkExists(user);
-        
+
         if (groupExists && userExists)
         {
             ((DynamicUser) user).addGroup(group);
             ((DynamicGroup) group).addUser(user);
-            
+
             Connection con = null;
-            
+
             try
             {
                 con = Transaction.begin(((TorqueAbstractSecurityEntity)user).getDatabaseName());
-                
+
                 ((TorqueAbstractSecurityEntity)user).update(con);
                 ((TorqueAbstractSecurityEntity)group).update(con);
-                
+
                 Transaction.commit(con);
                 con = null;
             }
@@ -280,21 +283,21 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
     {
         boolean groupExists = getGroupManager().checkExists(group);
         boolean userExists = getUserManager().checkExists(user);
-        
+
         if (groupExists && userExists)
         {
             ((DynamicUser) user).removeGroup(group);
             ((DynamicGroup) group).removeUser(user);
-            
+
             Connection con = null;
-            
+
             try
             {
                 con = Transaction.begin(((TorqueAbstractSecurityEntity)user).getDatabaseName());
-                
+
                 ((TorqueAbstractSecurityEntity)user).update(con);
                 ((TorqueAbstractSecurityEntity)group).update(con);
-                
+
                 Transaction.commit(con);
                 con = null;
             }
@@ -337,21 +340,21 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
     {
         boolean groupExists = getGroupManager().checkExists(group);
         boolean roleExists = getRoleManager().checkExists(role);
-        
+
         if (groupExists && roleExists)
         {
             ((DynamicGroup) group).addRole(role);
             ((DynamicRole) role).addGroup(group);
-            
+
             Connection con = null;
-            
+
             try
             {
                 con = Transaction.begin(((TorqueAbstractSecurityEntity)role).getDatabaseName());
-                
+
                 ((TorqueAbstractSecurityEntity)role).update(con);
                 ((TorqueAbstractSecurityEntity)group).update(con);
-                
+
                 Transaction.commit(con);
                 con = null;
             }
@@ -366,7 +369,7 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
                     Transaction.safeRollback(con);
                 }
             }
-            
+
             return;
         }
 
@@ -387,31 +390,31 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
      * @param delegatee B
      */
     public synchronized void addDelegate(User delegator, User delegatee)
-            throws DataBackendException, UnknownEntityException 
+            throws DataBackendException, UnknownEntityException
     {
         boolean delegatorExists = getUserManager().checkExists(delegator);
         boolean delegateeExists = getUserManager().checkExists(delegatee);
-        
+
         if (delegatorExists && delegateeExists)
         {
             super.addDelegate(delegator, delegatee);
 
             Connection con = null;
-            
+
             try
             {
                 con = Transaction.begin(((TorqueAbstractSecurityEntity)delegator).getDatabaseName());
-                
+
                 ((TorqueAbstractSecurityEntity)delegator).update(con);
                 ((TorqueAbstractSecurityEntity)delegatee).update(con);
-                
+
                 Transaction.commit(con);
                 con = null;
             }
             catch (TorqueException e)
             {
-                throw new DataBackendException("addDelegate('" 
-                        + delegator.getName() + "', '" 
+                throw new DataBackendException("addDelegate('"
+                        + delegator.getName() + "', '"
                         + delegatee.getName() + "') failed", e);
             }
             finally
@@ -421,7 +424,7 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
                     Transaction.safeRollback(con);
                 }
             }
-            
+
             return;
         }
 
@@ -442,31 +445,31 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
      * @param delegatee B
      */
     public synchronized void removeDelegate(User delegator, User delegatee)
-            throws DataBackendException, UnknownEntityException 
+            throws DataBackendException, UnknownEntityException
     {
         boolean delegatorExists = getUserManager().checkExists(delegator);
         boolean delegateeExists = getUserManager().checkExists(delegatee);
-        
+
         if (delegatorExists && delegateeExists)
         {
             super.removeDelegate(delegator, delegatee);
 
             Connection con = null;
-            
+
             try
             {
                 con = Transaction.begin(((TorqueAbstractSecurityEntity)delegator).getDatabaseName());
-                
+
                 ((TorqueAbstractSecurityEntity)delegator).update(con);
                 ((TorqueAbstractSecurityEntity)delegatee).update(con);
-                
+
                 Transaction.commit(con);
                 con = null;
             }
             catch (TorqueException e)
             {
-                throw new DataBackendException("removeDelegate('" 
-                        + delegator.getName() + "', '" 
+                throw new DataBackendException("removeDelegate('"
+                        + delegator.getName() + "', '"
                         + delegatee.getName() + "') failed", e);
             }
             finally
@@ -476,7 +479,7 @@ public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager i
                     Transaction.safeRollback(con);
                 }
             }
-            
+
             return;
         }
 

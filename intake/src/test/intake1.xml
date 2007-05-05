@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
 <!DOCTYPE input-data SYSTEM
            "http://jakarta.apache.org/turbine/dtd/intake_2_4.dtd">
 <input-data basePackage="org.apache.fulcrum.intake.test.">
 	<group name="LoginGroup" key="loginGroupKey" mapToObject="LoginForm">
 		<field name="Username" key="loginUsernameKey" type="String"
 			mapToProperty="Username">
-			
+
 		</field>
 	</group>
-	
+
 	<group name="BooleanTest" key="bt">
 		<field name="EmptyBooleanTestField" key="ebtf" type="boolean"/>
 		<field name="BooleanTestField" key="btf" type="boolean">
@@ -17,8 +35,8 @@
 		<field name="RequiredBooleanTestField" key="rbtf" type="boolean">
 			<rule value="true" name="required">ValidValue</rule>
 		</field>
-		<field name="TestCustomTypeField" key="tctf" type="custom" 
+		<field name="TestCustomTypeField" key="tctf" type="custom"
 			fieldClass="org.apache.fulcrum.intake.test.MyField" />
 	</group>
-	
+
 </input-data>

@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.memory;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.util.ArrayList;
 import java.util.List;
@@ -117,7 +120,7 @@ public class MemoryGroupManagerImpl
             throw new DataBackendException("renameGroup(Group,String)", e);
         }
     }
-    
+
     /**
      * Determines if the <code>Group</code> exists in the security system.
      *
@@ -128,9 +131,9 @@ public class MemoryGroupManagerImpl
      * @throws Exception A generic exception.
      */
     public boolean checkExists(String groupName) throws DataBackendException
-    {     
-        return MemoryHelper.checkExists(groups,groupName);      
-    }    
+    {
+        return MemoryHelper.checkExists(groups,groupName);
+    }
     /**
     	* Creates a new group with specified attributes.
     	*
@@ -143,12 +146,12 @@ public class MemoryGroupManagerImpl
     public synchronized Group persistNewGroup(Group group)
         throws DataBackendException
     {
-        
+
             group.setId(MemoryHelper.getUniqueId());
             groups.add(group);
             // return the object with correct id
             return group;
-       
+
     }
-    
+
 }

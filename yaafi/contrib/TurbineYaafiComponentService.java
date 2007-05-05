@@ -1,20 +1,22 @@
 package org.apache.turbine.services.yafficomponent;
 
 /*
- * Copyright 2004 Apache Software Foundation
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
- * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.io.File;
@@ -134,9 +136,9 @@ public class TurbineYaafiComponentService
         this.logger.info( "Using the following home : " + home.getAbsolutePath() );
 
         // create the configuration for YAAFI
-        
+
         ServiceContainerConfiguration config = this.createServiceContainerConfiguration(conf);
-        
+
         config.setLogger( this.createAvalonLogger( "yaafi" ) );
         config.setApplicationRootDir( home );
 
@@ -189,10 +191,10 @@ public class TurbineYaafiComponentService
     {
         this.container.release( component );
     }
-    
+
     /**
      * Create a ServiceContainerConfiguration based on the Turbine configuration
-     * 
+     *
      * @param conf the Turbine configuration
      * @return the YAAFI configuration
      * @throws IOException creating the YAAFI configuration failed
@@ -203,40 +205,40 @@ public class TurbineYaafiComponentService
         ServiceContainerConfiguration result = new ServiceContainerConfiguration();
 
         // are we using a "containerConfiguration.xml" ?!
-        
+
         if( conf.containsKey(CONTAINER_CONFIGURATION_KEY) )
         {
 	        // determine the container configuration file
-	        
+
 	        String containerConfiguration = conf.getString(
 	            CONTAINER_CONFIGURATION_KEY
 	            );
-	        
+
 	        result.loadContainerConfiguration(containerConfiguration);
-        }    
+        }
 	    else if( conf.containsKey(COMPONENT_ROLE_KEY) )
-	    {		         
+	    {
 	        // determine the location of the role configuraton file
-	
+
 	        String roleConfigurationFileName = conf.getString(
 	            COMPONENT_ROLE_KEY,
 	            COMPONENT_ROLE_VALUE
 	            );
-	
+
 	        // determine the location of component configuration file
-	
+
 	        String componentConfigurationFileName = conf.getString(
 	            COMPONENT_CONFIG_KEY,
 	            COMPONENT_CONFIG_VALUE
 	            );
-	
+
 	        // determine the location of parameters file
-	
+
 	        String parametersFileName = conf.getString(
 	            COMPONENT_PARAMETERS_KEY,
 	            COMPONENT_PARAMETERS_VALUE
 	            );
-	        
+
 	        result.setComponentRolesLocation( roleConfigurationFileName );
 	        result.setComponentConfigurationLocation( componentConfigurationFileName );
 	        result.setParametersLocation( parametersFileName );
@@ -244,18 +246,18 @@ public class TurbineYaafiComponentService
 	    else
         {
 	        // determine the container configuration file
-	        
+
 	        String containerConfiguration = conf.getString(
 	            CONTAINER_CONFIGURATION_KEY,
 	            CONTAINER_CONFIGURATION_VALUE
 	            );
-	        
+
 	        result.loadContainerConfiguration(containerConfiguration);
-        }    
-        
+        }
+
         return result;
     }
-    
+
     /**
      * Create the Avalon logger to be passed to YAAFI
      * @param name the name of the logger
@@ -263,6 +265,6 @@ public class TurbineYaafiComponentService
      */
     protected org.apache.avalon.framework.logger.Logger createAvalonLogger( String name )
     {
-        return new Log4JLogger( Logger.getLogger( name ) );        
+        return new Log4JLogger( Logger.getLogger( name ) );
     }
 }

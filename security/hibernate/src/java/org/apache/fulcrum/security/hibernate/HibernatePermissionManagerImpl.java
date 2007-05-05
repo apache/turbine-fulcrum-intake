@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.hibernate;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.util.List;
 
@@ -30,10 +33,10 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class HibernatePermissionManagerImpl extends AbstractPermissionManager 
+public class HibernatePermissionManagerImpl extends AbstractPermissionManager
 {
 	private PersistenceHelper persistenceHelper;
-    
+
     /**
     * Retrieves all permissions defined in the system.
     *
@@ -46,10 +49,10 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager
         PermissionSet permissionSet = new PermissionSet();
         try
         {
-            
+
             List permissions = getPersistenceHelper().retrieveSession().find("from " + Permission.class.getName() + "");
             permissionSet.add(permissions);
-	
+
         }
         catch (HibernateException e)
         {
@@ -95,10 +98,10 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager
         List permissions;
         try
         {
-        
+
             permissions =
 			getPersistenceHelper().retrieveSession().find("from " + Permission.class.getName() + " sp where sp.name=?", permissionName, Hibernate.STRING);
-		
+
         }
         catch (HibernateException e)
         {
@@ -144,11 +147,11 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager
     protected synchronized Permission persistNewPermission(Permission permission)
         throws DataBackendException
     {
-        
+
 		getPersistenceHelper().addEntity(permission);
         return permission;
     }
-    
+
 	/**
 	 * @return Returns the persistenceHelper.
 	 */
@@ -160,10 +163,10 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager
 		}
 		return persistenceHelper;
 	}
-	
+
 	/**
 	 * Retrieve a Permission object with specified id.
-	 * 
+	 *
 	 * @param id
 	 *            the id of the Permission.
 	 * @return an object representing the Permission with specified id.
@@ -174,7 +177,7 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager
 	 */
 	public Permission getPermissionById(Object id)
 	throws DataBackendException, UnknownEntityException {
-		
+
 		Permission permission = null;
 
 		if (id != null)
@@ -189,13 +192,13 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager
 							"Could not find permission by id " + id);
 				}
 				permission = (Permission) permissions.get(0);
-				
+
 			} catch (HibernateException e) {
 				throw new DataBackendException(
 						"Error retriving permission information",
 						e);
 			}
-			
+
 		return permission;
 	}
 }

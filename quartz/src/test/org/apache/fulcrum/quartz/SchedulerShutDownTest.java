@@ -1,18 +1,21 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */ 
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 
 package org.apache.fulcrum.quartz;
 
@@ -27,7 +30,7 @@ import org.quartz.Trigger;
 /**
  * @author <a href="mailto:leandro@ibnetwork.com.br">Leandro Rodrigo Saad Cruz</a>
  * @author <a href="mailto:epughNOSPAM@opensourceconnections.com">Eric Pugh </a>
- *  
+ *
  */
 public class SchedulerShutDownTest extends BaseQuartzTestCase implements SchedulerListener {
 
@@ -48,7 +51,7 @@ public class SchedulerShutDownTest extends BaseQuartzTestCase implements Schedul
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.quartz.SchedulerListener#jobScheduled(org.quartz.Trigger)
      */
     public void jobScheduled(Trigger arg0) {
@@ -57,7 +60,7 @@ public class SchedulerShutDownTest extends BaseQuartzTestCase implements Schedul
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.quartz.SchedulerListener#jobUnscheduled(java.lang.String,
      *      java.lang.String)
      */
@@ -67,7 +70,7 @@ public class SchedulerShutDownTest extends BaseQuartzTestCase implements Schedul
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.quartz.SchedulerListener#triggerFinalized(org.quartz.Trigger)
      */
     public void triggerFinalized(Trigger arg0) {
@@ -76,7 +79,7 @@ public class SchedulerShutDownTest extends BaseQuartzTestCase implements Schedul
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.quartz.SchedulerListener#triggersPaused(java.lang.String,
      *      java.lang.String)
      */
@@ -86,7 +89,7 @@ public class SchedulerShutDownTest extends BaseQuartzTestCase implements Schedul
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.quartz.SchedulerListener#triggersResumed(java.lang.String,
      *      java.lang.String)
      */
@@ -96,7 +99,7 @@ public class SchedulerShutDownTest extends BaseQuartzTestCase implements Schedul
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.quartz.SchedulerListener#jobsPaused(java.lang.String,
      *      java.lang.String)
      */
@@ -106,7 +109,7 @@ public class SchedulerShutDownTest extends BaseQuartzTestCase implements Schedul
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.quartz.SchedulerListener#jobsResumed(java.lang.String,
      *      java.lang.String)
      */
@@ -116,7 +119,7 @@ public class SchedulerShutDownTest extends BaseQuartzTestCase implements Schedul
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.quartz.SchedulerListener#schedulerError(java.lang.String,
      *      org.quartz.SchedulerException)
      */
@@ -126,7 +129,7 @@ public class SchedulerShutDownTest extends BaseQuartzTestCase implements Schedul
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.quartz.SchedulerListener#schedulerShutdown()
      */
     public void schedulerShutdown() {

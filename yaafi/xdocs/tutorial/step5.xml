@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
 
 <document>
 
@@ -12,9 +30,9 @@
     <section name="Odds and Ends">
 
       <subsection name="Setting Up A Logger">
-        <p>    
-          The YAAFI container expects that you setup the logging facilty to be used. 
-          The Avalon Service Framework provides wrappers for commonly used loggers such 
+        <p>
+          The YAAFI container expects that you setup the logging facilty to be used.
+          The Avalon Service Framework provides wrappers for commonly used loggers such
           as
           <ul>
             <li>JDK 1.4 logger</li>
@@ -23,28 +41,28 @@
             <li>Console logger</li>
             <li>Null logger</li>
           </ul>
-        </p>   
-        
+        </p>
+
         <p>
           The following examples shows how to use a Log4J logger assuming that
           the configuration is located in the "conf" directory and tells Log4J
           to monitor the configuration file to detect changes of the trace level.
-          <source><![CDATA[   
+          <source><![CDATA[
 Main cli = new Main(args)
-String log4jConfig = cli.makeAbsolutePath( System.getProperty("log4j.configuration", "./conf/log4j.properties") );        
+String log4jConfig = cli.makeAbsolutePath( System.getProperty("log4j.configuration", "./conf/log4j.properties") );
 PropertyConfigurator.configureAndWatch( log4jConfig, 2000 );
-cli.setLogger( new Log4JLogger( Logger.getLogger("main") ) );     
-          ]]></source>                                   
-        </p>                     
+cli.setLogger( new Log4JLogger( Logger.getLogger("main") ) );
+          ]]></source>
+        </p>
       </subsection>
 
       <subsection name="Looking up a Service">
-        <p>    
+        <p>
           Using an Avalon container requires your application to lookup
           services during runtime. This functionality is exposed through
           the "ServiceManager" interface. The real question is how to get
           hold of a "ServiceManager" interface without polluting the whole
-          application with Avalon dependencies. Unfortunately there is no 
+          application with Avalon dependencies. Unfortunately there is no
           simple answer to that
           <ul>
             <li>
@@ -56,22 +74,22 @@ cli.setLogger( new Log4JLogger( Logger.getLogger("main") ) );
               an instance of a "ServiceManager".
            </li>
             <li>
-              Your can lookup the services using the 
+              Your can lookup the services using the
               <a href="../services/servicemanagerservice.html">ServiceManagerService</a>
-           </li>           
+           </li>
           </ul>
-        </p>                     
+        </p>
       </subsection>
 
       <subsection name="Dynamic Reconfiguration">
-        <p>    
+        <p>
           A reconfiguration can be triggered by your application code
-          or by the 
+          or by the
           <a href="../services/reconfigurationservice.html">ReconfigurationService</a>
           which monitors the component configuration file.
-        </p>                     
+        </p>
       </subsection>
-          
+
     </section>
 
   </body>

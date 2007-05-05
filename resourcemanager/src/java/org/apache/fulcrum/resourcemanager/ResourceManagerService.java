@@ -1,20 +1,22 @@
 package org.apache.fulcrum.resourcemanager;
 
 /*
- * Copyright 2004 Apache Software Foundation
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
- * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.io.IOException;
@@ -34,14 +36,14 @@ public interface ResourceManagerService
 
     /**
      * List all available domains.
-     * 
+     *
      * @return list of all available domains
      */
     String[] listDomains();
-    
+
     /**
      * List all avaible resources recursivelyfor a given domain.
-     * 
+     *
      * @param domain the domain you are interested in
      * @return list of all available resources for the domain
      */
@@ -63,7 +65,7 @@ public interface ResourceManagerService
      * @return true if the resource exists
      */
     boolean exists( String domain, String resourcePath );
-    
+
     /**
      * Saves a file.
      *
@@ -82,7 +84,7 @@ public interface ResourceManagerService
      */
     byte[] read( String domain, String resourcePath )
         throws IOException;
-    
+
     /**
      * Updates a given resource
      *
@@ -118,7 +120,7 @@ public interface ResourceManagerService
 
     /**
      * Get the resource name.
-     * 
+     *
      * @param domain the domain you are interested in
      * @param context the context to locate the resource
      * @param resourceName the name of the resource
@@ -130,7 +132,7 @@ public interface ResourceManagerService
      * Loads a resource.
      *
      * @param domain the domain you are interested in
-     * @param context the context to locate the resource 
+     * @param context the context to locate the resource
      * @param resourceName the name of the resource
      */
     byte[] read( String domain, String[] context, String resourceName )
@@ -138,7 +140,7 @@ public interface ResourceManagerService
 
     /**
      * Get the implementation specific URL of the underlying resource.
-     * 
+     *
      * @param domain the domain you are interested in
      * @param context the context to locate the resource
      * @param resourceName the name of the resource

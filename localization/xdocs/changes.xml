@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
 <document>
   <properties>
     <title>Fulcrum Localization</title>
@@ -9,35 +27,35 @@
     <release version="1.0.6" date="">
       <action dev="epugh" type="update" due-to="Kostyantyn Shchekotykhin">
         Fix unit tests to run properly in non US english environments.
-      </action>  
+      </action>
     </release>
     <release version="1.0.5" date="2004-11-24">
       <action dev="epugh" type="update" due-to="Kostyantyn Shchekotykhin">
         Merge api and impl jars into one project.
-      </action>         
+      </action>
       <action dev="epugh" type="remove">
         Remove Localization, it was a facade that shouldn't be here.
         Facade's of this nature are specific to the user...
-      </action>        
+      </action>
       <action dev="epugh" type="update">
         Tweak dependencies to build under gump.
-      </action>          
+      </action>
       <action dev="epugh" type="update">
         Bump versions, clean up dependencies
-      </action>           
+      </action>
     </release>
     <release version="1.0.4" date="">
       <action dev="epugh" type="update">
         Use inherited getLogger() instead of Log in classes
         extending AbstractLogEnabled.
-      </action>     
+      </action>
       <action dev="epugh" type="update">
         Update to use Merlin 3.3.0
-      </action>    
+      </action>
       <action dev="epugh" type="add">
                 Merlinized code with input from Stephen
       </action>
-    </release>          
+    </release>
     <release version="1.0-alpha-3" date="">
       <action dev="epugh" type="add">
         New Localization class that is a facade to the underlying service.

@@ -1,24 +1,20 @@
 /*
- * $Header: /usr/local/cvsroot/it20one/service/it20one-service-framework/src/java/org/apache/fulcrum/yaafi/framework/locking/GenericLock.java,v 1.1 2005/09/22 11:04:12 sigi Exp $
- * $Revision: 1.1 $
- * $Date: 2005/09/22 11:04:12 $
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * ====================================================================
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Copyright 1999-2004 The Apache Software Foundation 
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.apache.fulcrum.yaafi.framework.locking;
@@ -35,9 +31,9 @@ import java.util.Set;
 
 
 /**
- * 
+ *
  * A generic implementaion of a simple multi level lock.
- * 
+ *
  * <p>
  * The idea is to have an ascending number of lock levels ranging from
  * <code>0</code> to <code>maxLockLevel</code> as specified in
@@ -54,7 +50,7 @@ import java.util.Set;
  * specify at least one other lock level and thus set <code>maxLockLevel</code>
  * to at least <code>1</code>.
  * </p>
- * 
+ *
  * <p>
  * Although this may sound complicated, in practice this is quite simple. Let us
  * imagine you have three lock levels:
@@ -106,21 +102,21 @@ import java.util.Set;
  * <td align="center">x</td>
  * </tr>
  * </tbody> </table>
- * 
+ *
  * </p>
  * <p>
  * Additionally, there are preferences for specific locks you can pass to
- * {@link #acquire(Object, int, boolean, int, boolean, long)}. 
+ * {@link #acquire(Object, int, boolean, int, boolean, long)}.
  * This means whenever more thanone party
  * waits for a lock you can specify which one is to be preferred. This gives you
- * every freedom you might need to specifcy e.g. 
+ * every freedom you might need to specifcy e.g.
  * <ul>
  * <li>priority to parties either applying for higher or lower lock levels
  * <li>priority not only to higher or lower locks, but to a specific level
  * <li>completely random preferences
  * </ul>
  * </p>
- * 
+ *
  * @version $Revision: 1.1 $
  */
 public class GenericLock implements MultiLevelLock2 {
@@ -138,12 +134,12 @@ public class GenericLock implements MultiLevelLock2 {
     private int maxLockLevel;
     protected LoggerFacade logger;
     protected int waiters = 0;
-    
+
     /**
      * Creates a new lock.
-     * 
+     *
      * @param resourceId identifier for the resource associated to this lock
-     * @param maxLockLevel highest allowed lock level as described in class intro 
+     * @param maxLockLevel highest allowed lock level as described in class intro
      * @param logger generic logger used for all kind of debug logging
      */
     public GenericLock(Object resourceId, int maxLockLevel, LoggerFacade logger) {
@@ -173,7 +169,7 @@ public class GenericLock implements MultiLevelLock2 {
         boolean success = tryLock(ownerId, targetLockLevel, compatibility, false, true);
         return success;
     }
-    
+
     /**
      * @see MultiLevelLock2#has(Object, int)
      */
@@ -181,7 +177,7 @@ public class GenericLock implements MultiLevelLock2 {
         int level = getLockLevel(ownerId);
         return (lockLevel <= level);
     }
-    
+
     /**
      * @see org.apache.fulcrum.yaafi.framework.locking.MultiLevelLock#acquire(java.lang.Object,
      *      int, boolean, boolean, long)
@@ -199,23 +195,23 @@ public class GenericLock implements MultiLevelLock2 {
             int compatibility, long timeoutMSecs) throws InterruptedException {
         return acquire(ownerId, targetLockLevel, wait, compatibility, false, timeoutMSecs);
     }
-    
+
     /**
      * Tries to blockingly acquire a lock which can be preferred.
-     * 
-     * @see #acquire(Object, int, boolean, int, boolean, long) 
-     * @since 1.1 
+     *
+     * @see #acquire(Object, int, boolean, int, boolean, long)
+     * @since 1.1
      */
     public synchronized boolean acquire(Object ownerId, int targetLockLevel, boolean preferred,
             long timeoutMSecs) throws InterruptedException {
         return acquire(ownerId, targetLockLevel, true, COMPATIBILITY_REENTRANT, preferred,
                 timeoutMSecs);
     }
-    
+
     /**
      * @see org.apache.fulcrum.yaafi.framework.locking.MultiLevelLock2#acquire(Object,
      *      int, boolean, int, boolean, long)
-     * @since 1.1 
+     * @since 1.1
      */
     public synchronized boolean acquire(
         Object ownerId,
@@ -238,7 +234,7 @@ public class GenericLock implements MultiLevelLock2 {
         }
 
         if (tryLock(ownerId, targetLockLevel, compatibility, preferred)) {
-            
+
             if (logger.isFinerEnabled()) {
 	            logger.logFiner(
 	                ownerId.toString()
@@ -283,10 +279,10 @@ public class GenericLock implements MultiLevelLock2 {
                                 // copy the old one
                                 setLockLevel(ownerId, null, targetLockLevel, compatibility,
                                         preferred);
-    
+
                                 // finally wait
                                 wait(remaining);
-                                
+
                             } finally {
                                 // we need to restore the old lock in order not to
                                 // interfere with the intention lock in the
@@ -299,14 +295,14 @@ public class GenericLock implements MultiLevelLock2 {
                                     owners.remove(ownerId);
                                 }
                             }
-    
+
                         } else {
                             wait(remaining);
                         }
                     } finally {
                         unregisterWaiter(waitingOwner);
                     }
-                    
+
                     if (tryLock(ownerId, targetLockLevel, compatibility, preferred)) {
 
                         if (logger.isFinerEnabled()) {
@@ -340,7 +336,7 @@ public class GenericLock implements MultiLevelLock2 {
                 waiters--;
         }
     }
-    
+
     /**
      * @see org.apache.fulcrum.yaafi.framework.locking.MultiLevelLock#release(Object)
      */
@@ -373,9 +369,9 @@ public class GenericLock implements MultiLevelLock2 {
     }
 
     /**
-     * Gets the resource assotiated to this lock. 
-     * 
-     * @return identifier for the resource associated to this lock 
+     * Gets the resource assotiated to this lock.
+     *
+     * @return identifier for the resource associated to this lock
      */
     public Object getResourceId() {
         return resourceId;
@@ -383,7 +379,7 @@ public class GenericLock implements MultiLevelLock2 {
 
     /**
      * Gets the lowest lock level possible.
-     * 
+     *
      * @return minimum lock level
      */
     public int getLevelMinLock() {
@@ -392,7 +388,7 @@ public class GenericLock implements MultiLevelLock2 {
 
     /**
      * Gets the highst lock level possible.
-     * 
+     *
      * @return maximum lock level
      */
     public int getLevelMaxLock() {
@@ -422,7 +418,7 @@ public class GenericLock implements MultiLevelLock2 {
                 buf.append("- ").append(owner.toString()).append("\n");
             }
         }
-        
+
         return buf.toString();
     }
 
@@ -453,7 +449,7 @@ public class GenericLock implements MultiLevelLock2 {
         }
         return maxOwner;
     }
-    
+
     protected synchronized void setLockLevel(Object ownerId, LockOwner lock, int targetLockLevel,
             int compatibility, boolean intention) {
         // be sure there exists at most one lock per owner
@@ -493,7 +489,7 @@ public class GenericLock implements MultiLevelLock2 {
 
         LockOwner myLock = (LockOwner) owners.get(ownerId);
 
-        // determine highest owner        
+        // determine highest owner
         LockOwner highestOwner;
         if (compatibility == COMPATIBILITY_REENTRANT) {
             if (myLock != null && targetLockLevel <= myLock.lockLevel) {
@@ -513,7 +509,7 @@ public class GenericLock implements MultiLevelLock2 {
                 // we already have it
                 return true;
             } else {
-                // our own lock will not be compromised by ourself and same lock level 
+                // our own lock will not be compromised by ourself and same lock level
                 highestOwner = getMaxLevelOwner(myLock, targetLockLevel, preferred);
             }
         } else {
@@ -543,7 +539,7 @@ public class GenericLock implements MultiLevelLock2 {
     protected boolean isCompatible(int targetLockLevel, int currentLockLevel) {
         return (targetLockLevel <= getLevelMaxLock() - currentLockLevel);
     }
-    
+
     protected Set getConflictingOwners(Object ownerId, int targetLockLevel, int compatibility) {
 
         LockOwner myLock = (LockOwner) owners.get(ownerId);
@@ -551,14 +547,14 @@ public class GenericLock implements MultiLevelLock2 {
             // shortcut as we already have the lock
             return null;
         }
-        
+
         LockOwner testLock = new LockOwner(ownerId, targetLockLevel, compatibility, false);
         List ownersCopy;
         synchronized (owners) {
             ownersCopy = new ArrayList(owners.values());
         }
         return getConflictingOwners(testLock, ownersCopy);
-        
+
     }
 
     protected Collection getConflictingWaiters(Object ownerId) {
@@ -573,30 +569,30 @@ public class GenericLock implements MultiLevelLock2 {
         }
         return null;
     }
-    
+
     protected Set getConflictingOwners(LockOwner myOwner, Collection ownersToTest) {
 
         if (myOwner == null) return null;
-        
+
         Set conflicts = new HashSet();
 
         // check if any locks conflict with ours
         for (Iterator it = ownersToTest.iterator(); it.hasNext();) {
             LockOwner owner = (LockOwner) it.next();
-            
+
             // we do not interfere with ourselves, except when explicitely said so
             if ((myOwner.compatibility == COMPATIBILITY_REENTRANT || myOwner.compatibility == COMPATIBILITY_REENTRANT_AND_SUPPORT)
                     && owner.ownerId.equals(myOwner.ownerId))
                 continue;
-            
+
             // otherwise find out the lock level of the owner and see if we conflict with it
             int onwerLockLevel = owner.lockLevel;
-           
+
             if (myOwner.compatibility == COMPATIBILITY_SUPPORT
                     || myOwner.compatibility == COMPATIBILITY_REENTRANT_AND_SUPPORT
                     && myOwner.lockLevel == onwerLockLevel)
                 continue;
-            
+
             if (!isCompatible(myOwner.lockLevel, onwerLockLevel)) {
                 conflicts.add(owner.ownerId);
             }
@@ -623,14 +619,14 @@ public class GenericLock implements MultiLevelLock2 {
                     .append(compatibility).append(intention ? ", intention/preferred" : "");
             return buf.toString();
         }
-        
+
         public boolean equals(Object o) {
             if (o instanceof LockOwner) {
                 return ((LockOwner)o).ownerId.equals(ownerId);
             }
             return false;
         }
-        
+
         public int hashCode() {
             return ownerId.hashCode();
         }

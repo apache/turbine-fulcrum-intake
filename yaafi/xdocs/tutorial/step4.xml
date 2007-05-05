@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
 
 <document>
 
@@ -13,8 +31,8 @@
 
       <p>
         Writing an Avalon service without running it is a rather
-        academic approach. The YAAFI container was born out of the need 
-        to add infrastructure service to an existing web application. 
+        academic approach. The YAAFI container was born out of the need
+        to add infrastructure service to an existing web application.
         Therefore there are many ways to skin the YAAFI cat
         <ul>
           <li>Using the org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory</li>
@@ -22,14 +40,13 @@
           <li>Using another Avalon container</li>
         </ul>
       </p>
-      
+
       <subsection name="Using ServiceContainerFactory">
-        <p>    
+        <p>
           The easist way of getting it going is to define a container configuration
           file as shown below. The file contains the location of the Avalon artifacts
           to get the container and the services up and running.
-          <source><![CDATA[   
-<?xml version="1.0" encoding="UTF-8"?>
+          <source><![CDATA[
 
 <fulcrum-yaafi>
   <componentRoles>
@@ -41,35 +58,35 @@
   <parameters>
     <location>./tutorial/conf/parameters.properties</location>
   </parameters>
-</fulcrum-yaafi>              
-          ]]></source>                         
+</fulcrum-yaafi>
+          ]]></source>
         </p>
         <p>
-          After writing the container configuration file you fire up 
+          After writing the container configuration file you fire up
           the factory to get an instance of the YAAFI container. Since
           all of the optional configuration the YAAFI container uses
           the default temp directory and a ConsoleLogger.
-          <source><![CDATA[   
+          <source><![CDATA[
 ServiceContainer container = null;
 ServiceContainerConfiguration config = null;
 
 config = new ServiceContainerConfiguration();
 config.loadContainerConfiguration( "./tutorial/conf/containerConfiguration.xml" );
-container = ServiceContainerFactory.create( config );          
-          ]]></source>                                   
+container = ServiceContainerFactory.create( config );
+          ]]></source>
         </p>
         <p>
           It is gooooooood practice to shutdown an Avalon container properly
-          to give the running Avalon service a chance to free any 
+          to give the running Avalon service a chance to free any
           resources
-          <source><![CDATA[   
+          <source><![CDATA[
 container.dispose();
-          ]]></source>                                   
+          ]]></source>
         </p>
       </subsection>
 
       <subsection name="Using Main">
-        <p>    
+        <p>
           This class helps to run a command line application based on the YAAFI
           container. The following sample shows a more complex setup
           <ul>
@@ -79,60 +96,60 @@ container.dispose();
             <li>blocks the main thread until termination</li>
             <li>installs a JVM shutdown hook to dispose the YAAFI container during JVM shutdown</li>
           </ul>
-          <source><![CDATA[   
+          <source><![CDATA[
 public class Application implements Runnable
 {
     /** the YAAFI command line interface */
     private Main cli;
-    
+
     public static void main( String[] args )
     {
         try
-        {   
-            new Application(args).init().run();           
+        {
+            new Application(args).init().run();
         }
         catch( Throwable t )
         {
             String msg = "Execution of the server failed : " + t.getMessage();
             System.err.println(msg);
-        }   
+        }
     }
-    
+
     public Application(String[] args)
     {
-        this.cli = new Main(args);        
-    } 
-  
+        this.cli = new Main(args);
+    }
+
     protected Application init() throws Exception
-    {           
+    {
         // 1) initialize the YAAFI Main class
-        
+
         // 1.1) set the temp directory to be used
         this.cli.setTempHome( "./tutorial/temp" );
-        
+
         // 1.2) set the container configuration to bootstrap the YAAFI container
         this.cli.setContainerConfigValue( "./tutorial/conf/containerConfiguration.xml" );
-        
+
         // 1.3) block the main thread until the JVM is terminated
         this.cli.setIsBlocking(true);
-        
+
         // 1.4) install a JVM shutdown hook to dispose the YAAFI container
         this.cli.setHasShutdownHook(true);
-        
+
         // 2) initialize the logger
 
         ConsoleLogger consoleLogger = new ConsoleLogger(ConsoleLogger.LEVEL_DEBUG);
         this.cli.setLogger( consoleLogger );
-        
+
         return this;
     }
-    
+
     public void run()
     {
         try
         {
             this.cli.initialize();
-            this.cli.getLogger().info( "The application is up and running ..." );     
+            this.cli.getLogger().info( "The application is up and running ..." );
             this.cli.onWait();
         }
         catch (Throwable t)
@@ -141,24 +158,24 @@ public class Application implements Runnable
             this.cli.getLogger().error(msg,t);
             throw new RuntimeException(msg);
         }
-    }    
- }         
-          ]]></source>                         
+    }
+ }
+          ]]></source>
         </p>
       </subsection>
 
       <subsection name="Using Another Avalon Container">
-        <p>    
+        <p>
           Emebdding YAAFI into another Avalon container might sound like
           a no-brainer but YAAFI was successfully integrated as Avalon
           service in the JAMES mail server using the Phoenix container.
           The ugly truth behind it is the fact that Avalon services might
           not be portable across different Avalon service containers which
-          definitely is a no-brainer. 
+          definitely is a no-brainer.
         </p>
-          <source><![CDATA[   
+          <source><![CDATA[
 <block name="fulcrum-yaafi" class="org.apache.fulcrum.yaafi.framework.container.ServiceContainerImpl" />
-          
+
 <fulcrum-yaafi>
   <containerFlavour>phoenix</containerFlavour>
   <componentRoles>
@@ -167,11 +184,11 @@ public class Application implements Runnable
   <componentConfiguration>
     <location>../conf/componentConfiguration.xml</location>
   </componentConfiguration>
-</fulcrum-yaafi>                        
-          ]]></source>                         
-        
+</fulcrum-yaafi>
+          ]]></source>
+
       </subsection>
-      
+
     </section>
 
   </body>

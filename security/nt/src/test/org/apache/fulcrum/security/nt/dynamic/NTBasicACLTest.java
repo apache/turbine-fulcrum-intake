@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.nt.dynamic;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import org.apache.commons.logging.Log;
@@ -27,10 +30,10 @@ import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 /**
- * 
+ *
  * Test the NT implementation of the user manager. This test traps some exceptions that can be
  * thrown if there is NO nt dll.
- *  
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -64,7 +67,7 @@ public class NTBasicACLTest extends BaseUnitTest implements TestConstants
     }
     /**
      * Constructor for MemoryPermissionManagerTest.
-     * 
+     *
      * @param arg0
      */
     public NTBasicACLTest(String arg0)
@@ -83,7 +86,7 @@ public class NTBasicACLTest extends BaseUnitTest implements TestConstants
             assertEquals(4,bacl.getGroups().size());
 			assertTrue(bacl.hasGroup("Guests"));
 			assertTrue(bacl.hasGroup("gUEsts"));
-            
+
         }
         catch(DataBackendException dbe){
             assertTrue(dbe.getMessage().indexOf(SCB_INVALID)>-1);
@@ -98,6 +101,6 @@ public class NTBasicACLTest extends BaseUnitTest implements TestConstants
         }
     }
 
-   
-  
+
+
 }

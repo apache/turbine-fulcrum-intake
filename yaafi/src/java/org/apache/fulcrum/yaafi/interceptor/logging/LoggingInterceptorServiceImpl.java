@@ -1,20 +1,22 @@
 package org.apache.fulcrum.yaafi.interceptor.logging;
 
 /*
- * Copyright 2004 Apache Software Foundation
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
- * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.lang.reflect.Method;
@@ -80,7 +82,7 @@ public class LoggingInterceptorServiceImpl
     public void configure(Configuration configuration) throws ConfigurationException
     {
         super.configure(configuration);
-        
+
         this.maxArgLength = configuration.getChild("maxArgLength").getValueAsInteger(MAX_ARG_LENGTH);
         this.toStringBuilderClassName = configuration.getChild("toStringBuilderClass").getValue(ArgumentToStringBuilderImpl.class.getName());
         this.monitorAllExceptions = configuration.getChild("monitorAllExceptions").getValueAsBoolean(true);
@@ -102,14 +104,14 @@ public class LoggingInterceptorServiceImpl
                 this.getToStringBuilderClassName()
                 );
         }
-        
+
         // create an instance of the StringBuilder to see if everything works
-        
+
         InterceptorToStringBuilder interceptorToStringBuilder = this.createArgumentToStringBuilder(
             this
             );
-            
-        interceptorToStringBuilder.toString();        
+
+        interceptorToStringBuilder.toString();
     }
 
     /**
@@ -133,7 +135,7 @@ public class LoggingInterceptorServiceImpl
         if( this.isServiceMonitored(interceptorContext ) )
         {
             if( this.getLogger().isInfoEnabled() )
-            {                
+            {
                 String msg = this.toString(interceptorContext,null,ON_ENTRY);
                 this.getLogger().info(msg);
                 this.createStopWatch(interceptorContext);
@@ -181,7 +183,7 @@ public class LoggingInterceptorServiceImpl
 
     /**
      * Creates a stop watch
-     * 
+     *
      * @param interceptorContext the current interceptor context
      */
     protected void createStopWatch(
@@ -189,29 +191,29 @@ public class LoggingInterceptorServiceImpl
     {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        interceptorContext.getRequestContext().put(this.getServiceName(),stopWatch);        
+        interceptorContext.getRequestContext().put(this.getServiceName(),stopWatch);
     }
 
     /**
      * Gets the stop watch. Even if none is defined we return one
      * in a proper state.
-     * 
+     *
      * @param interceptorContext the current interceptor context
      * @return the stop watch
      */
-    protected StopWatch getStopWatch( 
+    protected StopWatch getStopWatch(
         AvalonInterceptorContext interceptorContext )
     {
         StopWatch result = (StopWatch) interceptorContext.getRequestContext().remove(
             this.getServiceName()
             );
-        
+
         if( result == null )
         {
             result = new StopWatch();
             result.start();
         }
-        
+
         return result;
     }
 
@@ -238,7 +240,7 @@ public class LoggingInterceptorServiceImpl
     {
         return toStringBuilderClass;
     }
-    
+
     /**
      * @return Returns the toStringBuilderClassName.
      */
@@ -246,20 +248,20 @@ public class LoggingInterceptorServiceImpl
     {
         return toStringBuilderClassName;
     }
-    
+
     /**
      * Create an instance of an InterceptorToStringBuilder
-     * 
+     *
      * @param target the object to stringify
      * @return the string builder
      */
     protected InterceptorToStringBuilder createArgumentToStringBuilder(Object target)
     {
         InterceptorToStringBuilder result = null;
-        
+
         try
         {
-            result = (InterceptorToStringBuilder) 
+            result = (InterceptorToStringBuilder)
             	this.getToStringBuilderClass().newInstance();
         }
         catch (Exception e)
@@ -268,14 +270,14 @@ public class LoggingInterceptorServiceImpl
             this.getLogger().error(msg,e);
             result = new DefaultToStringBuilderImpl();
         }
-     
+
         result.setTarget(target);
         result.setMaxArgLength(this.getMaxArgLength());
         result.setMode(1);
-        
+
         return result;
     }
-    
+
     /**
      * Create a string representation of a service invocation returning a result.
      *
@@ -284,8 +286,8 @@ public class LoggingInterceptorServiceImpl
      * @param result the result of the service invocation
      * @return the string representation of the result
      */
-    protected String toString( 
-        AvalonInterceptorContext avalonInterceptorContext, 
+    protected String toString(
+        AvalonInterceptorContext avalonInterceptorContext,
         StopWatch stopWatch,
         Object result )
     {
@@ -297,7 +299,7 @@ public class LoggingInterceptorServiceImpl
         methodSignature.append( "result={" );
         methodSignature.append( toStringBuilder.toString() );
         methodSignature.append( "}" );
-        
+
         return methodSignature.toString();
     }
 
@@ -309,9 +311,9 @@ public class LoggingInterceptorServiceImpl
      * @param throwable the result of the service invocation
      * @return the string representation of the result
      */
-    protected String toString( 
-        AvalonInterceptorContext avalonInterceptorContext, 
-        StopWatch stopWatch, 
+    protected String toString(
+        AvalonInterceptorContext avalonInterceptorContext,
+        StopWatch stopWatch,
         Throwable throwable )
     {
         StringBuffer methodSignature = new StringBuffer();
@@ -334,7 +336,7 @@ public class LoggingInterceptorServiceImpl
      * @param mode the mode (onEntry, onExit, onError)
      * @return the debug output
      */
-    protected String toString( 
+    protected String toString(
         AvalonInterceptorContext interceptorContext, StopWatch stopWatch, int mode )
     {
         StringBuffer result = new StringBuffer();
@@ -353,14 +355,14 @@ public class LoggingInterceptorServiceImpl
         result.append(interceptorContext.getInvocationId());
         result.append(SEPERATOR);
         result.append(interceptorContext.getInvocationDepth());
-        result.append(SEPERATOR);        
+        result.append(SEPERATOR);
         result.append(mode);
-        result.append(SEPERATOR);        
+        result.append(SEPERATOR);
         result.append(interceptorContext.getServiceShorthand());
         result.append(SEPERATOR);
         result.append(method.getName());
         result.append(SEPERATOR);
-        
+
         if( stopWatch != null )
         {
             result.append(stopWatch.getTime());
@@ -369,10 +371,10 @@ public class LoggingInterceptorServiceImpl
         {
             result.append('0');
         }
-        
+
         result.append(SEPERATOR);
         result.append(methodToStringBuilder.toString());
-        
+
         if( (ON_ENTRY == mode) || (ON_ERROR == mode) )
         {
 	        for( int i=0; i<args.length; i++ )
@@ -384,7 +386,7 @@ public class LoggingInterceptorServiceImpl
 	            result.append("}");
 	        }
         }
-        
+
         return result.toString();
-    }   
+    }
 }

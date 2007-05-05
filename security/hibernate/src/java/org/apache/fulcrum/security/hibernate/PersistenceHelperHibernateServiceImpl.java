@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.hibernate;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
@@ -24,10 +27,10 @@ import org.apache.fulcrum.security.entity.SecurityEntity;
 import org.apache.fulcrum.security.spi.AbstractManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 /**
- * 
+ *
  * This base implementation persists to a database via Hibernate. it provides methods shared by all
  * Hibernate SPI managers.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -41,7 +44,7 @@ public class PersistenceHelperHibernateServiceImpl
 
     /**
      * Deletes an entity object
-     * 
+     *
      * @param role The object to be removed
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the object does not exist.
@@ -71,7 +74,7 @@ public class PersistenceHelperHibernateServiceImpl
     }
     /**
      * Stores changes made to an object
-     * 
+     *
      * @param role The object to be saved
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the role does not exist.
@@ -120,7 +123,7 @@ public class PersistenceHelperHibernateServiceImpl
     }
     /**
      * adds an entity
-     * 
+     *
      * @param role The object to be saved
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the role does not exist.
@@ -167,7 +170,7 @@ public class PersistenceHelperHibernateServiceImpl
      * In some environments (like ECM) the service ends up getting it's own
      * copy of the HibernateService.  In those environments, we might want to
      * pass in a different HibernateService instead.
-     * 
+     *
      * @param hibernateService The hibernateService to set.
      */
     public void setHibernateService(HibernateService hibernateService)
@@ -189,7 +192,7 @@ public class PersistenceHelperHibernateServiceImpl
         }
         return hibernateService;
     }
-    
+
     public void dispose(){
         release(hibernateService);
         super.dispose();

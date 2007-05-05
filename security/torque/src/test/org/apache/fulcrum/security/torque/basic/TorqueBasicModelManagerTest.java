@@ -1,19 +1,22 @@
 package org.apache.fulcrum.security.torque.basic;
 
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import org.apache.fulcrum.security.SecurityService;
@@ -71,7 +74,7 @@ public class TorqueBasicModelManagerTest extends AbstractModelManagerTest
             criteria.clear();
             criteria.add(TorqueBasicUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
             TorqueBasicUserPeer.doDelete(criteria);
-            
+
             criteria.clear();
             criteria.add(TorqueBasicGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
             TorqueBasicGroupPeer.doDelete(criteria);
@@ -86,7 +89,7 @@ public class TorqueBasicModelManagerTest extends AbstractModelManagerTest
 
     /**
      * Constructor for TorqueBasicModelManagerTest.
-     * 
+     *
      * @param arg0
      */
     public TorqueBasicModelManagerTest(String arg0)

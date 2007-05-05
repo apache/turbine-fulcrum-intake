@@ -1,20 +1,22 @@
 package org.apache.fulcrum.yaafi.interceptor.performance;
 
 /*
- * Copyright 2004 Apache Software Foundation
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
- * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.lang.reflect.Method;
@@ -74,7 +76,7 @@ public class PerformanceInterceptorServiceImpl
     public void configure(Configuration configuration) throws ConfigurationException
     {
         super.configure(configuration);
-        
+
         this.maxArgLength = configuration.getChild("maxArgLength").getValueAsInteger(MAX_ARG_LENGTH);
         Configuration tresholdConfiguration = configuration.getChild("tresholds");
         this.tresholdList[0] = tresholdConfiguration.getChild("fatal").getAttributeAsInteger("millis", 5000);
@@ -143,7 +145,7 @@ public class PerformanceInterceptorServiceImpl
 
     /**
      * Creates a stop watch
-     * 
+     *
      * @param interceptorContext the current interceptor context
      */
     protected void createStopWatch(
@@ -151,39 +153,39 @@ public class PerformanceInterceptorServiceImpl
     {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        interceptorContext.getRequestContext().put(this.getServiceName(),stopWatch);        
+        interceptorContext.getRequestContext().put(this.getServiceName(),stopWatch);
     }
 
     /**
      * Gets the stop watch
-     * 
+     *
      * @param interceptorContext the current interceptor context
      * @return the stop watch
      */
-    protected StopWatch getStopWatch( 
+    protected StopWatch getStopWatch(
         AvalonInterceptorContext interceptorContext )
     {
         return (StopWatch) interceptorContext.getRequestContext().remove(
             this.getServiceName()
             );
     }
-        
+
     /**
      * Logs the execution time.
-     * 
+     *
      * @param mode the invocation mode (onEntry, onExit, onError)
      * @param interceptorContext the current interceptor context
      * @param stopWatch the stop watch
      */
     protected void log(
         int mode,
-        AvalonInterceptorContext interceptorContext, 
+        AvalonInterceptorContext interceptorContext,
         StopWatch stopWatch
         )
     {
         String msg = null;
         long time = stopWatch.getTime();
-        
+
         if( time >= tresholdList[0] )
         {
             if( this.getLogger().isFatalErrorEnabled() )
@@ -222,20 +224,20 @@ public class PerformanceInterceptorServiceImpl
             {
 	            msg = this.toString(interceptorContext,stopWatch,mode);
 	            this.getLogger().debug(msg);
-            }            
+            }
         }
     }
-    
+
     /**
      * Create the log message for the performance logfile.
-     * 
+     *
      * @param interceptorContext the context
      * @param stopWatch the stopwatch
      * @param mode the mode (onEntry, onExit, onError)
      * @return the log message
      */
     protected String toString(
-        AvalonInterceptorContext interceptorContext, 
+        AvalonInterceptorContext interceptorContext,
         StopWatch stopWatch,
         int mode
         )
@@ -252,12 +254,12 @@ public class PerformanceInterceptorServiceImpl
         result.append(interceptorContext.getInvocationDepth());
         result.append(SEPERATOR);
         result.append(mode);
-        result.append(SEPERATOR);        
+        result.append(SEPERATOR);
         result.append(interceptorContext.getServiceShorthand());
         result.append(SEPERATOR);
         result.append(method.getName());
         result.append(SEPERATOR);
-        result.append(stopWatch.getTime());        
+        result.append(stopWatch.getTime());
         result.append(SEPERATOR);
         result.append(methodToStringBuilder.toString());
         result.append(SEPERATOR);
@@ -265,10 +267,10 @@ public class PerformanceInterceptorServiceImpl
 
         return result.toString();
     }
-    
+
     /**
      * Prints the argument list.
-     * 
+     *
      * @return the debug output
      */
     protected String toString( Object[] args )
@@ -287,14 +289,14 @@ public class PerformanceInterceptorServiceImpl
             result.append("arg[" + i + "]:={");
             result.append( toStringBuilder.toString());
             result.append("}");
-            
+
             if( i<args.length-1)
             {
             		result.append(SEPERATOR);
             }
         }
-        
+
         return result.toString();
-    }   
-    
+    }
+
 }

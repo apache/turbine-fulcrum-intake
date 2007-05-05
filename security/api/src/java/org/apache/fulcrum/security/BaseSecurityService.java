@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import org.apache.avalon.framework.activity.Initializable;
@@ -26,13 +29,13 @@ import org.apache.avalon.framework.service.Serviceable;
 import org.apache.avalon.framework.thread.ThreadSafe;
 /**
  * This a basis implementation of the Fulcrum security service.
- * 
+ *
  * Provided functionality includes:
  * <ul>
  * <li>methods for retrieving different types of managers.
  * <li>avalon lifecyle managers.
  * </ul>
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric PUgh</a>
  * @version $Id$
  */
@@ -61,7 +64,7 @@ public class BaseSecurityService
     protected ModelManager modelManager = null;
     /**
 	 * Returns the configured UserManager.
-	 * 
+	 *
 	 * @return An UserManager object
 	 */
     public UserManager getUserManager()
@@ -82,7 +85,7 @@ public class BaseSecurityService
     }
     /**
 	 * Returns the configured GroupManager.
-	 * 
+	 *
 	 * @return An UserManager object
 	 */
     public GroupManager getGroupManager()
@@ -103,7 +106,7 @@ public class BaseSecurityService
     }
     /**
 	 * Returns the configured RoleManager.
-	 * 
+	 *
 	 * @return An RoleManager object
 	 */
     public RoleManager getRoleManager()
@@ -124,7 +127,7 @@ public class BaseSecurityService
     }
     /**
 	 * Returns the configured PermissionManager.
-	 * 
+	 *
 	 * @return An PermissionManager object
 	 */
     public PermissionManager getPermissionManager()
@@ -145,7 +148,7 @@ public class BaseSecurityService
     }
     /**
 	 * Returns the configured ModelManager.
-	 * 
+	 *
 	 * @return An ModelManager object
 	 */
     public ModelManager getModelManager()
@@ -166,7 +169,7 @@ public class BaseSecurityService
     }
     /**
 	 * Configure a new role Manager.
-	 * 
+	 *
 	 * @param -ermissionManager An PermissionManager object
 	 */
     // void setPermissionManager(PermissionManager permissionManager);
@@ -183,13 +186,13 @@ public class BaseSecurityService
     public void service(ServiceManager manager) throws ServiceException
     {
         this.manager = manager;
-        
+
 
     }
     /**
 	 * Avalon Service lifecycle method Initializes the SecurityService, locating the apropriate
 	 * UserManager
-	 * 
+	 *
 	 * @throws Exception A Problem occured while initializing the User Manager.
 	 */
     public void initialize() throws Exception

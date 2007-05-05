@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import org.apache.avalon.framework.component.Component;
 import org.apache.fulcrum.security.acl.AccessControlList;
@@ -60,7 +63,7 @@ public interface UserManager extends Component
      * @throws DataBackendException if the object could not be instantiated.
      */
     User getUserInstance(String userName) throws DataBackendException;
- 
+
 	/**
    * Determines if the <code>User</code> exists in the security system.
    *
@@ -70,7 +73,7 @@ public interface UserManager extends Component
    *         the same name exists.
    * @throws Exception A generic exception.
    */
-	boolean checkExists(User user) throws DataBackendException; 
+	boolean checkExists(User user) throws DataBackendException;
     /**
      * Check whether a specified user's account exists.
      *
@@ -105,7 +108,7 @@ public interface UserManager extends Component
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-   User getUserById(Object id) throws UnknownEntityException, DataBackendException;    
+   User getUserById(Object id) throws UnknownEntityException, DataBackendException;
     /**
      * Retrieve a user from persistent storage using username as the
      * key, and authenticate the user. The implementation may chose
@@ -132,7 +135,7 @@ public interface UserManager extends Component
 	   * @throws DataBackendException if there was an error accessing the data
 	   *         backend.
 	   */
-	UserSet getAllUsers() throws DataBackendException;    
+	UserSet getAllUsers() throws DataBackendException;
     /**
     * Saves User's data in the permanent storage. The user account is required
     * to exist in the storage.
@@ -208,7 +211,7 @@ public interface UserManager extends Component
      *            storage.
      */
     void forcePassword(User user, String password) throws UnknownEntityException, DataBackendException;
-    
+
     /**
        * Return a Class object representing the system's chosen implementation of
        * of ACL interface.
@@ -218,9 +221,9 @@ public interface UserManager extends Component
        *         could not be determined, or does not exist.
        */
     public AccessControlList getACL(User user) throws UnknownEntityException;
-    
-	
 
 
-    
+
+
+
 }

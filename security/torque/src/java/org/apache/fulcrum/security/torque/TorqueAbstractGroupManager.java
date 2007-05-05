@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.torque;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.sql.Connection;
 import java.util.Iterator;
@@ -38,9 +41,9 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
 {
     /**
      * Get all specialized Groups
-     * 
+     *
      * @param con a database connection
-     * 
+     *
      * @return a List of Group instances
      *
      * @throws TorqueException if any database error occurs
@@ -50,10 +53,10 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
 
     /**
      * Get a specialized Group by name
-     * 
+     *
      * @param name the name of the group
      * @param con a database connection
-     * 
+     *
      * @return a Group instance
      *
      * @throws NoRowsException if no such group exists
@@ -65,10 +68,10 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
 
     /**
      * Get a specialized Group by id
-     * 
+     *
      * @param id the id of the group
      * @param con a database connection
-     * 
+     *
      * @return a Group instance
      *
      * @throws NoRowsException if no such group exists
@@ -77,7 +80,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
      */
     protected abstract Group doSelectById(Integer id, Connection con)
         throws NoRowsException, TooManyRowsException, TorqueException;
-    
+
     /**
     * Creates a new group with specified attributes.
     *
@@ -97,7 +100,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
         {
             throw new DataBackendException("Adding Group '" + group.getName() + "' failed", e);
         }
-        
+
         return group;
     }
 
@@ -115,7 +118,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
         if (checkExists(group))
         {
             group.setName(name);
-    
+
             try
             {
                 TorqueAbstractSecurityEntity g = (TorqueAbstractSecurityEntity)group;
@@ -166,16 +169,16 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
     {
         Group group = null;
         Connection con = null;
-    
+
         try
         {
             con = Transaction.begin(((TorqueAbstractSecurityEntity)getGroupInstance()).getDatabaseName());
-            
+
             group = doSelectByName(name, con);
-    
+
             // Add dependent objects if they exist
             ((TorqueAbstractSecurityEntity)group).retrieveAttachedObjects(con);
-    
+
             Transaction.commit(con);
             con = null;
         }
@@ -198,7 +201,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
                 Transaction.safeRollback(con);
             }
         }
-    
+
         return group;
     }
 
@@ -213,23 +216,23 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
     {
         GroupSet groupSet = new GroupSet();
         Connection con = null;
-    
+
         try
         {
             con = Transaction.begin(((TorqueAbstractSecurityEntity)getGroupInstance()).getDatabaseName());
-    
+
             List groups = doSelectAllGroups(con);
-            
+
             for (Iterator i = groups.iterator(); i.hasNext();)
             {
                 Group group = (Group)i.next();
-                
+
                 // Add dependent objects if they exist
                 ((TorqueAbstractSecurityEntity)group).retrieveAttachedObjects(con);
-    
+
                 groupSet.add(group);
             }
-    
+
             Transaction.commit(con);
             con = null;
         }
@@ -244,7 +247,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
                 Transaction.safeRollback(con);
             }
         }
-    
+
         return groupSet;
     }
 
@@ -259,18 +262,18 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
     public boolean checkExists(String groupName) throws DataBackendException
     {
         boolean exists = false;
-    
+
         Connection con = null;
-        
+
         try
         {
             con = Transaction.begin(((TorqueAbstractSecurityEntity)getGroupInstance()).getDatabaseName());
-    
+
             doSelectByName(groupName, con);
-            
+
             Transaction.commit(con);
             con = null;
-    
+
             exists = true;
         }
         catch (NoRowsException e)
@@ -293,7 +296,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
                 Transaction.safeRollback(con);
             }
         }
-    
+
         return exists;
     }
 
@@ -311,20 +314,20 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
     public Group getGroupById(Object id) throws DataBackendException, UnknownEntityException
     {
         Group group;
-        
+
         if (id != null && id instanceof Integer)
         {
             Connection con = null;
-    
+
             try
             {
                 con = Transaction.begin(((TorqueAbstractSecurityEntity)getGroupInstance()).getDatabaseName());
-                
+
                 group = doSelectById((Integer)id, con);
-                
+
                 // Add dependent objects if they exist
                 ((TorqueAbstractSecurityEntity)group).retrieveAttachedObjects(con);
-    
+
                 Transaction.commit(con);
                 con = null;
             }
@@ -348,7 +351,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
         {
             throw new UnknownEntityException("Invalid group id '" + id + "'");
         }
-    
+
         return group;
     }
 }

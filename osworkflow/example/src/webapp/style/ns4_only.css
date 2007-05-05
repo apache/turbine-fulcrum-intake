@@ -1,8 +1,26 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 /* $Id: ns4_only.css,v 1.3 2002/06/26 21:53:45 tfahrner Exp $
 
 simple rules suitable for Netscape 4.x only; richer rules are in tigris.css. see <http://style.tigris.org/> */
 
-/* colors, backgrounds, borders, link indication */ 
+/* colors, backgrounds, borders, link indication */
 
 body {
  background: #fff;
@@ -15,7 +33,7 @@ a:active, a:hover, #leftcol a:active, #leftcol a:hover {
  color: #f30;
  }
 #login a:link, #login a:visited {
- color: white; 
+ color: white;
  text-decoration: underline;
  }
 #banner a:active, #banner a:hover {
@@ -26,11 +44,11 @@ a:active, a:hover, #leftcol a:active, #leftcol a:hover {
  }
 #apphead h2 em {
  color: #777
- } 
-.a td { 
+ }
+.a td {
  background: #ddd;
  }
-.b td { 
+.b td {
  background: #efefef;
  }
 .tabs th {
@@ -43,7 +61,7 @@ a:active, a:hover, #leftcol a:active, #leftcol a:hover {
 .tabs th, .tabs th a:link, .tabs th a:visited {
  color: #333;
  }
-.tabs td, .tabs td a:link, .tabs td a:visited  { 
+.tabs td, .tabs td a:link, .tabs td a:visited  {
  color: #fff;
  }
 .app th {
@@ -53,7 +71,7 @@ a:active, a:hover, #leftcol a:active, #leftcol a:hover {
  background-color: #ddd;
  color: black
  }
-.alert { 
+.alert {
  color: #c00;
  }
 .confirm {
@@ -68,11 +86,11 @@ a:active, a:hover, #leftcol a:active, #leftcol a:hover {
 #login {
  color: #fff;
  }
-#banner, #banner td { 
+#banner, #banner td {
  background: #036;
  color: #fff;
  }
-body #banner #login a { 
+body #banner #login a {
  color: white;
  }
 
@@ -96,16 +114,16 @@ h2, h3, h4 {
  }
 #apphead h2 em {
 	font-style: normal;
- } 
+ }
 .tabs th {
  font-weight: bold
- } 
- 
+ }
+
 /* box properties (exclusive of borders), positioning, alignments, list types, text-indent */
 
 th, td {
  text-align: left;
- vertical-align: top 
+ vertical-align: top
  }
 .right {
  text-align: right;
@@ -145,7 +163,7 @@ dd {
  margin-top: .3em;
  padding-left: 1em;
  }
-#banner, #banner td { 
+#banner, #banner td {
  vertical-align: middle;
  }
 body.docs, body.nonav {

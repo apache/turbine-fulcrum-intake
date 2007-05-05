@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
 <document>
 
   <properties>
@@ -10,17 +28,17 @@
 
     <section name="Overview">
       <p>
-        This service uses a background thread to monitor a resource. A 
-        resource is loaded by using a resource name and an InputStreamLocator. 
+        This service uses a background thread to monitor a resource. A
+        resource is loaded by using a resource name and an InputStreamLocator.
         The a SHA-1 hashcode is derived and compared to the previous hashcode.
-        If a change is detected the container is disposed, either by 
+        If a change is detected the container is disposed, either by
         terminating all active threads or by calling System.exit(). This
         service allows to shutdown a long-running application by writing
         a timestamp into a file therefore avoiding any additional network
         support.
       </p>
     </section>
-    
+
     <section name="Configuration">
 
       <subsection name="Role Configuration">
@@ -32,7 +50,7 @@
   default-class="org.apache.fulcrum.yaafi.service.shutdown.ShutdownServiceImpl"
   early-init="true"
   description="Monitors a resource to force a disposal of the Avalon container"
-/>   
+/>
           ]]>
         </source>
       </subsection>
@@ -48,15 +66,15 @@
           <![CDATA[
 <ShutdownService interval="5000">
   <entry>
-    <location>./src/test/shutdown.txt</location> 
-    <useSystemExit>true</useSystemExit> 
-  </entry>    
+    <location>./src/test/shutdown.txt</location>
+    <useSystemExit>true</useSystemExit>
+  </entry>
 </ShutdownService>
           ]]>
         </source>
       </subsection>
     </section>
-        
+
   </body>
-    
+
 </document>

@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
 
 <document>
 
@@ -15,7 +33,7 @@
         This tutorial demonstrate how to write an Avalon service - in our
         case an Avalon SystemProperty Service.
       </p>
-      
+
      <subsection name="What We Want to Do?!">
        <p>
          The service will implement the following features
@@ -24,8 +42,8 @@
            <li>write some diagnostic output to the logfile</li>
            <li>be reconfigurable without restarting the container</li>
            <li>dump the updated system properties into the temporary directory</li>
-         </ul>       
-       </p>       
+         </ul>
+       </p>
      </subsection>
 
      <subsection name="The Five Steps to Happiness">
@@ -36,8 +54,8 @@
          <li><a href="step4.html">Running an Avalon Service</a></li>
          <li><a href="step5.html">Odds and Ends</a></li>
        </ul>
-     </subsection>     
-           
+     </subsection>
+
     </section>
 
   </body>

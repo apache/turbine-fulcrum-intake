@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
 
 <document>
 
@@ -10,34 +28,34 @@
   <body>
 
     <section name="The Implementation">
-    
+
       <p>
-        The Fulcrum ResourceManager Services manages multiple ResourceManager. Each ResourceManager 
+        The Fulcrum ResourceManager Services manages multiple ResourceManager. Each ResourceManager
         is responsible for exactly one domain. Therefore the Fulcrum ResourceManager Services just
         delegates the method invocations to the various ResourceManagers.
       </p>
 
       <subsection name="The Domain">
         <p>
-          The resources are located in a domain. A domain definition contains the location of the 
-          hierarchical resources, a suffix to filter resources based on their externsion and 
+          The resources are located in a domain. A domain definition contains the location of the
+          hierarchical resources, a suffix to filter resources based on their externsion and
           a flag for using the locator feature
         </p>
 
         <p>
-          It is not possible to define a domain more than once since each domain has a unique name. But it 
+          It is not possible to define a domain more than once since each domain has a unique name. But it
           is possible to use different domain names and share a location using a suffix filter.
         </p>
-      </subsection>     
+      </subsection>
 
       <subsection name="The Context">
         <p>
           The context consist of a String[] and is used to locate a resource. The file system
           implementation iterates over the context and creates a relative file name
         </p>
-      </subsection>     
-        
-    </section> 
+      </subsection>
+
+    </section>
 
   </body>
 </document>

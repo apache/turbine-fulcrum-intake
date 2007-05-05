@@ -1,7 +1,23 @@
+-- Licensed to the Apache Software Foundation (ASF) under one
+-- or more contributor license agreements.  See the NOTICE file
+-- distributed with this work for additional information
+-- regarding copyright ownership.  The ASF licenses this file
+-- to you under the Apache License, Version 2.0 (the
+-- "License"); you may not use this file except in compliance
+-- with the License.  You may obtain a copy of the License at
+--
+--   http://www.apache.org/licenses/LICENSE-2.0
+--
+-- Unless required by applicable law or agreed to in writing,
+-- software distributed under the License is distributed on an
+-- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+-- KIND, either express or implied.  See the License for the
+-- specific language governing permissions and limitations
+-- under the License.
 
------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 -- FULCRUM_DYNAMIC_PERMISSION
------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 drop table FULCRUM_DYNAMIC_PERMISSION if exists CASCADE;
 
 CREATE TABLE FULCRUM_DYNAMIC_PERMISSION
@@ -13,9 +29,9 @@ CREATE TABLE FULCRUM_DYNAMIC_PERMISSION
 );
 
 
------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 -- FULCRUM_DYNAMIC_ROLE
------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 drop table FULCRUM_DYNAMIC_ROLE if exists CASCADE;
 
 CREATE TABLE FULCRUM_DYNAMIC_ROLE
@@ -27,9 +43,9 @@ CREATE TABLE FULCRUM_DYNAMIC_ROLE
 );
 
 
------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 -- FULCRUM_DYNAMIC_GROUP
------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 drop table FULCRUM_DYNAMIC_GROUP if exists CASCADE;
 
 CREATE TABLE FULCRUM_DYNAMIC_GROUP
@@ -41,9 +57,9 @@ CREATE TABLE FULCRUM_DYNAMIC_GROUP
 );
 
 
------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 -- FULCRUM_DYNAMIC_USER
------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 drop table FULCRUM_DYNAMIC_USER if exists CASCADE;
 
 CREATE TABLE FULCRUM_DYNAMIC_USER
@@ -56,9 +72,9 @@ CREATE TABLE FULCRUM_DYNAMIC_USER
 );
 
 
------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 -- DYNAMIC_ROLE_PERMISSION
------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 drop table DYNAMIC_ROLE_PERMISSION if exists CASCADE;
 
 CREATE TABLE DYNAMIC_ROLE_PERMISSION
@@ -69,9 +85,9 @@ CREATE TABLE DYNAMIC_ROLE_PERMISSION
 );
 
 
------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 -- DYNAMIC_USER_GROUP
------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 drop table DYNAMIC_USER_GROUP if exists CASCADE;
 
 CREATE TABLE DYNAMIC_USER_GROUP
@@ -82,9 +98,9 @@ CREATE TABLE DYNAMIC_USER_GROUP
 );
 
 
------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 -- DYNAMIC_GROUP_ROLE
------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 drop table DYNAMIC_GROUP_ROLE if exists CASCADE;
 
 CREATE TABLE DYNAMIC_GROUP_ROLE
@@ -95,9 +111,9 @@ CREATE TABLE DYNAMIC_GROUP_ROLE
 );
 
 
------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 -- DYNAMIC_USER_DELEGATES
------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 drop table DYNAMIC_USER_DELEGATES if exists CASCADE;
 
 CREATE TABLE DYNAMIC_USER_DELEGATES

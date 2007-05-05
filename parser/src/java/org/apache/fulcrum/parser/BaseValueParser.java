@@ -2,19 +2,22 @@ package org.apache.fulcrum.parser;
 
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 
@@ -73,7 +76,7 @@ import org.apache.fulcrum.pool.Recyclable;
  */
 public class BaseValueParser
     extends AbstractLogEnabled
-    implements ValueParser, 
+    implements ValueParser,
                Recyclable, Configurable
 {
     /** The folding from the configuration */
@@ -1539,8 +1542,8 @@ public class BaseValueParser
 
         return (key != null) ? (String []) parameters.get(key) : null;
     }
-    
-    
+
+
     /** recylable support **/
 
     /**
@@ -1621,7 +1624,7 @@ public class BaseValueParser
     public String convertAndTrim(String value, int fold)
     {
         if(value == null) return "";
-        
+
         String tmp = value.trim();
 
         switch (fold)
@@ -1642,7 +1645,7 @@ public class BaseValueParser
                 tmp = tmp.toUpperCase();
                 break;
             }
-        
+
             default:
             {
                 getLogger().error("Passed " + fold + " as fold rule, which is illegal!");
@@ -1680,11 +1683,11 @@ public class BaseValueParser
         if (folding == URL_CASE_FOLDING_UNSET)
         {
             String foldString = conf.getChild(URL_CASE_FOLDING_KEY).getValue(URL_CASE_FOLDING_NONE_VALUE).toLowerCase();
-    
+
             folding = URL_CASE_FOLDING_NONE;
-    
+
             getLogger().debug("Setting folding from " + foldString);
-    
+
             if (StringUtils.isNotEmpty(foldString))
             {
                 if (foldString.equals(URL_CASE_FOLDING_NONE_VALUE))
@@ -1706,12 +1709,12 @@ public class BaseValueParser
                 }
             }
         }
-        
+
         parameterEncoding = conf.getChild(PARAMETER_ENCODING_KEY)
                             .getValue(PARAMETER_ENCODING_DEFAULT).toLowerCase();
 
         automaticUpload = conf.getAttributeAsBoolean(
-                            AUTOMATIC_KEY, 
+                            AUTOMATIC_KEY,
                             AUTOMATIC_DEFAULT);
     }
 }

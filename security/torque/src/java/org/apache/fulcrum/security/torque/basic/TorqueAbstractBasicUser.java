@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.torque.basic;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.sql.Connection;
 import java.util.Iterator;
@@ -41,21 +44,21 @@ public abstract class TorqueAbstractBasicUser extends TorqueAbstractSecurityEnti
 {
     /** a cache of group objects */
     private Set groupSet = null;
-    
+
     /**
      * Forward reference to generated code
-     * 
-     * Get a list of association objects, pre-populated with their TorqueBasicGroup 
+     *
+     * Get a list of association objects, pre-populated with their TorqueBasicGroup
      * objects.
-     * 
+     *
      * @param criteria Criteria to define the selection of records
      * @throws TorqueException
-     * 
+     *
      * @return a list of User/Group relations
      */
-    protected abstract List getTorqueBasicUserGroupsJoinTorqueBasicGroup(Criteria criteria) 
+    protected abstract List getTorqueBasicUserGroupsJoinTorqueBasicGroup(Criteria criteria)
         throws TorqueException;
-    
+
     /**
      * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#addGroup(org.apache.fulcrum.security.entity.Group)
      */
@@ -126,27 +129,27 @@ public abstract class TorqueAbstractBasicUser extends TorqueAbstractSecurityEnti
     public void retrieveAttachedObjects(Connection con) throws TorqueException
     {
         this.groupSet = new GroupSet();
-        
+
         List usergroups = getTorqueBasicUserGroupsJoinTorqueBasicGroup(new Criteria());
 
         for (Iterator i = usergroups.iterator(); i.hasNext();)
         {
-            TorqueBasicUserGroup tbug = (TorqueBasicUserGroup)i.next(); 
+            TorqueBasicUserGroup tbug = (TorqueBasicUserGroup)i.next();
             groupSet.add(tbug.getTorqueBasicGroup());
         }
     }
 
     /**
      * Update this instance to the database with all dependend objects
-     * 
-     * @param con A database connection 
+     *
+     * @param con A database connection
      */
     public void update(Connection con) throws TorqueException
     {
         if (groupSet != null)
         {
             Criteria criteria = new Criteria();
-            
+
             /* remove old entries */
             criteria.add(TorqueBasicUserGroupPeer.USER_ID, getEntityId());
             TorqueBasicUserGroupPeer.doDelete(criteria, con);
@@ -161,7 +164,7 @@ public abstract class TorqueAbstractBasicUser extends TorqueAbstractSecurityEnti
                 ug.save(con);
             }
         }
-        
+
         try
         {
             save(con);
@@ -174,8 +177,8 @@ public abstract class TorqueAbstractBasicUser extends TorqueAbstractSecurityEnti
 
     /**
      * Get the name of the connnection pool associated to this object
-     * 
-     * @return the logical Torque database name 
+     *
+     * @return the logical Torque database name
      */
     public String getDatabaseName()
     {

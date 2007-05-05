@@ -1,20 +1,22 @@
 package org.apache.fulcrum.script.impl;
 
 /*
- * Copyright 2005 Apache Software Foundation
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
- * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.io.IOException;
@@ -58,22 +60,22 @@ public class ScriptServiceImpl
 {
     /** the name of the default scripting engine*/
     private String defaultEngineName;
-    
+
     /** the script manager */
     private ScriptEngineManager scriptEngineManager;
-    
+
     /** the mapof scripting engines to use */
-    private HashMap scriptEngineMap; 
-    
+    private HashMap scriptEngineMap;
+
     /** maps from a script name to a script */
     private ScriptCache scriptCache;
-    
+
     /** a list of excluded services */
     private Set excludedServices;
 
-    /** common script configuration */ 
+    /** common script configuration */
     private Configuration scriptConfiguration;
-    
+
     /////////////////////////////////////////////////////////////////////////
     // Avalon Service Lifecycle Implementation
     /////////////////////////////////////////////////////////////////////////
@@ -104,22 +106,22 @@ public class ScriptServiceImpl
      */
     public void configure(Configuration configuration) throws ConfigurationException
     {
-        super.configure( configuration );    		
-        
+        super.configure( configuration );
+
         // extract the common script configuration
-        
+
         this.scriptConfiguration = configuration.getChild("scriptConfiguration");
-        
+
         // create all scripting engines
-        
-        Configuration[] scriptEngineConfigurationList = configuration.getChild("scriptEngines").getChildren("scriptEngine");        
-        
+
+        Configuration[] scriptEngineConfigurationList = configuration.getChild("scriptEngines").getChildren("scriptEngine");
+
         for (int i=0; i<scriptEngineConfigurationList.length; i++)
         {
             ScriptEngineEntry scriptEngineEntry = this.createScriptEngineEntry(scriptEngineConfigurationList[i]);
             this.getScriptEngineMap().put(scriptEngineEntry.getName(), scriptEngineEntry);
             this.getLogger().debug("Added ScriptEngine for " + scriptEngineEntry.getName());
-            
+
             if( this.defaultEngineName == null)
             {
                 this.defaultEngineName = scriptEngineEntry.getName();
@@ -127,19 +129,19 @@ public class ScriptServiceImpl
         }
 
         // verify that at least one scripting engine is available
-        
+
         if( this.getScriptEngineMap().size() == 0 )
         {
             String msg = "At least one scripting engine must be defined";
             this.getLogger().error(msg);
             throw new ConfigurationException(msg);
         }
-        
+
         // evaluate the scripts defined in the onLoad section
 
         this.preloadScripts();
     }
-    
+
     /**
      * @see org.apache.avalon.framework.activity.Initializable#initialize()
      */
@@ -148,7 +150,7 @@ public class ScriptServiceImpl
         ScriptAvalonContext avalonContext = this.createScriptAvalonContext();
         this.scriptEngineManager.put("avalonContext", avalonContext);
     }
-    
+
     /**
      * @see org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.apache.avalon.framework.configuration.Configuration)
      */
@@ -176,7 +178,7 @@ public class ScriptServiceImpl
     /////////////////////////////////////////////////////////////////////////
     // Service interface implementation
     /////////////////////////////////////////////////////////////////////////
-    
+
     /**
      * @see org.apache.fulcrum.script.ScriptService#getScriptEngineManager()
      */
@@ -184,7 +186,7 @@ public class ScriptServiceImpl
     {
         return this.scriptEngineManager;
     }
-    
+
     /**
      * @see org.apache.fulcrum.script.ScriptService#getScriptEngine()
      */
@@ -192,7 +194,7 @@ public class ScriptServiceImpl
     {
         return this.getScriptEngine(this.getDefaultEngineName());
     }
-        
+
     /**
      * @see org.apache.fulcrum.script.ScriptService#eval(java.lang.String, javax.script.Namespace)
      */
@@ -207,7 +209,7 @@ public class ScriptServiceImpl
         return result;
 
     }
-    
+
     /* (non-Javadoc)
      * @see org.apache.fulcrum.script.ScriptService#eval(java.lang.String, javax.script.ScriptContext)
      */
@@ -223,7 +225,7 @@ public class ScriptServiceImpl
         Object result = this.doEval( scriptCacheEntry, null, context );
         return result;
     }
-    
+
     /**
      * @see org.apache.fulcrum.script.ScriptService#eval(java.lang.String)
      */
@@ -235,7 +237,7 @@ public class ScriptServiceImpl
         Object result = this.doEval( scriptCacheEntry, null, null );
         return result;
     }
-        
+
     /**
      * @see org.apache.fulcrum.script.ScriptService#call(java.lang.String, java.lang.Object[])
      */
@@ -246,7 +248,7 @@ public class ScriptServiceImpl
         return this.call(this.getDefaultEngineName(), name, args);
 
     }
-    
+
     /**
      * @see org.apache.fulcrum.script.ScriptService#getInterface(java.lang.Class)
      */
@@ -254,20 +256,20 @@ public class ScriptServiceImpl
     {
         return this.getInterface(this.getDefaultEngineName(), clazz);
     }
-        
+
     /**
      * @see org.apache.fulcrum.script.ScriptService#exists(java.lang.String)
      */
     public boolean exists(String name)
     {
         Validate.notEmpty(name, "name");
-        
+
         String scriptName = this.makeScriptName(name);
         String engineName = this.getEngineName(scriptName);
         ScriptEngineEntry scriptEngineEntry = this.getScriptEngineEntry(engineName);
         String location = scriptEngineEntry.getLocation();
-        
-        if( this.getResourceManagerService().exists(location) &&            
+
+        if( this.getResourceManagerService().exists(location) &&
             this.getResourceManagerService().exists(location, scriptName) )
         {
             return true;
@@ -277,7 +279,7 @@ public class ScriptServiceImpl
             return false;
         }
     }
-    
+
     /////////////////////////////////////////////////////////////////////////
     // Service Implementation
     /////////////////////////////////////////////////////////////////////////
@@ -297,7 +299,7 @@ public class ScriptServiceImpl
     	throws ScriptException, NoSuchMethodException
     {
         Validate.notEmpty(engineName, "engineName");
-        
+
         Object result = this.doCall(engineName, name, args);
         return result;
     }
@@ -311,7 +313,7 @@ public class ScriptServiceImpl
     {
         Validate.notEmpty(engineName, "engineName");
         Validate.notNull(clazz, "clazz");
-        
+
         Object result = this.doGetInterface(engineName, clazz);
         return result;
     }
@@ -344,7 +346,7 @@ public class ScriptServiceImpl
     {
         ScriptEngineEntry scriptEngineEntry = this.getScriptEngineEntry(engineName);
         String location = scriptEngineEntry.getLocation();
-        
+
         String result = null;
         byte[] scriptContent = null;
         String[] sriptContext = {};
@@ -361,7 +363,7 @@ public class ScriptServiceImpl
 
     /**
      * Creates a compiled script.
-     * 
+     *
      * @param scriptName the name of the scipt to compile
      * @param scriptContent the name  scipt to compile
      * @return the compiled script
@@ -371,9 +373,9 @@ public class ScriptServiceImpl
         throws ScriptException
     {
         CompiledScript result = null;
-        
+
         try
-        {            
+        {
             ScriptEngineEntry scriptEngineEntry = this.getScriptEngineEntry(engineName);
             Compilable compilable = (Compilable) scriptEngineEntry.getScriptEngine();
             long startTime = System.currentTimeMillis();
@@ -387,7 +389,7 @@ public class ScriptServiceImpl
 	                + (endTime - startTime) + " ms"
 	                );
             }
-            
+
             return result;
         }
         catch (ScriptException e)
@@ -400,7 +402,7 @@ public class ScriptServiceImpl
 
     /**
      * Evaluates a script.
-     * 
+     *
      * @param scriptCacheEntry the script to run
      * @param namespace the parameters to pass to the script
      * @return the result of the executed script
@@ -415,7 +417,7 @@ public class ScriptServiceImpl
         try
         {
             long startTime = System.currentTimeMillis();
-            
+
             if( scriptCacheEntry.isCompiled() )
             {
                 if( namespace != null )
@@ -443,10 +445,10 @@ public class ScriptServiceImpl
                 }
                 else
                 {
-                    result = scriptEngine.eval(scriptCacheEntry.getPlainScript());    
+                    result = scriptEngine.eval(scriptCacheEntry.getPlainScript());
                 }
             }
-            
+
             long endTime = System.currentTimeMillis();
 
             if( this.getLogger().isDebugEnabled() )
@@ -456,7 +458,7 @@ public class ScriptServiceImpl
 	                + (endTime - startTime) + " ms"
 	                );
             }
-            
+
             return result;
         }
         catch( ScriptException e )
@@ -481,7 +483,7 @@ public class ScriptServiceImpl
         try
         {
             long startTime = System.currentTimeMillis();
-            result = invocable.call(name, args);   
+            result = invocable.call(name, args);
             long endTime = System.currentTimeMillis();
 
             if( this.getLogger().isDebugEnabled() )
@@ -491,7 +493,7 @@ public class ScriptServiceImpl
 	                + (endTime - startTime) + " ms"
 	                );
             }
-            
+
             return result;
         }
         catch( ScriptException e )
@@ -510,7 +512,7 @@ public class ScriptServiceImpl
 
     /**
      * Creates a script object implementing the requested interface.
-     * 
+     *
      * @param engineName the name of the scripting engine
      * @param clazz the requested interface
      * @return the result of the executed script
@@ -525,7 +527,7 @@ public class ScriptServiceImpl
         try
         {
             long startTime = System.currentTimeMillis();
-            result = invocable.getInterface(clazz);            
+            result = invocable.getInterface(clazz);
             long endTime = System.currentTimeMillis();
 
             if( this.getLogger().isDebugEnabled() )
@@ -535,7 +537,7 @@ public class ScriptServiceImpl
 	                + (endTime - startTime) + " ms"
 	                );
             }
-            
+
             return result;
         }
         catch( RuntimeException e )
@@ -552,7 +554,7 @@ public class ScriptServiceImpl
     private ScriptAvalonContext createScriptAvalonContext()
     {
         ScriptAvalonContextImpl result = null;
-        
+
         ScriptServiceManagerImpl scriptServiceManager = new ScriptServiceManagerImpl(
             this.getServiceManager(),
             this.excludedServices
@@ -584,96 +586,96 @@ public class ScriptServiceImpl
     {
         return scriptCache;
     }
-    
-    /** 
-     * Creates a script to be evaluates. 
-     * 
+
+    /**
+     * Creates a script to be evaluates.
+     *
      * @param scriptName the name of the script to execute
      * @return ScriptCacheEntry
      */
-    private synchronized ScriptCacheEntry createScriptCacheEntry(String scriptName) 
+    private synchronized ScriptCacheEntry createScriptCacheEntry(String scriptName)
     	throws IOException, ScriptException
     {
         String engineName = this.getEngineName(scriptName);
         ScriptCacheEntry scriptCacheEntry = null;
-        ScriptEngineEntry scriptEngineEntry = this.getScriptEngineEntry(engineName);        
+        ScriptEngineEntry scriptEngineEntry = this.getScriptEngineEntry(engineName);
         String plainScript = null;
         CompiledScript compiledScript = null;
         boolean isInCache = false;
-        
+
         // try to load the script from the cache or from the resource manager
-        
+
         if( scriptEngineEntry.isCached() == true )
         {
             scriptCacheEntry = this.getScriptCache().get(scriptName);
-            
+
             if( scriptCacheEntry == null )
             {
                 plainScript = this.loadScript(engineName, scriptName);
             }
             else
-            {                
+            {
                 plainScript = scriptCacheEntry.getPlainScript();
                 isInCache = true;
-            }            
+            }
         }
         else
         {
             plainScript = this.loadScript(engineName, scriptName);
         }
-        
+
         if( isInCache == false )
         {
 	        // compile the script if required
-	        
+
 	        if( scriptEngineEntry.isCompiled())
 	        {
 	            compiledScript = this.compileScript(engineName, scriptName, plainScript);
 	        }
-	        
+
             scriptCacheEntry = new ScriptCacheEntry(
 	            engineName,
 	            scriptName,
-	            plainScript,                        
+	            plainScript,
 	            compiledScript
 	            );
 
 	        // update the cache
-	        
+
 	        if( scriptEngineEntry.isCached() )
-	        {        	            	            
+	        {
 	            this.getScriptCache().put(scriptCacheEntry);
 	        }
         }
-        
+
         return scriptCacheEntry;
     }
 
     /**
      * Create a ScriptEngineEntry by parsing the configuration.
-     * 
+     *
      * @param configuration the configuration
      * @return ScriptEngineEntry
      * @throws ConfigurationException parsing the configuration failed
      */
     private ScriptEngineEntry createScriptEngineEntry(Configuration configuration)
     	throws ConfigurationException
-    {        
+    {
         String name = configuration.getChild("name").getValue();
         boolean isCached = configuration.getChild("isCached").getValueAsBoolean(true);
         boolean isCompiled = configuration.getChild("isCompiled").getValueAsBoolean(true);
         String location = configuration.getChild("location").getValue(name);
         ScriptEngine scriptEngine = this.getScriptEngineManager().getEngineByName(name);
-        
-        if( (scriptEngine instanceof Compilable) == false ) 
+
+        if( (scriptEngine instanceof Compilable) == false )
         {
             isCompiled = false;
         }
-        
+
         ScriptEngineEntry result = new ScriptEngineEntry(name, isCached, isCompiled, location, scriptEngine);
-        
+
         // evaluate the given scripts
-        
+
         ArrayList scriptList = new ArrayList();
         Configuration[] scriptListConfiguration = configuration.getChild("preLoad").getChildren("script");
         for( int i=0; i<scriptListConfiguration.length; i++ )
@@ -682,38 +684,38 @@ public class ScriptServiceImpl
         }
 
         result.setScriptList(scriptList);
-        
-        return result;                
+
+        return result;
     }
-    
-    /** 
+
+    /**
      * @param engineName the name of the scriptng engine
      * @return the ScriptEngineEntry
      */
     private ScriptEngineEntry getScriptEngineEntry( String engineName)
     {
         ScriptEngineEntry result = (ScriptEngineEntry) this.getScriptEngineMap().get(engineName);
-        
+
         if( result == null )
         {
             String msg = "Unable to handle scripts for the following script engine : " + engineName;
             this.getLogger().error(msg);
             throw new IllegalArgumentException(msg);
         }
-        
+
         return result;
     }
-    
+
     /**
      * Determines the name of the scripting engine by looking at the extension
-     * 
+     *
      * @param scriptName the script name
      * @return name of the scripting engine
      */
     private String getEngineName( String scriptName )
     {
         int pos = scriptName.lastIndexOf('.');
-        
+
         if( pos > 0 )
         {
             return scriptName.substring(pos+1, scriptName.length());
@@ -723,7 +725,7 @@ public class ScriptServiceImpl
             return this.getDefaultEngineName();
         }
     }
-        
+
     /**
      * @return Returns the scriptEngineMap.
      */
@@ -731,10 +733,10 @@ public class ScriptServiceImpl
     {
         return scriptEngineMap;
     }
-    
+
     /**
      * Ensure that the name has a proper extension.
-     * 
+     *
      * @param name the name of the script
      * @return script name
      */
@@ -742,7 +744,7 @@ public class ScriptServiceImpl
     {
         String engineName = this.getEngineName(name);
         String extension = '.' + engineName;
-        
+
         if( name.endsWith(extension) )
         {
             return name;
@@ -752,25 +754,25 @@ public class ScriptServiceImpl
             return name + extension;
         }
     }
-    
+
     /**
      * Preload the scripts defined in the onLoad section
      */
     private void preloadScripts()
     {
         Iterator iter = this.getScriptEngineMap().keySet().iterator();
-        
+
         while( iter.hasNext() )
         {
             String engineName = (String) iter.next();
             ScriptEngineEntry scriptEngineEntry = this.getScriptEngineEntry(engineName);
             ScriptEngine scriptEngine = scriptEngineEntry.getScriptEngine();
             Object[] scriptList = scriptEngineEntry.getScriptList().toArray();
-            
+
             for( int i=0; i<scriptList.length; i++ )
-            {                
+            {
                 String scriptName = scriptList[i].toString();
-                
+
                 try
                 {
                     String plainScript = this.loadScript(engineName, scriptName);
@@ -783,6 +785,6 @@ public class ScriptServiceImpl
                     throw new RuntimeException(msg);
                 }
             }
-        }                   
+        }
     }
 }

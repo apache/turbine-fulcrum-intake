@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
 <document>
   <properties>
     <title>Fulcrum CommonsEmail Service</title>
@@ -10,7 +28,7 @@
       <subsection name="Complexity">
         <p>
           Your first impression might be that the implementation is
-          overly complicated - and yes, you are right. On the other 
+          overly complicated - and yes, you are right. On the other
           hand sending emails is our core business and we regularly
           have to do the following things
           <ul>
@@ -21,8 +39,8 @@
             </li>
           </ul>
         </p>
-      </subsection>          
-    
+      </subsection>
+
       <subsection name="Domain Centric Approach">
         <p>
           The configuration of the services is centered around domains whereas
@@ -30,16 +48,16 @@
           contains all relevant configuration information for the email being
           created or sent.
         </p>
-      </subsection>          
+      </subsection>
 
       <subsection name="Application Hooks">
         <p>
           The service provide methods which can be overriden by a derived class.
           Since the author has no idea about the required configuration needed by
-          a derived class the CommonsEmailDomainEntry allows access to the 
+          a derived class the CommonsEmailDomainEntry allows access to the
           corresponding configuration instance.
         </p>
-      </subsection>          
+      </subsection>
 
       <subsection name="Determining a Domain">
         <p>
@@ -50,8 +68,8 @@
             <li>take the default domain</li>
           </ul>
         </p>
-      </subsection>          
-      
+      </subsection>
+
     </section>
   </body>
 </document>

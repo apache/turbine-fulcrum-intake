@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
 
 <document>
 
@@ -13,24 +31,24 @@
 
       <subsection name="How to write my own service?">
         <ul>
-          <li> 
-            Write your service interface and implementation using the 
+          <li>
+            Write your service interface and implementation using the
             Avalon Lifecycle interfaces.
           </li>
-          <li> 
+          <li>
             Add an entry to the role configuration file. This entry
             contains the information how YAAFI can instantiate and
             access the service
           </li>
-          <li> 
+          <li>
             Add an entry to the component configurating file if
             you need to configure your service.
           </li>
-        </ul>          
+        </ul>
       </subsection>
-      
+
       <subsection name="How can I embed YAAFI in an application?">
-        <p> 
+        <p>
           The embedding is done by creating a YAAFI instance using the
           ServiceContainerFactory.create() method. Technically there
           are two ways to create a YAAFI container
@@ -40,35 +58,35 @@
           </ul>
         </p>
 
-        <p> 
+        <p>
           The following example creates a fully initialized and running
           YAAFI container with the given configuration parameters using
-          a LOG4J logger. 
+          a LOG4J logger.
         </p>
-        
+
         <source>
 Logger logger = new Log4JLogger( org.apache.log4j.Logger.getLogger("YAAFI");
 ServiceContainer container = null;
-ServiceContainerConfiguration config = new ServiceContainerConfiguration();        
+ServiceContainerConfiguration config = new ServiceContainerConfiguration();
 config.setLogger( logger );
 config.setComponentRolesLocation( "./src/test/TestRoleConfig.xml" );
 config.setComponentConfigurationLocation( "./src/test/TestComponentConfig.xml" );
-config.setParametersLocation( "./src/test/TestParameters.properties" );                               
+config.setParametersLocation( "./src/test/TestParameters.properties" );
 container = ServiceContainerFactory.create( config );
         </source>
 
-        <p> 
-          The following example uses a XML file to initialize the YAAFI 
+        <p>
+          The following example uses a XML file to initialize the YAAFI
           container
         </p>
-        
+
         <source>
 ServiceContainer container = null;
-ServiceContainerConfiguration config = new ServiceContainerConfiguration();                
-config.setContainerConfiguration( "./src/test/TestContainerConfig.xml", false );        
+ServiceContainerConfiguration config = new ServiceContainerConfiguration();
+config.setContainerConfiguration( "./src/test/TestContainerConfig.xml", false );
 container = ServiceContainerFactory.create( config );
         </source>
-        
+
       <p>
         At the end of day you have to terminate YAAFI
       </p>
@@ -80,7 +98,7 @@ ServiceContainerFactory.dispose(container);
       </subsection>
 
       <subsection name="How can I embed YAAFI into Turbine?">
-        <p>        
+        <p>
           In the 'contrib' directory there is a ready-to-use Turbine
           service which needs the following configuration (for Turbine 2.2)
         </p>
@@ -90,9 +108,9 @@ services.YaafiComponentService.componentRoles=./conf/componentRoles.xml
 services.YaafiComponentService.componentConfiguration=./conf/componentConfiguration.xml
 services.YaafiComponentService.parameters=
         </source>
-        
+
       </subsection>
-    
+
     </section>
 
   </body>

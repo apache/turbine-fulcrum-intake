@@ -1,19 +1,22 @@
 package org.apache.fulcrum.intake;
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.beans.IntrospectionException;
@@ -58,12 +61,12 @@ import org.apache.fulcrum.localization.LocalizationService;
 /**
  * This service provides access to input processing objects based on an XML
  * specification.
- * 
+ *
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
- * 
+ *
  * @avalon.component name="intake"
  * @avalon.service type="org.apache.fulcrum.intake.IntakeService"
  */
@@ -105,7 +108,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
     /**
      * Registers a given group name in the system
-     * 
+     *
      * @param groupName
      *            The name to register the group under
      * @param group
@@ -114,7 +117,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      *            The app Data object where the group can be found
      * @param checkKey
      *            Whether to check if the key also exists.
-     * 
+     *
      * @return true if successful, false if not
      */
     private boolean registerGroup(String groupName, XmlGroup group,
@@ -160,10 +163,10 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
     /**
      * Tries to load a serialized Intake Group file. This can reduce the startup
      * time of Turbine.
-     * 
+     *
      * @param serialDataPath
      *            The path of the File to load.
-     * 
+     *
      * @return A map with appData objects loaded from the file or null if the
      *         map could not be loaded.
      */
@@ -249,7 +252,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      * Writes a parsed XML map with all the appData groups into a file. This
      * will speed up loading time when you restart the Intake Service because it
      * will only unserialize this file instead of reloading all of the XML files
-     * 
+     *
      * @param serialDataPath
      *            The path of the file to write to
      * @param appDataElements
@@ -330,7 +333,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
     /**
      * Gets an instance of a named group either from the pool or by calling the
      * Factory Service if the pool is empty.
-     * 
+     *
      * @param groupName
      *            the name of the group.
      * @return a Group instance.
@@ -368,10 +371,10 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
     /**
      * Puts a Group back to the pool.
-     * 
+     *
      * @param instance
      *            the object instance to recycle.
-     * 
+     *
      * @throws IntakeException
      *             The passed group name does not exist.
      */
@@ -404,10 +407,10 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
     /**
      * Gets the current size of the pool for a group.
-     * 
+     *
      * @param groupName
      *            the name of the group.
-     * 
+     *
      * @throws IntakeException
      *             The passed group name does not exist.
      */
@@ -428,7 +431,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
     /**
      * Names of all the defined groups.
-     * 
+     *
      * @return array of names.
      */
     public String[] getGroupNames()
@@ -438,7 +441,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
     /**
      * Gets the key (usually a short identifier) for a group.
-     * 
+     *
      * @param groupName
      *            the name of the group.
      * @return the the key.
@@ -450,7 +453,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
     /**
      * Gets the group name given its key.
-     * 
+     *
      * @param groupKey
      *            the key.
      * @return groupName the name of the group.
@@ -462,7 +465,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
     /**
      * Gets the Method that can be used to set a property.
-     * 
+     *
      * @param className
      *            the name of the object.
      * @param propName
@@ -527,7 +530,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
     /**
      * Gets the Method that can be used to get a property value.
-     * 
+     *
      * @param className
      *            the name of the object.
      * @param propName
@@ -796,7 +799,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
     /**
      * Avalon component lifecycle method Initializes the service by loading
      * default class loaders and customized object factories.
-     * 
+     *
      * @throws InitializationException
      *             if initialization fails.
      */
@@ -820,7 +823,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
     /**
      * Avalon component lifecycle method
-     * 
+     *
      * @avalon.dependency type="org.apache.fulcrum.localization.LocalizationService"
      */
     public void service(ServiceManager manager) throws ServiceException

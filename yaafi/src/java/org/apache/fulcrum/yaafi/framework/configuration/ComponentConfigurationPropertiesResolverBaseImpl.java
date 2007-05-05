@@ -1,17 +1,20 @@
 /*
- * Copyright 2002-2005 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.fulcrum.yaafi.framework.configuration;
 
@@ -34,15 +37,15 @@ import org.apache.fulcrum.yaafi.framework.util.InputStreamLocator;
 /**
  * Base class to expand the value and all attributes. This class is intentend
  * to be sub-classed if you hook up your own configuration mechanism.
- * 
+ *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
-public abstract class ComponentConfigurationPropertiesResolverBaseImpl 
+public abstract class ComponentConfigurationPropertiesResolverBaseImpl
 	implements ComponentConfigurationPropertiesResolver, LogEnabled, Contextualizable, Configurable
 {
     /** the logger of the container */
     private Logger logger;
-    
+
     /** the Avalon context */
     private Context context;
 
@@ -56,7 +59,7 @@ public abstract class ComponentConfigurationPropertiesResolverBaseImpl
     {
         this.logger = logger;
     }
-    
+
     /*
      * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
      */
@@ -64,7 +67,7 @@ public abstract class ComponentConfigurationPropertiesResolverBaseImpl
     {
         this.context = context;
     }
-    
+
     /**
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
@@ -72,7 +75,7 @@ public abstract class ComponentConfigurationPropertiesResolverBaseImpl
     {
         this.configuration = configuration;
     }
-    
+
     /**
      * @return Returns the logger.
      */
@@ -80,7 +83,7 @@ public abstract class ComponentConfigurationPropertiesResolverBaseImpl
     {
         return logger;
     }
-    
+
     /**
      * @return Returns the context.
      */
@@ -88,7 +91,7 @@ public abstract class ComponentConfigurationPropertiesResolverBaseImpl
     {
         return context;
     }
-    
+
     /**
      * @return the home directory of the application
      */
@@ -103,7 +106,7 @@ public abstract class ComponentConfigurationPropertiesResolverBaseImpl
             throw new RuntimeException(e.getMessage());
         }
     }
-    
+
     /**
      * @return Returns the configuration.
      */
@@ -111,7 +114,7 @@ public abstract class ComponentConfigurationPropertiesResolverBaseImpl
     {
         return configuration;
     }
-    
+
     /**
      * @return Returns the componentConfigurationPropertiesLocation.
      */
@@ -119,9 +122,9 @@ public abstract class ComponentConfigurationPropertiesResolverBaseImpl
     {
         return configuration.getChild("location").getValue(COMPONENT_CONFIG_PROPERTIES_VALUE );
     }
-    
+
     /**
-     * Creates an InputStream using a Locator. 
+     * Creates an InputStream using a Locator.
      * @return the InputStrem or null if the resource was not found
      */
     protected InputStream createInputStream(String location) throws IOException
@@ -129,41 +132,41 @@ public abstract class ComponentConfigurationPropertiesResolverBaseImpl
         InputStreamLocator locator = new InputStreamLocator(this.getApplicationRootDir(), this.getLogger());
         return locator.locate(location);
     }
-    
+
     /**
      * Add the Avalon context variables.
      */
     protected void addAvalonContext(Properties properties) throws ContextException
     {
-        properties.put( 
-            AvalonYaafiConstants.URN_AVALON_NAME, 
-            this.getContext().get(AvalonYaafiConstants.URN_AVALON_NAME) 
-            );
-        
-        properties.put( 
-            AvalonYaafiConstants.URN_AVALON_PARTITION, 
-            this.getContext().get(AvalonYaafiConstants.URN_AVALON_PARTITION) 
+        properties.put(
+            AvalonYaafiConstants.URN_AVALON_NAME,
+            this.getContext().get(AvalonYaafiConstants.URN_AVALON_NAME)
             );
 
-        properties.put( 
-            AvalonYaafiConstants.URN_AVALON_HOME, 
-            this.getContext().get(AvalonYaafiConstants.URN_AVALON_HOME) 
+        properties.put(
+            AvalonYaafiConstants.URN_AVALON_PARTITION,
+            this.getContext().get(AvalonYaafiConstants.URN_AVALON_PARTITION)
             );
 
-        properties.put( 
-            AvalonYaafiConstants.URN_AVALON_TEMP, 
-            this.getContext().get(AvalonYaafiConstants.URN_AVALON_TEMP) 
-            );        
+        properties.put(
+            AvalonYaafiConstants.URN_AVALON_HOME,
+            this.getContext().get(AvalonYaafiConstants.URN_AVALON_HOME)
+            );
+
+        properties.put(
+            AvalonYaafiConstants.URN_AVALON_TEMP,
+            this.getContext().get(AvalonYaafiConstants.URN_AVALON_TEMP)
+            );
     }
-    
+
     protected Properties loadProperties(String location) throws Exception
     {
         Properties result = new Properties();
         InputStream is = this.createInputStream(location);
-        
+
         try
         {
-            if(is != null) 
+            if(is != null)
             {
 		        result.load(is);
 		        is.close();
@@ -173,7 +176,7 @@ public abstract class ComponentConfigurationPropertiesResolverBaseImpl
             {
                 this.getLogger().debug("Unable to load the following optional file :" + location);
             }
-            
+
             return result;
         }
         catch ( Exception e )

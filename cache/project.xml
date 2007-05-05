@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
 <project>
   <extend>${basedir}/../project.xml</extend>
   <id>fulcrum-cache</id>
@@ -11,7 +29,7 @@
       <tag>FULCRUM_CACHE_1_0_5</tag>
     </version>
   </versions>
-  <dependencies>        
+  <dependencies>
     <dependency>
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
@@ -23,13 +41,13 @@
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
       <version>2.1</version>
-    </dependency> 
+    </dependency>
 
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.0.4</version>
-    </dependency> 
+    </dependency>
 
     <!--  For a more recent release of JCS and to make gump happy: -->
     <dependency>
@@ -43,7 +61,7 @@
       <groupId>ehcache</groupId>
       <artifactId>ehcache</artifactId>
       <version>1.2beta4</version>
-    </dependency>         
+    </dependency>
 
     <dependency>
       <groupId>jcs</groupId>
@@ -75,14 +93,14 @@
     <report>maven-developer-activity-plugin</report>
     <report>maven-file-activity-plugin</report>
     <report>maven-multiproject-plugin</report>
-    <report>maven-faq-plugin</report>    
+    <report>maven-faq-plugin</report>
     <report>maven-pmd-plugin</report>
     <!-- report>maven-simian-plugin</report -->
 
     <report>maven-javadoc-plugin</report>
-    <report>maven-jxr-plugin</report>      
+    <report>maven-jxr-plugin</report>
     <report>maven-junit-report-plugin</report>
 
-  </reports> 
+  </reports>
 
 </project>

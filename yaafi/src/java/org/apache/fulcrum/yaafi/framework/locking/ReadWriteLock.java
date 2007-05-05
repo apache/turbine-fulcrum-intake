@@ -1,24 +1,20 @@
 /*
- * $Header: /usr/local/cvsroot/it20one/service/it20one-service-framework/src/java/org/apache/fulcrum/yaafi/framework/locking/ReadWriteLock.java,v 1.1 2005/09/22 11:04:12 sigi Exp $
- * $Revision: 1.1 $
- * $Date: 2005/09/22 11:04:12 $
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * ====================================================================
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Copyright 2004 The Apache Software Foundation 
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.apache.fulcrum.yaafi.framework.locking;
@@ -39,10 +35,10 @@ package org.apache.fulcrum.yaafi.framework.locking;
  * {@link #acquireWrite(Object, long)}are blocking and reentrant. Blocking
  * means they will wait if they can not acquire the descired access, reentrant means that a lock
  * request by a specific owner will always be compatible with other accesses on this lock by the
- * same owner. E.g. if you already have a lock for writing and you try to acquire write access 
+ * same owner. E.g. if you already have a lock for writing and you try to acquire write access
  * again you will not be blocked by this first lock, while others of course will be. This is the
  * natural way you already know from Java monitors and synchronized blocks.
- * 
+ *
  * @version $Revision: 1.1 $
  * @see GenericLock
  */
@@ -56,7 +52,7 @@ public class ReadWriteLock extends GenericLock {
 
     /**
      * Creates a new read/write lock.
-     * 
+     *
      * @param resourceId
      *            identifier for the resource associated to this lock
      * @param logger
@@ -69,7 +65,7 @@ public class ReadWriteLock extends GenericLock {
     /**
      * Tries to acquire a blocking, reentrant read lock. A read lock is
      * compatible with other read locks, but not with a write lock.
-     * 
+     *
      * @param ownerId
      *            a unique id identifying the entity that wants to acquire a
      *            certain lock level on this lock
@@ -87,7 +83,7 @@ public class ReadWriteLock extends GenericLock {
     /**
      * Tries to acquire a blocking, reentrant write lock. A write lock is
      * incompatible with any another read or write lock and is thus exclusive.
-     * 
+     *
      * @param ownerId
      *            a unique id identifying the entity that wants to acquire a
      *            certain lock level on this lock

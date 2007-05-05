@@ -1,4 +1,22 @@
 <?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
 <document>
 
   <properties>
@@ -43,8 +61,8 @@
           </tr>
         </table>
       </p>
-    </section>  
-      
+    </section>
+
     <section name="Captured Information">
       <p>
         During the execution the service captures the following information for
@@ -114,7 +132,7 @@
         </table>
       </p>
     </section>
-    
+
     <section name="Example Logfile">
       <p>
         Looking at the following <a href="tracing.csv">example</a> you see that
@@ -128,34 +146,34 @@
       <source>
 <![CDATA[
 TID IID ID M Service             Method Signature
-        
+
 54  402  1 2 PdfSignatureService sign   Object service.signature.SignatureService.sign(
-                                        String,String,String,Object,String,String,Hashtable) 
-                                        arg[0]:={SUPPLIER}  
-                                        arg[1]:={SUPPLIER} 
-                                        arg[2]:={de}  
-                                        arg[3]:={[B@36d047} 
-                                        arg[4]:={broken.pdf}  
-                                        arg[5]:={application/pdf} 
-                                        arg[6]:={{isPdfAttached=false}} 
+                                        String,String,String,Object,String,String,Hashtable)
+                                        arg[0]:={SUPPLIER}
+                                        arg[1]:={SUPPLIER}
+                                        arg[2]:={de}
+                                        arg[3]:={[B@36d047}
+                                        arg[4]:={broken.pdf}
+                                        arg[5]:={application/pdf}
+                                        arg[6]:={{isPdfAttached=false}}
                                         service.signature.SignatureServiceException
                                         Rebuild failed: trailer not found
 
 54  400  0 2 SignatureService    sign   service.signature.SignatureService.sign(
-                                        String,String,String,Object,String,String,Hashtable) 
-                                        arg[0]:={SUPPLIER}  
-                                        arg[1]:={SUPPLIER} 
-                                        arg[2]:={de}  
-                                        arg[3]:={[B@36d047} 
-                                        arg[4]:={broken.pdf}  
-                                        arg[5]:={application/pdf} 
-                                        arg[6]:={{isPdfAttached=false}} 
+                                        String,String,String,Object,String,String,Hashtable)
+                                        arg[0]:={SUPPLIER}
+                                        arg[1]:={SUPPLIER}
+                                        arg[2]:={de}
+                                        arg[3]:={[B@36d047}
+                                        arg[4]:={broken.pdf}
+                                        arg[5]:={application/pdf}
+                                        arg[6]:={{isPdfAttached=false}}
                                         service.signature.SignatureServiceException
                                         Rebuild failed: trailer not found
 ]]>
       </source>
     </section>
-    
+
     <section name="Configuration">
       <subsection name="Component Configuration">
         <table>
@@ -189,7 +207,7 @@ TID IID ID M Service             Method Signature
             <td>[0|1]</td>
             <td>
               The class name of the string builder to use to format the method
-              parematers and the result. If no value is supplied the 
+              parematers and the result. If no value is supplied the
               SmartToStringBuilder is used.
             </td>
           </tr>
@@ -199,10 +217,10 @@ TID IID ID M Service             Method Signature
             <td>[0|1]</td>
             <td>
               Dump all encountered excpetions therefore overriding
-              the list of monitored services. If no value is supplied 
+              the list of monitored services. If no value is supplied
               then "true" is used.
              </td>
-          </tr>          
+          </tr>
           <tr>
             <td>services</td>
             <td>Tree</td>
@@ -210,7 +228,7 @@ TID IID ID M Service             Method Signature
             <td>
               Contains a list of services to be monitored.
             </td>
-          </tr>          
+          </tr>
           <tr>
             <td>services/service@name</td>
             <td>String</td>
@@ -228,10 +246,10 @@ TID IID ID M Service             Method Signature
     shorthand="LoggingInterceptorService"
     default-class="org.apache.fulcrum.yaafi.interceptor.logging.LoggingInterceptorServiceImpl"
     logger="tracing"
-/>    
+/>
             ]]></source>
       </subsection>
-    
+
       <subsection name="Log4J Configuration">
         <p>
           The following Log4J configuration defines a custom
@@ -262,8 +280,8 @@ log4j.appender.tracing.append = true
         ]]></source>
       </subsection>
     </section>
-    
-    
+
+
     <section name="Usage">
       <p>
         Dump the method invocation of all services using ReflectionToStringBuilder
@@ -282,6 +300,6 @@ log4j.appender.tracing.append = true
         ]]>
       </source>
     </section>
-  
+
   </body>
 </document>

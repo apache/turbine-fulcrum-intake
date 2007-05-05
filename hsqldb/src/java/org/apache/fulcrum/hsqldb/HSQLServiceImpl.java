@@ -1,20 +1,22 @@
 package org.apache.fulcrum.hsqldb;
 
 /*
- * Copyright 2004 Apache Software Foundation
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
- * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import org.apache.avalon.framework.activity.Disposable;
@@ -63,20 +65,20 @@ import org.hsqldb.persist.HsqlProperties;
  * @author <a href="mailto:pti@elex.be">Peter Tillemans</a>
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
-public class HSQLServiceImpl 
-	extends AbstractLogEnabled 
+public class HSQLServiceImpl
+	extends AbstractLogEnabled
 	implements HSQLService, Configurable, Initializable, Startable, Disposable
 {
     /** the HSQLDB server instance */
     private Server server;
-    
+
     /** the configuration properties */
     private HsqlProperties serverProperties;
-        
+
     /////////////////////////////////////////////////////////////////////////
     // Avalon Service Lifecycle Implementation
     /////////////////////////////////////////////////////////////////////////
-    
+
     /**
      * Constructor
      */
@@ -84,20 +86,20 @@ public class HSQLServiceImpl
     {
         // nothing to do
     }
-    
+
     public boolean isRunning() {
         // return true id server is online
         return server.getState() == ServerConstants.SERVER_STATE_ONLINE;
-    }    
-    
+    }
+
     /**
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
-    public void configure(Configuration cfg) throws ConfigurationException 
+    public void configure(Configuration cfg) throws ConfigurationException
     {
         String[] names = cfg.getAttributeNames();
-    
-        for (int i = 0; i < names.length; i++) 
+
+        for (int i = 0; i < names.length; i++)
         {
             getLogger().debug(names[i] + " --> " + cfg.getAttribute(names[i]));
         }
@@ -106,26 +108,26 @@ public class HSQLServiceImpl
         this.serverProperties.setProperty("server.database.0", cfg.getAttribute("database"));
         this.serverProperties.setProperty("server.dbname.0", cfg.getAttribute("dbname"));
         this.serverProperties.setProperty("server.trace", cfg.getAttributeAsBoolean("trace"));
-        this.serverProperties.setProperty("server.silent", cfg.getAttributeAsBoolean("silent"));        
+        this.serverProperties.setProperty("server.silent", cfg.getAttributeAsBoolean("silent"));
         this.serverProperties.setProperty("server.port", cfg.getAttribute("port"));
         this.serverProperties.setProperty("server.tls", cfg.getAttribute("tls","false"));
     }
-    
+
     /**
      * @see org.apache.avalon.framework.activity.Initializable#initialize()
      */
     public void initialize() throws Exception
     {
         this.server = new Server();
-        this.server.setProperties( this.serverProperties );        
+        this.server.setProperties( this.serverProperties );
     }
-    
+
     /**
      * Starts the HSQLDB server. The implementation polls to ensure
      * that the HSQLDB server is fully initialized otherwise we get
      * spurious connection exceptions. If the HSQLDB server is not
      * upand running within 10 seconds we throw an exception.
-     *  
+     *
      * @see org.apache.avalon.framework.activity.Startable#start()
      */
     public void start() throws Exception
@@ -135,30 +137,30 @@ public class HSQLServiceImpl
         // of this operation, server state must be polled or a subclass of Server
         // must be used that overrides the setState method to provide state
         // change notification.
-        
+
         server.start();
-        
+
         // poll for 10 seconds until HSQLDB is up and running
 
-        this.pollForState( ServerConstants.SERVER_STATE_ONLINE, 100 );        
+        this.pollForState( ServerConstants.SERVER_STATE_ONLINE, 100 );
     }
 
     /**
      * Stop the HSQLDB server. The implementation polls to ensure
      * that the HSQLDB server has terminated otherwise someone
      * could call System.exit() and break the database.
-     * 
+     *
      * @see org.apache.avalon.framework.activity.Startable#stop()
      */
     public void stop() throws Exception
     {
-        this.server.stop();  
-        
-        // poll for 10 seconds until HSQLDB is down 
+        this.server.stop();
 
-        this.pollForState( ServerConstants.SERVER_STATE_SHUTDOWN, 100 );  
+        // poll for 10 seconds until HSQLDB is down
+
+        this.pollForState( ServerConstants.SERVER_STATE_SHUTDOWN, 100 );
     }
-    
+
     /**
      * @see org.apache.avalon.framework.activity.Disposable#dispose()
      */
@@ -166,43 +168,43 @@ public class HSQLServiceImpl
     {
         this.server = null;
         this.serverProperties = null;
-    }   
-    
+    }
+
     /**
      * Poll the HSQLDB server for a state change
      * @param desiredState the state we are waiting for
      * @throws Exception something went wrong
      */
-    
+
     private void pollForState( int desiredState, int lim )
     	throws Exception
     {
         int currentState;
         boolean isSuccessful = false;
-        
+
         this.getLogger().debug( "Polling for state : " + desiredState );
-        
+
         for( int i=0; i<lim; i++ )
         {
             currentState = this.server.getState();
-            
+
             if( desiredState == currentState )
             {
                 isSuccessful = true;
                 break;
             }
-            
+
             Thread.sleep(100);
         }
-        
+
         if( isSuccessful == false )
         {
             String msg = "Unable to change the HSQLDB server to state : " + desiredState;
-                
+
             if( this.server.getServerError() != null )
             {
                 this.getLogger().error( msg, this.server.getServerError() );
-                
+
 	            if( this.server.getServerError() instanceof Exception )
 	            {
 	                throw (Exception) this.server.getServerError();
@@ -218,6 +220,6 @@ public class HSQLServiceImpl
 	            this.getLogger().error(msg);
 	            throw new RuntimeException( msg );
             }
-        }        
+        }
     }
 }

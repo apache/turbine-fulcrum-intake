@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.adapter.osuser;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.util.ArrayList;
@@ -34,7 +37,7 @@ import com.opensymphony.user.provider.AccessProvider;
  * whether a user exists in a role.  In OSUser, there are no roles, just groups,
  * so this maps Fulcrum roles on OSUser groups.  This means some the the method
  * names refer to groups, but interact with Fulcrum roles.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -44,10 +47,10 @@ public class FulcrumAccessProvider
 {
 	/** Logging */
 	private static Log log = LogFactory.getLog(FulcrumAccessProvider.class);
-	
+
 	/*
 	 * Not implemented.   Should use SecurityService directly.
-	 * 
+	 *
 	 * @see com.opensymphony.user.provider.AccessProvider#addToGroup(java.lang.String,
 	 *      java.lang.String)
 	 */
@@ -62,7 +65,7 @@ public class FulcrumAccessProvider
 	 * assignable to groups, then what this method really checks is that the
 	 * user has a specific role. </strong> This is because the mapping between
 	 * OSUser and Fulcurm Security is not a 1 to 1 mapping.
-	 * 
+	 *
 	 * @see com.opensymphony.user.provider.AccessProvider#inGroup(java.lang.String,
 	 *      java.lang.String)
 	 */
@@ -74,7 +77,7 @@ public class FulcrumAccessProvider
 			DynamicAccessControlList acl =
 			(DynamicAccessControlList)getSecurityService().getUserManager().getACL(user);
 			Role role = acl.getRoles().getRoleByName(groupname);
-			boolean result =acl.hasRole(role); 
+			boolean result =acl.hasRole(role);
 			return result;
 		}
 		catch (UnknownEntityException uee)
@@ -91,7 +94,7 @@ public class FulcrumAccessProvider
 	/*
 	 * This returns all the ROLES that a user has. This is similar to the
 	 * problems with the inGroup() method of this provider.
-	 * 
+	 *
 	 * @see com.opensymphony.user.provider.AccessProvider#listGroupsContainingUser(java.lang.String)
 	 * @see org.apache.fulcrum.security.adapter.osuser.FulcrumAccessProvider#inGroup(java.lang.String,java.lang.String)
 	 */
@@ -104,7 +107,7 @@ public class FulcrumAccessProvider
 			DynamicAccessControlList acl =
 				(DynamicAccessControlList)getSecurityService().getUserManager().getACL(user);
 			roles.addAll(acl.getRoles().getNames());
-			
+
 		}
 		catch (UnknownEntityException uee)
 		{
@@ -120,7 +123,7 @@ public class FulcrumAccessProvider
 
 	/*
 	 * Not implemented yet.
-	 * 
+	 *
 	 * @see com.opensymphony.user.provider.AccessProvider#listUsersInGroup(java.lang.String)
 	 */
 	public List listUsersInGroup(String groupname)
@@ -130,7 +133,7 @@ public class FulcrumAccessProvider
 
 	/*
 	 * Not implemented.  Should probably use SecurityService directly.
-	 * 
+	 *
 	 * @see com.opensymphony.user.provider.AccessProvider#removeFromGroup(java.lang.String,
 	 *      java.lang.String)
 	 */
@@ -141,7 +144,7 @@ public class FulcrumAccessProvider
 
 	/*
 	 * Not implemented.  Should use SecurityService directly.
-	 * 
+	 *
 	 * @see com.opensymphony.user.provider.UserProvider#create(java.lang.String)
 	 */
 	public boolean create(String name)
@@ -151,7 +154,7 @@ public class FulcrumAccessProvider
 
 	/*
 	 * Doesn't do anything.
-	 * 
+	 *
 	 * @see com.opensymphony.user.provider.UserProvider#flushCaches()
 	 */
 	public void flushCaches()
@@ -161,7 +164,7 @@ public class FulcrumAccessProvider
 
 	/*
 	 * Returns true if the user exists, otherwise returns false.
-	 * 
+	 *
 	 * @see com.opensymphony.user.provider.UserProvider#handles(java.lang.String)
 	 */
 	public boolean handles(String name)
@@ -185,7 +188,7 @@ public class FulcrumAccessProvider
 
 	/*
 	 * not implemented.
-	 * 
+	 *
 	 * @see com.opensymphony.user.provider.UserProvider#list()
 	 */
 	public List list()
@@ -197,7 +200,7 @@ public class FulcrumAccessProvider
 
 	/*
 	 * Not implemented.   Should use SecurityService directly.
-	 * 
+	 *
 	 * @see com.opensymphony.user.provider.UserProvider#remove(java.lang.String)
 	 */
 	public boolean remove(String name)
@@ -207,12 +210,12 @@ public class FulcrumAccessProvider
 
 	/*
 	 * Not implemented.   Should use SecurityService directly.
-	 * 
+	 *
 	 * @see com.opensymphony.user.provider.UserProvider#store(java.lang.String,
 	 *      com.opensymphony.user.Entity.Accessor)
 	 */
 	public boolean store(String arg0, Accessor arg1)
-	{	
+	{
 		return false;
 	}
 

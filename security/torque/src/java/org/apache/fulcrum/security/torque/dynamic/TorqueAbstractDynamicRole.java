@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.torque.dynamic;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.sql.Connection;
 import java.util.Iterator;
@@ -50,16 +53,16 @@ public abstract class TorqueAbstractDynamicRole extends TorqueAbstractSecurityEn
 
     /** a cache of permission objects */
     private Set permissionSet = null;
-    
+
     /**
      * Forward reference to generated code
-     * 
-     * Get a list of association objects, pre-populated with their TorqueDynamicPermission 
+     *
+     * Get a list of association objects, pre-populated with their TorqueDynamicPermission
      * objects.
-     * 
+     *
      * @param criteria Criteria to define the selection of records
      * @throws TorqueException
-     * 
+     *
      * @return a list of Role/Permission relations
      */
     protected abstract List getTorqueDynamicRolePermissionsJoinTorqueDynamicPermission(Criteria criteria)
@@ -67,13 +70,13 @@ public abstract class TorqueAbstractDynamicRole extends TorqueAbstractSecurityEn
 
     /**
      * Forward reference to generated code
-     * 
-     * Get a list of association objects, pre-populated with their TorqueDynamicGroup 
+     *
+     * Get a list of association objects, pre-populated with their TorqueDynamicGroup
      * objects.
-     * 
+     *
      * @param criteria Criteria to define the selection of records
      * @throws TorqueException
-     * 
+     *
      * @return a list of Group/Role relations
      */
     protected abstract List getTorqueDynamicGroupRolesJoinTorqueDynamicGroup(Criteria criteria)
@@ -221,24 +224,24 @@ public abstract class TorqueAbstractDynamicRole extends TorqueAbstractSecurityEn
     public void retrieveAttachedObjects(Connection con) throws TorqueException
     {
         this.permissionSet = new PermissionSet();
-        
+
         // the generated method that allows a Connection parameter is missing
         List rolepermissions = getTorqueDynamicRolePermissionsJoinTorqueDynamicPermission(new Criteria());
 
         for (Iterator i = rolepermissions.iterator(); i.hasNext();)
         {
-            TorqueDynamicRolePermission tdrp = (TorqueDynamicRolePermission)i.next(); 
+            TorqueDynamicRolePermission tdrp = (TorqueDynamicRolePermission)i.next();
             permissionSet.add(tdrp.getTorqueDynamicPermission());
         }
 
         this.groupSet = new GroupSet();
-        
+
         // the generated method that allows a Connection parameter is missing
         List grouproles = getTorqueDynamicGroupRolesJoinTorqueDynamicGroup(new Criteria());
 
         for (Iterator i = grouproles.iterator(); i.hasNext();)
         {
-            TorqueDynamicGroupRole tdgr = (TorqueDynamicGroupRole)i.next(); 
+            TorqueDynamicGroupRole tdgr = (TorqueDynamicGroupRole)i.next();
             groupSet.add(tdgr.getTorqueDynamicGroup());
         }
     }
@@ -251,7 +254,7 @@ public abstract class TorqueAbstractDynamicRole extends TorqueAbstractSecurityEn
         if (permissionSet != null)
         {
             Criteria criteria = new Criteria();
-            
+
             /* remove old entries */
             criteria.add(TorqueDynamicRolePermissionPeer.ROLE_ID, getEntityId());
             TorqueDynamicRolePermissionPeer.doDelete(criteria, con);
@@ -266,11 +269,11 @@ public abstract class TorqueAbstractDynamicRole extends TorqueAbstractSecurityEn
                 rp.save(con);
             }
         }
-        
+
         if (groupSet != null)
         {
             Criteria criteria = new Criteria();
-            
+
             /* remove old entries */
             criteria.add(TorqueDynamicGroupRolePeer.ROLE_ID, getEntityId());
             TorqueDynamicGroupRolePeer.doDelete(criteria, con);
@@ -285,7 +288,7 @@ public abstract class TorqueAbstractDynamicRole extends TorqueAbstractSecurityEn
                 gr.save(con);
             }
         }
-        
+
         try
         {
             save(con);

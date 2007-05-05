@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.adapter.turbine;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.util.Iterator;
 import java.util.List;
@@ -42,14 +45,14 @@ import org.apache.turbine.util.security.RoleSet;
 
 /**
  * An implementation of SecurityService that adapts it to work with
- * Fulcrum Security.  This adapter currently uses the "Simple" model of 
- * security.  However, it should actually use the "Turbine" model of 
+ * Fulcrum Security.  This adapter currently uses the "Simple" model of
+ * security.  However, it should actually use the "Turbine" model of
  * security.  I didn't do that because I don't quite understand some of
  * the reasons behind the "Turbine" model.
- * 
+ *
  * All the methods that currently throw a not implemented RuntimeException
  * could easily delegate their calls to the Fulcrum SecurityService.
- * 
+ *
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
@@ -60,7 +63,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
     private static Log log = LogFactory.getLog(SecurityServiceAdapter.class);
     /** Our Fulcrum Security Service to use */
     SecurityService securityService;
-    /** 
+    /**
      * Hook into the init() calls so our adapter can load up from Avalon
      * the securityManager it needs.
      */
@@ -767,7 +770,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
                 dbe);
         }
     }
-    /* 
+    /*
      * @see org.apache.turbine.services.security.SecurityService#accountExists(org.apache.turbine.om.security.User)
      */
     public boolean accountExists(User arg0)
@@ -775,7 +778,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
     {
         return accountExists(arg0.getName());
     }
-    /* 
+    /*
      * @see org.apache.turbine.services.security.SecurityService#getAuthenticatedUser(java.lang.String, java.lang.String)
      */
     public User getAuthenticatedUser(String arg0, String arg1)
@@ -812,7 +815,7 @@ public class SecurityServiceAdapter extends BaseSecurityService
                 dbe);
         }
     }
-    /* 
+    /*
      * @see org.apache.turbine.services.security.SecurityService#getUser(java.lang.String)
      */
     public User getUser(String arg0)

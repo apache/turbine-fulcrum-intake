@@ -1,19 +1,22 @@
 package org.apache.fulcrum.crypto;
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.security.NoSuchAlgorithmException;
@@ -51,7 +54,7 @@ public class DefaultCryptoService
     /** Default Key */
     private static final String DEFAULT_KEY = "default";
     /** Default Encryption Class */
-    private static final String DEFAULT_CLASS = 
+    private static final String DEFAULT_CLASS =
       "org.apache.fulcrum.crypto.provider.JavaCrypt";
     private boolean disposed = false;
     /** Names of the registered algorithms and the wanted classes */
@@ -68,7 +71,7 @@ public class DefaultCryptoService
      * @throws NoSuchAlgorithmException  Requested algorithm is not available
      *
      */
-    public CryptoAlgorithm getCryptoAlgorithm( String algo ) 
+    public CryptoAlgorithm getCryptoAlgorithm( String algo )
       throws NoSuchAlgorithmException
     {
         String cryptoClass = (String) algos.get(algo);
@@ -84,7 +87,7 @@ public class DefaultCryptoService
         }
         try
         {
-            //@todo should be created via factory service.  
+            //@todo should be created via factory service.
             //Just trying to get something to work.
             //ca = (CryptoAlgorithm) factoryService.getInstance(cryptoClass);
             ca = (CryptoAlgorithm) Class.forName(cryptoClass).newInstance();
@@ -92,7 +95,7 @@ public class DefaultCryptoService
         catch (Exception e)
         {
             throw new NoSuchAlgorithmException(
-              "TurbineCryptoService: Error instantiating " 
+              "TurbineCryptoService: Error instantiating "
               + cryptoClass + " for " + algo);
         }
         ca.setCipher(algo);
@@ -118,22 +121,22 @@ public class DefaultCryptoService
             {
                 String key = nameVal[i].getName();
                 String val = nameVal[i].getValue();
-                // getLogger.debug("Registered " + val 
+                // getLogger.debug("Registered " + val
                 //            + " for Crypto Algorithm " + key);
                 algos.put(key, val);
             }
         }
     }
-    
+
    /**
     * @see org.apache.avalon.framework.activity.Initializable#initialize()
     */
     public void initialize()
       throws Exception
     {
-        getLogger().debug("initialize()");         
+        getLogger().debug("initialize()");
     }
-    
+
     /**
      * Avalon component lifecycle method
      */
@@ -141,5 +144,5 @@ public class DefaultCryptoService
     {
         disposed = true;
     }
- 
+
 }

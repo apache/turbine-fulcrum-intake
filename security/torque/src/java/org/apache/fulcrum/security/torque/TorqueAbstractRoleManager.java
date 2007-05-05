@@ -1,18 +1,21 @@
 package org.apache.fulcrum.security.torque;
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 import java.sql.Connection;
 import java.util.Iterator;
@@ -38,9 +41,9 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
 {
     /**
      * Get all specialized Roles
-     * 
+     *
      * @param con a database connection
-     * 
+     *
      * @return a List of Role instances
      *
      * @throws TorqueException if any database error occurs
@@ -50,10 +53,10 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
 
     /**
      * Get a specialized Role by name
-     * 
+     *
      * @param name the name of the group
      * @param con a database connection
-     * 
+     *
      * @return a Role instance
      *
      * @throws NoRowsException if no such group exists
@@ -65,10 +68,10 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
 
     /**
      * Get a specialized Role by id
-     * 
+     *
      * @param id the id of the group
      * @param con a database connection
-     * 
+     *
      * @return a Role instance
      *
      * @throws NoRowsException if no such group exists
@@ -77,7 +80,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
      */
     protected abstract Role doSelectById(Integer id, Connection con)
         throws NoRowsException, TooManyRowsException, TorqueException;
-    
+
 
     /**
     * Renames an existing Role.
@@ -93,7 +96,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
         if (checkExists(role))
         {
             role.setName(name);
-            
+
             try
             {
                 TorqueAbstractSecurityEntity r = (TorqueAbstractSecurityEntity)role;
@@ -130,7 +133,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
         {
             throw new DataBackendException("Adding Role '" + role.getName() + "' failed", e);
         }
-        
+
         return role;
     }
 
@@ -172,18 +175,18 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
     public boolean checkExists(String roleName) throws DataBackendException
     {
         boolean exists = false;
-        
+
         Connection con = null;
-        
+
         try
         {
             con = Transaction.begin(((TorqueAbstractSecurityEntity)getRoleInstance()).getDatabaseName());
-    
+
             doSelectByName(roleName, con);
-            
+
             Transaction.commit(con);
             con = null;
-    
+
             exists = true;
         }
         catch (NoRowsException e)
@@ -205,7 +208,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
                 Transaction.safeRollback(con);
             }
         }
-    
+
         return exists;
     }
 
@@ -220,23 +223,23 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
     {
         RoleSet roleSet = new RoleSet();
         Connection con = null;
-    
+
         try
         {
             con = Transaction.begin(((TorqueAbstractSecurityEntity)getRoleInstance()).getDatabaseName());
-            
+
             List roles = doSelectAllRoles(con);
-            
+
             for (Iterator i = roles.iterator(); i.hasNext();)
             {
                 Role role = (Role)i.next();
-    
+
                 // Add attached objects if they exist
                 ((TorqueAbstractSecurityEntity)role).retrieveAttachedObjects(con);
-    
+
                 roleSet.add(role);
             }
-    
+
             Transaction.commit(con);
             con = null;
         }
@@ -251,7 +254,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
                 Transaction.safeRollback(con);
             }
         }
-        
+
         return roleSet;
     }
 
@@ -269,20 +272,20 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
     public Role getRoleById(Object id) throws DataBackendException, UnknownEntityException
     {
         Role role;
-    
+
         if (id != null && id instanceof Integer)
         {
             Connection con = null;
-    
+
             try
             {
                 con = Transaction.begin(((TorqueAbstractSecurityEntity)getRoleInstance()).getDatabaseName());
-                
+
                 role = doSelectById((Integer)id, con);
-                
+
                 // Add attached objects if they exist
                 ((TorqueAbstractSecurityEntity)role).retrieveAttachedObjects(con);
-    
+
                 Transaction.commit(con);
                 con = null;
             }
@@ -306,7 +309,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
         {
             throw new UnknownEntityException("Invalid role id '" + id + "'");
         }
-    
+
         return role;
     }
 
@@ -323,16 +326,16 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
     {
         Role role = null;
         Connection con = null;
-    
+
         try
         {
             con = Transaction.begin(((TorqueAbstractSecurityEntity)getRoleInstance()).getDatabaseName());
-            
+
             role = doSelectByName(name, con);
-    
+
             // Add attached objects if they exist
             ((TorqueAbstractSecurityEntity)role).retrieveAttachedObjects(con);
-    
+
             Transaction.commit(con);
             con = null;
         }
@@ -355,7 +358,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
                 Transaction.safeRollback(con);
             }
         }
-    
+
         return role;
     }
 }

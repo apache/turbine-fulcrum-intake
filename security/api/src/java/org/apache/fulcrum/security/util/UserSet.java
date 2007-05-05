@@ -1,19 +1,22 @@
 package org.apache.fulcrum.security.util;
 
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.util.Collection;
@@ -33,7 +36,7 @@ public class UserSet
         extends SecuritySet
 {
     /**
-     * Serial number 
+     * Serial number
      */
     private static final long serialVersionUID = 4415634631270197073L;
 
@@ -69,14 +72,14 @@ public class UserSet
     public boolean add(User user)
     {
         if (contains(user)){
-            return false;            
+            return false;
         }
         else {
             idMap.put(user.getId(), user);
             return true;
         }
     }
-    
+
     /**
      * Adds a User to this UserSet.
      *
@@ -91,7 +94,7 @@ public class UserSet
         else {
             throw new ClassCastException("Object passed to add to UserSet is not of type User");
         }
-    }     
+    }
 
     /**
      * Adds the Users in a Collection to this UserSet.
@@ -172,10 +175,10 @@ public class UserSet
     {
         return (User)getByName(userName);
         /*
-		userName=userName.toLowerCase();
-        return (StringUtils.isNotEmpty(userName))
-                ? (User) nameMap.get(userName) : null;
-                */
+         *		userName=userName.toLowerCase();
+         *        return (StringUtils.isNotEmpty(userName))
+         *                ? (User) nameMap.get(userName) : null;
+         */
     }
 
     /**
@@ -188,7 +191,7 @@ public class UserSet
      */
     public User getUserById(Object userId)
     {
-        return (userId != null) 
+        return (userId != null)
                 ? (User) idMap.get(userId) : null;
     }
 

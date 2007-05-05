@@ -2,19 +2,22 @@ package org.apache.fulcrum.crypto.provider;
 
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 
@@ -26,15 +29,15 @@ import org.apache.fulcrum.crypto.CryptoAlgorithm;
 
 /**
  * Implements the normal java.security.MessageDigest stream cipers.
- * Base64 strings returned by this provider are correctly padded to 
+ * Base64 strings returned by this provider are correctly padded to
  * multiples of four bytes. If you run into interoperability problems
- * with other languages, especially perl and the Digest::MD5 module, 
+ * with other languages, especially perl and the Digest::MD5 module,
  * note that the md5_base64 function from this package incorrectly drops
  * the pad bytes. Use the MIME::Base64 package instead.
  *
  * If you upgrade from Turbine 2.1 and suddently your old stored passwords
- * no longer work, please take a look at the OldJavaCrypt provider for 
- * bug-to-bug compatibility.                                                                                                                                                                     
+ * no longer work, please take a look at the OldJavaCrypt provider for
+ * bug-to-bug compatibility.
  *
  * This provider can be used as the default crypto algorithm provider.
  *
@@ -42,7 +45,7 @@ import org.apache.fulcrum.crypto.CryptoAlgorithm;
  * @version $Id$
  */
 
-public class JavaCrypt 
+public class JavaCrypt
     implements CryptoAlgorithm
 {
 
@@ -117,4 +120,4 @@ public class JavaCrypt
         return (encodedDigest == null ? null :
                 new String(encodedDigest));
     }
-}                                                                                                            
+}

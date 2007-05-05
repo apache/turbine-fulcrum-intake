@@ -1,19 +1,22 @@
 package org.apache.fulcrum.cache.impl;
 
 /*
- * Copyright 2006 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.io.ByteArrayOutputStream;
@@ -61,7 +64,7 @@ public class JCSCacheService
      * cacheCheckFrequency (default - 5 seconds)
      */
     private long cacheCheckFrequency;
-    
+
     /**
      * Instance of the JCS cache
      */
@@ -112,7 +115,7 @@ public class JCSCacheService
         continueThread = true;
         refreshing = new Thread(this);
 
-        // Indicate that this is a system thread. JVM will quit only when 
+        // Indicate that this is a system thread. JVM will quit only when
         // there are no more active user threads. Settings threads spawned
         // internally by Turbine as daemons allows commandline applications
         // using Turbine to terminate in an orderly manner.
@@ -207,7 +210,7 @@ public class JCSCacheService
             {
                 getLogger().warn("Object with id [" + id + "] is not serializable. Expect problems with auxiliary caches.");
             }
-            
+
             ElementAttributes attrib = (ElementAttributes)cacheManager.getElementAttributes();
 
             if (o instanceof RefreshableCachedObject)
@@ -221,8 +224,8 @@ public class JCSCacheService
             }
 
             attrib.setLastAccessTimeNow();
-            
-            // I know this is not nice, but setCreateTime() is missing and the fields are public ...  
+
+            // I know this is not nice, but setCreateTime() is missing and the fields are public ...
             attrib.createTime = System.currentTimeMillis();
             cacheManager.putInGroup(id, group, o, attrib);
         }
@@ -288,7 +291,7 @@ public class JCSCacheService
             {
                 if (!continueThread) return;
             }
-            
+
             for (Iterator i = cacheManager.getGroupKeys(group).iterator(); i.hasNext();)
             {
                 String key= (String)i.next();
@@ -348,10 +351,10 @@ public class JCSCacheService
     public int getNumberOfObjects()
     {
         int count = 0;
-        
+
         for (Iterator i = cacheManager.getGroupKeys(group).iterator();  i.hasNext();)
         {
-            if (cacheManager.getFromGroup(i.next(), group) != null) 
+            if (cacheManager.getFromGroup(i.next(), group) != null)
             {
                 count++;
             }

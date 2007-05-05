@@ -2,19 +2,22 @@ package org.apache.fulcrum.template.jsp;
 
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 
@@ -42,17 +45,17 @@ public interface JspService
      * executes the JSP given by templateName.
      */
     /*
-    public void handleRequest(RunData data, String templateName, boolean isForward)
-        throws ServiceException;
-    */        
+     *    public void handleRequest(RunData data, String templateName, boolean isForward)
+     *        throws ServiceException;
+     */
 
     /**
      * executes the JSP given by templateName.
      */
      /*
-    public void handleRequest(RunData data, String templateName)
-        throws ServiceException;
-     */
+      *    public void handleRequest(RunData data, String templateName)
+      *        throws ServiceException;
+      */
 
     /**
      * The buffer size
@@ -60,7 +63,7 @@ public interface JspService
     public int getDefaultBufferSize();
 
     /**
-     * Searchs for a template in the default.template path[s] and 
+     * Searchs for a template in the default.template path[s] and
      * returns the template name with a relative path which is required
      * by <a href="http://java.sun.com/products/servlet/2.3/javadoc/javax/servlet/ServletContext.html#getRequestDispatcher(java.lang.String)">javax.servlet.RequestDispatcher</a>
      *

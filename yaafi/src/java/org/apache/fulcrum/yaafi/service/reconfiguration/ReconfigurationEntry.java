@@ -1,20 +1,22 @@
 package org.apache.fulcrum.yaafi.service.reconfiguration;
 
 /*
- * Copyright 2004 Apache Software Foundation
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
- * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed  under the  License is distributed on an "AS IS" BASIS,
- * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- * implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.io.ByteArrayOutputStream;
@@ -37,7 +39,7 @@ public class ReconfigurationEntry
 {
     /** buffer size for copy() */
     private static final int BUF_SIZE = 1024;
-    
+
     /** the location to monitor for changes */
     private String location;
 
@@ -188,7 +190,7 @@ public class ReconfigurationEntry
 
     /**
      * Creates a message digest.
-     * 
+     *
      * @param is the input stream as input for the message digest
      * @return the message digest
      * @throws Exception the creation failed
@@ -221,7 +223,7 @@ public class ReconfigurationEntry
 
     /**
      * Compares two byte[] for equality
-     * 
+     *
      * @param lhs the left-hand side
      * @param rhs the right-hand side
      * @return true if the byte[] are equal

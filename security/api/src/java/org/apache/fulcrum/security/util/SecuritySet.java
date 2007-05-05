@@ -1,19 +1,22 @@
 package org.apache.fulcrum.security.util;
 
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.io.Serializable;
@@ -30,9 +33,9 @@ import org.apache.fulcrum.security.entity.SecurityEntity;
  * a UI. It wraps a TreeSet object to enforce that only relevant methods are
  * available. TreeSet's contain only unique Objects (no duplicates) based on the
  * ID.  They may or may not have a name, that depends on the implementation.
- * Want to get away frm requiring an ID and a name... Nothing should force 
+ * Want to get away frm requiring an ID and a name... Nothing should force
  * Name to be unique in the basic architecture of Fulcrum Security.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
@@ -54,20 +57,20 @@ public abstract class SecuritySet implements Serializable, Set
         //nameMap = new TreeMap();
         idMap = new TreeMap();
     }
-    
+
     /*
-	 * To enable the typesafe handling, make this abstract
-	 * and rely on the implementing classes like RoleSet to
-	 * properly cast the Object type.
-	 * 
-	 * @see java.util.Collection#add(java.lang.Object)
-	 */
-    public abstract boolean add(Object o);    
+     * To enable the typesafe handling, make this abstract
+     * and rely on the implementing classes like RoleSet to
+     * properly cast the Object type.
+     *
+     * @see java.util.Collection#add(java.lang.Object)
+     */
+    public abstract boolean add(Object o);
     /**
 	 * Returns a set of security objects in this object.
-	 * 
+	 *
 	 * @return A Set Object
-	 *  
+	 *
 	 */
     public Set getSet()
     {
@@ -75,7 +78,7 @@ public abstract class SecuritySet implements Serializable, Set
     }
     /**
 	 * Returns a set of Names in this Object.
-	 * 
+	 *
 	 * @return The Set of Names in this Object, backed by the actual data.
 	 */
     public Set getNames()
@@ -90,7 +93,7 @@ public abstract class SecuritySet implements Serializable, Set
     }
     /**
 	 * Returns a set of Id values in this Object.
-	 * 
+	 *
 	 * @return The Set of Ids in this Object, backed by the actual data.
 	 */
     public Set getIds()
@@ -107,26 +110,26 @@ public abstract class SecuritySet implements Serializable, Set
     }
     /**
 	 * Searches if an Object with a given name is in the Set
-	 * 
+	 *
 	 * @param roleName Name of the Security Object.
 	 * @return True if argument matched an Object in this Set; false if no
 	 *         match.
 	 */
     public boolean containsName(String name)
-    {        
-        
+    {
+
 		return (StringUtils.isNotEmpty(name))
 				   ? getNames().contains(name.toLowerCase())
-				   : false;        
+				   : false;
         /*
-        return (StringUtils.isNotEmpty(name))
-            ? nameMap.containsKey(name.toLowerCase())
-            : false;
-            */
+         *        return (StringUtils.isNotEmpty(name))
+         *            ? nameMap.containsKey(name.toLowerCase())
+         *            : false;
+         */
     }
     /**
 	 * Searches if an Object with a given Id is in the Set
-	 * 
+	 *
 	 * @param id Id of the Security Object.
 	 * @return True if argument matched an Object in this Set; false if no
 	 *         match.
@@ -137,7 +140,7 @@ public abstract class SecuritySet implements Serializable, Set
     }
     /**
 	 * Returns an Iterator for Objects in this Set.
-	 * 
+	 *
 	 * @return An iterator for the Set
 	 */
     public Iterator iterator()
@@ -146,7 +149,7 @@ public abstract class SecuritySet implements Serializable, Set
     }
     /**
 	 * Returns size (cardinality) of this set.
-	 * 
+	 *
 	 * @return The cardinality of this Set.
 	 */
     public int size()
@@ -155,7 +158,7 @@ public abstract class SecuritySet implements Serializable, Set
     }
     /**
 	 * list of role names in this set
-	 * 
+	 *
 	 * @return The string representation of this Set.
 	 */
     public String toString()
@@ -211,20 +214,20 @@ public abstract class SecuritySet implements Serializable, Set
         throw new RuntimeException("not implemented");
     }
     /*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.Collection#toArray()
-	 */
+     * (non-Javadoc)
+     *
+     * @see java.util.Collection#toArray()
+     */
     public Object[] toArray()
     {
         return getSet().toArray();
     }
-    
+
     /*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.Collection#contains(java.lang.Object)
-	 */
+     * (non-Javadoc)
+     *
+     * @see java.util.Collection#contains(java.lang.Object)
+     */
     public boolean contains(Object o)
     {
         if (o == null)
@@ -237,10 +240,10 @@ public abstract class SecuritySet implements Serializable, Set
         }
     }
     /*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.Collection#remove(java.lang.Object)
-	 */
+     * (non-Javadoc)
+     *
+     * @see java.util.Collection#remove(java.lang.Object)
+     */
     public boolean remove(Object o)
     {
         SecurityEntity se = (SecurityEntity)o;
@@ -249,15 +252,15 @@ public abstract class SecuritySet implements Serializable, Set
 		return res;
     }
     /*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.Collection#toArray(java.lang.Object[])
-	 */
+     * (non-Javadoc)
+     *
+     * @see java.util.Collection#toArray(java.lang.Object[])
+     */
     public Object[] toArray(Object[] a)
     {
         return getSet().toArray(a);
     }
-    
+
     public SecurityEntity getByName(String name){
         SecurityEntity securityEntity = null;
         for (Iterator i = getSet().iterator();i.hasNext();){
@@ -268,7 +271,7 @@ public abstract class SecuritySet implements Serializable, Set
             }
         }
         return securityEntity;
-    
-    
+
+
     }
 }

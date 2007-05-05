@@ -2,19 +2,22 @@ package org.apache.fulcrum.parser;
 
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 
@@ -73,7 +76,7 @@ public class DefaultParameterParser
      * The raw data of a file upload.
      */
     private byte[] uploadData = null;
-    
+
     /**
      * The upload service component to use
      */
@@ -153,9 +156,9 @@ public class DefaultParameterParser
 
         String contentType = request.getHeader("Content-type");
 
-        if (uploadService != null 
-                && getAutomaticUpload() 
-                && contentType != null 
+        if (uploadService != null
+                && getAutomaticUpload()
+                && contentType != null
                 && contentType.startsWith("multipart/form-data"))
         {
             if (getLogger().isDebugEnabled())
@@ -166,7 +169,7 @@ public class DefaultParameterParser
             try
             {
                 List fileItems = uploadService.parseRequest(request);
-                
+
                 if (fileItems != null)
                 {
                     for (Iterator it = fileItems.iterator(); it.hasNext();)
@@ -359,13 +362,13 @@ public class DefaultParameterParser
             return null;
         }
     }
-    
-    // ---------------- Avalon Lifecycle Methods ---------------------    
+
+    // ---------------- Avalon Lifecycle Methods ---------------------
     /**
      * Avalon component lifecycle method
      */
     public void service(ServiceManager manager) throws ServiceException
-    {        
+    {
         if (manager.hasService(UploadService.ROLE))
         {
             uploadService = (UploadService)manager.lookup(UploadService.ROLE);
@@ -375,10 +378,10 @@ public class DefaultParameterParser
             /*
              * Automatic parsing of uploaded file items was requested but no
              * UploadService is available
-             */ 
+             */
             if (getAutomaticUpload())
             {
-                throw new ServiceException(ParameterParser.ROLE, 
+                throw new ServiceException(ParameterParser.ROLE,
                         AUTOMATIC_KEY + " = true requires " +
                         UploadService.ROLE + " to be available");
             }

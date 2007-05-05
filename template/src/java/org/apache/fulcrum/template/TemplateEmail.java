@@ -2,19 +2,22 @@ package org.apache.fulcrum.template;
 
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 
@@ -28,7 +31,7 @@ import org.apache.fulcrum.util.WordWrapUtils;
 
 /**
  * This is a simple class for sending email from within the TemplateService.
- * Essentially, the body of the email is processed with a 
+ * Essentially, the body of the email is processed with a
  * TemplateContext object.
  * The beauty of this is that you can send email from within your
  * template layer or from your business logic in your Java code.
@@ -79,7 +82,7 @@ import org.apache.fulcrum.util.WordWrapUtils;
  * will be called for you when Velocity tries to convert the
  * TemplateEmail to a string by calling toString()).</p>
  *
- * <p>If you need your email to be word-wrapped, you can add the 
+ * <p>If you need your email to be word-wrapped, you can add the
  * following call to those above:
  *
  * <pre>
@@ -145,7 +148,7 @@ public class TemplateEmail
      * The charset
      */
     private String charset = null;
-    
+
     /**
      * The templateService to use in generating text
      *
@@ -173,7 +176,7 @@ public class TemplateEmail
      * @param email A String.
      * @param name A String.
      */
-    public void addTo(String email, String name) 
+    public void addTo(String email, String name)
         throws Exception
     {
         try
@@ -195,14 +198,14 @@ public class TemplateEmail
             throw new Exception("Cannot add 'To' recipient: " + e);
         }
     }
- 
+
     /**
      * Add a recipient CC to the email.
      *
      * @param email A String.
      * @param name A String.
      */
-    public void addCc(String email, String name) 
+    public void addCc(String email, String name)
         throws Exception
     {
         try
@@ -227,7 +230,7 @@ public class TemplateEmail
 
 
     /**
-     * The given Unicode string will be charset-encoded using the specified 
+     * The given Unicode string will be charset-encoded using the specified
      * charset. The charset is also used to set the "charset" parameter.
      *
      * @param charset a <code>String</code> value
@@ -291,15 +294,15 @@ public class TemplateEmail
      * @return An Email.
      * @exception MessagingException.
      */
-    public TemplateEmail addReplyTo( String name, String email) 
+    public TemplateEmail addReplyTo( String name, String email)
     {
         String[] emailName = new String[2];
         emailName[0] = email;
         emailName[1] = name;
-        if (replyToList == null) 
+        if (replyToList == null)
         {
             replyToList = new ArrayList(3);
-        }        
+        }
         replyToList.add(emailName);
         return this;
     }
@@ -310,10 +313,10 @@ public class TemplateEmail
         String[] pair = new String[2];
         pair[0] = name;
         pair[1] = value;
-        if (headersList == null) 
+        if (headersList == null)
         {
             headersList = new ArrayList(3);
-        }        
+        }
         headersList.add(pair);
         return this;
     }
@@ -368,7 +371,7 @@ public class TemplateEmail
     }
 
     /**
-     * Set the context object that will be merged with the 
+     * Set the context object that will be merged with the
      * template.
      *
      * @param context A TemplateContext context object.
@@ -381,7 +384,7 @@ public class TemplateEmail
     }
 
     /**
-     * Get the context object that will be merged with the 
+     * Get the context object that will be merged with the
      * template.
      *
      * @return A TemplateContext.
@@ -435,9 +438,9 @@ public class TemplateEmail
         }
 
         SimpleEmail se = new SimpleEmail();
-        if (charset != null) 
+        if (charset != null)
         {
-            se.setCharset(charset);            
+            se.setCharset(charset);
         }
         se.setFrom(fromEmail, fromName);
         se.setTo(toList);
@@ -449,20 +452,20 @@ public class TemplateEmail
         se.setSubject(subject);
         se.setMsg(body);
 
-        if (headersList != null) 
+        if (headersList != null)
         {
             Iterator i = headersList.iterator();
-            while (i.hasNext()) 
+            while (i.hasNext())
             {
                 String[] pair = (String[])i.next();
                 se.addHeader(pair[0], pair[1]);
             }
         }
-        
+
         se.send();
     }
-    
-    
+
+
 
     /**
      * A javabean style setter for passing in manually a templateservice
@@ -480,10 +483,10 @@ public class TemplateEmail
     private void addReplyTo(SimpleEmail se)
         throws Exception
     {
-        if (replyToList != null) 
+        if (replyToList != null)
         {
             Iterator i = replyToList.iterator();
-            while (i.hasNext()) 
+            while (i.hasNext())
             {
                 String[] emailName = (String[])i.next();
                 se.addReplyTo(emailName[0], emailName[1]);
