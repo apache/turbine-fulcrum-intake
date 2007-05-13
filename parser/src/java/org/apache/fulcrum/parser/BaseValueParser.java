@@ -1539,8 +1539,18 @@ public class BaseValueParser
     protected String [] getParam(final String name)
     {
         String key = convert(name);
-
-        return (key != null) ? (String []) parameters.get(key) : null;
+        Object value = parameters.get(key);
+        
+        // todo sgoeschl 20070405 quick fix for Scott's test case - need to
+        // be reworked for proper functioning according to TV
+        if(value instanceof String[])
+        {
+            return (String []) parameters.get(key);
+        }
+        else
+        {
+            return null;
+        }
     }
 
 
