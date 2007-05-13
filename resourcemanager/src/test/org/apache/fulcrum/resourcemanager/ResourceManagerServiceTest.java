@@ -132,31 +132,31 @@ public class ResourceManagerServiceTest extends BaseUnitTest
         String[] resourceContext1 = { "foo" };
         assertTrue( this.service.exists( resourceDomain, resourceContext1, "foo.groovy" ) );
         result = new String( this.service.read( resourceDomain, resourceContext1, "foo.groovy" ) );
-        assertEquals( "return \"FOO\";", result );
+        assertTrue( result.indexOf("return \"FOO\";") > 0 );
 
         // direct match
         String[] resourceContext2 = { "foo", "bar" };
         assertTrue( this.service.exists( resourceDomain, resourceContext2, "bar.groovy" ) );
         result = new String( this.service.read( resourceDomain, resourceContext2, "bar.groovy" ) );
-        assertEquals( "return \"BAR\";", result );
+        assertTrue( result.indexOf("return \"BAR\";") > 0 );
 
         // we have to go up one level to find foo.groofy
         String[] resourceContext3 = { "foo", "bar" };
         assertTrue( this.service.exists( resourceDomain, resourceContext3, "foo.groovy" ) );
         result = new String( this.service.read( resourceDomain, resourceContext3, "foo.groovy" ) );
-        assertEquals( "return \"FOO\";", result );
+        assertTrue( result.indexOf("return \"FOO\";") > 0 );
 
         // test the locate() method to retrieve foo.groovy
         result = this.service.locate( resourceDomain, resourceContext3, "foo.groovy" );
         assertEquals( "foo/foo.groovy", result );
         result = new String( this.service.read( resourceDomain, result ) );
-        assertEquals( "return \"FOO\";", result );
+        assertTrue( result.indexOf("return \"FOO\";") > 0 );
 
         // we have to go up two levels to find empty.groovy
         String[] resourceContext4 = { "foo", "bar" };
         assertTrue( this.service.exists( resourceDomain, resourceContext4, "empty.groovy" ) );
         result = new String( this.service.read( resourceDomain, resourceContext4, "empty.groovy" ) );
-        assertEquals( "return true;", result );
+        assertTrue( result.indexOf("return true;") > 0 );
 
         // search for a non-existing resource with an existing context
         String[] resourceContext5 = { "foo", "bar" };
