@@ -60,11 +60,6 @@ public class HsqlDB
         }
     }
 
-    public HsqlDB(String uri, URL loadFile) throws Exception
-    {
-        this(uri, new File(loadFile.toURI()));
-    }
-
     public HsqlDB(String uri, File loadFile) throws Exception
     {
         this(uri, loadFile.getAbsolutePath());
@@ -93,7 +88,9 @@ public class HsqlDB
         {
             statement = connection.createStatement();
             String commands = getFileContents(fileName);
+            statement.execute(commands);
 
+/*            
             for (int targetPos = commands.indexOf(';'); targetPos > -1; targetPos = commands.indexOf(';'))
             {
                 String cmd = commands.substring(0, targetPos + 1);
@@ -108,6 +105,7 @@ public class HsqlDB
 
                 commands = commands.substring(targetPos + 2);
             }
+*/
         }
         finally
         {
@@ -141,11 +139,6 @@ public class HsqlDB
         {
             loadSqlFile(sqlFile);
         }
-    }
-
-    public void addSQL(URL sqlFile) throws Exception
-    {
-        this.addSQL(new File(sqlFile.toURI()));
     }
 
     public void addSQL(File sqlFile) throws Exception
