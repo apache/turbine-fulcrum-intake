@@ -35,8 +35,7 @@ import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 import org.apache.avalon.framework.thread.ThreadSafe;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.fulcrum.quartz.QuartzScheduler;
 import org.apache.fulcrum.quartz.listener.ServiceableJobListener;
 import org.apache.fulcrum.quartz.listener.impl.ServiceableJobListenerWrapper;
@@ -60,16 +59,15 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
  * @author <a href="mailto:epughNOSPAM@opensourceconnections.com">Eric Pugh </a>
  *
  */
-public class DefaultQuartzScheduler implements QuartzScheduler, Configurable, Serviceable, Disposable, Initializable,
-        ThreadSafe {
+public class DefaultQuartzScheduler
+    extends AbstractLogEnabled
+    implements QuartzScheduler, Configurable, Serviceable, Disposable, Initializable, ThreadSafe {
 
     private ServiceableJobListener wrapper;
 
     private ServiceManager manager;
 
     private String globalJobListenerClassName;
-
-    protected Log logger = LogFactory.getLog(DefaultQuartzScheduler.class.getName());
 
     private Scheduler scheduler;
 
@@ -92,7 +90,6 @@ public class DefaultQuartzScheduler implements QuartzScheduler, Configurable, Se
         if (child != null) {
             globalJobListenerClassName = conf.getChild("globalJobListener").getAttribute("className");
         }
-
     }
 
     /**
@@ -106,7 +103,7 @@ public class DefaultQuartzScheduler implements QuartzScheduler, Configurable, Se
         try {
             scheduler = schedFact.getScheduler();
         } catch (SchedulerException e) {
-            throw new ServiceException("Error composing scheduler instance", e);
+            throw new ServiceException("QuartzScheduler", "Error composing scheduler instance", e);
         }
 
     }
@@ -142,7 +139,7 @@ public class DefaultQuartzScheduler implements QuartzScheduler, Configurable, Se
         for (Iterator iter = jobDetailsMap.keySet().iterator(); iter.hasNext();) {
             String key = (String) iter.next();
             JobDetail jobDetail = (JobDetail) jobDetailsMap.get(key);
-            logger.debug("Adding job detail [" + jobDetail + "] to scheduler");
+            this.getLogger().debug("Adding job detail [" + jobDetail + "] to scheduler");
             scheduler.addJob(jobDetail, true);
         }
 
@@ -150,6 +147,7 @@ public class DefaultQuartzScheduler implements QuartzScheduler, Configurable, Se
         if (globalJobListenerClassName != null) {
             JobListener configuredjobListener = (JobListener) Class.forName(globalJobListenerClassName).newInstance();
             wrapper = new ServiceableJobListenerWrapper(configuredjobListener);
+            wrapper.enableLogging(this.getLogger().getChildLogger("ServiceableJobListener"));
             wrapper.service(manager);
             scheduler.addGlobalJobListener(wrapper);
         }
@@ -163,7 +161,7 @@ public class DefaultQuartzScheduler implements QuartzScheduler, Configurable, Se
                 	   Trigger t = scheduler.getTrigger(trigger.getName(),trigger.getGroup());
                 	   if (t==null){
                     CronTrigger triggerToSchedule = new CronTrigger(trigger.getName(),trigger.getGroup(),trigger.getJobName(),trigger.getJobGroup(),((CronTrigger)trigger).getCronExpression());
-                    logger.debug("Scheduling trigger [" + triggerToSchedule.getFullName() + "] for  job ["
+                    this.getLogger().debug("Scheduling trigger [" + triggerToSchedule.getFullName() + "] for  job ["
                             + triggerToSchedule.getFullJobName() + "] using cron " + triggerToSchedule.getCronExpression());
 
                     triggerToSchedule.setDescription(trigger.getDescription());
@@ -180,7 +178,7 @@ public class DefaultQuartzScheduler implements QuartzScheduler, Configurable, Se
         }
 
         scheduler.start();
-        logger.debug("Quartz scheduler started !");
+        this.getLogger().debug("Quartz scheduler started !");
     }
 
     /**
@@ -190,7 +188,7 @@ public class DefaultQuartzScheduler implements QuartzScheduler, Configurable, Se
         try {
             scheduler.shutdown();
         } catch (SchedulerException e) {
-            logger.warn("Problem shutting down scheduler ", e);
+            this.getLogger().warn("Problem shutting down scheduler ", e);
         }
         if(wrapper != null) {
             wrapper.dispose();

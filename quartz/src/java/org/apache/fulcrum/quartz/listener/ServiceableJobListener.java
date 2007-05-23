@@ -21,6 +21,7 @@ package org.apache.fulcrum.quartz.listener;
 
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.service.Serviceable;
+import org.apache.avalon.framework.logger.LogEnabled;
 import org.quartz.JobListener;
 
 /*
@@ -34,7 +35,8 @@ import org.quartz.JobListener;
  *
  */
 public interface ServiceableJobListener
-	extends JobListener,Serviceable,Disposable
+	extends JobListener,LogEnabled,Serviceable,Disposable
 {
 
 }
+

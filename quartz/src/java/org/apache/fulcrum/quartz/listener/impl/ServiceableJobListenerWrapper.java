@@ -22,8 +22,7 @@ package org.apache.fulcrum.quartz.listener.impl;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.avalon.framework.logger.Logger;
 import org.apache.fulcrum.quartz.listener.ServiceableJobListener;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -42,7 +41,7 @@ public class  ServiceableJobListenerWrapper
 {
 	protected JobListener wrappedListener;
 
-    protected Log logger = LogFactory.getLog(ServiceableJobListener.class.getName());
+    protected Logger logger;
 
     protected ServiceManager manager;
 
@@ -54,7 +53,13 @@ public class  ServiceableJobListenerWrapper
         wrappedListener = listener;
     }
 
-	public void service(ServiceManager manager)
+
+    public void enableLogging(Logger logger)
+    {
+        this.logger = logger;
+    }
+
+    public void service(ServiceManager manager)
 		throws ServiceException
 	{
 		this.manager = manager;
