@@ -23,6 +23,7 @@ import junit.framework.TestCase;
 import org.apache.fulcrum.security.entity.SecurityEntity;
 import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
+import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
 /**
  * Test that we can use a BaseAdapter with a SecurityEntity that has
  * various types of Id objects.
@@ -76,7 +77,7 @@ public class BaseAdapterTest extends TestCase
 
     public void testGetSecurityEntity()
     {
-        DynamicUser user = new DynamicUser();
+        DynamicUser user = new DynamicUserImpl();
         user.setName("bob");
         BaseAdapter ba = new BaseAdapter(user);
         assertTrue(ba.getSecurityEntity() instanceof DynamicUser);

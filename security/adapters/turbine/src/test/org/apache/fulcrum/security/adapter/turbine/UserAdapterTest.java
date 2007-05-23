@@ -21,7 +21,7 @@ package org.apache.fulcrum.security.adapter.turbine;
 import junit.framework.TestCase;
 
 import org.apache.fulcrum.security.entity.User;
-import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
+import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
 /**
  * Test that we can use a UserAdapter properly.
  *
@@ -40,7 +40,7 @@ public class UserAdapterTest extends TestCase
     }
     public void testWithInteger()
     {
-        User user = new DynamicUser();
+        User user = new DynamicUserImpl();
         user.setId(new Integer(56));
         UserAdapter ga = new UserAdapter(user);
         assertEquals(56, ga.getId());
@@ -49,7 +49,7 @@ public class UserAdapterTest extends TestCase
     }
     public void testWithLong()
     {
-        User user = new DynamicUser();
+        User user = new DynamicUserImpl();
         user.setId(new Long(56));
         UserAdapter ga = new UserAdapter(user);
         assertEquals(56, ga.getId());
@@ -58,7 +58,7 @@ public class UserAdapterTest extends TestCase
     }
     public void testWithString()
     {
-        User user = new DynamicUser();
+        User user = new DynamicUserImpl();
         user.setId("56");
         UserAdapter ga = new UserAdapter(user);
         assertEquals(56, ga.getId());
@@ -67,7 +67,7 @@ public class UserAdapterTest extends TestCase
     }
 
     public void testSetGetTemp(){
-		User user = new DynamicUser();
+		User user = new DynamicUserImpl();
 		user.setId("56");
 		UserAdapter ga = new UserAdapter(user);
 		Double d = new Double(10.243);

@@ -106,7 +106,7 @@
     <dependency>
       <groupId>javax.transaction</groupId>
       <artifactId>jta</artifactId>
-      <version>1.0.1B</version>
+      <version>1.1</version>
       <url>http://java.sun.com/products/jta/</url>
     </dependency>
 
@@ -127,7 +127,7 @@
         <include>**/*TestCase.*</include>
       </includes>
       <excludes>
-        <include>**/Abstract*.*</include>
+        <exclude>**/Abstract*.*</exclude>
       </excludes>
       <resources>
         <resource>

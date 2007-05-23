@@ -21,7 +21,7 @@ package org.apache.fulcrum.security.adapter.turbine;
 import junit.framework.TestCase;
 
 import org.apache.fulcrum.security.entity.Group;
-import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
+import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicGroupImpl;
 /**
  * Test that we can use a GroupAdapter with a Group that has
  * various types of Id objects.
@@ -41,7 +41,7 @@ public class GroupAdapterTest extends TestCase
     }
     public void testWithInteger()
     {
-        Group group = new DynamicGroup();
+        Group group = new DynamicGroupImpl();
         group.setId(new Integer(56));
         GroupAdapter ga = new GroupAdapter(group);
         assertEquals(56, ga.getId());
@@ -50,7 +50,7 @@ public class GroupAdapterTest extends TestCase
     }
     public void testWithLong()
     {
-        Group group = new DynamicGroup();
+        Group group = new DynamicGroupImpl();
         group.setId(new Long(56));
         GroupAdapter ga = new GroupAdapter(group);
         assertEquals(56, ga.getId());
@@ -59,7 +59,7 @@ public class GroupAdapterTest extends TestCase
     }
     public void testWithString()
     {
-        Group group = new DynamicGroup();
+        Group group = new DynamicGroupImpl();
         group.setId("56");
         GroupAdapter ga = new GroupAdapter(group);
         assertEquals(56, ga.getId());
