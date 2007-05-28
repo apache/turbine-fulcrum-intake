@@ -44,9 +44,9 @@
 
  <section name="Container compatibility">
    <p>
-     All components are compatible in Avalon's ECM container.  Any dependancies
+     All components are compatible in Avalon's ECM container.  Any dependencies
      on other components, system properties, or context elements are clearly
-     documentmented in the docs for each component.
+     documented in the docs for each component.
    </p>
    <p>
     Additionally, Fulcrum offers the Yaafi component.  Yaafi (Yet Another Avalon Framework
