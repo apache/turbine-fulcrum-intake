@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!--
  Licensed to the Apache Software Foundation (ASF) under one
  or more contributor license agreements.  See the NOTICE file
@@ -18,28 +19,8 @@
  under the License.
 -->
 
-<!DOCTYPE project [
-<!ENTITY site-nav SYSTEM "../../incl_site_nav.xml">
-]>
-
-<project
-  name="Fulcrum Script"
-  href="http://turbine.apache.org/fulcrum/fulcrum-script/">
-
-  <body>
-
-&site-nav;
-
-    <menu name="Overview">
-      <item name="Overview"            href="/index.html"/>
-      <item name="Configuration"       href="/configuration.html"/>
-      <item name="Integration"         href="/integration.html"/>
-      <item name="Technical"           href="/technical.html"/>
-      <item name="Resources"           href="/resources.html"/>
-    </menu>
-    <menu name="Links">
-      <item name="JSR 223" href="http://www.jcp.org/aboutJava/communityprocess/pr/jsr223/"/>
-    </menu>
-
-  </body>
-</project>
+    <links>
+      <item name="Turbine Home"     href="http://turbine.apache.org/"/>
+      <item name="Fulcrum"          href="http://turbine.apache.org/fulcrum/"/>
+      <item name="META"             href="http://turbine.apache.org/meta/"/>
+    </links>

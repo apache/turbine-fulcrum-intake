@@ -17,17 +17,18 @@
  specific language governing permissions and limitations
  under the License.
 -->
+
+<!DOCTYPE project [
+<!ENTITY site-nav SYSTEM "../../incl_site_nav.xml">
+]>
+
 <project
-  name="localization"
-  href="http://jakarta.apache.org/turbine/fulcrum/factory/">
+  name="Fulcrum Factory"
+  href="http://turbine.apache.org/fulcrum/fulcrum-factory/">
 
   <body>
-    <links>
-      <item name="Turbine"
-            href="http://jakarta.apache.org/turbine/"/>
-      <item name="Fulcrum"
-            href="http://jakarta.apache.org/turbine/fulcrum/"/>
-    </links>
+
+&site-nav;
 
     <menu name="Overview">
       <item name="Main"                 href="/index.html"/>

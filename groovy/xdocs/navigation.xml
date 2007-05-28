@@ -17,16 +17,18 @@
  specific language governing permissions and limitations
  under the License.
 -->
+
+<!DOCTYPE project [
+<!ENTITY site-nav SYSTEM "../../incl_site_nav.xml">
+]>
+
 <project
-  name="Fulcrum Groovy Service"
-  href="http://jakarta.apache.org/turbine/fulcrum/yaafi/">
+  name="Fulcrum Groovy"
+  href="http://turbine.apache.org/fulcrum/fulcrum-groovy/">
 
   <body>
-    <links>
-      <item name="Home"                href="../../../it20one-service-maven/target/docs/index.html"/>
-      <item name="Fulcrum"             href="http://jakarta.apache.org/turbine/fulcrum/"/>
-      <item name="Groovy"              href="http://groovy.codehaus.org/"/>
-    </links>
+
+&site-nav;
 
     <menu name="Overview">
       <item name="Overview"            href="/index.html"/>
@@ -34,5 +36,10 @@
       <item name="Integration"         href="/integration.html"/>
       <item name="Technical"           href="/technical.html"/>
     </menu>
+
+    <menu name="Links">
+      <item name="Groovy"              href="http://groovy.codehaus.org/"/>
+    </menu>
+
   </body>
 </project>

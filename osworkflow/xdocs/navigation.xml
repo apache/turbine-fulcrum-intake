@@ -17,23 +17,26 @@
  specific language governing permissions and limitations
  under the License.
 -->
+
+<!DOCTYPE project [
+<!ENTITY site-nav SYSTEM "../../incl_site_nav.xml">
+]>
+
 <project
-  name="Workflow"
-  href="http://jakarta.apache.org/turbine/fulcrum/workflow/">
+  name="Fulcrum OSWorkflow"
+  href="http://turbine.apache.org/fulcrum/fulcrum-osworkflow/">
 
   <body>
-    <links>
-      <item name="Turbine"
-            href="http://jakarta.apache.org/turbine/"/>
-      <item name="Fulcrum"
-            href="http://jakarta.apache.org/turbine/fulcrum/"/>
-      <item name="OpenSymphony Workflow"
-            href="http://www.opensymphony.com/osworkflow/"/>
-    </links>
+
+&site-nav;
 
     <menu name="Overview">
       <item name="Main"                 href="/index.html"/>
-      <item name="Example Application"  href="http://jakarta.apache.org/turbine/fulcrum/fulcrum-osworkflow-example/index.html"/>
+      <item name="Example Application"  href="http://turbine.apache.org/fulcrum/fulcrum-osworkflow-example/"/>
+    </menu>
+
+    <menu name="Links">
+      <item name="OpenSymphony Workflow" href="http://www.opensymphony.com/osworkflow/"/>
     </menu>
   </body>
 </project>

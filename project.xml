@@ -20,25 +20,25 @@
 
 <project>
   <pomVersion>3</pomVersion>
-  <name>jakarta-turbine-fulcrum</name>
+  <name>turbine-fulcrum</name>
   <groupId>fulcrum</groupId>
   <id>fulcrum</id>
   <organization>
     <name>Apache Software Foundation</name>
-    <url>http://jakarta.apache.org/</url>
-    <logo>http://jakarta.apache.org/images/jakarta-logo.gif</logo>
+    <url>http://turbine.apache.org/</url>
+    <logo>/images/turbine-project.png</logo>
   </organization>
   <inceptionYear>2000</inceptionYear>
   <package>org.apache.fulcrum</package>
-  <logo>/images/blue-logo.gif</logo>
+  <logo>/images/logo.gif</logo>
 
   <gumpRepositoryId>jakarta</gumpRepositoryId>
   <shortDescription>Component Repository</shortDescription>
   <description>Fulcrum is a component repository for Turbine.</description>
-  <url>http://jakarta.apache.org/turbine/fulcrum/${pom.artifactId}/</url>
+  <url>http://turbine.apache.org/fulcrum/${pom.artifactId}/</url>
   <issueTrackingUrl>http://issues.apache.org/jira/browse/TRB</issueTrackingUrl>
   <siteAddress>people.apache.org</siteAddress>
-  <siteDirectory>/www/jakarta.apache.org/turbine/fulcrum/</siteDirectory>
+  <siteDirectory>/www/turbine.apache.org/fulcrum/</siteDirectory>
   <distributionSite>www.apache.org</distributionSite>
   <distributionDirectory>/www/www.apache.org/dist/java-repository/</distributionDirectory>
   <repository>
@@ -49,15 +49,15 @@
   <mailingLists>
     <mailingList>
       <name>Turbine User List</name>
-      <subscribe>turbine-user-subscribe@jakarta.apache.org</subscribe>
-      <unsubscribe>turbine-user-unsubscribe@jakarta.apache.org</unsubscribe>
-      <archive>http://mail-archives.apache.org/mod_mbox/jakarta-turbine-user/</archive>
+      <subscribe>user-subscribe@turbine.apache.org</subscribe>
+      <unsubscribe>user-unsubscribe@turbine.apache.org</unsubscribe>
+      <archive>http://mail-archives.apache.org/mod_mbox/turbine-user/</archive>
     </mailingList>
     <mailingList>
       <name>Turbine Developer List</name>
-      <subscribe>turbine-dev-subscribe@jakarta.apache.org</subscribe>
-      <unsubscribe>turbine-dev-unsubscribe@jakarta.apache.org</unsubscribe>
-      <archive>http://mail-archives.apache.org/mod_mbox/jakarta-turbine-dev/</archive>
+      <subscribe>dev-subscribe@turbine.apache.org</subscribe>
+      <unsubscribe>dev-unsubscribe@turbine.apache.org</unsubscribe>
+      <archive>http://mail-archives.apache.org/mod_mbox/turbine-dev/</archive>
     </mailingList>
   </mailingLists>
   <developers>
@@ -347,6 +347,12 @@
            <include>**/*.x*</include>
          </includes>
        </resource>
+        <resource>
+          <directory>/</directory>
+          <includes>
+            <include>incl_site_nav.xml</include>
+          </includes>
+        </resource>
     </resources>
   </build>
 
@@ -366,7 +372,6 @@
     <report>maven-javadoc-plugin</report>
     <report>maven-jxr-plugin</report>
     <report>maven-junit-report-plugin</report>
-    <report>maven-cobertura-plugin</report>
   </reports>
 
 </project>
