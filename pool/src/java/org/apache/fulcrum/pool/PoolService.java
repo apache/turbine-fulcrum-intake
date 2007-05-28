@@ -28,7 +28,7 @@ package org.apache.fulcrum.pool;
  * requested, the service first checks its pool if one is available.
  * If the the pool is empty, a new object will be instantiated
  * from the specified class. If only class name is given, the request
- * to create an intance will be forwarded to the Factory Service.
+ * to create an instance will be forwarded to the Factory Service.
  *
  * <p>For objects implementing the Recyclable interface, a recycle
  * method will be called, when they are taken from the pool, and
@@ -51,7 +51,7 @@ public interface PoolService
 
     /**
      * Gets an instance of a specified class either from the pool
-     * or by instatiating from the class if the pool is empty.
+     * or by instantiating from the class if the pool is empty.
      *
      * @param clazz the class.
      * @return the instance.
@@ -62,7 +62,7 @@ public interface PoolService
 
     /**
      * Gets an instance of a specified class either from the pool
-     * or by instatiating from the class if the pool is empty.
+     * or by instantiating from the class if the pool is empty.
      *
      * @param clazz the class.
      * @param params an array containing the parameters of the constructor.
