@@ -19,7 +19,7 @@
 -->
 
 <!DOCTYPE project [
-<!ENTITY site-nav SYSTEM "../incl_site_nav.xml">
+<!ENTITY site-nav SYSTEM "../../incl_site_nav.xml">
 ]>
 
 <project name="Fulcrum" href="http://turbine.apache.org/fulcrum/">
