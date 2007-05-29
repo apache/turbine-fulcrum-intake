@@ -28,7 +28,7 @@
 
   <body>
 
-&site-nav
+&site-nav;
 
     <menu name="Overview">
       <item name="Main"                 href="/index.html"/>
