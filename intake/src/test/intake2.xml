@@ -18,7 +18,7 @@
  under the License.
 -->
 <!DOCTYPE input-data SYSTEM
-           "http://jakarta.apache.org/turbine/dtd/intake_2_4.dtd">
+           "http://turbine.apache.org/dtd/intake_2_4.dtd">
 <input-data basePackage="org.apache.fulcrum.intake.test.">
 <group name="AnotherGroup" key="anotherGroupKey" mapToObject="AnotherForm">
 <field name="Username" key="loginUsernameKey" type="String"
