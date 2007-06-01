@@ -24,9 +24,9 @@ import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 import org.apache.fulcrum.security.model.basic.test.AbstractModelManagerTest;
 import org.apache.fulcrum.security.torque.om.TorqueBasicGroupPeer;
-import org.apache.fulcrum.security.torque.HsqlDB;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserPeer;
+import org.apache.fulcrum.security.torque.HsqlDB;
 import org.apache.torque.TorqueException;
 import org.apache.torque.util.Criteria;
 
@@ -81,6 +81,7 @@ public class TorqueBasicModelManagerTest extends AbstractModelManagerTest
         }
         catch (TorqueException e)
         {
+            e.printStackTrace();
             fail(e.toString());
         }
 
