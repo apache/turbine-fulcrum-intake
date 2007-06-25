@@ -42,9 +42,9 @@
   <distributionSite>www.apache.org</distributionSite>
   <distributionDirectory>/www/www.apache.org/dist/java-repository/</distributionDirectory>
   <repository>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/turbine/fulcrum/trunk/</connection>
-    <developerConnection>scm:svn:http://svn.apache.org/repos/asf/jakarta/turbine/fulcrum/trunk/</developerConnection>
-    <url>http://svn.apache.org/repos/asf/jakarta/turbine/fulcrum/trunk</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/</connection>
+    <developerConnection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/</developerConnection>
+    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk</url>
   </repository>
   <mailingLists>
     <mailingList>
