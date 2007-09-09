@@ -72,15 +72,6 @@ public class Jamon1PerformanceMonitorImpl implements JamonPerformanceMonitor
      */
     public String createReport() throws Exception
     {
-        String result = "";
-        try
-        {
-            result = MonitorFactory.getRootMonitor().getReport();
-        }
-        catch (Exception e)
-        {
-
-        }
-        return result;
+        return MonitorFactory.getRootMonitor().getReport();
     }
 }
