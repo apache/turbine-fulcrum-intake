@@ -24,6 +24,7 @@ public interface JamonPerformanceMonitor
     /**
      * Create a performance report
      * @return the textual performance report
+     * @throws Exception generating the report failed
      */
-    public String createReport();
+    public String createReport() throws Exception;
 }

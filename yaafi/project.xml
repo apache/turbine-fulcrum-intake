@@ -36,8 +36,7 @@
   </versions>
 
   <dependencies>
-   <!-- you need to download the JAMON library manually to enable the interceptor -->
-   <!--
+   <!-- compile time dependency on JAMon for interceptors -->
    <dependency>
       <groupId>jamon</groupId>
       <artifactId>jamon</artifactId>
@@ -48,7 +47,6 @@
         <ear.bundle>true</ear.bundle>
       </properties>
     </dependency>
-   -->
   </dependencies>
 
   <build>
