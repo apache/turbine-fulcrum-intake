@@ -51,11 +51,19 @@
               invocations. </td>
           </tr>
           <tr>
+            <td>performanceMonitorClassName</td>
+            <td>String</td>
+            <td>[0|1]</td>
+            <td> The implementation class doing the JAMon API calls. If no value is supplied then 
+              "org.apache.fulcrum.yaafi.interceptor.jamon.Jamon1PerformanceMonitorImpl" providing
+              out of the box JAMon 1.x and 2.x integration</td>
+          </tr>
+          <tr>
             <td>reportTimeout</td>
             <td>Long</td>
             <td>[0|1]</td>
             <td> The report timeout to generate a HTML report. If the value "0" is used than no periodic reports are
-              generated. If no value is supplied than "0" is used. </td>
+              generated. If no value is supplied then "0" is used. </td>
           </tr>
           <tr>
             <td>reportFile</td>

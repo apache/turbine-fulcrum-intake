@@ -19,11 +19,6 @@ package org.apache.fulcrum.yaafi.interceptor.jamon;
  * under the License.
  */
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
-import java.lang.reflect.Method;
-
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.configuration.Configuration;
@@ -33,7 +28,11 @@ import org.apache.avalon.framework.thread.ThreadSafe;
 import org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorContext;
 import org.apache.fulcrum.yaafi.framework.reflection.Clazz;
 import org.apache.fulcrum.yaafi.interceptor.baseservice.BaseInterceptorServiceImpl;
-import org.apache.fulcrum.yaafi.interceptor.util.MethodToStringBuilderImpl;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.lang.reflect.Method;
 
 /**
  * A service using JAMon for performance monitoring. The implementation
@@ -61,11 +60,17 @@ public class JamonInterceptorServiceImpl
     /** the time when the next report is due */
     private long nextReportTimestamp;
 
-    /** the class for JAMon MonitorFactory */
-    private Class monitorFactoryClass;
+    /** the implementation class name for the performance monitor */
+    private String performanceMonitorClassName;
+
+    /** the implementation class name for the performance monitor */
+    private Class performanceMonitorClass;
 
     /** the class name of the JAMon MonitorFactory */
-    private static final String MONITORFACTOTY_CLASSNAME = "com.jamonapi.MonitorFactory";
+    private static final String MONITORFACTORY_CLASSNAME = "com.jamonapi.MonitorFactory";
+
+    /** the class name of the JAMon MonitorFactory */
+    private static final String DEFAULT_PERFORMANCEMONITOR_CLASSNAME = "org.apache.fulcrum.yaafi.interceptor.jamon.Jamon1PerformanceMonitorImpl";
 
     /////////////////////////////////////////////////////////////////////////
     // Avalon Service Lifecycle Implementation
@@ -84,22 +89,20 @@ public class JamonInterceptorServiceImpl
      */
     public void configure(Configuration configuration) throws ConfigurationException
     {
-        String reportFileName = null;
-
         super.configure(configuration);
         this.reportTimeout = configuration.getChild("reportTimeout").getValueAsLong(0);
 
-        // parse the report file name
+        // parse the performance monitor class name
+        this.performanceMonitorClassName = configuration.getChild("performanceMonitorClassName").getValue(DEFAULT_PERFORMANCEMONITOR_CLASSNAME);
 
-        reportFileName = configuration.getChild("reportFile").getValue("./jamon.html");
+        // parse the report file name
+        String reportFileName = configuration.getChild("reportFile").getValue("./jamon.html");
         this.reportFile = this.makeAbsoluteFile( reportFileName );
 
         // determine when to create the next report
-
         this.nextReportTimestamp = System.currentTimeMillis() + this.reportTimeout;
 
         // do we create a report on disposal
-
         this.reportOnExit = configuration.getChild("reportOnExit").getValueAsBoolean(false);
     }
 
@@ -110,21 +113,37 @@ public class JamonInterceptorServiceImpl
     {
         ClassLoader classLoader = this.getClassLoader();
 
-        if (Clazz.hasClazz(classLoader, MONITORFACTOTY_CLASSNAME))
-        {
-            this.monitorFactoryClass = Clazz.getClazz(
-                classLoader,
-                MONITORFACTOTY_CLASSNAME
-                );
-
-            this.isJamonAvailable = true;
-        }
-        else
+        if (!Clazz.hasClazz(classLoader, MONITORFACTORY_CLASSNAME))
         {
             String msg = "The JamonInterceptorService is disabled since the JAMON classes are not found in the classpath";
             this.getLogger().warn(msg);
             this.isJamonAvailable = false;
+            return;
         }
+        
+        if (!Clazz.hasClazz(classLoader, this.performanceMonitorClassName))
+        {
+            String msg = "The JamonInterceptorService is disabled since the performance monitor class is not found in the classpath";
+            this.getLogger().warn(msg);
+            this.isJamonAvailable = false;
+            return;
+        }
+
+        // load the performance monitor class
+        this.performanceMonitorClass = Clazz.getClazz(this.getClassLoader(), this.performanceMonitorClassName);
+
+        // check if we can create an instance of the performance monitor class
+        JamonPerformanceMonitor testMonitor = this.createJamonPerformanceMonitor(null, null, true);
+        if(testMonitor == null)
+        {
+            String msg = "The JamonInterceptorService is disabled since the performance monitor can't be instantiated";
+            this.getLogger().warn(msg);
+            this.isJamonAvailable = false;
+            return;
+        }
+
+        this.getLogger().debug("The JamonInterceptorService is enabled");
+        this.isJamonAvailable = true;
     }
 
         /**
@@ -143,11 +162,9 @@ public class JamonInterceptorServiceImpl
     {
         if( this.reportOnExit )
         {
-            this.getLogger().debug( "Creating JAMOM report ..." );
             this.run();
         }
 
-        this.monitorFactoryClass = null;
         this.reportFile = null;
     }
 
@@ -160,23 +177,16 @@ public class JamonInterceptorServiceImpl
      */
     public void onEntry(AvalonInterceptorContext interceptorContext)
     {
-        this.writeReport();
-
-        if( this.isJamonAvailable() && this.isServiceMonitored(interceptorContext ) )
+        if( this.isJamonAvailable()  )
         {
-            this.createMonitor(interceptorContext);
-        }
-    }
+            this.writeReport();
 
-    /**
-     * @see org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorService#onError(org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorContext, java.lang.Throwable)
-     */
-    public void onError(AvalonInterceptorContext interceptorContext,Throwable t)
-    {
-        if( this.isJamonAvailable() && this.isServiceMonitored(interceptorContext) )
-        {
-            Object monitor = this.getMonitor(interceptorContext);
-            this.stopMonitor(monitor);
+            String serviceShortHand = interceptorContext.getServiceShorthand();
+            Method serviceMethod = interceptorContext.getMethod();
+            boolean isEnabled = this.isServiceMonitored(interceptorContext );
+            JamonPerformanceMonitor monitor = this.createJamonPerformanceMonitor(serviceShortHand, serviceMethod, isEnabled);
+            monitor.start();
+            interceptorContext.getRequestContext().put(this.getServiceName(), monitor);
         }
     }
 
@@ -185,10 +195,24 @@ public class JamonInterceptorServiceImpl
      */
     public void onExit(AvalonInterceptorContext interceptorContext, Object result)
     {
-        if( this.isJamonAvailable() && this.isServiceMonitored(interceptorContext) )
+        if( this.isJamonAvailable() )
         {
-            Object monitor = this.getMonitor(interceptorContext);
-            this.stopMonitor(monitor);
+            JamonPerformanceMonitor monitor;
+            monitor = (JamonPerformanceMonitor) interceptorContext.getRequestContext().remove(this.getServiceName());
+            monitor.stop();
+        }
+    }
+
+    /**
+     * @see org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorService#onError(org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorContext, java.lang.Throwable)
+     */
+    public void onError(AvalonInterceptorContext interceptorContext,Throwable t)
+    {
+        if( this.isJamonAvailable() )
+        {
+            JamonPerformanceMonitor monitor;
+            monitor = (JamonPerformanceMonitor) interceptorContext.getRequestContext().remove(this.getServiceName());
+            monitor.stop(t);
         }
     }
 
@@ -209,38 +233,36 @@ public class JamonInterceptorServiceImpl
     /**
      * @return Returns the isJamonAvailable.
      */
-    protected boolean isJamonAvailable()
+    protected final boolean isJamonAvailable()
     {
         return this.isJamonAvailable;
     }
 
     /**
-     * Creates a JAMON monitor
+     * Factory method for creating an implementation of a JamonPerformanceMonitor.
      *
-     * @param interceptorContext the current interceptor context
+     * @param serviceName the service name
+     * @param method the method
+     * @param isEnabled is the monitor enabled
+     * @return the instance or <b>null</b> if the creation failed
      */
-    protected void createMonitor(
-        AvalonInterceptorContext interceptorContext )
+    protected JamonPerformanceMonitor createJamonPerformanceMonitor(String serviceName, Method method, boolean isEnabled)
     {
-        Method method = interceptorContext.getMethod();
-        MethodToStringBuilderImpl methodToStringBuilder = new MethodToStringBuilderImpl(method,0);
-        String monitorCategory = methodToStringBuilder.toString();
-        Object monitor = this.createMonitor(monitorCategory);
-        interceptorContext.getRequestContext().put(this.getServiceName(),monitor);
-    }
+        JamonPerformanceMonitor result = null;
 
-    /**
-     * Gets the JAMON Monitor
-     *
-     * @param interceptorContext the current interceptor context
-     * @return the monitor
-     */
-    protected Object getMonitor(
-        AvalonInterceptorContext interceptorContext )
-    {
-        return interceptorContext.getRequestContext().remove(
-            this.getServiceName()
-            );
+        try
+        {
+            Class[] signature = { String.class, Method.class, Boolean.class };
+            Object[] args = { serviceName, method, (isEnabled) ? Boolean.TRUE : Boolean.FALSE};
+            result = (JamonPerformanceMonitor) Clazz.newInstance(this.performanceMonitorClass, signature, args);
+            return result;
+        }
+        catch(Exception e)
+        {
+            String msg = "Failed to create a performance monitor instance : " + this.performanceMonitorClassName;
+            this.getLogger().error(msg, e);
+            return result;
+        }
     }
 
     /**
@@ -267,11 +289,10 @@ public class JamonInterceptorServiceImpl
      */
     protected void writeReport( File reportFile )
     {
+        PrintWriter printWriter = null;
+
         if( this.isJamonAvailable() )
         {
-            PrintWriter printWriter = null;
-            String report = null;
-
             try
             {
                 if( this.getLogger().isDebugEnabled() )
@@ -281,7 +302,8 @@ public class JamonInterceptorServiceImpl
 
                 FileOutputStream fos = new FileOutputStream( reportFile );
                 printWriter = new PrintWriter( fos );
-                report = this.createReport();
+                JamonPerformanceMonitor monitor = this.createJamonPerformanceMonitor(null, null, true);
+                String report = monitor.createReport();
                 printWriter.write( report );
                 printWriter.close();
             }
@@ -295,90 +317,8 @@ public class JamonInterceptorServiceImpl
                 if( printWriter != null )
                 {
                     printWriter.close();
-                    printWriter = null;
                 }
             }
         }
-    }
-
-    /**
-     * Creates a JAMON monitor for the category name.
-     *
-     * @param category the category name
-     * @return the monitor
-     */
-    private Object createMonitor(String category)
-    {
-		Object result = null;
-		String methodName = "start";
-		Class[] signature = { String.class };
-		Object[] args = { category };
-
-		// invoke MonitorFactory.start(String);
-
-        try
-        {
-            result = Clazz.invoke( this.monitorFactoryClass, methodName, signature, args );
-        }
-        catch (Exception e)
-        {
-            String msg = "Invoking com.jamonapi.MonitorFactory.start() failed";
-            this.getLogger().error( msg, e );
-        }
-
-        return result;
-    }
-
-    /**
-     * Stop the JAMON monitor.
-     *
-     * @param monitor the monitor to be stopped
-     */
-    private void stopMonitor( Object monitor )
-    {
-        String methodName = "stop";
-        Class[] signature = {};
-        Object[] args = {};
-
-        // invoke MonitorFactory.start(String);
-
-        try
-        {
-            Clazz.invoke(monitor, methodName, signature, args);
-        }
-        catch (Throwable t)
-        {
-            String msg = "Invoking com.jamonapi.MonitorFactory.start() failed";
-            this.getLogger().error(msg,t);
-        }
-    }
-
-    /**
-     * Create a JAMON report.
-     *
-     * @return the report
-     */
-    private String createReport()
-    {
-        String result = null;
-        Object rootMonitor = null;
-        Class[] signature = {};
-        Object[] args = {};
-
-        try
-        {
-            // invoke MonitorFactory.getRootMonitor().getReport()
-
-            rootMonitor = Clazz.invoke(this.monitorFactoryClass, "getRootMonitor", signature, args);
-            result = (String) Clazz.invoke(rootMonitor, "getReport", signature, args);
-        }
-        catch (Throwable t)
-        {
-            String msg = "Invoking com.jamonapi.MonitorFactory.getRootMonitor().getReport()() failed";
-            this.getLogger().error(msg,t);
-            result = "<" + t + ">";
-        }
-
-        return result;
     }
 }

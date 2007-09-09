@@ -25,10 +25,14 @@
 
   <body>
     <release version="1.0.5-dev" date="as in SVN">
+      <action dev="sgoeschl" type="fix">
+        Fixing broken JAMon 2.x integration. To decouple the service framework
+        from the JAMon library reflection was used but broke with JAMon 2.x. 
+      </action>
       <action dev="sgoeschl" type="add">
         Added componentConfiguration.properties to resolve custom properties
-		used for expanding the componentConfiguration.xml. Furthermore added
-		a resolver functionality to allow to use commons-configuration.
+        used for expanding the componentConfiguration.xml. Furthermore added
+        a resolver functionality to allow to use commons-configuration.
       </action>
       <action dev="sgoeschl" type="add">
         Added JamonInterceptorService to capture statistical performance data
