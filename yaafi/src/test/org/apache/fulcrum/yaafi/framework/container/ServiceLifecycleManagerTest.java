@@ -82,6 +82,7 @@ public class ServiceLifecycleManagerTest extends TestCase
         suite.addTest( new ServiceLifecycleManagerTest("testGeneralDecommision") );
         suite.addTest( new ServiceLifecycleManagerTest("testGeneralReconfigurationAndDecommision") );
         suite.addTest( new ServiceLifecycleManagerTest("testIndividualDecommission") );
+        suite.addTest( new ServiceLifecycleManagerTest("testException") );
 
         return suite;
     }
@@ -234,5 +235,25 @@ public class ServiceLifecycleManagerTest extends TestCase
         // and terminate it again
 
         this.lifecycleManager.decommision( ReconfigurationService.class.getName() );
+    }
+
+    /**
+     * Create an exception which should be handled by the JAMon interceptor.
+     */
+    public void testException() throws Exception
+    {
+      TestComponent testComponent = (TestComponent) container.lookup(
+          TestComponent.ROLE
+          );
+
+      try
+      {
+          testComponent.createException("testException", this);
+      }
+      catch(Exception e)
+      {
+          return;
+      }
+
     }
 }

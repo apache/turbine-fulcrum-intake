@@ -71,6 +71,7 @@
     JamonInterceptorService
 
     isEnabled := is the interceptor enabled
+    performanceMonitorClassName := the performance monitor implementation to interact with JAMon
     reportTimeout := the timeout between generating a JAMON report (No report = 0)
     reportFile := the file for the JAMON report
     reportOnExit := create a HTML report on disposal
@@ -80,6 +81,7 @@
 
   <JamonInterceptorService>
     <isEnabled>true</isEnabled>
+    <performanceMonitorClassName>org.apache.fulcrum.yaafi.interceptor.jamon.Jamon1PerformanceMonitorImpl</performanceMonitorClassName>
     <reportTimeout>60000</reportTimeout>
     <reportFile>./temp/jamon.html</reportFile>
     <reportOnExit>true</reportOnExit>
