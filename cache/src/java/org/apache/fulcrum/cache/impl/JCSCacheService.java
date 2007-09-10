@@ -131,19 +131,12 @@ public class JCSCacheService
      */
     public void dispose()
     {
-        try
-        {
-            cacheManager.remove();
-        }
-        catch (CacheException e)
-        {
-            // do nothing
-        }
-
         continueThread = false;
         refreshing.interrupt();
 
+        cacheManager.dispose();
         cacheManager = null;
+        
         getLogger().debug("JCSCacheService stopped.");
     }
 
@@ -211,7 +204,7 @@ public class JCSCacheService
                 getLogger().warn("Object with id [" + id + "] is not serializable. Expect problems with auxiliary caches.");
             }
 
-            ElementAttributes attrib = (ElementAttributes)cacheManager.getElementAttributes();
+            ElementAttributes attrib = (ElementAttributes)cacheManager.getDefaultElementAttributes();
 
             if (o instanceof RefreshableCachedObject)
             {
@@ -224,9 +217,8 @@ public class JCSCacheService
             }
 
             attrib.setLastAccessTimeNow();
+            attrib.setCreateTime();
 
-            // I know this is not nice, but setCreateTime() is missing and the fields are public ...
-            attrib.createTime = System.currentTimeMillis();
             cacheManager.putInGroup(id, group, o, attrib);
         }
         catch (CacheException e)
@@ -295,7 +287,7 @@ public class JCSCacheService
             for (Iterator i = cacheManager.getGroupKeys(group).iterator(); i.hasNext();)
             {
                 String key= (String)i.next();
-                CachedObject o = (CachedObject)cacheManager.getFromGroup(key, group);
+                Object o = cacheManager.getFromGroup(key, group);
                 if (o == null)
                 {
                     removeObject(key);
