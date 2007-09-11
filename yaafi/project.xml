@@ -40,7 +40,7 @@
    <dependency>
       <groupId>jamon</groupId>
       <artifactId>jamon</artifactId>
-      <version>1.01</version>
+      <version>2.6</version>
       <url>http://jamonapi.sourceforge.net/</url>
       <properties>
         <war.bundle>true</war.bundle>
