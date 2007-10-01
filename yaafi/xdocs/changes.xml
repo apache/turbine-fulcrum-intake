@@ -24,7 +24,10 @@
   </properties>
 
   <body>
-    <release version="1.0.5-dev" date="as in SVN">
+    <release version="1.0.5" date="2007-10-01">
+        <action dev="sgoeschl" type="add">
+            Addded README.txt and NOTICE.txt to create a proper release.
+        </action>
       <action dev="sgoeschl" type="fix">
         Fixing broken JAMon 2.x integration. To decouple the service framework
         from the JAMon library reflection was used but broke with JAMon 2.x. 
