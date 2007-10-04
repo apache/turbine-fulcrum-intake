@@ -30,8 +30,7 @@
   <section name="Overview">
     <p>
       The Crypto Service allows an application to request various encryption
-      algorithms provided by the normal Java crypto providers and 3rd party
-      providers such as <a href="http://www.cryptix.org/">Cryptix</a>.
+      algorithms.
     </p>
 
     <p>
@@ -144,8 +143,7 @@ To see an example, look at the test case
     <b>UnixCrypt</b> (org.apache.fulcrum.crypto.provider.UnixCrypt). This is an
     implementation of the Unix crypt(3) algorithm. Its main use is when
     you need to access legacy information or databases which already
-    contain crypted passwords. UnixCrypt needs the cryptix32.jar from <a
-    href="http://www.cryptix.org/">Cryptix</a>.
+    contain crypted passwords.
     </li>
     <li>
     <b>JavaCrypt</b> (org.apache.fulcrum.crypto.provider.JavaCrypt).  This is the

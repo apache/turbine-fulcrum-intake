@@ -56,7 +56,6 @@ public class DefaultCryptoService
     /** Default Encryption Class */
     private static final String DEFAULT_CLASS =
       "org.apache.fulcrum.crypto.provider.JavaCrypt";
-    private boolean disposed = false;
     /** Names of the registered algorithms and the wanted classes */
     private Hashtable algos = null;
 
@@ -142,7 +141,7 @@ public class DefaultCryptoService
      */
     public void dispose()
     {
-        disposed = true;
+        algos = null;
     }
 
 }

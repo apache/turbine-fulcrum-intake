@@ -23,9 +23,8 @@ package org.apache.fulcrum.crypto.provider;
 
 import java.security.MessageDigest;
 
-import org.apache.commons.codec.binary.Base64;
-
 import org.apache.fulcrum.crypto.CryptoAlgorithm;
+import org.apache.fulcrum.crypto.impl.Base64;
 
 /**
  * Implements the normal java.security.MessageDigest stream cipers.

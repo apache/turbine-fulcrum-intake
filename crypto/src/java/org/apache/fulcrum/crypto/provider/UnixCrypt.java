@@ -1,6 +1,5 @@
 package org.apache.fulcrum.crypto.provider;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -22,6 +21,8 @@ package org.apache.fulcrum.crypto.provider;
 
 
 import org.apache.fulcrum.crypto.CryptoAlgorithm;
+
+import java.util.Random;
 
 /**
  * Implements Standard Unix crypt(3) for use with the Crypto Service.
@@ -83,18 +84,15 @@ public class UnixCrypt
      * encrypt the supplied string with the requested cipher
      *
      * @param value       The value to be encrypted
-     *
      * @return The encrypted value
-     *
      * @throws Exception An Exception of the underlying implementation.
      */
-
     public String encrypt(String value)
         throws Exception
     {
         if (seed == null)
         {
-            java.util.Random randomGenerator = new java.util.Random();
+            Random randomGenerator = new java.util.Random();
             int numSaltChars = SALT_CHARS.length;
 
             seed = (new StringBuffer())
@@ -105,7 +103,6 @@ public class UnixCrypt
                 .toString();
         }
 
-        /* UnixCrypt seems to be a really widespread name... */
-        return new cryptix.tools.UnixCrypt(seed).crypt(value);
+        return org.apache.fulcrum.crypto.impl.UnixCrypt.crypt(seed, value);
     }
 }

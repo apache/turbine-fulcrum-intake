@@ -21,12 +21,10 @@ package org.apache.fulcrum.crypto.provider;
  */
 
 
-import javax.mail.internet.MimeUtility;
 import java.security.MessageDigest;
-import java.io.OutputStream;
-import java.io.ByteArrayOutputStream;
 
 import org.apache.fulcrum.crypto.CryptoAlgorithm;
+import org.apache.fulcrum.crypto.impl.Base64;
 
 /**
  * This is the Message Digest Implementation of Turbine 2.1. It does
@@ -116,10 +114,12 @@ public class OldJavaCrypt
         // default encoding. Thanks to SGawin for spotting this.
 
         byte[] digest = md.digest(value.getBytes("UTF-8"));
-        ByteArrayOutputStream bas =
-            new ByteArrayOutputStream(digest.length + digest.length / 3 + 1);
-        OutputStream encodedStream = MimeUtility.encode(bas, "base64");
-        encodedStream.write(digest);
-        return bas.toString();
+        byte[] base64 = Base64.encodeBase64(digest);
+        // from MD5 the digest has 16 bytes but for SHA1 it contains 20 bytes
+        // depending on the digest lenght the result is truncated
+        int len = (digest.length == 16 ? 20 : 24 );
+        byte[] result = new byte[len];
+        System.arraycopy(base64, 0, result, 0, result.length);
+        return new String(result);
     }
 }

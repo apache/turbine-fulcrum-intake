@@ -26,6 +26,13 @@
   <body>
     <release version="1.0.6-dev" date="as in SVN">
       <action dev="sgoeschl" type="update">
+        Getting rid of all external dependencies - in particular
+        the crytptix library. The cryptix library contains strong
+        encyryption algorithm causing problems using the software
+        outside of the US (ECCN). Copy and wasted some source from
+        JetSpeed (UnixCrpyt) and commons-codec (Base64).
+      </action>
+      <action dev="sgoeschl" type="update">
         Upgrading to javamail-1.3.2
       </action>
     </release>

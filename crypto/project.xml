@@ -32,40 +32,19 @@
       <tag>FULCRUM_CRYPTO_1_0_5</tag>
     </version>
   </versions>
+  
   <dependencies>
-
-   <dependency>
-      <groupId>javax.mail</groupId>
-      <artifactId>mail</artifactId>
-      <version>1.3.3</version>
-      <url>http://java.sun.com/products/javamail/</url>
-    </dependency>
-
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.3</version>
-    </dependency>
-
-    <dependency>
-      <groupId>cryptix</groupId>
-      <artifactId>cryptix</artifactId>
-      <version>3.2.0</version>
-    </dependency>
-
     <!--  Needed only for testing -->
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
       <version>1.0.5</version>
     </dependency>
-
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
       <version>1.0.4</version>
     </dependency>
-
   </dependencies>
 
 </project>
