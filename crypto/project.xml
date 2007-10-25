@@ -23,9 +23,14 @@
   <id>fulcrum-crypto</id>
   <extend>${basedir}/../project.xml</extend>
   <name>Fulcrum Crypto Component</name>
-  <currentVersion>1.0.6-dev</currentVersion>
+  <currentVersion>1.0.6</currentVersion>
   <package>org.apache.fulcrum.crypto</package>
   <versions>
+    <version>
+      <id>1.0.6</id>
+      <name>1.0.6</name>
+      <tag>FULCRUM_CRYPTO_1_0_6</tag>
+    </version>
     <version>
       <id>1.0.5</id>
       <name>1.0.5</name>

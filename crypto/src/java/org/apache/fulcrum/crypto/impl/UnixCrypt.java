@@ -19,8 +19,6 @@ package org.apache.fulcrum.crypto.impl;
  * under the License.
  */
 
-import org.apache.fulcrum.crypto.CryptoAlgorithm;
-
 import java.util.Random;
 
 /**
