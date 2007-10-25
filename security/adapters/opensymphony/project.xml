@@ -85,7 +85,7 @@
         <include>**/*TestCase.*</include>
       </includes>
       <excludes>
-        <include>**/Abstract*.*</include>
+        <exclude>**/Abstract*.*</exclude>
       </excludes>
       <resources>
         <resource>

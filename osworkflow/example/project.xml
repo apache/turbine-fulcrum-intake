@@ -45,12 +45,10 @@
   <contributors>
     <contributor>
       <name>Youngho Cho</name>
-      <id>ycho</id>
       <email>youngho@nannet.co.kr</email>
     </contributor>
     <contributor>
       <name>Tim Müller-Seydlitz</name>
-      <id>tmuller</id>
       <email>tms@nagler-company.com</email>
     </contributor>
   </contributors>
@@ -429,9 +427,6 @@
         <include>**/*Test.java</include>
       </includes>
     </unitTest>
-    <integrationUnitTestSourceDirectory/>
-    <integrationUnitTest/>
-    <aspectSourceDirectory/>
   </build>
 
   <reports>

@@ -32,7 +32,6 @@
   <contributors>
     <contributor>
       <name>Youngho Cho</name>
-      <id>ycho</id>
       <email>youngho@nannet.co.kr</email>
     </contributor>
   </contributors>
@@ -93,7 +92,7 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
-      <version>1.0.4</version>
+      <version>1.0.5</version>
     </dependency>
 
 
