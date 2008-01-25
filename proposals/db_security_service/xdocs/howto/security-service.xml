@@ -23,7 +23,7 @@ information. Fulcrum provides you with the following back-ends:
 <li>
 <a href="db-security-service.html">DBSecurityService</a> A Security
 Service backend which uses <a
-href="http://jakarta.apache.org/turbine/torque/">Torque</a> peers to
+href="http://db.apache.org/torque/">Torque</a> peers to
 query security information from a database. Its implementation is in
 the <i>org.apache.fulcrum.security.impl.db package</i>. If you want to
 use this Security Service (it is the default), you must use

@@ -4,11 +4,11 @@ Complete Docs are in xdocs/howto
 
 Installation: 
 
-- checkout jakarta-turbine-fulcrum from the CVS
+- checkout turbine-fulcrum from SVN
 
-- rm -rf jakarta-turbine-fulcrum/src/java/org/apache/fulcrum/security
+- rm -rf turbine-fulcrum/src/java/org/apache/fulcrum/security
 
-- cp -av src xdocs test jakarta-turbine-fulcrum
+- cp -av src xdocs test turbine-fulcrum
 
 - ant maven:clean
 - ant

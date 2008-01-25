@@ -37,29 +37,31 @@
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
       <version>3.1</version>
-      <url>http://jakarta.apache.org/commons/collections.html</url>
+      <url>http://commons.apache.org/collections/</url>
     </dependency>
     <dependency>
       <groupId>commons-configuration</groupId>
       <artifactId>commons-configuration</artifactId>
       <version>1.2</version>
-      <url>http://jakarta.apache.org/commons/configuration/index.html</url>
+      <url>http://commons.apache.org/configuration/</url>
     </dependency>
     <dependency>
       <groupId>commons-digester</groupId>
       <artifactId>commons-digester</artifactId>
       <version>1.5</version>
+      <url>http://commons.apache.org/digester/</url>
     </dependency>
     <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
+      <url>http://commons.apache.org/lang/</url>
       <version>2.1</version>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.0.4</version>
-      <url>http://jakarta.apache.org/commons/logging.html</url>
+      <url>http://commons.apache.org/logging/</url>
     </dependency>
     <dependency>
       <groupId>dom4j</groupId>

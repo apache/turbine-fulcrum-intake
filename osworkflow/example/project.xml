@@ -29,10 +29,6 @@
   <shortDescription>An example application implementing workflow.</shortDescription>
   <description>This is a small example application using the Turbine framework with the Fulcrum OSWorkflow component.  The engine underneath
     is provided by OpenSymphony's OSWorkflow project.</description>
-  <repository>
-    <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:jakarta-turbine-fulcrum/osworkflow/example</connection>
-    <url>http://cvs.apache.org/viewcvs/jakarta-turbine-fulcrum/osworkflow/example</url>
-  </repository>
 
   <developers>
     <developer>
@@ -67,7 +63,7 @@
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-osworkflow</artifactId>
       <version>1.0.1</version>
-      <url>http://jakarta.apache.org/turbine/fulcrum/osworkflow</url>
+      <url>http://turbine.apache.org/fulcrum/fulcrum-osworkflow/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -142,7 +138,7 @@
       <groupId>commons-beanutils</groupId>
       <artifactId>commons-beanutils</artifactId>
       <version>1.7.0</version>
-      <url>http://jakarta.apache.org/commons/beanutils.html</url>
+      <url>http://commons.apache.org/beanutils/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -151,6 +147,7 @@
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
       <version>1.3</version>
+      <url>http://commons.apache.org/codec/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -159,7 +156,7 @@
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
       <version>3.1</version>
-      <url>http://jakarta.apache.org/commons/collections.html</url>
+      <url>http://commons.apache.org/collections/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -168,7 +165,7 @@
       <groupId>commons-configuration</groupId>
       <artifactId>commons-configuration</artifactId>
       <version>1.2</version>
-      <url>http://jakarta.apache.org/commons/sandbox/configuration/index.html</url>
+      <url>http://commons.apache.org/configuration/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -177,7 +174,7 @@
       <groupId>commons-digester</groupId>
       <artifactId>commons-digester</artifactId>
       <version>1.5</version>
-      <url>http://jakarta.apache.org/commons/digester/index.html</url>
+      <url>http://commons.apache.org/digester/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -186,7 +183,7 @@
         <groupId>commons-email</groupId>
         <artifactId>commons-email</artifactId>
         <version>1.0</version>
-        <url>http://jakarta.apache.org/commons/email.html</url>
+        <url>http://commons.apache.org/email/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -196,7 +193,7 @@
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
       <version>1.2</version>
-      <url>http://jakarta.apache.org/commons/fileupload/index.html</url>
+      <url>http://commons.apache.org/fileupload/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -205,7 +202,7 @@
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
       <version>2.1</version>
-      <url>http://jakarta.apache.org/commons/lang.html</url>
+      <url>http://commons.apache.org/lang/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -214,7 +211,7 @@
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.0.4</version>
-      <url>http://jakarta.apache.org/commons/logging.html</url>
+      <url>http://commons.apache.org/logging/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -223,7 +220,7 @@
       <groupId>commons-pool</groupId>
       <artifactId>commons-pool</artifactId>
       <version>1.3</version>
-      <url>http://jakarta.apache.org/commons/pool/</url>
+      <url>http://commons.apache.org/pool/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -287,7 +284,7 @@
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-localization</artifactId>
       <version>1.0.6-dev</version>
-      <url>http://jakarta.apache.org/turbine/fulcrum/</url>
+      <url>http://turbine.apache.org/fulcrum/fulcrum-localization/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -335,7 +332,7 @@
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
       <version>1.2.8</version>
-      <url>http://jakarta.apache.org/log4j/</url>
+      <url>http://logging.apache.org/log4j/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -359,7 +356,7 @@
       <groupId>stratum</groupId>
       <artifactId>stratum</artifactId>
       <version>1.0</version>
-      <url>http://jakarta.apache.org/turbine/stratum/</url>
+      <url>http://turbine.apache.org/stratum/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -377,7 +374,7 @@
       <groupId>velocity</groupId>
       <artifactId>velocity</artifactId>
       <version>1.4</version>
-      <url>http://jakarta.apache.org/velocity/</url>
+      <url>http://velocity.apache.org/engine/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>

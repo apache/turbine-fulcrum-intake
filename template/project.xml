@@ -27,32 +27,32 @@
       <groupId>commons-configuration</groupId>
       <artifactId>commons-configuration</artifactId>
       <version>1.2</version>
-      <url>http://jakarta.apache.org/commons/configuration</url>
+      <url>http://commons.apache.org/configuration/</url>
     </dependency>
     <dependency>
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
       <version>3.1</version>
-      <url>http://jakarta.apache.org/commons/collections</url>
+      <url>http://commons.apache.org/collections/</url>
     </dependency>
     <dependency>
       <groupId>commons-email</groupId>
       <artifactId>commons-email</artifactId>
       <version>1.0</version>
-      <url>http://jakarta.apache.org/commons/email.html</url>
+      <url>http://commons.apache.org/email/</url>
       <properties/>
     </dependency>
     <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
       <version>2.1</version>
-      <url>http://jakarta.apache.org/commons/sandbox/email</url>
+      <url>http://commons.apache.org/lang/</url>
     </dependency>
     <dependency>
       <groupId>velocity</groupId>
       <artifactId>velocity</artifactId>
       <version>1.4</version>
-      <url>http://jakarta.apache.org/velocity</url>
+      <url>http://velocity.apache.org/engine/</url>
     </dependency>
     <dependency>
       <groupId>javax.activation</groupId>

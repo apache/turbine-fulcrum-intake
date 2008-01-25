@@ -29,7 +29,7 @@ import java.util.Properties;
 /**
  * The Fulcrum DVSL Service is used to transform XML with a DVSL stylesheet.
  * The service makes use of the DVSL engine available from the
- * Jakarta Velocity project.
+ * Apache Velocity project.
  *
  * @author <a href="mailto:geirm@apache.org">Geir Magnusson Jr.</a>
  * @author <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>

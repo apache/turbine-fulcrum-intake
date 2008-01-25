@@ -31,12 +31,12 @@
 &site-nav;
 
     <menu name="Overview">
-      <item name="Main"                 href="/index.html"/>
+      <item name="Main"                 href="/"/>
     </menu>
 
     <menu name="Links">
       <item name="Commons Configuration"
-            href="http://jakarta.apache.org/commons/configuration/"/>
+            href="http://commons.apache.org/configuration/"/>
     </menu>
 
   </body>

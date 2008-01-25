@@ -34,8 +34,8 @@
 
     <p>
       It provides a similar demonstration using the Turbine framework to the example application included in
-      the OpenSymphony OSWorkflow distriubution.  This includes demostrating running BeanShell and BSF scripts,
-      user authenctication etc..
+      the OpenSymphony OSWorkflow distribution.  This includes demonstrating running BeanShell and BSF scripts,
+      user authentication etc..
     </p>
     <p>
       It leverages the Turbine user by storing the user information in runData.getUser() object.  The persistence
@@ -72,7 +72,7 @@
   Please note that a number of dependencies that are defined in
   project.xml cannot be resolved automatically with maven. Using these
   pieces of software requires stepping through the process of accepting
-  the licensing agreeement.
+  the licensing agreement.
   Maven prints out the links to the sites from where the downloads can
   be made manually. Once downloaded and unpacked, copy the jars to the
   appropriate directories:
@@ -92,7 +92,7 @@
   <source>
   <![CDATA[
 
-  maven.repo.remote=http://www.ibiblio.org/maven/,http://jakarta.apache.org/turbine/repo
+  maven.repo.remote=http://www.ibiblio.org/maven/,http://turbine.apache.org/repo
 
   maven.jar.override=on
   maven.jar.activation = ${maven.repo.local}/jaf/jars/activation.jar

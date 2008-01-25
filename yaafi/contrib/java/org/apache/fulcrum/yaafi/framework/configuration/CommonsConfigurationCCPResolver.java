@@ -39,7 +39,7 @@ import org.apache.commons.configuration.XMLConfiguration;
  * replacement values for the YAAFI component configuration
  *
  * The component configuration is carved after the
- * <a href="http://jakarta.apache.org/commons/configuration/howto_configurationfactory.html">CompositeConfiguraton</a>
+ * <a href="http://commons.apache.org/configuration/howto_configurationfactory.html">CompositeConfiguraton</a>
  * from Commons Configuration and allows similar expressions. The implementation understands the
  * following types of configurations:<br>
  * <pre>

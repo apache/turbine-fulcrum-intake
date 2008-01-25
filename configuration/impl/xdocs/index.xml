@@ -75,7 +75,7 @@
   <p>
     The component supports the following sources of configuration which can be
     used as a list in arbitrary sequence. The order in that list is important. See
-    <a href="http://jakarta.apache.org/commons/configuration/">the Commons Configuration Site</a>
+    <a href="http://commons.apache.org/configuration/">the Commons Configuration Site</a>
     for details on the configuration sources.
   </p>
   <table>

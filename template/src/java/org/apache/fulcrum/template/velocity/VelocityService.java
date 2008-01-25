@@ -30,7 +30,7 @@ import org.apache.velocity.context.Context;
 
 /**
  * The Turbine service interface to
- * <a href="http://jakarta.apache.org/velocity/">Velocity</a>.
+ * <a href="http://velocity.apache.org/engine/">Velocity</a>.
  *
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:mbryson@mont.mindspring.com">Dave Bryson</a>

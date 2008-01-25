@@ -12,7 +12,7 @@
 
 <p>
 This is an implementation of a Security Service which uses <a
-href="http://jakarta.apache.org/turbine/torque/">Torque</a> generated
+href="http://db.apache.org/torque/">Torque</a> generated
 peers to access the required security information.
 </p>
 

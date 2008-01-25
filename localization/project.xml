@@ -39,12 +39,13 @@
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
       <version>2.1</version>
+      <url>http://commons.apache.org/lang/</url>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.0.4</version>
-      <url>http://jakarta.apache.org/commons/logging.html</url>
+      <url>http://commons.apache.org/logging/</url>
     </dependency>
 
     <!--  Needed only for testing -->

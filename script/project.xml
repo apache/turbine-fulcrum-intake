@@ -31,14 +31,14 @@
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
       <version>1.0.5</version>
-      <url>http://jakarta.apache.org/turbine/fulcrum/</url>
+      <url>http://turbine.apache.org/fulcrum/fulcrum-testcontainer/</url>
     </dependency>
 
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
       <version>1.0.5</version>
-      <url>http://jakarta.apache.org/turbine/fulcrum/</url>
+      <url>http://turbine.apache.org/fulcrum/fulcrum-yaafi/</url>
     </dependency>
 
     <dependency>
@@ -68,7 +68,7 @@
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-resourcemanager</artifactId>
       <version>1.0.1-dev</version>
-      <url>http://jakarta.apache.org/turbine/fulcrum/</url>
+      <url>http://turbine.apache.org/fulcrum/fulcrum-resourcemanager/</url>
     </dependency>
 
   </dependencies>

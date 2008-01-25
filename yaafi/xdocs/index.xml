@@ -78,7 +78,7 @@
           <ul>
             <li>
               <a href="http://excalibur.apache.org/fortress/">Fortress</a> is another Avalon container under the
-              Jakarta umbrella. It is also targeted to be embedded into existing
+              Apache umbrella. It is also targeted to be embedded into existing
               applications.
             </li>
             <li>
@@ -86,8 +86,8 @@
               derived from Phoenix
             </li>
             <li>
-              <a href="http://dpml.net/metro/latest/index.html">Metro</a> was meant as unification
-              of Avalon containers but moved away from Jakarta.
+              <a href="http://dpml.net/metro/latest/">Metro</a> was meant as unification
+              of Avalon containers but moved away from Apache.
             </li>
             <li>
               <a href="http://plexus.codehaus.org/">Plexus</a> another light-weight being

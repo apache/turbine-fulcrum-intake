@@ -24,14 +24,14 @@
 
 <project
   name="Fulcrum PBE"
-  href="http://jakarta.apache.org/turbine/fulcrum/fulcrum-pbe/">
+  href="http://turbine.apache.org/fulcrum/fulcrum-pbe/">
 
   <body>
 
 &site-nav;
 
     <menu name="Overview">
-      <item name="Overview"            href="/index.html"/>
+      <item name="Overview"            href="/"/>
       <item name="Configuration"       href="/configuration.html"/>
     </menu>
   </body>

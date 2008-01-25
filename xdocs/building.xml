@@ -33,13 +33,13 @@
       <p>
         Building Fulcrum from SVN is now very easy because it has been
         Maven-enabled.  Before you begin, you'll need to check out the
-        <code>jakarta-turbine-fulcrum</code> SVN repository (if you are
-        not familiar with the Jakarta SVN repositories, please refer to
-        the <a href="/site/cvsindex.html">documentation</a>).
+        <code>turbine-fulcrum</code> SVN repository (if you are
+        not familiar with the Apache SVN repositories, please refer to
+        the <a href="http://apache.org/dev/version-control.html">documentation</a>).
       </p>
       <p>
         Please refer to the Maven <a
-        href="http://maven.apache.org/maven-1.x/start/index.html">Getting
+        href="http://maven.apache.org/maven-1.x/start/">Getting
         Started</a> document for instructions on how to install and
         use Maven.
       </p>
