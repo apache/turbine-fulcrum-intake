@@ -36,10 +36,10 @@ Intake uses an xml specification to perform web form input validation
 and mapping input data to a bean's properties.  In other words, Intake
 will allow a web application to take web form input, validate it and
 then map the data to an object. Tools like the <a
-href="http://db.apache.org/torque">Torque</a> help provide mapping of Objects to the
+href="http://db.apache.org/torque/">Torque</a> help provide mapping of Objects to the
 database and Intake helps map web form data to Objects.  Intake can be used
 standalone by any application that supports Avalon components.  However it
-has extensive integration with the <a href="http://jakarta.apache.org/turbine">Turbine</a>
+has extensive integration with the <a href="http://turbine.apache.org/">Turbine</a>
 application server.  This howto focuses on using it with Turbine.
 </p>
 
