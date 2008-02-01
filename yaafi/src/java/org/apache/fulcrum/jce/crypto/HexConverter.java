@@ -47,7 +47,7 @@ public final class HexConverter
      * @param data the byte array
      * @return the hex string
      */
-    public final static String toString( byte[] data )
+    public static String toString( byte[] data )
     {
         return bytesToHexStr(data, 0, data.length);
     }
@@ -59,7 +59,7 @@ public final class HexConverter
      * @return the byte[]
      */
 
-    public final static byte[] toBytes( String data )
+    public static byte[] toBytes( String data )
     {
         byte[] result = new byte[data.length()/2];
         hexStrToBytes( data, result, 0, 0, result.length );
@@ -73,7 +73,7 @@ public final class HexConverter
      * @param nLen number of bytes to convert
      * @return the hex string
      */
-    private final static String bytesToHexStr(
+    private static String bytesToHexStr(
         byte[] data,
         int nOfs,
         int nLen)
@@ -106,7 +106,7 @@ public final class HexConverter
      * @param nLen number of bytes to extract
      * @return number of extracted bytes
      */
-    private final static int hexStrToBytes(
+    private static int hexStrToBytes(
         String sHex,
         byte[] data,
         int nSrcOfs,
