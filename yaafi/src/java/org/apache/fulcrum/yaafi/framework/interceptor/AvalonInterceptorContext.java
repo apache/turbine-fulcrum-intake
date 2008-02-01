@@ -16,12 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-/*
- * Created on 14.09.2005
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 package org.apache.fulcrum.yaafi.framework.interceptor;
 
 import java.lang.reflect.Method;
