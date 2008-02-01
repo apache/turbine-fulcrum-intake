@@ -115,6 +115,7 @@ public class SmartDecryptingInputStream extends ByteArrayInputStream
      *
      * @param content the data to be examined
      * @return true if this is an encrypted file
+     * @exception IOException unable to read the content
      */
     private boolean isEncrypted( byte[] content )
         throws IOException
@@ -234,7 +235,7 @@ public class SmartDecryptingInputStream extends ByteArrayInputStream
      *
      * @param content the content to examine
      * @return true if it is a XML document
-     * @throws IOException
+     * @throws IOException unable to read the content
      */
     private boolean isUtf16Text( byte[] content ) throws IOException
     {
@@ -243,7 +244,7 @@ public class SmartDecryptingInputStream extends ByteArrayInputStream
             return false;
         }
 
-        if( this.hasByteOrderMark(content) == true )
+        if( this.hasByteOrderMark( content ) )
         {
             // we should have plenty of 0x00 in a text file
 
@@ -264,7 +265,7 @@ public class SmartDecryptingInputStream extends ByteArrayInputStream
      *
      * @param content the content to examine
      * @return true if it is a XML document
-     * @throws IOException
+     * @throws IOException unable to read the content
      */
     private boolean isXML( byte[] content ) throws IOException
     {
@@ -293,7 +294,6 @@ public class SmartDecryptingInputStream extends ByteArrayInputStream
      *
      * @param content the content to examine
      * @return true if it is a PDF document
-     * @throws IOException
      */
 
     private boolean isZip( byte[] content )
@@ -325,7 +325,7 @@ public class SmartDecryptingInputStream extends ByteArrayInputStream
      *
      * @param content the content to examine
      * @return true if it is a PDF document
-     * @throws IOException
+     * @throws IOException unable to read the content
      */
     private boolean isPDF(byte[] content) throws IOException
     {
@@ -355,7 +355,9 @@ public class SmartDecryptingInputStream extends ByteArrayInputStream
     }
 
     /**
-     * Is this an ASCII control character
+     * Is this an ASCII control character?
+     * @param ch the charcter
+     * @return true is this in an ASCII character
      */
     private boolean isAsciiControl(char ch)
     {
