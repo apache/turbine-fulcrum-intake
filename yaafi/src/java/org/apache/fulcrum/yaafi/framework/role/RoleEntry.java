@@ -22,10 +22,9 @@ package org.apache.fulcrum.yaafi.framework.role;
 import java.util.Collection;
 
 /**
- * @author Sigi
+ * Contains the data of a <role> element.
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 public interface RoleEntry
 {
