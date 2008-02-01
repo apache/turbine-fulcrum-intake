@@ -83,7 +83,7 @@
     <isEnabled>true</isEnabled>
     <performanceMonitorClassName>org.apache.fulcrum.yaafi.interceptor.jamon.Jamon1PerformanceMonitorImpl</performanceMonitorClassName>
     <reportTimeout>60000</reportTimeout>
-    <reportFile>./temp/jamon.html</reportFile>
+    <reportFile>./target/jamon.html</reportFile>
     <reportOnExit>true</reportOnExit>
     <services>
       <service name="*"/>
