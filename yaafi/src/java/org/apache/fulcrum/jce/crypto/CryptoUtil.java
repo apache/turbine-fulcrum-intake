@@ -229,7 +229,7 @@ public final class CryptoUtil
     private static InputStream createInputStream( Object source )
         throws IOException
     {
-        InputStream is = null;
+        InputStream is;
 
         // create an InputStream
 
@@ -279,7 +279,7 @@ public final class CryptoUtil
     private static OutputStream createOutputStream( Object target )
         throws IOException
     {
-        OutputStream os = null;
+        OutputStream os;
 
         if( target instanceof File )
         {

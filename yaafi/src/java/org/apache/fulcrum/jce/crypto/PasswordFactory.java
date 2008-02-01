@@ -38,10 +38,11 @@ import java.security.NoSuchAlgorithmException;
 
 public class PasswordFactory implements PasswordParameters
 {
+
     /**
      * @return a default password using "xxxx-xxxx-xxxx-xxxxx"
      */
-    public static final char[] create()
+    public static char[] create()
         throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
         return create(
@@ -55,7 +56,7 @@ public class PasswordFactory implements PasswordParameters
      * @param seed the default password supplied by the caller
      * @return a password using "xxxx-xxxx-xxxx-xxxxx"
      */
-    public static final char[] create( String seed )
+    public static char[] create( String seed )
         throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
         return create(
@@ -72,8 +73,8 @@ public class PasswordFactory implements PasswordParameters
     {
         return create(
             seed,
-            PasswordParameters.SALT,
-            PasswordParameters.COUNT
+            PasswordFactory.SALT,
+            PasswordFactory.COUNT
             );
     }
 
@@ -87,7 +88,7 @@ public class PasswordFactory implements PasswordParameters
      * @throws NoSuchAlgorithmException the encryption algorithm is not supported
      * @throws UnsupportedEncodingException the requested encoding is not supported
      */
-    public static final char [] create( char[] password, byte[] salt, int count )
+    public static char [] create( char[] password, byte[] salt, int count )
         throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
         char [] result = null;
@@ -155,7 +156,7 @@ public class PasswordFactory implements PasswordParameters
      * @param nOfs index from where to read the data
      * @return the 64bit integer
      */
-    private static final long createLong(byte [] buf, int nOfs)
+    private static long createLong(byte [] buf, int nOfs)
     {
         return
             ((long)(( buf[nOfs    ]          << 24) |

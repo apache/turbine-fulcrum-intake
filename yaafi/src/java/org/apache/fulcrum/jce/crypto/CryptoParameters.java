@@ -31,28 +31,6 @@ public interface CryptoParameters
     /** Parameter for PBEParameterSpec */
     int COUNT = 20;
 
-    /**
-     * The algorithm being used
-     *
-     * <ul>
-     *   <li>for SunJCE 1.22 (JDK 1.3) :  PBEWithMD5AndDES</li>
-     *   <li>for SunJCE 1.42 (JDK 1.4) :  PBEWithMD5AndDES, PBEWithMD5AndTripleDES</li>
-     * </ul>
-     */
-    String ALGORITHM = "PBEWithMD5AndDES";
-
-    /**
-     * The JCE provider name known to work. If the value
-     * is set to null an appropriate provider will be
-     * used.
-     *
-     * <ul>
-     *  <li>SunJCE<li>
-     *  <li>BC (Bouncy Castle Provider)<li>
-     * </ul>
-     */
-    String PROVIDERNAME = null;
-
     /** The password salt */
     byte[] SALT = {
         (byte)0xc7, (byte)0x73, (byte)0x21, (byte)0x8c,

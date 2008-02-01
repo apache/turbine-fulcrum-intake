@@ -64,9 +64,7 @@ public class SmartDecryptingInputStreamTest extends TestCase
     {
         CryptoStreamFactoryImpl factory = new CryptoStreamFactoryImpl(
             CryptoParameters.SALT,
-            CryptoParameters.COUNT,
-            "PBEWithMD5AndDES",
-            CryptoParameters.PROVIDERNAME
+            CryptoParameters.COUNT
             );
 
         CryptoStreamFactoryImpl.setInstance( factory );

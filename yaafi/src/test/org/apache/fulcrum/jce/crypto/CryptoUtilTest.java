@@ -52,7 +52,8 @@ public class CryptoUtilTest extends TestCase
 
         this.password = "mysecret";
         this.testDataDirectory = new File( "./src/test/data" );
-        this.tempDataDirectory = new File( "./temp" );
+        this.tempDataDirectory = new File( "./target/temp" );
+        this.tempDataDirectory.mkdirs();
     }
 
     /**
@@ -67,9 +68,7 @@ public class CryptoUtilTest extends TestCase
     {
         CryptoStreamFactoryImpl factory = new CryptoStreamFactoryImpl(
             CryptoParameters.SALT,
-            CryptoParameters.COUNT,
-            "PBEWithMD5AndDES",
-            CryptoParameters.PROVIDERNAME
+            CryptoParameters.COUNT
             );
 
         CryptoStreamFactoryImpl.setInstance( factory );

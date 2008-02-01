@@ -70,24 +70,28 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
     /** the default instance */
     private static CryptoStreamFactory instance;
 
+    /** The crypto algorithm being used */
+    private static final String ALGORITHM = "PBEWithMD5AndDES";
+
+    /**
+     * The JCE provider name known to work. If the value
+     * is set to null an appropriate provider will be
+     * used.
+     */
+    private static final String PROVIDERNAME = null;
+
     /**
      * Factory method to get a default instance
      * @return an instance of the CryptoStreamFactory
      */
-    public static CryptoStreamFactory getInstance()
+    public synchronized static CryptoStreamFactory getInstance()
     {
         if( CryptoStreamFactoryImpl.instance == null )
         {
-            synchronized( CryptoStreamFactory.class )
-            {
-                if( CryptoStreamFactoryImpl.instance == null )
-                {
-                    CryptoStreamFactoryImpl.instance = new CryptoStreamFactoryImpl();
-                }
-            }
+            CryptoStreamFactoryImpl.instance = new CryptoStreamFactoryImpl();
         }
 
-        return instance;
+        return CryptoStreamFactoryImpl.instance;
     }
 
     /**
@@ -106,8 +110,8 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
     {
         this.salt = CryptoParameters.SALT;
         this.count = CryptoParameters.COUNT;
-        this.providerName = CryptoParameters.PROVIDERNAME;
-        this.algorithm = CryptoParameters.ALGORITHM;
+        this.providerName = PROVIDERNAME;
+        this.algorithm = ALGORITHM;
     }
 
     /**
@@ -115,19 +119,13 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
      *
      * @param salt the salt for the PBE algorithm
      * @param count the iteration for PBEParameterSpec
-     * @param algorithm the algorithm to be used
-     * @param providerName the name of the JCE provide to b used
      */
-    public CryptoStreamFactoryImpl(
-        byte[] salt,
-        int count,
-        String algorithm,
-        String providerName )
+    public CryptoStreamFactoryImpl( byte[] salt, int count)
     {
         this.salt = salt;
         this.count = count;
-        this.algorithm = algorithm;
-        this.providerName = providerName;
+        this.providerName = PROVIDERNAME;
+        this.algorithm = ALGORITHM;
     }
 
     /**
@@ -137,8 +135,7 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
         throws GeneralSecurityException, IOException
     {
         Cipher cipher = this.createCipher( Cipher.DECRYPT_MODE, PasswordFactory.create() );
-        CipherInputStream cis = new CipherInputStream( is, cipher );
-        return cis;
+        return new CipherInputStream( is, cipher );
     }
 
     /**
@@ -148,8 +145,7 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
         throws GeneralSecurityException, IOException
     {
         Cipher cipher = this.createCipher( Cipher.DECRYPT_MODE, password );
-        CipherInputStream cis = new CipherInputStream( is, cipher );
-        return cis;
+        return new CipherInputStream( is, cipher );
     }
 
     /**
@@ -170,7 +166,7 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
     public InputStream getSmartInputStream(InputStream is, char[] password )
         throws GeneralSecurityException, IOException
     {
-        SmartDecryptingInputStream result = null;
+        SmartDecryptingInputStream result;
 
         result = new SmartDecryptingInputStream(
             getInstance(),
@@ -188,14 +184,13 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
         throws GeneralSecurityException, IOException
     {
         Cipher cipher = this.createCipher( Cipher.ENCRYPT_MODE, password );
-        CipherOutputStream cos = new CipherOutputStream( os, cipher );
-        return cos;
+        return new CipherOutputStream( os, cipher );
     }
 
     /**
      * @return Returns the algorithm.
      */
-    private final String getAlgorithm()
+    private String getAlgorithm()
     {
         return algorithm;
     }
@@ -203,7 +198,7 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
     /**
      * @return Returns the count.
      */
-    private final int getCount()
+    private int getCount()
     {
         return count;
     }
@@ -211,7 +206,7 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
     /**
      * @return Returns the providerName.
      */
-    private final String getProviderName()
+    private String getProviderName()
     {
         return providerName;
     }
@@ -219,7 +214,7 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
     /**
      * @return Returns the salt.
      */
-    private final byte [] getSalt()
+    private byte [] getSalt()
     {
         return salt;
     }
@@ -231,10 +226,10 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
      * @return the key
      * @throws GeneralSecurityException creating the key failed
      */
-    private final Key createKey( char[] password )
+    private Key createKey( char[] password )
         throws GeneralSecurityException
     {
-        SecretKeyFactory keyFactory = null;
+        SecretKeyFactory keyFactory;
         String algorithm = this.getAlgorithm();
         PBEKeySpec keySpec =  new PBEKeySpec(password);
 
@@ -247,8 +242,7 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
             keyFactory = SecretKeyFactory.getInstance( algorithm, this.getProviderName() );
         }
 
-        Key key = keyFactory.generateSecret(keySpec);
-        return key;
+        return keyFactory.generateSecret(keySpec);
     }
 
     /**
@@ -260,10 +254,10 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
      * @throws GeneralSecurityException creating a cipher failed
      * @throws IOException creating a cipher failed
      */
-    private final Cipher createCipher( int mode, char[] password )
+    private Cipher createCipher( int mode, char[] password )
         throws GeneralSecurityException, IOException
     {
-        Cipher cipher = null;
+        Cipher cipher;
         PBEParameterSpec paramSpec = new PBEParameterSpec( this.getSalt(), this.getCount() );
         Key key = this.createKey( password );
 
