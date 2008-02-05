@@ -29,7 +29,8 @@ import java.security.GeneralSecurityException;
 
 /**
  * An input stream that determine if the originating input stream
- * was encrypted or not. This magic only works for text files though.
+ * was encrypted or not. This magic only works for well-known file
+ * types though.
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */

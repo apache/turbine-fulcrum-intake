@@ -31,7 +31,8 @@
 
       <p>
         The YAAFI container supports decryption of configuration files using
-        Sun's JCA (Java Crypto Architecture) and JCE (Java Crypto Extension).
+        Sun's JCA (Java Crypto Architecture). The encryption/decryption is 
+        based on DES using 56 bit key length.
       </p>
 
       <subsection name="JDK 1.3.x">
@@ -43,10 +44,17 @@
         </p>
       </subsection>
 
-      <subsection name="JDK 1.4.2">
+      <subsection name="JDK 1.4.x">
         <p>
           The current JDK's have the JCA built-in therefore no extra configuration
-          is required. In the case of an older JDK you need to upgrade.
+          is required.
+        </p>
+      </subsection>
+
+      <subsection name="JDK 1.5.x">
+        <p>
+          The current JDK's have the JCA built-in therefore no extra configuration
+          is required.
         </p>
       </subsection>
 
@@ -63,7 +71,7 @@
           <tr>
             <td>SunJCE 1.42</td>
             <td>
-              PBEWithMD5AndDES<br/>PBEWithMD5AndTripleDES
+              PBEWithMD5AndDES
             </td>
           </tr>
         </table>

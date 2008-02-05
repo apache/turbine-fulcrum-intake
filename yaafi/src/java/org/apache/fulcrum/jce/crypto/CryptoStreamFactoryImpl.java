@@ -70,9 +70,6 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
     /** the default instance */
     private static CryptoStreamFactory instance;
 
-    /** The crypto algorithm being used */
-    private static final String ALGORITHM = "PBEWithMD5AndDES";
-
     /**
      * The JCE provider name known to work. If the value
      * is set to null an appropriate provider will be
@@ -111,7 +108,7 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
         this.salt = CryptoParameters.SALT;
         this.count = CryptoParameters.COUNT;
         this.providerName = PROVIDERNAME;
-        this.algorithm = ALGORITHM;
+        this.algorithm = CryptoParameters.ALGORITHM;
     }
 
     /**
@@ -125,7 +122,7 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
         this.salt = salt;
         this.count = count;
         this.providerName = PROVIDERNAME;
-        this.algorithm = ALGORITHM;
+        this.algorithm = CryptoParameters.ALGORITHM;
     }
 
     /**
@@ -176,6 +173,15 @@ public final class CryptoStreamFactoryImpl implements CryptoStreamFactory
 
         return result;
     }
+
+    /**
+     * @see org.apache.fulcrum.jce.crypto.CryptoStreamFactory#getOutputStream(java.io.OutputStream)
+     */
+    public OutputStream getOutputStream( OutputStream os )
+        throws GeneralSecurityException, IOException
+    {
+        Cipher cipher = this.createCipher( Cipher.ENCRYPT_MODE, PasswordFactory.create() );
+        return new CipherOutputStream( os, cipher );    }
 
     /**
      * @see org.apache.fulcrum.jce.crypto.CryptoStreamFactory#getOutputStream(java.io.OutputStream, char[])

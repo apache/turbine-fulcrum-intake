@@ -25,7 +25,7 @@ import java.io.OutputStream;
 import java.security.GeneralSecurityException;
 
 /**
- * Interface for creating encrypting/decrypting streams.
+ * Interface for creating encrypting/decrypting streams. 
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl </a>
  */
@@ -33,7 +33,7 @@ import java.security.GeneralSecurityException;
 public interface CryptoStreamFactory
 {
     /**
-     * Creates a decrypting input stream.
+     * Creates a decrypting input stream using the default password.s
      *
      * @param is the input stream to be wrapped
      * @return an decrypting input stream
@@ -44,7 +44,7 @@ public interface CryptoStreamFactory
         throws GeneralSecurityException, IOException;
 
     /**
-     * Creates an decrypting input stream
+     * Creates an decrypting input stream using a given password.
      *
      * @param is the input stream to be wrapped
      * @param password the password to be used
@@ -56,7 +56,10 @@ public interface CryptoStreamFactory
         throws GeneralSecurityException, IOException;
 
     /**
-     * Creates a smart decrypting input stream.
+     * Creates a smart decrypting input stream using the default
+     * password. The implementation looks at the binary content
+     * to decide if it was encrypted or not thereby providing
+     * transparent access to encrypted/unencrypted files.
      *
      * @param is the input stream to be wrapped
      * @return an decrypting input stream
@@ -67,7 +70,10 @@ public interface CryptoStreamFactory
         throws GeneralSecurityException, IOException;
 
     /**
-     * Creates an decrypting input stream
+     * Creates a smart decrypting input stream using a given
+     * password. The implementation looks at the binary content
+     * to decide if it was encrypted or not thereby providing
+     * transparent access to encrypted/unencrypted files.
      *
      * @param is the input stream to be wrapped
      * @param password the password to be used
@@ -78,9 +84,19 @@ public interface CryptoStreamFactory
     InputStream getSmartInputStream(InputStream is, char[] password)
         throws GeneralSecurityException, IOException;
 
+    /**
+     * Creates an encrypting output stream using the default password.
+     *
+     * @param os the output stream to be wrapped
+     * @return an decrypting input stream
+     * @throws GeneralSecurityException creating the ouptut stream failed
+     * @throws IOException creating the ouptut stream failed
+     */
+    OutputStream getOutputStream(OutputStream os)
+        throws GeneralSecurityException, IOException;
 
     /**
-     * Creates an encrypting output stream
+     * Creates an encrypting output stream using the given password.
      *
      * @param os the output stream to be wrapped
      * @param password the password to be used
