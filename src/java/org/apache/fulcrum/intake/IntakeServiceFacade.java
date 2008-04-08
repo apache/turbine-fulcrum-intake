@@ -23,7 +23,6 @@ import java.beans.IntrospectionException;
 import java.lang.reflect.Method;
 
 import org.apache.fulcrum.intake.model.Group;
-import org.apache.fulcrum.localization.LocalizationService;
 
 /**
  * This is a Facade class for IntakeService.
@@ -44,20 +43,6 @@ public class IntakeServiceFacade
 	/** Static instance of the intakeService.  */
 
 	private static IntakeService intakeService;
-	private static LocalizationService localizationService;
-	/**
-	 * @return
-	 */
-	public static LocalizationService getLocalizationService() {
-		return localizationService;
-	}
-
-	/**
-	 * @param localizationService
-	 */
-	public static void setLocalizationService(LocalizationService localizationService) {
-		IntakeServiceFacade.localizationService = localizationService;
-	}
 
     /**
      * Gets an instance of a named group either from the pool
@@ -175,7 +160,7 @@ public class IntakeServiceFacade
         return (IntakeService) intakeService;
     }
 
-    static void setIntakeService(IntakeService service){
+    public static void setIntakeService(IntakeService service){
     	intakeService = service;
     }
 

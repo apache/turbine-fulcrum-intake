@@ -36,7 +36,6 @@ import org.apache.fulcrum.intake.validator.ValidationException;
 import org.apache.fulcrum.intake.validator.Validator;
 import org.apache.fulcrum.intake.xmlmodel.Rule;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
-import org.apache.fulcrum.parser.ParameterParser;
 import org.apache.fulcrum.parser.ValueParser;
 
 /**
@@ -319,20 +318,7 @@ public abstract class Field
         this.parser = pp;
         validFlag = true;
 
-        // If the parser is for a HTTP request, use the request it's
-        // associated with to grok the locale.
-        if (IntakeServiceFacade.getLocalizationService()!=null)
-        {
-            if (pp instanceof ParameterParser)
-            {
-                this.locale = IntakeServiceFacade.getLocalizationService().getLocale
-                        (((ParameterParser) pp).getRequest());
-            }
-            else
-            {
-                this.locale = IntakeServiceFacade.getLocalizationService().getLocale((String) null);
-            }
-        }
+        this.locale = pp.getLocale();
 
         if (pp.containsKey(getKey()))
         {
