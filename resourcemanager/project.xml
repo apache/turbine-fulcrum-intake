@@ -41,7 +41,7 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-pbe</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1-dev</version>
     </dependency>
 
   </dependencies>
