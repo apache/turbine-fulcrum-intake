@@ -56,7 +56,7 @@ import org.apache.fulcrum.intake.model.Group;
 import org.apache.fulcrum.intake.transform.XmlToAppData;
 import org.apache.fulcrum.intake.xmlmodel.AppData;
 import org.apache.fulcrum.intake.xmlmodel.XmlGroup;
-import org.apache.fulcrum.localization.LocalizationService;
+import org.apache.turbine.services.InitializationException;
 
 /**
  * This service provides access to input processing objects based on an XML
@@ -829,8 +829,5 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
     public void service(ServiceManager manager) throws ServiceException
     {
         IntakeServiceFacade.setIntakeService(this);
-        LocalizationService localizationService = (LocalizationService) manager
-                .lookup(LocalizationService.ROLE);
-        IntakeServiceFacade.setLocalizationService(localizationService);
     }
 }
