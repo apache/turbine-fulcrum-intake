@@ -80,10 +80,7 @@ public class PBEServiceImpl
         // read the parameters for CryptoStreamFactory
 
         byte[] cryptoSalt = CryptoParameters.SALT;
-        String crypoAlgorithm = configuration.getChild("cryptoAlgorithm").getValue(CryptoParameters.ALGORITHM);
-        String cryptoProvider = configuration.getChild("cryptoProvider").getValue(CryptoParameters.PROVIDERNAME);
         int cryptoCount = configuration.getChild("cyrptoCount").getValueAsInteger(CryptoParameters.COUNT);
-
         String tempCryptoSalt = configuration.getChild("cryptoSalt").getValue("");
 
         if( tempCryptoSalt.length() > 0 )
@@ -95,9 +92,7 @@ public class PBEServiceImpl
 
         this.cryptoStreamFactory = new CryptoStreamFactoryImpl(
             cryptoSalt,
-            cryptoCount,
-            crypoAlgorithm,
-            cryptoProvider
+            cryptoCount
             );
 
         // read the parameters for PasswordFactory

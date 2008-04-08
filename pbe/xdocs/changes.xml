@@ -24,6 +24,11 @@
   </properties>
 
   <body>
+    <release version="1.0.1-dev" date="as in SVN">
+     <action dev="sgoeschl" type="fix">
+        Update of fulcrum-yaafi broke the build - fixed it
+      </action>
+    </release>
     <release version="1.0.0" date="as in CVS">
      <action dev="sgoeschl" type="add">
         Initial import

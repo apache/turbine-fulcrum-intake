@@ -20,10 +20,8 @@
 
 <componentConfig>
   <PBEService>
-    <cryptoAlgorithm>PBEWithMD5AndDES</cryptoAlgorithm>
     <cryptoSalt>4463657541544141</cryptoSalt>
     <cyrptoCount>20</cyrptoCount>
-    <cryptoProvider></cryptoProvider>
     <passwordCount>20</passwordCount>
   </PBEService>
 </componentConfig>
