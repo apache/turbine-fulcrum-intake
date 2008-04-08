@@ -23,8 +23,8 @@ package org.apache.fulcrum.localization;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
+
 import javax.servlet.http.HttpServletRequest;
-import java.util.MissingResourceException;
 
 /**
  * <p>Provides localization functionality using the interface provided
@@ -41,9 +41,10 @@ import java.util.MissingResourceException;
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:leonardr@collab.net">Leonard Richardson</a>
  * @author <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
-public interface LocalizationService
+public interface LocalizationService extends SimpleLocalizationService
 {
     String ROLE = LocalizationService.class.getName();
     String SERVICE_NAME = ROLE;
@@ -52,50 +53,6 @@ public interface LocalizationService
      * A constant for the HTTP <code>Accept-Language</code> header.
      */
     String ACCEPT_LANGUAGE = "Accept-Language";
-
-    /**
-     * Retrieves the default language (as specified in the config
-     * file).
-     */
-    String getDefaultLanguage();
-
-    /**
-     * Retrieves the default country (as specified in the config
-     * file).
-     */
-    String getDefaultCountry();
-
-    /**
-     * Retrieves the name of the default bundle (as specified in the
-     * config file), or the first in the list if there are more than
-     * one.
-     */
-    String getDefaultBundleName();
-
-    /**
-     * Retrieves the list of names of bundles to search by default for
-     * <code>ResourceBundle</code> keys (as specified in the config
-     * file).
-     *
-     * @return The list of configured bundle names.
-     */
-    String[] getBundleNames();
-
-    /**
-     * Convenience method to get the default <code>ResourceBundle</code>.
-     *
-     * @return A localized <code>ResourceBundle</code>.
-     */
-    ResourceBundle getBundle();
-
-    /**
-     * Returns a ResourceBundle given the bundle name and the default
-     * locale information supplied by the configuration.
-     *
-     * @param bundleName Name of bundle.
-     * @return A localized ResourceBundle.
-     */
-    ResourceBundle getBundle(String bundleName);
 
     /**
      * Convenience method to get a ResourceBundle based on name and
@@ -130,16 +87,6 @@ public interface LocalizationService
     ResourceBundle getBundle(String bundleName, HttpServletRequest req);
 
     /**
-     * Convenience method to get a ResourceBundle based on name and
-     * Locale.
-     *
-     * @param bundleName Name of bundle.
-     * @param locale A Locale.
-     * @return A localized ResourceBundle.
-     */
-    ResourceBundle getBundle(String bundleName, Locale locale);
-
-    /**
      * Attempts to pull the <code>Accept-Language</code> header out of
      * the <code>HttpServletRequest</code> object and then parse it.
      * If the header is not present, it will return a
@@ -162,63 +109,4 @@ public interface LocalizationService
      * language and country defaults.
      */
     Locale getLocale(String languageHeader);
-
-    /**
-     * Tries very hard to return a value, looking first in the
-     * specified bundle, then searching list of default bundles
-     * (giving precedence to earlier bundles over later bundles).
-     *
-     * @param bundleName Name of the bundle to look in first.
-     * @param locale Locale to get text for.
-     * @param key Name of the text to retrieve.
-     * @return Localized text.
-     */
-    String getString(String bundleName, Locale locale, String key) throws MissingResourceException;
-
-    /**
-     * This method sets the name of the defaultBundle.
-     *
-     * @param defaultBundle Name of default bundle.
-     */
-    void setBundle(String defaultBundle);
-
-    /**
-     * Formats a localized value using the provided object.
-     *
-     * @param bundleName The bundle in which to look for the localizable text.
-     * @param locale The locale for which to format the text.
-     * @param key The identifier for the localized text to retrieve,
-     * @param arg1 The object to use as {0} when formatting the localized text.
-     * @return Formatted localized text.
-     * @see #format(String, Locale, String, Object[])
-     */
-    String format(String bundleName, Locale locale,
-                         String key, Object arg1);
-
-    /**
-     * Formats a localized value using the provided objects.
-     *
-     * @param bundleName The bundle in which to look for the localizable text.
-     * @param locale The locale for which to format the text.
-     * @param key The identifier for the localized text to retrieve,
-     * @param arg1 The object to use as {0} when formatting the localized text.
-     * @param arg2 The object to use as {1} when formatting the localized text.
-     * @return Formatted localized text.
-     * @see #format(String, Locale, String, Object[])
-     */
-    String format(String bundleName, Locale locale,
-                         String key, Object arg1, Object arg2);
-
-    /**
-     * Formats a localized value using the provided objects.
-     *
-     * @param bundleName The bundle in which to look for the localizable text.
-     * @param locale The locale for which to format the text.
-     * @param key The identifier for the localized text to retrieve,
-     * @param args The objects to use as {0}, {1}, etc. when
-     *             formatting the localized text.
-     * @return Formatted localized text.
-     */
-    String format(String bundleName, Locale locale,
-                         String key, Object[] args);
 }

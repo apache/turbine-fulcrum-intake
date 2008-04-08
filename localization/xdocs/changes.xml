@@ -25,6 +25,11 @@
 
   <body>
     <release version="1.0.6" date="">
+      <action dev="tv" type="add">
+        Split the service into a simple one that does not depend on servlet-api
+        and an extended one that does. This allows to use the service in non-web
+        environments without hassles.
+      </action>
       <action dev="epugh" type="update" due-to="Kostyantyn Shchekotykhin">
         Fix unit tests to run properly in non US english environments.
       </action>
