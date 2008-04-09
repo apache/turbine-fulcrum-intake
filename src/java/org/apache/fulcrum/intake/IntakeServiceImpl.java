@@ -799,7 +799,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      * Avalon component lifecycle method Initializes the service by loading
      * default class loaders and customized object factories.
      *
-     * @throws InitializationException
+     * @throws Exception
      *             if initialization fails.
      */
     public void initialize() throws Exception
