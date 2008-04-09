@@ -56,7 +56,6 @@ import org.apache.fulcrum.intake.model.Group;
 import org.apache.fulcrum.intake.transform.XmlToAppData;
 import org.apache.fulcrum.intake.xmlmodel.AppData;
 import org.apache.fulcrum.intake.xmlmodel.XmlGroup;
-import org.apache.turbine.services.InitializationException;
 
 /**
  * This service provides access to input processing objects based on an XML
