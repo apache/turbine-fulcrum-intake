@@ -28,24 +28,10 @@
   <artifactId>fulcrum-parent</artifactId>
   <packaging>pom</packaging>
   <!-- TODO: dummy version. In Maven 2.1, this will be auto-versioned being a generic parent -->
-  <version>1</version>
+  <version>1-SNAPSHOT</version>
   <name>Fulcrum Component Library</name>
   <url>http://turbine.apache.org/fulcrum</url>
   <inceptionYear>2001</inceptionYear>
-
-  <!-- We don't use Continuum yet -->
-  <!--
-  <ciManagement>
-    <system>continuum</system>
-    <notifiers>
-      <notifier>
-        <configuration>
-          <address>dev@commons.apache.org</address>
-        </configuration>
-      </notifier>
-    </notifiers>
-  </ciManagement>
-  -->
   
   <issueManagement>
     <system>jira</system>    
@@ -64,18 +50,8 @@
       <name>Dummy to avoid accidental deploys</name>
       <url />
     </repository>
-    <!--
-      This section *must* be overwritten by subprojects. It is only to allow
-      a site deployment of the fulcrum-parent POM.
-    -->
-    <site>
-      <id>fulcrum.website</id>
-      <name>Fulcrum Website</name>
-      <url>${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/fulcrum/fulcrum-parent/</url>
-    </site>    
-    
   </distributionManagement>
-
+  
   <!--
     This section *must* be overwritten by subprojects. It is only to allow
     a release of the fulcrum-parent POM.
@@ -91,7 +67,7 @@
       <name>Turbine Dev List</name>
       <subscribe>dev-subscribe@turbine.apache.org</subscribe>
       <unsubscribe>dev-unsubscribe@turbine.apache.org</unsubscribe>
-      <post>dev@commons.apache.org</post>
+      <post>dev@turbine.apache.org</post>
       <archive>http://mail-archives.apache.org/mod_mbox/turbine-dev/</archive>
     </mailingList>
     <mailingList>
@@ -118,23 +94,18 @@
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-idea-plugin</artifactId>
-          <version>2.3</version>
-        </plugin>               
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-idea-plugin</artifactId>
-          <version>2.0</version>
-        </plugin>       
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-gpg-plugin</artifactId>
           <version>1.0-alpha-3</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>2.1</version>
+          <version>2.2</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -144,7 +115,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.3</version>
+          <version>2.4.2</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -160,15 +131,65 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>2.3</version>
+          <configuration>
+            <encoding>${fulcrum.encoding}</encoding>
+            <docEncoding>${fulcrum.docEncoding}</docEncoding>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.0.2</version>
+          <configuration>
+            <source>${maven.compile.source}</source>
+            <target>${maven.compile.target}</target>
+            <encoding>${fulcrum.encoding}</encoding>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-antrun-plugin</artifactId>
           <version>1.1</version>
         </plugin>
+        <plugin>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <version>1.4.0</version>
+          <inherited>true</inherited>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-build-plugin</artifactId>
+          <version>1.0</version>
+          <configuration>
+            <commons.release.name>${fulcrum.release.name}</commons.release.name>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
+      <!-- TODO: later use toolchain support to do compilation on an external JDK 1.3+ compiler -->
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Specification-Title>${project.name}</Specification-Title>
+              <Specification-Version>${project.version}</Specification-Version>
+              <Specification-Vendor>${project.organization.name}</Specification-Vendor>
+              <Implementation-Title>${project.name}</Implementation-Title>
+              <Implementation-Version>${project.version}</Implementation-Version>
+              <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+              <Implementation-Vendor-Id>org.apache</Implementation-Vendor-Id>
+              <X-Compile-Source-JDK>${maven.compile.source}</X-Compile-Source-JDK>
+              <X-Compile-Target-JDK>${maven.compile.target}</X-Compile-Target-JDK>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>      
       <plugin>
         <!-- generate the IntelliJ project files -->
         <artifactId>maven-idea-plugin</artifactId>
@@ -185,57 +206,12 @@
           <downloadSources>true</downloadSources>
           <downloadJavadocs>false</downloadJavadocs>
         </configuration>
-      </plugin>           
-      <!-- TODO: later use toolchain support to do compilation on an external JDK 1.3+ compiler -->
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>${maven.compile.source}</source>
-          <target>${maven.compile.target}</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-          <configuration>
-            <includes>
-              <include>**/*Test</include>
-            </includes>
-        </configuration>
-      </plugin>            
-      <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifestEntries>
-              <Specification-Title>${project.name}</Specification-Title>
-              <Specification-Version>${project.version}</Specification-Version>
-              <Specification-Vendor>${project.organization.name}</Specification-Vendor>
-              <Implementation-Title>${project.name}</Implementation-Title>
-              <Implementation-Version>${project.version}</Implementation-Version>
-              <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
-              <Implementation-Vendor-Id>org.apache</Implementation-Vendor-Id>
-              <X-Compile-Source-JDK>${maven.compile.source}</X-Compile-Source-JDK>
-              <X-Compile-Target-JDK>${maven.compile.source}</X-Compile-Target-JDK>
-            </manifestEntries>
-          </archive>
-        </configuration>
       </plugin>      
       <plugin>
-        <!-- generate a *-sources.jar when building a jar, e.g. for quick debugging a local SNAPSHOT -->
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>create-source-jar</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>                      
-      <plugin>    	
-        <!-- copy LICENSE.txt and NOTICE.txt so that they are included in the -javadoc jar file for the component. -->
+        <!--
+          - Copy LICENSE.txt and NOTICE.txt so that they are included
+          - in the -javadoc jar file for the component.
+          -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
@@ -257,7 +233,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>      
+      </plugin>
       <plugin>
         <!-- build the source and binary distribution packages -->
         <artifactId>maven-assembly-plugin</artifactId>
@@ -276,11 +252,18 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.0.1</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>2.3</version>
         <configuration> 
           <aggregate>true</aggregate>
           <source>${maven.compile.source}</source>
+          <encoding>${fulcrum.encoding}</encoding>
+          <docEncoding>${fulcrum.docEncoding}</docEncoding>
         </configuration> 
       </plugin>
       <plugin>
@@ -307,7 +290,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
-        <version>2.3</version>
+        <version>2.4.2</version>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -371,6 +354,15 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>taglist-maven-plugin</artifactId>
         <version>2.1</version>
+      </plugin>    
+      <plugin>
+        <!-- generate the changelog report to simplify reviewing the changes -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changelog-plugin</artifactId>
+        <version>2.0</version>
+        <configuration>
+          <basedir>${basedir}</basedir>
+        </configuration>        
       </plugin>      
     </plugins>
   </reporting>
@@ -420,6 +412,24 @@
             </executions>
           </plugin>
           <plugin>
+            <artifactId>maven-install-plugin</artifactId>
+            <configuration>
+              <createChecksum>true</createChecksum>
+            </configuration>
+          </plugin>
+          <plugin>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>create-source-jar</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <artifactId>maven-release-plugin</artifactId>
             <configuration>
               <!-- Pass these arguments to the deploy plugin. -->
@@ -434,6 +444,7 @@
                 <goals>
                   <goal>jar</goal>
                 </goals>
+                <phase>package</phase>
                 <configuration>
                   <source>${maven.compile.source}</source>
                 </configuration>
@@ -477,6 +488,35 @@
             </executions>
           </plugin>
           <plugin>
+            <artifactId>maven-install-plugin</artifactId>
+            <configuration>
+              <createChecksum>true</createChecksum>
+            </configuration>
+          </plugin>
+          <plugin>
+            <artifactId>maven-site-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>site</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>create-source-jar</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <artifactId>maven-release-plugin</artifactId>
             <configuration>
               <!-- Pass these arguments to the deploy plugin. -->
@@ -491,9 +531,21 @@
                 <goals>
                   <goal>jar</goal>
                 </goals>
+                <phase>package</phase>
                 <configuration>
                   <source>${maven.compile.source}</source>
                 </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>attached</goal>
+                </goals>
+                <phase>package</phase>
               </execution>
             </executions>
           </plugin>
@@ -503,14 +555,32 @@
   </profiles>
   
   <properties>
+  
     <!-- Default configuration for compiler source and target JVM -->
     <maven.compile.source>1.3</maven.compile.source>
     <maven.compile.target>1.3</maven.compile.target>
+    
+    <!-- Default values for the download-page generation by commons-build-plugin -->
+    <commons.release.name>${project.artifactId}-${fulcrum.release.version}</commons.release.name>
+    <commons.binary.suffix>-bin</commons.binary.suffix>
+
+    <!-- Fulcrum Component Id -->
+    <fulcrum.componentid>${project.artifactId}</fulcrum.componentid>
+    
     <!--
       Make the deployment protocol pluggable. This allows to switch to
       other protocols like scpexe, which some users prefer over scp.
     -->
     <fulcrum.deployment.protocol>scp</fulcrum.deployment.protocol>
+    
+    <!--
+      Encoding of Java source files: Make sure, that the compiler and
+      the javadoc generator use the right encoding. Subprojects may
+      overwrite this, if they are using another encoding.
+    -->
+    <fulcrum.encoding>iso-8859-1</fulcrum.encoding>
+    <fulcrum.docEncoding>${fulcrum.encoding}</fulcrum.docEncoding>
+
     <!-- maven-surefire-plugin -->
     <test>**/*Test</test>
   </properties>
