@@ -22,11 +22,10 @@
   <parent>
     <groupId>org.apache.fulcrum</groupId>
     <artifactId>fulcrum-parent</artifactId>
-    <version>1</version>
+    <version>1-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.apache.fulcrum</groupId>
   <artifactId>fulcrum-yaafi</artifactId>
   <version>1.0.6-SNAPSHOT</version>
   <name>Fulcrum YAAFI</name>
@@ -34,11 +33,11 @@
   <description>A light-weight Avalon container</description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-yaafi</url>
 		
-	<scm>
-	  <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/yaafi/</connection>
-	  <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/yaafi/</developerConnection>
-	  <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/yaafi/</url>
-	</scm>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/yaafi/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/yaafi/</developerConnection>
+    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/yaafi/</url>
+  </scm>
 
   <distributionManagement>
     <site>
