@@ -123,22 +123,30 @@ public class ShortField
     {
         if (isMultiValued)
         {
-            String[] inputs = parser.getStrings(getKey());
+            Integer[] inputs = parser.getIntObjects(getKey());
             short[] values = new short[inputs.length];
+
             for (int i = 0; i < inputs.length; i++)
             {
-                values[i] = StringUtils.isNotEmpty(inputs[i])
-                        ? new Short(inputs[i]).shortValue()
-                        : ((Short) getEmptyValue()).shortValue();
+                values[i] = inputs[i] == null 
+                        ? ((Short) getEmptyValue()).shortValue() 
+                        : inputs[i].shortValue();
             }
+
             setTestValue(values);
         }
         else
         {
-            String val = parser.getString(getKey());
-            setTestValue(StringUtils.isNotEmpty(val)
-                    ? new Short(val) : (Short) getEmptyValue());
+            Integer value = parser.getIntObject(getKey());
+            
+            if (value == null)
+            {
+                setTestValue((Short)getEmptyValue());
+            }
+            else
+            {
+                setTestValue(new Short(value.shortValue()));
+            }
         }
     }
-
 }

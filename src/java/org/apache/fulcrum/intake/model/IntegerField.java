@@ -67,7 +67,7 @@ public class IntegerField
      * Set the empty Value. This value is used if Intake
      * maps a field to a parameter returned by the user and
      * the corresponding field is either empty (empty string)
-     * or non-existant.
+     * or non-existent.
      *
      * @param prop The value to use if the field is empty.
      */
@@ -123,21 +123,21 @@ public class IntegerField
     {
         if (isMultiValued)
         {
-            String[] inputs = parser.getStrings(getKey());
+            Integer[] inputs = parser.getIntObjects(getKey());
             int[] values = new int[inputs.length];
+
             for (int i = 0; i < inputs.length; i++)
             {
-                values[i] = StringUtils.isNotEmpty(inputs[i])
-                        ? new Integer(inputs[i]).intValue()
-                        : ((Integer) getEmptyValue()).intValue();
+                values[i] = inputs[i] == null 
+                        ? ((Integer) getEmptyValue()).intValue() 
+                        : inputs[i].intValue();
             }
+
             setTestValue(values);
         }
         else
         {
-            String val = parser.getString(getKey());
-            setTestValue(StringUtils.isNotEmpty(val)
-                    ? new Integer(val) : (Integer) getEmptyValue());
+            setTestValue(parser.getIntObject(getKey(), (Integer)getEmptyValue()));
         }
     }
 
