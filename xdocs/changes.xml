@@ -27,6 +27,11 @@
   <body>
   	 <release version="1.0.4-dev" date="in Subversion">
       <action type="update" dev="tv">
+        Use the localize features of the parser to simplify the value assignment
+        in Intake fields. Made handling of empty values consistent over all number
+        field types.
+      </action>
+      <action type="update" dev="tv">
         Updated locale handling to use the new localized parameter parser. This
         removes the dependency from LocalizationService
       </action>
@@ -40,7 +45,7 @@
       <action type="fix" dev="seade" issue="TRB-9" due-to="J&#252;rgen Hoffmann">
         Intake was not handling empty values correctly.
       </action>
-      <action type="fix" dev="eade" issue="TRB-14" due-to="J&#252;rgen Hoffmann">
+      <action type="fix" dev="seade" issue="TRB-14" due-to="J&#252;rgen Hoffmann">
       	Intake was not loading the correct Default Validators when the rules for
       	a field are empty.
       </action>
