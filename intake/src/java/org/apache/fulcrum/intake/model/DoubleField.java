@@ -31,7 +31,7 @@ import org.apache.fulcrum.intake.xmlmodel.XmlField;
  * @version $Id$
  */
 public class DoubleField
-        extends AbstractNumberField
+        extends Field
 {
     /**
      * Constructor.
@@ -123,22 +123,21 @@ public class DoubleField
     {
         if (isMultiValued)
         {
-            String[] inputs = parser.getStrings(getKey());
+            Double[] inputs = parser.getDoubleObjects(getKey());
             double[] values = new double[inputs.length];
+
             for (int i = 0; i < inputs.length; i++)
             {
-                values[i] = StringUtils.isNotEmpty(inputs[i])
-                        ? new Double(canonicalizeDecimalInput(inputs[i])).doubleValue()
-                        : ((Double) getEmptyValue()).doubleValue();
+                values[i] = inputs[i] == null 
+                        ? ((Double) getEmptyValue()).doubleValue() 
+                        : inputs[i].doubleValue();
             }
+
             setTestValue(values);
         }
         else
         {
-            String val = parser.getString(getKey());
-            setTestValue(StringUtils.isNotEmpty(val)
-                    ? new Double(canonicalizeDecimalInput(val))
-                    : (Double) getEmptyValue());
+            setTestValue(parser.getDoubleObject(getKey(), (Double)getEmptyValue()));
         }
     }
 
