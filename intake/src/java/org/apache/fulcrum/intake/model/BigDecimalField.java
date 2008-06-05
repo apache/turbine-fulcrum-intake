@@ -21,7 +21,6 @@ package org.apache.fulcrum.intake.model;
 
 import java.math.BigDecimal;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.validator.BigDecimalValidator;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
