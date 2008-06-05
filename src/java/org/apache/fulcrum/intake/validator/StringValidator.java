@@ -20,13 +20,10 @@ package org.apache.fulcrum.intake.validator;
  */
 
 import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.lang.StringUtils;
-
-import org.apache.oro.text.regex.MalformedPatternException;
-import org.apache.oro.text.regex.Pattern;
-import org.apache.oro.text.regex.Perl5Compiler;
-import org.apache.oro.text.regex.Perl5Matcher;
 
 /**
  * A validator that will compare a testValue against the following
@@ -54,7 +51,7 @@ public class StringValidator
     /** The matching mask String as supplied by the XML input */
     protected String maskString = null;
 
-    /** The compiled perl5 Regular expression from the ORO Perl5Compiler */
+    /** The compiled Regular Expression */
     protected Pattern maskPattern = null;
 
     /** The message to report if the mask constraint is not satisfied */
@@ -122,11 +119,8 @@ public class StringValidator
         {
             if (maskPattern != null)
             {
-                /** perl5 matcher */
-                Perl5Matcher patternMatcher = new Perl5Matcher();
-
-                boolean patternMatch =
-                        patternMatcher.matches(testValue, maskPattern);
+                /** JDK 1.4 matcher */
+                boolean patternMatch = maskPattern.matcher(testValue).matches();
 
                 log.debug("Trying to match " + testValue
                         + " to pattern " + maskString);
@@ -163,22 +157,19 @@ public class StringValidator
     public void setMask(String mask)
             throws InvalidMaskException
     {
-        /** perl5 compiler, needed for setting up the masks */
-        Perl5Compiler patternCompiler = new Perl5Compiler();
-
         maskString = mask;
 
         // Fixme. We should make this configureable by the XML file -- hps
-        int maskOptions = Perl5Compiler.DEFAULT_MASK;
+        int maskOptions = 0;
 
         try
         {
             log.debug("Compiling pattern " + maskString);
-            maskPattern = patternCompiler.compile(maskString, maskOptions);
+            maskPattern = Pattern.compile(maskString, maskOptions);
         }
-        catch (MalformedPatternException mpe)
+        catch (PatternSyntaxException pe)
         {
-            throw new InvalidMaskException("Could not compile pattern " + maskString, mpe);
+            throw new InvalidMaskException("Could not compile pattern " + maskString, pe);
         }
     }
 
