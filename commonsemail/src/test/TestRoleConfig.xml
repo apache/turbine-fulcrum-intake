@@ -17,7 +17,6 @@
  specific language governing permissions and limitations
  under the License.
 -->
-
 <role-list>
   <role
     name="org.apache.fulcrum.commonsemail.CommonsEmailService"
@@ -25,5 +24,5 @@
     default-class="org.apache.fulcrum.commonsemail.impl.CommonsEmailServiceImpl"
     early-init="true"
     description="Simplifies the usage of commons-email"
-  />
+  />        
 </role-list>

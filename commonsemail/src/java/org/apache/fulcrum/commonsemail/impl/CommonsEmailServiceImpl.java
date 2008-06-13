@@ -19,16 +19,25 @@ package org.apache.fulcrum.commonsemail.impl;
  * under the License.
  */
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Properties;
+import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.configuration.Reconfigurable;
+import org.apache.avalon.framework.context.Context;
+import org.apache.avalon.framework.context.ContextException;
+import org.apache.avalon.framework.context.Contextualizable;
+import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.framework.thread.ThreadSafe;
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.Email;
+import org.apache.commons.mail.EmailAttachment;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
+import org.apache.commons.mail.MultiPartEmail;
+import org.apache.commons.mail.SimpleEmail;
+import org.apache.fulcrum.commonsemail.CommonsEmailService;
+import org.apache.fulcrum.commonsemail.SendDeliveryStatus;
 
 import javax.activation.DataSource;
 import javax.mail.Address;
@@ -40,25 +49,16 @@ import javax.mail.event.TransportEvent;
 import javax.mail.event.TransportListener;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
-import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.activity.Initializable;
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.configuration.Reconfigurable;
-import org.apache.avalon.framework.context.Context;
-import org.apache.avalon.framework.context.ContextException;
-import org.apache.avalon.framework.context.Contextualizable;
-import org.apache.avalon.framework.logger.AbstractLogEnabled;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.mail.DefaultAuthenticator;
-import org.apache.commons.mail.Email;
-import org.apache.commons.mail.EmailAttachment;
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.HtmlEmail;
-import org.apache.commons.mail.MultiPartEmail;
-import org.apache.commons.mail.SimpleEmail;
-import org.apache.fulcrum.commonsemail.CommonsEmailService;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
+import java.util.WeakHashMap;
 
 /**
  * A service taking care of most of the commons-email configuration such as
@@ -74,18 +74,21 @@ import org.apache.fulcrum.commonsemail.CommonsEmailService;
 
 public class CommonsEmailServiceImpl
     extends AbstractLogEnabled
-    implements CommonsEmailService, Contextualizable, Reconfigurable, Initializable, Disposable,
+    implements CommonsEmailService, Contextualizable, Reconfigurable, Initializable, Disposable, ThreadSafe,
         TransportListener, CommonsEmailConstants
 {
     /** context key for persistent directory */
-    private final static String URN_AVALON_HOME = "urn:avalon:home";
+    private final static String URN_AVALON_HOME = "context-root";
 
     /** context key for temporary directory */
-    private final static String URN_AVALON_TEMP = "urn:avalon:temp";
+    private final static String URN_AVALON_TEMP = "impl.workDir";
+
+    /** the file extension used for a MimeMessage */
+    private final static String MIME_MESSAGE_EXTENSION = "eml";
 
     /** counter for creating a file name */
     private int fileNameCounter;
-
+    
     /** the Avalon home directory */
     private File serviceHomeDir;
 
@@ -98,15 +101,23 @@ public class CommonsEmailServiceImpl
     /** the available domains */
     private CommonsEmailDomainEntry[] domainList;
 
+    /** date formatter to create timestamps for debug utput */
+    private final SimpleDateFormat simpleDateFormat;
+
     /** is the service instance initialized */
     private volatile boolean isInitialized;
+
+    /** keep track of the incoming TransportEvents using MimeMessage ==> SendDeliveryStatus */
+    private Map sendDeliveryStatusMap;
 
     /**
      * Constructor
      */
     public CommonsEmailServiceImpl()
     {
-        // nothing to do
+        this.fileNameCounter = (int) System.currentTimeMillis() % 1000;
+        this.simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HHmmssSSS");
+        this.sendDeliveryStatusMap = new WeakHashMap();
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -168,6 +179,7 @@ public class CommonsEmailServiceImpl
         this.domainList = null;
         this.serviceHomeDir = null;
         this.serviceTempDir = null;
+        this.sendDeliveryStatusMap = null;
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -203,7 +215,7 @@ public class CommonsEmailServiceImpl
     public Session createSmtpSession(String domainName, String username,
         String password)
     {
-        Session result = null;
+        Session result;
         CommonsEmailDomainEntry domain = this.getDomain(domainName);
         Properties properties = new Properties(System.getProperties());
         DefaultAuthenticator authenticator = null;
@@ -341,15 +353,13 @@ public class CommonsEmailServiceImpl
     public MimeMessage send(String domainName, Session session, MimeMessage mimeMessage)
         throws MessagingException
     {
-        MimeMessage result = null;
-
         // get the configuration of this domain
 
         CommonsEmailDomainEntry domain = this.getDomain(domainName);
 
         //  update the MimeMessage based on the domain configuration
 
-        result = this.updateMimeMessage(domain, mimeMessage);
+        MimeMessage result = this.updateMimeMessage(domain, mimeMessage);
 
         // send the MimeMessage
 
@@ -370,15 +380,13 @@ public class CommonsEmailServiceImpl
         MimeMessage mimeMessage, Address [] recipients)
         throws MessagingException
     {
-        MimeMessage result = null;
-
         // get the configuration of this domain
 
         CommonsEmailDomainEntry domain = this.getDomain(domainName);
 
-        //  update the MimeMessage based on the domain configuration
+        // update the MimeMessage based on the domain configuration
 
-        result = this.updateMimeMessage(domain, mimeMessage);
+        MimeMessage result = this.updateMimeMessage(domain, mimeMessage);
 
         // send the MimeMessage
 
@@ -398,8 +406,6 @@ public class CommonsEmailServiceImpl
     public MimeMessage send(Session session, MimeMessage mimeMessage)
         throws MessagingException
     {
-         MimeMessage result = null;
-
          // determine the domain name
 
          if( ( mimeMessage.getFrom() == null ) || ( mimeMessage.getFrom().length == 0 ) )
@@ -416,7 +422,7 @@ public class CommonsEmailServiceImpl
 
          // update the MimeMessage based on the domain configuration
 
-         result = this.updateMimeMessage(domain, mimeMessage);
+         MimeMessage result = this.updateMimeMessage(domain, mimeMessage);
 
          // send the MimeMessage
 
@@ -463,6 +469,14 @@ public class CommonsEmailServiceImpl
         return result;
     }
 
+    /**
+     * @see org.apache.fulcrum.commonsemail.CommonsEmailService#getSendDeliveryStatus(javax.mail.internet.MimeMessage) 
+     */
+    public SendDeliveryStatus getSendDeliveryStatus( MimeMessage mimeMessage ) throws MessagingException
+    {        
+        return (SendDeliveryStatus) this.sendDeliveryStatusMap.get(mimeMessage);
+    }
+
     /////////////////////////////////////////////////////////////////////////
     // Service Implementation
     /////////////////////////////////////////////////////////////////////////
@@ -475,12 +489,32 @@ public class CommonsEmailServiceImpl
     {
         if( this.isInitialized() )
         {
-            this.getLogger().info(
-                "The MimeMessage "
-                + this.getMessageID(transportEvent)
-                + " was successfully delivered to the following recipients : "
-                + this.toString(transportEvent.getValidSentAddresses())
-                );
+            try
+            {
+                this.getLogger().info(
+                    "The MimeMessage "
+                    + this.getMessageId(transportEvent.getMessage())
+                    + " was successfully delivered to the following recipients : "
+                    + this.toString(transportEvent.getValidSentAddresses())
+                    );
+
+                SendDeliveryStatusImpl sendDeliveryStatus = this.getSendDeliveryStatus(transportEvent);
+
+                if(sendDeliveryStatus != null)
+                {
+                    sendDeliveryStatus.add(transportEvent);
+                }
+                else
+                {
+                    MimeMessage mimeMessage = (MimeMessage) transportEvent.getMessage();
+                    this.getLogger().error("Found no sendDeliveryStatus for " + mimeMessage.getMessageID());
+                }
+            }
+            catch(Exception e)
+            {
+                String msg = "Unable to update the delivery status for 'messageDelivered'";
+                this.getLogger().error(msg, e);
+            }
         }
     }
 
@@ -491,12 +525,32 @@ public class CommonsEmailServiceImpl
     {
         if( this.isInitialized() )
         {
-            this.getLogger().error(
-                "The MimeMessage "
-                + this.getMessageID(transportEvent)
-                + " was not delivered to any recipient due to following invalid addresses : "
-                + this.toString(transportEvent.getInvalidAddresses())
-                );
+            try
+            {
+                this.getLogger().error(
+                    "The MimeMessage "
+                    + this.getMessageId(transportEvent.getMessage())
+                    + " was not delivered to any recipient due to following invalid addresses : "
+                    + this.toString(transportEvent.getInvalidAddresses())
+                    );
+
+                SendDeliveryStatusImpl sendDeliveryStatus = this.getSendDeliveryStatus(transportEvent);
+                
+                if(sendDeliveryStatus != null)
+                {
+                    sendDeliveryStatus.add(transportEvent);
+                }
+                else
+                {
+                    MimeMessage mimeMessage = (MimeMessage) transportEvent.getMessage();
+                    this.getLogger().error("Found no sendDeliveryStatus for " + mimeMessage.getMessageID());
+                }                
+            }
+            catch(Exception e)
+            {
+                String msg = "Unable to update the delivery status for 'messageNotDelivered'";
+                this.getLogger().error(msg, e);
+            }
         }
     }
 
@@ -505,13 +559,35 @@ public class CommonsEmailServiceImpl
      */
     public void messagePartiallyDelivered(TransportEvent transportEvent)
     {
+        // write to the logfile
         if( this.isInitialized() )
         {
-            this.getLogger().warn(
-                "The MimeMessage "
-                + this.getMessageID(transportEvent)
-                + "was only partially delivered "
-                );
+            try
+            {
+                this.getLogger().warn(
+                    "The MimeMessage "
+                    + this.getMessageId(transportEvent.getMessage())
+                    + "was only partially delivered "
+                    + this.toString(transportEvent.getValidUnsentAddresses())
+                    );
+
+                SendDeliveryStatusImpl sendDeliveryStatus = this.getSendDeliveryStatus(transportEvent);
+
+                if(sendDeliveryStatus != null)
+                {
+                    sendDeliveryStatus.add(transportEvent);
+                }
+                else
+                {
+                    MimeMessage mimeMessage = (MimeMessage) transportEvent.getMessage();
+                    this.getLogger().error("Found no sendDeliveryStatus for " + mimeMessage.getMessageID());
+                }                
+            }
+            catch(Exception e)
+            {
+                String msg = "Unable to update the delivery status for 'messagePartiallyDelivered'";
+                this.getLogger().error(msg, e);
+            }
         }
     }
 
@@ -533,6 +609,7 @@ public class CommonsEmailServiceImpl
 
     /**
      * @return Returns the serviceTempDir.
+     * @noinspection WeakerAccess
      */
     protected File getServiceTempDir()
     {
@@ -546,6 +623,8 @@ public class CommonsEmailServiceImpl
      *
      * @param mimeMessage the MimeMessage to be send
      * @return the updated MimeMessage
+     * @throws MessagingException the post-processing failed
+     * @noinspection WeakerAccess
      */
     protected MimeMessage onPostProcessMimeMessage(MimeMessage mimeMessage)
         throws MessagingException
@@ -558,6 +637,8 @@ public class CommonsEmailServiceImpl
      *
      * @param email the underlying email for building the MimeMessage
      * @return the resulting MimeMessage
+     * @throws EmailException building the message failed
+     * @throws MessagingException the post-processing failed
      */
     private MimeMessage buildMimeMessage( Email email )
         throws EmailException, MessagingException
@@ -578,6 +659,7 @@ public class CommonsEmailServiceImpl
      * @param domain the domain configuration
      * @param mimeMessage the MimeMessage to be updated
      * @return the resulting MimeMessage
+     * @throws MessagingException the operation failed
      */
     private MimeMessage updateMimeMessage( CommonsEmailDomainEntry domain, MimeMessage mimeMessage )
         throws MessagingException
@@ -615,7 +697,7 @@ public class CommonsEmailServiceImpl
      * a transport listener to track invalid email addresses.
      *
      * @param domain the domain configuration
-     * @param sesssion the mail sessoin
+     * @param session the mail sessoin
      * @param mimeMessage the MimeMessage to be sent
      * @param recipients the list of recipients
      * @throws MessagingException sending the MimeMessage failed
@@ -632,6 +714,20 @@ public class CommonsEmailServiceImpl
                 );
         }
 
+        // get the current recipients for the mail since we allow
+        // overwriting the recipients found in the message
+
+        javax.mail.Address[] currRecipients = null;
+
+        if( (recipients == null) || (recipients.length == 0) )
+        {
+            currRecipients = mimeMessage.getAllRecipients();
+        }
+        else
+        {
+            currRecipients = recipients;
+        }
+
         // dump the MimeMessage to be sent
 
         if( domain.isMailDump() )
@@ -639,26 +735,22 @@ public class CommonsEmailServiceImpl
             this.dump(mimeMessage,"send");
         }
 
-        if( domain.isMailDoNotSend() == false )
+        // keep track of the deliver status
+
+        this.createSendDeliveryStatus(mimeMessage, domain.isMailDoNotSend());
+
+        if( !domain.isMailDoNotSend() )
         {
             try
             {
                 long startTime = System.currentTimeMillis();
 
-                Transport transport = session.getTransport("smtp");
+                // do the sending keyboard gymnastics
 
+                Transport transport = session.getTransport("smtp");
                 transport.addTransportListener(this);
                 transport.connect();
-
-                if( (recipients == null) || (recipients.length == 0) )
-                {
-                    transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
-                }
-                else
-                {
-                    transport.sendMessage(mimeMessage, recipients);
-                }
-
+                transport.sendMessage(mimeMessage, currRecipients);
                 transport.close();
 
                 long endTime = System.currentTimeMillis();
@@ -732,29 +824,9 @@ public class CommonsEmailServiceImpl
      */
     protected void onSendSucceeded(CommonsEmailDomainEntry domain, Session session, MimeMessage mimeMessage)
     {
-        try
-        {
-            Configuration conf = domain.getOnSuccessHookConfiguration();
-            String directoryName = conf.getChild("directory").getValue(this.getServiceTempDir().getAbsolutePath());
-
-            String messageId = mimeMessage.getMessageID();
-            String messageFileName = this.createMessageFileName(messageId);
-            File directory = this.makeAbsolutePath(directoryName);
-            directory.mkdirs();
-
-            File file = new File( directory, messageFileName);
-            FileOutputStream fos = new FileOutputStream(file);
-            mimeMessage.writeTo(fos);
-            fos.flush();
-            fos.close();
-
-            this.getLogger().info( "Stored the MimeMessage as " + file.getAbsolutePath() );
-        }
-        catch( Throwable t )
-        {
-            String msg = "Failed to store the MimeMessage in " + this.serviceTempDir.getAbsolutePath();
-            this.getLogger().error(msg,t);
-        }
+        Configuration conf = domain.getOnSuccessHookConfiguration();
+        String directoryName = conf.getChild("directory").getValue(this.getServiceTempDir().getAbsolutePath());
+        this.writeMimeMessage(directoryName, mimeMessage);
     }
 
     /**
@@ -766,29 +838,9 @@ public class CommonsEmailServiceImpl
      */
     protected void onSendFailed(CommonsEmailDomainEntry domain, Session session, MimeMessage mimeMessage)
     {
-        try
-        {
-            Configuration conf = domain.getOnFailureHookConfiguration();
-            String directoryName = conf.getChild("directory").getValue(this.getServiceTempDir().getAbsolutePath());
-
-            String messageId = mimeMessage.getMessageID();
-            String messageFileName = this.createMessageFileName(messageId);
-            File directory = this.makeAbsolutePath(directoryName);
-            directory.mkdirs();
-
-            File file = new File( directory, messageFileName);
-            FileOutputStream fos = new FileOutputStream(file);
-            mimeMessage.writeTo(fos);
-            fos.flush();
-            fos.close();
-
-            this.getLogger().info( "Stored the MimeMessage as " + file.getAbsolutePath() );
-        }
-        catch( Throwable t )
-        {
-            String msg = "Failed to store the MimeMessage in " + this.serviceTempDir.getAbsolutePath();
-            this.getLogger().error(msg,t);
-        }
+        Configuration conf = domain.getOnFailureHookConfiguration();
+        String directoryName = conf.getChild("directory").getValue(this.getServiceTempDir().getAbsolutePath());
+        this.writeMimeMessage(directoryName, mimeMessage);
     }
 
     /**
@@ -800,29 +852,9 @@ public class CommonsEmailServiceImpl
      */
     protected void onSendSupressed(CommonsEmailDomainEntry domain, Session session, MimeMessage mimeMessage)
     {
-        try
-        {
-            Configuration conf = domain.getOnNotSendHookConfiguration();
-            String directoryName = conf.getChild("directory").getValue(this.getServiceTempDir().getAbsolutePath());
-
-            String messageId = mimeMessage.getMessageID();
-            String messageFileName = this.createMessageFileName(messageId);
-            File directory = this.makeAbsolutePath(directoryName);
-            directory.mkdirs();
-
-            File file = new File( directory, messageFileName);
-            FileOutputStream fos = new FileOutputStream(file);
-            mimeMessage.writeTo(fos);
-            fos.flush();
-            fos.close();
-
-            this.getLogger().info( "Stored the MimeMessage as " + file.getAbsolutePath() );
-        }
-        catch( Throwable t )
-        {
-            String msg = "Failed to store the MimeMessage in " + this.serviceTempDir.getAbsolutePath();
-            this.getLogger().error(msg,t);
-        }
+        Configuration conf = domain.getOnNotSendHookConfiguration();
+        String directoryName = conf.getChild("directory").getValue(this.getServiceTempDir().getAbsolutePath());
+        this.writeMimeMessage(directoryName, mimeMessage);
     }
 
     /**
@@ -1011,8 +1043,9 @@ public class CommonsEmailServiceImpl
      * Overwrites certain fields of the MimeMessage before sending it.
      *
      * @param domain the domain configuration
-     * @param email the email to configure
-     * @throws EmailException the configuration failed
+     * @param mimeMessage the email to configure
+     * @return the modified message
+     * @throws MessagingException the configuration failed
      */
     private MimeMessage overwrite( CommonsEmailDomainEntry domain, MimeMessage mimeMessage )
         throws MessagingException
@@ -1053,8 +1086,6 @@ public class CommonsEmailServiceImpl
      */
     private void dump(MimeMessage mimeMessage, String type)
     {
-        FileOutputStream fos = null;
-
         if( mimeMessage == null )
         {
             return;
@@ -1064,29 +1095,12 @@ public class CommonsEmailServiceImpl
         {
             String name = "CommonsEmailService_" + type + ".eml";
             File dumpFile = new File( this.serviceTempDir, name );
-            fos = new FileOutputStream(dumpFile);
-            mimeMessage.writeTo(fos);
-            fos.flush();
+            CommonsEmailUtils.writeMimeMessage(dumpFile, mimeMessage);
         }
         catch (Throwable t)
         {
             String msg = "Unable to dump the MimeMessage";
             this.getLogger().warn(msg,t);
-        }
-        finally
-        {
-            if( fos != null )
-            {
-                try
-                {
-                    fos.close();
-                }
-                catch (IOException ioe)
-                {
-                    String msg = "Closing the FileOutputStream failed";
-                    this.getLogger().warn(msg,ioe);
-                }
-            }
         }
     }
 
@@ -1101,24 +1115,21 @@ public class CommonsEmailServiceImpl
     /**
      * Determines the message id for the TansportEvent
      *
-     * @param transportEvent the transport event
+     * @param message the message
      * @return the message id
+     * @throws MessagingException the operation failed
      */
-    private String getMessageID( TransportEvent transportEvent)
+    private String getMessageId(Message message) throws MessagingException
     {
         String result = "<unknown>";
 
-        if( transportEvent.getMessage() instanceof MimeMessage )
+        if( message instanceof MimeMessage )
         {
-            try
-            {
-                result = ((MimeMessage) transportEvent.getMessage()).getMessageID();
-            }
-            catch (MessagingException e)
-            {
-                String msg = "Unable to retrieve messageID";
-                this.getLogger().warn(msg,e);
-            }
+            result = ((MimeMessage) message).getMessageID();
+        }
+        else
+        {
+            throw new IllegalArgumentException("Don't know how to handle : " + message.getClass());
         }
 
         return result;
@@ -1168,7 +1179,7 @@ public class CommonsEmailServiceImpl
      */
     private boolean hasDefaulDomain()
     {
-        return (this.defaultDomainName != null ? true : false );
+        return ( this.defaultDomainName != null );
     }
 
     /**
@@ -1329,7 +1340,9 @@ public class CommonsEmailServiceImpl
     }
 
     /**
-     * Creates a meaningful log message for a MimeMessage
+     * Creates a meaningful log message for a MimeMessage.
+     *
+     * @param mimeMessage the mesage to log
      * @return log message
      */
     private String getLogMsg( MimeMessage mimeMessage )
@@ -1366,7 +1379,7 @@ public class CommonsEmailServiceImpl
 
     /**
      * Creates a valid file name based on the system time, e.g
-     * "2005-12-28T143216345000
+     * "2005-12-28T143216345-414
      *
      * @param messageId the message id
      * @return a file name
@@ -1374,22 +1387,8 @@ public class CommonsEmailServiceImpl
     private synchronized String createMessageFileName(String messageId)
     {
         int currCounter = this.fileNameCounter++ % 1000;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HHmmssSSS");
         String counterString = StringUtils.leftPad( "" + currCounter, 3, '0');
-        String result = dateFormat.format(new Date()) + counterString + ".eml";
-        return result;
-    }
-
-    /**
-     * Creates an absolute path for the given filename based on the application
-     * root directory.
-     *
-     * @param fileName the file name
-     * @return abolsute file
-     */
-    private File makeAbsolutePath( String fileName )
-    {
-        return this.makeAbsolutePath( new File(fileName) );
+        return this.simpleDateFormat.format(new Date()) + "-" + counterString + "." + MIME_MESSAGE_EXTENSION;
     }
 
     /**
@@ -1403,7 +1402,7 @@ public class CommonsEmailServiceImpl
     {
         File result = file;
 
-        if( result.isAbsolute() == false )
+        if( !result.isAbsolute() )
         {
             if( file.isDirectory() )
             {
@@ -1417,5 +1416,63 @@ public class CommonsEmailServiceImpl
         }
 
         return result;
+    }
+
+    /**
+     * Writes a MimeMessage to the given directory.
+     *
+     * @param directory the directory
+     * @param mimeMessage the MimeMessage
+     */
+    protected void writeMimeMessage(File directory, MimeMessage mimeMessage)
+    {
+        File targetDirectory = this.makeAbsolutePath(directory);
+
+        try
+        {
+            String messageId = mimeMessage.getMessageID();
+            String messageFileName = this.createMessageFileName(messageId);
+            targetDirectory.mkdirs();
+            File file = new File(targetDirectory, messageFileName);
+            CommonsEmailUtils.writeMimeMessage(file, mimeMessage);
+            this.getLogger().debug( "Stored the MimeMessage as " + file.getAbsolutePath() );
+        }
+        catch( Throwable t )
+        {
+            String msg = "Failed to store the MimeMessage in " + targetDirectory.getAbsolutePath();
+            this.getLogger().error(msg,t);
+        }
+    }
+
+    /**
+     * Writes a MimeMessage to the given directory.
+     *
+     * @param directory the directory
+     * @param mimeMessage the MimeMessage
+     */
+    protected void writeMimeMessage(String directory, MimeMessage mimeMessage)
+    {
+        this.writeMimeMessage(new File(directory), mimeMessage);
+    }
+
+    private SendDeliveryStatusImpl createSendDeliveryStatus(MimeMessage mimeMessage, boolean isMailDoNotSend)
+        throws MessagingException
+    {
+        SendDeliveryStatusImpl sendDeliveryStatus = new SendDeliveryStatusImpl();
+
+        if(isMailDoNotSend)
+        {
+            sendDeliveryStatus.addSendAddressList(mimeMessage.getAllRecipients());
+        }
+
+        this.sendDeliveryStatusMap.put(mimeMessage, sendDeliveryStatus);
+        return sendDeliveryStatus;
+    }
+
+    private SendDeliveryStatusImpl getSendDeliveryStatus( TransportEvent transportEvent )
+        throws MessagingException
+    {
+        MimeMessage mimeMessage = (MimeMessage) transportEvent.getMessage();
+        return (SendDeliveryStatusImpl) this.getSendDeliveryStatus(mimeMessage);
     }
 }

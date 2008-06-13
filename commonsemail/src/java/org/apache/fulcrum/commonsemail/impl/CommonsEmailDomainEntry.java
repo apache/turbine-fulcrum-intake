@@ -19,18 +19,17 @@ package org.apache.fulcrum.commonsemail.impl;
  * under the License.
  */
 
-import java.util.Hashtable;
-import java.util.Properties;
-
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import java.util.Hashtable;
+import java.util.Properties;
+
 /**
  * A service taking care of most of the commons-email configuration such as
- *
+ * 
  * <ul>
  *   <li>authentication</li>
  *   <li>mail session</li>
@@ -44,13 +43,13 @@ public class CommonsEmailDomainEntry
 {
     /** use SMTPAUTH */
     public static final String AUTH_SMTP = "smtpauth";
-
+    
     /** use PopBeforeSmtp */
     public static final String AUTH_POPBEFORESMTP = "popbeforesmtp";
-
+    
     /** use no authentication at all */
     public static final String AUTH_NONE = "none";
-
+    
     /** the name of the domain */
     private String domainName;
 
@@ -59,31 +58,31 @@ public class CommonsEmailDomainEntry
 
     /** turn the diagnostic features on */
     private boolean mailDump;
-
+    
     /** the bounce address */
     private String mailBounceAddress;
-
+    
     /** debug mode for mail session */
     private boolean mailDebug;
-
+    
     /** the charset being used for the mail */
     private String mailCharset;
-
+    
     /** the address of the mail server */
     private String mailSmtpHost;
 
     /** the port of the mail server */
     private int mailSmtpPort;
-
+    
     /** socket connection timeout value in milliseconds */
     private int mailSmtpConnectionTimeout;
-
+    
 	/** socket I/O timeout value in millisecond */
     private int mailSmtpTimeout;
-
+    
     /** if the message has some valid and some invalid addresses, send the message anyway */
     private boolean mailSmtpSendPartial;
-
+    
     /** the email address of the sender */
     private String mailFromEmail;
 
@@ -95,25 +94,25 @@ public class CommonsEmailDomainEntry
 
     /** the email address of the replyTo */
     private String mailReplyToName;
-
+    
     /** the type of authentication */
     private String authType;
-
+    
     /** the username for authentication */
     private String authUsername;
-
+    
     /** the password for authentication */
     private String authPassword;
-
-    /** the POP server being used for popbeforesmtp */
+    
+    /** the POP server being used for popbeforesmtp */    
     private String authPopHost;
-
+    
     /** the mail headers being used */
     private Properties headers;
-
+    
     /** are we overwriting the TO recipients */
     private boolean hasOverwriteTo;
-
+    
     /** the to address to be overwritten during send() */
     private InternetAddress overwriteTo;
 
@@ -128,10 +127,10 @@ public class CommonsEmailDomainEntry
 
     /** the bcc address to be overwritten during send() */
     private InternetAddress overwriteBcc;
-
+        
     /** do we skip the sending */
     private boolean mailDoNotSend;
-
+    
     /** is an application hook for onSuccess defined */
     private boolean hasOnSuccessHook;
 
@@ -143,16 +142,16 @@ public class CommonsEmailDomainEntry
 
     /** the configuration of the success hook */
     private Configuration onSuccessHookConfiguration;
-
+    
     /** the configuration of the success hook */
-    private Configuration onFailureHookConfiguration;
+    private Configuration onFailureHookConfiguration;    
 
     /** the configuration of the notSend hook */
-    private Configuration onNotSendHookConfiguration;
+    private Configuration onNotSendHookConfiguration;    
 
     /**
-     * Constructor.
-     */
+     * Constructor. 
+     */    
     public CommonsEmailDomainEntry()
     {
         this.headers = new Properties();
@@ -160,78 +159,78 @@ public class CommonsEmailDomainEntry
         this.hasOverwriteCc = false;
         this.hasOverwriteBcc = false;
     }
-
+    
     /**
      * Initialize this instance.
-     *
-     * @param conf the domain configuration
+     * 
+     * @param conf the domain configuration 
      * @return the fully configured instance
      * @throws ConfigurationException the configuration failed
      */
     public CommonsEmailDomainEntry initialize( Configuration conf )
     	throws ConfigurationException
-    {
+    {        
         // read the basic parameters
-
-        this.domainName = conf.getChild("domainName").getValue();
+        
+        this.domainName = conf.getChild("domainName").getValue();     
         this.domainMatch = conf.getChild("domainName").getValue(this.domainName);
-
+        
         this.mailBounceAddress = conf.getChild("mailBounceAddress").getValue(null);
         this.mailDebug = conf.getChild("mailDebug").getValueAsBoolean(false);
         this.mailCharset = conf.getChild("mailCharset").getValue(null);
-
+        
         this.mailSmtpHost = conf.getChild("mailSmtpHost").getValue(
             System.getProperty("mail.smtp.host","localhost")
             );
-
+        
         // determine SMTP port either from the configuration or from the system properties
-
-        this.mailSmtpPort = conf.getChild("mailSmtpPort").getValueAsInteger(0);
-
+        
+        this.mailSmtpPort = conf.getChild("mailSmtpPort").getValueAsInteger(0);    
+        
         if( this.mailSmtpPort == 0 )
         {
             this.mailSmtpPort = Integer.parseInt(
                 System.getProperty("mail.smtp.port","25")
                 );
         }
-
+        
         this.mailSmtpConnectionTimeout = conf.getChild("mailSmtpConnectionTimeout").getValueAsInteger(Integer.MAX_VALUE);
         this.mailSmtpTimeout = conf.getChild("mailSmtpConnectionTimeout").getValueAsInteger(Integer.MAX_VALUE);
         this.mailSmtpSendPartial = conf.getChild("mailSmtpSendPartial").getValueAsBoolean(false);
         this.mailFromEmail = conf.getChild("mailFromEmail").getValue(null);
         this.mailFromName = conf.getChild("mailFromName").getValue(null);
         this.mailReplyToEmail = conf.getChild("mailReplyToEmail").getValue(this.mailFromEmail);
-        this.mailReplyToName = conf.getChild("mailReplyToName").getValue(this.mailFromName);
+        this.mailReplyToName = conf.getChild("mailReplyToName").getValue(this.mailFromName);         
         this.mailDump = conf.getChild("mailDump").getValueAsBoolean(false);
         this.mailDoNotSend = conf.getChild("mailDoNotSend").getValueAsBoolean(false);
-
+        
         // parse the authentication related parameters
-
+        
         this.authType = conf.getChild("authentication").getChild("type").getValue(AUTH_NONE);
-
+        
         if( this.hasAuthentication() )
         {
 	        this.authPopHost = conf.getChild("authentication").getChild("popHost").getValue(this.mailSmtpHost);
 	        this.authUsername = conf.getChild("authentication").getChild("username").getValue();
 	        this.authPassword = conf.getChild("authentication").getChild("password").getValue();
         }
-
+        
         // parse the email headers
-
+        
         Configuration[] headersConf = conf.getChild("headers").getChildren("property");
-
+        
         for( int i=0; i<headersConf.length; i++ )
         {
             String name = headersConf[i].getAttribute("name");
             String value = headersConf[i].getValue();
-            this.headers.setProperty(name,value);
+            this.headers.setProperty(name,value);            
         }
-
+                
         // parse the overwrites
-
+        
         String internetAddress = null;
         Configuration overwritesConf = conf.getChild("overwrites");
-
+        
         try
         {
             if( overwritesConf.getChild("mailToEmail",false) != null )
@@ -266,47 +265,47 @@ public class CommonsEmailDomainEntry
         }
         catch (AddressException e)
         {
-            String msg = "Unable to parse " + internetAddress;
+            String msg = "Unable to parse " + internetAddress;            
             throw new ConfigurationException(msg,e);
         }
-
+        
         // parse the application hooks
-
+        
         Configuration hookConf = conf.getChild("hooks");
-
+        
         this.hasOnSuccessHook = hookConf.getChild("onSuccess").getAttributeAsBoolean("enabled", false);
-
+        
         if( this.hasOnSuccessHook() )
         {
             this.onSuccessHookConfiguration = hookConf.getChild("onSuccess");
         }
-
+        
         this.hasOnFailureHook = hookConf.getChild("onFailure").getAttributeAsBoolean("enabled", false);
 
         if( this.hasOnFailureHook())
         {
             this.onFailureHookConfiguration = hookConf.getChild("onFailure");
         }
-
+        
         this.hasOnNotSendHook = hookConf.getChild("onNotSend").getAttributeAsBoolean("enabled", false);
 
         if( this.hasOnNotSendHook())
         {
             this.onNotSendHookConfiguration = hookConf.getChild("onNotSend");
         }
-
+        
         return this;
     }
-
+ 
     /**
      * @see java.lang.Object#toString()
      */
     public String toString()
     {
         StringBuffer result = new StringBuffer();
-
+        
         result.append(getClass().getName() + "@" + Integer.toHexString(hashCode()));
-
+        
         result.append('[');
         result.append("authPopHost=" + this.getAuthPopHost());
         result.append(',');
@@ -318,51 +317,51 @@ public class CommonsEmailDomainEntry
         result.append(',');
         result.append("domainName=" + this.getDomainName());
         result.append(',');
-        result.append("hasOverwriteCc=" + this.getHasOverwriteBcc());
+        result.append("hasOverwriteCc=" + this.getHasOverwriteBcc());                
         result.append(',');
-        result.append("hasOverwriteBcc=" + this.getHasOverwriteBcc());
+        result.append("hasOverwriteBcc=" + this.getHasOverwriteBcc());                
         result.append(',');
-        result.append("hasOverwriteTo=" + this.getHasOverwriteTo());
+        result.append("hasOverwriteTo=" + this.getHasOverwriteTo());                
         result.append(',');
-        result.append("headers=" + this.getHeaders());
+        result.append("headers=" + this.getHeaders());                
         result.append(',');
-        result.append("mailBounceAddress=" + this.getMailBounceAddress());
+        result.append("mailBounceAddress=" + this.getMailBounceAddress());                
         result.append(',');
-        result.append("mailCharset=" + this.getMailCharset());
+        result.append("mailCharset=" + this.getMailCharset());                
         result.append(',');
-        result.append("mailDebug=" + this.mailDebug);
+        result.append("mailDebug=" + this.mailDebug);                
         result.append(',');
-        result.append("mailDump=" + this.mailDump);
+        result.append("mailDump=" + this.mailDump);                
         result.append(',');
-        result.append("mailFromEmail=" + this.getMailFromEmail());
+        result.append("mailFromEmail=" + this.getMailFromEmail());                
         result.append(',');
-        result.append("mailFromName=" + this.getMailFromName());
+        result.append("mailFromName=" + this.getMailFromName());                
         result.append(',');
-        result.append("mailReplyToEmail=" + this.getMailReplyToEmail());
+        result.append("mailReplyToEmail=" + this.getMailReplyToEmail());                
         result.append(',');
-        result.append("mailReplyToName=" + this.getMailReplyToName());
+        result.append("mailReplyToName=" + this.getMailReplyToName());                
         result.append(',');
-        result.append("mailSmtpHost=" + this.getMailSmtpHost());
+        result.append("mailSmtpHost=" + this.getMailSmtpHost());                
         result.append(',');
-        result.append("mailSmtpPort=" + this.getMailSmtpPort());
+        result.append("mailSmtpPort=" + this.getMailSmtpPort());                
         result.append(',');
-        result.append("mailSmtpConnectionTimeout=" + this.getMailSmtpConnectionTimeout());
+        result.append("mailSmtpConnectionTimeout=" + this.getMailSmtpConnectionTimeout());                
         result.append(',');
-        result.append("mailSmtpTimeout=" + this.getMailSmtpTimeout());
+        result.append("mailSmtpTimeout=" + this.getMailSmtpTimeout());                
         result.append(',');
-        result.append("mailSmtpSendPartial=" + this.isMailSmtpSendPartial());
+        result.append("mailSmtpSendPartial=" + this.isMailSmtpSendPartial());                
         result.append(',');
-        result.append("overwriteBcc=" + this.getOverwriteBcc());
+        result.append("overwriteBcc=" + this.getOverwriteBcc());                
         result.append(',');
-        result.append("overwriteCc=" + this.getOverwriteCc());
+        result.append("overwriteCc=" + this.getOverwriteCc());                
         result.append(',');
-        result.append("overwriteTo=" + this.getOverwriteTo());
+        result.append("overwriteTo=" + this.getOverwriteTo());                                
         result.append(']');
-
-        return result.toString();
+        
+        return result.toString();                
 
     }
-
+    
     /**
      * @return Returns the authPassword.
      */
@@ -370,7 +369,7 @@ public class CommonsEmailDomainEntry
     {
         return authPassword;
     }
-
+    
     /**
      * @return Returns the authPopHost.
      */
@@ -378,7 +377,7 @@ public class CommonsEmailDomainEntry
     {
         return authPopHost;
     }
-
+    
     /**
      * @return Returns the authType.
      */
@@ -386,7 +385,7 @@ public class CommonsEmailDomainEntry
     {
         return authType;
     }
-
+    
     /**
      * @return Returns the authUsername.
      */
@@ -394,7 +393,7 @@ public class CommonsEmailDomainEntry
     {
         return authUsername;
     }
-
+    
     /**
      * @return Returns the mailBounceAddress.
      */
@@ -402,7 +401,7 @@ public class CommonsEmailDomainEntry
     {
         return mailBounceAddress;
     }
-
+    
     /**
      * @return Returns the domainName.
      */
@@ -410,7 +409,7 @@ public class CommonsEmailDomainEntry
     {
         return domainName;
     }
-
+        
     /**
      * @return Returns the domainMatch.
      */
@@ -418,7 +417,7 @@ public class CommonsEmailDomainEntry
     {
         return domainMatch;
     }
-
+    
     /**
      * @return Returns the headers.
      */
@@ -426,7 +425,7 @@ public class CommonsEmailDomainEntry
     {
         return headers;
     }
-
+        
     /**
      * @return Returns the overwriteBcc.
      */
@@ -434,7 +433,7 @@ public class CommonsEmailDomainEntry
     {
         return overwriteBcc;
     }
-
+    
     /**
      * @return Returns the overwriteCc.
      */
@@ -442,7 +441,7 @@ public class CommonsEmailDomainEntry
     {
         return overwriteCc;
     }
-
+    
     /**
      * @return Returns the overwriteTo.
      */
@@ -450,7 +449,7 @@ public class CommonsEmailDomainEntry
     {
         return overwriteTo;
     }
-
+        
     /**
      * @return Returns the mailCharset.
      */
@@ -458,7 +457,7 @@ public class CommonsEmailDomainEntry
     {
         return mailCharset;
     }
-
+    
     /**
      * @return Returns the mailDebug.
      */
@@ -466,7 +465,7 @@ public class CommonsEmailDomainEntry
     {
         return mailDebug;
     }
-
+    
     /**
      * @return Returns the mailFromEmail.
      */
@@ -474,7 +473,7 @@ public class CommonsEmailDomainEntry
     {
         return mailFromEmail;
     }
-
+    
     /**
      * @return Returns the mailFromName.
      */
@@ -482,7 +481,7 @@ public class CommonsEmailDomainEntry
     {
         return mailFromName;
     }
-
+        
     /**
      * @return Returns the mailReplyToEmail.
      */
@@ -490,7 +489,7 @@ public class CommonsEmailDomainEntry
     {
         return mailReplyToEmail;
     }
-
+    
     /**
      * @return Returns the mailReplyToName.
      */
@@ -498,7 +497,7 @@ public class CommonsEmailDomainEntry
     {
         return mailReplyToName;
     }
-
+    
     /**
      * @return Returns the mailSmtpHost.
      */
@@ -506,7 +505,7 @@ public class CommonsEmailDomainEntry
     {
         return mailSmtpHost;
     }
-
+    
     /**
      * @return Returns the mailSmtpPort.
      */
@@ -514,7 +513,7 @@ public class CommonsEmailDomainEntry
     {
         return mailSmtpPort;
     }
-
+    
     /**
      * @return Returns the mailSmtpConnectionTimeout.
      */
@@ -522,7 +521,7 @@ public class CommonsEmailDomainEntry
     {
         return mailSmtpConnectionTimeout;
     }
-
+    
     /**
      * @return Returns the mailSmtpTimeout.
      */
@@ -530,7 +529,7 @@ public class CommonsEmailDomainEntry
     {
         return mailSmtpTimeout;
     }
-
+    
     /**
      * @return Returns the mailSmtpSendPartial.
      */
@@ -538,7 +537,7 @@ public class CommonsEmailDomainEntry
     {
         return mailSmtpSendPartial;
     }
-
+    
     /**
      * @return Is any type of authentication used for this domain?
      */
@@ -583,7 +582,7 @@ public class CommonsEmailDomainEntry
             return false;
         }
     }
-
+    
     /**
      * @return Returns the mailDump.
      */
@@ -591,7 +590,7 @@ public class CommonsEmailDomainEntry
     {
         return mailDump;
     }
-
+        
     /**
      * @return Returns the hasOverwriteBcc.
      */
@@ -599,7 +598,7 @@ public class CommonsEmailDomainEntry
     {
         return hasOverwriteBcc;
     }
-
+    
     /**
      * @return Returns the hasOverwriteCc.
      */
@@ -614,15 +613,15 @@ public class CommonsEmailDomainEntry
     {
         return hasOverwriteTo;
     }
-
+    
     /**
      * @return Returns the mailDoNotSend.
      */
     public boolean isMailDoNotSend()
     {
         return mailDoNotSend;
-    }
-
+    } 
+        
     /**
      * @return Returns the hasOnFailureHook.
      */
@@ -630,7 +629,7 @@ public class CommonsEmailDomainEntry
     {
         return hasOnFailureHook;
     }
-
+    
     /**
      * @return Returns the hasOnSuccessHook.
      */
@@ -638,7 +637,7 @@ public class CommonsEmailDomainEntry
     {
         return hasOnSuccessHook;
     }
-
+    
     /**
      * @return Returns the onFailureHookConfiguration.
      */
@@ -646,7 +645,7 @@ public class CommonsEmailDomainEntry
     {
         return onFailureHookConfiguration;
     }
-
+    
     /**
      * @return Returns the onSuccessHookConfiguration.
      */
@@ -654,7 +653,7 @@ public class CommonsEmailDomainEntry
     {
         return onSuccessHookConfiguration;
     }
-
+        
     /**
      * @return Returns the hasOnNotSendHook.
      */
@@ -662,7 +661,7 @@ public class CommonsEmailDomainEntry
     {
         return hasOnNotSendHook;
     }
-
+    
     /**
      * @return Returns the onNotSendHookConfiguration.
      */
