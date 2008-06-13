@@ -25,19 +25,26 @@
 
   <body>
     <release version="1.0.0-dev" date="as in SVN">
-     <action dev="sgoeschl" type="update">
-     		Using official commons-email-1.0 release which now contains
-     		the patch required to work with this service
+      <action dev="sgoeschl" type="update">
+        Providing SendDeliveryStatus to keep track of the email delivery status, i.e.
+        to whom the email was NOT send
       </action>
-     <action dev="sgoeschl" type="add">
+      <action dev="sgoeschl" type="update">
+        Removed commons-lang dependency
+      </action>
+      <action dev="sgoeschl" type="update">
+        Using official commons-email-1.0 release which now contains
+  		the patch required to work with this service
+      </action>
+      <action dev="sgoeschl" type="add">
         Added support for creating SMTP session without relying on
         commons-email.
       </action>
-     <action dev="sgoeschl" type="add">
+      <action dev="sgoeschl" type="add">
         Providing a send() using an explicit list of recipients. This is
         a mandatory functionality for our SMTP gateway.
       </action>
-     <action dev="sgoeschl" type="add">
+      <action dev="sgoeschl" type="add">
         Adding connection timeouts supported by javamail-1.3.3 but stick
         to javamail-1.3.2 for the time being
       </action>
