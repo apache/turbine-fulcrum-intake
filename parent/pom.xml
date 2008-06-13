@@ -335,11 +335,13 @@
         <version>2.3</version>
         <configuration>
           <minimumTokens>200</minimumTokens>
+          <targetJdk>${maven.compile.source}</targetJdk>
           <rulesets>
             <ruleset>/rulesets/basic.xml</ruleset>
+            <ruleset>/rulesets/finalizers.xml</ruleset>            
             <ruleset>/rulesets/imports.xml</ruleset>
+            <ruleset>/rulesets/strings.xml</ruleset>
             <ruleset>/rulesets/unusedcode.xml</ruleset>
-            <ruleset>/rulesets/finalizers.xml</ruleset>
           </rulesets>
         </configuration>
       </plugin>      
