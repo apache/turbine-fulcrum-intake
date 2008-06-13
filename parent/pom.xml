@@ -115,7 +115,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.4.2</version>
+          <version>2.4.3</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -130,7 +130,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>2.3</version>
+          <version>2.4</version>
           <configuration>
             <encoding>${fulcrum.encoding}</encoding>
             <docEncoding>${fulcrum.docEncoding}</docEncoding>
@@ -150,12 +150,6 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-antrun-plugin</artifactId>
           <version>1.1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.felix</groupId>
-          <artifactId>maven-bundle-plugin</artifactId>
-          <version>1.4.0</version>
-          <inherited>true</inherited>
         </plugin>
         <plugin>
           <groupId>org.apache.commons</groupId>
@@ -235,6 +229,19 @@
         </executions>
       </plugin>
       <plugin>
+        <!-- attach the source code when building a jar -->
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>create-source-jar</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <phase>package</phase>
+          </execution>
+        </executions>
+      </plugin>      
+      <plugin>
         <!-- build the source and binary distribution packages -->
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
@@ -258,12 +265,16 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.3</version>
+        <version>2.4</version>
         <configuration> 
-          <aggregate>true</aggregate>
+          <aggregate>false</aggregate>
           <source>${maven.compile.source}</source>
           <encoding>${fulcrum.encoding}</encoding>
           <docEncoding>${fulcrum.docEncoding}</docEncoding>
+          <linksource>true</linksource>
+          <links>
+            <link>http://java.sun.com/javase/6/docs/api/</link>
+          </links>
         </configuration> 
       </plugin>
       <plugin>
@@ -290,7 +301,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
-        <version>2.4.2</version>
+        <version>2.4.3</version>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -369,22 +380,6 @@
 
   <profiles>
     <profile>
-      <id>ci</id>
-      <distributionManagement>
-        <repository>
-          <id>apache.snapshots</id>
-          <name>Apache Development Snapshot Repository</name>
-          <url>${fulcrum.deployment.protocol}://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository</url>
-        </repository>
-        <snapshotRepository>
-          <id>apache.snapshots</id>
-          <name>Apache Development Snapshot Repository</name>
-          <url>${fulcrum.deployment.protocol}://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository</url>
-        </snapshotRepository>
-      </distributionManagement>
-    </profile>
-
-    <profile>
       <id>release</id>
       <distributionManagement>
         <repository>
@@ -418,18 +413,6 @@
             </configuration>
           </plugin>
           <plugin>
-            <artifactId>maven-source-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>create-source-jar</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-                <phase>package</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
             <artifactId>maven-release-plugin</artifactId>
             <configuration>
               <!-- Pass these arguments to the deploy plugin. -->
@@ -461,7 +444,7 @@
         <repository>
           <id>apache.snapshots</id>
           <name>Apache Development Snapshot Repository</name>
-          <url>${fulcrum.deployment.protocol}://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository</url>
+          <url>${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/builds/turbine/fulcrum/${fulcrum.componentid}/${fulcrum.release.version}/${fulcrum.rc.version}/staged</url>
         </repository>
         <snapshotRepository>
           <id>apache.snapshots</id>
@@ -499,18 +482,6 @@
               <execution>
                 <goals>
                   <goal>site</goal>
-                </goals>
-                <phase>package</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-source-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>create-source-jar</id>
-                <goals>
-                  <goal>jar</goal>
                 </goals>
                 <phase>package</phase>
               </execution>
@@ -567,6 +538,9 @@
     <!-- Fulcrum Component Id -->
     <fulcrum.componentid>${project.artifactId}</fulcrum.componentid>
     
+    <!-- The RC version used in the staging repository URL. -->
+    <fulcrum.rc.version>RC1</fulcrum.rc.version>
+
     <!--
       Make the deployment protocol pluggable. This allows to switch to
       other protocols like scpexe, which some users prefer over scp.

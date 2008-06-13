@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Apache Turbine Fulcrum">
+  <bannerLeft>
+    <name>Apache Turbine Fulcrum</name>
+    <src>http://turbine.apache.org/images/turbine-project.png</src>
+    <href>http://turbine.apache.org/fulcrum/</href>
+  </bannerLeft>
+  <publishDate format="dd MMMM yyyy" position="left" />
+  <version position="left" />
+  <body>
+    <links>
+      <item name="Apache"  href="http://www.apache.org"/>
+      <item name="Turbine" href="http://turbine.apache.org/" />      
+      <item name="Fulcrum" href="http://turbine.apache.org/fulcrum" />
+    </links>
+    <menu ref="reports" inherit="bottom" />
+    <menu name="ASF" inherit="bottom">
+      <item name="Sponsorship"           href="http://www.apache.org/foundation/sponsorship.html" />
+      <item name="Thanks"                href="http://www.apache.org/foundation/thanks.html" />
+    </menu>
+  </body>
+</project>
