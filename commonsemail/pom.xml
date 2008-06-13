@@ -80,11 +80,12 @@
       <groupId>commons-email</groupId>
       <artifactId>commons-email</artifactId>
       <version>1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>dumbster</groupId>
+          <artifactId>dumbster</artifactId>
+        </exclusion>
+      </exclusions>      
     </dependency>
     <dependency>
       <groupId>javax.mail</groupId>
@@ -93,8 +94,14 @@
     </dependency>
     <!-- testing dependencies -->
     <dependency>
-      <groupId>fulcrum</groupId>
+      <groupId>org.apache.turbine.fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
+      <version>1.0.6-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.turbine.fulcrum</groupId>
+      <artifactId>fulcrum-yaafi</artifactId>
       <version>1.0.6-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
