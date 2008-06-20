@@ -43,6 +43,9 @@ public class Jamon2PerformanceMonitorImpl implements JamonPerformanceMonitor
     /** the default label being used */
     private static final String MONITOR_LABEL = "ms.services";
 
+    /** our custom range definition */
+    private static RangeHolder rangeHolder;
+
     /** is monitoring enabled */
     private boolean isActive;
 
@@ -57,8 +60,7 @@ public class Jamon2PerformanceMonitorImpl implements JamonPerformanceMonitor
 
     static
     {
-        // configure the unit/ranges only once
-        MonitorFactory.setRangeDefault(MONITOR_LABEL, createMSHolder());
+        rangeHolder = Jamon2PerformanceMonitorImpl.createMSHolder();
     }
   
     /**
@@ -81,6 +83,9 @@ public class Jamon2PerformanceMonitorImpl implements JamonPerformanceMonitor
     {
         if(this.isActive)
         {
+            // when reseting using the JAMon GUI the custom ranges are discarded
+            MonitorFactory.setRangeDefault(MONITOR_LABEL, Jamon2PerformanceMonitorImpl.rangeHolder);
+            // do the internal house-keeping
             this.startTime = System.currentTimeMillis();
             MethodToStringBuilderImpl methodToStringBuilder = new MethodToStringBuilderImpl(this.method, 0);
             String methodSignature = methodToStringBuilder.toString();
