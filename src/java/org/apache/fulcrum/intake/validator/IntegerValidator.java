@@ -65,13 +65,6 @@ public class IntegerValidator
     }
 
     /**
-     * Default Constructor
-     */
-    public IntegerValidator()
-    {
-    }
-
-    /**
      * Method to initialise Object
      *
      * @param paramMap

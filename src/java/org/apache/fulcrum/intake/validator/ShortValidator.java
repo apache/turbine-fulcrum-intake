@@ -65,13 +65,6 @@ public class ShortValidator
     }
 
     /**
-     * Default Constructor
-     */
-    public ShortValidator()
-    {
-    }
-
-    /**
      * Method to initialise Object
      *
      * @param paramMap

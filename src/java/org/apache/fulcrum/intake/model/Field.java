@@ -203,8 +203,7 @@ public abstract class Field
         {
             validatorClassName = getDefaultValidator();
         }
-        else if (validatorClassName != null
-                && validatorClassName.indexOf('.') == -1)
+        else if (validatorClassName.indexOf('.') == -1)
         {
             validatorClassName = defaultValidatorPackage + validatorClassName;
         }

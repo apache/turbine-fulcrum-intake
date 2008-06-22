@@ -139,7 +139,7 @@ public class ShortField
             
             if (value == null)
             {
-                setTestValue((Short)getEmptyValue());
+                setTestValue(getEmptyValue());
             }
             else
             {

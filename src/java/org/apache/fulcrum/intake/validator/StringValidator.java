@@ -73,13 +73,6 @@ public class StringValidator
     }
 
     /**
-     * Default constructor
-     */
-    public StringValidator()
-    {
-    }
-
-    /**
      * Extract the relevant parameters from the constraints listed
      * in <rule> tags within the intake.xml file.
      *

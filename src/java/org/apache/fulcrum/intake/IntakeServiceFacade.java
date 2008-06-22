@@ -26,70 +26,73 @@ import org.apache.fulcrum.intake.model.Group;
 
 /**
  * This is a Facade class for IntakeService.
- *
+ * 
  * This class provides static methods that call related methods of the
- * implementation of the IntakeService used by the System, according to
- * the settings in your intake.xml file.
- *
- * Note:  How should a facade class work?  It seems to me that maybe it should
+ * implementation of the IntakeService used by the System, according to the
+ * settings in your intake.xml file.
+ * 
+ * Note: How should a facade class work? It seems to me that maybe it should
  * only have a hook into the Avalon Component Manager somehow?
- *
+ * 
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
  */
 public class IntakeServiceFacade
 {
-	/** Static instance of the intakeService.  */
+    /** Static instance of the intakeService. */
 
-	private static IntakeService intakeService;
+    private static IntakeService intakeService;
 
     /**
-     * Gets an instance of a named group either from the pool
-     * or by calling the Factory Service if the pool is empty.
-     *
-     * @param groupName the name of the group.
+     * Gets an instance of a named group either from the pool or by calling the
+     * Factory Service if the pool is empty.
+     * 
+     * @param groupName
+     *            the name of the group.
      * @return a Group instance.
-     * @throws IntakeException if recycling fails.
+     * @throws IntakeException
+     *             if recycling fails.
      */
-    public static Group getGroup(String groupName)
-            throws IntakeException
+    public static Group getGroup(String groupName) throws IntakeException
     {
         if (groupName == null)
         {
-            throw new IntakeException(
-                    "IntakeServiceFacade.getGroup(groupName) is null");
+            throw new IntakeException("IntakeServiceFacade.getGroup(groupName) is null");
         }
         return getService().getGroup(groupName);
     }
 
     /**
      * Puts a group back to the pool.
-     * @param instance the object instance to recycle.
-     * @throws IntakeException A non existant group was passed
+     * 
+     * @param instance
+     *            the object instance to recycle.
+     * @throws IntakeException
+     *             A non existant group was passed
      */
-    public static void releaseGroup(Group instance)
-            throws IntakeException
+    public static void releaseGroup(Group instance) throws IntakeException
     {
         getService().releaseGroup(instance);
     }
 
     /**
      * Gets the current size of the pool for a named group.
-     *
-     * @param groupName the name of the group.
+     * 
+     * @param groupName
+     *            the name of the group.
      * @return the current pool size
-     * @throws IntakeException A non existant group was passed
+     * @throws IntakeException
+     *             A non existant group was passed
      */
-    public static int getSize(String groupName)
-            throws IntakeException
+    public static int getSize(String groupName) throws IntakeException
     {
         return getService().getSize(groupName);
     }
 
     /**
      * Names of all the defined groups.
-     *
+     * 
      * @return array of names.
      */
     public static String[] getGroupNames()
@@ -99,8 +102,9 @@ public class IntakeServiceFacade
 
     /**
      * Gets the key (usually a short identifier) for a group.
-     *
-     * @param groupName the name of the group.
+     * 
+     * @param groupName
+     *            the name of the group.
      * @return the the key.
      */
     public static String getGroupKey(String groupName)
@@ -110,8 +114,9 @@ public class IntakeServiceFacade
 
     /**
      * Gets the group name given its key.
-     *
-     * @param groupKey the key.
+     * 
+     * @param groupKey
+     *            the key.
      * @return groupName the name of the group.
      */
     public static String getGroupName(String groupKey)
@@ -121,57 +126,49 @@ public class IntakeServiceFacade
 
     /**
      * Gets the Method that can be used to set a property.
-     *
-     * @param className the name of the object.
-     * @param propName the name of the property.
+     * 
+     * @param className
+     *            the name of the object.
+     * @param propName
+     *            the name of the property.
      * @return the setter.
      * @throws ClassNotFoundException
      * @throws IntrospectionException
      */
-    public static Method getFieldSetter(String className, String propName)
-            throws IntrospectionException, ClassNotFoundException
+    public static Method getFieldSetter(String className, String propName) throws IntrospectionException, ClassNotFoundException
     {
         return getService().getFieldSetter(className, propName);
     }
 
     /**
      * Gets the Method that can be used to get a property value.
-     *
-     * @param className the name of the object.
-     * @param propName the name of the property.
+     * 
+     * @param className
+     *            the name of the object.
+     * @param propName
+     *            the name of the property.
      * @return the getter.
      * @throws ClassNotFoundException
      * @throws IntrospectionException
      */
-    public static Method getFieldGetter(String className, String propName)
-            throws IntrospectionException, ClassNotFoundException
+    public static Method getFieldGetter(String className, String propName) throws IntrospectionException, ClassNotFoundException
     {
         return getService().getFieldGetter(className, propName);
     }
 
     /**
-     * Utility method for accessing the service
-     * implementation
-     *
+     * Utility method for accessing the service implementation
+     * 
      * @return a IntakeService implementation instance
      */
     private static IntakeService getService()
     {
-        return (IntakeService) intakeService;
+        return intakeService;
     }
 
-    public static void setIntakeService(IntakeService service){
-    	intakeService = service;
+    public static void setIntakeService(IntakeService service)
+    {
+        intakeService = service;
     }
 
 }
-
-
-
-
-
-
-
-
-
-
