@@ -614,21 +614,17 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             for (int i = 0; i < nameVal.length; i++)
             {
                 String val = nameVal[i].getValue();
-                // getLogger.debug("Registered " + val
-                // + " for Crypto Algorithm " + key);
                 xmlPathes.add(val);
             }
         }
 
         Map appDataElements = null;
 
-        String serialDataPath = conf.getChild(SERIAL_XML, false).getValue(
-                SERIAL_XML_DEFAULT);
+        String serialDataPath = conf.getChild(SERIAL_XML, false).getValue(SERIAL_XML_DEFAULT);
 
         if (!serialDataPath.equalsIgnoreCase("none"))
         {
-            serialDataPath = new File(applicationRoot, serialDataPath)
-                    .getAbsolutePath();
+            serialDataPath = new File(applicationRoot, serialDataPath).getAbsolutePath();
         }
         else
         {
@@ -643,16 +639,6 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
         getterMap = new HashMap();
         setterMap = new HashMap();
         keyedPools = new HashMap();
-
-        if (xmlPathes == null)
-        {
-            String LOAD_ERROR = "No paths for XML files were specified. "
-                    + "Check that the property exists in "
-                    + "TurbineResources.props and were loaded.";
-
-            getLogger().error(LOAD_ERROR);
-            throw new ConfigurationException(LOAD_ERROR);
-        }
 
         Set xmlFiles = new HashSet();
 

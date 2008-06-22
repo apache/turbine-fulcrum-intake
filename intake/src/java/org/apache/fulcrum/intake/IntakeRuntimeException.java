@@ -38,6 +38,7 @@ public class IntakeRuntimeException extends RuntimeException
      */
     public IntakeRuntimeException()
     {
+        super();
     }
 
     /**

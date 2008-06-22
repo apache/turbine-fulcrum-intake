@@ -70,13 +70,6 @@ public class DoubleValidator
     }
 
     /**
-     * Default Constructor
-     */
-    public DoubleValidator()
-    {
-    }
-
-    /**
      * Method to initialise Object
      *
      * @param paramMap

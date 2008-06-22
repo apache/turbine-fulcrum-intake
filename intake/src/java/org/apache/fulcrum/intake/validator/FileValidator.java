@@ -57,13 +57,6 @@ public class FileValidator
     }
 
     /**
-     * Default constructor
-     */
-    public FileValidator()
-    {
-    }
-
-    /**
      * Determine whether a testValue meets the criteria specified
      * in the constraints defined for this validator
      *
