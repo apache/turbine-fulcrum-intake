@@ -53,7 +53,7 @@ public class LocaleTokenizer
      * The default quality value for an <code>AcceptLanguage</code>
      * object.
      */
-    private static final Float DEFAULT_QUALITY = new Float(1.0f);
+    protected static final Float DEFAULT_QUALITY = new Float(1.0f);
 
     /**
      * The parsed locales.
@@ -90,6 +90,7 @@ public class LocaleTokenizer
                     }
                     catch (NumberFormatException useDefault)
                     {
+                        // ignore
                     }
                 }
             }
@@ -153,7 +154,7 @@ public class LocaleTokenizer
      * Struct representing an element of the HTTP
      * <code>Accept-Language</code> header.
      */
-    private class AcceptLanguage implements Comparable
+    protected static class AcceptLanguage implements Comparable
     {
         /**
          * The language and country.

@@ -509,6 +509,7 @@ public class SimpleLocalizationServiceImpl
             }
             catch (MissingResourceException ignored)
             {
+                // ignore
             }
         }
         return null;
@@ -554,24 +555,14 @@ public class SimpleLocalizationServiceImpl
         String key,
         Object[] args)
     {
-        if (locale == null)
-        {
-            // When formatting Date objects and such, MessageFormat
-            // cannot have a null Locale.
-            locale = getDefaultLocale();
-        }
+        // When formatting Date objects and such, MessageFormat
+        // cannot have a null Locale.
+        Locale formatLocale = (locale == null) ? getDefaultLocale() : locale; 
         String value = getString(bundleName, locale, key);
-        if (args == null)
-        {
-            args = NO_ARGS;
-        }
-        // FIXME: after switching to JDK 1.4, it will be possible to clean
-        // this up by providing the Locale along with the string in the
-        // constructor to MessageFormat.  Until 1.4, the following workaround
-        // is required for constructing the format with the appropriate locale:
-        MessageFormat messageFormat = new MessageFormat("");
-        messageFormat.setLocale(locale);
-        messageFormat.applyPattern(value);
-        return messageFormat.format(args);
+        
+        Object[] formatArgs = (args == null) ? NO_ARGS : args;
+        
+        MessageFormat messageFormat = new MessageFormat(value, formatLocale);
+        return messageFormat.format(formatArgs);
     }
 }
