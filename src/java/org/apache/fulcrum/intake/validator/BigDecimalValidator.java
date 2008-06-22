@@ -68,13 +68,6 @@ public class BigDecimalValidator
     }
 
     /**
-     * Default Constructor
-     */
-    public BigDecimalValidator()
-    {
-    }
-
-    /**
      * Method to initialise Object
      *
      * @param paramMap

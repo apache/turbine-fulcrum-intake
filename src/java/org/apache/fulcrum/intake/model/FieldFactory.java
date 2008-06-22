@@ -182,7 +182,7 @@ public abstract class FieldFactory
         return fieldCtors;
     }
 
-    private static abstract class FieldCtor
+    protected static abstract class FieldCtor
     {
         public Field getInstance(XmlField f, Group g) throws IntakeException
         {

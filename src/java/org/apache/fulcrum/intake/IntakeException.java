@@ -38,6 +38,7 @@ public class IntakeException extends Exception
      */
     public IntakeException()
     {
+        super();
     }
 
     /**
@@ -75,5 +76,4 @@ public class IntakeException extends Exception
     {
         super(msg, nested);
     }
-
 }

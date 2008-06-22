@@ -19,15 +19,13 @@ package org.apache.fulcrum.intake;
  * under the License.
  */
 
-import org.apache.commons.lang.exception.NestableError;
-
 /**
  * Base exception thrown by the Intake service.
  *
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
  */
-public class IntakeError extends NestableError
+public class IntakeError extends Error
 {
     /**
      * Serial version id
@@ -40,6 +38,7 @@ public class IntakeError extends NestableError
      */
     public IntakeError()
     {
+        super();
     }
 
     /**
@@ -77,5 +76,4 @@ public class IntakeError extends NestableError
     {
         super(msg, nested);
     }
-
 }
