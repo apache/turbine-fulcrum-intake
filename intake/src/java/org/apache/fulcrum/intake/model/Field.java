@@ -124,6 +124,9 @@ public abstract class Field
     /** Has the field passed the validation test? */
     protected boolean validFlag;
 
+    /** Has the field been validated? */
+    protected boolean validated;
+
     /** Does the field require a value? */
     protected boolean required;
 
@@ -316,6 +319,7 @@ public abstract class Field
     {
         this.parser = pp;
         validFlag = true;
+        validated = false;
 
         this.locale = pp.getLocale();
 
@@ -329,14 +333,14 @@ public abstract class Field
             {
                 setFlag = true;
             }
-            validate();
+            // validate();
         }
         else if (pp.containsKey(getValueIfAbsent()) &&
                 pp.getString(getValueIfAbsent()) != null)
         {
             pp.add(getKey(), pp.getString(getValueIfAbsent()));
             setFlag = true;
-            validate();
+            // validate();
         }
 
         initialized = true;
@@ -357,6 +361,7 @@ public abstract class Field
         if (!initialized)
         {
             validFlag = true;
+            validated = false;
         }
         retrievable = obj;
         return this;
@@ -472,6 +477,7 @@ public abstract class Field
         initialized = false;
         setFlag = false;
         validFlag = false;
+        validated = false;
         required = false;
         message = null;
         retrievable = null;
@@ -517,8 +523,20 @@ public abstract class Field
     }
 
     /**
-     * Flag set to true, if the test value has been set to
-     * anything other than an empty value.
+     * Flag to determine whether the field has been validated.
+     *
+     * @return value of validated.
+     */
+    public boolean isValidated()
+    {
+        return validated;
+    }
+
+    /**
+     * Flag set to true, if the test value has been set by the parser (even to
+     * an empty value, so don't used this to determine if the field contains a
+     * non-empty value).  Validation will only be executed for fields that have
+     * been set in this manner.
      *
      * @return a <code>boolean</code> value
      */
@@ -580,7 +598,7 @@ public abstract class Field
     /**
      * Compares request data with constraints and sets the valid flag.
      */
-    protected boolean validate()
+    public boolean validate()
     {
         log.debug(name + ": validate()");
 
@@ -590,10 +608,13 @@ public abstract class Field
 
             if (isDebugEnabled)
             {
-                log.debug(name + ": Multi-Valued");
-                for (int i = 0; i < stringValues.length; i++)
+                log.debug(name + ": Multi-Valued, Value is " + stringValue);
+                if (stringValues != null)
                 {
-                    log.debug(name + ": " + i + ". Wert: " + stringValues[i]);
+                    for (int i = 0; i < stringValues.length; i++)
+                    {
+                        log.debug(name + ": " + i + ". Value: " + stringValues[i]);
+                    }
                 }
             }
 
@@ -601,7 +622,7 @@ public abstract class Field
             {
                 // set the test value as a String[] which might be replaced by
                 // the correct type if the input is valid.
-                setTestValue(parser.getStrings(getKey()));
+                setTestValue(stringValues);
 
                 try
                 {
@@ -650,6 +671,8 @@ public abstract class Field
                 doSetValue();
             }
         }
+        
+        validated = true;
 
         return validFlag;
     }
@@ -869,7 +892,7 @@ public abstract class Field
             throw new IntakeException(
                     "Attempted to assign an invalid input.");
         }
-        if (isSet())
+        if (isSet() && null != getTestValue())
         {
             valArray[0] = getTestValue();
             if (isDebugEnabled)
@@ -902,9 +925,9 @@ public abstract class Field
             {
                 log.debug(name + ": has a null setter for the mapToProperty"
                         + " Attribute, although all Fields should be mapped"
-                        + " to " + mapToObject + ". If this is unwanted, You"
-                        + " should doublecheck the mapToProperty Attribute, and"
-                        + " consult the logs. The Turbine Intake Serice will"
+                        + " to " + mapToObject + ". If this is unwanted, you"
+                        + " should double check the mapToProperty Attribute, and"
+                        + " consult the logs. The Turbine Intake Service will"
                         + " have logged a detailed Message with the error.");
             }
         }
