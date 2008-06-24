@@ -33,7 +33,7 @@ public class IntakeException extends Exception
     private static final long serialVersionUID = 7078617074679759156L;
 
     /**
-     * Constructs a new <code>TurbineException</code> without specified
+     * Constructs a new <code>IntakeException</code> without specified
      * detail message.
      */
     public IntakeException()
@@ -42,7 +42,7 @@ public class IntakeException extends Exception
     }
 
     /**
-     * Constructs a new <code>TurbineException</code> with specified
+     * Constructs a new <code>IntakeException</code> with specified
      * detail message.
      *
      * @param msg The error message.
@@ -53,7 +53,7 @@ public class IntakeException extends Exception
     }
 
     /**
-     * Constructs a new <code>TurbineException</code> with specified
+     * Constructs a new <code>IntakeException</code> with specified
      * nested <code>Throwable</code>.
      *
      * @param nested The exception or error that caused this exception
@@ -65,7 +65,7 @@ public class IntakeException extends Exception
     }
 
     /**
-     * Constructs a new <code>TurbineException</code> with specified
+     * Constructs a new <code>IntakeException</code> with specified
      * detail message and nested <code>Throwable</code>.
      *
      * @param msg    The error message.

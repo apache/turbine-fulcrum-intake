@@ -33,7 +33,7 @@ public class IntakeRuntimeException extends RuntimeException
     private static final long serialVersionUID = -6874511109052092373L;
 
     /**
-     * Constructs a new <code>TurbineException</code> without specified
+     * Constructs a new <code>IntakeRuntimeException</code> without specified
      * detail message.
      */
     public IntakeRuntimeException()
@@ -42,7 +42,7 @@ public class IntakeRuntimeException extends RuntimeException
     }
 
     /**
-     * Constructs a new <code>TurbineException</code> with specified
+     * Constructs a new <code>IntakeRuntimeException</code> with specified
      * detail message.
      *
      * @param msg The error message.
@@ -53,7 +53,7 @@ public class IntakeRuntimeException extends RuntimeException
     }
 
     /**
-     * Constructs a new <code>TurbineException</code> with specified
+     * Constructs a new <code>IntakeRuntimeException</code> with specified
      * nested <code>Throwable</code>.
      *
      * @param nested The exception or error that caused this exception
@@ -65,7 +65,7 @@ public class IntakeRuntimeException extends RuntimeException
     }
 
     /**
-     * Constructs a new <code>TurbineException</code> with specified
+     * Constructs a new <code>IntakeRuntimeException</code> with specified
      * detail message and nested <code>Throwable</code>.
      *
      * @param msg    The error message.
