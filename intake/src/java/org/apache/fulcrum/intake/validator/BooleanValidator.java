@@ -66,6 +66,13 @@ public class BooleanValidator
     private static String[] falseValues = {"FALSE","F","NO","N","0","OFF"};
 
     /**
+     * Default Constructor
+     */
+    public BooleanValidator()
+    {
+    }
+
+    /**
      * Constructor to use when initialising Object
      *
      * @param paramMap
