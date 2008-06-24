@@ -141,7 +141,7 @@ public class FileItemField
      *
      * @return the valid flag
      */
-    protected boolean validate()
+    public boolean validate()
     {
         ParameterParser pp = (ParameterParser) super.parser;
         if (isMultiValued)
