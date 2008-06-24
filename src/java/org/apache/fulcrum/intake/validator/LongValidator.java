@@ -65,6 +65,13 @@ public class LongValidator
     }
 
     /**
+     * Default Constructor
+     */
+    public LongValidator()
+    {
+    }
+
+    /**
      * Method to initialise Object
      *
      * @param paramMap
