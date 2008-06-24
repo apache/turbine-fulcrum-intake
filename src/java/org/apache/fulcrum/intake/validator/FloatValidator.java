@@ -70,6 +70,13 @@ public class FloatValidator
     }
 
     /**
+     * Default Constructor
+     */
+    public FloatValidator()
+    {
+    }
+
+    /**
      * Method to initialise Object
      *
      * @param paramMap
