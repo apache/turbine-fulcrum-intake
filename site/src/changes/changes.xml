@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<document>
+  <properties>
+    <title>Fulcrum</title>
+    <author email="epugh@upstate.com">Eric Pugh</author>
+    <author email="quintonm@bellsouth.net">Quinton McCombs</author>
+  </properties>
+
+  <body>
+    <release version="3.0.0" date="2005-05-13">
+     <action dev="sgoeschl" type="add">
+       Added fulcrum:site to build a subprojects and the master
+       project including Dashboard report
+     </action>
+     <action dev="sgoeschl" type="add">
+       Added Dashboard report
+     </action>
+     <action dev="epugh" type="add">
+      Integrate the avalon-meta plugin into the project.xml files so
+      that this dependency is downloaded.
+     </action>
+     <action dev="epugh" type="add">
+      Finished updating the conversion process.  All the components
+      that Steve McConnell revamped are integrated and building.
+     </action>
+     <action dev="epugh" type="add">
+        Changed multiproject site build so that instead of having a
+        /docs/multiproject/fulcrum-XXX url, it is /docs/fulcrum-XXX
+        url for all the components.  Allows us to leverage the multiproject
+        plugin better.  Updated docs on building the site.  Easier to update
+        individual component site documentation this way.
+      </action>
+      <action dev="epugh" type="add">
+        Intake Component Added
+      </action>
+      <action dev="epugh" type="add">
+        Build process updated to use 'multiproject' plugin.  Additionally,
+        significantly more components have been converted to being seperate
+        Avalon components.
+      </action>
+      <action dev="quintonm" type="add">
+        The build process for Fulcrum has been changed.  Now, when you
+        build Fulcrum, it uses Maven's reactor to build the components
+        individually.  This means that Fulcrum itself no longer has a
+        version number.  The individual components are versioned
+        seperately.  For changes to individual components, see the docs
+        for each component.
+      </action>
+
+
+    </release>
+
+  </body>
+</document>
+

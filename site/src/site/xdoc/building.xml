@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+
+<document>
+
+  <properties>
+    <title>Building Fulcrum</title>
+    <author email="pete@kazmier.com">Pete Kazmier</author>
+    <author email="quintonm@bellsouth.net">Quinton McCombs</author>
+    <author email="epugh@upstate.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+
+    <section name="Building Fulcrum">
+      <p>
+        Building Fulcrum from SVN is now very easy because it has been
+        Maven-enabled.  Before you begin, you'll need to check out the
+        <code>turbine-fulcrum</code> SVN repository (if you are
+        not familiar with the Apache SVN repositories, please refer to
+        the <a href="http://apache.org/dev/version-control.html">documentation</a>).
+      </p>
+      <p>
+        Please refer to the Maven <a
+        href="http://maven.apache.org/maven-1.x/start/">Getting
+        Started</a> document for instructions on how to install and
+        use Maven.
+      </p>
+      <p>
+        From the root directory of the Fulcrum project (where you checked
+        out the code to or unpacked a source distribution), simply type
+        'maven fulcrum:build' and press enter.  This will start a process that will
+        build each component.  After the component is built, it will be
+        installed into you local maven repository.
+      </p>
+      <p>
+        To build a local copy of the documentation, use 'maven multiproject:site'.
+        This will build a local copy of the web site in the 'target/docs'
+        directory.  Note, this uses a LOT of memory.  If you can't build all of them,
+        build them individually.
+      </p>
+       <subsection name="Current Build Issues">
+        <p>
+          <strong>Missing JARS!</strong>  There are some jar files that you must manually
+          install due to licensing restrictions.  Javamail.jar will need to be downloaded.
+          Note, when you download it from Sun's site, you will need to rename it from mail.jar
+          to javamail-1.3.1.jar and place it in your MAVEN_REPO/javamail/jars/ directory.  You
+          will also need to download jdbc-2.0.jar as well.  Lastly, for the Hibernate security
+          provider, you need Sun's JTA jar file.  Currently, the easiest place to go is <a href="http://www.hibernate.org">
+          Hibernate</a> and download the jar from there by downloading the current distribution.
+        </p>
+        <p>
+          Depending on your version of Maven, you may have various problems with
+          the reports being generated, or you may run out of memory when you do a
+          complete build.  One approach to take is to turn off running unit tests
+          and excluding various components:
+<source><![CDATA[
+$ maven multiproject:site -Dmaven.test.skip=true -Dmaven.multiproject.excludes=security/*.*,cache/*.*,scheduler/*.*'
+]]></source>
+        </p>
+      </subsection>
+      <subsection name="Maven Repositories">
+        <p>
+          If you are willing to build with an "unofficial" repository, you can uncomment
+          the <code>maven.repo</code> property in the project.properties file.  This will
+          allow Maven to download from a Turbine repository the various jars that are not
+          currently in the main Maven repository.
+        </p>
+      </subsection>
+    </section>
+  </body>
+</document>
+

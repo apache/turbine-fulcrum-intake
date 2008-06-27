@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<document>
+ <properties>
+  <title>Fulcrum</title>
+  <author email="jvanzyl@apache.org">Jason van Zyl</author>
+  <author email="quintonm@bellsouth.net">Quinton McCombs</author>
+ </properties>
+
+ <body>
+
+ <section name="What is Fulcrum?">
+   <p>
+     Fulcrum was originally created as part of the Turbine 3 effort.  The idea
+     was to be able to decouple the services from Turbine 2 allowing them to be
+     used on both projects.
+   </p>
+   <p>
+     Fulcrum is currently evolving into a component repository based on the Avalon framework.
+     Each service is being converted into a stand alone component that can
+     be released independently of the other components.  This will allow the
+     Turbine project to to release components as they change instead of having
+     to release everything at once.  This will also allow other projects to take advantage
+     of these components.
+   </p>
+ </section>
+
+ <section name="Container compatibility">
+   <p>
+     All components are compatible in Avalon's ECM container.  Any dependencies
+     on other components, system properties, or context elements are clearly
+     documented in the docs for each component.
+   </p>
+   <p>
+    Additionally, Fulcrum offers the Yaafi component.  Yaafi (Yet Another Avalon Framework
+    Implementation) is a very simple container that is meant to be used with singleton
+    components.  It is perfect for unit testing your components.  You can then run them in
+    any other Avalon container like ECM, Phoenix, Excaliber, etc..
+   </p>
+ </section>
+
+ </body>
+</document>
