@@ -28,109 +28,85 @@
 
   <body>
 
-  <section name="Overview">
-    <p>
-      This component is really just a test container for testing the
-      other components.  This container is not meant to be used in
-      a production environment.
-    </p>
-    <p>
-      In order to same you a little coding, a base class has been provided
-      for your test cases.  Simply extend
-      <code>org.apache.fulcrum.testcontainer.BaseUnitTest</code> and
-      you are ready to go.
-    </p>
-  </section>
+    <section name="Overview">
+      <p> This component is really just a test container for testing the other components. This
+        container is not meant to be used in a production environment. </p>
+      <p> In order to save you a little coding, a base class has been provided for your test cases.
+        Simply extend <code>org.apache.fulcrum.testcontainer.BaseUnitTest</code> and you are ready
+        to go. </p>
+    </section>
 
-  <section name="Usage">
+    <section name="Usage">
 
-    <subsection name="Extending the test case">
-      <p>
-        In order to same you a little coding, a base class has been provided
-        for your test cases.  Simply extend
-        <code>org.apache.fulcrum.testcontainer.BaseUnitTest</code> and
-        you are ready to go.
-      </p>
-      <p>
-        The <code>lookup</code> and <code>tearDown</code> methods of
-        <code>BaseUnitTest</code> will handle the lifecycle of the container
-        for you.  Each test will have a freshly initialized container in
-        which to run.
-      </p>
-      <p>
-        To lookup and release components, call the <code>lookup</code>
-        and <code>release</code> methods of <code>BaseUnitTest</code>.
-      </p>
-      <p>
-        By default, all tests will use the configuration files
-        <code>TestComponentConfig.xml</code> and
-        <code>TestRoleConfig.xml</code> located in the
-        <code>src/test</code> directory.  If you want to override that
-        behavior for ALL your tests, you can override the <code>getConfigurationFileName()</code>
-        and/or <code>getRoleFileName()</code> methods.
-      </p>
-      <p>
-        If you are testing multiple config or role files, then just call <code>setConfigurationFileName()</code>
-        or <code>setRoleFileName()</code> before doing your first lookup. The string you pass in should be prefixed from
-        the directory the JVM is running in (e.g. src/test/YOUR_CONFIG.xml).
-      </p>
+      <subsection name="Extending the test case">
+        <p> In order to save you a little coding, a base class has been provided for your test
+          cases. Simply extend <code>org.apache.fulcrum.testcontainer.BaseUnitTest</code> and you
+          are ready to go. 
+        </p>
+        <p> The <code>lookup</code> and <code>tearDown</code> methods of <code>BaseUnitTest</code>
+          will handle the lifecycle of the container for you. Each test will have a freshly
+          initialized container in which to run. 
+        </p>
+        <p> To lookup and release components, call the <code>lookup</code> and <code>release</code>
+          methods of <code>BaseUnitTest</code>. 
+        </p>
+        <p> By default, all tests will use the configuration files
+          <code>TestComponentConfig.xml</code> and <code>TestRoleConfig.xml</code> located in the
+            <code>src/test</code> directory. If you want to override that behavior for ALL your
+          tests, you can override the <code>getConfigurationFileName()</code> and/or
+            <code>getRoleFileName()</code> methods. 
+        </p>
+        <p> If you are testing multiple config or role files, then just call
+            <code>setConfigurationFileName()</code> or <code>setRoleFileName()</code> before doing
+          your first lookup. The string you pass in should be prefixed from the directory the JVM is
+          running in (e.g. src/test/YOUR_CONFIG.xml). 
+        </p>
+      </subsection>
 
-    </subsection>
+      <subsection name="Using the container directly">
+        <p> If you need more control over the container itself for your test, just don't extend the
+          unit test provided with the container. Instead, embed the container directly in your test
+          case. See the java docs for <code>org.apache.fulcrum.testcontainer.Container</code> for
+          more information. 
+        </p>
+      </subsection>
 
-    <subsection name="Using the container directly">
-      <p>
-        If you need more control over the container itself for your test,
-        just don't extend the unit test provided with the container.  Instead,
-        embed the container directly in your test case.  See the java
-        docs for <code>org.apache.fulcrum.testcontainer.Container</code>
-        for more information.
-      </p>
-    </subsection>
-
-    <subsection name="Configuring the Components">
-      <p>
-        There are two ways of configuring your components.  One is the
-        traditional TestComponentConfig.xml and TestRoleConfig.xml files
-        described below.  Or, one that integrates the two, shown at the bottom.
-      </p>
-
-<p>
-      First, here is the role configuration.
-    </p>
-
-<source>
+      <subsection name="Configuring the Components">
+        <p> There are two ways of configuring your components. One is the traditional
+          TestComponentConfig.xml and TestRoleConfig.xml files described below. Or, one that
+          integrates the two, shown at the bottom. 
+        </p>
+        <p> First, here is the role configuration.</p>
+        <source>
 <![CDATA[
-  <role
-    name="org.apache.fulcrum.crypto.CryptoService"
-    shorthand="crypto"
-    default-class="org.apache.fulcrum.crypto.DefaultCryptoService"/>
+<role
+  name="org.apache.fulcrum.crypto.CryptoService"
+  shorthand="crypto"
+  default-class="org.apache.fulcrum.crypto.DefaultCryptoService"/>
 ]]>
-</source>
+        </source>
 
-  <p>
-    Now comes the basic configuration of the component.  Here will will
-    configure the various encryption providers
-  </p>
-<source>
+        <p> Now comes the basic configuration of the component. Here will will configure the various
+          encryption providers 
+        </p>
 
+        <source>
 <![CDATA[
-    <crypto>
-      <algorithm>
-      	<unix>org.apache.fulcrum.crypto.provider.UnixCrypt</unix>
-        <clear>org.apache.fulcrum.crypto.provider.ClearCrypt</clear>
-        <java>org.apache.fulcrum.crypto.provider.JavaCrypt</java>
-        <oldjava>org.apache.fulcrum.crypto.provider.OldJavaCrypt</oldjava>
+<crypto>
+  <algorithm>
+    <unix>org.apache.fulcrum.crypto.provider.UnixCrypt</unix>
+    <clear>org.apache.fulcrum.crypto.provider.ClearCrypt</clear>
+    <java>org.apache.fulcrum.crypto.provider.JavaCrypt</java>
+    <oldjava>org.apache.fulcrum.crypto.provider.OldJavaCrypt</oldjava>
 
-      </algorithm>
-    </crypto>
+  </algorithm>
+</crypto>
 ]]>
-</source>
+        </source>
 
-  <p>
-    Or, the integrated roles and components file:
-  </p>
-<source>
+        <p> Or, the integrated roles and components file: </p>
 
+        <source>
 <![CDATA[
 <my-system>
   <component
@@ -139,11 +115,8 @@
   </component>
 </my-system>
 ]]>
-</source>
-
-    </subsection>
-
-  </section>
-
-</body>
+        </source>
+      </subsection>
+    </section>
+  </body>
 </document>
