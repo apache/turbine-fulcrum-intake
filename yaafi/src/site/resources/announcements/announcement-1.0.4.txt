@@ -1,0 +1,61 @@
+We are pleased to announce the Fulcrum's YAAFI 1.0.4 release! 
+
+http://turbine.apache.org/fulcrum/fulcrum-yaafi/
+
+Fulcrum is a component repository for Turbine. 
+
+===============================================================================
+
+Changes in this version include:
+
+  New Features:
+
+o Added a simple tutorial 
+o The CLI can be now configured using SystemProperties and the command line. 
+o Added a getParameters() to the ServiceContainer interface. This allows to 
+  retrieve the Avalon parameters easily. 
+o The YAAFI service container implements Parameterizable 
+o Added a Shutdown service to dispose the YAAFI container 
+o Transparent decryption of configuration files 
+o Added reconfiuration service ro reconfigure YAAFI if the component 
+  configuration file has changed 
+o Provide context mapping in the case that YAAFI is embedded in another 
+  Avalon container (experimental) 
+o Improved bootstrapping of YAAFI using containerConfiguration.xml 
+o Decryption of configuration files 
+o Added cryptography support based on JCE/JCA 
+o Using ServiceManagerConfig to capture the configuration data for YAAFI 
+o Refactored some code into AvalonContextHelper and InputStreamLocator 
+o Parsing a "component-type" element for the future 
+o Parsing a "description" element of the role configuration file 
+o Extending ServiceManagerService to store Parameters and Context 
+o Setting proper context to achive compatibility with Phoenix container. 
+  YAAFI now works embedded into JAMES. 
+
+  Fixed bugs:
+
+o Fixed bug in ShutdownService resulting in excessive CPU usage. 
+o Updated Turbine integration found in the 'contrib' directory 
+o Updated CLI to make it fit for one of our products 
+o Removed CVS tags since it makes maintainance difficult 
+o Removed obsolete email address 
+o Fixed wrong default values for parameters file if no value was defined. 
+o Fixed bug in ServiceManagerService - the static field was not reset during 
+  a dispose() leading to a NPE in the second invocation. 
+
+  Changes:
+
+o Improved the implementation of BaseServiceImpl 
+o Improved creation of child logger to avoid overly long names by using the 
+  shorthand instead of the class name 
+
+===============================================================================
+
+Issues, bugs, and feature requests for Fulcrum's YAAFI
+should be submitted to the following issue tracking system:
+
+http://issues.apache.org/jira/browse/TRB
+
+
+Have fun!
+-The Fulcrum's YAAFI development team

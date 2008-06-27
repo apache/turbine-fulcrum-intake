@@ -1,0 +1,30 @@
+We are pleased to announce the Fulcrum's YAAFI 1.0.2 release! 
+
+http://turbine.apache.org/fulcrum/fulcrum-yaafi/
+
+Fulcrum is a component repository for Turbine. 
+
+===============================================================================
+
+Changes in this version include:
+
+  Fixed bugs:
+
+o Locating an absolute file should now also work with Windows 
+o Removed log4j dpendency 
+
+  Changes:
+
+o Using LogEnabled.enableLogging() and Configurable.configure() to create a 
+  service container 
+
+===============================================================================
+
+Issues, bugs, and feature requests for Fulcrum's YAAFI
+should be submitted to the following issue tracking system:
+
+http://issues.apache.org/jira/browse/TRB
+
+
+Have fun!
+-The Fulcrum's YAAFI development team

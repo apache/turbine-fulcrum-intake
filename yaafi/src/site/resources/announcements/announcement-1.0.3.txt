@@ -1,0 +1,34 @@
+We are pleased to announce the Fulcrum's YAAFI 1.0.3 release! 
+
+http://turbine.apache.org/fulcrum/fulcrum-yaafi/
+
+Fulcrum is a component repository for Turbine. 
+
+===============================================================================
+
+Changes in this version include:
+
+  New Features:
+
+o Added a little bit of documentation 
+
+  Fixed bugs:
+
+o Fixed most of the Eclipse complaints about coding conventions 
+o Container was missing call to decomission objects, therefore Disposeable 
+  interface never working. Thanks to Siegfried Goeschl. 
+
+  Changes:
+
+o Initial import to Fulcrum project. 
+
+===============================================================================
+
+Issues, bugs, and feature requests for Fulcrum's YAAFI
+should be submitted to the following issue tracking system:
+
+http://issues.apache.org/jira/browse/TRB
+
+
+Have fun!
+-The Fulcrum's YAAFI development team
