@@ -24,10 +24,19 @@
   </properties>
 
   <body>
+    <release version="1.0.6" date="as in SVN">
+      <action dev="sgoeschl" type="fix">
+        Setting custom JAMon ranges for every invocation because those ranges
+        are discarded when resetting JAMon through the GUI.
+      </action>
+      <action dev="sgoeschl" type="add">
+        Addded M2 build 
+      </action>
+    </release>
     <release version="1.0.5" date="2007-10-01">
-        <action dev="sgoeschl" type="add">
-            Addded README.txt and NOTICE.txt to create a proper release.
-        </action>
+      <action dev="sgoeschl" type="add">
+        Addded README.txt and NOTICE.txt to create a proper release.
+      </action>
       <action dev="sgoeschl" type="fix">
         Fixing broken JAMon 2.x integration. To decouple the service framework
         from the JAMon library reflection was used but broke with JAMon 2.x. 
