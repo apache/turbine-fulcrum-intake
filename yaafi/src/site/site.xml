@@ -19,15 +19,13 @@
 -->
 <project
   name="Fulcrum YAAFI Avalon Container"
-  href="http://turbine.apache.org/fulcrum/fulcrum-yaafi/">
-  <bannerLeft>
-    <name>Fulcrum YAAFI Avalon Container</name>
-  </bannerLeft>
+  href="http://turbine.apache.org/fulcrum/fulcrum-yaafi/"> 
   <version position="left" />
   <publishDate format="dd MMM yyyy"/>
   <body>
     <menu name="Overview">
       <item name="Main"                           href="/index.html"/>
+      <item name="Downloads"                      href="/downloads.html"/>
       <item name="How To"                         href="/howto.html"/>
       <item name="Cryptography"                   href="/cryptography.html"/>
       <item name="Lifecycle"                      href="/lifecycle/index.html" collapse="true">
