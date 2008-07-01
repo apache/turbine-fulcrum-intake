@@ -121,6 +121,12 @@ public class ServiceContainerFactory
 
         ContainerUtil.enableLogging( result, serviceManagerConfig.getLogger() );
         ContainerUtil.contextualize( result, context );
+
+        if(serviceManagerConfig.getParentServiceManager() != null)
+        {
+            ContainerUtil.service(result, serviceManagerConfig.getParentServiceManager());
+        }
+        
         ContainerUtil.configure( result, configuration );
         ContainerUtil.initialize( result );
 
@@ -154,7 +160,10 @@ public class ServiceContainerFactory
     }
 
     /**
-     * Reads the implementation class of the YAAFI container
+     * Reads the implementation class of the YAAFI container.
+     *
+     * @param configuration the Avalon configuration
+     * @return the implementation class name of the container
      */
     private static String getServiceContainerClazzName( Configuration configuration )
     {

@@ -32,6 +32,7 @@ import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.DefaultContext;
 import org.apache.avalon.framework.logger.ConsoleLogger;
 import org.apache.avalon.framework.logger.Logger;
+import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.fulcrum.jce.crypto.CryptoStreamFactoryImpl;
 import org.apache.fulcrum.yaafi.framework.constant.AvalonMerlinConstants;
 import org.apache.fulcrum.yaafi.framework.container.ServiceConstants;
@@ -98,6 +99,9 @@ public class ServiceContainerConfiguration
 
     /** the caller-supplied container configuration */
     private Configuration containerConfiguration;
+
+    /** to lookup service in the parent container */
+    private ServiceManager parentServiceManager;
 
     /** Constructor */
     public ServiceContainerConfiguration()
@@ -588,6 +592,14 @@ public class ServiceContainerConfiguration
     {
         this.containerConfiguration = containerConfiguration;
     }
+    
+    public ServiceManager getParentServiceManager() {
+        return parentServiceManager;
+    }
+
+    public void setParentServiceManager(ServiceManager parentServiceManager) {
+        this.parentServiceManager = parentServiceManager;
+    }
 
     /**
      * Loads a containerConfiguration file and set is as the Avalon
@@ -679,7 +691,7 @@ public class ServiceContainerConfiguration
     {
         File result = new File(fileName);
 
-        if( result.isAbsolute() == false )
+        if(!result.isAbsolute())
         {
             result = new File( baseDir, fileName );
         }

@@ -52,7 +52,7 @@
       <name>Siegfried Goeschl</name>
       <id>sgoeschl</id>
       <email>sgoeschl@apache.org</email>
-      <organization></organization>
+      <organization>Apache</organization>
       <roles>
         <role>Java Developer</role>
       </roles>
@@ -66,12 +66,29 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <!-- Spring 1.2.x depedencies -->
     <dependency>
-      <groupId>com.jamonapi</groupId>
-      <artifactId>jamon</artifactId>
-      <version>2.4</version>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring</artifactId>
+      <version>1.2.9</version>    
       <optional>true</optional>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.mail</groupId>
+          <artifactId>mail</artifactId>
+        </exclusion>
+      </exclusions>      
     </dependency>    
+    <!-- Spring 2.5.x depedencies -->
+      <!--
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring</artifactId>
+      <version>2.5.4</version>    
+      <optional>true</optional>
+    </dependency>
+    -->
+    <!-- Avalon depedencies -->
     <dependency>
       <groupId>avalon-framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
@@ -125,6 +142,13 @@
           <artifactId>commons-logging</artifactId>
         </exclusion>        
       </exclusions>
+    </dependency>
+    <!-- Interceptor dependencies -->
+    <dependency>
+      <groupId>com.jamonapi</groupId>
+      <artifactId>jamon</artifactId>
+      <version>2.4</version>
+      <optional>true</optional>
     </dependency>
   </dependencies>
 
