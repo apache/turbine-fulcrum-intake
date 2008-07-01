@@ -205,10 +205,8 @@ public class Main implements Runnable, Disposable
        {
            exitCode = 1;
        }
-       finally
-       {
-           System.exit(exitCode);
-       }
+
+       System.exit(exitCode);
     }
 
     /**
@@ -224,7 +222,7 @@ public class Main implements Runnable, Disposable
     {
         File result = new File(name);
 
-        if( result.isAbsolute() == false )
+        if( !result.isAbsolute() )
         {
             result = new File( baseDir, name );
         }
@@ -593,7 +591,7 @@ public class Main implements Runnable, Disposable
      */
     protected void shutdown()
     {
-        if( this.isInitialized() == false )
+        if( !this.isInitialized())
         {
             return;
         }
