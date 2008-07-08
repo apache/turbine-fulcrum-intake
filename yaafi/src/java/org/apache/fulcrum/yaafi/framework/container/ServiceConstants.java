@@ -60,7 +60,7 @@ public interface ServiceConstants extends AvalonYaafiConstants
     /** property to lookup the decryption handling */
     String COMPONENT_ISENCRYPTED_KEY = "isEncrypted";
 
-    /** property to lookup the  lcoation */
+    /** property to lookup the location */
     String COMPONENT_LOCATION_KEY = "location";
 
     /** property to lookup the usage of dynamic proxies */
@@ -74,6 +74,12 @@ public interface ServiceConstants extends AvalonYaafiConstants
 
     /** property to lookup the reconfigurationDelay */
     String RECONFIGURATION_DELAY_KEY = "reconfigurationDelay";
+
+    /** property to lookup a list of service managers */
+    String SERVICEMANAGER_LIST_KEY = "serviceManagers";
+
+    /** property to lookup a single  service managers */
+    String SERVICEMANAGER_KEY = "serviceManager";
 
     /////////////////////////////////////////////////////////////////////////
     // Default values for YAAFI configuration files
