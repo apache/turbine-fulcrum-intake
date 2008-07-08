@@ -126,15 +126,11 @@ public class InputStreamLocator
         {
             this.getLogger().debug("Looking for " + location + " using the class loader");
             is =  getClass().getResourceAsStream( location );
-        }
 
-        if( is == null )
-        {
-            this.getLogger().warn("Unable to locate " + location);
-        }
-        else
-        {
-            this.getLogger().debug("Successfully located " + location);
+            if( is != null )
+            {
+                this.getLogger().debug("Successfully located " + location);
+            }
         }
 
         // try to load the last part of the file name using the classloader
@@ -146,15 +142,16 @@ public class InputStreamLocator
             baseName = '/' + new File(location).getName();
             this.getLogger().debug("Looking for " + baseName + " using the class loader");
             is =  getClass().getResourceAsStream( baseName );
+
+            if( is != null )
+            {
+                this.getLogger().debug("Successfully located " + baseName);
+            }
         }
 
         if( is == null )
         {
-            this.getLogger().warn("Unable to locate " + baseName);
-        }
-        else
-        {
-            this.getLogger().debug("Successfully located " + baseName);
+            this.getLogger().warn("Unable to find any resource with the name '" + location + "'");
         }
 
         return is;
