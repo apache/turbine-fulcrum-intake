@@ -140,6 +140,9 @@ public class ServiceContainerImpl
     /** The list of interceptor services applied to all services */
     private ArrayList defaultInterceptorServiceList;
 
+    /** The list of ServiceManagers as fallback service lookup */
+    private ArrayList fallbackServiceManagerList;
+
     /** Read/Write lock to synchronize acess to services */
     private ReadWriteLock readWriteLock;
 
@@ -176,6 +179,7 @@ public class ServiceContainerImpl
         this.applicationRootDir = new File( new File("").getAbsolutePath() );
         this.tempRootDir = new File( System.getProperty("java.io.tmpdir",".") );
 
+        this.fallbackServiceManagerList = new ArrayList();
         this.defaultInterceptorServiceList = new ArrayList();
     }
 
@@ -300,7 +304,6 @@ public class ServiceContainerImpl
                 "false" )
                 );
 
-
         // get the configuration for componentConfigurationPropertiesResolver
 
         this.componentConfigurationPropertiesResolverConfig = configuration.getChild(
@@ -331,9 +334,9 @@ public class ServiceContainerImpl
             INTERCEPTOR_KEY
             );
 
-        for( int j=0; j<interceptorConfigList.length; j++ )
+        for( int i=0; i<interceptorConfigList.length; i++ )
         {
-            String interceptorServiceName = interceptorConfigList[j].getValue(null);
+            String interceptorServiceName = interceptorConfigList[i].getValue(null);
 
             if( !StringUtils.isEmpty(interceptorServiceName) && this.hasDynamicProxies())
             {
@@ -341,6 +344,32 @@ public class ServiceContainerImpl
 
 	            this.getLogger().debug("Using the following default interceptor service : "
 	                + interceptorServiceName
+	                );
+            }
+        }
+
+        // evaluate a list of service managers managing their own set of services
+        // independent from the Avalon container. This service managers are used
+        // to find services implemented as Spring bean or remote webservices.
+
+        Configuration currServiceManagerList = configuration.getChild(
+            SERVICEMANAGER_LIST_KEY
+            );
+
+        Configuration[] serviceManagerConfigList = currServiceManagerList.getChildren(
+            SERVICEMANAGER_KEY
+            );
+
+        for( int i=0; i<serviceManagerConfigList.length; i++ )
+        {
+            String serviceManagerName = serviceManagerConfigList[i].getValue(null);
+
+            if( !StringUtils.isEmpty(serviceManagerName) )
+            {
+	            this.fallbackServiceManagerList.add( serviceManagerName );
+
+	            this.getLogger().debug("Using the following fallback service manager : "
+	                + serviceManagerName
 	                );
             }
         }
@@ -429,6 +458,18 @@ public class ServiceContainerImpl
             this.getServiceMap().put( serviceComponent.getName(), serviceComponent );
         }
 
+        // ensure that fallback service managers are available
+
+        for(int i=0; i<this.fallbackServiceManagerList.size(); i++)
+        {
+            String currServiceManagerName = (String) this.fallbackServiceManagerList.get(i);
+            if(this.getServiceMap().get(currServiceManagerName) == null)
+            {
+                String msg = "The following fallback service manager was not found : " + currServiceManagerName;
+                throw new IllegalArgumentException(msg);
+            }
+        }
+
         // run the various lifecycle stages
 
         this.incarnateAll( this.getServiceList() );
@@ -483,6 +524,8 @@ public class ServiceContainerImpl
             this.roleConfiguration = null;
             this.serviceConfiguration = null;
             this.parameters = null;
+            this.fallbackServiceManagerList = null;
+            this.defaultInterceptorServiceList = null;
             this.isDisposed = true;
 
             if( this.getLogger() != null )
@@ -691,6 +734,14 @@ public class ServiceContainerImpl
     }
 
     /**
+     * Lookup a service instance. The implementation uses the following
+     * mechanism
+     * <ul>
+     *  <li>look for a matching local service
+     *  <li>use the fallback service manager as they might know the service
+     *  <li>ask the parent service manager
+     * </ul>
+     *
      * @see org.apache.avalon.framework.service.ServiceManager#lookup(java.lang.String)
      */
     public Object lookup(String name) throws ServiceException
@@ -699,19 +750,56 @@ public class ServiceContainerImpl
 
         Object lock = null;
         Object result = null;
-        ServiceComponent serviceComponent = null;
+        ServiceComponent serviceManagerComponent = null;
 
         // look at our available service
 
         try
         {
             lock = this.getReadLock();
-            serviceComponent = this.getLocalServiceComponent(name);
 
-            if( serviceComponent != null )
+            // check our local services
+            
+            serviceManagerComponent = this.getLocalServiceComponent(name);
+
+            if( serviceManagerComponent != null )
             {
-                result = serviceComponent.getInstance();
+                result = serviceManagerComponent.getInstance();
+
+                if((result != null) && this.getLogger().isDebugEnabled())
+                {
+                    String msg = "Located the service '" + name + "' in the local container";
+                    this.getLogger().debug(msg);
+                }
             }
+
+            // look at fallback service managers
+
+            if(result == null)
+            {
+                for(int i=0; i<this.fallbackServiceManagerList.size(); i++)
+                {
+                    String serviceManagerComponentName = (String) fallbackServiceManagerList.get(i);
+                    serviceManagerComponent = this.getLocalServiceComponent(serviceManagerComponentName);
+
+                    if(serviceManagerComponent != null)
+                    {
+                        ServiceManager currServiceManager = (ServiceManager) serviceManagerComponent.getInstance();
+
+                        if (currServiceManager.hasService(name))
+                        {
+                            result = currServiceManager.lookup(name);
+
+                            if((result != null) && this.getLogger().isDebugEnabled())
+                            {
+                                String msg = "Located the service '" + name + "' using the fallback service manager '" + serviceManagerComponentName + "'";
+                                this.getLogger().debug(msg);
+                            }
+                        }
+                    }
+                }
+            }
+
         }
         catch( Throwable t )
         {
@@ -731,7 +819,13 @@ public class ServiceContainerImpl
             if( this.hasParentServiceManager() )
 	        {
 	            result = this.getParentServiceManager().lookup(name);
-	        }
+
+                if((result != null) && this.getLogger().isDebugEnabled())
+                {
+                    String msg = "Located the service '" + name + "' using the parent service manager";
+                    this.getLogger().debug(msg);
+                }
+            }
         }
 
         // if we still haven't found anything then complain
@@ -834,8 +928,8 @@ public class ServiceContainerImpl
      * Reconfigure a single service
      *
      * @param name the name of the service to be reconfigured
-     * @param ServiceException the service was not found
-     * @param ConfigurationException the reconfiguration failed
+     * @throws ServiceException the service was not found
+     * @throws ConfigurationException the reconfiguration failed
      */
     private void reconfigure(String name)
         throws ServiceException, ConfigurationException
@@ -973,6 +1067,7 @@ public class ServiceContainerImpl
      * the service component is ready to be incarnated.
      *
      * @param serviceComponent The service component to be configured
+     * @throws Exception the configuration failed
      */
     private void configure( ServiceComponent serviceComponent )
         throws Exception
@@ -1035,6 +1130,7 @@ public class ServiceContainerImpl
      * incarnation the service component is operational.
      *
      * @param serviceComponent The service component to incarnate
+     * @exception Exception incarnating the service component failed
      */
     private void incarnate( ServiceComponent serviceComponent )
         throws Exception
@@ -1047,7 +1143,9 @@ public class ServiceContainerImpl
     }
 
     /**
-     * Decommision a ist of services
+     * Decommision a ist of services.
+     *
+     * @param serviceList the list of services to decommision
      */
     private void decommisionAll(List serviceList)
     {
@@ -1085,6 +1183,8 @@ public class ServiceContainerImpl
 
     /**
      * Disposing a ist of services
+     *
+     * @param serviceList the list of services to dispose
      */
     private void disposeAll(List serviceList)
     {
@@ -1147,6 +1247,7 @@ public class ServiceContainerImpl
      *
      * @param roleConfiguration the role configuration file
      * @param logger the logger
+     * @return the list of service components
      * @throws ConfigurationException creating the service instance failed
      */
     private List createServiceComponents(Configuration roleConfiguration, Logger logger )
@@ -1252,7 +1353,7 @@ public class ServiceContainerImpl
 
     /**
      * Load a configuration property file either from a file or using the class loader.
-     * @param location the location of the file
+     * 
      * @return The loaded proeperty file
      * @throws ConfigurationException Something went wrong
      */
@@ -1447,9 +1548,10 @@ public class ServiceContainerImpl
      * Create a decrypting input stream using the default password.
      *
      * @param is the input stream to be decrypted
+     * @param isEncrypted the encryption mode (true|false|auto)
      * @return an decrypting input stream
-     * @throws IOException
-     * @throws GeneralSecurityException
+     * @throws IOException reading the input stream failed
+     * @throws GeneralSecurityException accessing the JCA indrastructure failed
      */
     private InputStream getDecryptingInputStream( InputStream is, String isEncrypted )
         throws IOException, GeneralSecurityException
@@ -1514,7 +1616,7 @@ public class ServiceContainerImpl
     /**
      * @return Returns the hasDynamicProxies.
      */
-    private final boolean hasDynamicProxies()
+    private boolean hasDynamicProxies()
     {
         return this.hasDynamicProxies;
     }
@@ -1530,7 +1632,7 @@ public class ServiceContainerImpl
     /**
      * @return a read lock
      */
-    private final Object getReadLock()
+    private Object getReadLock()
     {
         try
         {
@@ -1546,7 +1648,7 @@ public class ServiceContainerImpl
     /**
      * @return a write lock
      */
-    private final Object getWriteLock()
+    private Object getWriteLock()
     {
         Object result = null;
 
@@ -1578,7 +1680,7 @@ public class ServiceContainerImpl
     /**
      * Release the read/write lock.
      */
-    private final void releaseLock(Object lock)
+    private void releaseLock(Object lock)
     {
         this.readWriteLock.releaseLock(lock, AVALON_CONTAINER_YAAFI);
     }
