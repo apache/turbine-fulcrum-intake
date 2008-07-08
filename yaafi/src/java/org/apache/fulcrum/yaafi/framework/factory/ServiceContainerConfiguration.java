@@ -82,7 +82,7 @@ public class ServiceContainerConfiguration
     /** the user-supplied Avalon context */
     private DefaultContext context;
 
-    /** the Avalon */
+    /** the Avalon logger */
     private Logger logger;
 
     /** the application directory */
@@ -102,6 +102,9 @@ public class ServiceContainerConfiguration
 
     /** to lookup service in the parent container */
     private ServiceManager parentServiceManager;
+
+    /** a list of ServiceManager maintaining their own services */
+    private String[] serviceManagerList;
 
     /** Constructor */
     public ServiceContainerConfiguration()
@@ -349,6 +352,33 @@ public class ServiceContainerConfiguration
 
             result.addChild( parameterConfigurationConfig );
 
+            // Add the following fragement
+            //
+            // <serviceManagers>
+            //   <serviceManagers>springFrameworkService</serviceManager>
+            // </serviceManagers>
+
+            if(this.hasServiceManagerList())
+            {
+                DefaultConfiguration serviceManagerListConfig = new DefaultConfiguration(
+                    ServiceConstants.SERVICEMANAGER_LIST_KEY
+                    );
+
+                for(int i=0; i<this.serviceManagerList.length; i++)
+                {
+                    DefaultConfiguration serviceManagerConfig = new DefaultConfiguration(
+                        ServiceConstants.SERVICEMANAGER_KEY
+                        );
+
+                    serviceManagerConfig.setValue(this.serviceManagerList[i]);
+
+                    serviceManagerListConfig.addChild(serviceManagerConfig);
+                }
+
+                result.addChild( serviceManagerListConfig );
+            }
+
+
             return result;
         }
     }
@@ -592,13 +622,52 @@ public class ServiceContainerConfiguration
     {
         this.containerConfiguration = containerConfiguration;
     }
-    
+
+    /**
+     * Get the parent service manager to find service managed by the
+     * parent container.
+     *
+     * @return the parent container
+     */
+
     public ServiceManager getParentServiceManager() {
         return parentServiceManager;
     }
 
+    /**
+     * Set the parent service manager to find service managed by the
+     * parent container.
+     *
+     * @param parentServiceManager the parent container
+     */
     public void setParentServiceManager(ServiceManager parentServiceManager) {
         this.parentServiceManager = parentServiceManager;
+    }
+
+    /**
+     * Get a list of service manager managing their own set of services.
+     *
+     * @return a list of service implementing the ServiceManager interface
+     */
+    public String[] getServiceManagerList() {
+        return serviceManagerList;
+    }
+
+    /**
+     * Set a list of service manager managing their own set of services.
+     *
+     * @param serviceManagerList a list of service implementing the ServiceManager interface
+     */
+    public void setServiceManagerList(String[] serviceManagerList) {
+        this.serviceManagerList = serviceManagerList;
+    }
+
+    /**
+     * @return is a list of service manager managing their own set of services defined
+     */
+    public boolean hasServiceManagerList()
+    {
+        return ((this.serviceManagerList != null) && (this.serviceManagerList.length > 0));
     }
 
     /**
