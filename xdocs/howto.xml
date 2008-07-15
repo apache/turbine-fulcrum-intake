@@ -78,36 +78,6 @@ error message defined in the XML file can be shown to the user.
 
 </section>
 
-<section name="Configuration">
-
-    <p>
-      First, here is the role configuration.
-    </p>
-
-<source><![CDATA[
-    <role
-        name="org.apache.fulcrum.intake.IntakeService"
-        shorthand="intake"
-        default-class="org.apache.fulcrum.intake.IntakeServiceImpl"/>
-
-]]></source>
-
-  <p>
-    Now comes the basic configuration of the component.  Here will will
-    configure the various bundles.
-  </p>
-<source><![CDATA[
-   <intake>
-      <serialDataPath>./target/appData.ser</serialDataPath>
-      <xmlPaths>
-      	<xmlPath>src/test/xmlConf.xml</xmlPath>
-      	<xmlPath>src/test/xmlConf2.xml</xmlPath>
-      </xmlPaths>
-    </intake>
-]]></source>
-
-  </section>
-
 <section name="Usage">
 <p>
 Intake is implemented as a Avalon component. Access to it is provided by

@@ -29,48 +29,69 @@
 
   <section name="Overview">
     <p>
-  This service provides access to input processing objects based on an XML specification.
+      This service provides access to input processing objects based on an XML 
+      specification.
     </p>
   </section>
 
-<section name="Configuration">
+  <section name="Configuration">
+    <subsection name="Role Configuration">
+      <source><![CDATA[
+      <role
+          name="org.apache.fulcrum.intake.IntakeService"
+          shorthand="intake"
+          default-class="org.apache.fulcrum.intake.IntakeServiceImpl"/>
+      ]]></source>
+    </subsection>
+    
+    <subsection name="Component Configuration">
+      <table>
+        <tr>
+          <th>Item</th>
+          <th>Datatype</th>
+          <th>Cardinality</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>serialDataPath</td>
+          <td>String</td>
+          <td>[0|1]</td>
+          <td>
+            The file where the serialized XML files will be stored. The 
+            default is <code>WEB-INF/appData.ser</code>.
+          </td>
+        </tr>
+        <tr>
+          <td>xmlPaths</td>
+          <td>Complex</td>
+          <td>[0|1]</td>
+          <td>
+            The list of XML files that contain rules for Intake. The
+            default is <code>WEB-INF/conf/intake.xml</code>
+          </td>
+        </tr>
+        <tr>
+          <td>xmlPaths/xmlPath</td>
+          <td>String</td>
+          <td>[1..n]</td>
+          <td>
+            A name of an XML file that contains rules for Intake.
+          </td>
+        </tr>
+      </table>
+    </subsection>
 
-    <p>
-      First, here is the role configuration.
-    </p>
-
-<source>
-<![CDATA[
-    <role
-        name="org.apache.fulcrum.intake.IntakeService"
-        shorthand="intake"
-        default-class="org.apache.fulcrum.intake.IntakeServiceImpl"/>
-
-]]>
-</source>
-
-  <p>
-    Now comes the basic configuration of the component.  Here will will
-    configure the various bundles.
-  </p>
-<source>
-
-<![CDATA[
-   <intake>
+    <subsection name="Component Configuration Example">
+      <source><![CDATA[
+    <intake>
       <serialDataPath>./target/appData.ser</serialDataPath>
       <xmlPaths>
       	<xmlPath>src/test/xmlConf.xml</xmlPath>
       	<xmlPath>src/test/xmlConf2.xml</xmlPath>
       </xmlPaths>
     </intake>
-]]>
-</source>
-
-  </section>
-
-  <section name="Usage">
-    <p>
-    </p>
+      ]]></source>
+    </subsection>
   </section>
 
 </body>
