@@ -47,14 +47,10 @@ public interface IntakeService
 	/** Avalon role - used to id the component within the manager */
 	String ROLE = IntakeService.class.getName();
 
-
-
     /**
      * The default location of the xml specification.
      */
     String XML_PATH_DEFAULT = "WEB-INF/conf/intake.xml";
-
-
 
     /**
      * The default location where a serialized version of
