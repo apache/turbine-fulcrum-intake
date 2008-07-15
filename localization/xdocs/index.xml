@@ -22,98 +22,152 @@
 
   <properties>
     <title>Localization Component</title>
-    <author email="epugh@upstate.com">Eric PUgh</author>
+    <author email="epugh@upstate.com">Eric Pugh</author>
+    <author email="tv@apache.org">Thomas Vandahl</author>
   </properties>
 
   <body>
 
   <section name="Overview">
     <p>
-      This component wraps provides Localization of strings.  It is written
+      This component provides Localization of strings. It is written
       for use in Turbine but it can be used in any container compatible
       with Avalon's ECM container.
     </p>
   </section>
 
-<section name="Configuration">
-
-    <p>
-      First, here is the role configuration.
-    </p>
-
-<source>
-<![CDATA[
+  <section name="Configuration">
+    <subsection name="Role Configuration">
+      <source><![CDATA[
     <role
         name="org.apache.fulcrum.localization.LocalizationService"
         shorthand="localization"
         default-class="org.apache.fulcrum.localization.DefaultLocalizationService"/>
-]]>
-</source>
+      ]]></source>
+    </subsection>
 
-  <p>
-    Now comes the basic configuration of the component.  Here will will
-    configure the various bundles.
-  </p>
-<source>
+    <subsection name="Component Configuration">
+      <table>
+        <tr>
+          <th>Item</th>
+          <th>Datatype</th>
+          <th>Cardinality</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>bundles</td>
+          <td>Complex</td>
+          <td>[1]</td>
+          <td>
+            The list of configured bundles.
+          </td>
+        </tr>
+        <tr>
+          <td>bundles/bundle</td>
+          <td>String</td>
+          <td>[1..n]</td>
+          <td>
+            The name of the bundle
+          </td>
+        </tr>
+      </table>
+    </subsection>
 
-<![CDATA[
+    <subsection name="Component Configuration Example">
+      <source><![CDATA[
     <localization>
       <bundles>
         <bundle>org.apache.fulcrum.localization.BarBundle</bundle>
         <bundle>org.apache.fulcrum.localization.FooBundle</bundle>
       </bundles>
     </localization>
-]]>
-</source>
+    ]]></source>
+    </subsection>
+  </section>
 
+  <section name="Resource Bundles">
+    <p>
+      Resource bundles are basically property files.  You might have one for 
+      the "en" locale thus:
+    </p>
+
+    <source><![CDATA[
+    LABEL_ORGANIZATION = organisation
+    CURRENT_RECORD = Record {0} of {1}
+    ]]></source>
+
+    <p>
+      and another for the "en_US" locale thus:
+    </p>
+
+    <source><![CDATA[
+    LABEL_ORGANIZATION = organization
+    ]]></source>
+
+    <p>
+      Please see the <em>java.util.ListResourceBundle</em> and
+      <em>java.util.ResourceBundle</em> classes for more information.
+    </p>
   </section>
 
   <section name="Usage">
-
-<source><![CDATA[
-
-TurbineServices.getInstance().getService(LocalizationService.LOCALIZATION)
+    <source><![CDATA[
+    TurbineServices.getInstance().getService(LocalizationService.LOCALIZATION)
     .getString("DISPLAYPROJECTS_TITLE");
+    ]]></source>
 
-]]></source>
+    <p>
+      Wow. That is a lot of typing. That could be easily shortened to this:
+    </p>
 
-<p>
-Wow. That is a lot of typing. That could be easily shortened to this:
-</p>
+    <source><![CDATA[
+    Localization.getString("DISPLAYPROJECTS_TITLE");
+    ]]></source>
 
-<source><![CDATA[
+    <p>
+      The hard example above was given as an example of using Services. The easy
+      example is the one that you really should be using. Another cool feature
+      of the Localization class is that you can pass in a RunData object like
+      this:
+    </p>
 
-Localization.getString("DISPLAYPROJECTS_TITLE");
+    <source><![CDATA[
+    Localization.getString(data, "DISPLAYPROJECTS_TITLE");
+    ]]></source>
 
-]]></source>
+    <p>
+      This has the added effect of using the Accept-Language HTTP header to determine
+      which language to display based on what setting the user has defined in
+      the browser. Can you say Dynamic Localization? ;-)
+    </p>
 
-<p>
-The hard example above was given as an example of using Services. The easy
-example is the one that you really should be using. Another cool feature
-of the Localization class is that you can pass in a RunData object like
-this:
-</p>
-
-<source><![CDATA[
-
-Localization.getString(data, "DISPLAYPROJECTS_TITLE");
-
-]]></source>
-
-<p>
-This has the added effect of using the Accept-Language HTTP header to determine
-which language to display based on what setting the user has defined in
-the browser. Can you say Dynamic Localization? ;-)
-</p>
-
-<p>
-For creating the file where you get the value of the String, please
-see the <em>java.util.ListResourceBundle</em> and
-<em>java.util.ResourceBundle</em> classes for more information.
-<a href="http://java.apache.org/jyve/">Jyve</a> also contains example usage
-of this code because that was the first place where this code was originally
-developed.
-</p>
+    <p>
+      The Localization class also supports the formatting of localized strings containing 
+      parameters, such as in
+    </p>
+    
+    <source><![CDATA[
+    Localization.format(Localization.getDefaultBundle(), 
+        Localization.getLocale(data.getRequest()),
+        "CURRENT_RECORD",
+        recno, all);
+    ]]></source>
+    
+    <p>
+      This actually doesn't look too nice, however the call using the LocalizationTool
+      from a <a href="http://velocity.apache.org/">Velocity</a> template just deflates to
+    </p>
+    
+    <source><![CDATA[
+    $l10n.format("CURRENT_RECORD", $recno, $all);
+    ## Other examples
+    ## No arguments
+    $l10n.LABEL_ORGANIZATION
+    ## One argument
+    $l10n.format("STRING_KEY_ONE_ARG" "arg1")
+    ## Three or more arguments
+    $l10n.format("STRING_KEY_3_OR_MORE_ARGS" ["arg1", "arg2", "arg3"])
+    ]]></source>
   </section>
 
 </body>
