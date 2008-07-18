@@ -43,8 +43,7 @@
     <site>
       <id>fulcrum.website</id>
       <name>Fulcrum Website</name>
-      <!-- <url>${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/fulcrum/fulcrum-spring/</url> -->
-      <url>${fulcrum.deployment.protocol}://people.apache.org/x1/home/sgoeschl/public_html/download/fulcrum-spring/</url>
+      <url>${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/fulcrum/fulcrum-spring/</url>
     </site>    
   </distributionManagement>
 	
