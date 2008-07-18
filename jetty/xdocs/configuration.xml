@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<document>
+  <properties>
+    <title>Fulcrum Jetty Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+  <body>
+    <section name="Configuration">
+
+      <subsection name="Role Configuration">
+        <source><![CDATA[
+<role
+  name="org.apache.fulcrum.jetty.JettyService"
+  shorthand="JettyService"
+  default-class="org.apache.fulcrum.jetty.impl.JettyServiceImpl"
+  description="Starts a Jetty container as Avalon service"
+/>      
+          ]]></source>
+      </subsection>
+
+      <subsection name="Component Configuration">      
+        <table>
+          <tr>
+            <th>Item</th>
+            <th>Datatype</th>
+            <th>Cardinality</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>configurations</td>
+            <td>Complex</td>
+            <td>[1]</td>
+            <td>
+              Contains a list of Jetty configuration files
+            </td>
+          </tr>
+          <tr>
+            <td>configurations\configuration</td>
+            <td>String</td>
+            <td>[1..n]</td>
+            <td>
+              Contains the location of a Jetty configuration file. The configuration
+              is loaded from the file system or from the classpath.
+            </td>
+          </tr>
+          <tr>
+            <td>properties</td>
+            <td>Complex</td>
+            <td>[0|1]</td>
+            <td>
+              Contains a list of system properties used for configuring Jetty
+            </td>
+          </tr>
+          <tr>
+            <td>properties\property</td>
+            <td>String</td>
+            <td>[0..n]</td>
+            <td>
+              Contains a single system property
+            </td>
+          </tr>          
+        </table>
+      </subsection>
+
+      <subsection name="Component Configuration Example 1">
+        <p>A simple configuration to start Jetty</p>
+        <source><![CDATA[
+<JettyService>
+  <configurations>
+    <configuration>./src/test/jetty/etc/jetty.xml</configLocation>
+  </configurations>
+</JettyService>  
+        ]]></source>
+      </subsection>
+
+      <subsection name="Component Configuration Example 2">
+        <p>
+          A configuration loading three Jetty configuration files and setting
+          a few system properties to configure Jetty.
+        </p>   
+        <source><![CDATA[
+<JettyService>
+  <configurations>
+    <configuration>./src/test/jetty/etc/jetty.xml</configLocation>
+    <configuration>./src/test/jetty/etc/jetty-logging.xml</configuration>
+    <configuration>./src/test/jetty/etc/jetty-jaas.xml</configuration>    
+  </configurations>
+  <properties>
+    <property name="jetty.home">./src/test/jetty</property>
+    <property name="jetty.logs">./target</property>
+    <property name="jetty.port">9080</property>
+  </properties>  
+</JettyService>  
+        ]]></source>
+      </subsection>
+
+    </section>
+  </body>
+</document>
