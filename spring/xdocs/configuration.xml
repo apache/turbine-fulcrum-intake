@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<document>
+  <properties>
+    <title>Fulcrum Spring Framework Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+  <body>
+    <section name="Configuration">
+
+      <subsection name="Role Configuration">
+        <p>
+          The <i>ServiceManagerService</i> instance is required to access the YAAFI 
+          instance using a static 'getInstance()' method because YAAFI does 
+          not use any static variable to store the current instance.
+        </p>
+        <p>
+          The <i>SpringFrameworkService</i> instance starts the Spring container within YAAFI.
+        </p>        
+        <source><![CDATA[
+<role
+  name="serviceManagerService"
+  default-class="org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerServiceImpl"
+/>
+<role
+  name="springFrameworkService"
+  default-class="org.apache.fulcrum.spring.SpringFrameworkServiceImpl"
+/>
+          ]]></source>
+      </subsection>
+
+      <subsection name="Component Configuration">      
+        <table>
+          <tr>
+            <th>Item</th>
+            <th>Datatype</th>
+            <th>Cardinality</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>configurations</td>
+            <td>Complex</td>
+            <td>[1]</td>
+            <td>
+              Contains a list of Spring configuration files
+            </td>
+          </tr>
+          <tr>
+            <td>configurations\configuration</td>
+            <td>String</td>
+            <td>[1..n]</td>
+            <td>
+              Contains the location of a Spring configuration file
+            </td>
+          </tr>
+        </table>
+      </subsection>
+
+      <subsection name="Component Configuration Example">
+        <source><![CDATA[
+<springFrameworkService>
+  <configurations>
+    <configuration>./src/test/springIntoAvalonApplicationContext.xml</configuration>
+  </configurations>
+</springFrameworkService>  
+        ]]></source>
+      </subsection>
+
+    </section>
+  </body>
+</document>

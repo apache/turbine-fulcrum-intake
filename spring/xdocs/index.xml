@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<document>
+  <properties>
+    <title>Fulcrum Spring Framework Service</title>
+    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
+  </properties>
+  <body>
+    <section name="Overview">
+      <p>
+        The Fulcrum Spring Framework Service allows embedding a Spring 
+        container as Avalon service or the other way round, i.e. embedding 
+        YAAFI and Avalon services in a Spring container.
+      </p>
+      <p>
+        The main goal of the implementation was providing transparent service
+        lookup and embedding across the two different containers.
+        <ul>
+          <li>embedding Spring into YAAFI</li>
+          <li>embedding YAAFI into Spring</li>
+          <li>lookup Spring beans from within Avalon services</li>
+          <li>inject Avalon services into Spring beans</li>          
+        </ul>        
+      </p>      
+      <p>
+        If you would like to have a closer look at the functionality and
+        features please check the regression tests.
+      </p>
+      <subsection name="Embedding Spring into YAAFI">
+        <p>
+          In this scenario the Spring container is created within the
+          SpringFrameworkService implementation. Within the Spring container
+          the Avalon services are exposed using a Spring FactoryBean and the
+          exposed Avalon services can be used for dependency injection.
+            <source><![CDATA[          
+<!-- Get a hold on an Avalon Service Manager -->
+<bean id="avalonContainerBean"
+  class="org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerServiceImpl"
+  factory-method="getInstance"
+/>
+
+<!-- Expose an Avalon service using a Spring factory bean -->
+<bean id="systemPropertyService"
+  class="org.apache.fulcrum.spring.AvalonServiceFactoryBean">
+    <property name="serviceManager" ref="avalonContainerBean"/>
+    <property name="serviceName" value="systemPropertyService"/>
+</bean>
+
+<!-- Create a Spring bean and inject the Avalon service -->
+<bean id="customSpringService" class="org.apache.fulcrum.spring.CustomSpringServiceImpl">
+    <property name="greeting" value="Hello Avalon!!!"/>
+    <property name="serviceManager" ref="avalonContainerBean"/>
+    <property name="systemPropertyService" ref="systemPropertyService"/>
+</bean>
+          ]]></source>
+        </p>
+        
+        <p>
+          Please note that Avalon services can use Spring beans as well relying 
+          on the standard service lookup mechanism.
+          <source><![CDATA[          
+public void service(ServiceManager serviceManager) 
+  throws ServiceException
+{
+    this.customSpringService = (CustomSpringService) 
+      serviceManager.lookup("customSpringService");
+}        
+          ]]></source>          
+        </p>
+        <p>
+          Technically this is implemented by telling YAAFI about components
+          managing their own services. This information is contained in the
+          'serviceManagers' section of the container configuration file.        
+          <source><![CDATA[          
+<fulcrum-yaafi>
+  <serviceManagers>
+    <serviceManager>springFrameworkService</serviceManager>
+  </serviceManagers>
+</fulcrum-yaafi>
+          ]]></source>          
+        </p>                
+      </subsection>
+
+      <subsection name="Embedding YAAFI into Spring">
+        <p>
+          In this scenario the YAAFI Avalon container is created as Spring bean
+          and the Avalon services within YAAFI are exposed using a Spring 
+          FactoryBean. This approach is not overly elegant since it requires
+          some boiler-plate XML code to export Avalon services but it is 
+          trivial and works for all Spring versions in the wild.
+          <source><![CDATA[          
+<!-- Instantiate YAAFI using a container configuration file -->   
+<bean id="avalonContainerBean"
+  class="org.apache.fulcrum.spring.YaafiContainerBean"
+  init-method="initialize"
+  destroy-method="dispose">
+    <property
+      name="containerConfigValue"
+      value="./src/test/avalonIntoSpringContainerConfiguration.xml"
+    />
+</bean>
+
+<!-- Expose an Avalon service using a Spring factory bean -->
+<bean id="systemPropertyService"
+  class="org.apache.fulcrum.spring.AvalonServiceFactoryBean">
+    <property name="serviceManager" ref="avalonContainerBean"/>
+    <property name="serviceName" value="systemPropertyService"/>
+</bean>
+
+<!-- Create a Spring bean and inject the Avalon service -->
+<bean id="customSpringService"
+  class="org.apache.fulcrum.spring.CustomSpringServiceImpl">
+    <property name="greeting" value="Hello Avalon!!!"/>
+    <property name="serviceManager" ref="avalonContainerBean"/>
+    <property name="systemPropertyService" ref="systemPropertyService"/>
+</bean>
+          ]]></source>
+        </p>        
+        <p>
+          Please note that Avalon services can use Spring beans as well relying 
+          on the standard service lookup mechanism. Technically this is 
+          implemented by wrapping the Spring container into a class exposing
+          a Service Manager interface and using this wrapper as parent service lookp. 
+          If the YAAFI instance in question does not find a service it delegates
+          the service lookup to its parent Service Manager - in this case the
+          Spring Framework - which can successfully resolve the service.
+          <source><![CDATA[          
+public void service(ServiceManager serviceManager) 
+  throws ServiceException
+{
+    this.customSpringService = (CustomSpringService) 
+      serviceManager.lookup("customSpringService");
+}        
+          ]]></source>          
+        </p>                
+      </subsection>
+      
+      <subsection name="Supported Spring Framewok Releases">
+        The service was tested with the following Spring releases
+        <ul>
+          <li>Spring 1.2.9</li>
+          <li>Spring 2.0.8</li>
+          <li>Spring 2.5.4</li>          
+        </ul>        
+      </subsection>
+
+      <subsection name="Using a different Avalon Container">
+        <p>
+          This library is not directly tied to Fulcrum YAAFI apart from creating
+          a YAAFI container for testing using the YaafiContainerBean. So if you
+          have the code to bootstrap your favourite Avalon container you are also
+          able from the integration effort.
+        </p>
+      </subsection>
+    </section>
+  </body>
+</document>
