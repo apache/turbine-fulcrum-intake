@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>fulcrum</groupId>
+    <artifactId>fulcrum-parent</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>fulcrum-servicemanager</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <name>Fulcrum ServiceManager</name>
+  <inceptionYear>2008</inceptionYear>
+  <description>Fulcrum ServiceManager Service</description>
+  <url>http://turbine.apache.org/fulcrum/fulcrum-servicemanager</url>
+		
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/servicemanager/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/servicemanager/</developerConnection>
+    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/servicemanager/</url>
+  </scm>
+
+  <distributionManagement>
+    <site>
+      <id>fulcrum.website</id>
+      <name>Fulcrum Website</name>
+      <url>${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/fulcrum/fulcrum-servicemanager/</url>
+    </site>    
+  </distributionManagement>
+	
+  <developers>
+    <developer>
+      <name>Siegfried Goeschl</name>
+      <id>sgoeschl</id>
+      <email>sgoeschl@apache.org</email>
+      <organization></organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <dependencies>
+    <dependency>
+      <groupId>avalon-framework</groupId>
+      <artifactId>avalon-framework-api</artifactId>
+      <version>4.3</version>
+      <exclusions>
+        <exclusion>
+          <groupId>avalon-logkit</groupId>
+          <artifactId>avalon-logkit</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!-- testing dependencies -->
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-testcontainer</artifactId>
+      <version>1.0.6-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-yaafi</artifactId>
+      <version>1.0.6-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <sourceDirectory>${basedir}/src/java</sourceDirectory>
+    <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
+  </build>
+	
+</project>
