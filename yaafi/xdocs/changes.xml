@@ -25,6 +25,11 @@
 
   <body>
     <release version="1.0.6" date="as in SVN">
+      <action dev="sgoeschl" type="update">
+        Moved the code regarding transparent decryption of configuration files
+        into 'fuclrum-yaafi-crypto' project and decouple the code using
+        dynamic class loading and reflection.
+      </action>
       <action dev="sgoeschl" type="fix">
         Setting custom JAMon ranges for every invocation because those ranges
         are discarded when resetting JAMon through the GUI.
