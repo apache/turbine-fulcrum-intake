@@ -33,11 +33,11 @@ import org.apache.avalon.framework.context.DefaultContext;
 import org.apache.avalon.framework.logger.ConsoleLogger;
 import org.apache.avalon.framework.logger.Logger;
 import org.apache.avalon.framework.service.ServiceManager;
-import org.apache.fulcrum.jce.crypto.CryptoStreamFactoryImpl;
 import org.apache.fulcrum.yaafi.framework.constant.AvalonMerlinConstants;
 import org.apache.fulcrum.yaafi.framework.container.ServiceConstants;
 import org.apache.fulcrum.yaafi.framework.util.InputStreamLocator;
 import org.apache.fulcrum.yaafi.framework.util.Validate;
+import org.apache.fulcrum.yaafi.framework.crypto.CryptoStreamFactory;
 
 /**
  * Helper class to capture configuration related stuff. The are two ways
@@ -709,30 +709,13 @@ public class ServiceContainerConfiguration
 
         DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
         InputStream is = locator.locate( location );
-        InputStream cis = is;
 
         if( is != null )
         {
             try
             {
-                if( isEncrypted.equalsIgnoreCase("true") )
-                {
-                    cis = CryptoStreamFactoryImpl.getInstance().getInputStream(is);
-                    result = builder.build( cis );
-                    cis.close();
-                }
-                if( isEncrypted.equalsIgnoreCase("auto") )
-                {
-                    cis = CryptoStreamFactoryImpl.getInstance().getSmartInputStream(is);
-                    result = builder.build( cis );
-                    cis.close();
-                }
-                else
-                {
-                    result = builder.build( is );
-                    is.close();
-                }
-
+                is = CryptoStreamFactory.getDecryptingInputStream(is ,isEncrypted);
+                result = builder.build( is );
                 this.setContainerConfiguration( result );
             }
             catch ( Exception e )

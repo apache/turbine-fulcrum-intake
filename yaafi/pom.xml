@@ -60,12 +60,6 @@
   </developers>
 
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
     <!-- Avalon depedencies -->
     <dependency>
       <groupId>avalon-framework</groupId>
@@ -121,6 +115,13 @@
         </exclusion>        
       </exclusions>
     </dependency>
+    <!-- Optional decrytpion of configuration files -->
+   <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-yaafi-crypto</artifactId>
+      <version>1.0.6-SNAPSHOT</version>
+      <optional>true</optional>
+    </dependency>      
     <!-- Interceptor dependencies -->
     <dependency>
       <groupId>com.jamonapi</groupId>
@@ -128,6 +129,13 @@
       <version>2.4</version>
       <optional>true</optional>
     </dependency>
+    <!-- Testing dependencies -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>    
   </dependencies>
 
   <build>

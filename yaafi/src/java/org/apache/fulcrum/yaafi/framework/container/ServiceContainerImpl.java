@@ -20,9 +20,7 @@ package org.apache.fulcrum.yaafi.framework.container;
  */
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +39,6 @@ import org.apache.avalon.framework.parameters.ParameterException;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
-import org.apache.fulcrum.jce.crypto.CryptoStreamFactoryImpl;
 import org.apache.fulcrum.yaafi.framework.component.AvalonServiceComponentImpl;
 import org.apache.fulcrum.yaafi.framework.component.ServiceComponent;
 import org.apache.fulcrum.yaafi.framework.configuration.ComponentConfigurationPropertiesResolver;
@@ -58,6 +55,7 @@ import org.apache.fulcrum.yaafi.framework.util.ReadWriteLock;
 import org.apache.fulcrum.yaafi.framework.util.StringUtils;
 import org.apache.fulcrum.yaafi.framework.util.ToStringBuilder;
 import org.apache.fulcrum.yaafi.framework.util.Validate;
+import org.apache.fulcrum.yaafi.framework.crypto.CryptoStreamFactory;
 
 /**
  * Yet another avalon framework implementation (YAAFI).
@@ -1330,13 +1328,8 @@ public class ServiceContainerImpl
         {
             try
             {
-                if( isEncrypted.equalsIgnoreCase("false") == false)
-                {
-                    is = this.getDecryptingInputStream( is, isEncrypted );
-                }
-
+                is = this.getDecryptingInputStream( is, isEncrypted );
                 result = builder.build( is );
-
                 is.close();
                 is = null;
             }
@@ -1405,17 +1398,12 @@ public class ServiceContainerImpl
 
         if( is != null )
         {
-            if( isEncrypted.equalsIgnoreCase("false") == false )
-            {
-                is = this.getDecryptingInputStream( is, isEncrypted );
-            }
-
+            is = this.getDecryptingInputStream( is, isEncrypted );
             Properties props = new Properties();
             props.load( is );
-            result = Parameters.fromProperties( props );
-
             is.close();
             is = null;
+            result = Parameters.fromProperties( props );
         }
 
         return result;
@@ -1550,27 +1538,12 @@ public class ServiceContainerImpl
      * @param is the input stream to be decrypted
      * @param isEncrypted the encryption mode (true|false|auto)
      * @return an decrypting input stream
-     * @throws IOException reading the input stream failed
-     * @throws GeneralSecurityException accessing the JCA indrastructure failed
+     * @throws Exception reading the input stream failed
      */
     private InputStream getDecryptingInputStream( InputStream is, String isEncrypted )
-        throws IOException, GeneralSecurityException
+        throws Exception
     {
-        InputStream result = null;
-
-        if( isEncrypted.equalsIgnoreCase("true") )
-        {
-            result = CryptoStreamFactoryImpl.getInstance().getInputStream(is);
-        }
-        else if( isEncrypted.equalsIgnoreCase("auto") )
-        {
-            result = CryptoStreamFactoryImpl.getInstance().getSmartInputStream(is);
-        }
-        else
-        {
-            result = is;
-        }
-        return result;
+        return CryptoStreamFactory.getDecryptingInputStream(is, isEncrypted);
     }
 
     /**
