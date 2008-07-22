@@ -40,5 +40,18 @@
         <a href="http://www.j2ee-security.net/">J2EE Security</a>.
       </p>
     </section>
+    <section name="What is Password Based Encryption">
+      <p>
+        Encryption is most of the time only as good as the password being used. And the
+        password can be guessed using a dictionary attack. PBE tries to avoid the problem
+        by mangling the user-provided password through various rounds of SHA-1 invocation
+        and only this mangled result is used for encryption/decryption.
+      </p>
+      <p>
+        So the simple password "mysecret" would be mangled to "62cc-bf14-1814-672da" which
+        is much harder to guess therefore avoiding a simple dictionary attack. Using this
+        approach makes storing passwords in configuration files slightly more secure.
+      </p>      
+    </section>    
   </body>
 </document>
