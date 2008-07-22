@@ -71,11 +71,12 @@
         </exclusion>
       </exclusions>
     </dependency>
-   <dependency>
+    <!-- Fulcrum dependencies -->
+    <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-yaafi-crypto</artifactId>
       <version>1.0.6-SNAPSHOT</version>
-    </dependency>          
+    </dependency>              
     <!-- testing dependencies -->
     <dependency>
       <groupId>fulcrum</groupId>
