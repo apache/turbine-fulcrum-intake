@@ -34,9 +34,16 @@
   <modules>
     <module>commonsemail</module>    
     <module>crypto</module>    
-    <module>yaafi</module>    
-    <module>testcontainer</module>    
+    <module>jetty</module>        
+    <module>mimetype</module>    
     <module>quartz</module>    
+    <module>pbe</module>    
+    <module>resourcemanager</module>    
+    <module>servicemanager</module>    
+    <module>spring</module>        
+    <module>testcontainer</module>    
+    <module>yaafi</module>        
+    <module>yaafi-crypto</module>        
   </modules>
 
 </project>
