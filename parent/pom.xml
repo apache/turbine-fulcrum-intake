@@ -125,7 +125,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
-          <version>2.2-beta-1</version>
+          <version>2.2-beta-2</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -242,10 +242,11 @@
         <!-- build the source and binary distribution packages -->
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
-          <descriptors>
-            <descriptor>src/main/assembly/bin.xml</descriptor>
-            <descriptor>src/main/assembly/src.xml</descriptor>
-          </descriptors>
+          <descriptorRefs>
+            <descriptorRef>bin</descriptorRef>
+            <descriptorRef>project</descriptorRef>            
+            <descriptorRef>src</descriptorRef>
+          </descriptorRefs>        
           <tarLongFileMode>gnu</tarLongFileMode>
         </configuration>
       </plugin>      
