@@ -26,6 +26,9 @@
   <body>
     <release version="1.0.1-dev" date="in SVN">
       <action dev="sgoeschl" type="update">
+        Adding a M2 build
+      </action>    
+      <action dev="sgoeschl" type="update">
       	Using the FileResourceManager as default for the configuration
       </action>
       <action dev="sgoeschl" type="fix">
