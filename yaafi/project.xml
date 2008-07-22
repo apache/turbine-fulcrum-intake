@@ -41,7 +41,18 @@
   </versions>
 
   <dependencies>
-   <!-- compile time dependency on JAMon for interceptors -->
+   <!-- run time dependency on decryption of transparent configuration files -->
+   <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-yaafi-crypto</artifactId>
+      <version>1.0.6-dev</version>
+      <url>http://turbine.apache.org/fulcrum/yaafi-crypto</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+        <ear.bundle>true</ear.bundle>
+      </properties>
+    </dependency>
+  <!-- compile time dependency on JAMon for interceptors -->
    <dependency>
       <groupId>com.jamonapi</groupId>
       <artifactId>jamon</artifactId>
