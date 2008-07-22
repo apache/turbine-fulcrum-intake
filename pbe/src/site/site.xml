@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  Licensed to the Apache Software Foundation (ASF) under one
  or more contributor license agreements.  See the NOTICE file
@@ -17,29 +17,13 @@
  specific language governing permissions and limitations
  under the License.
 -->
-<document>
-  <properties>
-    <title>Fulcrum PBE Service</title>
-    <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
-  </properties>
-
+<project name="Fulcrum PBE Service">
   <body>
-    <release version="1.0.1-dev" date="as in SVN">
-      <action dev="sgoeschl" type="add">
-        Added more regression tests.
-      </action>
-      <action dev="sgoeschl" type="add">
-        Added a M2 build.
-      </action>
-      <action dev="sgoeschl" type="fix">
-        Update of fulcrum-yaafi broke the build - fixed it
-      </action>
-    </release>
-    <release version="1.0.0" date="as in CVS">
-     <action dev="sgoeschl" type="add">
-        Initial import
-      </action>
-    </release>
+    <menu name="Overview">
+      <item name="Overview"            href="/index.html"/>
+      <item name="Configuration"       href="/configuration.html"/>
+      <item name="Technical"           href="/technical.html"/>
+    </menu>  
+    ${reports}
   </body>
-</document>
-
+</project>

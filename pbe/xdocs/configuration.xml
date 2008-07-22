@@ -31,8 +31,6 @@
     name="org.apache.fulcrum.pbe.PBEService"
     shorthand="PBEService"
     default-class="org.apache.fulcrum.pbe.PBEServiceImpl"
-    early-init="true"
-    component-type="merlin"
     description="Provides Password Based Encyrption using JCA/JCE"
 />
           ]]></source>
@@ -50,17 +48,6 @@
             <th>Datatype</th>
             <th>Optional</th>
             <th>Description</th>
-          </tr>
-          <tr>
-            <td>cryptoAlgorithm</td>
-            <td>String</td>
-            <td>Y</td>
-            <td>
-              Defines the JCE provider to be used. Depending
-              on your environement you leave it empty to get
-              an appropriate implementation automatically or
-              use "SunJCE" or "BC"
-            </td>
           </tr>
           <tr>
             <td>cryptoSalt</td>
@@ -94,7 +81,6 @@
       <subsection name="Component Configuration Example">
         <source><![CDATA[
   <PBEService>
-    <cryptoAlgorithm>PBEWithMD5AndDES</cryptoAlgorithm>
     <cryptoSalt>4463657541544141</cryptoSalt>
     <cyrptoCount>20</cyrptoCount>
     <cryptoProvider></cryptoProvider>

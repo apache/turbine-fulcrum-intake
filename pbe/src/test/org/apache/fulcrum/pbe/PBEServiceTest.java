@@ -19,13 +19,11 @@ package org.apache.fulcrum.pbe;
  * under the License.
  */
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.jce.crypto.CryptoUtil;
+import org.apache.fulcrum.jce.crypto.StreamUtil;
 
 /**
  * PBEServiceTest
@@ -75,32 +73,6 @@ public class PBEServiceTest extends BaseUnitTest
         return this.getService().createPassword();
     }
 
-    /**
-     * Pumps the input stream to the output stream.
-     *
-     * @param is the source input stream
-     * @param os the target output stream
-     * @throws IOException the copying failed
-     */
-    public void copy( InputStream is, OutputStream os )
-        throws IOException
-    {
-        byte[] buf = new byte[1024];
-        int n = 0;
-        int total = 0;
-
-        while ((n = is.read(buf)) > 0)
-        {
-            os.write(buf, 0, n);
-            total += n;
-        }
-
-        is.close();
-
-        os.flush();
-        os.close();
-    }
-
     /////////////////////////////////////////////////////////////////////////
     // Start of unit tests
     /////////////////////////////////////////////////////////////////////////
@@ -113,6 +85,7 @@ public class PBEServiceTest extends BaseUnitTest
         char[] result = this.getService().createPassword();
         assertNotNull( result );
         assertTrue( result.length > 0 );
+        assertEquals("727a-98b9-93be-4537c", new String(result));
     }
 
     /**
@@ -124,16 +97,30 @@ public class PBEServiceTest extends BaseUnitTest
         char[] result = this.getService().createPassword(seed);
         assertNotNull( result );
         assertTrue( result.length > 0 );
+        assertEquals("62cc-bf14-1814-672da", new String(result));
     }
 
     /**
      * Test encryption and decryption of Strings
      */
-    public void testEncryptDecryptString() throws Exception
+    public void testEncryptDecryptStringUsingDefaultPassword() throws Exception
     {
-        String source = "Nobody knows the toubles I have seen ...";
+        String source = "Nobody knows the troubles I have seen ...";
         String cipherText = this.getService().encryptString( source, this.getPassword() );
         String plainText = this.getService().decryptString( cipherText, this.getPassword() );
+        assertEquals( source, plainText );
+    }
+
+    /**
+     * Test encryption and decryption of Strings with
+     * a caller-supplied password
+     */
+    public void testEncryptDecryptStringUsingCustomPassword() throws Exception
+    {
+        char[] myPassword = this.getService().createPassword("mysecret".toCharArray());
+        String source = "Nobody knows the troubles I have seen ...";
+        String cipherText = this.getService().encryptString( source, myPassword );
+        String plainText = this.getService().decryptString( cipherText, myPassword );
         assertEquals( source, plainText );
     }
 
@@ -170,7 +157,7 @@ public class PBEServiceTest extends BaseUnitTest
 
     public void testStreamCiphers() throws Exception
     {
-        String source = "Nobody knows the toubles I have seen ...";
+        String source = "Nobody knows the troubles I have seen ...";
         byte[] cipherText = null;
         String plainText = null;
         char[] password = this.getPassword();
@@ -179,17 +166,30 @@ public class PBEServiceTest extends BaseUnitTest
         ByteArrayInputStream bais1 = new ByteArrayInputStream( source.getBytes() );
         ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
         OutputStream cos = this.getService().getOutputStream( baos1, password );
-        this.copy( bais1, cos );
+        StreamUtil.copy( bais1, cos );
         cipherText = baos1.toByteArray();
 
-        // decrypt using a CipherinputStream
+        // decrypt using a CipherInputStream
         ByteArrayInputStream bais2 = new ByteArrayInputStream( cipherText );
         ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
         InputStream cis = this.getService().getInputStream( bais2, password );
-        this.copy( cis, baos2 );
+        StreamUtil.copy( cis, baos2 );
         plainText = new String( baos2.toByteArray() );
 
         // verify the result
         assertEquals( source, plainText );
+    }
+
+    public void testConvinienceEncryption() throws Exception
+    {
+        String plainText = "Nobody knows the troubles I have seen ...";
+
+        this.getService().encrypt(plainText, new File("./target/temp/plain.enc.txt"), "mysecret".toCharArray());
+        this.getService().encrypt(new File("./project.xml"), new File("./target/temp/project.enc.xml"), "mysecret".toCharArray());
+
+        this.getService().decrypt(new File("./target/temp/plain.enc.txt"), new File("./target/temp/plain.dec.txt"), "mysecret".toCharArray());
+        this.getService().decrypt(new File("./target/temp/project.enc.xml"), new File("./target/temp/project.dec.xml"), "mysecret".toCharArray());
+
+
     }
 }
