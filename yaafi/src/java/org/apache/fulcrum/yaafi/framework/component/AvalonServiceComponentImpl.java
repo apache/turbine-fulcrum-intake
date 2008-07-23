@@ -42,7 +42,6 @@ import org.apache.avalon.framework.service.Serviceable;
 import org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorFactory;
 import org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorService;
 import org.apache.fulcrum.yaafi.framework.role.RoleEntry;
-import org.apache.fulcrum.yaafi.framework.util.ReadWriteLock;
 import org.apache.fulcrum.yaafi.framework.util.Validate;
 
 /**
@@ -61,12 +60,11 @@ public class AvalonServiceComponentImpl
      * @param roleEntry The information extracted from the role configuration file
      * @param parentLogger the logger of the service container
      * @param logger The logger for the service instance
-     * @param readWriteLock the read/write lock to synchronize access to services
      */
     public AvalonServiceComponentImpl(
-        RoleEntry roleEntry, Logger parentLogger, Logger logger, ReadWriteLock readWriteLock )
+        RoleEntry roleEntry, Logger parentLogger, Logger logger)
     {
-        super( roleEntry, parentLogger, logger, readWriteLock );
+        super( roleEntry, parentLogger, logger );
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -118,23 +116,19 @@ public class AvalonServiceComponentImpl
             this.getImplementationClazz()
             );
 
-        if( (this.getRoleEntry().hasDynamicProxy()) &&
-            (isInterceptor == false ) )
+        if( (this.getRoleEntry().hasDynamicProxy()) && (isInterceptor == false ) )
         {
             if( this.getParentLogger().isDebugEnabled() )
             {
                 this.getParentLogger().debug( "Creating a dynamic proxy for " + this.getShorthand() );
             }
 
-            ReadWriteLock readWriteLock = this.getReadWriteLock();
-
             Object proxyInstance = AvalonInterceptorFactory.create(
                 this.getName(),
                 this.getShorthand(),
                 this.getServiceManager(),
                 this.getRoleEntry().getInterceptorList(),
-                this.getRawInstance(false),
-                readWriteLock
+                this.getRawInstance(false)
                 );
 
             this.setProxyInstance(proxyInstance);

@@ -23,8 +23,8 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.fulcrum.yaafi.framework.util.ReadWriteLock;
 import org.apache.fulcrum.yaafi.framework.util.Validate;
+import org.apache.fulcrum.yaafi.framework.util.ToStringBuilder;
 
 /**
  * The InvocationHandler invoked when a service call is routed through
@@ -47,9 +47,6 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
     /** the list of interceptors to be invoked */
     private AvalonInterceptorService [] serviceInterceptorList;
 
-    /** read/write lock to snychronize access to services */
-    private ReadWriteLock readWriteLock;
-
     /** counts the current transactions */
     private static volatile long transactionCounter = 0L;
 
@@ -63,26 +60,22 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
      * @param serviceShorthand the shorthand of the service being intercepted
      * @param serviceDelegate the real service implementation
      * @param serviceInterceptorList the list of interceptors to be invoked
-     * @param readWriteLock the YAAFI kernel lock
      */
     public AvalonInterceptorInvocationHandler(
         String serviceName,
         String serviceShorthand,
         Object serviceDelegate,
-        AvalonInterceptorService [] serviceInterceptorList,
-        ReadWriteLock readWriteLock )
+        AvalonInterceptorService [] serviceInterceptorList )
     {
         Validate.notEmpty(serviceName,"serviceName");
         Validate.notEmpty(serviceShorthand,"serviceShorthand");
         Validate.notNull(serviceDelegate,"serviceDelegate");
         Validate.notNull(serviceInterceptorList,"serviceInterceptorList");
-        Validate.notNull(readWriteLock,"readWriteLock");
 
         this.serviceName = serviceName;
         this.serviceShorthand = serviceShorthand;
         this.serviceDelegate = serviceDelegate;
         this.serviceInterceptorList = serviceInterceptorList;
-        this.readWriteLock = readWriteLock;
     }
 
     /**
@@ -130,7 +123,14 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
      */
     public String toString()
     {
-        return super.toString();
+        ToStringBuilder toStringBuilder = new ToStringBuilder(this);
+
+        toStringBuilder.append("serviceShorthand",this.serviceShorthand);
+        toStringBuilder.append("serviceName",this.serviceName);
+        toStringBuilder.append("serviceDelegate",this.serviceDelegate);
+        toStringBuilder.append("transactionId",this.transactionId);
+
+        return toStringBuilder.toString();
     }
 
     /**
@@ -140,7 +140,6 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
         throws Throwable
     {
         Object result = null;
-        Object lock = null;
 
         // create the interceptor context for current method call
 
@@ -159,7 +158,6 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
         try
         {
             context.incrementInvocationDepth();
-            lock = this.getReadWriteLock().getReadLock(this.serviceName);
             this.onEntry(context);
             result = method.invoke( this.getServiceDelegate(), args );
             this.onExit(context,result);
@@ -170,16 +168,8 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
             this.onError(context,e.getTargetException());
             throw e.getTargetException();
         }
-        catch (Throwable t)
-        {
-            throw t;
-        }
         finally
         {
-            // return the read lock
-
-            this.getReadWriteLock().releaseLock(lock,this.serviceName);
-
             // decrement the service invocation depth
 
             context.decrementInvocationDepth();
@@ -232,14 +222,6 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
         {
             this.getServiceInterceptorList()[i].onError(context,t);
         }
-    }
-
-    /**
-     * @return Returns the readWriteLock.
-     */
-    private final ReadWriteLock getReadWriteLock()
-    {
-        return readWriteLock;
     }
 
     /**

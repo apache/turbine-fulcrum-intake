@@ -26,7 +26,6 @@ import org.apache.avalon.framework.logger.Logger;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.fulcrum.yaafi.framework.role.RoleEntry;
-import org.apache.fulcrum.yaafi.framework.util.ReadWriteLock;
 import org.apache.fulcrum.yaafi.framework.util.ToStringBuilder;
 import org.apache.fulcrum.yaafi.framework.util.Validate;
 
@@ -70,29 +69,23 @@ public abstract class ServiceComponentImpl
     /** The Avalon Parameters passed to the service component instance */
     private Parameters parameters;
 
-    /** read/write lock to snychronize access to services */
-    private ReadWriteLock readWriteLock;
-
     /**
      * Constructor to parse the configuration.
      *
      * @param roleEntry The information extracted from the role configuration file
      * @param parentLogger the logger of the service container
      * @param logger The logger for the service instance
-     * @param readWriteLock the read/write lock to synchronize access to services
      */
     public ServiceComponentImpl(
-        RoleEntry roleEntry, Logger parentLogger, Logger logger, ReadWriteLock readWriteLock )
+        RoleEntry roleEntry, Logger parentLogger, Logger logger)
     {
         Validate.notNull( roleEntry, "roleEntry" );
         Validate.notNull( parentLogger, "parentLogger" );
         Validate.notNull( logger, "logger" );
-        Validate.notNull( readWriteLock, "readWriteLock" );
 
         this.roleEntry = roleEntry;
         this.parentLogger = parentLogger;
         this.logger = logger;
-        this.readWriteLock = readWriteLock;
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -199,7 +192,6 @@ public abstract class ServiceComponentImpl
         this.context = null;
         this.configuration = null;
         this.parameters = null;
-        this.readWriteLock = null;
     }
 
     /**
@@ -406,13 +398,5 @@ public abstract class ServiceComponentImpl
     protected void setProxyInstance(Object proxy)
     {
         this.proxy = proxy;
-    }
-
-    /**
-     * @return Returns the readWriteLock.
-     */
-    protected final ReadWriteLock getReadWriteLock()
-    {
-        return readWriteLock;
     }
 }

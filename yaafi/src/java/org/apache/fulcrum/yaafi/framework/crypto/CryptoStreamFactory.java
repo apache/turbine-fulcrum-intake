@@ -22,9 +22,6 @@ package org.apache.fulcrum.yaafi.framework.crypto;
 import org.apache.fulcrum.yaafi.framework.reflection.Clazz;
 
 import java.io.InputStream;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Factory class to get a decrypting input stream for reading configuration

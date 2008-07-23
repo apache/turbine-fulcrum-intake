@@ -32,10 +32,8 @@ import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
-import org.apache.fulcrum.yaafi.framework.constant.AvalonYaafiConstants;
 import org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorFactory;
 import org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorInvocationHandler;
-import org.apache.fulcrum.yaafi.framework.util.ReadWriteLock;
 import org.apache.fulcrum.yaafi.framework.util.Validate;
 
 /**
@@ -52,9 +50,6 @@ public class AdviceServiceImpl
 {
     /** the service manager supplied by the Avalon framework */
     private ServiceManager serviceManager;
-
-    /** the YAAFI kernel lock */
-    private ReadWriteLock readWriteLock;
 
     /** the list of default interceptors */
     private String[] defaultInterceptorList;
@@ -76,7 +71,7 @@ public class AdviceServiceImpl
      */
     public void contextualize(Context context) throws ContextException
     {
-        this.readWriteLock = (ReadWriteLock) context.get(AvalonYaafiConstants.URN_YAAFI_KERNELLOCK);
+        // nothing to do
     }
 
     /**
@@ -152,15 +147,7 @@ public class AdviceServiceImpl
         if ((object != null ) && Proxy.isProxyClass(object.getClass()))
         {
             invocationHandler = Proxy.getInvocationHandler(object);
-
-            if (invocationHandler instanceof AvalonInterceptorInvocationHandler)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return invocationHandler instanceof AvalonInterceptorInvocationHandler;
         }
 
         return false;
@@ -222,8 +209,7 @@ public class AdviceServiceImpl
                 name,
                 this.getServiceManager(),
                 interceptorList,
-                object,
-                this.getReadWriteLock()
+                object
                 );
         }
         catch (ServiceException e)
@@ -234,14 +220,6 @@ public class AdviceServiceImpl
         }
 
         return result;
-    }
-
-    /**
-     * @return Returns the readWriteLock.
-     */
-    private ReadWriteLock getReadWriteLock()
-    {
-        return readWriteLock;
     }
 
     /**

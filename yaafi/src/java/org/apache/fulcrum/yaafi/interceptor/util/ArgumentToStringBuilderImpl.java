@@ -99,7 +99,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
     public ArgumentToStringBuilderImpl(Object target, int maxArgLength)
     {
         this(target,
-            MAX_LINE_LENGTH,
+            maxArgLength,
             ArgumentToStringBuilderImpl.defaultMode
             );
     }

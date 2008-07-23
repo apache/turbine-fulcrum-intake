@@ -27,7 +27,6 @@ import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.fulcrum.yaafi.framework.constant.AvalonYaafiConstants;
 import org.apache.fulcrum.yaafi.framework.reflection.Clazz;
-import org.apache.fulcrum.yaafi.framework.util.ReadWriteLock;
 import org.apache.fulcrum.yaafi.framework.util.Validate;
 
 
@@ -47,7 +46,6 @@ public class AvalonInterceptorFactory
      * @param serviceManager the corresponding service manager
      * @param serviceInterceptorList the list of interceptors to be installed
      * @param serviceDelegate the service implementation
-     * @param readWriteLock the YAAFI kernel lock
      * @return a dynamic proxy
      * @throws ServiceException an interceptor was not found
      */
@@ -56,8 +54,7 @@ public class AvalonInterceptorFactory
         String serviceShorthand,
         ServiceManager serviceManager,
         String[] serviceInterceptorList,
-        Object serviceDelegate,
-        ReadWriteLock readWriteLock )
+        Object serviceDelegate )
         throws ServiceException
     {
         Validate.notEmpty(serviceName,"serviceName");
@@ -65,7 +62,6 @@ public class AvalonInterceptorFactory
         Validate.notNull(serviceManager,"serviceManager");
         Validate.notNull(serviceInterceptorList,"serviceInterceptorList");
         Validate.notNull(serviceDelegate,"serviceDelegate");
-        Validate.notNull(readWriteLock,"readWriteLock");
 
         Object result = null;
 
@@ -84,8 +80,7 @@ public class AvalonInterceptorFactory
             serviceName,
             serviceShorthand,
             serviceDelegate,
-            avalonInterceptorServices,
-            readWriteLock
+            avalonInterceptorServices
             );
 
         result = Proxy.newProxyInstance(
