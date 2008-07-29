@@ -515,28 +515,9 @@
           </plugin>
         </plugins>
       </build>
-    </profile>
-    
-    <!--
-      Profile to build all Fulcrum M2 components.
-
-      This profile is a convience which can be used, for example, to build all the component sites:
-          mvn -Pfulcrum site
-
-      or, to clean up:
-          mvn -Pfulcrum clean
-      -->
-    <profile>
-      <id>fulcrum</id>
-      <modules>
-        <module>../commonsemail</module>
-        <module>../testcontainer</module>
-        <module>../yaafi</module>
-      </modules>
-    </profile>
+    </profile>    
   </profiles>
-    
-  
+     
   <properties>
   
     <!-- Default configuration for compiler source and target JVM -->
