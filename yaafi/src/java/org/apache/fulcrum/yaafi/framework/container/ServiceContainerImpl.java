@@ -65,8 +65,8 @@ import org.apache.fulcrum.yaafi.framework.crypto.CryptoStreamFactory;
 public class ServiceContainerImpl
     implements ServiceContainer, ServiceConstants
 {
-    /** the timeout after getting a write lock for reconfiguration */
-    private static final int RECONFIGURATION_DELAY = 0;
+    /** the timeout before reconfiguring the container or services */
+    private static final int RECONFIGURATION_DELAY = 2000;
 
     /** The role configuration file to be used */
     private String componentRolesLocation;
@@ -175,6 +175,8 @@ public class ServiceContainerImpl
 
         this.fallbackServiceManagerList = new ArrayList();
         this.defaultInterceptorServiceList = new ArrayList();
+
+        this.reconfigurationDelay = RECONFIGURATION_DELAY;
     }
 
     /**
@@ -490,10 +492,6 @@ public class ServiceContainerImpl
         {
             this.getLogger().debug("Disposing all services");
         }
-
-        // wait some time so
-
-        this.waitForReconfiguration();
 
         // decommision all servcies
 
