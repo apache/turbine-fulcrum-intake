@@ -34,9 +34,86 @@
       for use in Turbine but it can be used in any container compatible
       with Avalon's ECM container.
     </p>
+    <p>
+      There two implementations
+      <ul>
+        <li>SimpleLocalizationService and</li>
+        <li>LocalizationService</li>
+      </ul>
+      The <code>SimpleLocalizationService</code> provides basic localization functions
+      for generic applications whereas the <code>LocalizationService</code> adds support
+      for web applications and depends on a servlet container environment.
+    </p>
   </section>
 
-  <section name="Configuration">
+  <section name="SimpleLocalizationService">
+    <subsection name="Role Configuration">
+      <source><![CDATA[
+    <role
+        name="org.apache.fulcrum.localization.SimpleLocalizationService"
+        shorthand="localization"
+        default-class="org.apache.fulcrum.localization.SimpleLocalizationServiceImpl"/>
+      ]]></source>
+    </subsection>
+
+    <subsection name="Component Configuration">
+      <table>
+        <tr>
+          <th>Item</th>
+          <th>Datatype</th>
+          <th>Cardinality</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>bundles</td>
+          <td>Complex</td>
+          <td>[1]</td>
+          <td>
+            The list of configured bundles.
+          </td>
+        </tr>
+        <tr>
+          <td>bundles@locale-default-language</td>
+          <td>String</td>
+          <td>[0|1]</td>
+          <td>
+            The default language to use if none is specified. If this attribute
+            is absent, the JVM default language will be used.
+          </td>
+        </tr>
+        <tr>
+          <td>bundles@locale-default-country</td>
+          <td>String</td>
+          <td>[0|1]</td>
+          <td>
+            The default country to use if none is specified. If this attribute
+            is absent, the JVM default country will be used.
+          </td>
+        </tr>
+        <tr>
+          <td>bundles/bundle</td>
+          <td>String</td>
+          <td>[1..n]</td>
+          <td>
+            The name of the bundle
+          </td>
+        </tr>
+      </table>
+    </subsection>
+
+    <subsection name="Component Configuration Example">
+      <source><![CDATA[
+    <localization>
+      <bundles locale-default-language="en" locale-default-country="US">
+        <bundle>org.apache.fulcrum.localization.BarBundle</bundle>
+        <bundle>org.apache.fulcrum.localization.FooBundle</bundle>
+      </bundles>
+    </localization>
+    ]]></source>
+    </subsection>
+  </section>
+
+  <section name="LocalizationService">
     <subsection name="Role Configuration">
       <source><![CDATA[
     <role
@@ -63,6 +140,24 @@
           </td>
         </tr>
         <tr>
+          <td>bundles@locale-default-language</td>
+          <td>String</td>
+          <td>[0|1]</td>
+          <td>
+            The default language to use if none is specified. If this attribute
+            is absent, the JVM default language will be used.
+          </td>
+        </tr>
+        <tr>
+          <td>bundles@locale-default-country</td>
+          <td>String</td>
+          <td>[0|1]</td>
+          <td>
+            The default country to use if none is specified. If this attribute
+            is absent, the JVM default country will be used.
+          </td>
+        </tr>
+        <tr>
           <td>bundles/bundle</td>
           <td>String</td>
           <td>[1..n]</td>
@@ -76,7 +171,7 @@
     <subsection name="Component Configuration Example">
       <source><![CDATA[
     <localization>
-      <bundles>
+      <bundles locale-default-language="en" locale-default-country="US">
         <bundle>org.apache.fulcrum.localization.BarBundle</bundle>
         <bundle>org.apache.fulcrum.localization.FooBundle</bundle>
       </bundles>
