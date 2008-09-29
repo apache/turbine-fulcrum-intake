@@ -116,12 +116,14 @@
       </exclusions>
     </dependency>
     <!-- Optional decrytpion of configuration files -->
-   <dependency>
+    <!--
+    <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-yaafi-crypto</artifactId>
       <version>1.0.6-SNAPSHOT</version>
       <optional>true</optional>
-    </dependency>      
+    </dependency>
+    -->
     <!-- Interceptor dependencies -->
     <dependency>
       <groupId>com.jamonapi</groupId>

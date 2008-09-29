@@ -41,7 +41,8 @@
   </versions>
 
   <dependencies>
-   <!-- run time dependency on decryption of transparent configuration files -->
+   <!-- run-time dependency on decryption of transparent configuration files -->
+   <!--
    <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-yaafi-crypto</artifactId>
@@ -52,7 +53,8 @@
         <ear.bundle>true</ear.bundle>
       </properties>
     </dependency>
-  <!-- compile time dependency on JAMon for interceptors -->
+    -->
+   <!-- compile time dependency on JAMon for interceptors -->
    <dependency>
       <groupId>com.jamonapi</groupId>
       <artifactId>jamon</artifactId>
