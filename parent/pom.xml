@@ -9,7 +9,7 @@
   <artifactId>fulcrum-parent</artifactId>
   <packaging>pom</packaging>
   <!-- TODO: dummy version. In Maven 2.1, this will be auto-versioned being a generic parent -->
-  <version>2-SNAPSHOT</version>
+  <version>1-SNAPSHOT</version>
   <name>Fulcrum Component Library</name>
   <url>http://turbine.apache.org/fulcrum</url>
   <inceptionYear>2001</inceptionYear>
