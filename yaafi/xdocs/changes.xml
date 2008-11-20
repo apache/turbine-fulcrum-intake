@@ -66,7 +66,7 @@
         of the LoggingInterceptorService.
       </action>
       <action dev="sgoeschl" type="fix">
-      	Fixed a few JavaDoc warnings
+        Fixed a few JavaDoc warnings
       </action>
       <action dev="sgoeschl" type="add">
         Using the parent ServiceManager (if available) during

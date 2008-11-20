@@ -1,0 +1,22 @@
+The fulcrum-yaafi-team is pleased to announce the fulcrum-yaafi-1.0.6-SNAPSHOT.jar release!
+
+A light-weight Avalon container
+
+Changes in this version include:
+
+New features:
+o Addded M2 build 
+
+Fixed Bugs:
+o Setting custom JAMon ranges for every invocation because those ranges
+        are discarded when resetting JAMon through the GUI. 
+
+Changes:
+o Moved the code regarding transparent decryption of configuration files
+        into 'fuclrum-yaafi-crypto' project and decouple the code using
+        dynamic class loading and reflection. 
+
+
+Have fun!
+-fulcrum-yaafi-team
+
