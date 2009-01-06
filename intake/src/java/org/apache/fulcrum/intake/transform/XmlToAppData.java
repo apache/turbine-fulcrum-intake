@@ -27,14 +27,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import org.apache.avalon.framework.logger.LogEnabled;
+import org.apache.avalon.framework.logger.Logger;
 import org.apache.fulcrum.intake.xmlmodel.AppData;
 import org.apache.fulcrum.intake.xmlmodel.Rule;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
 import org.apache.fulcrum.intake.xmlmodel.XmlGroup;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -52,15 +50,17 @@ import org.xml.sax.helpers.DefaultHandler;
  * @version $Id$
  */
 public class XmlToAppData extends DefaultHandler
+    implements LogEnabled
 {
     /** Logging */
-    private static Log log = LogFactory.getLog(XmlToAppData.class);
+    private Logger log;
 
     private AppData app;
     private XmlGroup currGroup;
     private XmlField currField;
     private Rule currRule;
     private String currElement;
+    private StringBuffer chars;
 
     private static SAXParserFactory saxFactory;
 
@@ -95,6 +95,9 @@ public class XmlToAppData extends DefaultHandler
 
         FileReader fr = new FileReader(xmlFile);
         BufferedReader br = new BufferedReader(fr);
+        
+        chars = new StringBuffer();
+        
         try
         {
             InputSource is = new InputSource(br);
@@ -106,6 +109,17 @@ public class XmlToAppData extends DefaultHandler
         }
 
         return app;
+    }
+
+    /**
+     * Provide an Avalon logger
+     * 
+     * @see org.apache.avalon.framework.logger.LogEnabled#enableLogging(org.apache.avalon.framework.logger.Logger)
+     */
+    public void enableLogging(Logger logger)
+    {
+        this.log = logger.getChildLogger("XmlToAppData");
+        
     }
 
     /**
@@ -144,23 +158,34 @@ public class XmlToAppData extends DefaultHandler
     }
 
     /**
+     * Handles closing elements of the xml file.
+     * 
+     * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
+     */
+    public void endElement(String uri, String localName, String name) throws SAXException
+    {
+        if ("rule".equals(currElement) && chars.length() > 0)
+        {
+            currRule.setMessage(chars.toString());
+        }
+        else if ("required-message".equals(currElement) && chars.length() > 0)
+        {
+            log.warn("The required-message element is deprecated!  " +
+                    "You should update your intake.xml file to use the " +
+                    "'required' rule instead.");
+            currField.setIfRequiredMessage(chars.toString());
+        }
+        
+        chars = new StringBuffer();
+    }
+
+    /**
      * Handles the character data, which we are using to specify the
      * error message.
      */
     public void characters(char[] mesgArray, int start, int length)
     {
-        String cdata = new String(mesgArray, start, length).trim();
-        if ("rule".equals(currElement) && cdata.length() > 0)
-        {
-            currRule.setMessage(cdata);
-        }
-        if ("required-message".equals(currElement) && cdata.length() > 0)
-        {
-            log.warn("The required-message element is deprecated!  " +
-                    "You should update your intake.xml file to use the " +
-                    "'required' rule instead.");
-            currField.setIfRequiredMessage(cdata);
-        }
+        this.chars.append(mesgArray, start, length);
     }
 
     /**
@@ -196,7 +221,7 @@ public class XmlToAppData extends DefaultHandler
      */
     public void fatalError(SAXParseException spe)
     {
-        log.fatal("Parser Exception: " +
+        log.fatalError("Parser Exception: " +
                 "Line " + spe.getLineNumber() +
                 " Row: " + spe.getColumnNumber() +
                 " Msg: " + spe.getMessage());

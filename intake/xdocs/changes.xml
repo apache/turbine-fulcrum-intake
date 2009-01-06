@@ -26,6 +26,9 @@
 
   <body>
   	 <release version="1.0.4-dev" date="in Subversion">
+      <action type="fix" dev="tv" issue="TRB-68" due-to="Ronny Voelker">
+        Intake did not correctly parse the message of a rule or required-message from intake.xml
+      </action>
       <action type="update" dev="tv">
         Removed the dependency on ORO by replacing the regular expression handling
         with java.util.regexp. This might have slight implications on the regexp
