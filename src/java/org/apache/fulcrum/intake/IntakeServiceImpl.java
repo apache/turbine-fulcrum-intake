@@ -694,12 +694,11 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                 try
                 {
                     XmlToAppData xmlApp = new XmlToAppData();
+                    xmlApp.enableLogging(getLogger());
                     appData = xmlApp.parseFile(xmlPath);
                 }
                 catch (Exception e)
                 {
-                    getLogger().error("Could not parse XML file " + xmlPath, e);
-
                     throw new ConfigurationException(
                             "Could not parse XML file " + xmlPath, e);
                 }
