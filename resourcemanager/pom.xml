@@ -20,9 +20,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
-    <groupId>fulcrum</groupId>
+    <groupId>org.apache.fulcrum</groupId>
     <artifactId>fulcrum-parent</artifactId>
-    <version>1-SNAPSHOT</version>
+    <version>1</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -62,31 +62,25 @@
   <dependencies>
     <!-- Avalon dependencies -->
     <dependency>
-      <groupId>avalon-framework</groupId>
+      <groupId>org.apache.avalon.framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
-      <version>4.3</version>
-      <exclusions>
-        <exclusion>
-          <groupId>avalon-logkit</groupId>
-          <artifactId>avalon-logkit</artifactId>
-        </exclusion>
-      </exclusions>
+      <version>4.3.1</version>
     </dependency>
     <!-- Fulcrum dependencies -->
     <dependency>
-      <groupId>fulcrum</groupId>
+      <groupId>org.apache.fulcrum</groupId>
       <artifactId>fulcrum-pbe</artifactId>
       <version>1.0.1-SNAPSHOT</version>
     </dependency>              
     <!-- testing dependencies -->
     <dependency>
-      <groupId>fulcrum</groupId>
+      <groupId>org.apache.fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
       <version>1.0.6-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>fulcrum</groupId>
+      <groupId>org.apache.fulcrum</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
       <version>1.0.6-SNAPSHOT</version>
       <scope>test</scope>

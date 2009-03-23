@@ -24,7 +24,7 @@
     <artifactId>apache</artifactId>
     <version>4</version>
   </parent>
-  <groupId>fulcrum</groupId>
+  <groupId>org.apache.fulcrum</groupId>
   <artifactId>fulcrum-site</artifactId>
   <version>1.0.0</version>
   <name>Fulcrum Component Library</name>
