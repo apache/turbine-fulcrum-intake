@@ -32,20 +32,24 @@
   <inceptionYear>2001</inceptionYear>
 
   <modules>
-    <!--
+    <module>cache</module>    
     <module>commonsemail</module>    
     <module>crypto</module>    
-    <module>jetty</module>        
-    <module>mimetype</module>    
-    <module>quartz</module>    
+    <module>factory</module>    
+    <module>jetty</module>            
+    <module>localization</module>    
+    <module>mimetype</module>        
+    <module>parser</module>    
     <module>pbe</module>    
+    <module>pool</module>    
+    <module>quartz</module>        
     <module>resourcemanager</module>    
     <module>servicemanager</module>    
-    <module>spring</module>        
-    -->
+    <module>spring</module>            
     <module>testcontainer</module>    
-    <module>yaafi</module>        
+    <module>upload</module>        
     <module>yaafi-crypto</module>        
+    <module>yaafi</module>        
   </modules>
 
 </project>
