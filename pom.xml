@@ -26,12 +26,13 @@
   </parent>
   <artifactId>fulcrum</artifactId>
   <packaging>pom</packaging>
-  <version>1-SNAPSHOT</version>
+  <version>1</version>
   <name>Fulcrum Master Build</name>
   <url>http://turbine.apache.org/fulcrum</url>
   <inceptionYear>2001</inceptionYear>
 
   <modules>
+    <!--
     <module>commonsemail</module>    
     <module>crypto</module>    
     <module>jetty</module>        
@@ -41,6 +42,7 @@
     <module>resourcemanager</module>    
     <module>servicemanager</module>    
     <module>spring</module>        
+    -->
     <module>testcontainer</module>    
     <module>yaafi</module>        
     <module>yaafi-crypto</module>        
