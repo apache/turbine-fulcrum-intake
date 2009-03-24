@@ -21,15 +21,13 @@ package org.apache.fulcrum.template;
  */
 
 
-import org.apache.commons.lang.exception.NestableException;
-
 /**
  * The base class of all regular exceptions thrown by Fulcrum.
  *
  * @author <a href="mailto:jvz@apache.org">Jason van Zyl</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  */
-public class TemplateException extends NestableException
+public class TemplateException extends Exception
 {
     public TemplateException()
     {
