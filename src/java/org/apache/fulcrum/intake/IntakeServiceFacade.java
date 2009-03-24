@@ -45,6 +45,15 @@ public class IntakeServiceFacade
     private static IntakeService intakeService;
 
     /**
+     * Return whether the intake service has been initialized.
+     * @return
+     */
+    public static boolean isInitialized()
+    {
+        return (!(intakeService == null));
+    }
+
+    /**
      * Gets an instance of a named group either from the pool or by calling the
      * Factory Service if the pool is empty.
      * 
