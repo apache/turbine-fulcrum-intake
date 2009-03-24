@@ -48,9 +48,20 @@ public interface IntakeService
 	String ROLE = IntakeService.class.getName();
 
     /**
+     * The configuration property specifying the location of the xml specification.
+     */
+    String XML_PATHS = "xmlPaths";
+
+    /**
      * The default location of the xml specification.
      */
     String XML_PATH_DEFAULT = "WEB-INF/conf/intake.xml";
+
+    /**
+     * The configuration property specifying the location where a serialized version of the
+     * xml specification can be written for faster restarts..
+     */
+    String SERIAL_XML = "serialDataPath";
 
     /**
      * The default location where a serialized version of

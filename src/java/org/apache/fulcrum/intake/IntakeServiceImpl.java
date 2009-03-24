@@ -36,7 +36,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.configuration.Configurable;
@@ -94,17 +93,12 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
     /** The Avalon Container root directory */
     private String applicationRoot;
 
-    /**
-     * The property specifying the location of the xml specification.
-     */
-    String XML_PATHS = "xmlPaths";
-
-    /**
-     * The property specifying the location where a serialized version of the
-     * xml specification can be written for faster restarts..
-     */
-    String SERIAL_XML = "serialDataPath";
-
+    /** List of configured xml specification files */
+    private List xmlPathes = null;
+    
+    /** Configured location of the serialization file */
+    private String serialDataPath = null; 
+    
     /**
      * Registers a given group name in the system
      *
@@ -598,12 +592,10 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      */
     public void configure(Configuration conf) throws ConfigurationException
     {
-
-        Vector defaultXmlPathes = new Vector();
-        defaultXmlPathes.add(XML_PATH_DEFAULT);
-
         final Configuration xmlPaths = conf.getChild(XML_PATHS, false);
-        List xmlPathes = new ArrayList();
+
+        xmlPathes = new ArrayList();
+
         if (xmlPaths == null)
         {
             xmlPathes.add(XML_PATH_DEFAULT);
@@ -618,9 +610,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             }
         }
 
-        Map appDataElements = null;
-
-        String serialDataPath = conf.getChild(SERIAL_XML, false).getValue(SERIAL_XML_DEFAULT);
+        serialDataPath = conf.getChild(SERIAL_XML, false).getValue(SERIAL_XML_DEFAULT);
 
         if (!serialDataPath.equalsIgnoreCase("none"))
         {
@@ -632,6 +622,18 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
         }
 
         getLogger().debug("Path for serializing: " + serialDataPath);
+    }
+
+    /**
+     * Avalon component lifecycle method Initializes the service by loading
+     * default class loaders and customized object factories.
+     *
+     * @throws Exception
+     *             if initialization fails.
+     */
+    public void initialize() throws Exception
+    {
+        Map appDataElements = null;
 
         groupNames = new HashMap();
         groupKeyMap = new HashMap();
@@ -658,7 +660,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                         + xmlPath + ".  Looking for file " + xmlFile;
 
                 getLogger().error(READ_ERR);
-                throw new ConfigurationException(READ_ERR);
+                throw new Exception(READ_ERR);
             }
 
             xmlFiles.add(xmlFile.toString());
@@ -691,17 +693,10 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                 AppData appData = null;
 
                 getLogger().debug("Now parsing: " + xmlPath);
-                try
-                {
-                    XmlToAppData xmlApp = new XmlToAppData();
-                    xmlApp.enableLogging(getLogger());
-                    appData = xmlApp.parseFile(xmlPath);
-                }
-                catch (Exception e)
-                {
-                    throw new ConfigurationException(
-                            "Could not parse XML file " + xmlPath, e);
-                }
+
+                XmlToAppData xmlApp = new XmlToAppData();
+                xmlApp.enableLogging(getLogger());
+                appData = xmlApp.parseFile(xmlPath);
 
                 appDataElements.put(appData, xmlPath);
                 getLogger().debug("Saving appData for " + xmlPath);
@@ -710,89 +705,67 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             saveSerialized(serialDataPath, appDataElements);
         }
 
-        try
+        for (Iterator it = appDataElements.keySet().iterator(); it.hasNext();)
         {
-            for (Iterator it = appDataElements.keySet().iterator(); it
-                    .hasNext();)
+            AppData appData = (AppData) it.next();
+
+            int maxPooledGroups = 0;
+            List glist = appData.getGroups();
+
+            String groupPrefix = appData.getGroupPrefix();
+
+            for (int i = glist.size() - 1; i >= 0; i--)
             {
-                AppData appData = (AppData) it.next();
+                XmlGroup g = (XmlGroup) glist.get(i);
+                String groupName = g.getName();
 
-                int maxPooledGroups = 0;
-                List glist = appData.getGroups();
+                boolean registerUnqualified = registerGroup(groupName, g,
+                        appData, true);
 
-                String groupPrefix = appData.getGroupPrefix();
-
-                for (int i = glist.size() - 1; i >= 0; i--)
+                if (!registerUnqualified)
                 {
-                    XmlGroup g = (XmlGroup) glist.get(i);
-                    String groupName = g.getName();
-
-                    boolean registerUnqualified = registerGroup(groupName, g,
-                            appData, true);
-
-                    if (!registerUnqualified)
-                    {
-                        getLogger().info(
-                                "Ignored redefinition of Group " + groupName
-                                        + " or Key " + g.getKey() + " from "
-                                        + appDataElements.get(appData));
-                    }
-
-                    if (groupPrefix != null)
-                    {
-                        StringBuffer qualifiedName = new StringBuffer();
-                        qualifiedName.append(groupPrefix).append(':').append(
-                                groupName);
-
-                        // Add the fully qualified group name. Do _not_ check
-                        // for
-                        // the existence of the key if the unqualified
-                        // registration succeeded
-                        // (because then it was added by the registerGroup
-                        // above).
-                        if (!registerGroup(qualifiedName.toString(), g,
-                                appData, !registerUnqualified))
-                        {
-                            getLogger()
-                                    .error(
-                                            "Could not register fully qualified name "
-                                                    + qualifiedName
-                                                    + ", maybe two XML files have the same prefix. Ignoring it.");
-                        }
-                    }
-
-                    maxPooledGroups = Math.max(maxPooledGroups, Integer
-                            .parseInt(g.getPoolCapacity()));
-
+                    getLogger().info(
+                            "Ignored redefinition of Group " + groupName
+                                    + " or Key " + g.getKey() + " from "
+                                    + appDataElements.get(appData));
                 }
 
-                KeyedPoolableObjectFactory factory = new Group.GroupFactory(
-                        appData);
-                keyedPools.put(appData, new StackKeyedObjectPool(factory,
-                        maxPooledGroups));
+                if (groupPrefix != null)
+                {
+                    StringBuffer qualifiedName = new StringBuffer();
+                    qualifiedName.append(groupPrefix).append(':').append(
+                            groupName);
+
+                    // Add the fully qualified group name. Do _not_ check
+                    // for
+                    // the existence of the key if the unqualified
+                    // registration succeeded
+                    // (because then it was added by the registerGroup
+                    // above).
+                    if (!registerGroup(qualifiedName.toString(), g,
+                            appData, !registerUnqualified))
+                    {
+                        getLogger().error(
+                            "Could not register fully qualified name "
+                                    + qualifiedName
+                                    + ", maybe two XML files have the same prefix. Ignoring it.");
+                    }
+                }
+
+                maxPooledGroups = Math.max(maxPooledGroups, Integer
+                        .parseInt(g.getPoolCapacity()));
+
             }
 
+            KeyedPoolableObjectFactory factory = new Group.GroupFactory(
+                    appData);
+            keyedPools.put(appData, new StackKeyedObjectPool(factory,
+                    maxPooledGroups));
         }
-        catch (Exception e)
-        {
-            throw new ConfigurationException(
-                    "IntakeServiceImpl failed to initialize", e);
-        }
-    }
 
-    /**
-     * Avalon component lifecycle method Initializes the service by loading
-     * default class loaders and customized object factories.
-     *
-     * @throws Exception
-     *             if initialization fails.
-     */
-    public void initialize() throws Exception
-    {
-        Intake.setIntakeService(this);
         if (getLogger().isInfoEnabled())
         {
-            getLogger().info("Intake Service is Initialized now..");
+            getLogger().info("Intake Service is initialized now.");
         }
     }
 
