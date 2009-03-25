@@ -33,11 +33,13 @@
 
   <modules>
     <module>cache</module>    
-    <module>commonsemail</module>    
+    <module>commonsemail</module>
+    <module>configuration/impl</module>    
     <module>crypto</module>    
     <module>factory</module>    
     <module>jetty</module>            
     <module>localization</module>    
+    <module>intake</module>    
     <module>mimetype</module>        
     <module>parser</module>    
     <module>pbe</module>    
@@ -50,6 +52,8 @@
     <module>upload</module>        
     <module>yaafi-crypto</module>        
     <module>yaafi</module>        
+    <module>xmlrpc</module>        
+    <module>xslt</module>            
   </modules>
 
 </project>
