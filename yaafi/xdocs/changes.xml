@@ -24,7 +24,7 @@
   </properties>
 
   <body>
-    <release version="1.0.6" date="as in SVN">
+    <release version="1.0.6" date="2009-03-26">
       <action dev="sgoeschl" type="add">
         Added support of "fallback service mamagers" to transparently lookup
         service not managed by the Avalon container instance. A good example
