@@ -36,36 +36,41 @@
         the decryption support was moved to fulcrum-yaafi-crypto.
       </p>
 
-      <subsection name="JDK 1.3.x">
-        <p>
-          For JDK 1.3.x the <a href="http://java.sun.com/products/jce/index-122.html">
-          Java Cryptography Extension (JCE) 1.2.2</a> needs to be installed.
-          Furthermore you need to add the jce1_2_2.jar to your Maven repository
-          and project.xml
-        </p>
+      <subsection name="JDK Support">
+        <table>
+          <tr>
+            <td>JDK 1.3.x</td>
+            <td>
+              For JDK 1.3.x the <a href="http://java.sun.com/products/jce/index-122.html">
+              Java Cryptography Extension (JCE) 1.2.2</a> needs to be installed.
+              Furthermore you need to add the jce1_2_2.jar to your Maven repository
+              and project.xml
+            </td>
+          </tr>
+          <tr>
+            <td>JDK 1.4.x</td>
+            <td>
+              The current JDK's have the JCA built-in therefore no extra configuration
+              is required.
+            </td>
+          </tr>
+          <tr>
+            <td>JDK 1.5.x</td>
+            <td>
+              The current JDK's have the JCA built-in therefore no extra configuration
+              is required.
+            </td>
+          </tr>
+          <tr>
+            <td>JDK 1.6.x</td>
+            <td>
+              The current JDK's have the JCA built-in therefore no extra configuration
+              is required.
+            </td>
+          </tr>          
+        </table>
       </subsection>
-
-      <subsection name="JDK 1.4.x">
-        <p>
-          The current JDK's have the JCA built-in therefore no extra configuration
-          is required.
-        </p>
-      </subsection>
-
-      <subsection name="JDK 1.5.x">
-        <p>
-          The current JDK's have the JCA built-in therefore no extra configuration
-          is required.
-        </p>
-      </subsection>
-
-      <subsection name="JDK 1.5.x">
-        <p>
-          The current JDK's have the JCA built-in therefore no extra configuration
-          is required.
-        </p>
-      </subsection>
-      
+            
       <subsection name="Availabe Algorithms">
         <table>
           <tr>

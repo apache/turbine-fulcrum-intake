@@ -25,6 +25,12 @@
 
   <body>
     <release version="1.0.6" date="as in SVN">
+      <action dev="sgoeschl" type="add">
+        Added support of "fallback service mamagers" to transparently lookup
+        service not managed by the Avalon container instance. A good example
+        is the integration of Spring services or remote services hidden behind
+        some SOAP proxies.        
+      </action>
       <action dev="sgoeschl" type="update">
         Moved the code regarding transparent decryption of configuration files
         into 'fuclrum-yaafi-crypto' project and decouple the code using
