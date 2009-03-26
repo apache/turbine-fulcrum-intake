@@ -29,10 +29,10 @@
 
     <section name="Container Configuration">
 
-      <p>
-        The Container Configuration File is used to bootstrap the
-        YAAFI container.
-      </p>
+      <p> The Container Configuration File is used to bootstrap the YAAFI container. This file is
+        optional and only used if you either want full control over the container configuration or
+        would like to use advanced features such as global interceptors of fallback service
+        managers. </p>
 
       <subsection name="Specification">
         <table>
@@ -46,21 +46,16 @@
             <td>containerType</td>
             <td>String</td>
             <td>[0|1]</td>
-            <td>
-              The type of Avalon container where YAAFI is instantiated,
-              either "phoenix", "fortress" or "merlin". If no value is
-              defined then <b>merlin</b> will be used.
-            </td>
+            <td>The type of Avalon container where YAAFI is instantiated, either "phoenix",
+              "fortress" or "merlin". If no value is defined then <b>merlin</b> will be used. This
+              parameter is only relevant if you embed YAAFI into another Avalon container. </td>
           </tr>
           <tr>
             <td>containerClazzName</td>
             <td>String</td>
             <td>[0|1]</td>
-            <td>
-              The class name of the YAAFI container to be instantiated. This
-              feature allows to use inheritance for customizing the container
-              functionality.
-            </td>
+            <td>The class name of the YAAFI container to be instantiated. This feature allows to use
+              inheritance for customizing the container functionality. </td>
           </tr>
           <tr>
             <td>componentRoles</td>
@@ -78,10 +73,8 @@
             <td>componentRoles/isEncrypted</td>
             <td>String</td>
             <td>[0|1]</td>
-            <td>
-              Is the component role file encrypted? The possible
-              values are ["true"|"false"|"auto"]
-            </td>
+            <td>Is the component role file encrypted? The possible values are
+              ["true"|"false"|"auto"] </td>
           </tr>
           <tr>
             <td>componentConfiguration</td>
@@ -99,36 +92,30 @@
             <td>componentConfiguration/isEncrypted</td>
             <td>String</td>
             <td>[0|1]</td>
-            <td>
-              Is the component configuration file encrypted? The possible
-              values are ["true"|"false"|"auto"]
-            </td>
+            <td>Is the component configuration file encrypted? The possible values are
+              ["true"|"false"|"auto"] </td>
           </tr>
           <tr>
             <td>componentConfigurationProperties</td>
             <td>Tree</td>
             <td>[0|1]</td>
-            <td>
-              Information about the component configuration proeprties used
-              to resolve variables in the componentConfiguration
-            </td>
+            <td>Information about the component configuration proeprties used to resolve variables
+              in the componentConfiguration </td>
           </tr>
           <tr>
             <td>componentConfigurationProperties/location</td>
             <td>String</td>
             <td>[0|1]</td>
-            <td>
-              The location of the component configuration property file. The
-              default value is "/componentConfiguration.properties"
-            </td>
+            <td>The location of the component configuration property file. The default value is
+              "/componentConfiguration.properties" </td>
           </tr>
           <tr>
             <td>componentConfigurationProperties/resolver</td>
             <td>String</td>
             <td>[0|1]</td>
-            <td>
-              The resolver class name to load the componentConfiguration.properties.
-            </td>
+            <td>The fully-qualified name of a class implementing
+              "ComponentConfigurationPropertiesResolver". An instance of this class is created to
+              support custom property resolvers such as commons-configuration integration. </td>
           </tr>
           <tr>
             <td>parameters</td>
@@ -146,66 +133,70 @@
             <td>parameters/isEncrypted</td>
             <td>String</td>
             <td>[0|1]</td>
-            <td>
-              Is the parameters file encrypted? The possible
-              values are ["true"|"false"|"auto"]
-            </td>
+            <td>Is the parameters file encrypted? The possible values are
+              ["true"|"false"|"auto"]</td>
           </tr>
           <tr>
             <td>hasDynamicProxies</td>
             <td>Boolean</td>
             <td>[true|false]</td>
-            <td>
-              Enable the usage of dynamic proxies for the whole container. When
-          	  the no dynamic proxies are used no interceptors will be installed.
-            </td>
+            <td>Enable the usage of dynamic proxies for the whole container. When the no dynamic
+              proxies are used no interceptors will be installed. This is a quick way to disable a
+              interceptors without touching the remaining configuration (e.g. enable interceptors
+              for execution time profiling during intergration testing).</td>
           </tr>
           <tr>
             <td>interceptors</td>
             <td>Tree</td>
             <td>[0|1]</td>
-            <td>
-              Contains a list of container specific interceptors
-            </td>
+            <td>Contains a list of container specific interceptors</td>
           </tr>
           <tr>
             <td>interceptors/interceptor</td>
             <td>String</td>
             <td>[0..n]</td>
-            <td>
-              Contains the service name of an interceptor
-            </td>
+            <td>Contains the service name of an interceptor</td>
+          </tr>
+          <tr>
+            <td>serviceManagers</td>
+            <td>Tree</td>
+            <td>[0|1]</td>
+            <td>Contains a list of fallback service managers used to expose additional servcices not
+              managed by the Avalon container.</td>
+          </tr>
+          <tr>
+            <td>serviceManager</td>
+            <td>String</td>
+            <td>1</td>
+            <td> The name of a service implementing the "ServiceManager" interface. The service
+              lookup is used to locate service not managed by by the Avalon container. This allows
+              to transparently integrate other service framework such as Spring.</td>
           </tr>
         </table>
       </subsection>
 
       <subsection name="Example 1">
-        <source>
-          <![CDATA[
-
+        <p>A plain vanilla container configuration defining the location of all configuration
+          files. It is assumed that the configuration files are not encrypted.</p>
+        <source><![CDATA[
 <fulcrum-yaafi>
-  <containerType>phoenix</containerType
-  <containerClazzName>org.apache.fulcrum.yaafi.framework.container.ServiceContainerImpl</containerClazzName>
   <componentRoles>
     <location>./src/test/TestRoleConfig.xml</location>
-    <isEncrypted>false</isEncrypted>
   </componentRoles>
   <componentConfiguration>
     <location>./src/test/TestComponentConfig.xml</location>
-    <isEncrypted>false</isEncrypted>
   </componentConfiguration>
   <parameters>
     <location>./src/test/TestParameters.properties</location>
-    <isEncrypted>false</isEncrypted>
   </parameters>
 </fulcrum-yaafi>
-          ]]>
-        </source>
+          ]]></source>
       </subsection>
 
       <subsection name="Example 2">
-        <source>
-          <![CDATA[
+        <p>This container configuration defines the location of the component role and component
+          configuration files. Furthermore it adds two interceptors to all managed services.</p>
+        <source><![CDATA[
 <fulcrum-yaafi>
   <componentRoles>
     <location>./src/test/componentRoles.xml</location>
@@ -218,10 +209,27 @@
     <interceptor>org.apache.fulcrum.yaafi.interceptor.logging.LoggingInterceptorService</interceptor>
   </interceptors>
 </fulcrum-yaafi>
-          ]]>
-        </source>
+          ]]></source>
       </subsection>
 
+      <subsection name="Example 3">
+        <p>This container configuration defines the location of the component role and component
+          configuration files. Furthermore it defines a fallback service manager to lookup services
+          managed by the Spring framework.</p>
+        <source><![CDATA[
+<fulcrum-yaafi>
+  <componentRoles>
+    <location>./src/test/springIntoAvalonComponentRoles.xml</location>
+  </componentRoles>
+  <componentConfiguration>
+    <location>./src/test/springIntoAvalonComponentConfiguration.xml</location>
+  </componentConfiguration>
+  <serviceManagers>
+    <serviceManager>springFrameworkService</serviceManager>
+  </serviceManagers>
+</fulcrum-yaafi>
+          ]]></source>
+      </subsection>
     </section>
 
   </body>
