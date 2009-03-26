@@ -5,16 +5,20 @@ A light-weight Avalon container
 Changes in this version include:
 
 New features:
+o Added support of "fallback service mamagers" to transparently lookup
+service not managed by the Avalon container instance. A good example
+is the integration of Spring services or remote services hidden behind
+some SOAP proxies. 
 o Addded M2 build 
 
 Fixed Bugs:
 o Setting custom JAMon ranges for every invocation because those ranges
-        are discarded when resetting JAMon through the GUI. 
+are discarded when resetting JAMon through the GUI. 
 
 Changes:
 o Moved the code regarding transparent decryption of configuration files
-        into 'fuclrum-yaafi-crypto' project and decouple the code using
-        dynamic class loading and reflection. 
+into 'fuclrum-yaafi-crypto' project and decouple the code using
+dynamic class loading and reflection. 
 
 
 Have fun!
