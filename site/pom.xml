@@ -44,7 +44,7 @@
       <url />
     </repository>
     <site>
-      <id>fulcrum.website</id>
+      <id>apache.website</id>
       <name>Fulcrum Website</name>
       <url>${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/fulcrum/</url>
     </site>        
