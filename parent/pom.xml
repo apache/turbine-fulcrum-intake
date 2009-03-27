@@ -277,7 +277,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <version>2.0-beta-6</version>
+        <version>2.0</version>
         <configuration>
           <!-- Exclude the navigation file for Maven 1 sites
                and the changes file used by the changes-plugin,
@@ -534,7 +534,7 @@
       Make the deployment protocol pluggable. This allows to switch to
       other protocols like scpexe, which some users prefer over scp.
     -->
-    <fulcrum.deployment.protocol>scp</fulcrum.deployment.protocol>
+    <fulcrum.deployment.protocol>scpexe</fulcrum.deployment.protocol>
     
     <!--
       Encoding of Java source files: Make sure, that the compiler and
