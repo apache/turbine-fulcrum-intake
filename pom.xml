@@ -50,10 +50,10 @@
     <module>spring</module>            
     <module>testcontainer</module>    
     <module>upload</module>        
+    <module>xmlrpc</module>        
+    <module>xslt</module>        
     <module>yaafi-crypto</module>        
     <module>yaafi</module>        
-    <module>xmlrpc</module>        
-    <module>xslt</module>            
   </modules>
 
 </project>
