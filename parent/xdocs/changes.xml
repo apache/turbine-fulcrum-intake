@@ -32,7 +32,7 @@
         Changed the source and javadoc encoding from "ISO-8859-1" to "UTF-8"
       </action>
       <action dev="sgoeschl" type="add">
-        Moved Java source and target version from '1.4' to '1.3'
+        Moved Java source and target version from '1.3' to '1.4'
       </action>
       <action dev="sgoeschl" type="add">
         Added a 'ci' profile to deploy snapshots.
