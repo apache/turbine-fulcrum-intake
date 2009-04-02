@@ -74,9 +74,10 @@
     </dependency>
     <!-- Needed if testing with ECM -->
     <dependency>
-      <groupId>excalibur-component</groupId>
+      <groupId>org.apache.excalibur.component</groupId>
       <artifactId>excalibur-component</artifactId>
-      <version>2.1</version>
+      <version>2.2.1</version>
+      <type>jar</type>
       <optional>true</optional>
     </dependency>
   </dependencies>
