@@ -82,7 +82,7 @@
     <dependency>
       <groupId>org.apache.fulcrum</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
-      <version>1.0.7-SNAPSHOT</version>
+      <version>1.0.6</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -90,6 +90,16 @@
   <build>
     <sourceDirectory>${basedir}/src/java</sourceDirectory>
     <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
+
+    <testResources>
+      <testResource>
+        <targetPath/>
+        <directory>${basedir}/src/test/resources</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </testResource>
+    </testResources>
   </build>
 	
   <properties>  
