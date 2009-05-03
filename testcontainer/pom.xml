@@ -108,6 +108,7 @@
   <properties>
     <fulcrum.release.version>1.0.6</fulcrum.release.version>
     <fulcrum.rc.version>RC1</fulcrum.rc.version>
+    <fulcrum.deployment.protocol>scpexe</fulcrum.deployment.protocol>
   </properties>
 	
 </project>
