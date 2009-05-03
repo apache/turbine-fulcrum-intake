@@ -25,6 +25,14 @@
   </properties>
 
   <body>
+    <release version="1.0.6" date="2009-05-03">
+      <action dev="tv" type="add">
+        Added a Maven-2 build
+      </action>
+      <action dev="tv" type="fix">
+        Added the missing log4j-dependency
+      </action>
+    </release>
     <release version="1.0.5" date="2005-05-13">
       <action dev="sgoeschl" type="change">
         Changed the implementation wo work with fulcrum-yaafi 1.0.4-dev
