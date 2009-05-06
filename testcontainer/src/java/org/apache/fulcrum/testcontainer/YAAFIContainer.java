@@ -1,4 +1,5 @@
 package org.apache.fulcrum.testcontainer;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,20 +18,16 @@ package org.apache.fulcrum.testcontainer;
  * specific language governing permissions and limitations
  * under the License.
  */
+
 import java.io.File;
 
-import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.logger.ConsoleLogger;
-import org.apache.avalon.framework.service.ServiceException;
 import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerConfiguration;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
-
-
 
 /**
  * This is a simple YAAFI based container that can be used in unit test
@@ -144,7 +141,7 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
 
     /**
      * Releases the component implementing the Component interface. This
-     * interface is depracted but still around in Fulcrum
+     * interface is deprecated but still around in Fulcrum
      *
      * @param component
      */
