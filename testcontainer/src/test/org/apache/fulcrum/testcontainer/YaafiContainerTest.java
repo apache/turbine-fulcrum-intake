@@ -84,6 +84,26 @@ public class YaafiContainerTest extends BaseUnitTest
     public void testLoadingContainerWithNoRolesfileFails()
     {
         SimpleComponent sc = null;
+        this.setRoleFileName(null);
+        try
+        {
+            sc = (SimpleComponent) this.lookup(SimpleComponent.class.getName());
+          fail("We should fail");
+        }
+        catch (ComponentException e)
+        {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        catch (Exception e)
+        {
+            // We expect to fail with a ConfigurationException
+        }
+    }
+
+    public void testLoadingContainerWithIntegratedRolesfile()
+    {
+        SimpleComponent sc = null;
 
         this.setRoleFileName(null);
         this.setConfigurationFileName(
@@ -91,13 +111,16 @@ public class YaafiContainerTest extends BaseUnitTest
         try
         {
             sc = (SimpleComponent) this.lookup(SimpleComponent.ROLE);
-            fail("We should fail");
         }
         catch (Exception e)
         {
-            //good  We expect to fail
+            e.printStackTrace();
+            fail(e.getMessage());
         }
-
+        assertTrue(sc instanceof AlternativeComponentImpl);
+        assertNotNull(sc);
+        sc.test();
+        this.release(sc);
     }
 
 }
