@@ -31,9 +31,9 @@
   <url>http://turbine.apache.org/fulcrum/fulcrum-testcontainer</url>
 		
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/FULCRUM_PARENT_1/fulcrum-testcontainer</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/FULCRUM_PARENT_1/fulcrum-testcontainer</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/tags/FULCRUM_PARENT_1/fulcrum-testcontainer</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/fulcrum-testcontainer</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/fulcrum-testcontainer</developerConnection>
+    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/fulcrum-testcontainer</url>
   </scm>
 
   <distributionManagement>
