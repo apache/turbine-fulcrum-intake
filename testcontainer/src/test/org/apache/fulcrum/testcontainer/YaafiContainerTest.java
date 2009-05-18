@@ -88,7 +88,7 @@ public class YaafiContainerTest extends BaseUnitTest
         try
         {
             sc = (SimpleComponent) this.lookup(SimpleComponent.class.getName());
-          fail("We should fail");
+            fail("We should fail");
         }
         catch (ComponentException e)
         {
@@ -100,27 +100,4 @@ public class YaafiContainerTest extends BaseUnitTest
             // We expect to fail with a ConfigurationException
         }
     }
-
-    public void testLoadingContainerWithIntegratedRolesfile()
-    {
-        SimpleComponent sc = null;
-
-        this.setRoleFileName(null);
-        this.setConfigurationFileName(
-            "src/test/TestComponentConfigIntegratedRoles.xml");
-        try
-        {
-            sc = (SimpleComponent) this.lookup(SimpleComponent.ROLE);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
-        assertTrue(sc instanceof AlternativeComponentImpl);
-        assertNotNull(sc);
-        sc.test();
-        this.release(sc);
-    }
-
 }
