@@ -24,7 +24,7 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fulcrum-testcontainer</artifactId>
-  <version>1.0.7-SNAPSHOT</version>
+  <version>1.0.6-SNAPSHOT</version>
   <name>Fulcrum Test Container</name>
   <inceptionYear>2004</inceptionYear>
   <description>A light-weight Avalon container</description>
@@ -117,7 +117,7 @@
   
   <properties>
     <fulcrum.release.version>1.0.6</fulcrum.release.version>
-    <fulcrum.rc.version>RC1</fulcrum.rc.version>
+    <fulcrum.rc.version>RC2</fulcrum.rc.version>
     <fulcrum.deployment.protocol>scpexe</fulcrum.deployment.protocol>
   </properties>
 	
