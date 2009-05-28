@@ -61,6 +61,11 @@
           your first lookup. The string you pass in should be prefixed from the directory the JVM is
           running in (e.g. src/test/YOUR_CONFIG.xml). 
         </p>
+        <p> You can choose between two container implementations, the ECM and Fulcrum YAAFI. For this
+          just assign one of the values BaseUnitTest.CONTAINER_ECM or BaseUnitTest.CONTAINER_YAAFI to
+          the static variable BaseUnitTest.containerType before doing the first lookup. The default
+          container is Fulcrum YAAFI.
+        </p>
       </subsection>
 
       <subsection name="Using the container directly">
@@ -73,10 +78,10 @@
 
       <subsection name="Configuring the Components">
         <p> There are two ways of configuring your components. One is the traditional
-          TestComponentConfig.xml and TestRoleConfig.xml files described below. Or, one that
-          integrates the two, shown at the bottom. 
+          TestComponentConfig.xml and TestRoleConfig.xml files described below. Or, for the ECMContainer
+          one is available that integrates the two, shown at the bottom. 
         </p>
-        <p> First, here is the role configuration.</p>
+        <p> First, here is the role configuration example.</p>
         <source>
 <![CDATA[
 <role
@@ -87,7 +92,7 @@
         </source>
 
         <p> Now comes the basic configuration of the component. Here will will configure the various
-          encryption providers 
+          encryption providers. 
         </p>
 
         <source>
@@ -104,7 +109,10 @@
 ]]>
         </source>
 
-        <p> Or, the integrated roles and components file: </p>
+        <p>When using the ECM container you can choose to use an integrated roles and components file
+          like follows. Note that this file format is not supported with Fulcrum YAAFI and will cause
+          an Exception to be thrown.
+        </p>
 
         <source>
 <![CDATA[
