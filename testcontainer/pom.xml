@@ -27,7 +27,7 @@
   <version>1.0.7-SNAPSHOT</version>
   <name>Fulcrum Test Container</name>
   <inceptionYear>2004</inceptionYear>
-  <description>A light-weight Avalon container</description>
+  <description>A test framework for Avalon components</description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-testcontainer</url>
 		
   <scm>
