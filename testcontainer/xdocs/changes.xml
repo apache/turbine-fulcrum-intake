@@ -21,7 +21,7 @@
   <properties>
     <title>Fulcrum</title>
     <author email="epugh@upstate.com">Eric Pugh</author>
-    <author email="quintonm@bellsouth.net">Quinton McCombs</author>
+    <!-- author email="quintonm@bellsouth.net">Quinton McCombs</author -->
   </properties>
 
   <body>
@@ -42,7 +42,7 @@
     <release version="1.0.4" date="2004-11-24">
       <action dev="epugh" type="add">
         By default use Yaafi as the Test container, but you can swap to ECM for
-        more "real" testing if required by doing <code>containerType=CONTAINER_ECM;</code>.
+        more "real" testing if required by doing containerType=CONTAINER_ECM;.
       </action>
       <action dev="epugh" type="add">
         Add helper "resolve" method that delegates to "lookup" to faciliate
