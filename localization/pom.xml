@@ -24,7 +24,7 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fulcrum-localization</artifactId>
-  <version>1.0.7-SNAPSHOT</version>
+  <version>1.0.6-SNAPSHOT</version>
   <name>Fulcrum Localization</name>
   <inceptionYear>2005</inceptionYear>
   <description>Fulcrum Localization Service</description>
@@ -63,7 +63,7 @@
       <name>Siegfried Goeschl</name>
       <id>sgoeschl</id>
       <email>sgoeschl@apache.org</email>
-      <organization />
+      <organization></organization>
       <roles>
         <role>Java Developer</role>
       </roles>
@@ -72,7 +72,7 @@
       <name>Thomas Vandahl</name>
       <id>tv</id>
       <email>tv@apache.org</email>
-      <organization />
+      <organization></organization>
       <roles>
         <role>Java Developer</role>
       </roles>
