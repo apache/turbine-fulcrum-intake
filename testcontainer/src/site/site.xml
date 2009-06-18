@@ -20,9 +20,6 @@
 <project
   name="Fulcrum Test Container"
   href="http://turbine.apache.org/fulcrum/fulcrum-testcontainer/">
-  <bannerLeft>
-    <name>Fulcrum Test Container</name>
-  </bannerLeft>
   <version position="left" />
   <publishDate format="dd MMM yyyy"/>
   <body>
