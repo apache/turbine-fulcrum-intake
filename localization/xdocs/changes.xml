@@ -24,7 +24,10 @@
   </properties>
 
   <body>
-    <release version="1.0.6" date="">
+    <release version="1.0.6" date="2009-06-18">
+      <action dev="tv" type="add">
+        Added a Maven-2 build.
+      </action>
       <action dev="tv" type="add">
         Split the service into a simple one that does not depend on servlet-api
         and an extended one that does. This allows to use the service in non-web

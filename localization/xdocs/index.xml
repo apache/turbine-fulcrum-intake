@@ -207,12 +207,12 @@
 
   <section name="Usage">
     <source><![CDATA[
-    TurbineServices.getInstance().getService(LocalizationService.LOCALIZATION)
+    TurbineServices.getInstance().getService(LocalizationService.ROLE)
     .getString("DISPLAYPROJECTS_TITLE");
     ]]></source>
 
     <p>
-      Wow. That is a lot of typing. That could be easily shortened to this:
+      Wow. That is a lot of typing. In Turbine, that could be easily shortened to this:
     </p>
 
     <source><![CDATA[
@@ -249,7 +249,7 @@
     ]]></source>
     
     <p>
-      This actually doesn't look too nice, however the call using the LocalizationTool
+      This actually doesn't look too nice, however the call using the Turbine LocalizationTool
       from a <a href="http://velocity.apache.org/">Velocity</a> template just deflates to
     </p>
     
