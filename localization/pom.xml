@@ -7,16 +7,16 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fulcrum-localization</artifactId>
-  <version>1.0.6</version>
+  <version>1.0.7-SNAPSHOT</version>
   <name>Fulcrum Localization</name>
   <inceptionYear>2005</inceptionYear>
   <description>Fulcrum Localization Service</description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-localization</url>
 		
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/FULCRUM_LOCALIZATION_1_0_6</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/FULCRUM_LOCALIZATION_1_0_6</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/tags/FULCRUM_LOCALIZATION_1_0_6</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/localization/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/localization/</developerConnection>
+    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/localization/</url>
   </scm>
 
   <distributionManagement>
