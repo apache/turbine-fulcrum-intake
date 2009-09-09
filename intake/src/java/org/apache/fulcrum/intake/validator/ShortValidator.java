@@ -60,7 +60,7 @@ public class ShortValidator
     public ShortValidator(Map paramMap)
             throws InvalidMaskException
     {
-        invalidNumberMessage = "Entry was not a valid Short";
+        this();
         init(paramMap);
     }
 
@@ -69,6 +69,7 @@ public class ShortValidator
      */
     public ShortValidator()
     {
+        invalidNumberMessage = "Entry was not a valid Short";
     }
 
     /**

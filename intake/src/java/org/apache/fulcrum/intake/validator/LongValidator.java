@@ -60,7 +60,7 @@ public class LongValidator
     public LongValidator(Map paramMap)
             throws InvalidMaskException
     {
-        invalidNumberMessage = "Entry was not a valid Long";
+        this();
         init(paramMap);
     }
 
@@ -69,6 +69,7 @@ public class LongValidator
      */
     public LongValidator()
     {
+        invalidNumberMessage = "Entry was not a valid Long";
     }
 
     /**

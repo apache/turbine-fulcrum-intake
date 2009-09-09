@@ -73,6 +73,7 @@ public class IntegerRangeValidator
     public IntegerRangeValidator(final Map paramMap)
             throws IntakeException
     {
+        this();
         init(paramMap);
     }
 

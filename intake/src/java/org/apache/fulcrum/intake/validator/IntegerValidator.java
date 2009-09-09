@@ -60,7 +60,7 @@ public class IntegerValidator
     public IntegerValidator(Map paramMap)
             throws InvalidMaskException
     {
-        invalidNumberMessage = "Entry was not a valid Integer";
+        this();
         init(paramMap);
     }
 
@@ -69,6 +69,7 @@ public class IntegerValidator
      */
     public IntegerValidator()
     {
+        invalidNumberMessage = "Entry was not a valid Integer";
     }
 
     /**
