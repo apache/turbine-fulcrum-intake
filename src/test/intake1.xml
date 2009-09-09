@@ -39,4 +39,15 @@
 			fieldClass="org.apache.fulcrum.intake.test.MyField" />
 	</group>
 
+    <group name="NumberTest" key="nt">
+        <field name="EmptyIntegerTestField" key="eitf" type="int"/>
+        <field name="EmptyLongTestField" key="eltf" type="long"/>
+        <field name="EmptyShortTestField" key="estf" type="short"/>
+        <field name="EmptyFloatTestField" key="eftf" type="float"/>
+        <field name="EmptyDoubleTestField" key="edtf" type="double"/>
+        <field name="EmptyBigDecimalTestField" key="ebdtf" type="BigDecimal"/>
+        <field name="NumberTestField" key="ntf" type="int">
+            <rule name="invalidNumber">Not a number</rule>
+        </field>
+    </group>
 </input-data>

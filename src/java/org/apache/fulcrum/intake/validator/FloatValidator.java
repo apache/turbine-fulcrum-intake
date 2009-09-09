@@ -65,7 +65,7 @@ public class FloatValidator
     public FloatValidator(Map paramMap)
             throws InvalidMaskException
     {
-        invalidNumberMessage = "Entry was not a valid Float";
+        this();
         init(paramMap);
     }
 
@@ -74,6 +74,7 @@ public class FloatValidator
      */
     public FloatValidator()
     {
+        invalidNumberMessage = "Entry was not a valid Float";
     }
 
     /**
