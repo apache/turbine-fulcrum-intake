@@ -26,6 +26,10 @@
 
   <body>
   	 <release version="1.0.4-dev" date="in Subversion">
+      <action type="fix" dev="tv" issue="TRB-74" due-to="Susi Berrington">
+        The number validators did not set an invalid number message when initialized with
+        the default constructor
+      </action>
       <action type="remove" dev="tv">
         Removed the Intake class. It was duplicating the IntakeServiceFacade.
       </action>

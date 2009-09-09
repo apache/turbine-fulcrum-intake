@@ -63,7 +63,7 @@ public class BigDecimalValidator
     public BigDecimalValidator(Map paramMap)
             throws InvalidMaskException
     {
-        invalidNumberMessage = "Entry was not a valid BigDecimal";
+        this();
         init(paramMap);
     }
 
@@ -72,6 +72,7 @@ public class BigDecimalValidator
      */
     public BigDecimalValidator()
     {
+        invalidNumberMessage = "Entry was not a valid BigDecimal";
     }
 
     /**

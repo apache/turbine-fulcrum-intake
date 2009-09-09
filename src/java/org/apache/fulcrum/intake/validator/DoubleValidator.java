@@ -65,7 +65,7 @@ public class DoubleValidator
     public DoubleValidator(Map paramMap)
             throws InvalidMaskException
     {
-        invalidNumberMessage = "Entry was not a valid Double";
+        this();
         init(paramMap);
     }
 
@@ -74,6 +74,7 @@ public class DoubleValidator
      */
     public DoubleValidator()
     {
+        invalidNumberMessage = "Entry was not a valid Double";
     }
 
     /**
