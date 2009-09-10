@@ -24,7 +24,9 @@
   </properties>
 
   <body>
-    <release version="1.0.7" date="as in SVN">
+    <release version="1.0.8-SNAPSHOT" date="as in SVN">
+    </release>
+    <release version="1.0.7" date="2009-09-10">
       <action dev="sgoeschl" type="update">
         Moving to M2 build
       </action>
