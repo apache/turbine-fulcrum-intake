@@ -23,9 +23,14 @@
 	<group name="LoginGroup" key="loginGroupKey" mapToObject="LoginForm">
 		<field name="Username" key="loginUsernameKey" type="String"
 			mapToProperty="Username">
-
 		</field>
 	</group>
+
+    <group name="LoginIfcGroup" key="loginIfcGroupKey" mapToObject="LoginFormInterface">
+        <field name="Username" key="loginUsernameKey" type="String"
+            mapToProperty="Username">
+        </field>
+    </group>
 
 	<group name="BooleanTest" key="bt">
 		<field name="EmptyBooleanTestField" key="ebtf" type="boolean"/>

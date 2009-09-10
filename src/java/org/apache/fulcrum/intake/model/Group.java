@@ -206,6 +206,21 @@ public class Group
                 }
             }
 
+            // Also check any interfaces
+            Class[] interfaces = cls.getInterfaces();
+            for (int idx = 0; idx < interfaces.length; idx++)
+            {
+                Field[] interfaceFields =
+                    (Field[]) mapToObjectFields.get(interfaces[idx].getName());
+                if (interfaceFields != null)
+                {
+                    for (int i = 0; i < interfaceFields.length; i++)
+                    {
+                        interfaceFields[i].init(obj);
+                    }
+                }
+            }
+            
             cls = cls.getSuperclass();
         }
 
@@ -369,8 +384,24 @@ public class Group
                 }
             }
 
+            // Also check any interfaces
+            Class[] interfaces = cls.getInterfaces();
+            for (int idx = 0; idx < interfaces.length; idx++)
+            {
+                Field[] interfaceFields =
+                    (Field[]) mapToObjectFields.get(interfaces[idx].getName());
+                if (interfaceFields != null)
+                {
+                    for (int i = 0; i < interfaceFields.length; i++)
+                    {
+                        interfaceFields[i].setProperty(obj);
+                    }
+                }
+            }            
+
             cls = cls.getSuperclass();
         }
+        
         log.debug("setProperties() finished");
     }
 
@@ -402,6 +433,28 @@ public class Group
                 }
             }
 
+            // Also check any interfaces
+            Class[] interfaces = cls.getInterfaces();
+            for (int idx = 0; idx < interfaces.length; idx++)
+            {
+                Field[] interfaceFields =
+                    (Field[]) mapToObjectFields.get(interfaces[idx].getName());
+                if (interfaceFields != null)
+                {
+                    for (int i = 0; i < interfaceFields.length; i++)
+                    {
+                        try
+                        {
+                            interfaceFields[i].setProperty(obj);
+                        }
+                        catch(Exception e)
+                        {
+                            // just move on to next field
+                        }
+                    }
+                }
+            }            
+
             cls = cls.getSuperclass();
         }
     }
@@ -427,6 +480,21 @@ public class Group
                 for (int i = flds.length - 1; i >= 0; i--)
                 {
                     flds[i].getProperty(obj);
+                }
+            }
+
+            // Also check any interfaces
+            Class[] interfaces = cls.getInterfaces();
+            for (int idx = 0; idx < interfaces.length; idx++)
+            {
+                Field[] interfaceFields =
+                    (Field[]) mapToObjectFields.get(interfaces[idx].getName());
+                if (interfaceFields != null)
+                {
+                    for (int i = 0; i < interfaceFields.length; i++)
+                    {
+                        interfaceFields[i].getProperty(obj);
+                    }
                 }
             }
 
