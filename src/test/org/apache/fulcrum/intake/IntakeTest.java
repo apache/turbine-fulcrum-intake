@@ -19,11 +19,15 @@ package org.apache.fulcrum.intake;
  * under the License.
  */
 
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
 import org.apache.fulcrum.intake.model.Field;
 import org.apache.fulcrum.intake.model.Group;
+import org.apache.fulcrum.intake.test.LoginForm;
 import org.apache.fulcrum.intake.validator.BooleanValidator;
 import org.apache.fulcrum.intake.validator.ValidationException;
+import org.apache.fulcrum.parser.DefaultParameterParser;
+import org.apache.fulcrum.parser.ParserService;
+import org.apache.fulcrum.parser.ValueParser;
+import org.apache.fulcrum.testcontainer.BaseUnitTest;
 /**
  * Test the facade class for the service
  *
@@ -70,6 +74,27 @@ public class IntakeTest extends BaseUnitTest
         assertTrue(IntakeServiceFacade.isInitialized());
         group = IntakeServiceFacade.getGroup("LoginGroup");
 		assertNotNull(group);
+    }
+
+    public void testInterfaceMapTo() throws Exception
+    {
+        IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
+        Group group = is.getGroup("LoginIfcGroup");
+        assertNotNull(group);
+        
+        Field userNameField = group.get("Username");
+        
+        ParserService ps = (ParserService) this.resolve( ParserService.class.getName() );
+        ValueParser pp = ps.getParser(DefaultParameterParser.class);
+        
+        pp.setString(userNameField.getKey(), "Joe");
+        userNameField.init(pp);
+        userNameField.validate();
+        
+        LoginForm form = new LoginForm();
+        group.setProperties(form);
+        
+        assertEquals("User names should be equal", "Joe", form.getUsername());
     }
 
     public void testEmptyBooleanField() throws Exception
