@@ -20,31 +20,21 @@ package org.apache.fulcrum.intake.test;
  */
 
 /**
- * Test form for Intake
+ * Test form interface for Intake
  * 
- * @author <a href="mailto:epugh@upstate.com">epugh@upstate.com</a>
- * @version $Id$
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
+ * @version $Id: LoginForm.java 535465 2007-05-05 06:58:06Z tv $
  */
 
-public class LoginForm implements LoginFormInterface
+public interface LoginFormInterface
 {
-
-    private String username;
-
     /**
      * @return the user name
      */
-    public String getUsername()
-    {
-        return username;
-    }
+    String getUsername();
 
     /**
      * @param username the user name
      */
-    public void setUsername(String username)
-    {
-        this.username = username;
-    }
-
+    void setUsername(String username);
 }
