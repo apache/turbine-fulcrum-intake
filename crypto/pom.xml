@@ -7,16 +7,16 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fulcrum-crypto</artifactId>
-  <version>1.0.7</version>
+  <version>1.0.8-SNAPSHOT</version>
   <name>Fulcrum Crypto</name>
   <inceptionYear>2005</inceptionYear>
   <description>Fulcrum Crypto Service</description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-crypto</url>
 		
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/FULCRUM_CRYPTO_1_0_7</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/FULCRUM_CRYPTO_1_0_7</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/tags/FULCRUM_CRYPTO_1_0_7</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/crypto/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/crypto/</developerConnection>
+    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/crypto/</url>
   </scm>
 
   <distributionManagement>
