@@ -27,7 +27,7 @@ import org.apache.fulcrum.mimetype.util.MimeType;
 import org.apache.fulcrum.mimetype.util.MimeTypeMapperTest;
 
 /**
- * Tests for {@link TurbineMimeTypeService}.
+ * Tests for {@link DefaultMimeTypeService}.
  *
  * @author <a href="paulsp@apache.org">Paul Spencer</a>
  * @author <a href="epugh@upstate.com">Eric Pugh</a>

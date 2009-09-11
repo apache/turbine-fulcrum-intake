@@ -131,8 +131,8 @@ public class MimeType
     /**
      * Constructs a new MIME type by parsing a specification string.
      *
-     * @parameter spec a string representing a MIME type.
-     * @throws IllegalArgument for parsing errors.
+     * @param spec a string representing a MIME type.
+     * @throws IllegalArgumentException for parsing errors.
      */
     public MimeType(String spec)
     {
@@ -170,7 +170,7 @@ public class MimeType
         while ((start < length) &&
                ((look = spec.charAt(start)) != '/'))
         {
-            sb.append((char) look);
+            sb.append(look);
             start++;
         }
         if (look != '/')
@@ -187,7 +187,7 @@ public class MimeType
                ((look = spec.charAt(start)) != ';') &&
                !Character.isWhitespace(look))
         {
-            sb.append((char) look);
+            sb.append(look);
             start++;
         }
         mimeSubtype = sb.toString();
@@ -223,7 +223,7 @@ public class MimeType
                            ((look=spec.charAt(start)) != '=') &&
                            !Character.isWhitespace(look))
                     {
-                        sb.append(Character.toLowerCase((char) look));
+                        sb.append(Character.toLowerCase(look));
                         start++ ;
                     }
                     String name = sb.toString();
@@ -257,7 +257,7 @@ public class MimeType
                            ((delim == '"') ||
                             !Character.isWhitespace(look)))
                     {
-                        sb.append((char) look);
+                        sb.append(look);
                         start++;
                     }
                     while ((start < length) &&
@@ -470,7 +470,7 @@ public class MimeType
      *
      * @param params an array of parameter names.
      * @param values an array of parameter values.
-     * @throw IllegalArgumentException for incorrect parameters.
+     * @throws IllegalArgumentException for incorrect parameters.
      */
     public synchronized void addParameters(String[] params,
                                            String[] values)

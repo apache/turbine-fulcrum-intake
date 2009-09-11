@@ -30,7 +30,6 @@ import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
-import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.fulcrum.mimetype.util.CharSetMap;
 import org.apache.fulcrum.mimetype.util.MimeType;
 import org.apache.fulcrum.mimetype.util.MimeTypeMap;
@@ -83,13 +82,13 @@ public class DefaultMimeTypeService
      * The charset map used by the service.
      */
     private CharSetMap charSetMap;
-    /** The Avalon Context */
-    private Context context = null;
+
     /**
      * Constructs a new service.
      */
     public DefaultMimeTypeService()
     {
+        // empty
     }
     /**
      * Sets a MIME content type mapping to extensions to the map.
@@ -170,7 +169,7 @@ public class DefaultMimeTypeService
      * Gets the default file name extension for a MIME type.
      * Note that the mappers are called in the reverse order.
      *
-     * @param mime the MIME type as a string.
+     * @param type the MIME type as a string.
      * @return the file name extension or null.
      */
     public String getDefaultExtension(String type)
@@ -325,7 +324,6 @@ public class DefaultMimeTypeService
      */
     public void contextualize(Context context) throws ContextException
     {
-        this.context = context;
         this.applicationRoot = context.get( "urn:avalon:home" ).toString();
     }
 

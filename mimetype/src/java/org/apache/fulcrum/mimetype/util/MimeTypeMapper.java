@@ -151,7 +151,7 @@ public class MimeTypeMapper
     /**
      * Gets a file name extension corresponding to a specified MIME content type.
      *
-     * @param mime a MIME type as a string.
+     * @param type a MIME type as a string.
      * @return the corresponding file name extension or null.
      */
     public String getExtension(String type)

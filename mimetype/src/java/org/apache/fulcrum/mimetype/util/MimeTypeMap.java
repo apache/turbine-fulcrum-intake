@@ -114,7 +114,7 @@ public class MimeTypeMap
      * Loads mappings from a file path.
      *
      * @param path a file path.
-     * @returns the mappings.
+     * @return the mappings.
      * @throws IOException for an incorrect file.
      */
     protected static MimeTypeMapper loadPath(String path)
@@ -203,7 +203,7 @@ public class MimeTypeMap
     /**
      * Contructs a MIME type map read from a file.
      *
-     * @param path an input file.
+     * @param file an input file.
      * @throws IOException for an incorrect input file.
      */
     public MimeTypeMap(File file)

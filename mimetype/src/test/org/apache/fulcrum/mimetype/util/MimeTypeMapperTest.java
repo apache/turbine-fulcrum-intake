@@ -22,11 +22,11 @@ package org.apache.fulcrum.mimetype.util;
 import junit.framework.TestCase;
 
 /**
+ * Tests for the MimeTypeMapper
+ * 
  * @author Eric Pugh
  * @author Daniel Rall
  *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
  */
 public class MimeTypeMapperTest extends TestCase
 {
