@@ -24,6 +24,13 @@
   </properties>
 
   <body>
+    <release version="1.0.6-SNAPSHOT" date="in SVN">
+    </release>
+    <release version="1.0.5" date="2009-09-11">
+      <action dev="tv" type="update">
+        Moved build to Maven-2
+      </action>
+    </release> 
     <release version="1.0.4" date="2004-11-24">
       <action dev="epugh" type="update" due-to="Kostyantyn Shchekotykhin">
         Merge api and impl jars into one project.
