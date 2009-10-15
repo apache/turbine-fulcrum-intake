@@ -39,8 +39,6 @@ public class XSLTServiceTest extends BaseUnitTest
 {
     private XSLTService xsltService = null;
 
-
-
     /**
      * Defines the testcase name for JUnit.
      *
@@ -66,13 +64,19 @@ public class XSLTServiceTest extends BaseUnitTest
     }
     /**
      * Simple test that verify an object can be created and deleted.
-     * @throws Exception
+     * @throws Exception the test failed
      */
     public void testPath() throws Exception
     {
         assertNotNull(xsltService);
     }
 
+    /**
+     * Test an indentity transformation to make sure that the service
+     * works.
+     *
+     * @throws Exception the test failed
+     */
     public void testTransform() throws Exception
     {
         Reader reader = new FileReader("./pom.xml");
@@ -81,5 +85,4 @@ public class XSLTServiceTest extends BaseUnitTest
         reader.close();
         writer.close();
     }
-
 }
