@@ -19,12 +19,15 @@
 -->
 <document>
   <properties>
-    <title>Fulcrum BSF</title>
+    <title>Fulcrum XSLT</title>
     <author email="epugh@opensourceconnections.com">Eric Pugh</author>
   </properties>
 
   <body>
     <release version="1.0.4" date="in Subversion">
+      <action type="add" dev="sgoeschl" date="2009-10-14">
+        Added a regression test which really does a XSL transformation.
+      </action>
       <action type="update" dev="seade" issue="TRB-19" due-to="Thomas Vandahl">
       	Synced with 2_3 branch (excluding the replacement of the cache Map()
       	with a LRUMap()).  Thanks to Thomas Vandahl for the patches.

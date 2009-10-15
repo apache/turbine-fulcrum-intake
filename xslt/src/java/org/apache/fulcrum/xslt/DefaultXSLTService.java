@@ -119,7 +119,7 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
             sb.append(style);
         }
 
-        sb.append(".xsl");
+        sb.append(".xslt");
 
         URL url = null;
 

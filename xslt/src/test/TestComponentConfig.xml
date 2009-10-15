@@ -18,5 +18,5 @@
  under the License.
 -->
 <componentConfig>
-    <xslt path="target" cache="true"/>
+    <xslt path="./src/test/xslt" cache="true"/>
 </componentConfig>
