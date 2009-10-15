@@ -22,6 +22,12 @@ package org.apache.fulcrum.xslt;
 
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
+
+import java.io.Reader;
+import java.io.FileReader;
+import java.io.Writer;
+import java.io.FileWriter;
+
 /**
  * XSLTServiceTest
  *
@@ -65,6 +71,15 @@ public class XSLTServiceTest extends BaseUnitTest
     public void testPath() throws Exception
     {
         assertNotNull(xsltService);
+    }
+
+    public void testTransform() throws Exception
+    {
+        Reader reader = new FileReader("./pom.xml");
+        Writer writer = new FileWriter("./target/testTransform.xml");
+        xsltService.transform("identity.xsl", reader, writer);
+        reader.close();
+        writer.close();
     }
 
 }
