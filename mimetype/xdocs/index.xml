@@ -149,7 +149,7 @@
 
             <p>
                 The service contains defaults for most common MIME types, like
-                text/plain, text/html, text/x-hdml, text/vnd.wap.wml, image/gif and 
+                text/plain, text/html, text/x-html, text/vnd.wap.wml, image/gif and 
                 image/jpeg. More specific ones can be specified in an optional MIME types
                 file. The name of the MIME types file can be given with a service property
                 named "mimetypes".
