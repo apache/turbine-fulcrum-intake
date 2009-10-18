@@ -58,6 +58,7 @@
         <item name="OSWorkflow"            href="/fulcrum-osworkflow/"/>
         <item name="OSWorkflow Example"    href="/fulcrum-osworkflow-example/"/>
       </item>
+      <item name="Parser"                href="/fulcrum-parser/"/>
       <item name="Quartz"                href="/fulcrum-quartz/"/>
       <item name="Security"              href="/sites/security.html" collapse="true">
         <item name="Site"                  href="/fulcrum-security-site/"/>
@@ -66,6 +67,7 @@
         <item name="Memory Impl"           href="/fulcrum-security-memory/"/>
         <item name="Hibernate Impl"        href="/fulcrum-security-hibernate/"/>
         <item name="NT Impl"               href="/fulcrum-security-nt/"/>
+        <item name="Torque Impl"           href="/fulcrum-security-torque/"/>
         <item name="Adapter Turbine"       href="/fulcrum-security-adapter-turbine/"/>
         <item name="Adapter OpenSymphony"  href="/fulcrum-security-adapter-opensymphony/"/>
       </item>
@@ -83,12 +85,11 @@
       <item name="Groovy"                href="/fulcrum-groovy/"/>
       <item name="HsqlDB"                href="/fulcrum-hsqldb/"/>      
       <item name="Intake"                href="/fulcrum-intake/"/>
-      <item name="Jetty"          			 href="/fulcrum-jetty/"/>      
-      <item name="Parser"                href="/fulcrum-parser/"/>      
+      <item name="Jetty"      			 href="/fulcrum-jetty/"/>      
       <item name="PBE"                   href="/fulcrum-pbe/"/>
       <item name="ResourceManager"       href="/fulcrum-resourcemanager/"/>
-      <item name="Script"          			 href="/fulcrum-script/"/>
-      <item name="Spring"          			 href="/fulcrum-spring/"/>
+      <item name="Script"          		 href="/fulcrum-script/"/>
+      <item name="Spring"          		 href="/fulcrum-spring/"/>
       <item name="Template"              href="/fulcrum-template/"/>
     </menu>
 
