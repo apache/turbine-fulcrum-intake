@@ -200,8 +200,9 @@ public class CharSetMap
                 mappers[MAP_HOME] = loadPath(path);
             }
         }
-        catch (Exception x)
+        catch (IOException x)
         {
+            // ignore
         }
 
         try
@@ -211,8 +212,9 @@ public class CharSetMap
                 File.separator + "lib" + File.separator + CHARSET_RESOURCE;
             mappers[MAP_SYS] = loadPath(path);
         }
-        catch (Exception x)
+        catch (IOException x)
         {
+            // ignore
         }
 
         // Check whether the current class jar contains mappings.

@@ -55,6 +55,7 @@ public class MimeTypeMapper
      */
     public MimeTypeMapper()
     {
+        // do nothing
     }
 
     /**
@@ -92,6 +93,7 @@ public class MimeTypeMapper
             }
             catch (IOException x)
             {
+                // ignore
             }
         }
     }
@@ -121,6 +123,7 @@ public class MimeTypeMapper
       }
       catch (IOException x)
       {
+          // ignore
       }
     }
 
