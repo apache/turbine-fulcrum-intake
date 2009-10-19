@@ -26,6 +26,9 @@
 
   <body>
     <release version="3.0.0" date="2005-05-13">
+     <action dev="tv" type="update">
+       Moved parser component to the released components section.
+     </action>
      <action dev="sgoeschl" type="add">
        Added fulcrum:site to build a subprojects and the master
        project including Dashboard report
