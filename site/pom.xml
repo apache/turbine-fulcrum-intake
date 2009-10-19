@@ -272,7 +272,7 @@
       Make the deployment protocol pluggable. This allows to switch to
       other protocols like scpexe, which some users prefer over scp.
     -->
-    <fulcrum.deployment.protocol>scp</fulcrum.deployment.protocol>
+    <fulcrum.deployment.protocol>scpexe</fulcrum.deployment.protocol>
   </properties>
 
 </project>
