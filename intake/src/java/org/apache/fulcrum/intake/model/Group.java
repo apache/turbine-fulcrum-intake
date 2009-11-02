@@ -426,7 +426,7 @@ public class Group
                     {
                         flds[i].setProperty(obj);
                     }
-                    catch (Exception e)
+                    catch (IntakeException e)
                     {
                         // just move on to next field
                     }
@@ -447,7 +447,7 @@ public class Group
                         {
                             interfaceFields[i].setProperty(obj);
                         }
-                        catch(Exception e)
+                        catch(IntakeException e)
                         {
                             // just move on to next field
                         }
