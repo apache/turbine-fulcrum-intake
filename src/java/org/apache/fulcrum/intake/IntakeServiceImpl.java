@@ -503,17 +503,10 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
                 if (gettersForClassName != null)
                 {
-                    try
+                    Method getter = pd.getReadMethod();
+                    if (getter != null)
                     {
-                        Method getter = pd.getReadMethod();
-                        if (getter != null)
-                        {
-                            gettersForClassName.put(propName, getter);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        // Do nothing
+                        gettersForClassName.put(propName, getter);
                     }
                 }
             }
@@ -568,17 +561,10 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
                 if (settersForClassName != null)
                 {
-                    try
+                    Method setter = pd.getWriteMethod();
+                    if (setter != null)
                     {
-                        Method setter = pd.getWriteMethod();
-                        if (setter != null)
-                        {
-                            settersForClassName.put(propName, setter);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        // Do nothing
+                        settersForClassName.put(propName, setter);
                     }
                 }
             }
