@@ -77,6 +77,7 @@ public class StringValidator
      */
     public StringValidator()
     {
+        // do nothing
     }
 
     /**
@@ -115,21 +116,18 @@ public class StringValidator
     {
         super.assertValidity(testValue);
 
-        if (required || StringUtils.isNotEmpty(testValue))
+        if ((required || StringUtils.isNotEmpty(testValue)) && maskPattern != null)
         {
-            if (maskPattern != null)
+            /** JDK 1.4 matcher */
+            boolean patternMatch = maskPattern.matcher(testValue).matches();
+
+            log.debug("Trying to match " + testValue
+                    + " to pattern " + maskString);
+
+            if (!patternMatch)
             {
-                /** JDK 1.4 matcher */
-                boolean patternMatch = maskPattern.matcher(testValue).matches();
-
-                log.debug("Trying to match " + testValue
-                        + " to pattern " + maskString);
-
-                if (!patternMatch)
-                {
-                    errorMessage = maskMessage;
-                    throw new ValidationException(maskMessage);
-                }
+                errorMessage = maskMessage;
+                throw new ValidationException(maskMessage);
             }
         }
     }

@@ -46,7 +46,7 @@ public class IntakeServiceFacade
 
     /**
      * Return whether the intake service has been initialized.
-     * @return
+     * @return true if the service has been initialzed
      */
     public static boolean isInitialized()
     {

@@ -158,8 +158,8 @@ public class FieldReference
     /**
      * Map the comparison strings to their numeric counterparts
      * 
-     * @param key the 
-     * @return
+     * @param key the string representation of a comparison operator
+     * @return the numeric representation of the given comparison operator
      */
     public static int getCompareType(String key)
     {
