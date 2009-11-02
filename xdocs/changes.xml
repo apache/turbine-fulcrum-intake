@@ -25,7 +25,12 @@
   </properties>
 
   <body>
-  	 <release version="1.0.4-dev" date="in Subversion">
+     <release version="1.0.7-SNAPSHOT" date="in Subversion">
+     </release>
+  	 <release version="1.0.6" date="2009-11-02">
+      <action type="fix" dev="tv">
+        Catch only Exceptions that are actually thrown.
+      </action>
       <action type="fix" dev="tv" issue="TRB-11" due-to="Evan Koffler">
         Intake won't use interfaces for the mapTo() method.
       </action>
