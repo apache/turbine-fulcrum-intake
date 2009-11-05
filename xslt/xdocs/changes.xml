@@ -23,7 +23,7 @@
     <author email="epugh@opensourceconnections.com">Eric Pugh</author>
   </properties>
   <body>
-    <release version="1.0.4" date="in Subversion">
+    <release version="1.1.0" date="2009-11-06">
       <action type="add" dev="sgoeschl" date="2009-11-05">
         Added an additional transform() method which takes no XML input
         document. 
