@@ -27,6 +27,8 @@ import java.io.Reader;
 import java.io.FileReader;
 import java.io.Writer;
 import java.io.FileWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * XSLTServiceTest
@@ -72,7 +74,7 @@ public class XSLTServiceTest extends BaseUnitTest
     }
 
     /**
-     * Test an indentity transformation to make sure that the service
+     * Test an identity transformation to make sure that the service
      * works.
      *
      * @throws Exception the test failed
@@ -81,8 +83,21 @@ public class XSLTServiceTest extends BaseUnitTest
     {
         Reader reader = new FileReader("./pom.xml");
         Writer writer = new FileWriter("./target/testTransform.xml");
-        xsltService.transform("identity.xsl", reader, writer);
+        xsltService.transform("identity.xslt", reader, writer);
         reader.close();
         writer.close();
+    }
+
+     /**
+     * Test invocation of a XSLT having no source document.
+     *
+     * @throws Exception the test failed
+     */
+    public void testTransformXsltOnly() throws Exception
+    {
+        Map values = new HashMap();
+        values.put("name", "Fulcrum");
+        String result = xsltService.transform("hello.xslt", values );
+        assertTrue(result.contains("Hello Fulcrum"));
     }
 }

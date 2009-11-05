@@ -36,6 +36,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.configuration.Configurable;
@@ -48,6 +50,7 @@ import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 import org.w3c.dom.Node;
+import org.w3c.dom.Document;
 
 /**
  * Implementation of the Turbine XSLT Service. It transforms xml with a given
@@ -103,7 +106,7 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      */
     private URL getStyleURL(String style)
     {
-        StringBuffer sb = new StringBuffer(128);
+        StringBuffer sb = new StringBuffer();
 
         sb.append(path);
 
@@ -137,12 +140,15 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
 
     /**
      * Compile Templates from an input file.
+     *
+     * @param source the source URL
+     * @return the compiled template
+     * @throws Exception the compilation failed
      */
     protected Templates compileTemplates(URL source) throws Exception
     {
         StreamSource xslin = new StreamSource(source.openStream());
-        Templates root = tfactory.newTemplates(xslin);
-        return root;
+        return tfactory.newTemplates(xslin);
     }
 
     /**
@@ -154,6 +160,10 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      * This method is synchronized on the xsl cache so that a thread does not
      * attempt to load Templates from the cache while it is still being
      * compiled.
+     *
+     * @param xslName the name of the XSL file
+     * @return the correspondint template or null if the XSL was not found
+     * @throws Exception getting the template failed
      */
     protected Templates getTemplates(String xslName) throws Exception
     {
@@ -177,24 +187,38 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
 
             return sr;
         }
-
     }
 
     protected void transform(String xslName, Source xmlin, Result xmlout, Map params)
             throws Exception
     {
-        Transformer transformer = getTransformer(xslName);
-
-        if (params != null)
+        try
         {
-            for (Iterator it = params.entrySet().iterator(); it.hasNext(); )
+            long startTime = System.currentTimeMillis();
+            Transformer transformer = getTransformer(xslName);
+
+            if (params != null)
             {
-                Map.Entry entry = (Map.Entry) it.next();
-                transformer.setParameter(String.valueOf(entry.getKey()), entry.getValue());
+                for (Iterator it = params.entrySet().iterator(); it.hasNext(); )
+                {
+                    Map.Entry entry = (Map.Entry) it.next();
+                    transformer.setParameter(String.valueOf(entry.getKey()), entry.getValue());
+                }
+            }
+
+            transformer.transform(xmlin, xmlout);
+
+            if(getLogger().isDebugEnabled())
+            {
+                long duration = System.currentTimeMillis() - startTime;
+                getLogger().debug("The transforamtion '" + xslName + "' took " + duration + " ms");
             }
         }
-
-        transformer.transform(xmlin, xmlout);
+        catch(Exception e)
+        {
+            getLogger().debug("The transformation '" + xslName + "' failed due to : " + e.getMessage());
+            throw e;
+        }
     }
 
     /**
@@ -349,6 +373,38 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
     }
 
     /**
+     * Uses an xsl file without any input.
+     *
+     * @param xslName The name of the file that contains the xsl stylesheet.
+     * @param params A set of parameters that will be forwarded to the XSLT
+     * @return the transformed output
+     * @throws Exception the transformation failed
+     */
+    public String transform(String xslName, Map params) throws Exception {
+
+        StringWriter sw = new StringWriter();
+        transform(xslName, sw, params);
+        return sw.toString();
+    }
+
+    /**
+     * Uses an xsl file without any xml input (simplified stylesheet)
+     *
+     * @param xslName The name of the file that contains the xsl stylesheet
+     * @param out The writer for the transformed output.
+     * @param params A set of parameters that will be forwarded to the XSLT
+     * @throws Exception the transformation failed
+     */
+    public void transform(String xslName, Writer out, Map params) throws Exception {
+
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        Document document = documentBuilder.newDocument();
+
+        transform(xslName, document.getDocumentElement(), out, params);
+    }
+
+    /**
      * Retrieve a transformer for the given stylesheet name. If no stylesheet is
      * available for the provided name, an identity transformer will be
      * returned. This allows clients of this service to perform more complex
@@ -358,6 +414,7 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      * @param xslName
      *            Identifies stylesheet to get transformer for
      * @return A transformer for that stylesheet
+     * @throws Exception retrieving the transformer failed
      */
     public Transformer getTransformer(String xslName) throws Exception
     {

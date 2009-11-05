@@ -174,4 +174,28 @@ public class XSLTServiceFacade
     {
         return getService().transform(xslName, in, params);
     }
+
+    /**
+     * Uses an xsl file without any xml input.
+     *
+     * @param xslName The name of the file that contains the xsl stylesheet.
+     * @param params A set of parameters that will be forwarded to the XSLT
+     * @return the transformed output
+     * @throws Exception the transformation failed
+     */
+    public String transform(String xslName, Map params) throws Exception {
+        return getService().transform(xslName, params);
+    }
+
+    /**
+     * Uses an xsl file without any xml input.
+     *
+     * @param xslName The name of the file that contains the xsl stylesheet
+     * @param out The writer for the transformed output.
+     * @param params A set of parameters that will be forwarded to the XSLT
+     * @throws Exception the transformation failed
+     */    
+    public void transform(String xslName, Writer out, Map params) throws Exception {
+        getService().transform(xslName, out, params);
+    }
 }

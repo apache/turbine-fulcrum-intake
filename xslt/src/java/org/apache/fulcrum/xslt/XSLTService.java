@@ -129,4 +129,26 @@ public interface XSLTService
      * @throws Exception the transformation failed
      */
     String transform(String xslName, Node in, Map params) throws Exception;
+
+    /**
+     * Uses an xsl file without any xml input.
+     *
+     * @param xslName The name of the file that contains the xsl stylesheet.
+     * @param params A set of parameters that will be forwarded to the XSLT
+     * @return the transformed output
+     * @throws Exception the transformation failed
+     */
+    String transform(String xslName, Map params) throws Exception;
+
+    /**
+     * Uses an xsl file without any xml input.
+     *
+     * @param xslName The name of the file that contains the xsl stylesheet
+     * @param out The writer for the transformed output.
+     * @param params A set of parameters that will be forwarded to the XSLT
+     * @return the transformed output
+     * @throws Exception the transformation failed
+     */
+    void transform(String xslName, Writer out, Map params) throws Exception;
+
 }
