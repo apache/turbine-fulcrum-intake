@@ -42,7 +42,7 @@
       <p>And here is the configuration:</p>
       <source>
         <![CDATA[
-        <xslt path="/WEB-INF/stylesheets" cache="true"/>
+<xslt path="/WEB-INF/stylesheets" cache="true"/>
     ]]>
 </source>
     </section>

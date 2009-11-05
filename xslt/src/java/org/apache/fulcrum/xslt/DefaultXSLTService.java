@@ -61,7 +61,6 @@ import org.w3c.dom.Document;
  * @author <a href="mailto:rubys@us.ibm.com">Sam Ruby</a>
  * @author <a href="mailto:epugh@opensourceconnections.com">Eric Pugh</a>
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
- * @version $Id$
  */
 public class DefaultXSLTService extends AbstractLogEnabled implements
         XSLTService, Initializable, Configurable, Contextualizable, Serviceable

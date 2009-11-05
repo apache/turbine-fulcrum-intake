@@ -24,6 +24,10 @@
   </properties>
   <body>
     <release version="1.0.4" date="in Subversion">
+      <action type="add" dev="sgoeschl" date="2009-11-05">
+        Added an additional transform() method which takes no XML input
+        document. 
+      </action>
       <action type="add" dev="sgoeschl" date="2009-10-14">
         Added a regression test which really does a XSL transformation.
       </action>

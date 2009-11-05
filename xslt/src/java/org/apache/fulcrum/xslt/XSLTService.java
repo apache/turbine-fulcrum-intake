@@ -32,7 +32,6 @@ import org.w3c.dom.Node;
  *
  * @author <a href="mailto:leon@opticode.co.za">Leon Messerschmidt</a>
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
- * @version $Id$
  */
 public interface XSLTService
 {
