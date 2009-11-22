@@ -50,6 +50,7 @@
       <item name="Crypto"                href="/fulcrum-crypto/"/>
       <item name="DVSL"                  href="/fulcrum-dvsl/"/>
       <item name="Factory"               href="/fulcrum-factory/"/>
+      <item name="Intake"                href="/fulcrum-intake/"/>
       <item name="Localization"          href="/fulcrum-localization/"/>
       <item name="Mimetype"              href="/fulcrum-mimetype/"/>
       <item name="Pool"                  href="/fulcrum-pool/"/>
@@ -84,7 +85,6 @@
       <item name="Configuration"         href="/fulcrum-configuration-impl/"/>
       <item name="Groovy"                href="/fulcrum-groovy/"/>
       <item name="HsqlDB"                href="/fulcrum-hsqldb/"/>      
-      <item name="Intake"                href="/fulcrum-intake/"/>
       <item name="Jetty"      			 href="/fulcrum-jetty/"/>      
       <item name="PBE"                   href="/fulcrum-pbe/"/>
       <item name="ResourceManager"       href="/fulcrum-resourcemanager/"/>

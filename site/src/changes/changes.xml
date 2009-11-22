@@ -27,6 +27,9 @@
   <body>
     <release version="3.0.0" date="2005-05-13">
      <action dev="tv" type="update">
+       Moved intake component to the released components section.
+     </action>
+     <action dev="tv" type="update">
        Moved parser component to the released components section.
      </action>
      <action dev="sgoeschl" type="add">
