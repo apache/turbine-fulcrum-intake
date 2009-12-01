@@ -49,7 +49,7 @@ import org.hsqldb.persist.HsqlProperties;
  * <dt>trace</dt>
  * <dd>(true/false) a flag enabling tracing in the hsql server.</dd>
  * <dt>silent</dt>
- * <dd>(true/false) a flag to control the logging output oh thr hsql server.</dd>
+ * <dd>(true/false) a flag to control the logging output of the hsql server.</dd>
  * <dt>start</dt>
  * <dd>(true/false) when true the database is started at configuration time, and does
  * not need to be started under application control.</dd>
@@ -87,11 +87,6 @@ public class HSQLServiceImpl
         // nothing to do
     }
 
-    public boolean isRunning() {
-        // return true id server is online
-        return server.getState() == ServerConstants.SERVER_STATE_ONLINE;
-    }
-
     /**
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
@@ -107,8 +102,8 @@ public class HSQLServiceImpl
         this.serverProperties = new HsqlProperties();
         this.serverProperties.setProperty("server.database.0", cfg.getAttribute("database"));
         this.serverProperties.setProperty("server.dbname.0", cfg.getAttribute("dbname"));
-        this.serverProperties.setProperty("server.trace", cfg.getAttributeAsBoolean("trace"));
-        this.serverProperties.setProperty("server.silent", cfg.getAttributeAsBoolean("silent"));
+        this.serverProperties.setProperty("server.trace", cfg.getAttributeAsBoolean("trace", false));
+        this.serverProperties.setProperty("server.silent", cfg.getAttributeAsBoolean("silent", true));
         this.serverProperties.setProperty("server.port", cfg.getAttribute("port"));
         this.serverProperties.setProperty("server.tls", cfg.getAttribute("tls","false"));
     }
@@ -170,12 +165,27 @@ public class HSQLServiceImpl
         this.serverProperties = null;
     }
 
+    /////////////////////////////////////////////////////////////////////////
+    // Service Interface Implementation
+    /////////////////////////////////////////////////////////////////////////
+
+    public boolean isRunning() {
+        // return true id server is online
+        return server.getState() == ServerConstants.SERVER_STATE_ONLINE;
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////
+    // Service Implementation
+    /////////////////////////////////////////////////////////////////////////
+
     /**
-     * Poll the HSQLDB server for a state change
+     * Poll the HSQLDB server for a state change.
+     *
      * @param desiredState the state we are waiting for
+     * @param lim the number of 100ms iteration to wait for
      * @throws Exception something went wrong
      */
-
     private void pollForState( int desiredState, int lim )
     	throws Exception
     {
@@ -197,22 +207,23 @@ public class HSQLServiceImpl
             Thread.sleep(100);
         }
 
-        if( isSuccessful == false )
+        if( !isSuccessful )
         {
+
+            Throwable serverError = this.server.getServerError();
             String msg = "Unable to change the HSQLDB server to state : " + desiredState;
 
-            if( this.server.getServerError() != null )
+            if( serverError != null )
             {
-                this.getLogger().error( msg, this.server.getServerError() );
+                this.getLogger().error( msg, serverError );
 
-	            if( this.server.getServerError() instanceof Exception )
+	            if( serverError instanceof Exception )
 	            {
-	                throw (Exception) this.server.getServerError();
+	                throw (Exception) serverError;
 	            }
-
-	            if( this.server.getServerError() instanceof Throwable )
+                else
 	            {
-	                throw new RuntimeException( this.server.getServerError().getMessage() );
+	                throw new RuntimeException( serverError.getMessage() );
 	            }
             }
             else

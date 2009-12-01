@@ -18,5 +18,5 @@
  under the License.
 -->
 <componentConfig>
-    <HSQLService database="./src/test/test" dbname="test" trace="true" silent="false" port="9001" tls="false"/>
+    <HSQLService database="./src/test/test" dbname="test" trace="false" silent="true" port="9001" tls="false"/>
 </componentConfig>

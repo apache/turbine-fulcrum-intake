@@ -28,7 +28,7 @@
     <dependency>
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
-      <version>1.8.0.7</version>
+      <version>1.8.1.1</version>
       <url>http://hsqldb.sourceforge.net/</url>
     </dependency>
 
@@ -36,13 +36,13 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0.5</version>
+      <version>1.0.6</version>
     </dependency>
 
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
-      <version>1.0.5</version>
+      <version>1.0.6</version>
     </dependency>
 
   </dependencies>

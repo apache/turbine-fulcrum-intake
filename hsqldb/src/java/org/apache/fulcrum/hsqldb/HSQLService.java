@@ -50,7 +50,7 @@ public interface HSQLService extends Startable
     public void stop() throws Exception;
 
     /**
-     * Check if the server is running
+     * Check if the database server is running.
      *
      * @return the state of the hsqldb server
      */
