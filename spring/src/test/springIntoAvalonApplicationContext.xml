@@ -22,7 +22,7 @@
 
     <!-- Get a hold on an Avalon Service Manager -->
     <bean id="avalonContainerBean" 
-      class="org.apache.fulcrum.servicemanager.ServiceManagerServiceImpl" 
+      class="org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerServiceImpl" 
       factory-method="getInstance"
     />
 

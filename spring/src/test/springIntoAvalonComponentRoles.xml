@@ -21,7 +21,7 @@
 <role-list>
     <role
         name="serviceManagerService"
-        default-class="org.apache.fulcrum.servicemanager.ServiceManagerServiceImpl"
+        default-class="org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerServiceImpl"
     />
     <role
         name="systemPropertyService"
