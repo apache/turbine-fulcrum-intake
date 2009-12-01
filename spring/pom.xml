@@ -7,16 +7,16 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fulcrum-spring</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
   <name>Fulcrum Spring</name>
   <inceptionYear>2008</inceptionYear>
   <description>Fulcrum Spring Container Integration Service</description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-spring</url>
 		
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/FULCRUM_SPRING_1_0_0</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/FULCRUM_SPRING_1_0_0</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/tags/FULCRUM_SPRING_1_0_0</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/spring/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/spring/</developerConnection>
+    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/spring/</url>
   </scm>
 
   <distributionManagement>
