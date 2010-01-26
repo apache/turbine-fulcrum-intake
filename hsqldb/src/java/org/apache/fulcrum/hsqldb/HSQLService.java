@@ -1,7 +1,5 @@
 package org.apache.fulcrum.hsqldb;
 
-import org.apache.avalon.framework.activity.Startable;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,6 +19,8 @@ import org.apache.avalon.framework.activity.Startable;
  * under the License.
  */
 
+import org.apache.avalon.framework.activity.Startable;
+
 /**
  * A definition for a HSQLService component which configures a single hsqldb
  * database.
@@ -28,31 +28,6 @@ import org.apache.avalon.framework.activity.Startable;
  * @author <a href="mailto:pti@elex.be">Peter Tillemans</a>
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
-public interface HSQLService extends Startable
+public interface HSQLService
 {
-    /**
-     * Starts the HSQLDB server. The implementation polls to ensure
-     * that the HSQLDB server is fully initialized otherwise we get
-     * spurious connection exceptions. If the HSQLDB server is not
-     * upand running within 10 seconds we throw an exception.
-     *
-     * @see org.apache.avalon.framework.activity.Startable#start()
-     */
-    public void start() throws Exception;
-
-    /**
-     * Stop the HSQLDB server. The implementation polls to ensure
-     * that the HSQLDB server has terminated otherwise someone
-     * could call System.exit() and break the database.
-     *
-     * @see org.apache.avalon.framework.activity.Startable#stop()
-     */
-    public void stop() throws Exception;
-
-    /**
-     * Check if the database server is running.
-     *
-     * @return the state of the hsqldb server
-     */
-    public boolean isRunning();
 }

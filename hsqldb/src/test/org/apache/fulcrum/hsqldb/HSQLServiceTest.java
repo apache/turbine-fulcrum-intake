@@ -91,6 +91,7 @@ public class HSQLServiceTest extends BaseUnitTest
             while( rs.next() )
             {
                 String loginName = rs.getString("LOGIN_NAME");
+                System.out.println(loginName);
                 assertTrue( loginName.length() > 0 );
             }
         }
@@ -108,18 +109,23 @@ public class HSQLServiceTest extends BaseUnitTest
         }
     }
 
-    public void testIsRunning() throws Exception {
-
-        assertTrue("Server was not started", service.isRunning());
-        service.stop();
-        assertFalse("Server is still running", service.isRunning());
+    public void testIsRunning() throws Exception
+    {
+        assertTrue("Server was not started", ((HSQLServiceImpl) service).isRunning());
+        ((HSQLServiceImpl) service).stop();
+        assertFalse("Server is still running", ((HSQLServiceImpl) service).isRunning());
     }
 
-    public void testShutdown() throws Exception {
-
+    /**
+     * Terminate the embedded HSQLDB server using the "SHUTDOWN" command.
+     *
+     * @throws Exception the test failed
+     */
+    public void testShutdown() throws Exception
+    {
         Connection conn = this.getConnection("test");
         Statement stmt = conn.createStatement();
         stmt.execute("SHUTDOWN;");
-        assertFalse("Server is still running", service.isRunning());
+        assertFalse("Server is still running", ((HSQLServiceImpl) service).isRunning());
     }
 }
