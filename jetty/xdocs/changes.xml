@@ -24,7 +24,10 @@
   </properties>
 
   <body>
-    <release version="1.0.0-SNAPSHOT" date="as in SVN">
+    <release version="1.0.0" date="2010-02-16">
+      <action dev="sgoeschl" type="delete" date="2010-02-16">
+        Removing JSP 2.0 and JDK 1.4 support
+      </action>
       <action dev="sgoeschl" type="update" date="2010-02-16">
         Upgrading from jetty-6.1.11 to jetty-6.1.14
       </action>
