@@ -8,16 +8,16 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fulcrum-jetty</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
   <name>Fulcrum Jetty</name>
   <inceptionYear>2008</inceptionYear>
   <description>Avalon Component for an embeddable Jetty Servlet Container</description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-jetty/</url>
 		
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/FULCRUM_JETTY_1_0_0</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/FULCRUM_JETTY_1_0_0</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/tags/FULCRUM_JETTY_1_0_0</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/jetty/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/jetty/</developerConnection>
+    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/jetty/</url>
   </scm>
 
   <distributionManagement>
