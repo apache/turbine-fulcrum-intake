@@ -32,7 +32,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 /**
- * Testing the embedded Jetty container.
+ * Testing the embedded Jetty container. We are basically
+ * invoking the various URL to make sure that everything
+ * is properly wired.
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
@@ -95,7 +97,9 @@ public class JettyServiceTest extends BaseUnitTest
     /////////////////////////////////////////////////////////////////////////
 
     /**
-     * Ensure that we start Jetty properly
+     * Ensure that we start Jetty properly.
+     *
+     * @throws Exception the test failed
      */
     public void testGetJettyService() throws Exception
     {
@@ -103,7 +107,9 @@ public class JettyServiceTest extends BaseUnitTest
     }
 
     /**
-     * Fetch the start page
+     * Fetch the start page.
+     *
+     * @throws Exception the test failed
      */
     public void testGetIndexPage() throws Exception
     {
@@ -112,7 +118,9 @@ public class JettyServiceTest extends BaseUnitTest
     }
 
     /**
-     * Invoke all servlet examples
+     * Invoke all servlet examples.
+     *
+     * @throws Exception the test failed
      */
     public void testInvokeTestServlets() throws Exception
     {
@@ -136,7 +144,9 @@ public class JettyServiceTest extends BaseUnitTest
     }
 
     /**
-     * Invoke a JSP examples
+     * Invoke a JSP examples.
+     *
+     * @throws Exception the test failed
      */
     public void testInvokeTestJsps() throws Exception
     {
@@ -153,7 +163,9 @@ public class JettyServiceTest extends BaseUnitTest
     }
 
     /**
-     * Reconfigure a running Jetty using the Avalon Lifycyle 'stop', 'reconfigure', 'start'
+     * Reconfigure a running Jetty using the Avalon Lifycyle 'stop', 'reconfigure', 'start'.
+     *
+     * @throws Exception the test failed
      */
     public void testStartStop() throws Exception
     {

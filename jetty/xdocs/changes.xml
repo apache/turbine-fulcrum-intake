@@ -25,6 +25,9 @@
 
   <body>
     <release version="1.0.0-SNAPSHOT" date="as in SVN">
+      <action dev="sgoeschl" type="update" date="2010-02-16">
+        Upgrading from jetty-6.1.11 to jetty-6.1.14
+      </action>
       <action dev="sgoeschl" type="add">
         First cut for an embeddable Jetty server
       </action>

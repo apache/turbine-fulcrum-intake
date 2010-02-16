@@ -19,15 +19,7 @@ package org.apache.fulcrum.jetty;
  * under the License.
  */
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
-
-import java.net.URL;
-import java.io.InputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 
 /**
  * Testing the embedded Jetty container.
@@ -69,7 +61,9 @@ public class JettyTestRunner extends BaseUnitTest
     /////////////////////////////////////////////////////////////////////////
 
     /**
-     * Run the Jetty instance for 600 seconds to do some manual testing
+     * Run the Jetty instance for 600 seconds to do some manual testing.
+     *
+     * @throws Exception the test failed
      */
     public void testRunJetty() throws Exception
     {

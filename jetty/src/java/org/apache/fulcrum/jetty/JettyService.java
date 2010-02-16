@@ -1,7 +1,5 @@
 package org.apache.fulcrum.jetty;
 
-import org.mortbay.jetty.Server;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,14 +19,20 @@ import org.mortbay.jetty.Server;
  * under the License.
  */
 
+import org.mortbay.jetty.Server;
+
 /**
- * Starts an instance of the Spring Service Framework as Avalon service.
+ * Starts a Jetty servlet container as Avalon service.
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
 public interface JettyService
 {
-    /** @return the underlying Jetty server instance */
+    /**
+     * Get the underlying Jetty server instance.
+     *
+     * @return the Jetty server instance 
+     */
     Server getServer();
 }
