@@ -22,18 +22,23 @@ package org.apache.fulcrum.script;
 import java.util.Map;
 
 /**
- * A Runnable executing scripts
+ * A Runnable for executing scripts.
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 public interface ScriptRunnable extends Runnable
 {
     /**
+     * Set the arguments for script execution.
+     *
      * @param args The args to be used.
      */
     void setArgs(Map args);
 
     /**
+     *
+     * Get the result from script execution.
+     * 
      * @return Returns the result.
      */
     Object getResult() throws Exception;

@@ -38,7 +38,6 @@ import java.util.Map;
  * @author Gary Gregory
  * @author Norm Deane
  * @since 2.0
- * @version $Id: Validate.java,v 1.1.1.1 2005/12/28 12:10:22 sigi Exp $
  */
 public class Validate
 {

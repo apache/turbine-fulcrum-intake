@@ -38,9 +38,9 @@ function testMe(aBar)
   var isDebug = configuration.getChild("isDebug").getValueAsBoolean(false);
   serviceManager.lookup("org.apache.fulcrum.script.ScriptService").exists("Avalon");
 
-  // print("applicationDir = " + applicationDir);
-  // print("tempDir = " + tempDir);
-  // print("isDebug = " + isDebug);
+  print("applicationDir = " + applicationDir);
+  print("tempDir = " + tempDir);
+  print("isDebug = " + isDebug);
   logger.info("Logging from within a script ... :-)");
 
   // 3) create a property instance

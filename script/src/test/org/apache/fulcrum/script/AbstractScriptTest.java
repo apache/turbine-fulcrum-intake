@@ -21,12 +21,11 @@ package org.apache.fulcrum.script;
 
 import java.util.Hashtable;
 
-import javax.script.GenericScriptContext;
-import javax.script.Namespace;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
-import javax.script.SimpleNamespace;
+import javax.script.SimpleBindings;
+import javax.script.SimpleScriptContext;
 
 import org.apache.fulcrum.script.impl.ScriptRunnableImpl;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
@@ -36,7 +35,7 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
-public class AbstractScriptTest extends BaseUnitTest
+public abstract class AbstractScriptTest extends BaseUnitTest
 {
     protected ScriptService scriptService;
 
@@ -57,13 +56,15 @@ public class AbstractScriptTest extends BaseUnitTest
     }
 
     /**
-     * Taken from the JSR 223 reference implementation
+     * Taken from the JSR 223 reference implementation.
+     *
+     * @throws Exception the test failed
      */
     public void testCompilableInterface() throws Exception
     {
         for (int i=0; i<3; i++)
         {
-            SimpleNamespace args = new SimpleNamespace();
+            SimpleBindings args = new SimpleBindings();
             args.put("count",new Integer(i));
             args.put("currentTime",new Long(System.currentTimeMillis()));
             this.scriptService.eval("CompilableInterface", args);
@@ -71,7 +72,9 @@ public class AbstractScriptTest extends BaseUnitTest
     }
 
     /**
-     * Taken from the JSR 223 reference implementation
+     * Taken from the JSR 223 reference implementation.
+     *
+     * @throws Exception the test failed
      */
     public void testHelloWorld() throws Exception
     {
@@ -80,7 +83,9 @@ public class AbstractScriptTest extends BaseUnitTest
 
     /**
      * Taken from the JSR 223 reference implementation. This test
-     * does not work with the "small" interpreter
+     * does not work with the "small" interpreter.
+     *
+     * @throws Exception the test failed
      */
     public void testInvocableIntf() throws Exception
     {
@@ -98,30 +103,32 @@ public class AbstractScriptTest extends BaseUnitTest
 
     /**
      * Taken from the JSR 223 reference implementation.
+     *
+     * @throws Exception the test failed 
      */
     public void testNamespaceDemo2() throws Exception
     {
         ScriptEngine eng = this.scriptService.getScriptEngine();
 
 		//create two simple namespaces
-		SimpleNamespace eNamespace = new SimpleNamespace();
+		SimpleBindings eNamespace = new SimpleBindings();
 		eNamespace.put("key", new Testobj("Original engine scope."));
-		SimpleNamespace cNamespace = new SimpleNamespace();
+		SimpleBindings cNamespace = new SimpleBindings();
 		cNamespace.put("key", new Testobj("Original ENGINE_SCOPE in context."));
 
 		//use external namespace instead of the default one
-		eng.setNamespace(eNamespace,ScriptContext.ENGINE_SCOPE);
+		eng.setBindings(eNamespace,ScriptContext.ENGINE_SCOPE);
 		System.out.println("Starting value of key in engine scope is \"" + eng.get("key") + "\"");
 
 		//execute script using the namespace
-		Object ret = this.scriptService.eval("NamespaceDemo2");
+		this.scriptService.eval("NamespaceDemo2");
 		System.out.println("Ending value of key in engine scope is \"" + eng.get("key") + "\"");
 
 		//create a scriptcontext and set its engine scope namespace
-		ScriptContext ctxt = new GenericScriptContext();
-		ctxt.setNamespace(cNamespace, ScriptContext.ENGINE_SCOPE);
+		ScriptContext ctxt = new SimpleScriptContext();
+		ctxt.setBindings(cNamespace, ScriptContext.ENGINE_SCOPE);
 
-		ret = this.scriptService.eval("NamespaceDemo2", ctxt);
+		this.scriptService.eval("NamespaceDemo2", ctxt);
 		System.out.println("Ending value of key in engine scope is \"" + eng.get("key") + "\"");
 		System.out.println("Ending value of key in ENGINE_SCOPE of context is " +
 			ctxt.getAttribute("key",ScriptContext.ENGINE_SCOPE));
@@ -129,6 +136,8 @@ public class AbstractScriptTest extends BaseUnitTest
 
     /**
      * Taken from the JSR 223 reference implementation.
+     *
+     * @throws Exception the test failed 
      */
     public void testNamespaceDemo3() throws Exception
     {
@@ -138,8 +147,8 @@ public class AbstractScriptTest extends BaseUnitTest
         final ScriptService scriptService = this.scriptService;
 
         //set engine-scope namespace with state=1
-        Namespace n = new SimpleNamespace();
-        engine.setNamespace(n, ScriptContext.ENGINE_SCOPE);
+        SimpleBindings n = new SimpleBindings();
+        engine.setBindings(n, ScriptContext.ENGINE_SCOPE);
         n.put("state", new Integer(STATE1));
 
         //create a new thread to run script
@@ -165,18 +174,22 @@ public class AbstractScriptTest extends BaseUnitTest
     }
 
     /**
-     * Test access to the Avalon infrastructure
+     * Test access to the Avalon infrastructure.
+     *
+     * @throws Exception the test failed
      */
     public void testAvalonContext() throws Exception
     {
-        SimpleNamespace args = new SimpleNamespace();
+        SimpleBindings args = new SimpleBindings();
         args.put("bar",new Integer(2));
         Object result = this.scriptService.eval("Avalon", args);
         System.out.println("RESULT ==> " +  result);
     }
 
     /**
-     * Test the general performance of the JSR 223 integration
+     * Test the general performance of the JSR 223 integration.
+     *
+     * @throws Exception the test failed
      */
     public void testPerformance() throws Exception
     {
@@ -195,8 +208,9 @@ public class AbstractScriptTest extends BaseUnitTest
     }
 
     /**
-     * Check ScriptService.exist()
+     * Check ScriptService.exist().
      *
+     * @throws Exception the test failed
      */
     public void testExists() throws Exception
     {
@@ -206,6 +220,8 @@ public class AbstractScriptTest extends BaseUnitTest
 
     /**
      * Execute a script using multiple threads.
+     *
+     * @throws Exception the test failed
      */
     public void testMultithreadingScript() throws Exception
     {
@@ -241,6 +257,8 @@ public class AbstractScriptTest extends BaseUnitTest
 
     /**
      * Execute a script resulting in a ScriptException.
+     *
+     * @throws Exception the test failed
      */
     public void testRuntimeErrorScript() throws Exception
     {
@@ -251,12 +269,14 @@ public class AbstractScriptTest extends BaseUnitTest
         }
         catch (ScriptException e)
         {
-            return;
+            // expected
         }
     }
 
     /**
      * Tests the call() method of an Invocable.
+     *
+     * @throws Exception the test failed
      */
     public void testCall() throws Exception
     {
@@ -268,7 +288,9 @@ public class AbstractScriptTest extends BaseUnitTest
     }
 
     /**
-     * Tests the locator functionality
+     * Tests the locator functionality.
+     *
+     * @throws Exception the test failed
      */
     public void testLocatorFunctionality() throws Exception
     {
@@ -285,6 +307,5 @@ public class AbstractScriptTest extends BaseUnitTest
         // execute locator/bar/foo.extension
         result = this.scriptService.eval("locator/bar/foo").toString();
         assertTrue(result.startsWith("locator/bar/foo."));
-
     }
 }

@@ -20,6 +20,17 @@
 
 <componentConfig>
 
+  <!--
+    ResourceManagerService
+    
+    domain := one or more domain definitions
+    domain@name := the name of a domain
+    domain@type := an optional implementation class - defaults to FileResourceManager
+    domain/suffix := the extension of the resources to manage
+    domain/location := the location were the resources reside
+    domain/useLocator := enable/disable the locator feature
+  -->
+  
   <ResourceManagerService>
     <domain name="js">
       <suffix>js</suffix>
@@ -35,21 +46,22 @@
 		scriptEngines/scriptEngine := configuration of a single script engine
 		scriptEngines/scriptEngine/name := the name of the script engine
 		scriptEngines/scriptEngine/isCached := cache the scripts or reload it each time from the ResourceManagerService
-		scriptEngines/scriptEngine/isCompiled := precompile the script
-		scriptEngines/scriptEngine/location := the location of the scripts
+		scriptEngines/scriptEngine/isCompiled := precompile the script (if supported by the scripting engine)
+		scriptEngines/scriptEngine/location := the associated domain name of ResourceManagerService
 		scriptEngines/scriptEngine/preLoad := a list of scripts to load on startup
-		scriptEngines/scriptEngine/preLoad/script := the script to preload
+		scriptEngines/scriptEngine/preLoad/script := a single script to load on startup
 	-->
 
   <ScriptService>
   	<scriptEngines>
   		<scriptEngine>
-  			<name>js</name>
-  			<isCached>true</isCached>
+  			<name>javascript</name>
+            <extension>js</extension>
+            <isCached>true</isCached>
   			<isCompiled>true</isCompiled>
   			<location>js</location>
   			<preLoad>
-  				<script>InvocableIntf.js</script>
+  		    <script>InvocableIntf.js</script>
   			</preLoad>
   		</scriptEngine>
   	</scriptEngines>

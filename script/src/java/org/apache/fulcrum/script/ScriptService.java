@@ -19,13 +19,12 @@ package org.apache.fulcrum.script;
  * under the License.
  */
 
-import java.io.IOException;
-
-import javax.script.Namespace;
+import javax.script.Bindings;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import java.io.IOException;
 
 /**
  * An Avalon service to execute scripts based on JSR-223.
@@ -69,12 +68,12 @@ public interface ScriptService
      * during the script execution.
      *
      * @param scriptName the name of the script
-     * @param namespace The Namespace of attributes
+     * @param bindings The binding of attributes
      * @return result from the executed script
      * @throws IOException loading the script failed
      * @throws ScriptException if an error occurrs during script execution.
      */
-    Object eval( String scriptName, Namespace namespace ) throws IOException, ScriptException;
+    Object eval( String scriptName, Bindings bindings ) throws IOException, ScriptException;
 
     /**
      * Causes the immediate execution of the script. State left in the engine

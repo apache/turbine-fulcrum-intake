@@ -39,8 +39,8 @@ import org.apache.avalon.framework.service.Serviceable;
 
 /**
  * Base class for a service implementation capturing the Avalon
- * configuration artifats. This is basically a "copy-and-waste" from
- * the YAAFI framework.
+ * configuration artifacts. This is basically a "copy-and-waste" from
+ * the fulcrum-yaafi framework.
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
@@ -50,10 +50,10 @@ public abstract class ScriptBaseService
     implements Contextualizable, Serviceable, Configurable, Parameterizable, Reconfigurable, Disposable
 {
     /** context key for persistent directory */
-    private final static String URN_AVALON_HOME = "urn:avalon:home";
+    private final static String URN_AVALON_HOME = "context-root";
 
     /** context key for temporary directory */
-    private final static String URN_AVALON_TEMP = "urn:avalon:temp";
+    private final static String URN_AVALON_TEMP = "impl.workDir";
 
     /** The context supplied by the avalon framework */
     private Context context;

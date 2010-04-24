@@ -21,7 +21,7 @@ package org.apache.fulcrum.script.impl;
 
 import java.util.Map;
 
-import javax.script.SimpleNamespace;
+import javax.script.SimpleBindings;
 
 import org.apache.fulcrum.script.ScriptRunnable;
 import org.apache.fulcrum.script.ScriptService;
@@ -40,7 +40,7 @@ public class ScriptRunnableImpl implements ScriptRunnable
     private ScriptService scriptService;
 
     /** the arguments for executing the script */
-    private SimpleNamespace args;
+    private SimpleBindings args;
 
     /** the result of the execution */
     private Object result;
@@ -65,7 +65,7 @@ public class ScriptRunnableImpl implements ScriptRunnable
 
         this.scriptName = scriptName;
         this.scriptService = scriptService;
-        this.args = new SimpleNamespace(args);
+        this.args = new SimpleBindings(args);
     }
 
     /**
@@ -114,7 +114,7 @@ public class ScriptRunnableImpl implements ScriptRunnable
     public void setArgs(Map args)
     {
         Validate.notNull( args, "args" );
-        this.args = new SimpleNamespace(args);
+        this.args = new SimpleBindings(args);
     }
 
     /**

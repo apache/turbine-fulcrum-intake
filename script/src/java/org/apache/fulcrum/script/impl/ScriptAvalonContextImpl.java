@@ -37,10 +37,10 @@ import org.apache.fulcrum.script.ScriptAvalonContext;
 public class ScriptAvalonContextImpl implements ScriptAvalonContext
 {
     /** context key for persistent directory*/
-    private final static String URN_AVALON_HOME = "urn:avalon:home";
+    private final static String URN_AVALON_HOME = "context-root";
 
     /** context key for temporary directory */
-    private final static String URN_AVALON_TEMP = "urn:avalon:temp";
+    private final static String URN_AVALON_TEMP = "impl.workDir";
 
     /** the Avalon service manager instance */
     private ServiceManager serviceManager;

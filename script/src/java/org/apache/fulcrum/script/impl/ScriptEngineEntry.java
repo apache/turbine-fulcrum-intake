@@ -33,6 +33,9 @@ public class ScriptEngineEntry
     /** the name of the script engine */
     private String name;
 
+    /** the default extension of the scripts */
+    private String extension;
+
     /** is the script cached or loaded for each execution */
     private boolean isCached;
 
@@ -52,6 +55,7 @@ public class ScriptEngineEntry
      * Constructor
      *
      * @param name the name of the script engine
+     * @param extension the script extension, e.g. "js"
      * @param isCached is the script cached or loaded for each execution
      * @param isCompiled is the script compiled to improve performance
      * @param location the location of the scripts
@@ -59,16 +63,19 @@ public class ScriptEngineEntry
      */
     public ScriptEngineEntry(
         String name,
+        String extension,
         boolean isCached,
         boolean isCompiled,
         String location,
         ScriptEngine scriptEngine)
     {
         Validate.notEmpty(name, "name");
+        Validate.notEmpty(extension, "extension");
         Validate.notEmpty(location, "location");
         Validate.notNull(scriptEngine, "scriptEngine");
 
         this.name = name;
+        this.extension = extension;
         this.isCached = isCached;
         this.isCompiled = isCompiled;
         this.location = location;
@@ -105,6 +112,13 @@ public class ScriptEngineEntry
     public String getName()
     {
         return name;
+    }
+
+    /**
+     * @return Returns the script extension
+     */
+    public String getExtension() {
+        return extension;
     }
 
     /**

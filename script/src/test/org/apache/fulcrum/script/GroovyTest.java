@@ -46,23 +46,29 @@ public class GroovyTest extends AbstractScriptTest
     }
 
     /**
-     * Add all of our test suites
+     * Add all of our test suites.
+     *
+     * @return the Groovy test suite
      */
     public static Test suite()
     {
-        TestSuite suite= new TestSuite("GroovyTest");
+        TestSuite suite = new TestSuite("GroovyTest");
 
-        suite.addTest( new GroovyTest("testCompilableInterface") );
-        suite.addTest( new GroovyTest("testHelloWorld") );
-        suite.addTest( new GroovyTest("testNamespaceDemo2") );
-        suite.addTest( new GroovyTest("testNamespaceDemo3") );
+        if(System.getProperty("fulcrum.script.groovyEnabled") != null)
+        {
+            // tests from the JSR-223 Reference implementation
+            suite.addTest( new GroovyTest("testCompilableInterface") );
+            suite.addTest( new GroovyTest("testHelloWorld") );
+            suite.addTest( new GroovyTest("testNamespaceDemo2") );
+            suite.addTest( new GroovyTest("testNamespaceDemo3") );
 
-        suite.addTest( new GroovyTest("testAvalonContext") );
-        suite.addTest( new GroovyTest("testExists") );
-        suite.addTest( new GroovyTest("testPerformance") );
-        suite.addTest( new GroovyTest("testMultithreadingScript") );
-        suite.addTest( new GroovyTest("testRuntimeErrorScript") );
+            suite.addTest( new GroovyTest("testAvalonContext") );
+            suite.addTest( new GroovyTest("testExists") );
+            suite.addTest( new GroovyTest("testPerformance") );
+            suite.addTest( new GroovyTest("testMultithreadingScript") );
+            suite.addTest( new GroovyTest("testRuntimeErrorScript") );
 
+        }
         return suite;
     }
 }

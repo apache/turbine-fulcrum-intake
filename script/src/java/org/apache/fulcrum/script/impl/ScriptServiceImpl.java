@@ -29,7 +29,7 @@ import java.util.Set;
 import javax.script.Compilable;
 import javax.script.CompiledScript;
 import javax.script.Invocable;
-import javax.script.Namespace;
+import javax.script.Bindings;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -196,16 +196,16 @@ public class ScriptServiceImpl
     }
 
     /**
-     * @see org.apache.fulcrum.script.ScriptService#eval(java.lang.String, javax.script.Namespace)
+     * @see org.apache.fulcrum.script.ScriptService#eval(java.lang.String, javax.script.Bindings)
      */
-    public Object eval(String scriptName, Namespace namespace)
+    public Object eval(String scriptName, Bindings binding)
         throws IOException, ScriptException
     {
         Validate.notEmpty(scriptName, "scriptName");
-        Validate.notNull(namespace, "namespace");
+        Validate.notNull(binding, "binding");
         String currScriptName = this.makeScriptName(scriptName);
         ScriptCacheEntry scriptCacheEntry = this.createScriptCacheEntry(currScriptName);
-        Object result = this.doEval( scriptCacheEntry, namespace, null );
+        Object result = this.doEval( scriptCacheEntry, binding, null );
         return result;
 
     }
@@ -291,9 +291,14 @@ public class ScriptServiceImpl
     }
 
     /**
+     * Invokes a global script method.
+     *
      * @param engineName the engine name
-     * @param clazz the inteface to implement
+     * @param name the script method to invoke
+     * @param args the arguments for the script method
      * @return a scripting object implementing the given interface
+     * @throws ScriptException script execution failed
+     * @throws NoSuchMethodException the script method was nout found
      */
     private Object call(String engineName, String name, Object[] args)
     	throws ScriptException, NoSuchMethodException
@@ -338,8 +343,10 @@ public class ScriptServiceImpl
     /**
      * Load a script from the persistent storage.
      *
-     * @param scriptName the name of the Groovy script
+     * @param engineName the script engine for executing the script
+     * @param scriptName the name of the script
      * @return the plain content of the script
+     * @throws IOException loading the script failed
      */
     private String loadScript( String engineName, String scriptName )
         throws IOException
@@ -349,11 +356,11 @@ public class ScriptServiceImpl
 
         String result = null;
         byte[] scriptContent = null;
-        String[] sriptContext = {};
+        String[] scriptContext = {};
 
         scriptContent = this.getResourceManagerService().read(
             location,
-            sriptContext,
+            scriptContext,
             scriptName
             );
 
@@ -364,6 +371,7 @@ public class ScriptServiceImpl
     /**
      * Creates a compiled script.
      *
+     * @param engineName the script engine to use
      * @param scriptName the name of the scipt to compile
      * @param scriptContent the name  scipt to compile
      * @return the compiled script
@@ -404,10 +412,13 @@ public class ScriptServiceImpl
      * Evaluates a script.
      *
      * @param scriptCacheEntry the script to run
-     * @param namespace the parameters to pass to the script
+     * @param binding the parameters to pass to the script
+     * @param scriptContext the script context
      * @return the result of the executed script
+     * @throws ScriptException executing the script failed
      */
-    private Object doEval( ScriptCacheEntry scriptCacheEntry, Namespace namespace, ScriptContext scriptContext ) throws ScriptException
+    private Object doEval( ScriptCacheEntry scriptCacheEntry, Bindings binding, ScriptContext scriptContext )
+        throws ScriptException
     {
         Object result = null;
         String scriptName = scriptCacheEntry.getScriptName();
@@ -420,9 +431,9 @@ public class ScriptServiceImpl
 
             if( scriptCacheEntry.isCompiled() )
             {
-                if( namespace != null )
+                if( binding != null )
                 {
-                    result = scriptCacheEntry.getCompiledScript().eval(namespace);
+                    result = scriptCacheEntry.getCompiledScript().eval(binding);
                 }
                 else if( scriptContext != null )
                 {
@@ -435,9 +446,9 @@ public class ScriptServiceImpl
             }
             else
             {
-                if( namespace != null )
+                if( binding != null )
                 {
-                    result = scriptEngine.eval(scriptCacheEntry.getPlainScript(), namespace);
+                    result = scriptEngine.eval(scriptCacheEntry.getPlainScript(), binding);
                 }
                 else if( scriptContext != null )
                 {
@@ -470,7 +481,14 @@ public class ScriptServiceImpl
     }
 
     /**
-     * Invokes a global script method
+     * Invokes a global script method.
+     *
+     * @param engineName the name of the script engine to use
+     * @param name the name of the script method
+     * @param args the script method parameters
+     * @return the result of the script invocation
+     * @throws ScriptException if an error occurrs during invocation of the method.
+     * @throws NoSuchMethodException if method with given name or matching argument types cannot be found.
      */
     private Object doCall( String engineName, String name, Object[] args )
     	throws ScriptException, NoSuchMethodException
@@ -483,7 +501,7 @@ public class ScriptServiceImpl
         try
         {
             long startTime = System.currentTimeMillis();
-            result = invocable.call(name, args);
+            result = invocable.invokeFunction(name, args);
             long endTime = System.currentTimeMillis();
 
             if( this.getLogger().isDebugEnabled() )
@@ -498,13 +516,13 @@ public class ScriptServiceImpl
         }
         catch( ScriptException e )
         {
-            String msg= "Caling the following method failed : " + name;
+            String msg= "Calling the following method failed : " + name;
             this.getLogger().error( msg, e );
             throw e;
         }
         catch( NoSuchMethodException e )
         {
-            String msg= "Caling the following method failed : " + name;
+            String msg= "Calling the following method failed : " + name;
             this.getLogger().error( msg, e );
             throw e;
         }
@@ -549,7 +567,9 @@ public class ScriptServiceImpl
     }
 
     /**
-     * Create the Avalon specific context
+     * Create the Avalon specific context.
+     *
+     * @return the Avalon context for the script
      */
     private ScriptAvalonContext createScriptAvalonContext()
     {
@@ -592,6 +612,8 @@ public class ScriptServiceImpl
      *
      * @param scriptName the name of the script to execute
      * @return ScriptCacheEntry
+     * @throws IOException the script could not be loaded
+     * @throws ScriptException the script could not be parsed by the script engine
      */
     private synchronized ScriptCacheEntry createScriptCacheEntry(String scriptName)
     	throws IOException, ScriptException
@@ -605,7 +627,7 @@ public class ScriptServiceImpl
 
         // try to load the script from the cache or from the resource manager
 
-        if( scriptEngineEntry.isCached() == true )
+        if(scriptEngineEntry.isCached())
         {
             scriptCacheEntry = this.getScriptCache().get(scriptName);
 
@@ -624,7 +646,7 @@ public class ScriptServiceImpl
             plainScript = this.loadScript(engineName, scriptName);
         }
 
-        if( isInCache == false )
+        if(!isInCache)
         {
 	        // compile the script if required
 
@@ -662,17 +684,18 @@ public class ScriptServiceImpl
     	throws ConfigurationException
     {
         String name = configuration.getChild("name").getValue();
+        String extension = configuration.getChild("extension").getValue(name);
         boolean isCached = configuration.getChild("isCached").getValueAsBoolean(true);
         boolean isCompiled = configuration.getChild("isCompiled").getValueAsBoolean(true);
         String location = configuration.getChild("location").getValue(name);
         ScriptEngine scriptEngine = this.getScriptEngineManager().getEngineByName(name);
 
-        if( (scriptEngine instanceof Compilable) == false )
+        if(!(scriptEngine instanceof Compilable))
         {
             isCompiled = false;
         }
 
-        ScriptEngineEntry result = new ScriptEngineEntry(name, isCached, isCompiled, location, scriptEngine);
+        ScriptEngineEntry result = new ScriptEngineEntry(name, extension, isCached, isCompiled, location, scriptEngine);
 
         // evaluate the given scripts
 
@@ -718,12 +741,36 @@ public class ScriptServiceImpl
 
         if( pos > 0 )
         {
-            return scriptName.substring(pos+1, scriptName.length());
+            String extension = scriptName.substring(pos+1, scriptName.length());
+            return this.getEngineNameForExtension(extension);
         }
         else
         {
             return this.getDefaultEngineName();
         }
+    }
+
+    /**
+     * Determines the scripting engine based on the extension
+     *
+     * @param extension the script name extension
+     * @return name of the scripting engine
+     */
+    private String getEngineNameForExtension( String extension )
+    {
+        Iterator iter = this.scriptEngineMap.keySet().iterator();
+
+        while( iter.hasNext() )
+        {
+            String engineName = (String) iter.next();
+            ScriptEngineEntry scriptEngineEntry = this.getScriptEngineEntry(engineName);
+            if(scriptEngineEntry.getExtension().equalsIgnoreCase(extension))
+            {
+                return engineName;
+            }
+        }
+
+        throw new IllegalArgumentException("Unknow script extension : " + extension);
     }
 
     /**
@@ -743,7 +790,8 @@ public class ScriptServiceImpl
     private String makeScriptName( String name )
     {
         String engineName = this.getEngineName(name);
-        String extension = '.' + engineName;
+        ScriptEngineEntry scriptEngineEntry = this.getScriptEngineEntry(engineName);
+        String extension = '.' + scriptEngineEntry.getExtension();
 
         if( name.endsWith(extension) )
         {

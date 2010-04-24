@@ -34,7 +34,7 @@ public class ScriptCacheEntry
     /** the plain script */
     private String plainScript;
 
-    /** the precompiled script */
+    /** the pre-compiled script */
     private CompiledScript compiledScript;
 
     /** the name of the script */
@@ -101,10 +101,10 @@ public class ScriptCacheEntry
     }
 
     /**
-     * Is the script already compiled
+     * @return Is the script already compiled
      */
     public boolean isCompiled()
     {
-        return ( this.getCompiledScript() != null ? true : false );
+        return (this.getCompiledScript() != null);
     }
 }

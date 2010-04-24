@@ -29,28 +29,37 @@ import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.service.ServiceManager;
 
 /**
- * Holder class for Avalon related artifacts to be passed to a script.
+ * Holder class for Avalon related artifacts to be passed to a script. This
+ * allows full access to Avalon service framework from within the script.
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 public interface ScriptAvalonContext
 {
     /**
+     * Get the Avalon configuration.
+     *
      * @return Returns the configuration
      */
     Configuration getConfiguration();
 
     /**
+     * Get the Avalon context.
+     *
      * @return Returns the context.
      */
     Context getContext();
 
     /**
+     * Get the Avalon logger to access the logger from within the script.
+     *
      * @return Returns the logger.
      */
     Logger getLogger();
 
     /**
+     * Get the Avalon service manager to lookup services. 
+     *
      * @return Returns the serviceManager.
      */
     ServiceManager getServiceManager();
@@ -61,12 +70,18 @@ public interface ScriptAvalonContext
     Parameters getParameters();
 
     /**
+     * Get the working directory of the application.
+     *
      * @return Returns the Avalon application directory
+     * @throws ContextException the context entry for the application directory was not found
      */
     File getApplicationDir() throws ContextException;
 
     /**
+     * Get the working directory of the application.
+     *
      * @return Returns the Avalon application directory
+     * @throws ContextException the context entry for the temp directory was not found
      */
     File getTempDir() throws ContextException;
 }

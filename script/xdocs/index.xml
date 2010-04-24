@@ -36,6 +36,13 @@
       	and Fulcrum Groovy service.
       </p>
 
+      <p>
+        When you are using JDK 1.5 then you need Bean Scripting
+        Framework (bsf-api-3.0-beta2.jar). If you are using
+        JDK 1.6 then the library will do no harm and you use
+        the JDK 1.6 built-in implementation of JSR-223.
+      </p>
+
       <subsection name="Features">
         <p>
           The Fulcrum Script Service provides the following features:
@@ -62,17 +69,7 @@
           <tr>
             <td><a href="http://groovy.codehaus.org">Groovy</a></td>
             <td>Done</td>
-            <td>Currently no support for Invocable</td>
-          </tr>
-          <tr>
-            <td><a href="https://pnuts.dev.java.net">pnuts</a></td>
-            <td>Open</td>
-            <td>Currently no JDK 1.4 support for JSR 223 integration</td>
-          </tr>
-          <tr>
-            <td><a href="http://www.beanshell.org">Beanshell</a></td>
-            <td>Open</td>
-            <td>Currently no JSR 223 integration available</td>
+            <td>Not sure if Groovy support Invocable</td>
           </tr>
         </table>
       </subsection>
