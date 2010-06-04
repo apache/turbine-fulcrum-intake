@@ -19,6 +19,15 @@
 -->
 
 <componentConfig>
+
+  <!--
+
+    PBEService
+
+    cryptoSalt := the hex-encoded salt for PBE
+    cyrptoCount := the iteration for PBEParameterSpec for encryption/decryption
+    passwordCount := defines the number of SHA-1 invocations to create the password
+   -->
   <PBEService>
     <cryptoSalt>4463657541544141</cryptoSalt>
     <cyrptoCount>20</cyrptoCount>

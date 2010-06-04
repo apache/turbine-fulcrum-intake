@@ -45,6 +45,7 @@ public interface PBEService
      * Create a password based on the pre-defined seed.
      *
      * @return the password
+     * @throws Exception the password creation failed
      */
     char[] createPassword()
         throws Exception;

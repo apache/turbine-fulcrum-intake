@@ -22,7 +22,6 @@ package org.apache.fulcrum.pbe;
 import java.io.*;
 
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
-import org.apache.fulcrum.jce.crypto.CryptoUtil;
 import org.apache.fulcrum.jce.crypto.StreamUtil;
 
 /**
@@ -78,7 +77,7 @@ public class PBEServiceTest extends BaseUnitTest
     /////////////////////////////////////////////////////////////////////////
 
     /**
-     * Create the default password do be used
+     * Create the default password do be used.
      */
     public void testCreateDefaultPassword() throws Exception
     {
@@ -129,8 +128,8 @@ public class PBEServiceTest extends BaseUnitTest
      */
     public void testBinaryEncryptDecrypt() throws Exception
     {
+        byte[] result;
         byte[] source = new byte[256];
-        byte[] result = null;
 
         for( int i=0; i<source.length; i++ )
         {
@@ -155,11 +154,14 @@ public class PBEServiceTest extends BaseUnitTest
         }
     }
 
+    /**
+     * Test encryption/decryption based on streams.
+     */
     public void testStreamCiphers() throws Exception
     {
+        byte[] cipherText;
+        String plainText;
         String source = "Nobody knows the troubles I have seen ...";
-        byte[] cipherText = null;
-        String plainText = null;
         char[] password = this.getPassword();
 
         // encrypt using a CipherOutputStream
@@ -180,6 +182,9 @@ public class PBEServiceTest extends BaseUnitTest
         assertEquals( source, plainText );
     }
 
+    /**
+     * Test a few of the convinience methods.
+     */
     public void testConvinienceEncryption() throws Exception
     {
         String plainText = "Nobody knows the troubles I have seen ...";
