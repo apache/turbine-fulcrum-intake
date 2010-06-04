@@ -22,7 +22,6 @@
     <menu name="Overview">
       <item name="Overview"            href="/index.html"/>
       <item name="Configuration"       href="/configuration.html"/>
-      <item name="Technical"           href="/technical.html"/>
     </menu>  
     ${reports}
   </body>
