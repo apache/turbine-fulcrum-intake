@@ -158,8 +158,15 @@ public interface CommonsEmailService
     
     /**
      * Sends an email using the service instead of calling send()
-     * directly on the Email. The implementation uses the
-     * the from email address as domain name.
+     * directly on the Email.
+     *
+     * The implementation uses the the following mechanism to obtain
+     * the domain configuration
+     * <ul>
+     *   <li>use the email from address, e.g. "siegfried.goeschl@it20one.at"</li>
+     *   <li>use the email domain, e.g. "it20one.at" </li>
+     *   <li>use the configured default domain</li>
+     * </ul>
      * 
      * @param email the email to be sent
      * @return the MimeMessage being sent
@@ -213,8 +220,10 @@ public interface CommonsEmailService
     	throws MessagingException;
 
     /**
-     * Get the delivery status of the previously sent email. This
-     * allows to do something sensible if email delivery failed.
+     * Get the delivery status of the previously sent email. The mail
+     * implementation provides hook to get notification from the mail
+     * server regarding message delivery, e.g. a mail server might report
+     * that a message will not be relayed to the recipient
      *
      * @param mimeMessage the email sent
      * @return the delivery status

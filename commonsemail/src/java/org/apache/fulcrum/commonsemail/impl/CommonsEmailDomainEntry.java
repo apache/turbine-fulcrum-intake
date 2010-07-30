@@ -543,14 +543,7 @@ public class CommonsEmailDomainEntry
      */
     public boolean hasAuthentication()
     {
-        if( this.authType.equals(AUTH_NONE) )
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return !this.authType.equals( AUTH_NONE );
     }
 
     /**
@@ -558,14 +551,7 @@ public class CommonsEmailDomainEntry
      */
     public boolean hasSmtpAuthentication()
     {
-        if( this.authType.equals(AUTH_SMTP) )
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return this.authType.equals( AUTH_SMTP );
     }
 
     /**
@@ -573,14 +559,7 @@ public class CommonsEmailDomainEntry
      */
     public boolean hasPopBeforeSmtpAuthentication()
     {
-        if( this.authType.equals(AUTH_POPBEFORESMTP) )
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return this.authType.equals( AUTH_POPBEFORESMTP );
     }
     
     /**

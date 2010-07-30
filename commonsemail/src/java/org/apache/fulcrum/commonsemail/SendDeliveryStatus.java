@@ -28,12 +28,26 @@ import javax.mail.Address;
 public interface SendDeliveryStatus
 {
     /**
+     * Returns the message of of the corresponding email.
+     *
+     * @return mime message id
+     */
+    String getMessageId();
+
+    /**
      * Returns true only if ALL recipients were accepted by the
      * mailserver, i.e. everything is okay.
      *
      * @return true if message sending was successful
      */
     boolean hasSucceeded();
+
+    /**
+     * Get all of the original recipients from the mime message.
+     *
+     * @return list of email addresses
+     */
+    Address[] getAllRecipients();
 
     /**
      * The list of mail addresses accepted by the mailserver.
@@ -55,4 +69,11 @@ public interface SendDeliveryStatus
      * @return list of email addresses
      */        
     Address[] getInvalidAddresses();
+
+    /**
+     * Return the number of all recipients.
+     *
+     * @return overall number of recipients
+     */
+    int size();
 }

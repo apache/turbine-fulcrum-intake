@@ -19,10 +19,15 @@ package org.apache.fulcrum.commonsemail.impl;
  * under the License.
  */
 
+import org.omg.CORBA_2_3.portable.InputStream;
+
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 
 import javax.mail.internet.MimeMessage;
+import javax.mail.Session;
 
 /**
  * Static helper methods.
@@ -65,7 +70,6 @@ public class CommonsEmailUtils
                 try
                 {
                     fos.close();
-                    fos = null;
                 }
                 catch( Exception e )
                 {
@@ -73,5 +77,55 @@ public class CommonsEmailUtils
                 }
             }
         }
+    }
+
+    /**
+     * Convinience method to read a MimeMessage from a source.
+     *
+     * @param session the mail session
+     * @param source the source of the MimeMessage
+     * @throws Exception reading the MimeMessage failed
+     * @return the MimeMessage
+     */
+    public static MimeMessage readMimeMessage(Session session, Object source) throws Exception
+    {
+
+        MimeMessage result = null;
+
+        if(source instanceof InputStream)
+        {
+            result = new MimeMessage(session, (InputStream) source);
+        }
+        else if(source instanceof byte[])
+        {
+            ByteArrayInputStream bais = new ByteArrayInputStream((byte[]) source);
+            result = new MimeMessage(session, bais);
+            bais.close();
+        }
+        else if(source instanceof File)
+        {
+            FileInputStream fis = null;
+
+            try
+            {
+                fis = new FileInputStream((File) source);
+                result = new MimeMessage(session, fis);
+                fis.close();
+            }
+            catch(Exception e)
+            {
+                if(fis != null)
+                {
+                    fis.close();
+                }
+            }
+        }
+        else
+        {
+            String msg = "Failed to read message from " + source.getClass().getName();
+            throw new IllegalArgumentException(msg);
+        }
+
+        return result;
     }
 }

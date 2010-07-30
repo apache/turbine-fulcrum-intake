@@ -23,37 +23,54 @@ import org.apache.fulcrum.commonsemail.SendDeliveryStatus;
 
 import javax.mail.Address;
 import javax.mail.event.TransportEvent;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Keep track of the delivery status of a single email.
+ * Keep track of the delivery status of a single email. Please note
+ * that using a set is a deliberate decision - assuming that the same
+ * address shows up in 'to' and 'cc' the email would be sent only
+ * once.
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
 public class SendDeliveryStatusImpl implements SendDeliveryStatus
 {
-    private List validSentAddressList;
-    private List validUnsentAddressList;
-    private List invalidAddressList;
+    /** the message id from the email */
+    private String messageId;
+
+    /** the original list of recipients */
+    private HashSet allRecipients;
+
+    /** the list of valid addresses where an email is going to be delivered */
+    private Set validSentAddressList;
+
+    /** the list of valid addresses where an email is NOT going to be delivered */
+    private Set validUnsentAddressList;
+
+    /** the list of invalid addresses */
+    private Set invalidAddressList;
 
     /**
      * Constructor.
+     *
+     * @param allRecipients the list of all recipients
      */
-    SendDeliveryStatusImpl()
+    SendDeliveryStatusImpl(Address[] allRecipients)
     {
-        this.validSentAddressList = new ArrayList();
-        this.validUnsentAddressList = new ArrayList();
-        this.invalidAddressList = new ArrayList();        
+        this.allRecipients = new HashSet();
+        this.addAddresses( this.allRecipients, allRecipients );
+        
+        this.validSentAddressList = new HashSet();
+        this.validUnsentAddressList = new HashSet();
+        this.invalidAddressList = new HashSet();
     }
 
     /** @see org.apache.fulcrum.commonsemail.SendDeliveryStatus#hasSucceeded()  */
     public boolean hasSucceeded()
     {
-        if((this.validSentAddressList.size() > 0) &&
-           (this.validUnsentAddressList.size() == 0) &&
-           (this.invalidAddressList.size() == 0 ))
+        if(this.allRecipients.equals(this.validSentAddressList))
         {
             return true;
         }
@@ -66,22 +83,40 @@ public class SendDeliveryStatusImpl implements SendDeliveryStatus
     /** @see org.apache.fulcrum.commonsemail.SendDeliveryStatus#getValidSentAddresses()  */
     public Address[] getValidSentAddresses()
     {
-        List currList = this.validSentAddressList;
+        Set currList = this.validSentAddressList;
         return (Address[]) currList.toArray(new Address[currList.size()]);
     }
 
     /** @see org.apache.fulcrum.commonsemail.SendDeliveryStatus#getValidUnsentAddresses()  */
     public Address[] getValidUnsentAddresses()
     {
-        List currList = this.validUnsentAddressList; 
+        Set currList = this.validUnsentAddressList;
         return (Address[]) currList.toArray(new Address[currList.size()]);
     }
 
     /** @see org.apache.fulcrum.commonsemail.SendDeliveryStatus#getInvalidAddresses()  */
     public Address[] getInvalidAddresses()
     {
-        List currList = this.invalidAddressList; 
+        Set currList = this.invalidAddressList; 
         return (Address[]) currList.toArray(new Address[currList.size()]);
+    }
+
+    /** @see org.apache.fulcrum.commonsemail.SendDeliveryStatus#getAllRecipients() */
+    public Address[] getAllRecipients()
+    {
+        return (Address[]) this.allRecipients.toArray(new Address[this.allRecipients.size()]);
+    }
+
+    /** @see org.apache.fulcrum.commonsemail.SendDeliveryStatus#size()  */
+    public int size()
+    {
+        return this.allRecipients.size();
+    }
+
+    /** @see org.apache.fulcrum.commonsemail.SendDeliveryStatus#getMessageId()  */    
+    public String getMessageId()
+    {
+        return messageId;
     }
 
     /** @see Object#toString() */
@@ -92,6 +127,9 @@ public class SendDeliveryStatusImpl implements SendDeliveryStatus
         result.append('@');
         result.append(Integer.toHexString(this.hashCode()));
         result.append(' ');
+        result.append("allRecipients:");
+        result.append(this.allRecipients.size());
+        result.append(',');
         result.append("validSentAddresses:");
         result.append(this.validSentAddressList.size());
         result.append(',');
@@ -126,12 +164,22 @@ public class SendDeliveryStatusImpl implements SendDeliveryStatus
     }
 
     /**
+     * The message id of the corresponding email
+     *
+     * @param messageId the message id
+     */
+    void setMessageId(String messageId)
+    {
+        this.messageId = messageId;    
+    }
+
+    /**
      * Add a list of addresses to the given target list
      *
      * @param target the target list
      * @param addressList the address list
      */
-    private void addAddresses(List target, Address[] addressList)
+    private void addAddresses(Set target, Address[] addressList)
     {
         if((addressList != null) && (addressList.length > 0))
         {

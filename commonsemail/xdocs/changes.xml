@@ -24,7 +24,10 @@
   </properties>
 
   <body>
-    <release version="1.0.0-dev" date="as in SVN">
+    <release version="1.0.0-SNAPSHOT" date="as in SVN">
+      <action dev="sgoeschl" type="update">
+        Synching with production code.
+      </action>
       <action dev="sgoeschl" type="update">
         Providing SendDeliveryStatus to keep track of the email delivery status, i.e.
         to whom the email was NOT send

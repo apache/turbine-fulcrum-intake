@@ -66,25 +66,9 @@
       <version>4.3.1</version>
     </dependency>
     <dependency>
-      <groupId>javax.activation</groupId>
-      <artifactId>activation</artifactId>
-      <version>1.1</version>
-    </dependency>
-    <dependency>
       <groupId>commons-email</groupId>
       <artifactId>commons-email</artifactId>
-      <version>1.0</version>
-      <exclusions>
-        <exclusion>
-          <groupId>dumbster</groupId>
-          <artifactId>dumbster</artifactId>
-        </exclusion>
-      </exclusions>      
-    </dependency>
-    <dependency>
-      <groupId>javax.mail</groupId>
-      <artifactId>mail</artifactId>
-      <version>1.4.1</version>
+      <version>1.2</version>
     </dependency>
     <!-- testing dependencies -->
     <dependency>
