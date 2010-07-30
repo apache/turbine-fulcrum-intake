@@ -26,16 +26,16 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fulcrum-hsqldb</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <name>Fulcrum HSQLDB</name>
   <inceptionYear>2005</inceptionYear>
   <description>Fulcrum HSQLDB Service</description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-hsqldb</url>
 		
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/hsqldb/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/hsqldb/</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/hsqldb/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/FULCRUM_HSQLDB_1_0_0</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/FULCRUM_HSQLDB_1_0_0</developerConnection>
+    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/tags/FULCRUM_HSQLDB_1_0_0</url>
   </scm>
 
   <distributionManagement>
