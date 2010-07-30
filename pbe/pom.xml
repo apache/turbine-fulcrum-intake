@@ -7,16 +7,16 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fulcrum-pbe</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2-SNAPSHOT</version>
   <name>Fulcrum PBE</name>
   <inceptionYear>2008</inceptionYear>
   <description>Fulcrum PBE Service</description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-pbe</url>
 		
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/FULCRUM_PBE_1_0_1</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/FULCRUM_PBE_1_0_1</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/tags/FULCRUM_PBE_1_0_1</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/pbe/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/pbe/</developerConnection>
+    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/pbe/</url>
   </scm>
 
   <distributionManagement>
