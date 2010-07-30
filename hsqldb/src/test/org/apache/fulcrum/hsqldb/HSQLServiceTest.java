@@ -24,6 +24,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import org.apache.avalon.framework.activity.Startable;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
@@ -91,9 +92,12 @@ public class HSQLServiceTest extends BaseUnitTest
             while( rs.next() )
             {
                 String loginName = rs.getString("LOGIN_NAME");
-                System.out.println(loginName);
+                System.out.println("Found the following user : " + loginName);
                 assertTrue( loginName.length() > 0 );
             }
+
+            rs.close();
+            stmt.close();
         }
         catch (Exception e)
         {
@@ -109,11 +113,11 @@ public class HSQLServiceTest extends BaseUnitTest
         }
     }
 
-    public void testIsRunning() throws Exception
+    public void testIsOnline() throws Exception
     {
-        assertTrue("Server was not started", ((HSQLServiceImpl) service).isRunning());
-        ((HSQLServiceImpl) service).stop();
-        assertFalse("Server is still running", ((HSQLServiceImpl) service).isRunning());
+        assertTrue("Server is online", service.isOnline());
+        ((Startable) service).stop();
+        assertFalse("Server is offline", service.isOnline());
     }
 
     /**
@@ -126,6 +130,6 @@ public class HSQLServiceTest extends BaseUnitTest
         Connection conn = this.getConnection("test");
         Statement stmt = conn.createStatement();
         stmt.execute("SHUTDOWN;");
-        assertFalse("Server is still running", ((HSQLServiceImpl) service).isRunning());
+        assertFalse("Server is still running", (service).isOnline());
     }
 }

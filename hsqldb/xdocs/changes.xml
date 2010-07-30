@@ -23,7 +23,12 @@
     <author email="siegfried.goeschl@it20one.at">Siegfried Goeschl</author>
   </properties>
   <body>
-    <release version="1.0.1-dev" date="as in SVN">
+    <release version="1.0.0-SNAPSHOT" date="as in SVN">
+      <action dev="sgoeschl" type="update">
+        Removing the "Startable" interface from HSQLService because the
+        service lifecycle is managed by the container and not the
+        application.
+      </action>
       <action dev="sgoeschl" type="update">
       	Removing the access to the Avalon context since it was never used.
       </action>
@@ -40,8 +45,6 @@
         stop the database since the cast fails when using dynamic
         proxies
       </action>
-    </release>
-    <release version="1.0.0" date="as in CVS">
       <action dev="epugh" type="update">
         Add additional tests submitted by Peter Tillemans in Scarab version of
         this service.

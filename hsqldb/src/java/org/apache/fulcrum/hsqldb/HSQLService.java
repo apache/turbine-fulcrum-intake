@@ -19,8 +19,6 @@ package org.apache.fulcrum.hsqldb;
  * under the License.
  */
 
-import org.apache.avalon.framework.activity.Startable;
-
 /**
  * A definition for a HSQLService component which configures a single hsqldb
  * database.
@@ -30,4 +28,10 @@ import org.apache.avalon.framework.activity.Startable;
  */
 public interface HSQLService
 {
+    /**
+     * Is the HSQLDB server  online and will accept SQL queries?
+     *
+     * @return true if the HSQLDB server is online
+     */
+    boolean isOnline();
 }

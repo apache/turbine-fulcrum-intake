@@ -128,7 +128,7 @@ public class HSQLServiceImpl
     public void start() throws Exception
     {
         // The method start() waits for current state to change from
-        // SERVER_STATE_OPENNING. In order to discover the success or failure
+        // SERVER_STATE_OPENING. In order to discover the success or failure
         // of this operation, server state must be polled or a subclass of Server
         // must be used that overrides the setState method to provide state
         // change notification.
@@ -169,8 +169,7 @@ public class HSQLServiceImpl
     // Service Interface Implementation
     /////////////////////////////////////////////////////////////////////////
 
-    public boolean isRunning() {
-        // return true id server is online
+    public boolean isOnline() {
         return server.getState() == ServerConstants.SERVER_STATE_ONLINE;
     }
 
