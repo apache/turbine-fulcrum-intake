@@ -228,7 +228,10 @@ public class CommonsEmailServiceImpl
         properties.setProperty(MAIL_SMTP_TIMEOUT, Integer.toString(domain.getMailSmtpTimeout()));
         properties.setProperty(MAIL_SMTP_SENTPARTIAL, Boolean.toString(domain.isMailSmtpSendPartial()));
 
-        properties.setProperty(MAIL_SMTP_FROM,domain.getMailBounceAddress());
+        if(domain.getMailBounceAddress() != null)
+        {
+            properties.setProperty(MAIL_SMTP_FROM,domain.getMailBounceAddress());
+        }
 
         // if SMTP AUTH is enabled create a default authenticator
 
@@ -333,14 +336,15 @@ public class CommonsEmailServiceImpl
         }
         catch(MessagingException e)
         {
-            String msg = "Sending the mail failed";
+            // we are repackaging the exception and a few mail exception do not contain a message text
+            String msg = "Sending the mail failed due to a messaging problem : [" + e.getClass().getName() + "] " + e.getMessage();
             this.getLogger().error(msg,e);
             this.dump(mimeMessage,"error");
             throw new EmailException(msg,e);
         }
         catch(Throwable t)
         {
-            String msg = "An internal error occured";
+            String msg = "Sending the mail failed due to an internal error : [" + t.getClass().getName() + "] " + t.getMessage();
             this.getLogger().error(msg,t);
             this.dump(mimeMessage,"error");
             throw new EmailException(msg,t);
@@ -474,6 +478,11 @@ public class CommonsEmailServiceImpl
      */
     public SendDeliveryStatus getSendDeliveryStatus( MimeMessage mimeMessage ) throws MessagingException
     {        
+        if(mimeMessage == null)
+        {
+            throw new IllegalArgumentException( "mimeMessage is null");
+        }
+        
         return (SendDeliveryStatus) this.sendDeliveryStatusMap.get(mimeMessage);
     }
 
@@ -643,12 +652,8 @@ public class CommonsEmailServiceImpl
     private MimeMessage buildMimeMessage( Email email )
         throws EmailException, MessagingException
     {
-        MimeMessage result = null;
-
         email.buildMimeMessage();
-        result = email.getMimeMessage();
-
-        return result;
+        return email.getMimeMessage();
     }
 
     /**
@@ -664,7 +669,7 @@ public class CommonsEmailServiceImpl
     private MimeMessage updateMimeMessage( CommonsEmailDomainEntry domain, MimeMessage mimeMessage )
         throws MessagingException
     {
-        MimeMessage result = null;
+        MimeMessage result;
 
         // dump the original MimeMessage
 
@@ -717,7 +722,7 @@ public class CommonsEmailServiceImpl
         // get the current recipients for the mail since we allow
         // overwriting the recipients found in the message
 
-        javax.mail.Address[] currRecipients = null;
+        javax.mail.Address[] currRecipients;
 
         if( (recipients == null) || (recipients.length == 0) )
         {
@@ -737,7 +742,7 @@ public class CommonsEmailServiceImpl
 
         // keep track of the deliver status
 
-        this.createSendDeliveryStatus(mimeMessage, domain.isMailDoNotSend());
+        SendDeliveryStatusImpl sendDeliveryStatus = this.createSendDeliveryStatus(mimeMessage);
 
         if( !domain.isMailDoNotSend() )
         {
@@ -785,7 +790,7 @@ public class CommonsEmailServiceImpl
 
                 throw e;
             }
-            catch (RuntimeException e)
+            catch (Exception e)
             {
                 if( domain.hasOnFailureHook() )
                 {
@@ -797,11 +802,42 @@ public class CommonsEmailServiceImpl
                     + this.getLogMsg(mimeMessage)
                     );
 
-                throw e;
+                throw new MessagingException("Sending of the MimeMessage failed", e);
             }
         }
         else
         {
+            // set a fake message id otherwise it will be null and
+            // potentially breaking a client application
+            
+            String fakeMessageId = "<"
+                + this.fileNameCounter
+                + "." + System.currentTimeMillis()
+                + ".CommonsEmailService."
+                + System.getProperty( "user.name", "anonymous" )
+                + "@localhost>";
+
+            mimeMessage.setHeader( "Message-ID", fakeMessageId );
+
+            // for some unknown reasons we have to write the MimeMessage
+            // to be able to parse it later on
+
+            NullOutputStream nos = new NullOutputStream();
+
+            try
+            {
+                mimeMessage.writeTo( nos );
+                nos.close();
+            }
+            catch(Exception e)
+            {
+                this.getLogger().error( "Unable to write the MimeMessage", e );  
+            }
+
+            // since we don't send the email assume that the delivery was successful
+
+            sendDeliveryStatus.addSendAddressList(mimeMessage.getAllRecipients());
+
             if( domain.hasOnNotSendHook() )
             {
                 this.onSendSupressed(domain,session,mimeMessage);
@@ -813,6 +849,10 @@ public class CommonsEmailServiceImpl
                 + domain.getDomainName()
                 );
         }
+
+        // store the message id
+
+        sendDeliveryStatus.setMessageId( mimeMessage.getMessageID() );
     }
 
     /**
@@ -872,7 +912,7 @@ public class CommonsEmailServiceImpl
      */
     protected CommonsEmailDomainEntry getDomain( String name )
     {
-        CommonsEmailDomainEntry result = null;
+        CommonsEmailDomainEntry result;
 
         // check if we really have a name
 
@@ -1121,7 +1161,7 @@ public class CommonsEmailServiceImpl
      */
     private String getMessageId(Message message) throws MessagingException
     {
-        String result = "<unknown>";
+        String result;
 
         if( message instanceof MimeMessage )
         {
@@ -1295,8 +1335,8 @@ public class CommonsEmailServiceImpl
 
             if( email instanceof MultiPartEmail )
             {
+                Object attachment;
                 MultiPartEmail multiPartEmail = (MultiPartEmail) email;
-                Object attachment = null;
                 Collection attachments = (Collection) content.get(Email.ATTACHMENTS);
 
                 if( attachments != null  )
@@ -1455,16 +1495,11 @@ public class CommonsEmailServiceImpl
         this.writeMimeMessage(new File(directory), mimeMessage);
     }
 
-    private SendDeliveryStatusImpl createSendDeliveryStatus(MimeMessage mimeMessage, boolean isMailDoNotSend)
+    private SendDeliveryStatusImpl createSendDeliveryStatus(MimeMessage mimeMessage)
         throws MessagingException
     {
-        SendDeliveryStatusImpl sendDeliveryStatus = new SendDeliveryStatusImpl();
-
-        if(isMailDoNotSend)
-        {
-            sendDeliveryStatus.addSendAddressList(mimeMessage.getAllRecipients());
-        }
-
+        SendDeliveryStatusImpl sendDeliveryStatus = new SendDeliveryStatusImpl(mimeMessage.getAllRecipients());
+        sendDeliveryStatus.setMessageId(mimeMessage.getMessageID());
         this.sendDeliveryStatusMap.put(mimeMessage, sendDeliveryStatus);
         return sendDeliveryStatus;
     }
