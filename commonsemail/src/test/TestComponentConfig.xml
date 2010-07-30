@@ -115,6 +115,19 @@
           <password>demo</password>
         </authentication>
       </domain>
+        <domain>
+          <domainName>siegfried.goeschl@it20one.at</domainName>
+          <mailSmtpHost>localhost</mailSmtpHost>
+          <mailSmtpPort>6025</mailSmtpPort>
+          <mailFromEmail>siegfried.goeschl@it20one.at</mailFromEmail>
+          <mailFromName>E-Billing Test (Siegfried Goeschl)</mailFromName>
+          <mailDoNotSend>true</mailDoNotSend>
+          <authentication>
+            <type>smtpauth</type>
+            <username>demo</username>
+            <password>demo</password>
+          </authentication>
+        </domain>
     </domains>
   </CommonsEmailService>
 
