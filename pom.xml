@@ -37,9 +37,10 @@
     <module>configuration/impl</module>    
     <module>crypto</module>    
     <module>factory</module>    
-    <module>jetty</module>            
     <module>localization</module>    
+    <module>hsqldb</module>    
     <module>intake</module>    
+    <module>jetty</module>    
     <module>mimetype</module>        
     <module>parser</module>    
     <module>pbe</module>    
