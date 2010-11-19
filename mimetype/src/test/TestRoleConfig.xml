@@ -21,6 +21,6 @@
 <role-list>
     <role
         name="org.apache.fulcrum.mimetype.MimeTypeService"
-        shorthand="mimetype"
+        shorthand="MimeTypeService"
         default-class="org.apache.fulcrum.mimetype.DefaultMimeTypeService"/>
 </role-list>

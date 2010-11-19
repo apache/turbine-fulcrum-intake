@@ -78,13 +78,24 @@ public class MimetypeTest extends BaseUnitTest
         }
     }
 
-    public void testGetDefaultExtension() throws Exception
+    public void testGetDefaultExtensionForCrazy() throws Exception
     {
-        String result =
-            mimeTypeService.getDefaultExtension(MimeTypeMapperTest.MIME_TYPE);
+        String result = mimeTypeService.getDefaultExtension(MimeTypeMapperTest.MIME_TYPE);
         assertEquals("crazy", result);
         MimeType mt = new MimeType(MimeTypeMapperTest.MIME_TYPE);
         result = mimeTypeService.getDefaultExtension(mt);
         assertEquals("crazy", result);
+    }
+
+    public void testGetDefaultExtensionForPdf() throws Exception
+    {
+        assertEquals("pdf", mimeTypeService.getDefaultExtension("application/pdf"));
+    }
+
+    public void testGetContentTypeForPdf() throws Exception
+    {
+        assertEquals("application/pdf", mimeTypeService.getContentType("foo.pdf"));
+        assertEquals("application/pdf", mimeTypeService.getContentType("foo.PDF"));
+        assertEquals("application/pdf", mimeTypeService.getContentType("foo.Pdf"));
     }
 }

@@ -25,6 +25,9 @@
 
   <body>
     <release version="1.0.6-SNAPSHOT" date="in SVN">
+      <action dev="sgoeschl" type="add">
+        Added 'mime.types' file and two tests.
+      </action>
     </release>
     <release version="1.0.5" date="2009-09-11">
       <action dev="tv" type="update">

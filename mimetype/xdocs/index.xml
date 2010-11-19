@@ -48,7 +48,7 @@
                 <source><![CDATA[
     <role
         name="org.apache.fulcrum.mimetype.MimeTypeService"
-        shorthand="mimetype"
+        shorthand="MimeTypeService"
         default-class="org.apache.fulcrum.mimetype.DefaultMimeTypeService"/>
                 ]]></source>
             </subsection>
@@ -85,7 +85,7 @@
 
             <subsection name="Component Configuration Example">
               <source><![CDATA[
-    <mimetype
+    <MimeTypeService
         mimetypes="WEB-INF/conf/mime.types" 
         charsets="WEB-INF/conf/charsets.properties" />
               ]]></source>

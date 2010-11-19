@@ -18,5 +18,14 @@
  under the License.
 -->
 <componentConfig>
-    <mimetype/>
+
+    <!--
+      MimeTypeService
+
+      @mimetypes file containing mime-type to file extension mapping
+      @charsets file containing locale to charset mappings
+    -->
+    
+    <MimeTypeService mimetypes="./src/test/mime.types"/>
+    
 </componentConfig>
