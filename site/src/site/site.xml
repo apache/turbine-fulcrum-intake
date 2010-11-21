@@ -72,7 +72,7 @@
       <item name="Template"              href="/fulcrum-template/"/>
     </menu>
 
-    <menu name="Retired Components">
+    <menu name="Dormant Components">
       <item name="BSF"                   href="/fulcrum-bsf/"/>
       <item name="Configuration"         href="/fulcrum-configuration-impl/"/>
       <item name="DVSL"                  href="/fulcrum-dvsl/"/>      
