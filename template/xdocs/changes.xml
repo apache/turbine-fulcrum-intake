@@ -24,6 +24,11 @@
   </properties>
 
   <body>
+    <release version="2.0.0-SNAPSHOT" date="in SVN">
+       <action dev="sgoeschl" type="add" date="2010-11-24" issue="TRB-79" due-to="Ludwig Magnusson">
+         Move fulcrum-template to maven2.
+       </action>
+    </release>  
     <release version="1.0-alpha-2" date="in SVN">
      <action dev="seade" type="fix" issue="FULS10">
         TemplateEmail.sendMultiple() was setting the character set to late.
