@@ -47,6 +47,7 @@
     <module>pool</module>    
     <module>quartz</module>        
     <module>resourcemanager</module>    
+    <module>security/api</module>    
     <module>servicemanager</module>    
     <module>spring</module>            
     <module>testcontainer</module>    
