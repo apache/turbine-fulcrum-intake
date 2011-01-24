@@ -56,7 +56,7 @@
       <version>3.2.1</version>
     </dependency>
     <dependency>
-      <groupId>commons-email</groupId>
+      <groupId>org.apache.commons</groupId>
       <artifactId>commons-email</artifactId>
       <version>1.2</version>
     </dependency>
