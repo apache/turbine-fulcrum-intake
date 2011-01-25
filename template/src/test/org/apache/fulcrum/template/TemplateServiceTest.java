@@ -20,12 +20,9 @@ package org.apache.fulcrum.template;
  */
 
 
-import junit.awtui.TestRunner;
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import org.apache.avalon.framework.component.ComponentException;
-import org.apache.fulcrum.template.TemplateService;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
+
 /**
  * TemplateServiceTest
  *
@@ -37,8 +34,6 @@ public class TemplateServiceTest extends BaseUnitTest
 {
     private TemplateService templateService = null;
 
-
-
     /**
      * Defines the testcase name for JUnit.
      *
@@ -48,26 +43,8 @@ public class TemplateServiceTest extends BaseUnitTest
     {
         super(name);
     }
-    /**
-     * Start the tests.
-     *
-     * @param args the arguments. Not used
-     */
-    public static void main(String args[])
-    {
-        TestRunner.main(new String[] { TemplateServiceTest.class.getName()});
-    }
-    /**
-     * Creates the test suite.
-     *
-     * @return a test suite (<code>TestSuite</code>) that includes all methods
-     *         starting with "test"
-     */
-    public static Test suite()
-    {
-        // All methods starting with "test" will be executed in the test suite.
-        return new TestSuite(TemplateServiceTest.class);
-    }
+
+    @Override
     protected void setUp() throws Exception
     {
         super.setUp();
@@ -81,13 +58,13 @@ public class TemplateServiceTest extends BaseUnitTest
             fail(e.getMessage());
         }
     }
+
     /**
      * Simple test that verify an object can be created and deleted.
      * @throws Exception
      */
     public void testSimpleAddGetCacheObject() throws Exception
     {
-
-
+        // TODO: write some tests
     }
-  }
+}
