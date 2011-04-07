@@ -495,6 +495,17 @@ public class SimpleLocalizationServiceImpl
     }
     
     /**
+     * Returns the value for the key in the default bundle and the default locale.
+     * 
+     * @param key The key to retrieve the value for.
+     * @return The value mapped to the key.
+     */
+    public String getString(String key) {
+    	return getString(getDefaultBundleName(), getDefaultLocale(), key);
+    }
+    
+    
+    /**
      * Gets localized text from a bundle if it's there.  Otherwise,
      * returns <code>null</code> (ignoring a possible
      * <code>MissingResourceException</code>).

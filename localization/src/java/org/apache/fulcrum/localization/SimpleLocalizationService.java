@@ -119,6 +119,14 @@ public interface SimpleLocalizationService
      * @return Localized text.
      */
     String getString(String bundleName, Locale locale, String key) throws MissingResourceException;
+    
+    /**
+     * Returns the value for the key in the default bundle and the default locale.
+     * 
+     * @param key The key to retrieve the value for.
+     * @return The value mapped to the key.
+     */
+    String getString(String key);
 
     /**
      * This method sets the name of the defaultBundle.
