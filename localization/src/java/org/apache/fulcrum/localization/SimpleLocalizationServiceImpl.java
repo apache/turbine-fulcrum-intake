@@ -500,8 +500,9 @@ public class SimpleLocalizationServiceImpl
      * @param key The key to retrieve the value for.
      * @return The value mapped to the key.
      */
-    public String getString(String key) {
-    	return getString(getDefaultBundleName(), getDefaultLocale(), key);
+    public String getString(String key)
+    {
+        return getString(getDefaultBundleName(), getDefaultLocale(), key);
     }
     
     

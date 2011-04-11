@@ -97,21 +97,22 @@ public class LocalizationTest extends BaseUnitTest
     }
     
     
-    public void testGetString() {
-    	String key1 = "key1";
-    	String value1 = "value1";
-    	String key2 = "key2";
-    	String value2 = "value2";
-    	String key3 = "key3";
-    	String value3 = "value3";
-    	String key4 = "key4";
-    	String value4 = "value4";
-    	
-    	assertEquals(value1, ls.getString(key1));
-    	assertEquals(value2, ls.getString(key2));
-    	assertEquals(value3, ls.getString(key3));
-    	assertEquals(value4, ls.getString(key4));
-    	
+    public void testGetString()
+    {
+        String key1 = "key1";
+        String value1 = "value1";
+        String key2 = "key2";
+        String value2 = "value2";
+        String key3 = "key3";
+        String value3 = "value3";
+        String key4 = "key4";
+        String value4 = "value4";
+
+        assertEquals(value1, ls.getString(key1));
+        assertEquals(value2, ls.getString(key2));
+        assertEquals(value3, ls.getString(key3));
+        assertEquals(value4, ls.getString(key4));
+
     }
     
     /**
