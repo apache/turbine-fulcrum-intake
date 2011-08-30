@@ -181,6 +181,13 @@ public class Group
         {
             fieldsArray[i].init(pp);
         }
+        for (int i = fieldsArray.length - 1; i >= 0; i--)
+        {
+            if (fieldsArray[i].isSet() && !fieldsArray[i].isValidated())
+            {
+                fieldsArray[i].validate();
+            }
+        }
         return this;
     }
 
@@ -220,7 +227,7 @@ public class Group
                     }
                 }
             }
-            
+
             cls = cls.getSuperclass();
         }
 
@@ -397,11 +404,11 @@ public class Group
                         interfaceFields[i].setProperty(obj);
                     }
                 }
-            }            
+            }
 
             cls = cls.getSuperclass();
         }
-        
+
         log.debug("setProperties() finished");
     }
 
@@ -453,7 +460,7 @@ public class Group
                         }
                     }
                 }
-            }            
+            }
 
             cls = cls.getSuperclass();
         }
@@ -573,7 +580,7 @@ public class Group
     public static class GroupFactory
             extends BaseKeyedPoolableObjectFactory
     {
-        private AppData appData;
+        private final AppData appData;
 
         public GroupFactory(AppData appData)
         {
