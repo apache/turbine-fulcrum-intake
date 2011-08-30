@@ -50,7 +50,7 @@ public class IntakeTest extends BaseUnitTest
 
     /*
      * This looks strange to me. A test should not bother with explicit initialization.
-     * That's the task of the container. 
+     * That's the task of the container.
      */
     public void OFFtestFacadeNotConfigured() throws Exception
     {
@@ -81,20 +81,40 @@ public class IntakeTest extends BaseUnitTest
         IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
         Group group = is.getGroup("LoginIfcGroup");
         assertNotNull(group);
-        
+
         Field userNameField = group.get("Username");
-        
+
         ParserService ps = (ParserService) this.resolve( ParserService.class.getName() );
         ValueParser pp = ps.getParser(DefaultParameterParser.class);
-        
+
         pp.setString(userNameField.getKey(), "Joe");
         userNameField.init(pp);
         userNameField.validate();
-        
+
         LoginForm form = new LoginForm();
         group.setProperties(form);
-        
+
         assertEquals("User names should be equal", "Joe", form.getUsername());
+    }
+
+    public void testParserInit() throws Exception
+    {
+        IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
+        Group group = is.getGroup("LoginGroup");
+        assertNotNull(group);
+
+        Field userNameField = group.get("Username");
+
+        ParserService ps = (ParserService) this.resolve( ParserService.class.getName() );
+        ValueParser pp = ps.getParser(DefaultParameterParser.class);
+
+        pp.setString("loginGroupKey_0loginUsernameKey", "Joe");
+        group.init(pp);
+
+        assertTrue("The field should be set", userNameField.isSet());
+        assertTrue("The field should be validated", userNameField.isValidated());
+        assertTrue("The field should be valid", userNameField.isValid());
+        assertEquals("The field should have the value Joe", "Joe", userNameField.getValue());
     }
 
     public void testEmptyBooleanField() throws Exception
@@ -132,7 +152,7 @@ public class IntakeTest extends BaseUnitTest
         assertTrue("The Default Validator of an intake Field type boolean should be BooleanValidator", (booleanField.getValidator() instanceof BooleanValidator));
         assertTrue("An intake Field type boolean, which is required, should be required", booleanField.isRequired());
     }
-    
+
     public void testInvalidNumberMessage() throws Exception // TRB-74
     {
         IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
@@ -148,7 +168,7 @@ public class IntakeTest extends BaseUnitTest
         {
             assertEquals("Invalid number message is wrong.", "Entry was not a valid Integer", ve.getMessage());
         }
-        
+
         Field longField = group.get("EmptyLongTestField");
         try
         {

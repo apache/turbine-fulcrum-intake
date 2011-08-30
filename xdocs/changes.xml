@@ -26,6 +26,9 @@
 
   <body>
      <release version="1.0.7-SNAPSHOT" date="in Subversion">
+      <action type="fix" dev="tv">
+        Groups were not initialized correctly from a parser.
+      </action>
      </release>
   	 <release version="1.0.6" date="2009-11-02">
       <action type="fix" dev="tv">
