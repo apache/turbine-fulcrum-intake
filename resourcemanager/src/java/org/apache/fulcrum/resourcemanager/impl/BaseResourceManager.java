@@ -66,7 +66,7 @@ public abstract class BaseResourceManager
     /** The service manager supplied by the avalon framework */
     private ServiceManager serviceManager;
 
-    /** The configuraton supplied by the avalon framework */
+    /** The configuration supplied by the avalon framework */
     private Configuration configuration;
 
     /** the Avalon application directory */
@@ -208,7 +208,7 @@ public abstract class BaseResourceManager
     }
 
     /**
-     * Get the content as byte[]
+     * Get the content as byte[].
      */
     protected byte[] getContent( Object content )
     	throws IOException
@@ -458,10 +458,10 @@ public abstract class BaseResourceManager
     }
 
     /**
-     * Write the given file without encryption.
-     * @param target the target file
+     * Write the given content without encryption.
+     *
+     * @param os the output stream
      * @parwm content the content to be written
-     * @return
      */
     private void writePlain( OutputStream os, byte[] content )
     	throws IOException
@@ -471,10 +471,10 @@ public abstract class BaseResourceManager
     }
 
     /**
-     * Write the given file and encrypt it.
-     * @param target the target file
+     * Write the given content and encrypt it.
+     *
+     * @param os the output stream
      * @parwm content the content to be written
-     * @return
      */
     private void writeEncrypted( OutputStream os, byte[] content )
     	throws IOException

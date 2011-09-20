@@ -42,7 +42,7 @@ public interface ResourceManagerService
     String[] listDomains();
 
     /**
-     * List all avaible resources recursivelyfor a given domain.
+     * List all available resources recursively for a given domain.
      *
      * @param domain the domain you are interested in
      * @return list of all available resources for the domain
@@ -67,11 +67,12 @@ public interface ResourceManagerService
     boolean exists( String domain, String resourcePath );
 
     /**
-     * Saves a file.
+     * Saves a resource.
      *
      * @param domain the domain you are interested in
      * @param resourcePath the path of the resource
      * @param resourceContent the content of the resource
+     * @throws IOException unable to create the resource
      */
     void create( String domain, String resourcePath, Object resourceContent )
         throws IOException;
@@ -81,6 +82,8 @@ public interface ResourceManagerService
      *
      * @param domain the domain you are interested in
      * @param resourcePath the path of the resource
+     * @return the loaded resource
+     * @throws IOException unable to save the resource
      */
     byte[] read( String domain, String resourcePath )
         throws IOException;
@@ -91,6 +94,7 @@ public interface ResourceManagerService
      * @param domain the domain you are interested in
      * @param resourcePath the path of the resource
      * @param resourceContent the content of the resource
+     * @throws IOException unable to update the resource
      */
     void update( String domain, String resourcePath, Object resourceContent )
         throws IOException;
@@ -100,6 +104,8 @@ public interface ResourceManagerService
      *
      * @param domain the domain you are interested in
      * @param resourcePath the path of the resource
+     * @return true if the resource was deleted
+     * @throws IOException unable to delete the resource
      */
     boolean delete( String domain, String resourcePath )
         throws IOException;
@@ -134,6 +140,8 @@ public interface ResourceManagerService
      * @param domain the domain you are interested in
      * @param context the context to locate the resource
      * @param resourceName the name of the resource
+     * @return the loaded resource
+     * @throws IOException unable to load the resource
      */
     byte[] read( String domain, String[] context, String resourceName )
         throws IOException;
@@ -144,7 +152,7 @@ public interface ResourceManagerService
      * @param domain the domain you are interested in
      * @param context the context to locate the resource
      * @param resourceName the name of the resource
-     * @return the file name or null
+     * @return the resource URL or null
      */
     URL getResourceURL( String domain, String[] context, String resourceName );
 }

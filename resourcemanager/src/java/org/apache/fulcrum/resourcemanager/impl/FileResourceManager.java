@@ -160,15 +160,7 @@ public class FileResourceManager
     public synchronized boolean exists(String resourceName)
     {
         File resourceFile = this.findResourceFile( resourceName, this.resourceFileNameList );
-
-    	if( resourceFile == null )
-    	{
-    	    return false;
-    	}
-    	else
-    	{
-    	    return true;
-    	}
+        return resourceFile != null;
 	}
 
     /**
@@ -217,7 +209,7 @@ public class FileResourceManager
     public synchronized byte[] read( String resourcePath )
         throws IOException
     {
-        byte[] result = null;
+        byte[] result;
 
         File resourceFile = this.findResourceFile( resourcePath, this.resourceFileNameList );
 
@@ -258,7 +250,7 @@ public class FileResourceManager
         // if a resource was deleted we have to update our resource list
         // to avoid a stale entry
 
-        if( file.delete() == true )
+        if(file.delete())
         {
             this.createResourceFileNameList();
             result = true;
@@ -272,7 +264,7 @@ public class FileResourceManager
      */
     public synchronized boolean exists( String[] context, String resourceName )
     {
-        return( this.locate(context,resourceName) != null ? true : false );
+        return(this.locate(context, resourceName) != null);
     }
 
     /**
@@ -322,7 +314,7 @@ public class FileResourceManager
         {
             try
             {
-                return resourceFile.toURL();
+                return resourceFile.toURI().toURL();
             }
             catch( MalformedURLException e )
             {
@@ -397,12 +389,12 @@ public class FileResourceManager
     private File findResourceFile( String resourceName, String[] resourceList )
     {
         File result = null;
-        String tempFileName = null;
+        String tempFileName;
         String resourceFileName = new File( this.getResourceDir(), resourceName).getAbsolutePath();
 
-        boolean wasFound = ( Arrays.binarySearch( resourceList, resourceFileName ) >= 0 ? true : false );
+        boolean wasFound = (Arrays.binarySearch(resourceList, resourceFileName) >= 0);
 
-        if( wasFound == true  )
+        if(wasFound)
         {
             result = new File( resourceFileName );
         }
@@ -415,10 +407,7 @@ public class FileResourceManager
             String[] context = new String[parts.length-1];
             String scriptBaseName = parts[parts.length-1];
 
-            for( int i=0; i<context.length; i++ )
-            {
-                context[i] = parts[i];
-            }
+            System.arraycopy(parts, 0, context, 0, context.length);
 
             // create a list of files stepping up the directories
             // [0]=./foo/bar/empty.groovy
@@ -474,9 +463,10 @@ public class FileResourceManager
 
     /**
      * Find all resources recursively.
+     *
      * @param startDir the start directory of the search
      * @param suffix an optional suffix to filter the result
-     * @param result list of all Grovvy scripts
+     * @param result list of all matching resources
      */
     private void findAllResources( File startDir, String suffix, ArrayList result )
     {
@@ -499,7 +489,7 @@ public class FileResourceManager
                 }
                 else
                 {
-                    if( suffix.equals("*") == false )
+                    if(!suffix.equals("*"))
                     {
 	                    if( list[i].getName().endsWith(suffix) )
 	                    {
@@ -516,7 +506,7 @@ public class FileResourceManager
     }
 
     /**
-     * Build a file name using the context and resoure name.
+     * Build a file name using the context and resource name.
      * @param context the context to locate the resource
      * @param resourceName the name of the resource
      * @return a file name

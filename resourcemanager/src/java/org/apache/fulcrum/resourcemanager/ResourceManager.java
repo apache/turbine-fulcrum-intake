@@ -51,7 +51,7 @@ public interface ResourceManager
     String getDomain();
 
     /**
-     * List all avaible resources recursively for a domain.
+     * List all available resources recursively for a domain.
      *
      * @return list of all available resources for the domain
      */

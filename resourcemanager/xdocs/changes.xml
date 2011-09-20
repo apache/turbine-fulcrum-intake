@@ -24,7 +24,10 @@
   </properties>
 
   <body>
-    <release version="1.0.1" date="2010-07-30">
+    <release version="1.0.1" date="2011-09-20">
+        <action dev="sgoeschl" type="update">
+          Cleaned up the code.
+        </action>
       <action dev="sgoeschl" type="update">
         Adding a M2 build
       </action>    

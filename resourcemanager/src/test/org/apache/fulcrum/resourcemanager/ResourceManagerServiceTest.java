@@ -242,7 +242,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
 
         resourceName = "inputstream.txt";
         resourceContent = "Hello World";
-        FileInputStream fis = new FileInputStream( "project.xml" );
+        FileInputStream fis = new FileInputStream( "pom.xml" );
         this.service.create( resourceDomain, resourceName, fis );
         fis.close();
         assertTrue( this.service.read(resourceDomain,resourceName).length > 0 );

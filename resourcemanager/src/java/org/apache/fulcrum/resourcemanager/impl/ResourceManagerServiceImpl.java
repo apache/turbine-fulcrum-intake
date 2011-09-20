@@ -103,7 +103,7 @@ public class ResourceManagerServiceImpl
      */
     public void initialize() throws Exception
     {
-        ResourceManager resourceManager = null;
+        ResourceManager resourceManager;
 
         for( int i=0; i<this.domainConfigurationList.length; i++ )
         {
@@ -117,12 +117,12 @@ public class ResourceManagerServiceImpl
      */
     public void dispose()
     {
+        ResourceManager resourceManager;
         String[] domainList = this.listDomains();
-        ResourceManager resourceManager = null;
 
         for( int i=0; i<domainList.length; i++ )
         {
-            resourceManager = (ResourceManager) this.getResourceManager(domainList[i]);
+            resourceManager = this.getResourceManager(domainList[i]);
 
             if( resourceManager instanceof Disposable )
             {
@@ -192,7 +192,7 @@ public class ResourceManagerServiceImpl
      */
     public String[] listDomains()
     {
-        String key = null;
+        String key;
         Enumeration keys = this.getDomainList().keys();
         ArrayList result = new ArrayList();
 
@@ -275,12 +275,16 @@ public class ResourceManagerServiceImpl
     }
 
     /**
-     * Incarnates the concrete resource manager instances
+     * Incarnates the concrete resource manager instances.
+     *
+     * @param domainConfiguration the domain configuration
+     * @return the resource manager
+     * @throws Exception incarnating the resource manager failed
      */
     private ResourceManager incarnate( Configuration domainConfiguration )
     	throws Exception
     {
-        ResourceManager result = null;
+        ResourceManager result;
 
         String domainName = domainConfiguration.getAttribute("name");
         String domainType = domainConfiguration.getAttribute("type",FileResourceManager.class.getName());
@@ -326,13 +330,14 @@ public class ResourceManagerServiceImpl
     /**
      * Load the given class dynamically and return an instance of it.
      * @param clazz the name of the class
+     * @param domain the name of the domain
      * @return an instance of the class
      * @throws Exception creating an instance failed
      */
     private ResourceManager createResourceManager( String clazz, String domain )
     	throws Exception
 	{
-        ResourceManager result = null;
+        ResourceManager result;
 
         try
         {
