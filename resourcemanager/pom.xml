@@ -1,24 +1,4 @@
-<?xml version="1.0"?>
-<!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
-<project
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.apache.fulcrum</groupId>
     <artifactId>fulcrum-parent</artifactId>
@@ -27,16 +7,16 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fulcrum-resourcemanager</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.1</version>
   <name>Fulcrum ResourceManager</name>
   <inceptionYear>2005</inceptionYear>
   <description>Fulcrum ResourceManager Service</description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-resourcemanager</url>
 		
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/resourcemanager/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/resourcemanager/</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/resourcemanager/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/FULCRUM_RESOURCEMANAGER_1_0_1</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/FULCRUM_RESOURCEMANAGER_1_0_1</developerConnection>
+    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/tags/FULCRUM_RESOURCEMANAGER_1_0_1</url>
   </scm>
 
   <distributionManagement>
@@ -52,7 +32,7 @@
       <name>Siegfried Goeschl</name>
       <id>sgoeschl</id>
       <email>sgoeschl@apache.org</email>
-      <organization></organization>
+      <organization />
       <roles>
         <role>Java Developer</role>
       </roles>
@@ -91,7 +71,7 @@
 
     <testResources>
       <testResource>
-        <targetPath/>
+        <targetPath />
         <directory>${basedir}/src/test/resources</directory>
         <includes>
           <include>**/*</include>
@@ -99,7 +79,17 @@
       </testResource>
     </testResources>
   </build>
-	
+
+  <reporting>
+      <plugins>
+          <plugin>
+            <!-- get test coverage for regression tests -->
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>cobertura-maven-plugin</artifactId>
+            <version>2.3</version>
+          </plugin>
+      </plugins>
+  </reporting>
   <properties>  
     <!-- Default configuration for compiler source and target JVM -->
     <maven.compile.source>1.4</maven.compile.source>
