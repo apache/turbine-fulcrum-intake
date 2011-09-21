@@ -7,16 +7,16 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fulcrum-resourcemanager</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.1</version>
   <name>Fulcrum ResourceManager</name>
   <inceptionYear>2005</inceptionYear>
   <description>Fulcrum ResourceManager Service</description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-resourcemanager</url>
 		
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/resourcemanager/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/resourcemanager/</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/resourcemanager/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/FULCRUM_RESOURCEMANAGEER_1_0_1</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/FULCRUM_RESOURCEMANAGEER_1_0_1</developerConnection>
+    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/tags/FULCRUM_RESOURCEMANAGEER_1_0_1</url>
   </scm>
 
   <distributionManagement>
