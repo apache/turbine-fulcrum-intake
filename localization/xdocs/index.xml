@@ -65,15 +65,7 @@
           <th>Description</th>
         </tr>
         <tr>
-          <td>bundles</td>
-          <td>Complex</td>
-          <td>[1]</td>
-          <td>
-            The list of configured bundles.
-          </td>
-        </tr>
-        <tr>
-          <td>bundles@locale-default-language</td>
+          <td>localization@locale-default-language</td>
           <td>String</td>
           <td>[0|1]</td>
           <td>
@@ -82,12 +74,20 @@
           </td>
         </tr>
         <tr>
-          <td>bundles@locale-default-country</td>
+          <td>localization@locale-default-country</td>
           <td>String</td>
           <td>[0|1]</td>
           <td>
             The default country to use if none is specified. If this attribute
             is absent, the JVM default country will be used.
+          </td>
+        </tr>        
+        <tr>
+          <td>bundles</td>
+          <td>Complex</td>
+          <td>[1]</td>
+          <td>
+            The list of configured bundles.
           </td>
         </tr>
         <tr>
@@ -103,8 +103,8 @@
 
     <subsection name="Component Configuration Example">
       <source><![CDATA[
-    <localization>
-      <bundles locale-default-language="en" locale-default-country="US">
+    <localization locale-default-language="en" locale-default-country="US">
+      <bundles>
         <bundle>org.apache.fulcrum.localization.BarBundle</bundle>
         <bundle>org.apache.fulcrum.localization.FooBundle</bundle>
       </bundles>
@@ -132,15 +132,7 @@
           <th>Description</th>
         </tr>
         <tr>
-          <td>bundles</td>
-          <td>Complex</td>
-          <td>[1]</td>
-          <td>
-            The list of configured bundles.
-          </td>
-        </tr>
-        <tr>
-          <td>bundles@locale-default-language</td>
+          <td>localization@locale-default-language</td>
           <td>String</td>
           <td>[0|1]</td>
           <td>
@@ -149,12 +141,20 @@
           </td>
         </tr>
         <tr>
-          <td>bundles@locale-default-country</td>
+          <td>localization@locale-default-country</td>
           <td>String</td>
           <td>[0|1]</td>
           <td>
             The default country to use if none is specified. If this attribute
             is absent, the JVM default country will be used.
+          </td>
+        </tr>
+        <tr>
+          <td>bundles</td>
+          <td>Complex</td>
+          <td>[1]</td>
+          <td>
+            The list of configured bundles.
           </td>
         </tr>
         <tr>
@@ -170,8 +170,8 @@
 
     <subsection name="Component Configuration Example">
       <source><![CDATA[
-    <localization>
-      <bundles locale-default-language="en" locale-default-country="US">
+    <localization locale-default-language="en" locale-default-country="US">
+      <bundles>
         <bundle>org.apache.fulcrum.localization.BarBundle</bundle>
         <bundle>org.apache.fulcrum.localization.FooBundle</bundle>
       </bundles>
