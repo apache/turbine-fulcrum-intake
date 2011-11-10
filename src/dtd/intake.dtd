@@ -206,7 +206,7 @@ Used in:        group
 >
 
 <!--
-The rule element is used to decribe validation rules for fields.
+The rule element is used to describe validation rules for fields.
 
 name:       Name of the rule.  The valid rule names vary by field type.
 
