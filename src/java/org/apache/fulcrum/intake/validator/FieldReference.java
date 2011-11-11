@@ -19,7 +19,6 @@ package org.apache.fulcrum.intake.validator;
  * under the License.
  */
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -31,7 +30,7 @@ import org.apache.fulcrum.intake.model.Group;
 /**
  * Helper Class to manage relations between fields. The following
  * comparisons are supported:
- * 
+ *
  * <table>
  * <tr>
  *   <th>Name</th><th>Valid Values</th><th>Default Value</th>
@@ -65,7 +64,7 @@ public class FieldReference
 {
     /** a local logger */
     protected static final Log log = LogFactory.getLog(FieldReference.class);
-    
+
     /** Rule name for "&lt;" comparison */
     public static final String RANGE_LT = "less-than";
 
@@ -92,13 +91,13 @@ public class FieldReference
 
     /** Numeric comparison */
     private int compare = 0;
-    
+
     /** Name of referenced field */
     private String fieldName = null;
 
     /** Error message */
     private String message = null;
-    
+
     /**
      *  Constructor
      */
@@ -154,17 +153,17 @@ public class FieldReference
     {
         this.message = message;
     }
-    
+
     /**
      * Map the comparison strings to their numeric counterparts
-     * 
+     *
      * @param key the string representation of a comparison operator
      * @return the numeric representation of the given comparison operator
      */
     public static int getCompareType(String key)
     {
         int compareType = 0;
-        
+
         if (key.equals(RANGE_LT))
         {
             compareType = COMPARE_LT;
@@ -181,33 +180,33 @@ public class FieldReference
         {
             compareType = COMPARE_GTE;
         }
-        
+
         return compareType;
     }
-    
+
     /**
      * Check the parsed value against the referenced fields
-     * 
+     *
      * @param fieldReferences List of field references to check
      * @param compareCallback Callback to the actual compare operation
      * @param value the parsed value of the related field
      * @param group the group the related field belongs to
-     * 
+     *
      * @throws ValidationException
      */
-    public static void checkReferences(List fieldReferences, CompareCallback compareCallback, 
-            Object value, Group group)
+    public static <T> void checkReferences(List<FieldReference> fieldReferences, CompareCallback<T> compareCallback,
+            T value, Group group)
         throws ValidationException
     {
-        for (Iterator i = fieldReferences.iterator(); i.hasNext();)
+        for (FieldReference ref : fieldReferences)
         {
-            FieldReference ref = (FieldReference)i.next();
             boolean comp_true = true;
 
             try
             {
-                Field refField = group.get(ref.getFieldName());
-                
+                @SuppressWarnings("unchecked")
+                Field<T> refField = (Field<T>) group.get(ref.getFieldName());
+
                 if (refField.isSet())
                 {
                     /*
@@ -219,20 +218,12 @@ public class FieldReference
                     {
                         refField.validate();
                     }
-                    
+
                     if (refField.isValid())
                     {
-                        try
-                        {
-                            comp_true = compareCallback.compareValues(ref.getCompare(), 
-                                    value, 
-                                    refField.getValue());
-                        }
-                        catch (ClassCastException e)
-                        {
-                            throw new IntakeException("Type mismatch comparing " +
-                                    value + " with " + refField.getValue(), e);
-                        }
+                        comp_true = compareCallback.compareValues(ref.getCompare(),
+                                value,
+                                refField.getValue());
                     }
                 }
             }

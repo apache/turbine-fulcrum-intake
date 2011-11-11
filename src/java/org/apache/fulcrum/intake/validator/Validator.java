@@ -28,7 +28,7 @@ import org.apache.fulcrum.intake.model.Field;
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
-public interface Validator
+public interface Validator<T>
 {
     /** "flexible" Rule, used in DateFormat Validator */
     String FLEXIBLE_RULE_NAME = "flexible";
@@ -64,7 +64,7 @@ public interface Validator
      * @param field a <code>Field</code> to be tested
      * @return true if valid, false otherwise
      */
-    boolean isValid(Field field);
+    boolean isValid(Field<T> field);
 
     /**
      * Determine whether a field meets the criteria specified
@@ -74,7 +74,7 @@ public interface Validator
      * @exception ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
-    void assertValidity(Field field)
+    void assertValidity(Field<T> field)
             throws ValidationException;
 
     /**

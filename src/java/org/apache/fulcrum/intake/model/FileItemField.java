@@ -35,7 +35,7 @@ import org.apache.fulcrum.parser.ValueParser;
  * @version $Id$
  */
 public class FileItemField
-        extends Field
+        extends Field<FileItem>
 {
 
     /**
@@ -111,14 +111,12 @@ public class FileItemField
      * @return a <code>Field</code> value
      * @exception IntakeException if an error occurs
      */
-    public Field init(ValueParser vp)
+    public Field<FileItem> init(ValueParser vp)
             throws IntakeException
     {
-        try
-        {
-            super.parser = (ParameterParser) vp;
-        }
-        catch (ClassCastException e)
+        super.parser = vp;
+
+        if (!(vp instanceof ParameterParser))
         {
             throw new IntakeException(
                     "FileItemFields can only be used with ParameterParser");

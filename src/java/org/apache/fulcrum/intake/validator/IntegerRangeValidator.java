@@ -20,7 +20,6 @@ package org.apache.fulcrum.intake.validator;
  */
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -65,16 +64,15 @@ public class IntegerRangeValidator
         extends IntegerValidator
 {
     /** List of FieldReferences for multiple comparisons */
-    List fieldReferences; 
+    List<FieldReference> fieldReferences;
 
     /** Callback for the actual compare operation */
-    CompareCallback compareCallback; 
+    CompareCallback<Integer> compareCallback;
 
-    public IntegerRangeValidator(final Map paramMap)
+    public IntegerRangeValidator(Map<String, Constraint> paramMap)
             throws IntakeException
     {
-        this();
-        init(paramMap);
+        super(paramMap);
     }
 
     /**
@@ -91,63 +89,58 @@ public class IntegerRangeValidator
      * @param paramMap
      * @throws InvalidMaskException
      */
-    public void init(final Map paramMap)
+    public void init(Map<String, ? extends Constraint> paramMap)
             throws InvalidMaskException
     {
         super.init(paramMap);
-        
-        compareCallback = new CompareCallback()
+
+        compareCallback = new CompareCallback<Integer>()
             {
                 /**
                  * Compare the given values using the compare operation provided
-                 * 
+                 *
                  * @param compare type of compare operation
                  * @param thisValue value of this field
                  * @param refValue value of the reference field
-                 * 
+                 *
                  * @return the result of the comparison
                  */
-                public boolean compareValues(int compare, Object thisValue, Object refValue)
-                    throws ClassCastException
+                public boolean compareValues(int compare, Integer thisValue, Integer refValue)
                 {
                     boolean result = true;
-                    
-                    Integer thisInt = (Integer)thisValue;
-                    Integer otherInt = (Integer)refValue;
-                    
+
                     switch (compare)
                     {
                         case FieldReference.COMPARE_LT:
-                            result = thisInt.compareTo(otherInt) < 0;
+                            result = thisValue.compareTo(refValue) < 0;
                             break;
-                            
+
                         case FieldReference.COMPARE_LTE:
-                            result = thisInt.compareTo(otherInt) <= 0;
+                            result = thisValue.compareTo(refValue) <= 0;
                             break;
-                            
+
                         case FieldReference.COMPARE_GT:
-                            result = thisInt.compareTo(otherInt) > 0;
+                            result = thisValue.compareTo(refValue) > 0;
                             break;
-                            
+
                         case FieldReference.COMPARE_GTE:
-                            result = thisInt.compareTo(otherInt) >= 0;
+                            result = thisValue.compareTo(refValue) >= 0;
                             break;
                     }
-                    
+
                     return result;
                 }
             };
-        
-        fieldReferences = new ArrayList(10);
 
-        for (Iterator i = paramMap.entrySet().iterator(); i.hasNext();)
+        fieldReferences = new ArrayList<FieldReference>(10);
+
+        for (Map.Entry<String, ? extends Constraint> entry : paramMap.entrySet())
         {
-            Map.Entry entry = (Map.Entry)i.next();
-            String key = (String)entry.getKey();
-            Constraint constraint = (Constraint)entry.getValue();
+            String key = entry.getKey();
+            Constraint constraint = entry.getValue();
 
             int compare = FieldReference.getCompareType(key);
-            
+
             if (compare != 0)
             {
                 // found matching constraint
@@ -155,17 +148,17 @@ public class IntegerRangeValidator
                 fieldref.setCompare(compare);
                 fieldref.setFieldName(constraint.getValue());
                 fieldref.setMessage(constraint.getMessage());
-                
+
                 fieldReferences.add(fieldref);
             }
         }
-        
+
         if (fieldReferences.isEmpty())
         {
             log.warn("No reference field rules have been found.");
         }
     }
-    
+
     /**
      * Determine whether a testValue meets the criteria specified
      * in the constraints defined for this validator
@@ -174,11 +167,11 @@ public class IntegerRangeValidator
      * @exception ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
-    public void assertValidity(final Field testField)
+    public void assertValidity(final Field<Integer> testField)
         throws ValidationException
     {
         super.assertValidity(testField);
-        
+
         Group thisGroup = testField.getGroup();
 
         if (testField.isMultiValued())
@@ -193,7 +186,7 @@ public class IntegerRangeValidator
         else
         {
             String testValue = (String)testField.getTestValue();
-        
+
             assertValidity(testValue, thisGroup);
         }
     }
@@ -204,7 +197,7 @@ public class IntegerRangeValidator
      *
      * @param testValue a <code>String</code> to be tested
      * @param group the group this field belongs to
-     * 
+     *
      * @exception ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
@@ -214,10 +207,10 @@ public class IntegerRangeValidator
         if (required || StringUtils.isNotEmpty(testValue))
         {
             Integer testInt = new Integer(testValue);
-            
+
             try
             {
-                FieldReference.checkReferences(fieldReferences, compareCallback, 
+                FieldReference.checkReferences(fieldReferences, compareCallback,
                         testInt, group);
             }
             catch (ValidationException e)

@@ -19,10 +19,13 @@ package org.apache.fulcrum.intake;
  * under the License.
  */
 
+import java.util.Arrays;
+
 import org.apache.fulcrum.intake.model.Field;
 import org.apache.fulcrum.intake.model.Group;
 import org.apache.fulcrum.intake.test.LoginForm;
 import org.apache.fulcrum.intake.validator.BooleanValidator;
+import org.apache.fulcrum.intake.validator.IntegerValidator;
 import org.apache.fulcrum.intake.validator.ValidationException;
 import org.apache.fulcrum.parser.DefaultParameterParser;
 import org.apache.fulcrum.parser.ParserService;
@@ -82,7 +85,7 @@ public class IntakeTest extends BaseUnitTest
         Group group = is.getGroup("LoginIfcGroup");
         assertNotNull(group);
 
-        Field userNameField = group.get("Username");
+        Field<?> userNameField = group.get("Username");
 
         ParserService ps = (ParserService) this.resolve( ParserService.class.getName() );
         ValueParser pp = ps.getParser(DefaultParameterParser.class);
@@ -103,7 +106,7 @@ public class IntakeTest extends BaseUnitTest
         Group group = is.getGroup("LoginGroup");
         assertNotNull(group);
 
-        Field userNameField = group.get("Username");
+        Field<?> userNameField = group.get("Username");
 
         ParserService ps = (ParserService) this.resolve( ParserService.class.getName() );
         ValueParser pp = ps.getParser(DefaultParameterParser.class);
@@ -124,7 +127,7 @@ public class IntakeTest extends BaseUnitTest
         assertNotNull(group);
         assertTrue(IntakeServiceFacade.isInitialized());
         group = IntakeServiceFacade.getGroup("BooleanTest");
-        Field booleanField = group.get("EmptyBooleanTestField");
+        Field<?> booleanField = group.get("EmptyBooleanTestField");
         assertTrue("The Default Validator of an intake Field type boolean should be BooleanValidator", (booleanField.getValidator() instanceof BooleanValidator));
         assertFalse("An Empty intake Field type boolean should not be required", booleanField.isRequired());
     }
@@ -136,7 +139,7 @@ public class IntakeTest extends BaseUnitTest
         assertNotNull(group);
         assertTrue(IntakeServiceFacade.isInitialized());
         group = IntakeServiceFacade.getGroup("BooleanTest");
-        Field booleanField = group.get("BooleanTestField");
+        Field<?> booleanField = group.get("BooleanTestField");
         assertTrue("The Default Validator of an intake Field type boolean should be BooleanValidator", (booleanField.getValidator() instanceof BooleanValidator));
         assertFalse("An intake Field type boolean, which is not required, should not be required", booleanField.isRequired());
     }
@@ -148,9 +151,32 @@ public class IntakeTest extends BaseUnitTest
         assertNotNull(group);
         assertTrue(IntakeServiceFacade.isInitialized());
         group = IntakeServiceFacade.getGroup("BooleanTest");
-        Field booleanField = group.get("RequiredBooleanTestField");
+        Field<?> booleanField = group.get("RequiredBooleanTestField");
         assertTrue("The Default Validator of an intake Field type boolean should be BooleanValidator", (booleanField.getValidator() instanceof BooleanValidator));
         assertTrue("An intake Field type boolean, which is required, should be required", booleanField.isRequired());
+    }
+
+    public void testMultiValueField() throws Exception
+    {
+        IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
+        Group group = is.getGroup("NumberTest");
+        assertNotNull(group);
+        Field<?> multiValueField = group.get("MultiIntegerTestField");
+        assertTrue("The Default Validator of an intake Field type int should be IntegerValidator", (multiValueField.getValidator() instanceof IntegerValidator));
+        assertTrue("An intake Field type int, which is multiValued, should be multiValued", multiValueField.isMultiValued());
+
+        ParserService ps = (ParserService) this.resolve( ParserService.class.getName() );
+        ValueParser pp = ps.getParser(DefaultParameterParser.class);
+
+        int[] values = new int[] { 1, 2 };
+        pp.add("nt_0mitf", values[0]);
+        pp.add("nt_0mitf", values[1]);
+        group.init(pp);
+
+        assertTrue("The field should be set", multiValueField.isSet());
+        assertTrue("The field should be validated", multiValueField.isValidated());
+        assertTrue("The field should be valid", multiValueField.isValid());
+        assertTrue("The field should have the value [1, 2]", Arrays.equals(values, (int[])multiValueField.getValue()));
     }
 
     public void testInvalidNumberMessage() throws Exception // TRB-74
@@ -159,7 +185,7 @@ public class IntakeTest extends BaseUnitTest
         Group group = is.getGroup("NumberTest");
         assertNotNull(group);
 
-        Field intField = group.get("EmptyIntegerTestField");
+        Field<?> intField = group.get("EmptyIntegerTestField");
         try
         {
             intField.getValidator().assertValidity("aa");
@@ -169,7 +195,7 @@ public class IntakeTest extends BaseUnitTest
             assertEquals("Invalid number message is wrong.", "Entry was not a valid Integer", ve.getMessage());
         }
 
-        Field longField = group.get("EmptyLongTestField");
+        Field<?> longField = group.get("EmptyLongTestField");
         try
         {
             longField.getValidator().assertValidity("aa");
@@ -179,7 +205,7 @@ public class IntakeTest extends BaseUnitTest
             assertEquals("Invalid number message is wrong.", "Entry was not a valid Long", ve.getMessage());
         }
 
-        Field shortField = group.get("EmptyShortTestField");
+        Field<?> shortField = group.get("EmptyShortTestField");
         try
         {
             shortField.getValidator().assertValidity("aa");
@@ -189,7 +215,7 @@ public class IntakeTest extends BaseUnitTest
             assertEquals("Invalid number message is wrong.", "Entry was not a valid Short", ve.getMessage());
         }
 
-        Field floatField = group.get("EmptyFloatTestField");
+        Field<?> floatField = group.get("EmptyFloatTestField");
         try
         {
             floatField.getValidator().assertValidity("aa");
@@ -199,7 +225,7 @@ public class IntakeTest extends BaseUnitTest
             assertEquals("Invalid number message is wrong.", "Entry was not a valid Float", ve.getMessage());
         }
 
-        Field doubleField = group.get("EmptyDoubleTestField");
+        Field<?> doubleField = group.get("EmptyDoubleTestField");
         try
         {
             doubleField.getValidator().assertValidity("aa");
@@ -209,7 +235,7 @@ public class IntakeTest extends BaseUnitTest
             assertEquals("Invalid number message is wrong.", "Entry was not a valid Double", ve.getMessage());
         }
 
-        Field bigDecimalField = group.get("EmptyBigDecimalTestField");
+        Field<?> bigDecimalField = group.get("EmptyBigDecimalTestField");
         try
         {
             bigDecimalField.getValidator().assertValidity("aa");
@@ -219,7 +245,7 @@ public class IntakeTest extends BaseUnitTest
             assertEquals("Invalid number message is wrong.", "Entry was not a valid BigDecimal", ve.getMessage());
         }
 
-        Field numberField = group.get("NumberTestField");
+        Field<?> numberField = group.get("NumberTestField");
         try
         {
             numberField.getValidator().assertValidity("aa");

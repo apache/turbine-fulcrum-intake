@@ -20,13 +20,10 @@ package org.apache.fulcrum.intake.xmlmodel;
  */
 
 import java.io.Serializable;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.xml.sax.Attributes;
 
 /**
@@ -44,8 +41,8 @@ public class XmlGroup
      */
     private static final long serialVersionUID = 4771953823149519746L;
 
-    private List fields;
-    private List mapToObjects;
+    private final List<XmlField> fields;
+    private final List<String> mapToObjects;
     private String defaultMapToObject;
     private AppData parent;
     private String groupName;
@@ -57,8 +54,8 @@ public class XmlGroup
      */
     public XmlGroup()
     {
-        fields = new ArrayList();
-        mapToObjects = new ArrayList(2);
+        fields = new ArrayList<XmlField>();
+        mapToObjects = new ArrayList<String>(2);
     }
 
     /**
@@ -178,7 +175,7 @@ public class XmlGroup
     /**
      * Returns a collection of fields in this input group
      */
-    public List getFields()
+    public List<XmlField> getFields()
     {
         return fields;
     }
@@ -199,9 +196,8 @@ public class XmlGroup
     {
         String curName;
 
-        for (Iterator iter = fields.iterator(); iter.hasNext();)
+        for (XmlField field : fields)
         {
-            XmlField field = (XmlField) iter.next();
             curName = field.getRawName();
             if (curName.equals(name))
             {
@@ -227,7 +223,7 @@ public class XmlGroup
         return (getField(name) != null);
     }
 
-    public List getMapToObjects()
+    public List<String> getMapToObjects()
     {
         return mapToObjects;
     }
@@ -276,9 +272,9 @@ public class XmlGroup
 
         if (fields != null)
         {
-            for (Iterator iter = fields.iterator(); iter.hasNext();)
+            for (XmlField field : fields)
             {
-                result.append(iter.next());
+                result.append(field);
             }
         }
 

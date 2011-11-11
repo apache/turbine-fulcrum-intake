@@ -19,9 +19,9 @@ package org.apache.fulcrum.intake.validator;
  * under the License.
  */
 
+import java.text.ParseException;
+import java.util.Locale;
 import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Validates Integers with the following constraints in addition to those
@@ -43,25 +43,18 @@ import org.apache.commons.lang.StringUtils;
  * @version $Id$
  */
 public class IntegerValidator
-        extends NumberValidator
+        extends NumberValidator<Integer>
 {
-    /* Init the minValue to that for a Integer */
-    private int minValue = Integer.MIN_VALUE;
-
-    /* Init the maxValue to that for a Integer */
-    private int maxValue = Integer.MAX_VALUE;
-
     /**
      * Constructor to use when initialising Object
      *
      * @param paramMap
      * @throws InvalidMaskException
      */
-    public IntegerValidator(Map paramMap)
+    public IntegerValidator(Map<String, Constraint> paramMap)
             throws InvalidMaskException
     {
-        this();
-        init(paramMap);
+        super(paramMap);
     }
 
     /**
@@ -69,118 +62,16 @@ public class IntegerValidator
      */
     public IntegerValidator()
     {
+        super();
         invalidNumberMessage = "Entry was not a valid Integer";
     }
 
     /**
-     * Method to initialise Object
-     *
-     * @param paramMap
-     * @throws InvalidMaskException
+     * @see org.apache.fulcrum.intake.validator.NumberValidator#parseNumber(java.lang.String, java.util.Locale)
      */
-    public void init(Map paramMap)
-            throws InvalidMaskException
+    @Override
+    protected Integer parseNumber(String stringValue, Locale locale) throws ParseException
     {
-        super.init(paramMap);
-
-        Constraint constraint = (Constraint) paramMap.get(MIN_VALUE_RULE_NAME);
-        if (constraint != null)
-        {
-            String param = constraint.getValue();
-            minValue = Integer.parseInt(param);
-            minValueMessage = constraint.getMessage();
-        }
-
-        constraint = (Constraint) paramMap.get(MAX_VALUE_RULE_NAME);
-        if (constraint != null)
-        {
-            String param = constraint.getValue();
-            maxValue = Integer.parseInt(param);
-            maxValueMessage = constraint.getMessage();
-        }
-    }
-
-    /**
-     * Determine whether a testValue meets the criteria specified
-     * in the constraints defined for this validator
-     *
-     * @param testValue a <code>String</code> to be tested
-     * @exception ValidationException containing an error message if the
-     * testValue did not pass the validation tests.
-     */
-    public void assertValidity(String testValue)
-            throws ValidationException
-    {
-        super.assertValidity(testValue);
-
-        if (required || StringUtils.isNotEmpty(testValue))
-        {
-            int i = 0;
-            try
-            {
-                i = Integer.parseInt(testValue);
-            }
-            catch (RuntimeException e)
-            {
-                errorMessage = invalidNumberMessage;
-                throw new ValidationException(invalidNumberMessage);
-            }
-
-            if (i < minValue)
-            {
-                errorMessage = minValueMessage;
-                throw new ValidationException(minValueMessage);
-            }
-            if (i > maxValue)
-            {
-                errorMessage = maxValueMessage;
-                throw new ValidationException(maxValueMessage);
-            }
-        }
-    }
-
-
-    // ************************************************************
-    // **                Bean accessor methods                   **
-    // ************************************************************
-
-    /**
-     * Get the value of minValue.
-     *
-     * @return value of minValue.
-     */
-    public int getMinValue()
-    {
-        return minValue;
-    }
-
-    /**
-     * Set the value of minValue.
-     *
-     * @param minValue  Value to assign to minValue.
-     */
-    public void setMinValue(int minValue)
-    {
-        this.minValue = minValue;
-    }
-
-    /**
-     * Get the value of maxValue.
-     *
-     * @return value of maxValue.
-     */
-    public int getMaxValue()
-    {
-        return maxValue;
-    }
-
-    /**
-     * Set the value of maxValue.
-     *
-     * @param maxValue  Value to assign to maxValue.
-     */
-    public void setMaxValue(int maxValue)
-    {
-        this.maxValue = maxValue;
+        return Integer.valueOf(stringValue);
     }
 }

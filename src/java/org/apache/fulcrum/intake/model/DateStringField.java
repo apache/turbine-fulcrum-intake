@@ -21,11 +21,9 @@ package org.apache.fulcrum.intake.model;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.IntakeRuntimeException;
 import org.apache.fulcrum.intake.validator.DateStringValidator;
@@ -43,7 +41,7 @@ import org.apache.fulcrum.intake.xmlmodel.XmlField;
  * @version $Id$
  */
 public class DateStringField
-        extends Field
+        extends Field<Date>
 {
     /** date format */
     private DateFormat df = null;
@@ -144,7 +142,7 @@ public class DateStringField
                 try
                 {
                     values[i] = StringUtils.isNotEmpty(inputs[i])
-                            ? getDate(inputs[i]) : (Date) getEmptyValue();
+                            ? getDate(inputs[i]) : getEmptyValue();
                 }
                 catch (ParseException e)
                 {
@@ -158,7 +156,7 @@ public class DateStringField
             String val = parser.getString(getKey());
             try
             {
-                setTestValue(StringUtils.isNotEmpty(val) ? getDate(val) : (Date) getEmptyValue());
+                setTestValue(StringUtils.isNotEmpty(val) ? getDate(val) : getEmptyValue());
             }
             catch (ParseException e)
             {

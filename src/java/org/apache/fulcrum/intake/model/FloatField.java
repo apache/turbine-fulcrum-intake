@@ -30,7 +30,7 @@ import org.apache.fulcrum.intake.xmlmodel.XmlField;
  * @version $Id$
  */
 public class FloatField
-        extends Field
+        extends Field<Float>
 {
     /**
      * Constructor.
@@ -66,7 +66,7 @@ public class FloatField
      * Set the empty Value. This value is used if Intake
      * maps a field to a parameter returned by the user and
      * the corresponding field is either empty (empty string)
-     * or non-existant.
+     * or non-existent.
      *
      * @param prop The value to use if the field is empty.
      */
@@ -79,7 +79,7 @@ public class FloatField
             return;
         }
 
-        emptyValue = new Double(prop);
+        emptyValue = new Float(prop);
     }
 
     /**
@@ -127,8 +127,8 @@ public class FloatField
 
             for (int i = 0; i < inputs.length; i++)
             {
-                values[i] = inputs[i] == null 
-                        ? ((Float) getEmptyValue()).floatValue() 
+                values[i] = inputs[i] == null
+                        ? (getEmptyValue()).floatValue()
                         : inputs[i].floatValue();
             }
 
@@ -136,7 +136,7 @@ public class FloatField
         }
         else
         {
-            setTestValue(parser.getFloatObject(getKey(), (Float)getEmptyValue()));
+            setTestValue(parser.getFloatObject(getKey(), getEmptyValue()));
         }
     }
 

@@ -46,7 +46,7 @@ import org.apache.commons.lang.StringUtils;
  * @version $Id$
  */
 public class StringValidator
-        extends DefaultValidator
+        extends DefaultValidator<String>
 {
     /** The matching mask String as supplied by the XML input */
     protected String maskString = null;
@@ -66,10 +66,10 @@ public class StringValidator
      * @exception InvalidMaskException An invalid mask was specified for one of the rules
 
     */
-    public StringValidator(Map paramMap)
+    public StringValidator(Map<String, Constraint> paramMap)
             throws InvalidMaskException
     {
-        init(paramMap);
+        super(paramMap);
     }
 
     /**
@@ -77,7 +77,7 @@ public class StringValidator
      */
     public StringValidator()
     {
-        // do nothing
+        super();
     }
 
     /**
@@ -88,12 +88,12 @@ public class StringValidator
      * containing constraints on the input.
      * @exception InvalidMaskException An invalid mask was specified for one of the rules
      */
-    public void init(Map paramMap)
+    public void init(Map<String, ? extends Constraint> paramMap)
             throws InvalidMaskException
     {
         super.init(paramMap);
 
-        Constraint constraint = (Constraint) paramMap.get(MASK_RULE_NAME);
+        Constraint constraint = paramMap.get(MASK_RULE_NAME);
         if (constraint != null)
         {
             String param = constraint.getValue();

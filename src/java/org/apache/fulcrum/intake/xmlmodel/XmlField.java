@@ -23,15 +23,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.xml.sax.Attributes;
 
 /**
@@ -57,8 +54,8 @@ public class XmlField
     private String displayName;
     private String multiValued;
     private XmlGroup parent;
-    private List rules;
-    private Map ruleMap;
+    private final List<Rule> rules;
+    private final Map<String, Rule> ruleMap;
     private String ifRequiredMessage;
     private String mapToObject;
     private String mapToProperty;
@@ -73,8 +70,8 @@ public class XmlField
      */
     public XmlField()
     {
-        rules = new ArrayList();
-        ruleMap = new HashMap();
+        rules = new ArrayList<Rule>();
+        ruleMap = new HashMap<String, Rule>();
     }
 
     /**
@@ -82,9 +79,8 @@ public class XmlField
      */
     public XmlField(String name)
     {
+        this();
         this.name = name;
-        rules = new ArrayList();
-        ruleMap = new HashMap();
     }
 
     /**
@@ -421,7 +417,7 @@ public class XmlField
      *
      * @return a <code>List</code> value
      */
-    public List getRules()
+    public List<Rule> getRules()
     {
         return rules;
     }
@@ -432,7 +428,7 @@ public class XmlField
      *
      * @return a <code>Map</code> value
      */
-    public Map getRuleMap()
+    public Map<String, Rule> getRuleMap()
     {
         return ruleMap;
     }
@@ -481,9 +477,9 @@ public class XmlField
         else
         {
             result.append(">\n");
-            for (Iterator i = rules.iterator(); i.hasNext();)
+            for (Rule rule : rules)
             {
-                result.append(i.next());
+                result.append(rule);
             }
             result.append("</field>\n");
         }

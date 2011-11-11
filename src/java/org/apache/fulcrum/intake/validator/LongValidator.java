@@ -19,9 +19,9 @@ package org.apache.fulcrum.intake.validator;
  * under the License.
  */
 
+import java.text.ParseException;
+import java.util.Locale;
 import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Validates Longs with the following constraints in addition to those
@@ -43,25 +43,18 @@ import org.apache.commons.lang.StringUtils;
  * @version $Id$
  */
 public class LongValidator
-        extends NumberValidator
+        extends NumberValidator<Long>
 {
-    /* Init the minValue to that for a Long */
-    private long minValue = Long.MIN_VALUE;
-
-    /* Init the maxValue to that for a Long */
-    private long maxValue = Long.MAX_VALUE;
-
     /**
      * Constructor to use when initialising Object
      *
      * @param paramMap
      * @throws InvalidMaskException
      */
-    public LongValidator(Map paramMap)
+    public LongValidator(Map<String, Constraint> paramMap)
             throws InvalidMaskException
     {
-        this();
-        init(paramMap);
+        super(paramMap);
     }
 
     /**
@@ -69,118 +62,16 @@ public class LongValidator
      */
     public LongValidator()
     {
+        super();
         invalidNumberMessage = "Entry was not a valid Long";
     }
 
     /**
-     * Method to initialise Object
-     *
-     * @param paramMap
-     * @throws InvalidMaskException
+     * @see org.apache.fulcrum.intake.validator.NumberValidator#parseNumber(java.lang.String, java.util.Locale)
      */
-    public void init(Map paramMap)
-            throws InvalidMaskException
+    @Override
+    protected Long parseNumber(String stringValue, Locale locale) throws ParseException
     {
-        super.init(paramMap);
-
-        Constraint constraint = (Constraint) paramMap.get(MIN_VALUE_RULE_NAME);
-        if (constraint != null)
-        {
-            String param = constraint.getValue();
-            minValue = Long.parseLong(param);
-            minValueMessage = constraint.getMessage();
-        }
-
-        constraint = (Constraint) paramMap.get(MAX_VALUE_RULE_NAME);
-        if (constraint != null)
-        {
-            String param = constraint.getValue();
-            maxValue = Long.parseLong(param);
-            maxValueMessage = constraint.getMessage();
-        }
-    }
-
-    /**
-     * Determine whether a testValue meets the criteria specified
-     * in the constraints defined for this validator
-     *
-     * @param testValue a <code>String</code> to be tested
-     * @exception ValidationException containing an error message if the
-     * testValue did not pass the validation tests.
-     */
-    public void assertValidity(String testValue)
-            throws ValidationException
-    {
-        super.assertValidity(testValue);
-
-        if (required || StringUtils.isNotEmpty(testValue))
-        {
-            long l = 0L;
-            try
-            {
-                l = Long.parseLong(testValue);
-            }
-            catch (RuntimeException e)
-            {
-                errorMessage = invalidNumberMessage;
-                throw new ValidationException(invalidNumberMessage);
-            }
-
-            if (l < minValue)
-            {
-                errorMessage = minValueMessage;
-                throw new ValidationException(minValueMessage);
-            }
-            if (l > maxValue)
-            {
-                errorMessage = maxValueMessage;
-                throw new ValidationException(maxValueMessage);
-            }
-        }
-    }
-
-
-    // ************************************************************
-    // **                Bean accessor methods                   **
-    // ************************************************************
-
-    /**
-     * Get the value of minValue.
-     *
-     * @return value of minValue.
-     */
-    public long getMinValue()
-    {
-        return minValue;
-    }
-
-    /**
-     * Set the value of minValue.
-     *
-     * @param minValue  Value to assign to minValue.
-     */
-    public void setMinValue(long minValue)
-    {
-        this.minValue = minValue;
-    }
-
-    /**
-     * Get the value of maxValue.
-     *
-     * @return value of maxValue.
-     */
-    public long getMaxValue()
-    {
-        return maxValue;
-    }
-
-    /**
-     * Set the value of maxValue.
-     *
-     * @param maxValue  Value to assign to maxValue.
-     */
-    public void setMaxValue(long maxValue)
-    {
-        this.maxValue = maxValue;
+        return Long.valueOf(stringValue);
     }
 }

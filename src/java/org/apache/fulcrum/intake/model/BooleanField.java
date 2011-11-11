@@ -29,7 +29,7 @@ import org.apache.fulcrum.intake.xmlmodel.XmlField;
  * @version $Id$
  */
 public class BooleanField
-        extends Field
+        extends Field<Boolean>
 {
     /**
      * Constructor.
@@ -125,8 +125,8 @@ public class BooleanField
 
             for (int i = 0; i < inputs.length; i++)
             {
-                values[i] = inputs[i] == null 
-                        ? ((Boolean) getEmptyValue()).booleanValue() 
+                values[i] = inputs[i] == null
+                        ? (getEmptyValue()).booleanValue()
                         : inputs[i].booleanValue();
             }
 
@@ -134,7 +134,7 @@ public class BooleanField
         }
         else
         {
-            setTestValue(parser.getBooleanObject(getKey(), (Boolean)getEmptyValue()));
+            setTestValue(parser.getBooleanObject(getKey(), getEmptyValue()));
         }
     }
 
@@ -149,7 +149,7 @@ public class BooleanField
         boolean result = false;
         try
         {
-            result = ((Boolean) getValue()).booleanValue();
+            result = (getValue()).booleanValue();
         }
         catch (Exception e)
         {
