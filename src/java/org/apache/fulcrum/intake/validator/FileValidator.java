@@ -22,14 +22,11 @@ package org.apache.fulcrum.intake.validator;
 import java.util.Map;
 
 import org.apache.commons.fileupload.FileItem;
-
 import org.apache.fulcrum.intake.IntakeException;
 
 /**
  * A validator that will compare a FileItem testValue against the following
  * constraints in addition to those listed in DefaultValidator.
- *
- *
  *
  * This validator can serve as the base class for more specific validators
  *
@@ -39,7 +36,7 @@ import org.apache.fulcrum.intake.IntakeException;
  * @version $Id$
  */
 public class FileValidator
-        extends DefaultValidator
+        extends DefaultValidator<FileItem>
 {
 
     /**
@@ -50,10 +47,10 @@ public class FileValidator
      * containing constraints on the input.
      * @exception InvalidMaskException an invalid mask was specified
      */
-    public FileValidator(Map paramMap)
+    public FileValidator(Map<String, Constraint> paramMap)
             throws IntakeException
     {
-        init(paramMap);
+        super(paramMap);
     }
 
     /**
@@ -61,6 +58,7 @@ public class FileValidator
      */
     public FileValidator()
     {
+        super();
     }
 
     /**

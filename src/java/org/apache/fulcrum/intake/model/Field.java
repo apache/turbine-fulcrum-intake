@@ -49,7 +49,7 @@ import org.apache.fulcrum.parser.ValueParser;
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
-public abstract class Field
+public abstract class Field<T>
 {
     /** Empty Value */
     private static final String EMPTY = "";
@@ -71,14 +71,14 @@ public abstract class Field
     /** Key used to identify the field in the parser */
     protected final String key;
 
-    /** Display name of the field to be used on data entry forms... */
-    protected String displayName;
+    /** Display size of the field */
+    protected final String displaySize;
 
     /** Class name of the object to which the field is mapped */
     protected final String mapToObject;
 
     /** Used to validate the contents of the field */
-    protected Validator validator;
+    protected final Validator<T> validator;
 
     /** Getter method in the mapped object used to populate the field */
     protected final Method getter;
@@ -102,16 +102,16 @@ public abstract class Field
      * Value of the field if an error occurs while getting
      * the value from the mapped object
      */
-    protected Object onError;
+    protected T onError;
 
     /** Default value of the field */
-    protected Object defaultValue;
+    protected T defaultValue;
 
-    /** Value of the field to use if the mapped parameter is empty or non-existant */
-    protected Object emptyValue;
+    /** Value of the field to use if the mapped parameter is empty or non-existent */
+    protected T emptyValue;
 
-    /** Display size of the field */
-    private String displaySize;
+    /** Display name of the field to be used on data entry forms... */
+    protected String displayName;
 
     /** Max size of the field */
     private String maxSize;
@@ -139,17 +139,24 @@ public abstract class Field
     /** Mapped object used to set the initial field value */
     protected Retrievable retrievable;
 
+    /** Locale of the field */
     private Locale locale;
+
     /** String value of the field */
     private String stringValue;
-    /** String valuess of the field if isMultiValued=true */
+
+    /** String values of the field if isMultiValued=true */
     private String[] stringValues;
+
     /** Stores the value of the field from the Retrievable object */
-    private Object validValue;
+    private T validValue;
+
     /** Stores the value of the field from the parser */
     private Object testValue;
-    /** Used to pass testValue to the setter mathod through reflection */
-    private Object[] valArray;
+
+    /** Used to pass testValue to the setter method through reflection */
+    private final Object[] valArray;
+
     /** The object containing the field data. */
     protected ValueParser parser;
 
@@ -215,7 +222,7 @@ public abstract class Field
         {
             try
             {
-                validator = (Validator)
+                validator = (Validator<T>)
                         Class.forName(validatorClassName).newInstance();
             }
             catch (InstantiationException e)
@@ -249,16 +256,20 @@ public abstract class Field
                         + "InitableByConstraintMap");
             }
         }
+        else
+        {
+            validator = null;
+        }
 
         // field may have been declared as always required in the xml spec
-        Rule reqRule = (Rule) field.getRuleMap().get("required");
+        Rule reqRule = field.getRuleMap().get("required");
         if (reqRule != null)
         {
             alwaysRequired = Boolean.valueOf(reqRule.getValue()).booleanValue();
             ifRequiredMessage = reqRule.getMessage();
         }
 
-        Rule maxLengthRule = (Rule) field.getRuleMap().get("maxLength");
+        Rule maxLengthRule = field.getRuleMap().get("maxLength");
         if (maxLengthRule != null)
         {
             maxSize = maxLengthRule.getValue();
@@ -314,7 +325,7 @@ public abstract class Field
      * @throws IntakeException this exception is only thrown by subclasses
      * overriding this implementation.
      */
-    public Field init(ValueParser pp)
+    public Field<T> init(ValueParser pp)
             throws IntakeException
     {
         this.parser = pp;
@@ -356,7 +367,7 @@ public abstract class Field
      * @param obj a <code>Retrievable</code> value
      * @return a <code>Field</code> value
      */
-    public Field init(Retrievable obj)
+    public Field<T> init(Retrievable obj)
     {
         if (!initialized)
         {
@@ -403,7 +414,7 @@ public abstract class Field
      * Gets the Validator object for this field.
      * @return a <code>Validator</code> object
      */
-    public Validator getValidator()
+    public Validator<T> getValidator()
     {
         return validator;
     }
@@ -652,7 +663,7 @@ public abstract class Field
             {
                 // set the test value as a String which might be replaced by
                 // the correct type if the input is valid.
-                setTestValue(parser.getString(getKey()));
+                setTestValue(stringValue);
 
                 try
                 {
@@ -671,7 +682,7 @@ public abstract class Field
                 doSetValue();
             }
         }
-        
+
         validated = true;
 
         return validFlag;
@@ -689,19 +700,11 @@ public abstract class Field
      * Set the empty Value. This value is used if Intake
      * maps a field to a parameter returned by the user and
      * the corresponding field is either empty (empty string)
-     * or non-existant.
+     * or non-existent.
      *
      * @param prop The value to use if the field is empty.
      */
     public abstract void setEmptyValue(String prop);
-
-    /**
-     * @deprecated Use doSetValue() instead (with no parameters).
-     */
-    protected void doSetValue(ValueParser pp)
-    {
-        doSetValue();
-    }
 
     /**
      * Sets the value of the field from data in the parser.
@@ -714,7 +717,7 @@ public abstract class Field
      *
      * @param obj an <code>Object</code> value
      */
-    void setInitialValue(Object obj)
+    void setInitialValue(T obj)
     {
         validValue = obj;
     }
@@ -729,7 +732,7 @@ public abstract class Field
      * @exception IntakeException indicates the value could not be
      * returned from the mapped object
      */
-    public Object getInitialValue() throws IntakeException
+    public T getInitialValue() throws IntakeException
     {
         if (validValue == null)
         {
@@ -742,6 +745,7 @@ public abstract class Field
                 getDefault();
             }
         }
+
         return validValue;
     }
 
@@ -775,9 +779,9 @@ public abstract class Field
      *
      * @return an <code>Object</code> value
      */
-    public Object getValue()
+    public T getValue()
     {
-        Object val = null;
+        T val = null;
         try
         {
             val = getInitialValue();
@@ -790,13 +794,14 @@ public abstract class Field
 
         if (getTestValue() != null)
         {
-            val = getTestValue();
+            val = (T) getTestValue();
         }
 
         if (val == null)
         {
             val = onError;
         }
+
         return val;
     }
 
@@ -846,7 +851,7 @@ public abstract class Field
     {
         try
         {
-            validValue = getter.invoke(obj, (Object[])null);
+            validValue = (T)getter.invoke(obj);
         }
         catch (IllegalAccessException e)
         {
@@ -868,7 +873,6 @@ public abstract class Field
     /**
      * Loads the default value from the object
      */
-
     public void getDefault()
     {
         validValue = getDefaultValue();
@@ -974,7 +978,7 @@ public abstract class Field
      *
      * @return the default value
      */
-    public Object getDefaultValue()
+    public T getDefaultValue()
     {
         return defaultValue;
     }
@@ -984,7 +988,7 @@ public abstract class Field
      *
      * @return the value to use if the field is empty.
      */
-    public Object getEmptyValue()
+    public T getEmptyValue()
     {
         return emptyValue;
     }

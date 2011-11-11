@@ -21,7 +21,6 @@ package org.apache.fulcrum.intake.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -81,17 +80,17 @@ public class Group
     /**
      * A map of the fields in this group mapped by field name.
      */
-    protected Map fields;
+    protected Map<String, Field<?>> fields;
 
     /**
      * Map of the fields by mapToObject
      */
-    protected Map mapToObjectFields;
+    protected Map<String, Field<?>[]> mapToObjectFields;
 
     /**
      * An array of fields in this group.
      */
-    protected Field[] fieldsArray;
+    protected Field<?>[] fieldsArray;
 
     /**
      * The object id used to associate this group to a bean
@@ -123,35 +122,38 @@ public class Group
         name = group.getName();
         poolCapacity = Integer.parseInt(group.getPoolCapacity());
 
-        List inputFields = group.getFields();
+        List<XmlField> inputFields = group.getFields();
         int size = inputFields.size();
-        fields = new HashMap((int) (1.25 * size + 1));
-        mapToObjectFields = new HashMap((int) (1.25 * size + 1));
+        fields = new HashMap<String, Field<?>>((int) (1.25 * size + 1));
+        Map<String, List<Field<?>>> mapToObjectFieldLists =
+            new HashMap<String, List<Field<?>>>((int) (1.25 * size + 1));
+
         fieldsArray = new Field[size];
         for (int i = size - 1; i >= 0; i--)
         {
-            XmlField f = (XmlField) inputFields.get(i);
-            Field field = FieldFactory.getInstance(f, this);
+            XmlField f = inputFields.get(i);
+            Field<?> field = FieldFactory.getInstance(f, this);
             fieldsArray[i] = field;
             fields.put(f.getName(), field);
 
             // map fields by their mapToObject
-            List tmpFields = (List) mapToObjectFields.get(f.getMapToObject());
+            List<Field<?>> tmpFields = mapToObjectFieldLists.get(f.getMapToObject());
             if (tmpFields == null)
             {
-                tmpFields = new ArrayList(size);
-                mapToObjectFields.put(f.getMapToObject(), tmpFields);
+                tmpFields = new ArrayList<Field<?>>(size);
+                mapToObjectFieldLists.put(f.getMapToObject(), tmpFields);
             }
+
             tmpFields.add(field);
         }
 
         // Change the mapToObjectFields values to Field[]
-        for (Iterator keys = mapToObjectFields.keySet().iterator(); keys.hasNext();)
+        mapToObjectFields = new HashMap<String, Field<?>[]>((int) (1.25 * size + 1));
+
+        for (Map.Entry<String, List<Field<?>>> entry : mapToObjectFieldLists.entrySet())
         {
-            Object key = keys.next();
-            List tmpFields = (List) mapToObjectFields.get(key);
-            mapToObjectFields.put(key,
-                    tmpFields.toArray(new Field[tmpFields.size()]));
+            mapToObjectFields.put(entry.getKey(),
+                entry.getValue().toArray(new Field[entry.getValue().size()]));
         }
     }
 
@@ -201,10 +203,10 @@ public class Group
     {
         this.oid = obj.getQueryKey();
 
-        Class cls = obj.getClass();
+        Class<?> cls = obj.getClass();
         while (cls != null)
         {
-            Field[] flds = (Field[]) mapToObjectFields.get(cls.getName());
+            Field<?>[] flds = mapToObjectFields.get(cls.getName());
             if (flds != null)
             {
                 for (int i = flds.length - 1; i >= 0; i--)
@@ -214,11 +216,11 @@ public class Group
             }
 
             // Also check any interfaces
-            Class[] interfaces = cls.getInterfaces();
+            Class<?>[] interfaces = cls.getInterfaces();
             for (int idx = 0; idx < interfaces.length; idx++)
             {
-                Field[] interfaceFields =
-                    (Field[]) mapToObjectFields.get(interfaces[idx].getName());
+                Field<?>[] interfaceFields =
+                    mapToObjectFields.get(interfaces[idx].getName());
                 if (interfaceFields != null)
                 {
                     for (int i = 0; i < interfaceFields.length; i++)
@@ -309,13 +311,13 @@ public class Group
      * @return an <code>ArrayList</code> value
      * @exception IntakeException if an error occurs
      */
-    public ArrayList getObjects(ValueParser pp) throws IntakeException
+    public List<Group> getObjects(ValueParser pp) throws IntakeException
     {
-        ArrayList objs = null;
+        ArrayList<Group> objs = null;
         String[] oids = pp.getStrings(gid);
         if (oids != null)
         {
-            objs = new ArrayList(oids.length);
+            objs = new ArrayList<Group>(oids.length);
             for (int i = oids.length - 1; i >= 0; i--)
             {
                 objs.add(IntakeServiceFacade.getGroup(name).init(oids[i], pp));
@@ -329,12 +331,12 @@ public class Group
      * @return Field.
      * @throws IntakeException indicates the field could not be found.
      */
-    public Field get(String fieldName)
+    public Field<?> get(String fieldName)
             throws IntakeException
     {
         if (fields.containsKey(fieldName))
         {
-            return (Field) fields.get(fieldName);
+            return fields.get(fieldName);
         }
         else
         {
@@ -373,7 +375,7 @@ public class Group
      */
     public void setProperties(Object obj) throws IntakeException
     {
-        Class cls = obj.getClass();
+        Class<?> cls = obj.getClass();
 
         while (cls != null)
         {
@@ -382,7 +384,7 @@ public class Group
                 log.debug("setProperties(" + cls.getName() + ")");
             }
 
-            Field[] flds = (Field[]) mapToObjectFields.get(cls.getName());
+            Field<?>[] flds = mapToObjectFields.get(cls.getName());
             if (flds != null)
             {
                 for (int i = flds.length - 1; i >= 0; i--)
@@ -392,11 +394,11 @@ public class Group
             }
 
             // Also check any interfaces
-            Class[] interfaces = cls.getInterfaces();
+            Class<?>[] interfaces = cls.getInterfaces();
             for (int idx = 0; idx < interfaces.length; idx++)
             {
-                Field[] interfaceFields =
-                    (Field[]) mapToObjectFields.get(interfaces[idx].getName());
+                Field<?>[] interfaceFields =
+                    mapToObjectFields.get(interfaces[idx].getName());
                 if (interfaceFields != null)
                 {
                     for (int i = 0; i < interfaceFields.length; i++)
@@ -421,10 +423,10 @@ public class Group
      */
     public void setValidProperties(Object obj)
     {
-        Class cls = obj.getClass();
+        Class<?> cls = obj.getClass();
         while (cls != null)
         {
-            Field[] flds = (Field[]) mapToObjectFields.get(cls.getName());
+            Field<?>[] flds = mapToObjectFields.get(cls.getName());
             if (flds != null)
             {
                 for (int i = flds.length - 1; i >= 0; i--)
@@ -441,11 +443,11 @@ public class Group
             }
 
             // Also check any interfaces
-            Class[] interfaces = cls.getInterfaces();
+            Class<?>[] interfaces = cls.getInterfaces();
             for (int idx = 0; idx < interfaces.length; idx++)
             {
-                Field[] interfaceFields =
-                    (Field[]) mapToObjectFields.get(interfaces[idx].getName());
+                Field<?>[] interfaceFields =
+                    mapToObjectFields.get(interfaces[idx].getName());
                 if (interfaceFields != null)
                 {
                     for (int i = 0; i < interfaceFields.length; i++)
@@ -478,10 +480,11 @@ public class Group
      */
     public void getProperties(Object obj) throws IntakeException
     {
-        Class cls = obj.getClass();
+        Class<?> cls = obj.getClass();
+
         while (cls != null)
         {
-            Field[] flds = (Field[]) mapToObjectFields.get(cls.getName());
+            Field<?>[] flds = mapToObjectFields.get(cls.getName());
             if (flds != null)
             {
                 for (int i = flds.length - 1; i >= 0; i--)
@@ -491,11 +494,11 @@ public class Group
             }
 
             // Also check any interfaces
-            Class[] interfaces = cls.getInterfaces();
+            Class<?>[] interfaces = cls.getInterfaces();
             for (int idx = 0; idx < interfaces.length; idx++)
             {
-                Field[] interfaceFields =
-                    (Field[]) mapToObjectFields.get(interfaces[idx].getName());
+                Field<?>[] interfaceFields =
+                    mapToObjectFields.get(interfaces[idx].getName());
                 if (interfaceFields != null)
                 {
                     for (int i = 0; i < interfaceFields.length; i++)

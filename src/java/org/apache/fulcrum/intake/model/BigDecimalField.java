@@ -34,7 +34,7 @@ import org.apache.fulcrum.intake.xmlmodel.XmlField;
  * @version $Id$
  */
 public class BigDecimalField
-        extends Field
+        extends Field<BigDecimal>
 {
     /**
      * Constructor.
@@ -109,7 +109,7 @@ public class BigDecimalField
             {
                 if (values[i] == null)
                 {
-                    values[i] = (BigDecimal) getEmptyValue();
+                    values[i] = getEmptyValue();
                 }
             }
 
@@ -117,7 +117,7 @@ public class BigDecimalField
         }
         else
         {
-            setTestValue(parser.getBigDecimal(getKey(), (BigDecimal)getEmptyValue()));
+            setTestValue(parser.getBigDecimal(getKey(), getEmptyValue()));
         }
     }
 }

@@ -46,10 +46,10 @@ import org.apache.fulcrum.intake.model.Field;
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
-abstract public class DefaultValidator
-        implements Validator, InitableByConstraintMap
+abstract public class DefaultValidator<T>
+        implements Validator<T>, InitableByConstraintMap
 {
-    /** A boolean value to signify if the field is definately required or not */
+    /** A boolean value to signify if the field is definitely required or not */
     protected boolean required = false;
 
     /** The message to show if field fails required test */
@@ -81,9 +81,10 @@ abstract public class DefaultValidator
      * @exception InvalidMaskException An invalid mask was specified for one of the rules
 
     */
-    public DefaultValidator(Map paramMap)
+    public DefaultValidator(Map<String, Constraint> paramMap)
             throws InvalidMaskException
     {
+        this();
         init(paramMap);
     }
 
@@ -103,10 +104,10 @@ abstract public class DefaultValidator
      * containing constraints on the input.
      * @exception InvalidMaskException An invalid mask was specified for one of the rules
      */
-    public void init(Map paramMap)
+    public void init(Map<String, ? extends Constraint> paramMap)
             throws InvalidMaskException
     {
-        Constraint constraint = (Constraint) paramMap.get(REQUIRED_RULE_NAME);
+        Constraint constraint = paramMap.get(REQUIRED_RULE_NAME);
         if (constraint != null)
         {
             String param = constraint.getValue();
@@ -114,7 +115,7 @@ abstract public class DefaultValidator
             requiredMessage = constraint.getMessage();
         }
 
-        constraint = (Constraint) paramMap.get(MIN_LENGTH_RULE_NAME);
+        constraint = paramMap.get(MIN_LENGTH_RULE_NAME);
         if (constraint != null)
         {
             String param = constraint.getValue();
@@ -122,7 +123,7 @@ abstract public class DefaultValidator
             minLengthMessage = constraint.getMessage();
         }
 
-        constraint = (Constraint) paramMap.get(MAX_LENGTH_RULE_NAME);
+        constraint = paramMap.get(MAX_LENGTH_RULE_NAME);
         if (constraint != null)
         {
             String param = constraint.getValue();
@@ -138,7 +139,7 @@ abstract public class DefaultValidator
      * @param field a <code>Field</code> to be tested
      * @return true if valid, false otherwise
      */
-    public boolean isValid(Field field)
+    public boolean isValid(Field<T> field)
     {
         boolean valid = false;
         try
@@ -161,7 +162,7 @@ abstract public class DefaultValidator
      * @exception ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
-    public void assertValidity(Field field)
+    public void assertValidity(Field<T> field)
             throws ValidationException
     {
     	if (field.isMultiValued())

@@ -29,7 +29,7 @@ import org.apache.fulcrum.intake.xmlmodel.XmlField;
  * @version $Id$
  */
 public class ShortField
-        extends Field
+        extends Field<Short>
 {
     /**
      * Constructor.
@@ -126,8 +126,8 @@ public class ShortField
 
             for (int i = 0; i < inputs.length; i++)
             {
-                values[i] = inputs[i] == null 
-                        ? ((Short) getEmptyValue()).shortValue() 
+                values[i] = inputs[i] == null
+                        ? (getEmptyValue()).shortValue()
                         : inputs[i].shortValue();
             }
 
@@ -136,7 +136,7 @@ public class ShortField
         else
         {
             Integer value = parser.getIntObject(getKey());
-            
+
             if (value == null)
             {
                 setTestValue(getEmptyValue());

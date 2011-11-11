@@ -20,7 +20,6 @@ package org.apache.fulcrum.intake.model;
  */
 
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.validator.StringValidator;
 import org.apache.fulcrum.intake.xmlmodel.XmlField;
@@ -34,7 +33,7 @@ import org.apache.fulcrum.intake.xmlmodel.XmlField;
  * @version $Id$
  */
 public class StringField
-        extends Field
+        extends Field<String>
 {
 
     /**
@@ -144,7 +143,7 @@ public class StringField
             }
             else
             {
-                if (!setFlag || StringUtils.isEmpty((String) getTestValue()))
+                if (!setFlag || StringUtils.isEmpty((String)getTestValue()))
                 {
                     validFlag = false;
                     this.message = message;

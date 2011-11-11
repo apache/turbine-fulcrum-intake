@@ -19,7 +19,12 @@ package org.apache.fulcrum.intake.validator;
  * under the License.
  */
 
+import java.text.ParseException;
+import java.util.Locale;
 import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.fulcrum.intake.model.Field;
 
 /**
  * Validates numbers with the following constraints in addition to those
@@ -40,8 +45,8 @@ import java.util.Map;
  * @author <a href="mailto:Colin.Chalmers@maxware.nl">Colin Chalmers</a>
  * @version $Id$
  */
-abstract class NumberValidator
-        extends DefaultValidator
+public abstract class NumberValidator<T extends Number>
+        extends DefaultValidator<T>
 {
     /** The message to show if field fails min-value test */
     String minValueMessage = null;
@@ -52,6 +57,29 @@ abstract class NumberValidator
     /** The message to use for invalid numbers */
     String invalidNumberMessage = null;
 
+    private T minValue = null;
+    private T maxValue = null;
+
+    /**
+     * Constructor to use when initializing Object
+     *
+     * @param paramMap
+     * @throws InvalidMaskException
+     */
+    public NumberValidator(Map<String, Constraint> paramMap)
+            throws InvalidMaskException
+    {
+        super(paramMap);
+    }
+
+    /**
+     * Default Constructor
+     */
+    public NumberValidator()
+    {
+        super();
+    }
+
     /**
      * Extract the relevant parameters from the constraints listed
      * in <rule> tags within the intake.xml file.
@@ -60,17 +88,124 @@ abstract class NumberValidator
      * containing constraints on the input.
      * @exception InvalidMaskException an invalid mask was specified
      */
-    public void init(Map paramMap)
+    public void init(Map<String, ? extends Constraint> paramMap)
             throws InvalidMaskException
     {
         super.init(paramMap);
 
-        Constraint constraint =
-                (Constraint) paramMap.get(INVALID_NUMBER_RULE_NAME);
+        Constraint constraint = paramMap.get(INVALID_NUMBER_RULE_NAME);
 
         if (constraint != null)
         {
             invalidNumberMessage = constraint.getMessage();
+        }
+
+        constraint = paramMap.get(MIN_VALUE_RULE_NAME);
+        if (constraint != null)
+        {
+            String param = constraint.getValue();
+            try
+            {
+                minValue = parseNumber(param, Locale.US);
+            }
+            catch (ParseException e)
+            {
+                throw new InvalidMaskException("Could not parse minimum value " + param, e);
+            }
+            minValueMessage = constraint.getMessage();
+        }
+
+        constraint = paramMap.get(MAX_VALUE_RULE_NAME);
+        if (constraint != null)
+        {
+            String param = constraint.getValue();
+            try
+            {
+                maxValue = parseNumber(param, Locale.US);
+            }
+            catch (ParseException e)
+            {
+                throw new InvalidMaskException("Could not parse minimum value " + param, e);
+            }
+            maxValueMessage = constraint.getMessage();
+        }
+    }
+
+    /**
+     * Parse the actual value out of a string
+     *
+     * @param stringValue the string value
+     * @param locale the locale to use while parsing
+     *
+     * @return the value
+     *
+     * @throws ParseException if the value could not be parsed
+     */
+    protected abstract T parseNumber(String stringValue, Locale locale) throws ParseException;
+
+    /**
+     * Determine whether a field meets the criteria specified
+     * in the constraints defined for this validator
+     *
+     * @param field a <code>Field</code> to be tested
+     * @exception ValidationException containing an error message if the
+     * testValue did not pass the validation tests.
+     */
+    public void assertValidity(Field<T> field) throws ValidationException
+    {
+        Locale locale = field.getLocale();
+
+        if (field.isMultiValued())
+        {
+            String[] stringValues = (String[])field.getTestValue();
+
+            for (int i = 0; i < stringValues.length; i++)
+            {
+                assertValidity(stringValues[i], locale);
+            }
+        }
+        else
+        {
+            assertValidity((String)field.getTestValue(), locale);
+        }
+    }
+
+    /**
+     * Determine whether a testValue meets the criteria specified
+     * in the constraints defined for this validator
+     *
+     * @param testValue a <code>String</code> to be tested
+     * @param locale the Locale of the associated field
+     * @exception ValidationException containing an error message if the
+     * testValue did not pass the validation tests.
+     */
+    public void assertValidity(String testValue, Locale locale) throws ValidationException
+    {
+        super.assertValidity(testValue);
+
+        if (required || StringUtils.isNotEmpty(testValue))
+        {
+            T number = null;
+            try
+            {
+                number = parseNumber(testValue, locale);
+            }
+            catch (ParseException e)
+            {
+                errorMessage = invalidNumberMessage;
+                throw new ValidationException(invalidNumberMessage);
+            }
+
+            if (minValue != null && number.doubleValue() < minValue.doubleValue())
+            {
+                errorMessage = minValueMessage;
+                throw new ValidationException(minValueMessage);
+            }
+            if (maxValue != null && number.doubleValue() > maxValue.doubleValue())
+            {
+                errorMessage = maxValueMessage;
+                throw new ValidationException(maxValueMessage);
+            }
         }
     }
 
@@ -138,4 +273,43 @@ abstract class NumberValidator
         this.invalidNumberMessage = invalidNumberMessage;
     }
 
+    /**
+     * Get the value of minValue.
+     *
+     * @return value of minValue.
+     */
+    public T getMinValue()
+    {
+        return minValue;
+    }
+
+    /**
+     * Set the value of minValue.
+     *
+     * @param minValue  Value to assign to minValue.
+     */
+    public void setMinValue(T minValue)
+    {
+        this.minValue = minValue;
+    }
+
+    /**
+     * Get the value of maxValue.
+     *
+     * @return value of maxValue.
+     */
+    public T getMaxValue()
+    {
+        return maxValue;
+    }
+
+    /**
+     * Set the value of maxValue.
+     *
+     * @param maxValue  Value to assign to maxValue.
+     */
+    public void setMaxValue(T maxValue)
+    {
+        this.maxValue = maxValue;
+    }
 }

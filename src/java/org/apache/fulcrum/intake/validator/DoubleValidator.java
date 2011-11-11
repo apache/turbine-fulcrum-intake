@@ -24,9 +24,6 @@ import java.text.ParseException;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.fulcrum.intake.model.Field;
-
 /**
  * Validates Doubles with the following constraints in addition to those
  * listed in NumberValidator and DefaultValidator.
@@ -48,25 +45,18 @@ import org.apache.fulcrum.intake.model.Field;
  * @version $Id$
  */
 public class DoubleValidator
-        extends NumberValidator
+        extends NumberValidator<Double>
 {
-    /* Init the minValue to that for a Double */
-    private double minValue = Double.NEGATIVE_INFINITY;
-
-    /* Init the maxValue to that for a Double */
-    private double maxValue = Double.POSITIVE_INFINITY;
-
     /**
      * Constructor to use when initialising Object
      *
      * @param paramMap
      * @throws InvalidMaskException
      */
-    public DoubleValidator(Map paramMap)
+    public DoubleValidator(Map<String, Constraint> paramMap)
             throws InvalidMaskException
     {
-        this();
-        init(paramMap);
+        super(paramMap);
     }
 
     /**
@@ -74,151 +64,18 @@ public class DoubleValidator
      */
     public DoubleValidator()
     {
+        super();
         invalidNumberMessage = "Entry was not a valid Double";
     }
 
     /**
-     * Method to initialise Object
-     *
-     * @param paramMap
-     * @throws InvalidMaskException
+     * @see org.apache.fulcrum.intake.validator.NumberValidator#parseNumber(java.lang.String, java.util.Locale)
      */
-    public void init(Map paramMap)
-            throws InvalidMaskException
+    @Override
+    protected Double parseNumber(String stringValue, Locale locale) throws ParseException
     {
-        super.init(paramMap);
+        NumberFormat nf = NumberFormat.getInstance(locale);
 
-        Constraint constraint = (Constraint) paramMap.get(MIN_VALUE_RULE_NAME);
-        if (constraint != null)
-        {
-            String param = constraint.getValue();
-            minValue = Double.parseDouble(param);
-            minValueMessage = constraint.getMessage();
-        }
-
-        constraint = (Constraint) paramMap.get(MAX_VALUE_RULE_NAME);
-        if (constraint != null)
-        {
-            String param = constraint.getValue();
-            maxValue = Double.parseDouble(param);
-            maxValueMessage = constraint.getMessage();
-        }
-    }
-
-    /**
-     * Determine whether a field meets the criteria specified
-     * in the constraints defined for this validator
-     *
-     * @param field a <code>Field</code> to be tested
-     * @exception ValidationException containing an error message if the
-     * testValue did not pass the validation tests.
-     */
-    public void assertValidity(Field field)
-            throws ValidationException
-    {
-        Locale locale = field.getLocale();
-
-        if (field.isMultiValued())
-        {
-            String[] stringValues = (String[])field.getTestValue();
-
-            for (int i = 0; i < stringValues.length; i++)
-            {
-                assertValidity(stringValues[i], locale);
-            }
-        }
-        else
-        {
-            assertValidity((String)field.getTestValue(), locale);
-        }
-    }
-
-    /**
-     * Determine whether a testValue meets the criteria specified
-     * in the constraints defined for this validator
-     *
-     * @param testValue a <code>String</code> to be tested
-     * @param locale the Locale of the associated field
-     * @exception ValidationException containing an error message if the
-     * testValue did not pass the validation tests.
-     */
-    public void assertValidity(String testValue, Locale locale)
-            throws ValidationException
-    {
-        super.assertValidity(testValue);
-
-        double d = 0.0D;
-
-        if (required || StringUtils.isNotEmpty(testValue))
-        {
-            NumberFormat nf = NumberFormat.getInstance(locale);
-
-            try
-            {
-                d = nf.parse(testValue).doubleValue();
-            }
-            catch (ParseException e)
-            {
-                errorMessage = invalidNumberMessage;
-                throw new ValidationException(invalidNumberMessage);
-            }
-
-            if (d < minValue)
-            {
-                errorMessage = minValueMessage;
-                throw new ValidationException(minValueMessage);
-            }
-
-            if (d > maxValue)
-            {
-                errorMessage = maxValueMessage;
-                throw new ValidationException(maxValueMessage);
-            }
-        }
-    }
-
-
-    // ************************************************************
-    // **                Bean accessor methods                   **
-    // ************************************************************
-
-    /**
-     * Get the value of minValue.
-     *
-     * @return value of minValue.
-     */
-    public double getMinValue()
-    {
-        return minValue;
-    }
-
-    /**
-     * Set the value of minValue.
-     *
-     * @param value  Value to assign to minValue.
-     */
-    public void setMinValue(double value)
-    {
-        this.minValue = value;
-    }
-
-    /**
-     * Get the value of maxValue.
-     *
-     * @return value of maxValue.
-     */
-    public double getMaxValue()
-    {
-        return maxValue;
-    }
-
-    /**
-     * Set the value of maxValue.
-     *
-     * @param value  Value to assign to maxValue.
-     */
-    public void setMaxValue(double value)
-    {
-        this.maxValue = value;
+        return Double.valueOf(nf.parse(stringValue).doubleValue());
     }
 }

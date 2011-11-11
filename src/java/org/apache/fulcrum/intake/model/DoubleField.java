@@ -30,7 +30,7 @@ import org.apache.fulcrum.intake.xmlmodel.XmlField;
  * @version $Id$
  */
 public class DoubleField
-        extends Field
+        extends Field<Double>
 {
     /**
      * Constructor.
@@ -127,8 +127,8 @@ public class DoubleField
 
             for (int i = 0; i < inputs.length; i++)
             {
-                values[i] = inputs[i] == null 
-                        ? ((Double) getEmptyValue()).doubleValue() 
+                values[i] = inputs[i] == null
+                        ? (getEmptyValue()).doubleValue()
                         : inputs[i].doubleValue();
             }
 
@@ -136,7 +136,7 @@ public class DoubleField
         }
         else
         {
-            setTestValue(parser.getDoubleObject(getKey(), (Double)getEmptyValue()));
+            setTestValue(parser.getDoubleObject(getKey(), getEmptyValue()));
         }
     }
 

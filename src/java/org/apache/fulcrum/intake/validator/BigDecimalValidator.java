@@ -25,8 +25,6 @@ import java.text.ParseException;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.fulcrum.intake.model.Field;
 
 /**
  * Validates BigDecimals with the following constraints in addition to those
@@ -49,22 +47,18 @@ import org.apache.fulcrum.intake.model.Field;
  * @version $Id$
  */
 public class BigDecimalValidator
-        extends NumberValidator
+        extends NumberValidator<BigDecimal>
 {
-    private BigDecimal minValue = null;
-    private BigDecimal maxValue = null;
-
     /**
-     * Constructor to use when initialising Object
+     * Constructor to use when initializing Object
      *
      * @param paramMap
      * @throws InvalidMaskException
      */
-    public BigDecimalValidator(Map paramMap)
+    public BigDecimalValidator(Map<String, Constraint> paramMap)
             throws InvalidMaskException
     {
-        this();
-        init(paramMap);
+        super(paramMap);
     }
 
     /**
@@ -72,149 +66,19 @@ public class BigDecimalValidator
      */
     public BigDecimalValidator()
     {
+        super();
         invalidNumberMessage = "Entry was not a valid BigDecimal";
     }
 
     /**
-     * Method to initialise Object
-     *
-     * @param paramMap
-     * @throws InvalidMaskException
+     * @see org.apache.fulcrum.intake.validator.NumberValidator#parseNumber(java.lang.String, java.util.Locale)
      */
-    public void init(Map paramMap)
-            throws InvalidMaskException
+    @Override
+    protected BigDecimal parseNumber(String stringValue, Locale locale) throws ParseException
     {
-        super.init(paramMap);
+        NumberFormat nf = NumberFormat.getInstance(locale);
 
-        Constraint constraint = (Constraint) paramMap.get(MIN_VALUE_RULE_NAME);
-        if (constraint != null)
-        {
-            String param = constraint.getValue();
-            minValue = new BigDecimal(param);
-            minValueMessage = constraint.getMessage();
-        }
-
-        constraint = (Constraint) paramMap.get(MAX_VALUE_RULE_NAME);
-        if (constraint != null)
-        {
-            String param = constraint.getValue();
-            maxValue = new BigDecimal(param);
-            maxValueMessage = constraint.getMessage();
-        }
-    }
-
-    /**
-     * Determine whether a field meets the criteria specified
-     * in the constraints defined for this validator
-     *
-     * @param field a <code>Field</code> to be tested
-     * @exception ValidationException containing an error message if the
-     * testValue did not pass the validation tests.
-     */
-    public void assertValidity(Field field)
-            throws ValidationException
-    {
-        Locale locale = field.getLocale();
-
-        if (field.isMultiValued())
-        {
-            String[] stringValues = (String[])field.getTestValue();
-
-            for (int i = 0; i < stringValues.length; i++)
-            {
-                assertValidity(stringValues[i], locale);
-            }
-        }
-        else
-        {
-            assertValidity((String)field.getTestValue(), locale);
-        }
-    }
-
-    /**
-     * Determine whether a testValue meets the criteria specified
-     * in the constraints defined for this validator
-     *
-     * @param testValue a <code>String</code> to be tested
-     * @param locale the Locale of the associated field
-     * @exception ValidationException containing an error message if the
-     * testValue did not pass the validation tests.
-     */
-    public void assertValidity(String testValue, Locale locale)
-            throws ValidationException
-    {
-        super.assertValidity(testValue);
-
-        if (required || StringUtils.isNotEmpty(testValue))
-        {
-            BigDecimal bd = null;
-            NumberFormat nf = NumberFormat.getInstance(locale);
-            try
-            {
-                Number number = nf.parse(testValue);
-                bd = new BigDecimal(number.doubleValue());
-            }
-            catch (ParseException e)
-            {
-                errorMessage = invalidNumberMessage;
-                throw new ValidationException(invalidNumberMessage);
-            }
-
-            if (minValue != null && bd.compareTo(minValue) < 0)
-            {
-                errorMessage = minValueMessage;
-                throw new ValidationException(minValueMessage);
-            }
-            if (maxValue != null && bd.compareTo(maxValue) > 0)
-            {
-                errorMessage = maxValueMessage;
-                throw new ValidationException(maxValueMessage);
-            }
-        }
-    }
-
-
-    // ************************************************************
-    // **                Bean accessor methods                   **
-    // ************************************************************
-
-    /**
-     * Get the value of minValue.
-     *
-     * @return value of minValue.
-     */
-    public BigDecimal getMinValue()
-    {
-        return minValue;
-    }
-
-    /**
-     * Set the value of minValue.
-     *
-     * @param minValue  Value to assign to minValue.
-     */
-    public void setMinValue(BigDecimal minValue)
-    {
-        this.minValue = minValue;
-    }
-
-    /**
-     * Get the value of maxValue.
-     *
-     * @return value of maxValue.
-     */
-    public BigDecimal getMaxValue()
-    {
-        return maxValue;
-    }
-
-    /**
-     * Set the value of maxValue.
-     *
-     * @param maxValue  Value to assign to maxValue.
-     */
-    public void setMaxValue(BigDecimal maxValue)
-    {
-        this.maxValue = maxValue;
+        Number number = nf.parse(stringValue);
+        return new BigDecimal(number.doubleValue());
     }
 }

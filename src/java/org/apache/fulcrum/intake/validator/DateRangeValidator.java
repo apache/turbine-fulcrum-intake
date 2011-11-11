@@ -22,7 +22,6 @@ package org.apache.fulcrum.intake.validator;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -67,15 +66,15 @@ public class DateRangeValidator
         extends DateStringValidator
 {
     /** List of FieldReferences for multiple comparisons */
-    List fieldReferences; 
+    List<FieldReference> fieldReferences;
 
     /** Callback for the actual compare operation */
-    CompareCallback compareCallback; 
+    CompareCallback<Date> compareCallback;
 
-    public DateRangeValidator(final Map paramMap)
+    public DateRangeValidator(Map<String, Constraint> paramMap)
             throws IntakeException
     {
-        init(paramMap);
+        super(paramMap);
     }
 
     /**
@@ -92,63 +91,58 @@ public class DateRangeValidator
      * @param paramMap
      * @throws InvalidMaskException
      */
-    public void init(final Map paramMap)
+    public void init(Map<String, ? extends Constraint> paramMap)
             throws InvalidMaskException
     {
         super.init(paramMap);
-        
-        compareCallback = new CompareCallback()
+
+        compareCallback = new CompareCallback<Date>()
             {
                 /**
                  * Compare the given values using the compare operation provided
-                 * 
+                 *
                  * @param compare type of compare operation
                  * @param thisValue value of this field
                  * @param refValue value of the reference field
-                 * 
+                 *
                  * @return the result of the comparison
                  */
-                public boolean compareValues(int compare, Object thisValue, Object refValue)
-                    throws ClassCastException
+                public boolean compareValues(int compare, Date thisValue, Date refValue)
                 {
                     boolean result = true;
-                    
-                    Date thisDate = (Date)thisValue;
-                    Date otherDate = (Date)refValue;
-                    
+
                     switch (compare)
                     {
                         case FieldReference.COMPARE_LT:
-                            result = thisDate.before(otherDate);
+                            result = thisValue.before(refValue);
                             break;
-                            
+
                         case FieldReference.COMPARE_LTE:
-                            result = !thisDate.after(otherDate);
+                            result = !thisValue.after(refValue);
                             break;
-                            
+
                         case FieldReference.COMPARE_GT:
-                            result = thisDate.after(otherDate);
+                            result = thisValue.after(refValue);
                             break;
-                            
+
                         case FieldReference.COMPARE_GTE:
-                            result = !thisDate.before(otherDate);
+                            result = !thisValue.before(refValue);
                             break;
                     }
-                    
+
                     return result;
                 }
             };
-        
-        fieldReferences = new ArrayList(10);
 
-        for (Iterator i = paramMap.entrySet().iterator(); i.hasNext();)
+        fieldReferences = new ArrayList<FieldReference>(10);
+
+        for (Map.Entry<String, ? extends Constraint> entry : paramMap.entrySet())
         {
-            Map.Entry entry = (Map.Entry)i.next();
-            String key = (String)entry.getKey();
-            Constraint constraint = (Constraint)entry.getValue();
+            String key = entry.getKey();
+            Constraint constraint = entry.getValue();
 
             int compare = FieldReference.getCompareType(key);
-            
+
             if (compare != 0)
             {
                 // found matching constraint
@@ -156,17 +150,17 @@ public class DateRangeValidator
                 fieldref.setCompare(compare);
                 fieldref.setFieldName(constraint.getValue());
                 fieldref.setMessage(constraint.getMessage());
-                
+
                 fieldReferences.add(fieldref);
             }
         }
-        
+
         if (fieldReferences.isEmpty())
         {
             log.warn("No reference field rules have been found.");
         }
     }
-    
+
     /**
      * Determine whether a testValue meets the criteria specified
      * in the constraints defined for this validator
@@ -175,11 +169,11 @@ public class DateRangeValidator
      * @exception ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
-    public void assertValidity(final Field testField)
+    public void assertValidity(Field<Date> testField)
         throws ValidationException
     {
         super.assertValidity(testField);
-        
+
         Group thisGroup = testField.getGroup();
 
         if (testField.isMultiValued())
@@ -194,7 +188,7 @@ public class DateRangeValidator
         else
         {
             String testValue = (String)testField.getTestValue();
-        
+
             assertValidity(testValue, thisGroup);
         }
     }
@@ -205,7 +199,7 @@ public class DateRangeValidator
      *
      * @param testValue a <code>String</code> to be tested
      * @param group the group this field belongs to
-     * 
+     *
      * @exception ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
@@ -215,22 +209,22 @@ public class DateRangeValidator
         if (required || StringUtils.isNotEmpty(testValue))
         {
             Date testDate = null;
-            
+
             try
             {
                 testDate = parse(testValue);
             }
             catch (ParseException e)
             {
-                // This should not happen because we succeded with this before, 
+                // This should not happen because we succeeded with this before,
                 // but we need to catch the exception anyway
                 errorMessage = getDateFormatMessage();
                 throw new ValidationException(errorMessage);
             }
-            
+
             try
             {
-                FieldReference.checkReferences(fieldReferences, compareCallback, 
+                FieldReference.checkReferences(fieldReferences, compareCallback,
                         testDate, group);
             }
             catch (ValidationException e)

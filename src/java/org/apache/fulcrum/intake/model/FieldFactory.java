@@ -37,15 +37,15 @@ import org.apache.fulcrum.intake.xmlmodel.XmlField;
  */
 public abstract class FieldFactory
 {
-    private static Map fieldCtors = initFieldCtors();
+    private static Map<String, FieldFactory.FieldCtor> fieldCtors = initFieldCtors();
 
-    private static Map initFieldCtors()
+    private static Map<String, FieldFactory.FieldCtor> initFieldCtors()
     {
-        fieldCtors = new HashMap();
+        fieldCtors = new HashMap<String, FieldFactory.FieldCtor>();
 
         fieldCtors.put("int", new FieldFactory.FieldCtor()
         {
-            public Field getInstance(XmlField f, Group g)
+            public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
                 return new IntegerField(f, g);
@@ -54,7 +54,7 @@ public abstract class FieldFactory
         );
         fieldCtors.put("boolean", new FieldFactory.FieldCtor()
         {
-            public Field getInstance(XmlField f, Group g)
+            public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
                 return new BooleanField(f, g);
@@ -63,7 +63,7 @@ public abstract class FieldFactory
         );
         fieldCtors.put("String", new FieldFactory.FieldCtor()
         {
-            public Field getInstance(XmlField f, Group g)
+            public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
                 return new StringField(f, g);
@@ -72,7 +72,7 @@ public abstract class FieldFactory
         );
         fieldCtors.put("BigDecimal", new FieldFactory.FieldCtor()
         {
-            public Field getInstance(XmlField f, Group g)
+            public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
                 return new BigDecimalField(f, g);
@@ -81,7 +81,7 @@ public abstract class FieldFactory
         );
         fieldCtors.put("FileItem", new FieldFactory.FieldCtor()
         {
-            public Field getInstance(XmlField f, Group g)
+            public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
                 return new FileItemField(f, g);
@@ -90,7 +90,7 @@ public abstract class FieldFactory
         );
         fieldCtors.put("DateString", new FieldFactory.FieldCtor()
         {
-            public Field getInstance(XmlField f, Group g)
+            public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
                 return new DateStringField(f, g);
@@ -99,7 +99,7 @@ public abstract class FieldFactory
         );
         fieldCtors.put("float", new FieldFactory.FieldCtor()
         {
-            public Field getInstance(XmlField f, Group g)
+            public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
                 return new FloatField(f, g);
@@ -108,7 +108,7 @@ public abstract class FieldFactory
         );
         fieldCtors.put("double", new FieldFactory.FieldCtor()
         {
-            public Field getInstance(XmlField f, Group g)
+            public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
                 return new DoubleField(f, g);
@@ -117,7 +117,7 @@ public abstract class FieldFactory
         );
         fieldCtors.put("short", new FieldFactory.FieldCtor()
         {
-            public Field getInstance(XmlField f, Group g)
+            public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
                 return new ShortField(f, g);
@@ -126,7 +126,7 @@ public abstract class FieldFactory
         );
         fieldCtors.put("long", new FieldFactory.FieldCtor()
         {
-            public Field getInstance(XmlField f, Group g)
+            public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
                 return new LongField(f, g);
@@ -135,7 +135,7 @@ public abstract class FieldFactory
         );
         fieldCtors.put("custom", new FieldFactory.FieldCtor()
         {
-            public Field getInstance(XmlField f, Group g)
+            public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
                 String fieldClass = f.getFieldClass();
@@ -148,15 +148,15 @@ public abstract class FieldFactory
 
                 if (fieldClass != null)
                 {
-                    Class field;
+                    Class<?> field;
 
                     try
                     {
                         field = Class.forName(fieldClass);
-                        Constructor constructor =
-                            field.getConstructor(new Class[] { XmlField.class, Group.class });
+                        Constructor<?> constructor =
+                            field.getConstructor(XmlField.class, Group.class);
 
-                        return (Field)constructor.newInstance(new Object[] { f, g });
+                        return (Field<?>)constructor.newInstance(f, g);
                     }
                     catch (ClassNotFoundException e)
                     {
@@ -182,12 +182,9 @@ public abstract class FieldFactory
         return fieldCtors;
     }
 
-    protected static abstract class FieldCtor
+    protected interface FieldCtor
     {
-        public Field getInstance(XmlField f, Group g) throws IntakeException
-        {
-            return null;
-        }
+        public Field<?> getInstance(XmlField f, Group g) throws IntakeException;
     }
 
     /**
@@ -198,14 +195,14 @@ public abstract class FieldFactory
      * @return a <code>Field</code> value
      * @throws IntakeException indicates that an unknown type was specified for a field.
      */
-    public static final Field getInstance(XmlField xmlField, Group xmlGroup)
+    public static final Field<?> getInstance(XmlField xmlField, Group xmlGroup)
             throws IntakeException
     {
         FieldCtor fieldCtor = null;
-        Field field = null;
+        Field<?> field = null;
         String type = xmlField.getType();
 
-        fieldCtor = (FieldCtor) fieldCtors.get(type);
+        fieldCtor = fieldCtors.get(type);
         if (fieldCtor == null)
         {
             throw new IntakeException("An Unsupported type has been specified for " +
