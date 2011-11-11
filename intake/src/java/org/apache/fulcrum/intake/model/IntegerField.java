@@ -29,7 +29,7 @@ import org.apache.fulcrum.intake.xmlmodel.XmlField;
  * @version $Id$
  */
 public class IntegerField
-        extends Field
+        extends Field<Integer>
 {
     /**
      * Constructor.
@@ -126,8 +126,8 @@ public class IntegerField
 
             for (int i = 0; i < inputs.length; i++)
             {
-                values[i] = inputs[i] == null 
-                        ? ((Integer) getEmptyValue()).intValue() 
+                values[i] = inputs[i] == null
+                        ? (getEmptyValue()).intValue()
                         : inputs[i].intValue();
             }
 
@@ -135,7 +135,7 @@ public class IntegerField
         }
         else
         {
-            setTestValue(parser.getIntObject(getKey(), (Integer)getEmptyValue()));
+            setTestValue(parser.getIntObject(getKey(), getEmptyValue()));
         }
     }
 

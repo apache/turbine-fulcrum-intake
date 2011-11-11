@@ -20,7 +20,6 @@ package org.apache.fulcrum.intake.validator;
  */
 
 import java.text.ParseException;
-
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -28,9 +27,9 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Validator for boolean field types.<br><br>
  *
- * Values are validated by attemting to match the value to
+ * Values are validated by attempting to match the value to
  * a list of strings for true and false values.  The string
- * values are compared without reguard to case.<br>
+ * values are compared without regard to case.<br>
  *
  * Valid values for Boolean.TRUE:
  * <ul>
@@ -57,7 +56,7 @@ import org.apache.commons.lang.StringUtils;
  * @version $Id$
  */
 public class BooleanValidator
-        extends DefaultValidator
+        extends DefaultValidator<Boolean>
 {
     /** String values which would evaluate to Boolean.TRUE */
     private static String[] trueValues = {"TRUE","T","YES","Y","1","ON"};
@@ -70,6 +69,7 @@ public class BooleanValidator
      */
     public BooleanValidator()
     {
+        super();
     }
 
     /**
@@ -78,7 +78,7 @@ public class BooleanValidator
      * @param paramMap
      * @throws InvalidMaskException
      */
-    public BooleanValidator(Map paramMap)
+    public BooleanValidator(Map<String, Constraint> paramMap)
             throws InvalidMaskException
     {
         super(paramMap);

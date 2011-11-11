@@ -20,6 +20,7 @@ package org.apache.fulcrum.intake.transform;
  */
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -55,7 +56,7 @@ public class XmlToAppData extends DefaultHandler
     /** Logging */
     private Logger log;
 
-    private AppData app;
+    private final AppData app;
     private XmlGroup currGroup;
     private XmlField currField;
     private Rule currRule;
@@ -88,16 +89,16 @@ public class XmlToAppData extends DefaultHandler
      * @throws SAXException
      * @throws IOException
      */
-    public AppData parseFile(String xmlFile)
+    public AppData parseFile(File xmlFile)
             throws ParserConfigurationException, SAXException, IOException
     {
         SAXParser parser = saxFactory.newSAXParser();
 
         FileReader fr = new FileReader(xmlFile);
         BufferedReader br = new BufferedReader(fr);
-        
+
         chars = new StringBuffer();
-        
+
         try
         {
             InputSource is = new InputSource(br);
@@ -113,13 +114,13 @@ public class XmlToAppData extends DefaultHandler
 
     /**
      * Provide an Avalon logger
-     * 
+     *
      * @see org.apache.avalon.framework.logger.LogEnabled#enableLogging(org.apache.avalon.framework.logger.Logger)
      */
     public void enableLogging(Logger logger)
     {
         this.log = logger.getChildLogger("XmlToAppData");
-        
+
     }
 
     /**
@@ -159,7 +160,7 @@ public class XmlToAppData extends DefaultHandler
 
     /**
      * Handles closing elements of the xml file.
-     * 
+     *
      * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
      */
     public void endElement(String uri, String localName, String name) throws SAXException
@@ -175,7 +176,7 @@ public class XmlToAppData extends DefaultHandler
                     "'required' rule instead.");
             currField.setIfRequiredMessage(chars.toString());
         }
-        
+
         chars = new StringBuffer();
     }
 

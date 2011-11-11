@@ -22,14 +22,12 @@ package org.apache.fulcrum.intake.validator;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.fulcrum.intake.IntakeException;
 
 /**
@@ -57,18 +55,18 @@ import org.apache.fulcrum.intake.IntakeException;
  * @version $Id$
  */
 public class DateStringValidator
-        extends DefaultValidator
+        extends DefaultValidator<Date>
 {
     private static final String DEFAULT_DATE_MESSAGE =
             "Date could not be parsed";
 
-    /**  */
-    private List dateFormats = null;
+    /** A list of date formats to try */
+    private List<String> dateFormats = null;
 
-    /**  */
+    /** An error message if no date could be parsed */
     private String dateFormatMessage = null;
 
-    /**  */
+    /** A flag that is passed to the DateFormat lenient feature */
     private boolean flexible = false;
 
     /**  */
@@ -77,10 +75,10 @@ public class DateStringValidator
     /**  */
     private SimpleDateFormat sdf = null;
 
-    public DateStringValidator(Map paramMap)
+    public DateStringValidator(Map<String, Constraint> paramMap)
             throws IntakeException
     {
-        init(paramMap);
+        super(paramMap);
     }
 
     /**
@@ -88,7 +86,8 @@ public class DateStringValidator
      */
     public DateStringValidator()
     {
-        dateFormats = new ArrayList(5);
+        super();
+        dateFormats = new ArrayList<String>(5);
     }
 
     /**
@@ -97,12 +96,12 @@ public class DateStringValidator
      * @param paramMap
      * @throws InvalidMaskException
      */
-    public void init(Map paramMap)
+    public void init(Map<String, ? extends Constraint> paramMap)
             throws InvalidMaskException
     {
         super.init(paramMap);
 
-        Constraint constraint = (Constraint) paramMap.get(FORMAT_RULE_NAME);
+        Constraint constraint = paramMap.get(FORMAT_RULE_NAME);
 
         if (constraint != null)
         {
@@ -112,7 +111,7 @@ public class DateStringValidator
 
         for(int i = 1 ;; i++)
         {
-            constraint = (Constraint) paramMap.get(FORMAT_RULE_NAME + i);
+            constraint = paramMap.get(FORMAT_RULE_NAME + i);
 
             if (constraint == null)
             {
@@ -128,7 +127,7 @@ public class DateStringValidator
             dateFormatMessage = DEFAULT_DATE_MESSAGE;
         }
 
-        constraint = (Constraint) paramMap.get(FLEXIBLE_RULE_NAME);
+        constraint = paramMap.get(FLEXIBLE_RULE_NAME);
 
         if (constraint != null)
         {
@@ -196,7 +195,7 @@ public class DateStringValidator
 
         for (int i = 1; i < dateFormats.size() && date == null; i++)
         {
-            sdf.applyPattern((String) dateFormats.get(i));
+            sdf.applyPattern(dateFormats.get(i));
 
             try
             {
@@ -210,7 +209,7 @@ public class DateStringValidator
 
         if (date == null)
         {
-            sdf.applyPattern((String) dateFormats.get(0));
+            sdf.applyPattern(dateFormats.get(0));
 
             try
             {
@@ -249,7 +248,7 @@ public class DateStringValidator
         String s = null;
         if (date != null)
         {
-            sdf.applyPattern((String) dateFormats.get(0));
+            sdf.applyPattern(dateFormats.get(0));
             s = sdf.format(date);
         }
         return s;
@@ -290,7 +289,7 @@ public class DateStringValidator
      *
      * @return value of dateFormats.
      */
-    public List getDateFormats()
+    public List<String> getDateFormats()
     {
         return dateFormats;
     }
@@ -300,7 +299,7 @@ public class DateStringValidator
      *
      * @param formats  Value to assign to dateFormats.
      */
-    public void setDateFormats(List formats)
+    public void setDateFormats(List<String> formats)
     {
         this.dateFormats = formats;
     }

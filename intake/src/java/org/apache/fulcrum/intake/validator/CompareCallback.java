@@ -25,17 +25,16 @@ package org.apache.fulcrum.intake.validator;
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id: DateStringValidator.java 534527 2007-05-02 16:10:59Z tv $
  */
-public interface CompareCallback
+public interface CompareCallback<T>
 {
     /**
      * Compare the given values using the compare operation provided
-     * 
+     *
      * @param compare type of compare operation
      * @param thisValue value of this field
      * @param refValue value of the reference field
-     * 
+     *
      * @return the result of the comparison
      */
-    public boolean compareValues(int compare, Object thisValue, Object refValue)
-        throws ClassCastException;
+    public boolean compareValues(int compare, T thisValue, T refValue);
 }

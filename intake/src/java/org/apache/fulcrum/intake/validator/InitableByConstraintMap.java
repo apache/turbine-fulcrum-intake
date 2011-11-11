@@ -38,6 +38,6 @@ public interface InitableByConstraintMap
      * containing rules and error messages.
      * @exception InvalidMaskException one of the mask rules is invalid
      */
-    void init(Map inputParameters)
+    void init(Map<String, ? extends Constraint> inputParameters)
             throws InvalidMaskException;
 }

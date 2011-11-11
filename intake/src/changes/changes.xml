@@ -25,7 +25,10 @@
   </properties>
 
   <body>
-     <release version="1.0.7-SNAPSHOT" date="in Subversion">
+     <release version="1.1.0" date="in Subversion">
+      <action type="update" dev="tv">
+        Introduce JDK 1.5 Generics
+      </action>
       <action type="fix" dev="tv">
         Groups were not initialized correctly from a parser.
       </action>

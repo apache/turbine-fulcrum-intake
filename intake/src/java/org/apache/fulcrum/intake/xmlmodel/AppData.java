@@ -20,13 +20,10 @@ package org.apache.fulcrum.intake.xmlmodel;
  */
 
 import java.io.Serializable;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.fulcrum.intake.IntakeException;
-
 import org.xml.sax.Attributes;
 
 /**
@@ -46,7 +43,7 @@ public class AppData
     private static final long serialVersionUID = -3953843038383617960L;
 
     /** List of groups */
-    private List inputs;
+    private final List<XmlGroup> inputs;
 
     /** Package that will be used for all mapTo objects */
     private String basePackage;
@@ -59,7 +56,7 @@ public class AppData
      */
     public AppData()
     {
-        inputs = new ArrayList();
+        inputs = new ArrayList<XmlGroup>();
     }
 
     /**
@@ -95,7 +92,7 @@ public class AppData
      * groups with and without prefix in the service.
      *
      */
-    public List getGroups()
+    public List<XmlGroup> getGroups()
     {
         return inputs;
     }
@@ -119,10 +116,8 @@ public class AppData
 
         String groupPrefix = getGroupPrefix();
 
-        for (Iterator it = inputs.iterator(); it.hasNext();)
+        for (XmlGroup group : inputs)
         {
-            XmlGroup group = (XmlGroup) it.next();
-
             if (group.getName().equals(groupName))
             {
                 return group;
@@ -211,7 +206,7 @@ public class AppData
     }
 
     /**
-     * Creats a string representation of this AppData.
+     * Creates a string representation of this AppData.
      * The representation is given in xml format.
      */
     public String toString()
@@ -219,9 +214,9 @@ public class AppData
         StringBuffer result = new StringBuffer();
 
         result.append("<input-data>\n");
-        for (Iterator iter = inputs.iterator(); iter.hasNext();)
+        for (XmlGroup group : inputs)
         {
-            result.append(iter.next());
+            result.append(group);
         }
         result.append("</input-data>");
         return result.toString();

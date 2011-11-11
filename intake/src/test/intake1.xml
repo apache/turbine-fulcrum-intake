@@ -46,6 +46,7 @@
 
     <group name="NumberTest" key="nt">
         <field name="EmptyIntegerTestField" key="eitf" type="int"/>
+        <field name="MultiIntegerTestField" key="mitf" type="int" multiValued="true" />
         <field name="EmptyLongTestField" key="eltf" type="long"/>
         <field name="EmptyShortTestField" key="estf" type="short"/>
         <field name="EmptyFloatTestField" key="eftf" type="float"/>

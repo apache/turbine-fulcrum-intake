@@ -24,6 +24,7 @@ import java.beans.PropertyDescriptor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -32,7 +33,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -73,32 +73,32 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
         Serviceable
 {
     /** Map of groupNames -> appData elements */
-    private Map groupNames;
+    private Map<String, AppData> groupNames;
 
     /** The cache of group names. */
-    private Map groupNameMap;
+    private Map<String, String> groupNameMap;
 
     /** The cache of group keys. */
-    private Map groupKeyMap;
+    private Map<String, String> groupKeyMap;
 
     /** The cache of property getters. */
-    private Map getterMap;
+    private Map<String, Map<String, Method>> getterMap;
 
     /** The cache of property setters. */
-    private Map setterMap;
+    private Map<String, Map<String, Method>> setterMap;
 
     /** AppData -> keyed Pools Map */
-    private Map keyedPools;
+    private Map<AppData, KeyedObjectPool> keyedPools;
 
     /** The Avalon Container root directory */
     private String applicationRoot;
 
     /** List of configured xml specification files */
-    private List xmlPathes = null;
-    
+    private List<String> xmlPathes = null;
+
     /** Configured location of the serialization file */
-    private String serialDataPath = null; 
-    
+    private String serialDataPath = null;
+
     /**
      * Registers a given group name in the system
      *
@@ -140,14 +140,13 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             groupNameMap.put(group.getKey(), groupName);
         }
 
-        List classNames = group.getMapToObjects();
-        for (Iterator iter2 = classNames.iterator(); iter2.hasNext();)
+        List<String> classNames = group.getMapToObjects();
+        for (String className : classNames)
         {
-            String className = (String) iter2.next();
             if (!getterMap.containsKey(className))
             {
-                getterMap.put(className, new HashMap());
-                setterMap.put(className, new HashMap());
+                getterMap.put(className, new HashMap<String, Method>());
+                setterMap.put(className, new HashMap<String, Method>());
             }
         }
         return true;
@@ -163,7 +162,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      * @return A map with appData objects loaded from the file or null if the
      *         map could not be loaded.
      */
-    private Map loadSerialized(String serialDataPath, long timeStamp)
+    private Map<AppData, File> loadSerialized(String serialDataPath, long timeStamp)
     {
         getLogger().debug(
                 "Entered loadSerialized(" + serialDataPath + ", " + timeStamp
@@ -189,7 +188,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
         }
 
         InputStream in = null;
-        Map serialData = null;
+        Map<AppData, File> serialData = null;
 
         try
         {
@@ -199,7 +198,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
             if (o instanceof Map)
             {
-                serialData = (Map) o;
+                serialData = (Map<AppData, File>) o;
             }
             else
             {
@@ -212,11 +211,19 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                                             // around
             }
         }
-        catch (Exception e)
+        catch (IOException e)
         {
             getLogger().error("Serialized File could not be read.", e);
 
             // We got a corrupt file for some reason.
+            // Null out serialData to be sure
+            serialData = null;
+        }
+        catch (ClassNotFoundException e)
+        {
+            getLogger().error("Objects could not be read from serialized file.", e);
+
+            // This should not happen
             // Null out serialData to be sure
             serialData = null;
         }
@@ -231,7 +238,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                     in.close();
                 }
             }
-            catch (Exception e)
+            catch (IOException e)
             {
                 getLogger().error("Exception while closing file", e);
             }
@@ -251,7 +258,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      * @param appDataElements
      *            A Map containing all of the XML parsed appdata elements
      */
-    private void saveSerialized(String serialDataPath, Map appDataElements)
+    private void saveSerialized(String serialDataPath, Map<AppData, File> appDataElements)
     {
 
         getLogger().debug(
@@ -270,7 +277,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             serialData.createNewFile();
             serialData.delete();
         }
-        catch (Exception e)
+        catch (IOException e)
         {
             getLogger().info(
                     "Could not create serialized file " + serialDataPath
@@ -297,11 +304,16 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
             getLogger().debug("Serializing successful");
         }
-        catch (Exception e)
+        catch (IOException e)
         {
             getLogger().info(
                     "Could not write serialized file to " + serialDataPath
                             + ", not serializing the XML data");
+        }
+        catch (ClassNotFoundException e)
+        {
+            getLogger().info(
+                    "Could not re-read serialized file from " + serialDataPath);
         }
         finally
         {
@@ -311,12 +323,19 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                 {
                     out.close();
                 }
+            }
+            catch (IOException e)
+            {
+                getLogger().error("Exception while closing file", e);
+            }
+            try
+            {
                 if (in != null)
                 {
                     in.close();
                 }
             }
-            catch (Exception e)
+            catch (IOException e)
             {
                 getLogger().error("Exception while closing file", e);
             }
@@ -337,13 +356,14 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
     {
         Group group = null;
 
-        AppData appData = (AppData) groupNames.get(groupName);
+        AppData appData = groupNames.get(groupName);
 
         if (groupName == null)
         {
             throw new IntakeException(
                     "Intake IntakeServiceImpl.getGroup(groupName) is null");
         }
+
         if (appData == null)
         {
             throw new IntakeException(
@@ -352,8 +372,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
         }
         try
         {
-            group = (Group) ((KeyedObjectPool) keyedPools.get(appData))
-                    .borrowObject(groupName);
+            group = (Group) keyedPools.get(appData).borrowObject(groupName);
         }
         catch (Exception e)
         {
@@ -376,7 +395,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
         if (instance != null)
         {
             String groupName = instance.getIntakeGroupName();
-            AppData appData = (AppData) groupNames.get(groupName);
+            AppData appData = groupNames.get(groupName);
 
             if (appData == null)
             {
@@ -388,8 +407,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
             try
             {
-                ((KeyedObjectPool) keyedPools.get(appData)).returnObject(
-                        groupName, instance);
+                keyedPools.get(appData).returnObject(groupName, instance);
             }
             catch (Exception e)
             {
@@ -409,7 +427,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      */
     public int getSize(String groupName) throws IntakeException
     {
-        AppData appData = (AppData) groupNames.get(groupName);
+        AppData appData = groupNames.get(groupName);
         if (appData == null)
         {
             throw new IntakeException(
@@ -417,7 +435,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                             + groupName + " found");
         }
 
-        KeyedObjectPool kop = (KeyedObjectPool) keyedPools.get(groupName);
+        KeyedObjectPool kop = keyedPools.get(groupName);
 
         return kop.getNumActive(groupName) + kop.getNumIdle(groupName);
     }
@@ -429,7 +447,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      */
     public String[] getGroupNames()
     {
-        return (String[]) groupNames.keySet().toArray(new String[0]);
+        return groupNames.keySet().toArray(new String[0]);
     }
 
     /**
@@ -441,7 +459,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      */
     public String getGroupKey(String groupName)
     {
-        return (String) groupKeyMap.get(groupName);
+        return groupKeyMap.get(groupName);
     }
 
     /**
@@ -453,7 +471,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      */
     public String getGroupName(String groupKey)
     {
-        return (String) groupNameMap.get(groupKey);
+        return groupNameMap.get(groupKey);
     }
 
     /**
@@ -470,7 +488,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
     public Method getFieldSetter(String className, String propName)
             throws ClassNotFoundException, IntrospectionException
     {
-        Map settersForClassName = (Map) setterMap.get(className);
+        Map<String, Method> settersForClassName = setterMap.get(className);
 
         if (settersForClassName == null)
         {
@@ -478,7 +496,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                     + " available!");
         }
 
-        Method setter = (Method) settersForClassName.get(propName);
+        Method setter = settersForClassName.get(propName);
 
         if (setter == null)
         {
@@ -499,7 +517,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             // save it so we do not have to repeat
             synchronized (getterMap)
             {
-                Map gettersForClassName = (Map) getterMap.get(className);
+                Map<String, Method> gettersForClassName = getterMap.get(className);
 
                 if (gettersForClassName != null)
                 {
@@ -528,7 +546,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
     public Method getFieldGetter(String className, String propName)
             throws ClassNotFoundException, IntrospectionException
     {
-        Map gettersForClassName = (Map) getterMap.get(className);
+        Map<String, Method> gettersForClassName = getterMap.get(className);
 
         if (gettersForClassName == null)
         {
@@ -536,7 +554,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                     + " available!");
         }
 
-        Method getter = (Method) gettersForClassName.get(propName);
+        Method getter = gettersForClassName.get(propName);
 
         if (getter == null)
         {
@@ -557,7 +575,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             // save it so we do not have to repeat
             synchronized (setterMap)
             {
-                Map settersForClassName = (Map) getterMap.get(className);
+                Map<String, Method> settersForClassName = getterMap.get(className);
 
                 if (settersForClassName != null)
                 {
@@ -580,7 +598,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
     {
         final Configuration xmlPaths = conf.getChild(XML_PATHS, false);
 
-        xmlPathes = new ArrayList();
+        xmlPathes = new ArrayList<String>();
 
         if (xmlPaths == null)
         {
@@ -619,23 +637,22 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      */
     public void initialize() throws Exception
     {
-        Map appDataElements = null;
+        Map<AppData, File> appDataElements = null;
 
-        groupNames = new HashMap();
-        groupKeyMap = new HashMap();
-        groupNameMap = new HashMap();
-        getterMap = new HashMap();
-        setterMap = new HashMap();
-        keyedPools = new HashMap();
+        groupNames = new HashMap<String, AppData>();
+        groupKeyMap = new HashMap<String, String>();
+        groupNameMap = new HashMap<String, String>();
+        getterMap = new HashMap<String, Map<String,Method>>();
+        setterMap = new HashMap<String, Map<String,Method>>();
+        keyedPools = new HashMap<AppData, KeyedObjectPool>();
 
-        Set xmlFiles = new HashSet();
+        Set<File> xmlFiles = new HashSet<File>();
 
         long timeStamp = 0;
 
-        for (Iterator it = xmlPathes.iterator(); it.hasNext();)
+        for (String xmlPath : xmlPathes)
         {
             // Files are webapp.root relative
-            String xmlPath = (String) it.next();
             File xmlFile = new File(applicationRoot, xmlPath).getAbsoluteFile();
 
             getLogger().debug("Path for XML File: " + xmlFile);
@@ -649,7 +666,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                 throw new Exception(READ_ERR);
             }
 
-            xmlFiles.add(xmlFile.toString());
+            xmlFiles.add(xmlFile);
 
             getLogger().debug("Added " + xmlPath + " as File to parse");
 
@@ -660,7 +677,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                     .lastModified() : timeStamp;
         }
 
-        Map serializedMap = loadSerialized(serialDataPath, timeStamp);
+        Map<AppData, File> serializedMap = loadSerialized(serialDataPath, timeStamp);
 
         if (serializedMap != null)
         {
@@ -671,38 +688,35 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
         else
         {
             // Parse all the given XML files
-            appDataElements = new HashMap();
+            appDataElements = new HashMap<AppData, File>();
 
-            for (Iterator it = xmlFiles.iterator(); it.hasNext();)
+            for (File xmlFile : xmlFiles)
             {
-                String xmlPath = (String) it.next();
                 AppData appData = null;
 
-                getLogger().debug("Now parsing: " + xmlPath);
+                getLogger().debug("Now parsing: " + xmlFile);
 
                 XmlToAppData xmlApp = new XmlToAppData();
                 xmlApp.enableLogging(getLogger());
-                appData = xmlApp.parseFile(xmlPath);
+                appData = xmlApp.parseFile(xmlFile);
 
-                appDataElements.put(appData, xmlPath);
-                getLogger().debug("Saving appData for " + xmlPath);
+                appDataElements.put(appData, xmlFile);
+                getLogger().debug("Saving appData for " + xmlFile);
             }
 
             saveSerialized(serialDataPath, appDataElements);
         }
 
-        for (Iterator it = appDataElements.keySet().iterator(); it.hasNext();)
+        for (AppData appData : appDataElements.keySet())
         {
-            AppData appData = (AppData) it.next();
-
             int maxPooledGroups = 0;
-            List glist = appData.getGroups();
+            List<XmlGroup> glist = appData.getGroups();
 
             String groupPrefix = appData.getGroupPrefix();
 
             for (int i = glist.size() - 1; i >= 0; i--)
             {
-                XmlGroup g = (XmlGroup) glist.get(i);
+                XmlGroup g = glist.get(i);
                 String groupName = g.getName();
 
                 boolean registerUnqualified = registerGroup(groupName, g,

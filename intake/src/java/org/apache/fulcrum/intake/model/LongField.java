@@ -29,7 +29,7 @@ import org.apache.fulcrum.intake.xmlmodel.XmlField;
  * @version $Id$
  */
 public class LongField
-        extends Field
+        extends Field<Long>
 {
 
     /**
@@ -126,8 +126,8 @@ public class LongField
 
             for (int i = 0; i < inputs.length; i++)
             {
-                values[i] = inputs[i] == null 
-                        ? ((Long) getEmptyValue()).longValue() 
+                values[i] = inputs[i] == null
+                        ? (getEmptyValue()).longValue()
                         : inputs[i].longValue();
             }
 
@@ -135,7 +135,7 @@ public class LongField
         }
         else
         {
-            setTestValue(parser.getLongObject(getKey(), (Long)getEmptyValue()));
+            setTestValue(parser.getLongObject(getKey(), getEmptyValue()));
         }
     }
 }
