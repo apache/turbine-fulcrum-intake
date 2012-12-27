@@ -26,6 +26,10 @@
   <body>
     <release version="2-SNAPSHOT" date="as in SVN">
       <action dev="tv" type="update">
+        Changed site descriptor to derive from the Turbine Parent POM and removed all 
+        duplicate definitions
+      </action>
+      <action dev="tv" type="update">
         Changed parent POM to the Turbine Parent POM and removed all duplicate definitions
       </action>
       <action dev="sgoeschl" type="update">
