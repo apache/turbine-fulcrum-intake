@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="."  default="delete-temp-files" name="DelScripts">
+  
+ <target name="delete-temp-files">
+  <echo message="delete in ${delete.path} ${delete.include}"/>
+  <delete>
+        <fileset dir="${delete.path}" includes="${delete.include}" />
+  </delete>
+</target>
+
+</project>
