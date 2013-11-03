@@ -25,16 +25,16 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.fulcrum</groupId>
   <artifactId>fulcrum-intake</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1-SNAPSHOT</version>
   <name>Fulcrum Intake Service</name>
   <inceptionYear>2005</inceptionYear>
   <description>This Service provides rule-based input validation</description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-intake</url>
 		
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-intake-1.1.0</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-intake-1.1.0</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/tags/fulcrum-intake-1.1.0</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/intake/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/intake/</developerConnection>
+    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/intake/</url>
   </scm>
 
   <developers>
