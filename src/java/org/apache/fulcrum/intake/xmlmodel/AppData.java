@@ -124,7 +124,7 @@ public class AppData
             }
             if (groupPrefix != null)
             {
-                StringBuffer qualifiedGroupName = new StringBuffer();
+                StringBuilder qualifiedGroupName = new StringBuilder();
 
                 qualifiedGroupName.append(groupPrefix)
                         .append(':')
@@ -211,7 +211,7 @@ public class AppData
      */
     public String toString()
     {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         result.append("<input-data>\n");
         for (XmlGroup group : inputs)

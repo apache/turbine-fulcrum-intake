@@ -732,9 +732,8 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
                 if (groupPrefix != null)
                 {
-                    StringBuffer qualifiedName = new StringBuffer();
-                    qualifiedName.append(groupPrefix).append(':').append(
-                            groupName);
+                    StringBuilder qualifiedName = new StringBuilder();
+                    qualifiedName.append(groupPrefix).append(':').append(groupName);
 
                     // Add the fully qualified group name. Do _not_ check
                     // for
@@ -757,11 +756,11 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
             }
 
-            KeyedPoolableObjectFactory<String, Group> factory = new Group.GroupFactory(
-                    appData);
+            KeyedPoolableObjectFactory<String, Group> factory =
+                new Group.GroupFactory(appData);
+
             keyedPools.put(appData,
-                    new StackKeyedObjectPool<String, Group>(factory,
-                    maxPooledGroups));
+                new StackKeyedObjectPool<String, Group>(factory, maxPooledGroups));
         }
 
         if (getLogger().isInfoEnabled())

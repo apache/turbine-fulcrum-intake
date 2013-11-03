@@ -439,7 +439,7 @@ public class XmlField
      */
     public String toString()
     {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         result.append(" <field name=\"" + name + "\"");
         result.append(" key=\"" + key + "\"");
         result.append(" type=\"" + type + "\"");
