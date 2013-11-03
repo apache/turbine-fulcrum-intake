@@ -100,7 +100,7 @@ public class LongField
         }
         else
         {
-            return (null == getEmptyValue()) ? new Long(0l) : getEmptyValue();
+            return (null == getEmptyValue()) ? Long.valueOf(0l) : getEmptyValue();
         }
     }
 

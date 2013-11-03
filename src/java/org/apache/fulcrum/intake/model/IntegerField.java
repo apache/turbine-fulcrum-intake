@@ -100,7 +100,7 @@ public class IntegerField
         else
         {
             return (null == getEmptyValue())
-                    ? new Integer(0) : getEmptyValue();
+                    ? Integer.valueOf(0) : getEmptyValue();
         }
     }
 
