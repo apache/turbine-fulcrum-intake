@@ -88,7 +88,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
     private Map<String, Map<String, Method>> setterMap;
 
     /** AppData -> keyed Pools Map */
-    private Map<AppData, KeyedObjectPool> keyedPools;
+    private Map<AppData, KeyedObjectPool<String, Group>> keyedPools;
 
     /** The Avalon Container root directory */
     private String applicationRoot;
@@ -372,7 +372,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
         }
         try
         {
-            group = (Group) keyedPools.get(appData).borrowObject(groupName);
+            group = keyedPools.get(appData).borrowObject(groupName);
         }
         catch (Exception e)
         {
@@ -435,7 +435,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                             + groupName + " found");
         }
 
-        KeyedObjectPool kop = keyedPools.get(groupName);
+        KeyedObjectPool<String, Group> kop = keyedPools.get(groupName);
 
         return kop.getNumActive(groupName) + kop.getNumIdle(groupName);
     }
@@ -644,7 +644,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
         groupNameMap = new HashMap<String, String>();
         getterMap = new HashMap<String, Map<String,Method>>();
         setterMap = new HashMap<String, Map<String,Method>>();
-        keyedPools = new HashMap<AppData, KeyedObjectPool>();
+        keyedPools = new HashMap<AppData, KeyedObjectPool<String, Group>>();
 
         Set<File> xmlFiles = new HashSet<File>();
 
@@ -757,9 +757,10 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
             }
 
-            KeyedPoolableObjectFactory factory = new Group.GroupFactory(
+            KeyedPoolableObjectFactory<String, Group> factory = new Group.GroupFactory(
                     appData);
-            keyedPools.put(appData, new StackKeyedObjectPool(factory,
+            keyedPools.put(appData,
+                    new StackKeyedObjectPool<String, Group>(factory,
                     maxPooledGroups));
         }
 

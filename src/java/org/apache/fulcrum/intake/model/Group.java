@@ -581,7 +581,7 @@ public class Group
     // ********** PoolableObjectFactory implementation ******************
 
     public static class GroupFactory
-            extends BaseKeyedPoolableObjectFactory
+            extends BaseKeyedPoolableObjectFactory<String, Group>
     {
         private final AppData appData;
 
@@ -593,20 +593,19 @@ public class Group
         /**
          * Creates an instance that can be returned by the pool.
          * @return an instance that can be returned by the pool.
-         * @throws IntakeException indicates that the group could not be retreived
+         * @throws IntakeException indicates that the group could not be retrieved
          */
-        public Object makeObject(Object key) throws IntakeException
+        public Group makeObject(String key) throws IntakeException
         {
-            return new Group(appData.getGroup((String) key));
+            return new Group(appData.getGroup(key));
         }
 
         /**
          * Uninitialize an instance to be returned to the pool.
          * @param obj the instance to be passivated
          */
-        public void passivateObject(Object key, Object obj)
+        public void passivateObject(String key, Group group)
         {
-            Group group = (Group) obj;
             group.oid = null;
             group.pp = null;
             for (int i = group.fieldsArray.length - 1; i >= 0; i--)
