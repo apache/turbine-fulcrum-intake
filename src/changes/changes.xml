@@ -20,8 +20,8 @@
 <document>
   <properties>
     <title>Fulcrum Intake</title>
-    <author email="epugh@upstate.com">Eric Pugh</author>
-    <author email="seade@backstagetech.com.au">Scott Eade</author>
+    <!--  author email="epugh@upstate.com">Eric Pugh</author -->
+    <!--  author email="seade@backstagetech.com.au">Scott Eade</author -->
   </properties>
 
   <body>
@@ -138,7 +138,7 @@
        it (the "format" rule is also used to parse the date if there are no
        "formatn" rules or they are not able to parse it).  In order to
        retrieve the correctly formatted DateString value you need to use
-       <em>$group.foo.StringValue</em> rather than <em>$group.foo.Value</em>
+       $group.foo.StringValue rather than $group.foo.Value
        (you can do this for all values, not just DateString).
       </action>
       <action dev="seade" type="fix">
@@ -146,7 +146,7 @@
        elements when mapping from the group to the object when no value has
        been set.  This makes it possible to clear values in an existing object
        that is being overwritten with Intake data using
-       <em>group.setProperties(obj)</em> (or you can provide non-null values
+       group.setProperties(obj) (or you can provide non-null values
        in your intake.xml file).  Make sure you do not inadvertently include
        the primary key for the object in the intake group without actually
        setting it to the appropriate value (it shouldn't be in the group
