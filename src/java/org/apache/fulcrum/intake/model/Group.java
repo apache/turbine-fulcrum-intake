@@ -592,6 +592,7 @@ public class Group
 
         /**
          * Creates an instance that can be returned by the pool.
+         * @param key the name of the group
          * @return an instance that can be returned by the pool.
          * @throws IntakeException indicates that the group could not be retrieved
          */
@@ -602,7 +603,8 @@ public class Group
 
         /**
          * Uninitialize an instance to be returned to the pool.
-         * @param obj the instance to be passivated
+         * @param key the name of the group
+         * @param group the instance to be passivated
          */
         public void passivateObject(String key, Group group)
         {
