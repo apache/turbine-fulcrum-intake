@@ -264,7 +264,7 @@ public class XmlGroup
      */
     public String toString()
     {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         result.append("<group name=\"").append(getName());
         result.append(" key=\"" + key + "\"");

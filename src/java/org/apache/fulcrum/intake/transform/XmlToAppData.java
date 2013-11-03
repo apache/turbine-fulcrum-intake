@@ -61,7 +61,7 @@ public class XmlToAppData extends DefaultHandler
     private XmlField currField;
     private Rule currRule;
     private String currElement;
-    private StringBuffer chars;
+    private StringBuilder chars;
 
     private static SAXParserFactory saxFactory;
 
@@ -97,7 +97,7 @@ public class XmlToAppData extends DefaultHandler
         FileReader fr = new FileReader(xmlFile);
         BufferedReader br = new BufferedReader(fr);
 
-        chars = new StringBuffer();
+        chars = new StringBuilder();
 
         try
         {
@@ -177,7 +177,7 @@ public class XmlToAppData extends DefaultHandler
             currField.setIfRequiredMessage(chars.toString());
         }
 
-        chars = new StringBuffer();
+        chars = new StringBuilder();
     }
 
     /**
