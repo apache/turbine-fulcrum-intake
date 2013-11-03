@@ -17,9 +17,7 @@
  specific language governing permissions and limitations
  under the License.
 -->
-<project
-  name="Fulcrum Intake"
-  href="http://turbine.apache.org/fulcrum/fulcrum-intake/">
+<project name="Fulcrum Intake">
 
   <body>
     <menu name="Overview">
