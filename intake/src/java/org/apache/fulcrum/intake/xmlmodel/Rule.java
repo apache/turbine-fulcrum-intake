@@ -132,7 +132,7 @@ public class Rule
      */
     public String toString()
     {
-        StringBuffer result = new StringBuffer(100);
+        StringBuilder result = new StringBuilder(100);
 
         result.append("<rule name=\"" + name + "\"")
                 .append(" value=\"" + value + "\"");

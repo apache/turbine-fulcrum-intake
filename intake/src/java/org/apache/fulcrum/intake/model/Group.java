@@ -556,7 +556,7 @@ public class Group
      */
     public String getHtmlFormInput()
     {
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
         appendHtmlFormInput(sb);
         return sb.toString();
     }
@@ -565,7 +565,7 @@ public class Group
      * A xhtml valid hidden input field that notifies intake of the
      * group's presence.
      */
-    public void appendHtmlFormInput(StringBuffer sb)
+    public void appendHtmlFormInput(StringBuilder sb)
     {
         if (!isDeclared)
         {
