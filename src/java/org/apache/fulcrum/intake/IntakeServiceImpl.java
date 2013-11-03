@@ -411,7 +411,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             }
             catch (Exception e)
             {
-                new IntakeException("Could not get group " + groupName, e);
+                throw new IntakeException("Could not get group " + groupName, e);
             }
         }
     }
@@ -435,7 +435,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                             + groupName + " found");
         }
 
-        KeyedObjectPool<String, Group> kop = keyedPools.get(groupName);
+        KeyedObjectPool<String, Group> kop = keyedPools.get(appData);
 
         return kop.getNumActive(groupName) + kop.getNumIdle(groupName);
     }

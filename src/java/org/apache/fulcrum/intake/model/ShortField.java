@@ -100,7 +100,7 @@ public class ShortField
         else
         {
             return (null == getEmptyValue())
-                    ? new Short((short) 0) : getEmptyValue();
+                    ? Short.valueOf((short) 0) : getEmptyValue();
         }
     }
 
@@ -143,7 +143,7 @@ public class ShortField
             }
             else
             {
-                setTestValue(new Short(value.shortValue()));
+                setTestValue(Short.valueOf(value.shortValue()));
             }
         }
     }
