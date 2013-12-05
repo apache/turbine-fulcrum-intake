@@ -27,7 +27,10 @@
   <body>
      <release version="1.1.1" date="in Subversion">
      </release>
-     <release version="1.1.0" date="2013-11-03">
+     <release version="1.1.0" date="2013-12-??">
+      <action dev="tv" type="add">
+        Add Intake schema derived from DTD
+      </action>
       <action dev="tv" type="update">
         Derive from Turbine parent POM 3
       </action>

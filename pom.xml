@@ -137,6 +137,7 @@
         <directory>src/dtd</directory>
         <includes>
           <include>intake.dtd</include>
+          <include>intake.xsd</include>
         </includes>
       </resource>
       <resource>
