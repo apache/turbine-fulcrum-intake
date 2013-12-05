@@ -130,7 +130,7 @@ emptyValue:     Value to be used for the value of the field if it is not
                 Default: null
 
 multiValued:    If this is true, the field will accept multiple values.
-                Otherwise, the field only accepts a single vale.
+                Otherwise, the field only accepts a single value.
 
                 Default: false
 
@@ -139,7 +139,7 @@ validator:      Name of the class used for validating the value of the
                 validator object.  If this is not set, a default validator
                 will be used according to the field type.
 
-                The the name of the class is not fully qualified, it will
+                If the the name of the class is not fully qualified, it will
                 be prepended with org.apache.fulcrum.intake.validator.
                 For example: a value of "NumberValidator" will be read as
                 "org.apache.fulcrum.intake.validator.NumberValidator".
@@ -150,7 +150,7 @@ fieldClass:     Name of the class used for handling the field. This is used to
                 customize field types. The attribute is only interpreted if the
                 type attribute is set to "custom".
 
-                The the name of the class is not fully qualified, it will
+                If the the name of the class is not fully qualified, it will
                 be prepended with org.apache.fulcrum.intake.model.
                 For example: a value of "CurrencyField" will be read as
                 "org.apache.fulcrum.intake.model.CurrencyField".
@@ -213,7 +213,7 @@ name:       Name of the rule.  The valid rule names vary by field type.
             Default: N/A
 
 value:      Value passed to the rule.  The meaning of this attribute
-            vary by rule.
+            varies by rule.
 
             Default: N/A
 
