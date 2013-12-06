@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+
+<!DOCTYPE project [
+<!ENTITY site-nav SYSTEM "../../incl_site_nav.xml">
+]>
+
+<project name="Fulcrum" href="http://turbine.apache.org/fulcrum/">
+
+  <title>Fulcrum</title>
+  <logo href="/images/logo.gif">Fulcrum</logo>
+
+  <body>
+
+&site-nav;
+
+    <menu name="Fulcrum">
+      <item name="Overview"              href="/index.html"/>
+      <item name="Building"              href="/building.html"/>
+      <item name="Changes"               href="/changes-report.html"/>
+    </menu>
+
+    <menu name="Released Components">
+
+      <item name="BSF"                   href="/fulcrum-bsf/index.html"/>
+      <item name="Cache"                 href="/fulcrum-cache/index.html"/>
+      <item name="Crypto"                href="/fulcrum-crypto/index.html"/>
+      <item name="DVSL"                  href="/fulcrum-dvsl/index.html"/>
+      <item name="Factory"               href="/fulcrum-factory/index.html"/>
+      <item name="Localization"          href="/fulcrum-localization/index.html"/>
+      <item name="Mimetype"              href="/fulcrum-mimetype/index.html"/>
+      <item name="Pool"                  href="/fulcrum-pool/index.html"/>
+      <item name="Naming"                href="/fulcrum-naming/index.html"/>
+      <item name="OSWorkflow"            href="/sites/osworkflow.html" collapse="true">
+        <item name="OSWorkflow"            href="/fulcrum-osworkflow/index.html"/>
+        <item name="OSWorkflow Example"    href="/fulcrum-osworkflow-example/index.html"/>
+      </item>
+      <item name="Quartz"                href="/fulcrum-quartz/index.html"/>
+      <item name="Security"              href="/sites/security.html" collapse="true">
+        <item name="Site"                  href="/fulcrum-security-site/index.html"/>
+        <item name="Security API"          href="/fulcrum-security-api/index.html"/>
+        <item name="Security SPI"          href="/fulcrum-security-spi/index.html"/>
+        <item name="Memory Impl"           href="/fulcrum-security-memory/index.html"/>
+        <item name="Hibernate Impl"        href="/fulcrum-security-hibernate/index.html"/>
+        <item name="NT Impl"               href="/fulcrum-security-nt/index.html"/>
+        <item name="Adapter Turbine"       href="/fulcrum-security-adapter-turbine/index.html"/>
+        <item name="Adapter OpenSymphony"  href="/fulcrum-security-adapter-opensymphony/index.html"/>
+      </item>
+      <item name="Test Container"         href="/fulcrum-testcontainer/index.html"/>
+      <item name="Upload"                 href="/fulcrum-upload/index.html"/>
+      <item name="XMLRPC"                 href="/fulcrum-xmlrpc/index.html"/>
+      <item name="XSLT"                   href="/fulcrum-xslt/index.html"/>
+      <item name="YAAFI"                  href="/fulcrum-yaafi/index.html"/>
+    </menu>
+
+    <menu name="Sandbox Components">
+      <item name="Script"          			 href="/fulcrum-script/index.html"/>
+      <item name="CommonsEmail"          href="/fulcrum-commonsemail/index.html"/>
+      <item name="PBE"                   href="/fulcrum-pbe/index.html"/>
+      <item name="Groovy"                href="/fulcrum-groovy/index.html"/>
+      <item name="ResourceManager"       href="/fulcrum-resourcemanager/index.html"/>
+      <item name="Configuration"         href="/fulcrum-configuration-impl/index.html"/>
+      <item name="HsqlDB"                href="/fulcrum-hsqldb/index.html"/>
+      <item name="Intake"                href="/fulcrum-intake/index.html"/>
+      <item name="Parser"                href="/fulcrum-parser/index.html"/>
+      <item name="Template"              href="/fulcrum-template/index.html"/>
+    </menu>
+
+    <menu name="Howtos (old)">
+      <item name="JSP Service"            href="/howto/jsp-service.html"/>
+      <item name="Template Service"       href="/howto/template-service.html"/>
+      <item name="Velocity Service"       href="/howto/velocity-service.html"/>
+    </menu>
+
+  </body>
+</project>

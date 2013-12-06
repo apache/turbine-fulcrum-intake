@@ -20,12 +20,26 @@
 <document>
   <properties>
     <title>Fulcrum</title>
-    <author email="epugh@upstate.com">Eric Pugh</author>
-    <author email="quintonm@bellsouth.net">Quinton McCombs</author>
+    <!--author email="epugh@upstate.com">Eric Pugh</author>
+    <author email="quintonm@bellsouth.net">Quinton McCombs</author-->
   </properties>
 
   <body>
-    <release version="3.0.0" date="2005-05-13">
+    <release version="2.0.0" date="SVN">
+     <action dev="gk" type="update">
+       Changed to SCM-publish-plugin for site deployment (as provided by turbine parent v3)
+     </action>
+      <action dev="gk" type="update">
+       Cleaning up folders: added xdocs folder from parent folder, removed duplicate site/xdoc folder, emptied site/rersources folder as it is not used
+     </action>
+     <action dev="gk" type="update">
+       Added JSON component
+     </action>
+     <action dev="gk" type="update">
+       Changed old version to 1.0.0 (as it was declared in pom)
+     </action>
+    </release>
+    <release version="1.0.0" date="2005-05-13">
      <action dev="tv" type="update">
        Moved intake component to the released components section.
      </action>

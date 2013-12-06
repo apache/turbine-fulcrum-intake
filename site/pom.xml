@@ -19,37 +19,24 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  
   <parent>
-    <groupId>org.apache.fulcrum</groupId>
-    <artifactId>fulcrum-parent</artifactId>
-    <version>1</version>
+  	<artifactId>turbine-parent</artifactId>
+  	<groupId>org.apache.turbine</groupId>
+  	<version>3</version>
   </parent>
+  
   <groupId>org.apache.fulcrum</groupId>
   <artifactId>fulcrum-site</artifactId>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
+  <packaging>pom</packaging>
   <name>Fulcrum Component Library</name>
   <url>http://turbine.apache.org/fulcrum</url>
   <inceptionYear>2001</inceptionYear>
-  
-  <distributionManagement>
-    <!--
-      This POM's parent POM (the Apache root POM) provides repositories. Unfortunately,
-      this allows for accidental deployments. So we disable them here by providing
-      a dummy repository. Use "mvn -Prc deploy" (Apache snapshot repository) or
-      "mvn -Prelease deploy" (Apache release repository), if you really want to deploy.
-    -->
-    <repository>
-      <id>dummy</id>
-      <name>Dummy to avoid accidental deploys</name>
-      <url />
-    </repository>
-    <site>
-      <id>apache.website</id>
-      <name>Fulcrum Website</name>
-      <url>${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/fulcrum/</url>
-    </site>        
-  </distributionManagement>
-  
+  <organization>
+    <name>Apache Software Foundation</name>
+    <url>http://turbine.apache.org/</url>
+  </organization>  
   <!--
     This section *must* be overwritten by subprojects. It is only to allow
     a release of the fulcrum-parent POM.
@@ -219,6 +206,68 @@
     </contributor>
   </contributors>
   
+ <build>
+    <plugins>
+      <plugin> <!-- Thanks to Apache Commons -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-scm-publish-plugin</artifactId>
+        <version>1.0-beta-2</version>
+        <configuration>
+          <content>${project.reporting.outputDirectory}</content>
+          <pubScmUrl>scm:svn:${turbine.scmPubUrl}</pubScmUrl>
+          <checkoutDirectory>${turbine.scmPubCheckoutDirectory}</checkoutDirectory>
+          <tryUpdate>true</tryUpdate>
+          <!--dryRun>true</dryRun-->
+          <skipDeletedFiles>true</skipDeletedFiles>
+          <ignorePathsToDelete>
+            <ignorePathToDelete>fulcrum-bsf**</ignorePathToDelete>
+            <ignorePathToDelete>fulcrum-cache**</ignorePathToDelete>
+            <ignorePathToDelete>fulcrum-commonsemail**</ignorePathToDelete>
+            <ignorePathToDelete>fulcrum-configuration**</ignorePathToDelete>
+            <ignorePathToDelete>fulcrum-crypto**</ignorePathToDelete>     
+            <ignorePathToDelete>fulcrum-dvsl**</ignorePathToDelete>    
+            <ignorePathToDelete>fulcrum-factory**</ignorePathToDelete>
+            <ignorePathToDelete>fulcrum-groovy**</ignorePathToDelete>
+            <ignorePathToDelete>fulcrum-hsqldb**</ignorePathToDelete>
+            <ignorePathToDelete>fulcrum-intake**</ignorePathToDelete>   
+            <ignorePathToDelete>fulcrum-jetty**</ignorePathToDelete>
+            <ignorePathToDelete>fulcrum-json**</ignorePathToDelete>
+            <ignorePathToDelete>fulcrum-localization**</ignorePathToDelete>       
+            <ignorePathToDelete>fulcrum-mimetype**</ignorePathToDelete>
+            <ignorePathToDelete>fulcrum-naming**</ignorePathToDelete>    
+            <ignorePathToDelete>fulcrum-osworkflow**</ignorePathToDelete>
+            <ignorePathToDelete>fulcrum-parent**</ignorePathToDelete>
+            <ignorePathToDelete>fulcrum-parser**</ignorePathToDelete>
+            <ignorePathToDelete>fulcrum-pbe**</ignorePathToDelete>      
+            <ignorePathToDelete>fulcrum-pool**</ignorePathToDelete>         
+            <ignorePathToDelete>fulcrum-quartz**</ignorePathToDelete>
+            <ignorePathToDelete>fulcrum-resourcemanager**</ignorePathToDelete>
+            <ignorePathToDelete>fulcrum-scheduler**</ignorePathToDelete>
+            <ignorePathToDelete>fulcrum-script**</ignorePathToDelete>       
+            <ignorePathToDelete>fulcrum-security**</ignorePathToDelete>
+            <ignorePathToDelete>fulcrum-servicemanager**</ignorePathToDelete>    
+            <ignorePathToDelete>fulcrum-spring**</ignorePathToDelete>   
+            <ignorePathToDelete>fulcrum-template**</ignorePathToDelete>
+            <ignorePathToDelete>fulcrum-testcontainer**</ignorePathToDelete>      
+            <ignorePathToDelete>fulcrum-upload**</ignorePathToDelete>   
+            <ignorePathToDelete>fulcrum-xmlrpc**</ignorePathToDelete>
+            <ignorePathToDelete>fulcrum-xslt**</ignorePathToDelete>    
+            <ignorePathToDelete>fulcrum-yaafi**</ignorePathToDelete>   
+            <ignorePathToDelete>fulcrum-yaafi-crypto**</ignorePathToDelete>
+          </ignorePathsToDelete>
+        </configuration>
+        <executions>
+          <execution>
+            <id>scm-publish</id>
+            <phase>site-deploy</phase><!-- deploy site with maven-scm-publish-plugin -->
+            <goals>
+              <goal>publish-scm</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
   <reporting>
     <plugins>
       <plugin>
@@ -237,42 +286,14 @@
               </reports>
            </reportSet>
         </reportSets>        
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId>
-        <version>2.0-beta-6</version>
-        <configuration>
-          <!-- Exclude the navigation file for Maven 1 sites
-               and the changes file used by the changes-plugin,
-               as they interfere with the site generation. -->
-          <moduleExcludes>
-            <xdoc>navigation.xml,changes.xml</xdoc>
-          </moduleExcludes>
-        </configuration>
-      </plugin>
-      <plugin>
-        <!-- generate the changes report from changes.xml -->
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-changes-plugin</artifactId>
-        <version>2.0-beta-3</version>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>changes-report</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>            
+      </plugin>         
     </plugins>
   </reporting>
   
   <properties>
-    <!--
-      Make the deployment protocol pluggable. This allows to switch to
-      other protocols like scpexe, which some users prefer over scp.
-    -->
-    <fulcrum.deployment.protocol>scpexe</fulcrum.deployment.protocol>
+   <turbine.site.path>fulcrum</turbine.site.path>
+   <turbine.site.cache>${user.home}/fulcrum-sites</turbine.site.cache>
+   <turbine.scmPubCheckoutDirectory>${turbine.site.cache}/site</turbine.scmPubCheckoutDirectory>
   </properties>
 
 </project>
