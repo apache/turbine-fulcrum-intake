@@ -50,6 +50,7 @@
       <item name="HsqlDB"                href="/fulcrum-hsqldb/"/>      
       <item name="Intake"                href="/fulcrum-intake/"/>
       <item name="Jetty"      			 href="/fulcrum-jetty/"/>      
+      <item name="JSON"      			 href="/fulcrum-json/"/> 
       <item name="Localization"          href="/fulcrum-localization/"/>
       <item name="Mimetype"              href="/fulcrum-mimetype/"/>
       <item name="Parser"                href="/fulcrum-parser/"/>

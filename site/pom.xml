@@ -47,6 +47,15 @@
     <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/site</url>
   </scm>
   
+      <!-- Required for staging to work -->
+     <distributionManagement>
+    <site>
+        <id>turbine.apache.org</id>
+        <name>Fulcrum JSON Website</name>
+        <url>http://turbine.apache.org/fulcrum/</url>
+      </site>    
+     </distributionManagement> 
+  
   <mailingLists>
     <mailingList>
       <name>Turbine Dev List</name>
