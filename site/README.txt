@@ -24,7 +24,7 @@ ok, you can check your .xml files back into Subversion.
 
 To test what files would be deleted or updated run:
 
-mvn scm-publish:publish-scm -Dscmpublish.dryRun=true
+mvn site:stage scm-publish:publish-scm -Dscmpublish.dryRun=true
 
 To deploy the site execute:
 

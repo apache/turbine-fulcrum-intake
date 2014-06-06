@@ -51,8 +51,8 @@
      <distributionManagement>
     <site>
         <id>turbine.apache.org</id>
-        <name>Fulcrum JSON Website</name>
-        <url>http://turbine.apache.org/fulcrum/</url>
+        <name>Fulcrum Subproject Main Website</name>
+        <url>scm:svn:https://svn.apache.org/repos/infra/websites/production/turbine/content/fulcrum/</url>
       </site>    
      </distributionManagement> 
   
@@ -220,9 +220,9 @@
       <plugin> <!-- Thanks to Apache Commons -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-scm-publish-plugin</artifactId>
-        <version>1.0-beta-2</version>
+        <version>1.1</version>
         <configuration>
-          <content>${project.reporting.outputDirectory}</content>
+          <content>${siteContent.path}</content>
           <pubScmUrl>scm:svn:${turbine.scmPubUrl}</pubScmUrl>
           <checkoutDirectory>${turbine.scmPubCheckoutDirectory}</checkoutDirectory>
           <tryUpdate>true</tryUpdate>
@@ -301,7 +301,8 @@
   
   <properties>
    <turbine.site.path>fulcrum</turbine.site.path>
-   <turbine.site.cache>${user.home}/fulcrum-sites</turbine.site.cache>
+   <turbine.site.cache>${project.build.directory}/fulcrum-sites</turbine.site.cache>
+   <siteContent.path>${project.build.directory}/staging</siteContent.path>
    <turbine.scmPubCheckoutDirectory>${turbine.site.cache}/site</turbine.scmPubCheckoutDirectory>
   </properties>
 
