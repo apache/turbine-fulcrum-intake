@@ -37,24 +37,31 @@
         not familiar with the Apache SVN repositories, please refer to
         the <a href="http://apache.org/dev/version-control.html">documentation</a>).
       </p>
+    <h4>Maven 2 Build</h4>
       <p>
-        Please refer to the Maven <a
-        href="http://maven.apache.org/maven-1.x/start/">Getting
+        Please refer to the Maven 2/3 <a
+        href="http://maven.apache.org/guides/getting-started/">Getting
         Started</a> document for instructions on how to install and
         use Maven.
       </p>
       <p>
         From the root directory of the Fulcrum project (where you checked
-        out the code to or unpacked a source distribution), simply type
-        'maven fulcrum:build' and press enter.  This will start a process that will
+        out the code to or unpacked a source distribution), simply type 'mvn install'
+        and press enter.  This will start a process that will
         build each component.  After the component is built, it will be
-        installed into you local maven repository.
-      </p>
+        installed into you local maven repository. 
+       </p>
       <p>
-        To build a local copy of the documentation, use 'maven multiproject:site'.
-        This will build a local copy of the web site in the 'target/docs'
-        directory.  Note, this uses a LOT of memory.  If you can't build all of them,
-        build them individually.
+       To build a local copy of the documentation, use 'mvn site'. 
+       This will build a local copy of the web site in the 'target/site' directory. 
+       Note, this uses a LOT of memory. If you can't build all of them, build them individually.  
+      </p>
+      <h4>Maven 1 Build</h4>
+            <p>  
+        For Maven 1 modules please refer to the Maven 1 <a
+        href="http://maven.apache.org/maven-1.x/start/">Getting
+        Started</a> documents.
+        Building a Maven 1 component is done inside the component folder using 'maven fulcrum:build'. 
       </p>
        <subsection name="Current Build Issues">
         <p>
@@ -71,10 +78,17 @@
           the reports being generated, or you may run out of memory when you do a
           complete build.  One approach to take is to turn off running unit tests
           and excluding various components:
+         </p>
+        <h4>Maven 2 Build</h4>
+        <p>You could use the <strong>-pl (--projects)</strong> maven command line option. Yet another approach would be to use custom profile.
+        </p>
+        <source><![CDATA[
+$ maven -pl parser,crypto site'
+]]></source>
+         <h4>Maven 1 Build</h4>
 <source><![CDATA[
 $ maven multiproject:site -Dmaven.test.skip=true -Dmaven.multiproject.excludes=security/*.*,cache/*.*,scheduler/*.*'
 ]]></source>
-        </p>
       </subsection>
       <subsection name="Maven Repositories">
         <p>
