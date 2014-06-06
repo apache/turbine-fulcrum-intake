@@ -20,9 +20,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.apache.fulcrum</groupId>
-    <artifactId>fulcrum-parent</artifactId>
-    <version>1</version>
+    <artifactId>turbine-parent</artifactId>
+       <groupId>org.apache.turbine</groupId>
+       <version>3</version>
   </parent>
   <artifactId>fulcrum</artifactId>
   <packaging>pom</packaging>
@@ -31,7 +31,7 @@
   <url>http://turbine.apache.org/fulcrum</url>
   <inceptionYear>2001</inceptionYear>
 
-  <modules>
+  <modules>  
     <module>cache</module>    
     <module>commonsemail</module>
     <module>configuration/impl</module>    
@@ -41,6 +41,7 @@
     <module>hsqldb</module>    
     <module>intake</module>    
     <module>jetty</module>    
+    <module>json/api</module>   
     <module>mimetype</module>        
     <module>parser</module>    
     <module>pbe</module>    

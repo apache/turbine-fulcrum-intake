@@ -32,7 +32,7 @@ import org.apache.xmlrpc.XmlRpcException;
  *
  * @avalon.service version="1.0"
  * @author <a href="mailto:josh@stonecottage.com">Josh Lucas</a>
- * @author <a href="mailto:magnus@handtolvur.is">Magnús Þór Torfason</a>
+ * @author <a href="mailto:magnus@handtolvur.is">MagnÃºs ÃžÃ³r Torfason</a>
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @author <a href="mailto:jvanzyl@periapt.com">Jason van Zyl</a>
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
