@@ -44,7 +44,7 @@
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/site</connection>
     <developerConnection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/site</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/site</url>
+    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/site</url>
   </scm>
   
       <!-- Required for staging to work -->

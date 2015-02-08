@@ -33,7 +33,7 @@
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/xslt/</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/xslt/</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/xslt/</url>
+    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/xslt/</url>
   </scm>
 
   <distributionManagement>

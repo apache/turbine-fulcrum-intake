@@ -35,7 +35,7 @@
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/yaafi/</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/yaafi/</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/yaafi/</url>
+    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/yaafi/</url>
   </scm>
 
   <distributionManagement>
