@@ -35,7 +35,7 @@
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/hsqldb/</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/hsqldb/</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/hsqldb/</url>
+    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/hsqldb/</url>
   </scm>
 
   <distributionManagement>

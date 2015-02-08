@@ -33,7 +33,7 @@
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/crypto/</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/crypto/</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/crypto/</url>
+    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/crypto/</url>
   </scm>
 
   <distributionManagement>
