@@ -33,7 +33,7 @@
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/localization/</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/localization/</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/localization/</url>
+    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/localization/</url>
   </scm>
 
   <distributionManagement>

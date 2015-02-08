@@ -17,7 +17,7 @@
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/jetty/</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/jetty/</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/jetty/</url>
+    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/jetty/</url>
   </scm>
 
   <distributionManagement>

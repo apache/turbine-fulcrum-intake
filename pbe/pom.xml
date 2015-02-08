@@ -16,7 +16,7 @@
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/pbe/</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/pbe/</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/pbe/</url>
+    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/pbe/</url>
   </scm>
 
   <distributionManagement>

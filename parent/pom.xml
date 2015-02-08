@@ -41,7 +41,7 @@
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/parent</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/parent</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/parent</url>
+    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/parent</url>
   </scm>
 
   <profiles>

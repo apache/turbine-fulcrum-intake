@@ -16,7 +16,7 @@
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/resourcemanager/</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/resourcemanager/</developerConnection>
-    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/resourcemanager/</url>
+    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/resourcemanager/</url>
   </scm>
 
   <distributionManagement>
