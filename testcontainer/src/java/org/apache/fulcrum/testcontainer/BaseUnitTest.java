@@ -20,6 +20,8 @@ package org.apache.fulcrum.testcontainer;
 import junit.framework.TestCase;
 
 import org.apache.avalon.framework.component.ComponentException;
+import org.apache.avalon.framework.logger.ConsoleLogger;
+
 /**
  * Base class for unit tests for components. This version doesn't load the container until the
  * first request for a component. This allows the tester to populate the configurationFileName and
@@ -31,14 +33,18 @@ import org.apache.avalon.framework.component.ComponentException;
  */
 public class BaseUnitTest extends TestCase
 {
-
     public static final String CONTAINER_ECM="CONTAINER_ECM";
     public static final String CONTAINER_YAAFI="CONTAINER_YAAFI";
+
     /** Key used in the context for defining the application root */
     public static String COMPONENT_APP_ROOT = Container.COMPONENT_APP_ROOT;
 
     /** Pick the default container to be Yaafi **/
     public static String containerType = CONTAINER_YAAFI;
+
+    /** Use INFO for ConsoleLogger */
+    public static int defaultLogLevel = ConsoleLogger.LEVEL_INFO;
+
     /** Container for the components */
     private Container container;
     /** Setup our default configurationFileName */
@@ -47,6 +53,8 @@ public class BaseUnitTest extends TestCase
     private String roleFileName = "src/test/TestRoleConfig.xml";
     /** Setup our default parameterFileName */
     private String parameterFileName = null;
+    /** Set the log level (only works for YAAFI container) */
+    private int logLevel = defaultLogLevel;
 
     /**
 	 * Gets the configuration file name for the container should use for this test. By default it
@@ -68,6 +76,13 @@ public class BaseUnitTest extends TestCase
     protected void setRoleFileName(String roleFileName)
     {
         this.roleFileName = roleFileName;
+    }
+
+    /**
+     * Set the console logger level,
+     */
+    protected void setLogLevel(int logLevel) {
+        this.logLevel = logLevel;
     }
 
     /**
@@ -132,7 +147,7 @@ public class BaseUnitTest extends TestCase
                 container = new ECMContainer();
             }
             else {
-                container = new YAAFIContainer();
+                container = new YAAFIContainer(logLevel);
             }
             container.startup(getConfigurationFileName(), getRoleFileName(),getParameterFileName());
         }

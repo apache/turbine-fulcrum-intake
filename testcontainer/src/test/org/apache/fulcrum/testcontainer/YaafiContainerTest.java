@@ -17,9 +17,10 @@ package org.apache.fulcrum.testcontainer;
  * specific language governing permissions and limitations
  * under the License.
  */
-import java.io.File;
-
 import org.apache.avalon.framework.component.ComponentException;
+import org.apache.avalon.framework.logger.ConsoleLogger;
+
+import java.io.File;
 /**
  * Basic testing of the Container
  *
@@ -42,6 +43,7 @@ public class YaafiContainerTest extends BaseUnitTest
     {
         assertTrue(true);
     }
+
     public void testComponentUsage()
     {
         SimpleComponent sc = null;
@@ -60,6 +62,7 @@ public class YaafiContainerTest extends BaseUnitTest
         assertEquals(sc.getAppRoot(),sc.getAppRoot2());
         this.release(sc);
     }
+
     public void testAlternativeRoles()
     {
         SimpleComponent sc = null;
@@ -99,5 +102,11 @@ public class YaafiContainerTest extends BaseUnitTest
         {
             // We expect to fail with a ConfigurationException
         }
+    }
+
+    public void testWithLogLevel() throws Exception
+    {
+        this.setLogLevel(ConsoleLogger.LEVEL_ERROR);
+        this.lookup(SimpleComponent.class.getName());
     }
 }

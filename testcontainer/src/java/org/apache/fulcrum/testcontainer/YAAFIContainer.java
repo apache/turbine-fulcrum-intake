@@ -19,8 +19,6 @@ package org.apache.fulcrum.testcontainer;
  * under the License.
  */
 
-import java.io.File;
-
 import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
@@ -28,6 +26,8 @@ import org.apache.avalon.framework.logger.ConsoleLogger;
 import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerConfiguration;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
+
+import java.io.File;
 
 /**
  * This is a simple YAAFI based container that can be used in unit test
@@ -43,13 +43,25 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
     /** Component manager */
     private ServiceContainer manager;
 
+    /** The log level for the ConsoleLogger */
+    private int logLevel = ConsoleLogger.LEVEL_DEBUG;
+
     /**
      * Constructor
      */
     public YAAFIContainer()
     {
-        // org.apache.log4j.BasicConfigurator.configure();
-        this.enableLogging( new ConsoleLogger( ConsoleLogger.LEVEL_DEBUG ) );
+        this.enableLogging( new ConsoleLogger( logLevel ) );
+        this.config = new ServiceContainerConfiguration();
+    }
+
+    /**
+     * Constructor
+     */
+    public YAAFIContainer(int logLevel)
+    {
+        this.logLevel = logLevel;
+        this.enableLogging( new ConsoleLogger( logLevel ) );
         this.config = new ServiceContainerConfiguration();
     }
 
@@ -69,7 +81,7 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
         this.config.setComponentConfigurationLocation( configFileName );
         this.config.setComponentRolesLocation( roleFileName );
         this.config.setParametersLocation( parametersFileName );
-        this.config.setLogger( new ConsoleLogger( ConsoleLogger.LEVEL_DEBUG ) );
+        this.config.setLogger( new ConsoleLogger( logLevel ) );
 
         File configFile = new File(configFileName);
 
