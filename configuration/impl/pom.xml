@@ -92,7 +92,7 @@
     <dependency>
       <groupId>commons-configuration</groupId>
       <artifactId>commons-configuration</artifactId>
-      <version>1.5</version>
+      <version>1.6</version>
     </dependency>
     
     <!-- testing dependencies -->
@@ -111,8 +111,8 @@
   </dependencies>
 
   <build>
-    <sourceDirectory>${basedir}/impl/src/java</sourceDirectory>
-    <testSourceDirectory>${basedir}/impl/src/test</testSourceDirectory>
+    <sourceDirectory>${basedir}/src/java</sourceDirectory>
+    <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
   </build>
 	
 </project>
