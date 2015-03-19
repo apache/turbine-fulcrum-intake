@@ -19,13 +19,6 @@ package org.apache.fulcrum.yaafi.framework.container;
  * under the License.
  */
 
-import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Properties;
-
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
@@ -46,15 +39,18 @@ import org.apache.fulcrum.yaafi.framework.configuration.ComponentConfigurationPr
 import org.apache.fulcrum.yaafi.framework.constant.AvalonYaafiConstants;
 import org.apache.fulcrum.yaafi.framework.context.AvalonToYaafiContextMapper;
 import org.apache.fulcrum.yaafi.framework.context.YaafiToAvalonContextMapper;
+import org.apache.fulcrum.yaafi.framework.crypto.CryptoStreamFactory;
 import org.apache.fulcrum.yaafi.framework.role.RoleConfigurationParser;
 import org.apache.fulcrum.yaafi.framework.role.RoleConfigurationParserImpl;
 import org.apache.fulcrum.yaafi.framework.role.RoleEntry;
-import org.apache.fulcrum.yaafi.framework.util.ConfigurationUtil;
-import org.apache.fulcrum.yaafi.framework.util.InputStreamLocator;
-import org.apache.fulcrum.yaafi.framework.util.StringUtils;
-import org.apache.fulcrum.yaafi.framework.util.ToStringBuilder;
-import org.apache.fulcrum.yaafi.framework.util.Validate;
-import org.apache.fulcrum.yaafi.framework.crypto.CryptoStreamFactory;
+import org.apache.fulcrum.yaafi.framework.util.*;
+
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * Yet another avalon framework implementation (YAAFI).
@@ -89,7 +85,7 @@ public class ServiceContainerImpl
     /** is the parameters file encrypted? */
     private String isParametersEncrypted;
 
-    /** The application directory aka the current woring directory */
+    /** The application directory aka the current working directory */
     private File applicationRootDir;
 
     /** The directory for storing temporary files */
@@ -235,7 +231,7 @@ public class ServiceContainerImpl
 
         this.getLogger().debug( "Using the following container type : " + this.getContainerFlavour() );
 
-        // process the caller-suppied context here
+        // process the caller-supplied context here
 
         try
         {
@@ -255,7 +251,7 @@ public class ServiceContainerImpl
                 this.getContainerFlavour()
                 );
 
-            // don't keep a reference of the caller-supplide context
+            // don't keep a reference of the caller-supplied context
 
             this.callerContext = null;
         }
@@ -345,7 +341,7 @@ public class ServiceContainerImpl
 
         // evaluate a list of service managers managing their own set of services
         // independent from the Avalon container. This service managers are used
-        // to find services implemented as Spring bean or remote webservices.
+        // to find services implemented as Spring bean or remote web services.
 
         Configuration currServiceManagerList = configuration.getChild(
             SERVICEMANAGER_LIST_KEY
@@ -436,7 +432,7 @@ public class ServiceContainerImpl
                 );
         }
 
-        // create the service implementaion instances
+        // create the service implementation instances
 
         List currServiceList = this.createServiceComponents(
             this.roleConfiguration,
@@ -493,11 +489,11 @@ public class ServiceContainerImpl
             this.getLogger().debug("Disposing all services");
         }
 
-        // decommision all servcies
+        // de-commission all services
 
-        this.decommisionAll( this.getServiceList() );
+        this.decommissionAll(this.getServiceList());
 
-        // dispose all servcies
+        // dispose all services
 
         this.disposeAll( this.getServiceList() );
 
@@ -536,7 +532,7 @@ public class ServiceContainerImpl
         Validate.notNull( configuration, "configuration" );
 
         int exceptionCounter = 0;
-        ServiceComponent serviceComponent = null;
+        ServiceComponent serviceComponent;
 
         this.getLogger().warn("Reconfiguring all services ...");
 
@@ -562,13 +558,13 @@ public class ServiceContainerImpl
         {
             serviceComponent = (ServiceComponent) this.getServiceList().get(i);
 
-            Configuration serviceComponentConfiguraton = this.getServiceConfiguration().getChild(
+            Configuration serviceComponentConfiguration = this.getServiceConfiguration().getChild(
                 serviceComponent.getShorthand()
                 );
 
             try
             {
-                serviceComponent.setConfiguration(serviceComponentConfiguraton);
+                serviceComponent.setConfiguration(serviceComponentConfiguration);
                 serviceComponent.reconfigure();
             }
             catch(Throwable t)
@@ -607,8 +603,8 @@ public class ServiceContainerImpl
      */
     public synchronized RoleEntry[] getRoleEntries()
     {
+        ServiceComponent serviceComponent;
         List serviceList = this.getServiceList();
-        ServiceComponent serviceComponent = null;
         RoleEntry[] result = new RoleEntry[serviceList.size()];
 
         for( int i=0; i<result.length; i++ )
@@ -634,7 +630,7 @@ public class ServiceContainerImpl
         for( int i=0; i<names.length; i++ )
         {
             // ensure that the service exists since during our reconfiguration
-            // we might use a stle recofniguration entry
+            // we might use a stale reconfiguration entry
 
             if( this.getServiceMap().get(names[i]) != null )
             {
@@ -650,7 +646,7 @@ public class ServiceContainerImpl
     {
         Validate.notEmpty( name, "name" );
 
-        boolean result = false;
+        boolean result;
 
         synchronized(this)
         {
@@ -692,7 +688,7 @@ public class ServiceContainerImpl
         Validate.notEmpty( name, "name" );
 
         Object result = null;
-        ServiceComponent serviceManagerComponent = null;
+        ServiceComponent serviceManagerComponent;
 
         try
         {
@@ -775,7 +771,7 @@ public class ServiceContainerImpl
     {
         this.waitForReconfiguration();       
         ServiceComponent serviceComponent = this.getServiceComponentEx(name);
-        this.decommision(serviceComponent);
+        this.decommission(serviceComponent);
     }
 
     /**
@@ -907,7 +903,7 @@ public class ServiceContainerImpl
         Validate.notEmpty( name, "name" );
 
         Object result = null;
-        ServiceComponent serviceManagerComponent = null;
+        ServiceComponent serviceManagerComponent;
 
         for(int i=0; i<this.fallbackServiceManagerList.size(); i++)
         {
@@ -944,7 +940,7 @@ public class ServiceContainerImpl
     {
         Validate.notEmpty( name, "name" );
 
-        ServiceComponent serviceManagerComponent = null;
+        ServiceComponent serviceManagerComponent;
 
         for(int i=0; i<this.fallbackServiceManagerList.size(); i++)
         {
@@ -1000,7 +996,7 @@ public class ServiceContainerImpl
     }
 
     /**
-     * @return The logger of the service containe
+     * @return The logger of the service container
      */
     private Logger getLogger()
     {
@@ -1024,7 +1020,7 @@ public class ServiceContainerImpl
     private void incarnateAll(List serviceList)
         throws Exception
     {
-        ServiceComponent serviceComponent = null;
+        ServiceComponent serviceComponent;
 
         // configure all services
 
@@ -1079,7 +1075,7 @@ public class ServiceContainerImpl
             roleEntry.getLogCategory()
             );
 
-        Configuration serviceComponentConfiguraton = this.getServiceConfiguration().getChild(
+        Configuration serviceComponentConfiguration = this.getServiceConfiguration().getChild(
             roleEntry.getShorthand()
             );
 
@@ -1090,7 +1086,7 @@ public class ServiceContainerImpl
         serviceComponent.setLogger(serviceComponentLogger);
         serviceComponent.setServiceManager(this);
         serviceComponent.setContext(serviceComponentContext);
-        serviceComponent.setConfiguration(serviceComponentConfiguraton);
+        serviceComponent.setConfiguration(serviceComponentConfiguration);
         serviceComponent.setParameters(serviceComponentParameters);
 
         // load the implementation class of the service
@@ -1118,32 +1114,30 @@ public class ServiceContainerImpl
     }
 
     /**
-     * Decommision a ist of services.
+     * De-commission a ist of services.
      *
-     * @param serviceList the list of services to decommision
+     * @param serviceList the list of services to decommission
      */
-    private void decommisionAll(List serviceList)
+    private void decommissionAll(List serviceList)
     {
-        ServiceComponent serviceComponent = null;
-
         for( int i=serviceList.size()-1; i>=0; i-- )
         {
-            serviceComponent = (ServiceComponent) serviceList.get(i);
-            this.decommision( serviceComponent );
+            ServiceComponent serviceComponent = (ServiceComponent) serviceList.get(i);
+            this.decommission(serviceComponent);
         }
     }
 
     /**
-     * Decommision of a single service component. Decommision consists of running the
-     * whole Avalon decommision lifecycle process for a service component. After
-     * decommision the service is not operational any longer. During decommisioning
+     * Decommission of a single service component. Decommission consists of running the
+     * whole Avalon decommission lifecycle process for a service component. After
+     * decommission the service is not operational any longer. During decommissioning
      * we ignore any exceptions since it is quite common that something goes wrong.
      *
-     * @param serviceComponent The service component to decommision
+     * @param serviceComponent The service component to decommission
      */
-    private void decommision( ServiceComponent serviceComponent )
+    private void decommission(ServiceComponent serviceComponent)
     {
-        this.getLogger().debug( "Decommision the service " + serviceComponent.getShorthand() );
+        this.getLogger().debug( "Decommission the service " + serviceComponent.getShorthand() );
 
         try
         {
@@ -1151,7 +1145,7 @@ public class ServiceContainerImpl
         }
         catch (Throwable e)
         {
-            String msg = "Decommisioning the following service failed : " + serviceComponent.getName();
+            String msg = "Decommissioning the following service failed : " + serviceComponent.getName();
             this.getLogger().error( msg, e );
         }
     }
@@ -1163,11 +1157,9 @@ public class ServiceContainerImpl
      */
     private void disposeAll(List serviceList)
     {
-        ServiceComponent serviceComponent = null;
-
         for( int i=serviceList.size()-1; i>=0; i-- )
         {
-            serviceComponent = (ServiceComponent) serviceList.get(i);
+            ServiceComponent serviceComponent = (ServiceComponent) serviceList.get(i);
             this.dispose( serviceComponent );
         }
     }
@@ -1175,7 +1167,7 @@ public class ServiceContainerImpl
     /**
      * Disposing of a single service component.
 
-     * @param serviceComponent The service component to decommision
+     * @param serviceComponent The service component to decommission
      */
     private void dispose( ServiceComponent serviceComponent )
     {
@@ -1288,7 +1280,7 @@ public class ServiceContainerImpl
     /**
      * Load a configuration file either from a file or using the class loader.
      * @param location the location of the file
-     * @param isEncrypted  is the configuration encryped
+     * @param isEncrypted  is the configuration encrypted
      * @return The loaded configuration
      * @throws Exception Something went wrong
      */
@@ -1306,14 +1298,16 @@ public class ServiceContainerImpl
             {
                 is = this.getDecryptingInputStream( is, isEncrypted );
                 result = builder.build( is );
-                is.close();
-                is = null;
             }
             catch ( Exception e )
             {
                 String msg = "Unable to parse the following file : " + location;
                 this.getLogger().error( msg , e );
                 throw e;
+            }
+            finally
+            {
+                safeClose(is);
             }
         }
 
@@ -1323,14 +1317,14 @@ public class ServiceContainerImpl
     /**
      * Load a configuration property file either from a file or using the class loader.
      * 
-     * @return The loaded proeperty file
+     * @return The loaded property file
      * @throws ConfigurationException Something went wrong
      */
     private Properties loadComponentConfigurationProperties()
     	throws ConfigurationException
     {
-        Properties result = new Properties();
-        ComponentConfigurationPropertiesResolver resolver = null;
+        Properties result;
+        ComponentConfigurationPropertiesResolver resolver;
 
         String className = this.componentConfigurationPropertiesResolverConfig.getChild("resolver").getValue(
             ComponentConfigurationPropertiesResolverImpl.class.getName()
@@ -1374,12 +1368,17 @@ public class ServiceContainerImpl
 
         if( is != null )
         {
-            is = this.getDecryptingInputStream( is, isEncrypted );
-            Properties props = new Properties();
-            props.load( is );
-            is.close();
-            is = null;
-            result = Parameters.fromProperties( props );
+            try
+            {
+                is = this.getDecryptingInputStream( is, isEncrypted );
+                Properties props = new Properties();
+                props.load( is );
+                result = Parameters.fromProperties( props );
+            }
+            finally
+            {
+                safeClose(is);
+            }
         }
 
         return result;
@@ -1599,6 +1598,21 @@ public class ServiceContainerImpl
         catch(InterruptedException e)
         {
             // nothing to do
+        }
+    }
+
+    private void safeClose(InputStream is)
+    {
+        if(is != null)
+        {
+            try
+            {
+                is.close();
+            }
+            catch(Exception e)
+            {
+                getLogger().error("Failed to close an input stream", e);
+            }
         }
     }
 }

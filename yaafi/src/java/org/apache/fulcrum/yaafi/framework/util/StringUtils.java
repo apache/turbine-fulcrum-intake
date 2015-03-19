@@ -260,10 +260,14 @@ public class StringUtils
     }
 
     /**
-     * Perform a series of substitutions. The substitions
+     * Perform a series of substitutions. The substitutions
      * are performed by replacing ${variable} in the target
      * string with the value of provided by the key "variable"
      * in the provided hashtable.
+     *
+     * If the "variable" is not found then an exception is
+     * thrown when "isLenient" is false - otherwise the unexpanded
+     * ${variable} is written to the string buffer. 
      *
      * @param argStr target string
      * @param vars name/value pairs used for substitution
@@ -311,6 +315,10 @@ public class StringUtils
                                 if (!isLenient)
                                 {
                                     throw new RuntimeException("No value found for : " + nameBuf );
+                                }
+                                else
+                                {
+                                    argBuf.append("${").append(nameBuf).append("}");
                                 }
                             }
 

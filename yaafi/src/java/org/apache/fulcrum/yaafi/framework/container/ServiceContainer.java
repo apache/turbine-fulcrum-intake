@@ -41,7 +41,7 @@ public interface ServiceContainer
 {
     /**
      * Return the Avalon parameters loaded by the Avalon service container
-     * @return the Avalon paramters
+     * @return the Avalon parameters
      */
     Parameters getParameters();
 }

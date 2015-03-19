@@ -24,6 +24,20 @@
   </properties>
 
   <body>
+    <release version="1.0.7-SNAPSHOT" date="as in SVN">
+      <action dev="sgoeschl" type="update" data="2015-03-19">
+        Upgrading to jamon-2.81.
+      </action>      
+      <action dev="sgoeschl" type="update" data="2015-03-19">
+        Fixing typos and cleaning up code to keep IntelliJ happy.
+      </action>
+      <action dev="sgoeschl" type="update" data="2010-03-02">
+        During property expansion of the component configuration any
+        non-expanded variables are retained in the lenient mode. This
+        fixes the problem that some services doing the property expansion
+        dynamically.
+      </action>
+    </release>
     <release version="1.0.6" date="2009-03-26">
       <action dev="sgoeschl" type="add">
         Added support of "fallback service managers" to transparently lookup

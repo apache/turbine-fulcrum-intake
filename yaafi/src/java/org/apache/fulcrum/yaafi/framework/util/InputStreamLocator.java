@@ -151,7 +151,7 @@ public class InputStreamLocator
 
         if( is == null )
         {
-            this.getLogger().warn("Unable to find any resource with the name '" + location + "'");
+            this.getLogger().info("Unable to find any resource with the name '" + location + "'");
         }
 
         return is;
