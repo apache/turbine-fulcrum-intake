@@ -30,6 +30,8 @@
     domains\domain\mailSmtpPort := the SMTP port (optional)
     domains\domain\mailSmtpConnectionTimeout := socket connection timeout value in milliseconds
     domains\domain\mailSmtpTimeout := socket I/O timeout value in milliseconds
+    domains\domain\mailUseSSL := use SSL for securing the SMTP protocol
+    domains\domain\mailUseTLS := use TLS for securing the SMTP protocol
     domains\domain\mailSmtpSendPartial := send the email to the recipients even if one address is rejected
     domains\domain\mailFromEmail := the sender address of the email (optional)
     domains\domain\mailFromName := the sender name of the email (optional)
@@ -65,6 +67,8 @@
         <mailSmtpPort>6025</mailSmtpPort>
         <mailSmtpConnectionTimeout>60000</mailSmtpConnectionTimeout>
         <mailSmtpTimeout>60000</mailSmtpTimeout>
+        <mailUseSSL>false</mailUseSSL>
+        <mailUseTLS>false</mailUseTLS>
         <mailSmtpSendPartial>true</mailSmtpSendPartial>
         <mailFromEmail>demo@it20one.at</mailFromEmail>
         <mailFromName>E-Billing Test</mailFromName>

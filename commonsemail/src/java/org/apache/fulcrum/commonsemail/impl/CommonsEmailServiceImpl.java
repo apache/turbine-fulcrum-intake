@@ -678,14 +678,18 @@ public class CommonsEmailServiceImpl
             this.dump(mimeMessage,"original");
         }
 
+        // overwrite the various recipients
+
         mimeMessage = this.overwrite(domain,mimeMessage);
 
-        // dump the original MimeMessage
+        // dump the updated MimeMessage
 
         if( domain.isMailDump() )
         {
             this.dump(mimeMessage,"overwrite");
         }
+
+        // dump the final MimeMessage
 
         result = this.onPostProcessMimeMessage(mimeMessage);
 
@@ -695,6 +699,47 @@ public class CommonsEmailServiceImpl
         }
 
         return result;
+    }
+
+    /**
+     * Add an additional mime message headers defined for the domain.
+     *
+     * @param domain the domain configuration
+     * @param mimeMessage the mime message to update
+     * @throws MessagingException accessing the mime message headers failed
+     */
+    private void addMimeMessageHeaders(CommonsEmailDomainEntry domain, MimeMessage mimeMessage) throws MessagingException
+    {
+        Hashtable headers = domain.getHeaders();
+
+        if (headers != null && headers.size() > 0)
+        {
+            Iterator iteratorHeaderNames = headers.keySet().iterator();
+            while (iteratorHeaderNames.hasNext())
+            {
+                String headerName = (String) iteratorHeaderNames.next();
+                String headerValue = (String) headers.get(headerName);
+                String[] currHeaderValues = mimeMessage.getHeader(headerName) ;
+                boolean newHeaderValueExists = false;
+
+                if(currHeaderValues != null)
+                {
+                    for(String currHeaderValue : currHeaderValues)
+                    {
+                        if(headerValue.equals(currHeaderValue))
+                        {
+                            newHeaderValueExists = true;
+                            break;
+                        }
+                    }
+                }
+
+                if(!newHeaderValueExists)
+                {
+                    mimeMessage.addHeader(headerName, headerValue);
+                }
+            }
+        }
     }
 
     /**
@@ -1010,6 +1055,19 @@ public class CommonsEmailServiceImpl
                 );
         }
 
+        // 1.3) use SSL or TLS
+
+        if(domain.isMailUseSSL())
+        {
+            email.setSSLOnConnect(true);
+            email.setSslSmtpPort("" + domain.getMailSmtpPort());
+        }
+
+        if(domain.isMailUseTLS())
+        {
+            email.setStartTLSEnabled(true);
+        }
+
         // 2) set the mail host and port
 
         if( domain.getMailSmtpHost() != null )
@@ -1112,6 +1170,11 @@ public class CommonsEmailServiceImpl
             {
                 mimeMessage.setRecipient(MimeMessage.RecipientType.BCC, domain.getOverwriteBcc() );
             }
+        }
+
+        if(domain.getHeaders() != null  || domain.getHeaders().size() > 0)
+        {
+            addMimeMessageHeaders(domain, mimeMessage);
         }
 
         return mimeMessage;
@@ -1302,6 +1365,48 @@ public class CommonsEmailServiceImpl
                 }
 
                 email.setTo(toRecipients);
+            }
+
+            // Set the CC field.
+
+            String ccEmail = (String) content.get("cc.email");
+            String ccName = (String) content.get("cc.name");
+
+            if( ccEmail != null )
+            {
+                ArrayList ccRecipients = new ArrayList();
+
+                if( ccName != null )
+                {
+                    ccRecipients.add( new InternetAddress(ccEmail,ccName) );
+                }
+                else
+                {
+                    ccRecipients.add( new InternetAddress(ccEmail) );
+                }
+
+                email.setCc(ccRecipients);
+            }
+
+            // Set the BCC field.
+
+            String bccEmail = (String) content.get("bcc.email");
+            String bccName = (String) content.get("bcc.name");
+
+            if( bccEmail != null )
+            {
+                ArrayList bccRecipients = new ArrayList();
+
+                if( bccName != null )
+                {
+                    bccRecipients.add( new InternetAddress(bccEmail,bccName) );
+                }
+                else
+                {
+                    bccRecipients.add( new InternetAddress(bccEmail) );
+                }
+
+                email.setBcc(bccRecipients);
             }
 
             // Set the SUBJECT field.
