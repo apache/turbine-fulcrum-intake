@@ -149,6 +149,12 @@ public class CommonsEmailDomainEntry
     /** the configuration of the notSend hook */
     private Configuration onNotSendHookConfiguration;    
 
+    /** use SSL for secured communication */
+    private boolean mailUseSSL;
+
+    /** use TLS for secured communication */
+    private boolean mailUseTLS;
+
     /**
      * Constructor. 
      */    
@@ -203,6 +209,8 @@ public class CommonsEmailDomainEntry
         this.mailReplyToName = conf.getChild("mailReplyToName").getValue(this.mailFromName);         
         this.mailDump = conf.getChild("mailDump").getValueAsBoolean(false);
         this.mailDoNotSend = conf.getChild("mailDoNotSend").getValueAsBoolean(false);
+        this.mailUseSSL = conf.getChild("mailUseSSL").getValueAsBoolean(false);
+        this.mailUseTLS = conf.getChild("mailUseTLS").getValueAsBoolean(false);
         
         // parse the authentication related parameters
         
@@ -351,6 +359,10 @@ public class CommonsEmailDomainEntry
         result.append(',');
         result.append("mailSmtpSendPartial=" + this.isMailSmtpSendPartial());                
         result.append(',');
+        result.append("mailUseSSL=" + this.isMailUseSSL());
+        result.append(',');
+        result.append("mailUseTls=" + this.isMailUseTLS());
+        result.append(',');        
         result.append("overwriteBcc=" + this.getOverwriteBcc());                
         result.append(',');
         result.append("overwriteCc=" + this.getOverwriteCc());                
@@ -647,5 +659,15 @@ public class CommonsEmailDomainEntry
     public Configuration getOnNotSendHookConfiguration()
     {
         return onNotSendHookConfiguration;
+    }
+
+    public boolean isMailUseSSL()
+    {
+        return mailUseSSL;
+    }
+
+    public boolean isMailUseTLS()
+    {
+        return mailUseTLS;
     }
 }

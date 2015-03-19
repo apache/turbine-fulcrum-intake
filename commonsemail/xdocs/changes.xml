@@ -24,6 +24,11 @@
   </properties>
 
   <body>
+    <release version="1.0.1-SNAPSHOT" date="as in SVN">
+      <action dev="sgoeschl" type="update" data="2015-03-19">
+        Upgrading to commons-email-1.3.3
+      </action>      
+    </release>
     <release version="1.0.0-SNAPSHOT" date="as in SVN">
       <action dev="sgoeschl" type="update">
         Synching with production code.
