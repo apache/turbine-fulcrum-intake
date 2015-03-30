@@ -17,36 +17,41 @@ package org.apache.fulcrum.testcontainer;
  * specific language governing permissions and limitations
  * under the License.
  */
+import static org.junit.Assert.*;
+
 import java.io.File;
 
 import org.apache.avalon.framework.component.ComponentException;
+import org.junit.Before;
+import org.junit.Test;
 /**
  * Basic testing of the Container
  *
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
  */
-public class EcmContainerTest extends BaseUnitTest
+public class EcmContainerTest extends BaseUnit4Test
 {
     /**
 	 * Constructor for test.
 	 *
 	 * @param testName name of the test being executed
 	 */
-    public EcmContainerTest(String testName)
+    public EcmContainerTest()
     {
-        super(testName);
     }
 
+    @Before
     public void setUp() throws Exception{
         containerType=CONTAINER_ECM;
-        super.setUp();
     }
 
+    @Test
     public void testInitialization()
     {
         assertTrue(true);
     }
+    @Test
     public void testComponentUsage()
     {
         SimpleComponent sc = null;
@@ -64,6 +69,7 @@ public class EcmContainerTest extends BaseUnitTest
         assertEquals(sc.getAppRoot(),sc.getAppRoot2());
         this.release(sc);
     }
+    @Test
     public void testAlternativeRoles()
     {
         SimpleComponent sc = null;
@@ -85,6 +91,7 @@ public class EcmContainerTest extends BaseUnitTest
         this.release(sc);
     }
 
+    @Test
     public void testLoadingContainerWithNoRolesfile()
     {
         SimpleComponent sc = null;
@@ -107,6 +114,7 @@ public class EcmContainerTest extends BaseUnitTest
         this.release(sc);
     }
 
+    @Test
     public void testLoadingNonExistentFile()
     {
         SimpleComponent sc = null;

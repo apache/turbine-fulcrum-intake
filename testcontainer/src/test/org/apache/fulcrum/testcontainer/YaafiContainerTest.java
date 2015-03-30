@@ -17,8 +17,11 @@ package org.apache.fulcrum.testcontainer;
  * specific language governing permissions and limitations
  * under the License.
  */
+import static org.junit.Assert.*;
+
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.framework.logger.ConsoleLogger;
+import org.junit.Test;
 
 import java.io.File;
 /**
@@ -27,23 +30,24 @@ import java.io.File;
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
  */
-public class YaafiContainerTest extends BaseUnitTest
+public class YaafiContainerTest extends BaseUnit4Test
 {
     /**
      * Constructor for test.
      *
      * @param testName name of the test being executed
      */
-    public YaafiContainerTest(String testName)
+    public YaafiContainerTest()
     {
-        super(testName);
     }
 
+    @Test
     public void testInitialization()
     {
         assertTrue(true);
     }
 
+    @Test
     public void testComponentUsage()
     {
         SimpleComponent sc = null;
@@ -62,7 +66,7 @@ public class YaafiContainerTest extends BaseUnitTest
         assertEquals(sc.getAppRoot(),sc.getAppRoot2());
         this.release(sc);
     }
-
+    @Test
     public void testAlternativeRoles()
     {
         SimpleComponent sc = null;
@@ -83,7 +87,7 @@ public class YaafiContainerTest extends BaseUnitTest
         sc.test();
         this.release(sc);
     }
-
+    @Test
     public void testLoadingContainerWithNoRolesfileFails()
     {
         SimpleComponent sc = null;
@@ -103,7 +107,7 @@ public class YaafiContainerTest extends BaseUnitTest
             // We expect to fail with a ConfigurationException
         }
     }
-
+    @Test
     public void testWithLogLevel() throws Exception
     {
         this.setLogLevel(ConsoleLogger.LEVEL_ERROR);
