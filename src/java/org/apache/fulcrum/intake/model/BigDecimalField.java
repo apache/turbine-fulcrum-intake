@@ -23,7 +23,6 @@ import java.math.BigDecimal;
 
 import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.validator.BigDecimalValidator;
-import org.apache.fulcrum.intake.xmlmodel.XmlField;
 
 /**
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
