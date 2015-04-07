@@ -114,9 +114,8 @@ groups from Scarab's intake.xml:
 </p>
 
 <source><![CDATA[
-<input-data basePackage="org.tigris.scarab.">
-
-<group name="AttributeValue" key="attv"
+<input-data xmlns="http://turbine.apache.org/schema/intake/4.0" basePackage="org.tigris.scarab.">
+  <group name="AttributeValue" key="attv"
             mapToObject="om.AttributeValue">
     <field name="Value" key="val" type="String">
         <rule name="maxLength" value="255">Value length cannot be &gt; 255</rule>
@@ -135,9 +134,9 @@ groups from Scarab's intake.xml:
                 an option for this attribute.
         </rule>
     </field>
-</group>
+  </group>
 
-<group name="Login" key="login">
+  <group name="Login" key="login">
     <field name="Username" key="u" type="String">
         <rule name="minLength" value="1">Please enter an email address</rule>
         <rule name="mask" value=".+@.+\..+">Please enter a valid email address</rule>
@@ -145,8 +144,7 @@ groups from Scarab's intake.xml:
     <field name="Password" key="p" type="String">
         <rule name="minLength" value="1">Please enter a password</rule>
     </field>
-</group>
-
+  </group>
 </input-data>
 ]]></source>
 
