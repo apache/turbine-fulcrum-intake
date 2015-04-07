@@ -19,6 +19,10 @@ package org.apache.fulcrum.intake.model;
  * under the License.
  */
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Locale;
@@ -34,8 +38,6 @@ import org.apache.fulcrum.intake.validator.DefaultValidator;
 import org.apache.fulcrum.intake.validator.InitableByConstraintMap;
 import org.apache.fulcrum.intake.validator.ValidationException;
 import org.apache.fulcrum.intake.validator.Validator;
-import org.apache.fulcrum.intake.xmlmodel.Rule;
-import org.apache.fulcrum.intake.xmlmodel.XmlField;
 import org.apache.fulcrum.parser.ValueParser;
 
 /**
@@ -49,8 +51,11 @@ import org.apache.fulcrum.parser.ValueParser;
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
-public abstract class Field<T>
+public abstract class Field<T> implements Serializable
 {
+    /** Serial version */
+    private static final long serialVersionUID = 6897267716698096895L;
+
     /** Empty Value */
     private static final String EMPTY = "";
 
@@ -75,16 +80,22 @@ public abstract class Field<T>
     protected final String displaySize;
 
     /** Class name of the object to which the field is mapped */
-    protected final String mapToObject;
+    protected String mapToObject;
+
+    /** Optional property name of the object to which the field is mapped */
+    protected String mapToProperty;
+
+    /** Class name of the validator (for deserialization) */
+    protected String validatorClassName;
 
     /** Used to validate the contents of the field */
-    protected final Validator<T> validator;
+    protected transient Validator<T> validator;
 
     /** Getter method in the mapped object used to populate the field */
-    protected final Method getter;
+    protected Method getter;
 
     /** Setter method in the mapped object used to store the value of field */
-    protected final Method setter;
+    protected Method setter;
 
     /** Error message set on the field if required and not set by parser */
     protected String ifRequiredMessage;
@@ -208,7 +219,7 @@ public abstract class Field<T>
                     + field.getEmptyValue(), e);
         }
 
-        String validatorClassName = field.getValidator();
+        this.validatorClassName = field.getValidator();
         if (validatorClassName == null)
         {
             validatorClassName = getDefaultValidator();
@@ -220,41 +231,7 @@ public abstract class Field<T>
 
         if (validatorClassName != null)
         {
-            try
-            {
-                validator = (Validator<T>)
-                        Class.forName(validatorClassName).newInstance();
-            }
-            catch (InstantiationException e)
-            {
-                throw new IntakeException(
-                        "Could not create new instance of Validator("
-                        + validatorClassName + ")", e);
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new IntakeException(
-                        "Could not create new instance of Validator("
-                        + validatorClassName + ")", e);
-            }
-            catch (ClassNotFoundException e)
-            {
-                throw new IntakeException(
-                        "Could not load Validator class("
-                        + validatorClassName + ")", e);
-            }
-            // this should always be true for now
-            // (until bean property initialization is implemented)
-            if (validator instanceof InitableByConstraintMap)
-            {
-                ((InitableByConstraintMap) validator).init(field.getRuleMap());
-            }
-            else
-            {
-                throw new IntakeError(
-                        "All Validation objects must be subclasses of "
-                        + "InitableByConstraintMap");
-            }
+            validator = createValidator(validatorClassName, field);
         }
         else
         {
@@ -277,41 +254,47 @@ public abstract class Field<T>
 
         // map the getter and setter methods
         mapToObject = field.getMapToObject();
-        String propName = field.getMapToProperty();
+        mapToProperty = field.getMapToProperty();
+        valArray = new Object[1];
+    }
+
+    /**
+     * Initialize getter and setter from properties
+     */
+    public void initGetterAndSetter()
+    {
         Method tmpGetter = null;
         Method tmpSetter = null;
         if (StringUtils.isNotEmpty(mapToObject)
-                && StringUtils.isNotEmpty(propName))
+                && StringUtils.isNotEmpty(mapToProperty))
         {
             try
             {
-                tmpGetter = IntakeServiceFacade.getFieldGetter(mapToObject, propName);
+                tmpGetter = IntakeServiceFacade.getFieldGetter(mapToObject, mapToProperty);
             }
             catch (Exception e)
             {
                 log.error("IntakeService could not map the getter for field "
                         + this.getDisplayName() + " in group "
                         + this.group.getIntakeGroupName()
-                        + " to the property " + propName + " in object "
+                        + " to the property " + mapToProperty + " in object "
                         + mapToObject, e);
             }
             try
             {
-                tmpSetter = IntakeServiceFacade.getFieldSetter(mapToObject, propName);
+                tmpSetter = IntakeServiceFacade.getFieldSetter(mapToObject, mapToProperty);
             }
             catch (Exception e)
             {
                 log.error("IntakeService could not map the setter for field "
                         + this.getDisplayName() + " in group "
                         + this.group.getIntakeGroupName()
-                        + " to the property " + propName + " in object "
+                        + " to the property " + mapToProperty + " in object "
                         + mapToObject, e);
             }
         }
         getter = tmpGetter;
         setter = tmpSetter;
-
-        valArray = new Object[1];
     }
 
     /**
@@ -417,6 +400,14 @@ public abstract class Field<T>
     public Validator<T> getValidator()
     {
         return validator;
+    }
+
+    /**
+     * Get the name of the object that takes this input
+     */
+    public String getMapToObject()
+    {
+        return mapToObject;
     }
 
     /**
@@ -601,6 +592,7 @@ public abstract class Field<T>
     /**
      * @deprecated Call validate() instead (with no parameters).
      */
+    @Deprecated
     protected boolean validate(ValueParser pp)
     {
         return validate();
@@ -811,6 +803,7 @@ public abstract class Field<T>
      *
      * @return a <code>String</code> value
      */
+    @Override
     public String toString()
     {
         String res = EMPTY;
@@ -1053,4 +1046,98 @@ public abstract class Field<T>
         return this.toString();
     }
 
+    /**
+     * Create a validator instance for the given class name
+     *
+     * @param validatorClassName the class name
+     * @param field the related xml field containing the rule map
+     * @return the validator instance
+     * @throws IntakeException if the instance could not be created
+     */
+    @SuppressWarnings("unchecked")
+    private Validator<T> createValidator(String validatorClassName, XmlField field)
+            throws IntakeException
+    {
+        Validator<T> v;
+
+        try
+        {
+            v = (Validator<T>)
+                    Class.forName(validatorClassName).newInstance();
+        }
+        catch (InstantiationException e)
+        {
+            throw new IntakeException(
+                    "Could not create new instance of Validator("
+                    + validatorClassName + ")", e);
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new IntakeException(
+                    "Could not create new instance of Validator("
+                    + validatorClassName + ")", e);
+        }
+        catch (ClassNotFoundException e)
+        {
+            throw new IntakeException(
+                    "Could not load Validator class("
+                    + validatorClassName + ")", e);
+        }
+
+        // this should always be true for now
+        // (until bean property initialization is implemented)
+        // FIXME: rulemap is not available when deserialized
+        if (field != null)
+        {
+            if (v instanceof InitableByConstraintMap)
+            {
+                ((InitableByConstraintMap) v).init(field.getRuleMap());
+            }
+            else
+            {
+                throw new IntakeError(
+                        "All Validation objects must be subclasses of "
+                        + "InitableByConstraintMap");
+            }
+        }
+
+        return v;
+    }
+    /**
+     * Serialize field to ObjectOutputStream
+     *
+     * @param oos the ObjectOutputStream
+     * @throws IOException
+     */
+    private void writeObject( ObjectOutputStream oos ) throws IOException
+    {
+        oos.defaultWriteObject();
+    }
+
+    /**
+     * De-serialize field from ObjectInputStream, recreate validator, getter and setter
+     *
+     * @param ois the ObjectInputStream
+     * @throws IOException
+     */
+    private void readObject( ObjectInputStream ois ) throws IOException
+    {
+        try
+        {
+            ois.defaultReadObject();
+
+            if (validatorClassName != null)
+            {
+                validator = createValidator(validatorClassName, null);
+            }
+        }
+        catch (ClassNotFoundException e)
+        {
+            throw new IOException("Could not create validator instance " + validatorClassName, e);
+        }
+        catch (IntakeException e)
+        {
+            throw new IOException("Could not create validator instance " + validatorClassName, e);
+        }
+    }
 }

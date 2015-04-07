@@ -23,28 +23,27 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+
 import org.apache.fulcrum.intake.IntakeException;
-import org.apache.fulcrum.intake.xmlmodel.XmlField;
 
 /**
  * Creates Field objects.
  *
- * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
- * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
- * @author <a href="mailto:Colin.Chalmers@maxware.nl">Colin Chalmers</a>
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
- * @version $Id$
+ * @version $Id: FieldFactory.java 1200653 2011-11-11 00:05:28Z tv $
  */
-public abstract class FieldFactory
+public class FieldAdapter extends XmlAdapter<XmlField, Field<?>>
 {
-    private static Map<String, FieldFactory.FieldCtor> fieldCtors = initFieldCtors();
+    private static Map<String, FieldAdapter.FieldCtor> fieldCtors = initFieldCtors();
 
-    private static Map<String, FieldFactory.FieldCtor> initFieldCtors()
+    private static Map<String, FieldAdapter.FieldCtor> initFieldCtors()
     {
-        fieldCtors = new HashMap<String, FieldFactory.FieldCtor>();
+        fieldCtors = new HashMap<String, FieldAdapter.FieldCtor>();
 
-        fieldCtors.put("int", new FieldFactory.FieldCtor()
+        fieldCtors.put("int", new FieldAdapter.FieldCtor()
         {
+            @Override
             public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
@@ -52,8 +51,9 @@ public abstract class FieldFactory
             }
         }
         );
-        fieldCtors.put("boolean", new FieldFactory.FieldCtor()
+        fieldCtors.put("boolean", new FieldAdapter.FieldCtor()
         {
+            @Override
             public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
@@ -61,8 +61,9 @@ public abstract class FieldFactory
             }
         }
         );
-        fieldCtors.put("String", new FieldFactory.FieldCtor()
+        fieldCtors.put("String", new FieldAdapter.FieldCtor()
         {
+            @Override
             public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
@@ -70,8 +71,9 @@ public abstract class FieldFactory
             }
         }
         );
-        fieldCtors.put("BigDecimal", new FieldFactory.FieldCtor()
+        fieldCtors.put("BigDecimal", new FieldAdapter.FieldCtor()
         {
+            @Override
             public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
@@ -79,8 +81,9 @@ public abstract class FieldFactory
             }
         }
         );
-        fieldCtors.put("FileItem", new FieldFactory.FieldCtor()
+        fieldCtors.put("FileItem", new FieldAdapter.FieldCtor()
         {
+            @Override
             public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
@@ -88,8 +91,9 @@ public abstract class FieldFactory
             }
         }
         );
-        fieldCtors.put("DateString", new FieldFactory.FieldCtor()
+        fieldCtors.put("DateString", new FieldAdapter.FieldCtor()
         {
+            @Override
             public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
@@ -97,8 +101,9 @@ public abstract class FieldFactory
             }
         }
         );
-        fieldCtors.put("float", new FieldFactory.FieldCtor()
+        fieldCtors.put("float", new FieldAdapter.FieldCtor()
         {
+            @Override
             public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
@@ -106,8 +111,9 @@ public abstract class FieldFactory
             }
         }
         );
-        fieldCtors.put("double", new FieldFactory.FieldCtor()
+        fieldCtors.put("double", new FieldAdapter.FieldCtor()
         {
+            @Override
             public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
@@ -115,8 +121,9 @@ public abstract class FieldFactory
             }
         }
         );
-        fieldCtors.put("short", new FieldFactory.FieldCtor()
+        fieldCtors.put("short", new FieldAdapter.FieldCtor()
         {
+            @Override
             public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
@@ -124,8 +131,9 @@ public abstract class FieldFactory
             }
         }
         );
-        fieldCtors.put("long", new FieldFactory.FieldCtor()
+        fieldCtors.put("long", new FieldAdapter.FieldCtor()
         {
+            @Override
             public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
@@ -133,8 +141,9 @@ public abstract class FieldFactory
             }
         }
         );
-        fieldCtors.put("custom", new FieldFactory.FieldCtor()
+        fieldCtors.put("custom", new FieldAdapter.FieldCtor()
         {
+            @Override
             public Field<?> getInstance(XmlField f, Group g)
                     throws IntakeException
             {
@@ -215,4 +224,25 @@ public abstract class FieldFactory
 
         return field;
     }
+
+    /**
+     * @see javax.xml.bind.annotation.adapters.XmlAdapter#unmarshal(java.lang.Object)
+     */
+    @Override
+    public Field<?> unmarshal(XmlField xmlField) throws Exception
+    {
+        return getInstance(xmlField, xmlField.getGroup());
+    }
+
+    /**
+     * @see javax.xml.bind.annotation.adapters.XmlAdapter#marshal(java.lang.Object)
+     */
+    @Override
+    public XmlField marshal(Field<?> field) throws Exception
+    {
+        // This is never used in this context
+        XmlField xml = new XmlField();
+        return xml;
+    }
+
 }
