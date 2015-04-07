@@ -17,14 +17,10 @@
  specific language governing permissions and limitations
  under the License.
 -->
-<!DOCTYPE input-data SYSTEM
-           "http://turbine.apache.org/dtd/intake_2_4.dtd">
-<input-data basePackage="org.apache.fulcrum.intake.test.">
-<group name="AnotherGroup" key="anotherGroupKey" mapToObject="AnotherForm">
-<field name="Username" key="loginUsernameKey" type="String"
-        mapToProperty="Username">
-
-</field>
-</group>
-
+<input-data xmlns="http://turbine.apache.org/schema/intake/4.0"
+    basePackage="org.apache.fulcrum.intake.test.">
+    <group name="AnotherGroup" key="anotherGroupKey" mapToObject="AnotherForm">
+        <field name="Username" key="loginUsernameKey" type="String" mapToProperty="Username">
+        </field>
+    </group>
 </input-data>

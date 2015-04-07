@@ -19,20 +19,30 @@ package org.apache.fulcrum.intake.model;
  * under the License.
  */
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.pool.BaseKeyedPoolableObjectFactory;
+import org.apache.commons.pool2.BaseKeyedPooledObjectFactory;
+import org.apache.commons.pool2.PooledObject;
+import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.IntakeServiceFacade;
 import org.apache.fulcrum.intake.Retrievable;
-import org.apache.fulcrum.intake.xmlmodel.AppData;
-import org.apache.fulcrum.intake.xmlmodel.XmlField;
-import org.apache.fulcrum.intake.xmlmodel.XmlGroup;
 import org.apache.fulcrum.parser.ValueParser;
 
 /**
@@ -43,8 +53,13 @@ import org.apache.fulcrum.parser.ValueParser;
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
  */
-public class Group
+@XmlType(name="group")
+@XmlAccessorType(XmlAccessType.NONE)
+public class Group implements Serializable
 {
+    /** Serial version */
+    private static final long serialVersionUID = -5452725641409669284L;
+
     public static final String EMPTY = "";
 
     /*
@@ -65,17 +80,31 @@ public class Group
      * The key used to represent this group in a parameter.
      * This key is usually a prefix as part of a field key.
      */
-    protected final String gid;
+    @XmlAttribute(name="key", required=true)
+    private String gid;
 
     /**
      * The name used in templates and java code to refer to this group.
      */
-    protected final String name;
+    @XmlAttribute(required=true)
+    private String name;
 
     /**
      * The number of Groups with the same name that will be pooled.
      */
-    private final int poolCapacity;
+    @XmlAttribute
+    private int poolCapacity = 128;
+
+    /**
+     * The default map object for this group
+     */
+    @XmlAttribute(name="mapToObject")
+    private String defaultMapToObject;
+
+    /**
+     * The parent element in the XML tree
+     */
+    private AppData parent;
 
     /**
      * A map of the fields in this group mapped by field name.
@@ -107,55 +136,6 @@ public class Group
      * A flag to help prevent duplicate hidden fields declaring this group.
      */
     protected boolean isDeclared;
-
-    /**
-     * Constructs a new Group based on the xml specification.  Groups are
-     * instantiated and pooled by the IntakeService and should not
-     * be instantiated otherwise.
-     *
-     * @param group a <code>XmlGroup</code> value
-     * @exception IntakeException if an error occurs in other classes
-     */
-    public Group(XmlGroup group) throws IntakeException
-    {
-        gid = group.getKey();
-        name = group.getName();
-        poolCapacity = Integer.parseInt(group.getPoolCapacity());
-
-        List<XmlField> inputFields = group.getFields();
-        int size = inputFields.size();
-        fields = new HashMap<String, Field<?>>((int) (1.25 * size + 1));
-        Map<String, List<Field<?>>> mapToObjectFieldLists =
-            new HashMap<String, List<Field<?>>>((int) (1.25 * size + 1));
-
-        fieldsArray = new Field[size];
-        for (int i = size - 1; i >= 0; i--)
-        {
-            XmlField f = inputFields.get(i);
-            Field<?> field = FieldFactory.getInstance(f, this);
-            fieldsArray[i] = field;
-            fields.put(f.getName(), field);
-
-            // map fields by their mapToObject
-            List<Field<?>> tmpFields = mapToObjectFieldLists.get(f.getMapToObject());
-            if (tmpFields == null)
-            {
-                tmpFields = new ArrayList<Field<?>>(size);
-                mapToObjectFieldLists.put(f.getMapToObject(), tmpFields);
-            }
-
-            tmpFields.add(field);
-        }
-
-        // Change the mapToObjectFields values to Field[]
-        mapToObjectFields = new HashMap<String, Field<?>[]>((int) (1.25 * size + 1));
-
-        for (Map.Entry<String, List<Field<?>>> entry : mapToObjectFieldLists.entrySet())
-        {
-            mapToObjectFields.put(entry.getKey(),
-                entry.getValue().toArray(new Field[entry.getValue().size()]));
-        }
-    }
 
     /**
      * Initializes the default Group using parameters.
@@ -305,6 +285,16 @@ public class Group
     }
 
     /**
+     * Default object to map this group to.
+     *
+     * @return a <code>String</code> value
+     */
+    public String getDefaultMapToObject()
+    {
+        return defaultMapToObject;
+    }
+
+    /**
      * Describe <code>getObjects</code> method here.
      *
      * @param pp a <code>ValueParser</code> value
@@ -342,6 +332,41 @@ public class Group
         {
             throw new IntakeException("Intake Field name: " + fieldName +
                     " not found in Group " + name);
+        }
+    }
+
+    /**
+     * Get the list of Fields .
+     * @return list of Fields
+     */
+    public List<Field<?>> getFields()
+    {
+        if (fieldsArray == null)
+        {
+            return new ArrayList<Field<?>>();
+        }
+
+        return Arrays.asList(fieldsArray);
+    }
+
+    /**
+     * Set a collection of fields for this group
+     *
+     * @param fields the fields to set
+     */
+    @XmlElement(name="field")
+    @XmlJavaTypeAdapter(FieldAdapter.class)
+    protected void setFields(List<Field<?>> inputFields)
+    {
+        int size = inputFields.size();
+        fields = new HashMap<String, Field<?>>((int) (1.25 * size + 1));
+        fieldsArray = new Field[size];
+
+        for (int i = size - 1; i >= 0; i--)
+        {
+            Field<?> field = inputFields.get(i);
+            fieldsArray[i] = field;
+            fields.put(field.getName(), field);
         }
     }
 
@@ -578,10 +603,87 @@ public class Group
         }
     }
 
+    /**
+     * Creates a string representation of this input group. This
+     * is an xml representation.
+     */
+    @Override
+    public String toString()
+    {
+        StringBuilder result = new StringBuilder();
+
+        result.append("<group name=\"").append(getIntakeGroupName()).append("\"");
+        result.append(" key=\"").append(getGID()).append("\"");
+        result.append(">\n");
+
+        if (fieldsArray != null)
+        {
+            for (Field<?> field : fieldsArray)
+            {
+                result.append(field);
+            }
+        }
+
+        result.append("</group>\n");
+
+        return result.toString();
+    }
+
+    /**
+     * Get the parent AppData for this group
+     *
+     * @return the parent
+     */
+    public AppData getAppData()
+    {
+        return parent;
+    }
+
+    /**
+     * JAXB callback to set the parent object
+     *
+     * @param um the Unmarshaller
+     * @param parent the parent object (an AppData object)
+     */
+    public void afterUnmarshal(Unmarshaller um, Object parent)
+    {
+        this.parent = (AppData)parent;
+        Map<String, List<Field<?>>> mapToObjectFieldLists =
+                new HashMap<String, List<Field<?>>>((int) (1.25 * fieldsArray.length + 1));
+
+        // Fix fields
+        for (Field<?> field : fieldsArray)
+        {
+            if (StringUtils.isNotEmpty(field.mapToObject))
+            {
+                field.mapToObject = this.parent.getBasePackage() + field.mapToObject;
+            }
+
+            // map fields by their mapToObject
+            List<Field<?>> tmpFields = mapToObjectFieldLists.get(field.getMapToObject());
+            if (tmpFields == null)
+            {
+                tmpFields = new ArrayList<Field<?>>(fieldsArray.length);
+                mapToObjectFieldLists.put(field.getMapToObject(), tmpFields);
+            }
+
+            tmpFields.add(field);
+        }
+
+        // Change the mapToObjectFields values to Field[]
+        mapToObjectFields = new HashMap<String, Field<?>[]>((int) (1.25 * fieldsArray.length + 1));
+
+        for (Map.Entry<String, List<Field<?>>> entry : mapToObjectFieldLists.entrySet())
+        {
+            mapToObjectFields.put(entry.getKey(),
+                entry.getValue().toArray(new Field[entry.getValue().size()]));
+        }
+    }
+
     // ********** PoolableObjectFactory implementation ******************
 
     public static class GroupFactory
-            extends BaseKeyedPoolableObjectFactory<String, Group>
+            extends BaseKeyedPooledObjectFactory<String, Group>
     {
         private final AppData appData;
 
@@ -596,18 +698,30 @@ public class Group
          * @return an instance that can be returned by the pool.
          * @throws IntakeException indicates that the group could not be retrieved
          */
-        public Group makeObject(String key) throws IntakeException
+        @Override
+        public Group create(String key) throws IntakeException
         {
-            return new Group(appData.getGroup(key));
+            return appData.getGroup(key);
+        }
+
+        /**
+         * @see org.apache.commons.pool2.BaseKeyedPooledObjectFactory#wrap(java.lang.Object)
+         */
+        @Override
+        public PooledObject<Group> wrap(Group group)
+        {
+            return new DefaultPooledObject<Group>(group);
         }
 
         /**
          * Uninitialize an instance to be returned to the pool.
          * @param key the name of the group
-         * @param group the instance to be passivated
+         * @param pooledGroup the instance to be passivated
          */
-        public void passivateObject(String key, Group group)
+        @Override
+        public void passivateObject(String key, PooledObject<Group> pooledGroup)
         {
+            Group group = pooledGroup.getObject();
             group.oid = null;
             group.pp = null;
             for (int i = group.fieldsArray.length - 1; i >= 0; i--)

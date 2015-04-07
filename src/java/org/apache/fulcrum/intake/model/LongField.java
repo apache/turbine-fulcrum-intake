@@ -21,7 +21,6 @@ package org.apache.fulcrum.intake.model;
 
 import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.validator.LongValidator;
-import org.apache.fulcrum.intake.xmlmodel.XmlField;
 
 /**
  * Processor for long fields.

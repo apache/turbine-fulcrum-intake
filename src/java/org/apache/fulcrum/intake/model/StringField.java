@@ -22,7 +22,6 @@ package org.apache.fulcrum.intake.model;
 import org.apache.commons.lang.StringUtils;
 import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.validator.StringValidator;
-import org.apache.fulcrum.intake.xmlmodel.XmlField;
 
 /**
  * Text field.

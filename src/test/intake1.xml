@@ -17,9 +17,8 @@
  specific language governing permissions and limitations
  under the License.
 -->
-<!DOCTYPE input-data SYSTEM
-           "http://turbine.apache.org/dtd/intake_2_4.dtd">
-<input-data basePackage="org.apache.fulcrum.intake.test.">
+<input-data xmlns="http://turbine.apache.org/schema/intake/4.0"
+    basePackage="org.apache.fulcrum.intake.test.">
 	<group name="LoginGroup" key="loginGroupKey" mapToObject="LoginForm">
 		<field name="Username" key="loginUsernameKey" type="String"
 			mapToProperty="Username">
@@ -53,7 +52,7 @@
         <field name="EmptyDoubleTestField" key="edtf" type="double"/>
         <field name="EmptyBigDecimalTestField" key="ebdtf" type="BigDecimal"/>
         <field name="NumberTestField" key="ntf" type="int">
-            <rule name="invalidNumber">Not a number</rule>
+            <rule name="invalidNumber" value="">Not a number</rule>
         </field>
     </group>
 </input-data>

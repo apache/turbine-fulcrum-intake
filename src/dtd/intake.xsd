@@ -22,7 +22,7 @@
     xmlns:tns="http://turbine.apache.org/schema/intake/4.0" 
     elementFormDefault="qualified">
 
-    <element name="input-data" type="tns:input-dataComplexType">
+    <element name="input-data" type="tns:inputDataComplexType">
     </element>
     <complexType name="groupComplexType">
         <sequence>
@@ -72,7 +72,7 @@
             </annotation>
         </attribute>
     </complexType>
-    <complexType name="input-dataComplexType">
+    <complexType name="inputDataComplexType">
         <annotation>
             <documentation>The input-data element is the root of the intake 
             XML definition file.</documentation>

@@ -27,7 +27,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.IntakeRuntimeException;
 import org.apache.fulcrum.intake.validator.DateStringValidator;
-import org.apache.fulcrum.intake.xmlmodel.XmlField;
 
 
 /**

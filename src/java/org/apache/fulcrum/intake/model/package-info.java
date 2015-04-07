@@ -1,3 +1,9 @@
+@javax.xml.bind.annotation.XmlSchema(
+    namespace = "http://turbine.apache.org/schema/intake/4.0",
+    elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+
+package org.apache.fulcrum.intake.model;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,20 +22,3 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fulcrum.intake.test;
-
-import org.apache.fulcrum.intake.IntakeException;
-import org.apache.fulcrum.intake.model.Group;
-import org.apache.fulcrum.intake.model.StringField;
-import org.apache.fulcrum.intake.model.XmlField;
-
-public class MyField extends StringField
-{
-
-    public MyField(XmlField field, Group group) throws IntakeException
-    {
-        super(field, group);
-        log.info("Instance of MyField created.");
-    }
-
-}
