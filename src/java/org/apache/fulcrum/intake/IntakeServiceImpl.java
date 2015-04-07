@@ -30,12 +30,19 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.helpers.DefaultValidationEventHandler;
+import javax.xml.validation.SchemaFactory;
 
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.configuration.Configurable;
@@ -48,13 +55,13 @@ import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
-import org.apache.commons.pool.KeyedObjectPool;
-import org.apache.commons.pool.KeyedPoolableObjectFactory;
-import org.apache.commons.pool.impl.StackKeyedObjectPool;
+import org.apache.commons.pool2.KeyedObjectPool;
+import org.apache.commons.pool2.KeyedPooledObjectFactory;
+import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
+import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
+import org.apache.fulcrum.intake.model.AppData;
+import org.apache.fulcrum.intake.model.Field;
 import org.apache.fulcrum.intake.model.Group;
-import org.apache.fulcrum.intake.transform.XmlToAppData;
-import org.apache.fulcrum.intake.xmlmodel.AppData;
-import org.apache.fulcrum.intake.xmlmodel.XmlGroup;
 
 /**
  * This service provides access to input processing objects based on an XML
@@ -105,7 +112,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      * @param groupName
      *            The name to register the group under
      * @param group
-     *            The XML Group to register in
+     *            The Group to register in
      * @param appData
      *            The app Data object where the group can be found
      * @param checkKey
@@ -113,16 +120,16 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      *
      * @return true if successful, false if not
      */
-    private boolean registerGroup(String groupName, XmlGroup group,
+    private boolean registerGroup(String groupName, Group group,
             AppData appData, boolean checkKey)
     {
-        if (groupNames.keySet().contains(groupName))
+        if (groupNames.containsKey(groupName))
         {
             // This name already exists.
             return false;
         }
 
-        boolean keyExists = groupNameMap.keySet().contains(group.getKey());
+        boolean keyExists = groupNameMap.containsKey(group.getGID());
 
         if (checkKey && keyExists)
         {
@@ -131,18 +138,18 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
         }
 
         groupNames.put(groupName, appData);
-
-        groupKeyMap.put(groupName, group.getKey());
+        groupKeyMap.put(groupName, group.getGID());
 
         if (!keyExists)
         {
             // This key does not exist. Add it to the hash.
-            groupNameMap.put(group.getKey(), groupName);
+            groupNameMap.put(group.getGID(), groupName);
         }
 
-        List<String> classNames = group.getMapToObjects();
-        for (String className : classNames)
+        List<Field<?>> fields = group.getFields();
+        for (Field<?> field : fields)
         {
+            String className = field.getMapToObject();
             if (!getterMap.containsKey(className))
             {
                 getterMap.put(className, new HashMap<String, Method>());
@@ -352,6 +359,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      * @throws IntakeException
      *             if recycling fails.
      */
+    @Override
     public Group getGroup(String groupName) throws IntakeException
     {
         Group group = null;
@@ -390,6 +398,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      * @throws IntakeException
      *             The passed group name does not exist.
      */
+    @Override
     public void releaseGroup(Group instance) throws IntakeException
     {
         if (instance != null)
@@ -425,6 +434,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      * @throws IntakeException
      *             The passed group name does not exist.
      */
+    @Override
     public int getSize(String groupName) throws IntakeException
     {
         AppData appData = groupNames.get(groupName);
@@ -445,6 +455,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      *
      * @return array of names.
      */
+    @Override
     public String[] getGroupNames()
     {
         return groupNames.keySet().toArray(new String[0]);
@@ -457,6 +468,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      *            the name of the group.
      * @return the the key.
      */
+    @Override
     public String getGroupKey(String groupName)
     {
         return groupKeyMap.get(groupName);
@@ -469,6 +481,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      *            the key.
      * @return groupName the name of the group.
      */
+    @Override
     public String getGroupName(String groupKey)
     {
         return groupNameMap.get(groupKey);
@@ -485,6 +498,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      * @throws ClassNotFoundException
      * @throws IntrospectionException
      */
+    @Override
     public Method getFieldSetter(String className, String propName)
             throws ClassNotFoundException, IntrospectionException
     {
@@ -543,6 +557,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      * @throws ClassNotFoundException
      * @throws IntrospectionException
      */
+    @Override
     public Method getFieldGetter(String className, String propName)
             throws ClassNotFoundException, IntrospectionException
     {
@@ -594,6 +609,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
     /**
      * Avalon component lifecycle method
      */
+    @Override
     public void configure(Configuration conf) throws ConfigurationException
     {
         final Configuration xmlPaths = conf.getChild(XML_PATHS, false);
@@ -630,11 +646,12 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
     /**
      * Avalon component lifecycle method Initializes the service by loading
-     * default class loaders and customized object factories.
+     * xml rule files and creating the Intake groups.
      *
      * @throws Exception
      *             if initialization fails.
      */
+    @Override
     public void initialize() throws Exception
     {
         Map<AppData, File> appDataElements = null;
@@ -688,17 +705,21 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
         else
         {
             // Parse all the given XML files
+            JAXBContext jaxb = JAXBContext.newInstance(AppData.class);
+            Unmarshaller um = jaxb.createUnmarshaller();
+
+            // Debug mapping
+            um.setEventHandler(new DefaultValidationEventHandler());
+
+            URL schemaURL = getClass().getResource("/intake.xsd");
+            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            um.setSchema(schemaFactory.newSchema(schemaURL));
             appDataElements = new HashMap<AppData, File>();
 
             for (File xmlFile : xmlFiles)
             {
-                AppData appData = null;
-
                 getLogger().debug("Now parsing: " + xmlFile);
-
-                XmlToAppData xmlApp = new XmlToAppData();
-                xmlApp.enableLogging(getLogger());
-                appData = xmlApp.parseFile(xmlFile);
+                AppData appData = (AppData)um.unmarshal(xmlFile);
 
                 appDataElements.put(appData, xmlFile);
                 getLogger().debug("Saving appData for " + xmlFile);
@@ -707,26 +728,26 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             saveSerialized(serialDataPath, appDataElements);
         }
 
+        int counter = 0;
         for (AppData appData : appDataElements.keySet())
         {
             int maxPooledGroups = 0;
-            List<XmlGroup> glist = appData.getGroups();
+            List<Group> glist = appData.getGroups();
 
             String groupPrefix = appData.getGroupPrefix();
 
             for (int i = glist.size() - 1; i >= 0; i--)
             {
-                XmlGroup g = glist.get(i);
-                String groupName = g.getName();
+                Group g = glist.get(i);
+                String groupName = g.getIntakeGroupName();
 
-                boolean registerUnqualified = registerGroup(groupName, g,
-                        appData, true);
+                boolean registerUnqualified = registerGroup(groupName, g, appData, true);
 
                 if (!registerUnqualified)
                 {
                     getLogger().info(
                             "Ignored redefinition of Group " + groupName
-                                    + " or Key " + g.getKey() + " from "
+                                    + " or Key " + g.getGID() + " from "
                                     + appDataElements.get(appData));
                 }
 
@@ -751,16 +772,25 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                     }
                 }
 
-                maxPooledGroups = Math.max(maxPooledGroups, Integer
-                        .parseInt(g.getPoolCapacity()));
+                // Init fields
+                for (Field<?> f : g.getFields())
+                {
+                    f.initGetterAndSetter();
+                }
 
+                maxPooledGroups = Math.max(maxPooledGroups, g.getPoolCapacity());
             }
 
-            KeyedPoolableObjectFactory<String, Group> factory =
+            KeyedPooledObjectFactory<String, Group> factory =
                 new Group.GroupFactory(appData);
 
+            GenericKeyedObjectPoolConfig poolConfig = new GenericKeyedObjectPoolConfig();
+            poolConfig.setMaxTotal(maxPooledGroups);
+            poolConfig.setJmxEnabled(true);
+            poolConfig.setJmxNamePrefix("fulcrum-intake-pool-" + counter++);
+
             keyedPools.put(appData,
-                new StackKeyedObjectPool<String, Group>(factory, maxPooledGroups));
+                new GenericKeyedObjectPool<String, Group>(factory, poolConfig));
         }
 
         if (getLogger().isInfoEnabled())
@@ -773,6 +803,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      * @see org.apache.avalon.framework.context.Contextualizable
      * @avalon.entry key="urn:avalon:home" type="java.io.File"
      */
+    @Override
     public void contextualize(Context context) throws ContextException
     {
         this.applicationRoot = context.get("urn:avalon:home").toString();
@@ -783,6 +814,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      *
      * @avalon.dependency type="org.apache.fulcrum.localization.LocalizationService"
      */
+    @Override
     public void service(ServiceManager manager) throws ServiceException
     {
         IntakeServiceFacade.setIntakeService(this);
