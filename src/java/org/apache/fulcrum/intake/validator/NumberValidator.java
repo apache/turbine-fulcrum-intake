@@ -19,7 +19,6 @@ package org.apache.fulcrum.intake.validator;
  * under the License.
  */
 
-import java.text.ParseException;
 import java.util.Locale;
 import java.util.Map;
 
@@ -61,18 +60,6 @@ public abstract class NumberValidator<T extends Number>
     private T maxValue = null;
 
     /**
-     * Constructor to use when initializing Object
-     *
-     * @param paramMap
-     * @throws InvalidMaskException
-     */
-    public NumberValidator(Map<String, Constraint> paramMap)
-            throws InvalidMaskException
-    {
-        super(paramMap);
-    }
-
-    /**
      * Default Constructor
      */
     public NumberValidator()
@@ -88,7 +75,8 @@ public abstract class NumberValidator<T extends Number>
      * containing constraints on the input.
      * @exception InvalidMaskException an invalid mask was specified
      */
-    public void init(Map<String, ? extends Constraint> paramMap)
+    @Override
+	public void init(Map<String, ? extends Constraint> paramMap)
             throws InvalidMaskException
     {
         super.init(paramMap);
@@ -108,7 +96,7 @@ public abstract class NumberValidator<T extends Number>
             {
                 minValue = parseNumber(param, Locale.US);
             }
-            catch (ParseException e)
+            catch (NumberFormatException e)
             {
                 throw new InvalidMaskException("Could not parse minimum value " + param, e);
             }
@@ -123,7 +111,7 @@ public abstract class NumberValidator<T extends Number>
             {
                 maxValue = parseNumber(param, Locale.US);
             }
-            catch (ParseException e)
+            catch (NumberFormatException e)
             {
                 throw new InvalidMaskException("Could not parse minimum value " + param, e);
             }
@@ -139,9 +127,9 @@ public abstract class NumberValidator<T extends Number>
      *
      * @return the value
      *
-     * @throws ParseException if the value could not be parsed
+     * @throws NumberFormatException if the value could not be parsed
      */
-    protected abstract T parseNumber(String stringValue, Locale locale) throws ParseException;
+    protected abstract T parseNumber(String stringValue, Locale locale) throws NumberFormatException;
 
     /**
      * Determine whether a field meets the criteria specified
@@ -151,7 +139,8 @@ public abstract class NumberValidator<T extends Number>
      * @exception ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
-    public void assertValidity(Field<T> field) throws ValidationException
+    @Override
+	public void assertValidity(Field<T> field) throws ValidationException
     {
         Locale locale = field.getLocale();
 
@@ -190,7 +179,7 @@ public abstract class NumberValidator<T extends Number>
             {
                 number = parseNumber(testValue, locale);
             }
-            catch (ParseException e)
+            catch (NumberFormatException e)
             {
                 errorMessage = invalidNumberMessage;
                 throw new ValidationException(invalidNumberMessage);

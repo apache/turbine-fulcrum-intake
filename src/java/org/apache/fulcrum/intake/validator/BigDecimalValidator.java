@@ -23,7 +23,6 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
-import java.util.Map;
 
 
 /**
@@ -50,18 +49,6 @@ public class BigDecimalValidator
         extends NumberValidator<BigDecimal>
 {
     /**
-     * Constructor to use when initializing Object
-     *
-     * @param paramMap
-     * @throws InvalidMaskException
-     */
-    public BigDecimalValidator(Map<String, Constraint> paramMap)
-            throws InvalidMaskException
-    {
-        super(paramMap);
-    }
-
-    /**
      * Default Constructor
      */
     public BigDecimalValidator()
@@ -74,11 +61,18 @@ public class BigDecimalValidator
      * @see org.apache.fulcrum.intake.validator.NumberValidator#parseNumber(java.lang.String, java.util.Locale)
      */
     @Override
-    protected BigDecimal parseNumber(String stringValue, Locale locale) throws ParseException
+    protected BigDecimal parseNumber(String stringValue, Locale locale) throws NumberFormatException
     {
         NumberFormat nf = NumberFormat.getInstance(locale);
 
-        Number number = nf.parse(stringValue);
-        return new BigDecimal(number.doubleValue());
+        try
+        {
+            Number number = nf.parse(stringValue);
+            return new BigDecimal(number.doubleValue());
+		}
+        catch (ParseException e)
+        {
+        	throw new NumberFormatException(e.getMessage());
+		}
     }
 }

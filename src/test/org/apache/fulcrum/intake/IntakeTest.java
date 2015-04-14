@@ -20,12 +20,18 @@ package org.apache.fulcrum.intake;
  */
 
 import java.util.Arrays;
+import java.util.Locale;
 
 import org.apache.fulcrum.intake.model.Field;
 import org.apache.fulcrum.intake.model.Group;
 import org.apache.fulcrum.intake.test.LoginForm;
+import org.apache.fulcrum.intake.validator.BigDecimalValidator;
 import org.apache.fulcrum.intake.validator.BooleanValidator;
+import org.apache.fulcrum.intake.validator.DoubleValidator;
+import org.apache.fulcrum.intake.validator.FloatValidator;
 import org.apache.fulcrum.intake.validator.IntegerValidator;
+import org.apache.fulcrum.intake.validator.LongValidator;
+import org.apache.fulcrum.intake.validator.ShortValidator;
 import org.apache.fulcrum.intake.validator.ValidationException;
 import org.apache.fulcrum.parser.DefaultParameterParser;
 import org.apache.fulcrum.parser.ParserService;
@@ -71,7 +77,7 @@ public class IntakeTest extends BaseUnitTest
     public void testFacadeConfigured() throws Exception
     {
         // this.lookup causes the workflow service to be configured.
-        IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
+        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
         Group group = is.getGroup("LoginGroup");
         assertNotNull(group);
         assertTrue(IntakeServiceFacade.isInitialized());
@@ -81,7 +87,7 @@ public class IntakeTest extends BaseUnitTest
 
     public void testInterfaceMapTo() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
+        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
         Group group = is.getGroup("LoginIfcGroup");
         assertNotNull(group);
 
@@ -102,7 +108,7 @@ public class IntakeTest extends BaseUnitTest
 
     public void testParserInit() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
+        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
         Group group = is.getGroup("LoginGroup");
         assertNotNull(group);
 
@@ -122,7 +128,7 @@ public class IntakeTest extends BaseUnitTest
 
     public void testEmptyBooleanField() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
+        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
         Group group = is.getGroup("BooleanTest");
         assertNotNull(group);
         assertTrue(IntakeServiceFacade.isInitialized());
@@ -134,7 +140,7 @@ public class IntakeTest extends BaseUnitTest
 
     public void testBooleanField() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
+        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
         Group group = is.getGroup("BooleanTest");
         assertNotNull(group);
         assertTrue(IntakeServiceFacade.isInitialized());
@@ -146,7 +152,7 @@ public class IntakeTest extends BaseUnitTest
 
     public void testRequiredBooleanField() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
+        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
         Group group = is.getGroup("BooleanTest");
         assertNotNull(group);
         assertTrue(IntakeServiceFacade.isInitialized());
@@ -158,7 +164,7 @@ public class IntakeTest extends BaseUnitTest
 
     public void testMultiValueField() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
+        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
         Group group = is.getGroup("NumberTest");
         assertNotNull(group);
         Field<?> multiValueField = group.get("MultiIntegerTestField");
@@ -181,14 +187,15 @@ public class IntakeTest extends BaseUnitTest
 
     public void testInvalidNumberMessage() throws Exception // TRB-74
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.class.getName() );
+        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
         Group group = is.getGroup("NumberTest");
         assertNotNull(group);
 
         Field<?> intField = group.get("EmptyIntegerTestField");
         try
         {
-            intField.getValidator().assertValidity("aa");
+            ((IntegerValidator)intField.getValidator()).assertValidity("aa", Locale.US);
+            fail("Validator should throw ValidationException");
         }
         catch (ValidationException ve)
         {
@@ -198,7 +205,8 @@ public class IntakeTest extends BaseUnitTest
         Field<?> longField = group.get("EmptyLongTestField");
         try
         {
-            longField.getValidator().assertValidity("aa");
+        	((LongValidator)longField.getValidator()).assertValidity("aa", Locale.US);
+            fail("Validator should throw ValidationException");
         }
         catch (ValidationException ve)
         {
@@ -208,7 +216,8 @@ public class IntakeTest extends BaseUnitTest
         Field<?> shortField = group.get("EmptyShortTestField");
         try
         {
-            shortField.getValidator().assertValidity("aa");
+        	((ShortValidator)shortField.getValidator()).assertValidity("aa", Locale.US);
+            fail("Validator should throw ValidationException");
         }
         catch (ValidationException ve)
         {
@@ -218,7 +227,8 @@ public class IntakeTest extends BaseUnitTest
         Field<?> floatField = group.get("EmptyFloatTestField");
         try
         {
-            floatField.getValidator().assertValidity("aa");
+        	((FloatValidator)floatField.getValidator()).assertValidity("aa", Locale.US);
+            fail("Validator should throw ValidationException");
         }
         catch (ValidationException ve)
         {
@@ -228,7 +238,8 @@ public class IntakeTest extends BaseUnitTest
         Field<?> doubleField = group.get("EmptyDoubleTestField");
         try
         {
-            doubleField.getValidator().assertValidity("aa");
+        	((DoubleValidator)doubleField.getValidator()).assertValidity("aa", Locale.US);
+            fail("Validator should throw ValidationException");
         }
         catch (ValidationException ve)
         {
@@ -238,7 +249,8 @@ public class IntakeTest extends BaseUnitTest
         Field<?> bigDecimalField = group.get("EmptyBigDecimalTestField");
         try
         {
-            bigDecimalField.getValidator().assertValidity("aa");
+        	((BigDecimalValidator)bigDecimalField.getValidator()).assertValidity("aa", Locale.US);
+            fail("Validator should throw ValidationException");
         }
         catch (ValidationException ve)
         {
@@ -248,7 +260,8 @@ public class IntakeTest extends BaseUnitTest
         Field<?> numberField = group.get("NumberTestField");
         try
         {
-            numberField.getValidator().assertValidity("aa");
+        	((IntegerValidator)numberField.getValidator()).assertValidity("aa", Locale.US);
+            fail("Validator should throw ValidationException");
         }
         catch (ValidationException ve)
         {
