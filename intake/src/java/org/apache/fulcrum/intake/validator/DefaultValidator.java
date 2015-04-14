@@ -21,9 +21,9 @@ package org.apache.fulcrum.intake.validator;
 
 import java.util.Map;
 
+import org.apache.avalon.framework.logger.LogEnabled;
+import org.apache.avalon.framework.logger.Logger;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.intake.model.Field;
 
 /**
@@ -47,7 +47,7 @@ import org.apache.fulcrum.intake.model.Field;
  * @version $Id$
  */
 abstract public class DefaultValidator<T>
-        implements Validator<T>, InitableByConstraintMap
+        implements Validator<T>, InitableByConstraintMap, LogEnabled
 {
     /** A boolean value to signify if the field is definitely required or not */
     protected boolean required = false;
@@ -71,22 +71,7 @@ abstract public class DefaultValidator<T>
     protected String errorMessage = null;
 
     /** Logging */
-    protected Log log = LogFactory.getLog(this.getClass());
-
-    /**
-     * Constructor
-     *
-     * @param paramMap a <code>Map</code> of <code>Rule</code>'s
-     * containing constraints on the input.
-     * @exception InvalidMaskException An invalid mask was specified for one of the rules
-
-    */
-    public DefaultValidator(Map<String, Constraint> paramMap)
-            throws InvalidMaskException
-    {
-        this();
-        init(paramMap);
-    }
+    protected Logger log;
 
     /**
      * Default constructor
@@ -97,6 +82,15 @@ abstract public class DefaultValidator<T>
     }
 
     /**
+	 * Enable Avalon Logging
+	 */
+	@Override
+	public void enableLogging(Logger logger)
+	{
+		this.log = logger.getChildLogger(getClass().getSimpleName());
+	}
+
+    /**
      * Extract the relevant parameters from the constraints listed
      * in <rule> tags within the intake.xml file.
      *
@@ -104,7 +98,8 @@ abstract public class DefaultValidator<T>
      * containing constraints on the input.
      * @exception InvalidMaskException An invalid mask was specified for one of the rules
      */
-    public void init(Map<String, ? extends Constraint> paramMap)
+    @Override
+	public void init(Map<String, ? extends Constraint> paramMap)
             throws InvalidMaskException
     {
         Constraint constraint = paramMap.get(REQUIRED_RULE_NAME);
@@ -139,7 +134,8 @@ abstract public class DefaultValidator<T>
      * @param field a <code>Field</code> to be tested
      * @return true if valid, false otherwise
      */
-    public boolean isValid(Field<T> field)
+    @Override
+	public boolean isValid(Field<T> field)
     {
         boolean valid = false;
         try
@@ -162,7 +158,8 @@ abstract public class DefaultValidator<T>
      * @exception ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
-    public void assertValidity(Field<T> field)
+    @Override
+	public void assertValidity(Field<T> field)
             throws ValidationException
     {
     	if (field.isMultiValued())
@@ -189,7 +186,8 @@ abstract public class DefaultValidator<T>
      *
      * @deprecated use isValid(Field) instead
      */
-    public boolean isValid(String testValue)
+    @Override
+	public boolean isValid(String testValue)
     {
         boolean valid = false;
         try
@@ -212,7 +210,8 @@ abstract public class DefaultValidator<T>
      * @exception ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
-    public void assertValidity(String testValue)
+    @Override
+	public void assertValidity(String testValue)
             throws ValidationException
     {
         if (!required && StringUtils.isEmpty(testValue))
@@ -243,7 +242,8 @@ abstract public class DefaultValidator<T>
      *
      * @return a <code>String</code> message, or the empty String "".
      */
-    public String getMessage()
+    @Override
+	public String getMessage()
     {
         String retValue = "";
 

@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.model.Field;
 import org.apache.fulcrum.intake.model.Group;
 
@@ -71,12 +70,6 @@ public class DateRangeValidator
     /** Callback for the actual compare operation */
     CompareCallback<Date> compareCallback;
 
-    public DateRangeValidator(Map<String, Constraint> paramMap)
-            throws IntakeException
-    {
-        super(paramMap);
-    }
-
     /**
      *  Default constructor
      */
@@ -86,12 +79,13 @@ public class DateRangeValidator
     }
 
     /**
-     * Constructor to use when initialising Object
+     * Constructor to use when initializing Object
      *
      * @param paramMap
      * @throws InvalidMaskException
      */
-    public void init(Map<String, ? extends Constraint> paramMap)
+    @Override
+	public void init(Map<String, ? extends Constraint> paramMap)
             throws InvalidMaskException
     {
         super.init(paramMap);
@@ -107,7 +101,8 @@ public class DateRangeValidator
                  *
                  * @return the result of the comparison
                  */
-                public boolean compareValues(int compare, Date thisValue, Date refValue)
+                @Override
+				public boolean compareValues(int compare, Date thisValue, Date refValue)
                 {
                     boolean result = true;
 
@@ -169,7 +164,8 @@ public class DateRangeValidator
      * @exception ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
-    public void assertValidity(Field<Date> testField)
+    @Override
+	public void assertValidity(Field<Date> testField)
         throws ValidationException
     {
         super.assertValidity(testField);

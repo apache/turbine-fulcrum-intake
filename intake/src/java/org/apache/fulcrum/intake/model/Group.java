@@ -34,9 +34,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.avalon.framework.logger.LogEnabled;
+import org.apache.avalon.framework.logger.Logger;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.pool2.BaseKeyedPooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
@@ -55,7 +55,7 @@ import org.apache.fulcrum.parser.ValueParser;
  */
 @XmlType(name="group")
 @XmlAccessorType(XmlAccessType.NONE)
-public class Group implements Serializable
+public class Group implements Serializable, LogEnabled
 {
     /** Serial version */
     private static final long serialVersionUID = -5452725641409669284L;
@@ -67,14 +67,8 @@ public class Group implements Serializable
      */
     public static final String NEW = "_0";
 
-    private static final Log log;
-    private static final boolean isDebugEnabled;
-
-    static
-    {
-        log = LogFactory.getLog(Group.class);
-        isDebugEnabled = log.isDebugEnabled();
-    }
+    /** Logging */
+    private transient Logger log;
 
     /**
      * The key used to represent this group in a parameter.
@@ -138,6 +132,15 @@ public class Group implements Serializable
     protected boolean isDeclared;
 
     /**
+	 * Enable Avalon Logging
+	 */
+	@Override
+	public void enableLogging(Logger logger)
+	{
+		this.log = logger.getChildLogger(getClass().getSimpleName());
+	}
+
+	/**
      * Initializes the default Group using parameters.
      *
      * @param pp a <code>ValueParser</code> value
@@ -381,7 +384,7 @@ public class Group implements Serializable
         for (int i = fieldsArray.length - 1; i >= 0; i--)
         {
             valid &= fieldsArray[i].isValid();
-            if (isDebugEnabled && !fieldsArray[i].isValid())
+            if (log.isDebugEnabled() && !fieldsArray[i].isValid())
             {
                 log.debug("Group(" + oid + "): " + name + "; Field: "
                         + fieldsArray[i].name + "; value=" +
@@ -404,7 +407,7 @@ public class Group implements Serializable
 
         while (cls != null)
         {
-            if (isDebugEnabled)
+            if (log.isDebugEnabled())
             {
                 log.debug("setProperties(" + cls.getName() + ")");
             }

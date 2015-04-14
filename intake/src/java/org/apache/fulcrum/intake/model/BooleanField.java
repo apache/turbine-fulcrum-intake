@@ -48,7 +48,8 @@ public class BooleanField
      *
      * @param prop Parameter for the default values
      */
-    public void setDefaultValue(String prop)
+    @Override
+	public void setDefaultValue(String prop)
     {
         defaultValue = null;
 
@@ -68,7 +69,8 @@ public class BooleanField
      *
      * @param prop The value to use if the field is empty.
      */
-    public void setEmptyValue(String prop)
+    @Override
+	public void setEmptyValue(String prop)
     {
         emptyValue = null;
 
@@ -90,7 +92,8 @@ public class BooleanField
      * @return the value to use when the field is empty or an Object that
      * wraps the empty value for primitive types.
      */
-    protected Object getSafeEmptyValue()
+    @Override
+	protected Object getSafeEmptyValue()
     {
         if (isMultiValued)
         {
@@ -107,7 +110,8 @@ public class BooleanField
      *
      * @return class name of the validator
      */
-    protected String getDefaultValidator()
+    @Override
+	protected String getDefaultValidator()
     {
         return BooleanValidator.class.getName();
     }
@@ -115,7 +119,8 @@ public class BooleanField
     /**
      * Sets the value of the field from data in the parser.
      */
-    protected void doSetValue()
+    @Override
+	protected void doSetValue()
     {
         if (isMultiValued)
         {
@@ -152,7 +157,7 @@ public class BooleanField
         }
         catch (Exception e)
         {
-            log.error(e);
+            log.error("Error getting boolean value " + getValue(), e);
         }
         return result;
     }

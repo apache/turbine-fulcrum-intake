@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.fulcrum.intake.IntakeException;
 
 /**
  * Validates numbers with the following constraints in addition to those
@@ -75,12 +74,6 @@ public class DateStringValidator
     /**  */
     private SimpleDateFormat sdf = null;
 
-    public DateStringValidator(Map<String, Constraint> paramMap)
-            throws IntakeException
-    {
-        super(paramMap);
-    }
-
     /**
      * Default Constructor
      */
@@ -91,12 +84,13 @@ public class DateStringValidator
     }
 
     /**
-     * Constructor to use when initialising Object
+     * Constructor to use when initializing Object
      *
      * @param paramMap
      * @throws InvalidMaskException
      */
-    public void init(Map<String, ? extends Constraint> paramMap)
+    @Override
+	public void init(Map<String, ? extends Constraint> paramMap)
             throws InvalidMaskException
     {
         super.init(paramMap);
@@ -154,7 +148,8 @@ public class DateStringValidator
      * @exception ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
-    public void assertValidity(String testValue)
+    @Override
+	public void assertValidity(String testValue)
             throws ValidationException
     {
         super.assertValidity(testValue);

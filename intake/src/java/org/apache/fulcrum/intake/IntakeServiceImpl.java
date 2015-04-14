@@ -25,10 +25,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
@@ -41,6 +39,7 @@ import java.util.Set;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.Unmarshaller.Listener;
 import javax.xml.bind.helpers.DefaultValidationEventHandler;
 import javax.xml.validation.SchemaFactory;
 
@@ -52,6 +51,7 @@ import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.framework.logger.LogEnabled;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
@@ -105,6 +105,28 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
     /** Configured location of the serialization file */
     private String serialDataPath = null;
+
+    /**
+     * Local Class to enable Avalon logging on the model classes
+     *
+     */
+    private class AvalonLogEnabledListener extends Listener
+    {
+		/**
+		 * @see javax.xml.bind.Unmarshaller.Listener#beforeUnmarshal(java.lang.Object, java.lang.Object)
+		 */
+		@Override
+		public void beforeUnmarshal(Object target, Object parent)
+		{
+			super.beforeUnmarshal(target, parent);
+
+			if (target instanceof LogEnabled)
+			{
+				((LogEnabled)target).enableLogging(getLogger());
+			}
+		}
+
+    }
 
     /**
      * Registers a given group name in the system
@@ -175,6 +197,8 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                 "Entered loadSerialized(" + serialDataPath + ", " + timeStamp
                         + ")");
 
+        long timer = System.currentTimeMillis();
+
         if (serialDataPath == null)
         {
             return null;
@@ -194,18 +218,20 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             return null;
         }
 
-        InputStream in = null;
+        ObjectInputStream in = null;
         Map<AppData, File> serialData = null;
 
         try
         {
-            in = new FileInputStream(serialDataFile);
-            ObjectInputStream p = new ObjectInputStream(in);
-            Object o = p.readObject();
+        	FileInputStream fin = new FileInputStream(serialDataFile);
+            in = new ObjectInputStream(fin);
+            Object o = in.readObject();
 
             if (o instanceof Map)
             {
-                serialData = (Map<AppData, File>) o;
+                @SuppressWarnings("unchecked") // checked with instanceof
+				Map<AppData, File> map = (Map<AppData, File>) o;
+				serialData = map;
             }
             else
             {
@@ -251,7 +277,35 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             }
         }
 
+        // Recreate transient loggers
+        if (serialData != null)
+        {
+        	for (AppData appData : serialData.keySet())
+        	{
+        		for (Group group : appData.getGroups())
+        		{
+        			if (group instanceof LogEnabled)
+        			{
+        				((LogEnabled)group).enableLogging(getLogger());
+        			}
+
+    				for (Field<?> field : group.getFields())
+    				{
+            			if (field instanceof LogEnabled)
+            			{
+            				((LogEnabled)field).enableLogging(getLogger());
+
+            				if (field.getValidator() != null && field.getValidator() instanceof LogEnabled)
+            				{
+                				((LogEnabled)field.getValidator()).enableLogging(getLogger());
+            				}
+            			}
+    				}
+        		}
+        	}
+        }
         getLogger().info("Loaded serialized map object, ignoring XML");
+        getLogger().debug("Loading took " + (System.currentTimeMillis() - timer));
         return serialData;
     }
 
@@ -272,6 +326,8 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                 "Entered saveSerialized(" + serialDataPath
                         + ", appDataElements)");
 
+        long timer = System.currentTimeMillis();
+
         if (serialDataPath == null)
         {
             return;
@@ -288,26 +344,26 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
         {
             getLogger().info(
                     "Could not create serialized file " + serialDataPath
-                            + ", not serializing the XML data");
+                            + ", not serializing the XML data", e);
             return;
         }
 
-        OutputStream out = null;
-        InputStream in = null;
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
 
         try
         {
             // write the appData file out
-            out = new FileOutputStream(serialDataPath);
-            ObjectOutputStream pout = new ObjectOutputStream(out);
-            pout.writeObject(appDataElements);
-            pout.flush();
+        	FileOutputStream fout = new FileOutputStream(serialDataPath);
+            out = new ObjectOutputStream(fout);
+            out.writeObject(appDataElements);
+            out.flush();
 
             // read the file back in. for some reason on OSX 10.1
             // this is necessary.
-            in = new FileInputStream(serialDataPath);
-            ObjectInputStream pin = new ObjectInputStream(in);
-            /* Map dummy = (Map) */ pin.readObject();
+            FileInputStream fin = new FileInputStream(serialDataPath);
+            in = new ObjectInputStream(fin);
+            /* Map dummy = (Map) */ in.readObject();
 
             getLogger().debug("Serializing successful");
         }
@@ -315,12 +371,12 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
         {
             getLogger().info(
                     "Could not write serialized file to " + serialDataPath
-                            + ", not serializing the XML data");
+                            + ", not serializing the XML data", e);
         }
         catch (ClassNotFoundException e)
         {
             getLogger().info(
-                    "Could not re-read serialized file from " + serialDataPath);
+                    "Could not re-read serialized file from " + serialDataPath, e);
         }
         finally
         {
@@ -347,6 +403,8 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                 getLogger().error("Exception while closing file", e);
             }
         }
+
+        getLogger().debug("Saving took " + (System.currentTimeMillis() - timer));
     }
 
     /**
@@ -704,12 +762,18 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
         }
         else
         {
+        	long timer = System.currentTimeMillis();
+
             // Parse all the given XML files
             JAXBContext jaxb = JAXBContext.newInstance(AppData.class);
             Unmarshaller um = jaxb.createUnmarshaller();
 
             // Debug mapping
             um.setEventHandler(new DefaultValidationEventHandler());
+
+            // Enable logging
+            Listener logEnabledListener = new AvalonLogEnabledListener();
+            um.setListener(logEnabledListener);
 
             URL schemaURL = getClass().getResource("/intake.xsd");
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
@@ -724,6 +788,8 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                 appDataElements.put(appData, xmlFile);
                 getLogger().debug("Saving appData for " + xmlFile);
             }
+
+            getLogger().debug("Parsing took " + (System.currentTimeMillis() - timer));
 
             saveSerialized(serialDataPath, appDataElements);
         }

@@ -26,10 +26,11 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Locale;
+import java.util.Map;
 
+import org.apache.avalon.framework.logger.LogEnabled;
+import org.apache.avalon.framework.logger.Logger;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.intake.IntakeError;
 import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.IntakeServiceFacade;
@@ -51,7 +52,7 @@ import org.apache.fulcrum.parser.ValueParser;
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
-public abstract class Field<T> implements Serializable
+public abstract class Field<T> implements Serializable, LogEnabled
 {
     /** Serial version */
     private static final long serialVersionUID = 6897267716698096895L;
@@ -171,9 +172,11 @@ public abstract class Field<T> implements Serializable
     /** The object containing the field data. */
     protected ValueParser parser;
 
+    /** Store rules for deserialization */
+    private Map<String, Rule> ruleMap;
+
     /** Logging */
-    protected Log log = LogFactory.getLog(this.getClass());
-    protected boolean isDebugEnabled = false;
+    protected transient Logger log;
 
     /**
      * Constructs a field based on data in the xml specification
@@ -188,14 +191,14 @@ public abstract class Field<T> implements Serializable
      */
     public Field(XmlField field, Group group) throws IntakeException
     {
-        isDebugEnabled = log.isDebugEnabled();
-
+    	enableLogging(field.getLogger());
         this.group = group;
         key = field.getKey();
         name = field.getName();
         displayName = field.getDisplayName();
         displaySize = field.getDisplaySize();
         isMultiValued = field.isMultiValued();
+        ruleMap = field.getRuleMap();
 
         try
         {
@@ -231,11 +234,16 @@ public abstract class Field<T> implements Serializable
 
         if (validatorClassName != null)
         {
-            validator = createValidator(validatorClassName, field);
+            validator = createValidator(validatorClassName);
         }
         else
         {
             validator = null;
+        }
+
+        if (validator instanceof LogEnabled)
+        {
+        	((LogEnabled)validator).enableLogging(log);
         }
 
         // field may have been declared as always required in the xml spec
@@ -257,6 +265,15 @@ public abstract class Field<T> implements Serializable
         mapToProperty = field.getMapToProperty();
         valArray = new Object[1];
     }
+
+    /**
+	 * Enable Avalon Logging
+	 */
+	@Override
+	public void enableLogging(Logger logger)
+	{
+		this.log = logger.getChildLogger(getClass().getSimpleName());
+	}
 
     /**
      * Initialize getter and setter from properties
@@ -319,7 +336,7 @@ public abstract class Field<T> implements Serializable
 
         if (pp.containsKey(getKey()))
         {
-            if (isDebugEnabled)
+            if (log.isDebugEnabled())
             {
                 log.debug(name + ": Found our Key in the request, setting Value");
             }
@@ -609,7 +626,7 @@ public abstract class Field<T> implements Serializable
         {
             stringValues = parser.getStrings(getKey());
 
-            if (isDebugEnabled)
+            if (log.isDebugEnabled())
             {
                 log.debug(name + ": Multi-Valued, Value is " + stringValue);
                 if (stringValues != null)
@@ -646,7 +663,7 @@ public abstract class Field<T> implements Serializable
         {
             stringValue = parser.getString(getKey());
 
-            if (isDebugEnabled)
+            if (log.isDebugEnabled())
             {
                 log.debug(name + ": Single Valued, Value is " + stringValue);
             }
@@ -879,7 +896,7 @@ public abstract class Field<T> implements Serializable
      */
     public void setProperty(Object obj) throws IntakeException
     {
-        if (isDebugEnabled)
+        if (log.isDebugEnabled())
         {
             log.debug(name + ".setProperty(" + obj.getClass().getName() + ")");
         }
@@ -892,7 +909,7 @@ public abstract class Field<T> implements Serializable
         if (isSet() && null != getTestValue())
         {
             valArray[0] = getTestValue();
-            if (isDebugEnabled)
+            if (log.isDebugEnabled())
             {
                 log.debug(name + ": Property is set, value is " + valArray[0]);
             }
@@ -900,7 +917,7 @@ public abstract class Field<T> implements Serializable
         else
         {
             valArray[0] = getSafeEmptyValue();
-            if (isDebugEnabled)
+            if (log.isDebugEnabled())
             {
                 log.debug(name + ": Property is not set, using emptyValue " + valArray[0]);
             }
@@ -918,7 +935,7 @@ public abstract class Field<T> implements Serializable
             {
                 setter.invoke(obj, valArray);
             }
-            else if (isDebugEnabled)
+            else if (log.isDebugEnabled())
             {
                 log.debug(name + ": has a null setter for the mapToProperty"
                         + " Attribute, although all Fields should be mapped"
@@ -1055,7 +1072,7 @@ public abstract class Field<T> implements Serializable
      * @throws IntakeException if the instance could not be created
      */
     @SuppressWarnings("unchecked")
-    private Validator<T> createValidator(String validatorClassName, XmlField field)
+    private Validator<T> createValidator(String validatorClassName)
             throws IntakeException
     {
         Validator<T> v;
@@ -1086,19 +1103,15 @@ public abstract class Field<T> implements Serializable
 
         // this should always be true for now
         // (until bean property initialization is implemented)
-        // FIXME: rulemap is not available when deserialized
-        if (field != null)
+        if (v instanceof InitableByConstraintMap)
         {
-            if (v instanceof InitableByConstraintMap)
-            {
-                ((InitableByConstraintMap) v).init(field.getRuleMap());
-            }
-            else
-            {
-                throw new IntakeError(
-                        "All Validation objects must be subclasses of "
-                        + "InitableByConstraintMap");
-            }
+            ((InitableByConstraintMap) v).init(this.ruleMap);
+        }
+        else
+        {
+            throw new IntakeError(
+                    "All Validation objects must be subclasses of "
+                    + "InitableByConstraintMap");
         }
 
         return v;
@@ -1128,7 +1141,7 @@ public abstract class Field<T> implements Serializable
 
             if (validatorClassName != null)
             {
-                validator = createValidator(validatorClassName, null);
+                validator = createValidator(validatorClassName);
             }
         }
         catch (ClassNotFoundException e)

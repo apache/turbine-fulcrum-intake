@@ -21,8 +21,6 @@ package org.apache.fulcrum.intake.validator;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.model.Field;
 import org.apache.fulcrum.intake.model.Group;
@@ -62,9 +60,6 @@ import org.apache.fulcrum.intake.model.Group;
  */
 public class FieldReference
 {
-    /** a local logger */
-    protected static final Log log = LogFactory.getLog(FieldReference.class);
-
     /** Rule name for "&lt;" comparison */
     public static final String RANGE_LT = "less-than";
 
@@ -229,7 +224,6 @@ public class FieldReference
             }
             catch (IntakeException e)
             {
-                log.error("Validate operation failed.", e);
                 throw new ValidationException(ref.getMessage());
             }
 
