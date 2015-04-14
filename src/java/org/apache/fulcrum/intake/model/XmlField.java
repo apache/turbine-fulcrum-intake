@@ -34,6 +34,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.avalon.framework.logger.LogEnabled;
+import org.apache.avalon.framework.logger.Logger;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -48,7 +50,7 @@ import org.apache.commons.lang.StringUtils;
 @XmlType(name="field")
 @XmlAccessorType(XmlAccessType.NONE)
 public class XmlField
-        implements Serializable
+        implements Serializable, LogEnabled
 {
     /**
      * Serial version id
@@ -96,6 +98,8 @@ public class XmlField
 
     private Group parent;
 
+    private Logger log;
+
     /**
      * Default Constructor
      */
@@ -103,6 +107,23 @@ public class XmlField
     {
         ruleMap = new HashMap<String, Rule>();
     }
+
+    /**
+	 * Enable Avalon Logging
+	 */
+	@Override
+	public void enableLogging(Logger logger)
+	{
+		this.log = logger;
+	}
+
+	/**
+	 * Return Avalon logger
+	 */
+	public Logger getLogger()
+	{
+		return log;
+	}
 
     /**
      * Get the name of the property

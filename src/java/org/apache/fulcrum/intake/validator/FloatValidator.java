@@ -22,7 +22,6 @@ package org.apache.fulcrum.intake.validator;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * Validates Floats with the following constraints in addition to those
@@ -48,18 +47,6 @@ public class FloatValidator
         extends NumberValidator<Float>
 {
     /**
-     * Constructor to use when initialising Object
-     *
-     * @param paramMap
-     * @throws InvalidMaskException
-     */
-    public FloatValidator(Map<String, Constraint> paramMap)
-            throws InvalidMaskException
-    {
-        super(paramMap);
-    }
-
-    /**
      * Default Constructor
      */
     public FloatValidator()
@@ -72,10 +59,17 @@ public class FloatValidator
      * @see org.apache.fulcrum.intake.validator.NumberValidator#parseNumber(java.lang.String, java.util.Locale)
      */
     @Override
-    protected Float parseNumber(String stringValue, Locale locale) throws ParseException
+    protected Float parseNumber(String stringValue, Locale locale) throws NumberFormatException
     {
         NumberFormat nf = NumberFormat.getInstance(locale);
 
-        return Float.valueOf(nf.parse(stringValue).floatValue());
+        try
+        {
+            return Float.valueOf(nf.parse(stringValue).floatValue());
+		}
+        catch (ParseException e)
+        {
+        	throw new NumberFormatException(e.getMessage());
+		}
     }
 }

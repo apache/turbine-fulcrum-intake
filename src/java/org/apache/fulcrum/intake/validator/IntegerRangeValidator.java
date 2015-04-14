@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.model.Field;
 import org.apache.fulcrum.intake.model.Group;
 
@@ -69,12 +68,6 @@ public class IntegerRangeValidator
     /** Callback for the actual compare operation */
     CompareCallback<Integer> compareCallback;
 
-    public IntegerRangeValidator(Map<String, Constraint> paramMap)
-            throws IntakeException
-    {
-        super(paramMap);
-    }
-
     /**
      *  Default constructor
      */
@@ -84,12 +77,13 @@ public class IntegerRangeValidator
     }
 
     /**
-     * Constructor to use when initialising Object
+     * Constructor to use when initializing Object
      *
      * @param paramMap
      * @throws InvalidMaskException
      */
-    public void init(Map<String, ? extends Constraint> paramMap)
+    @Override
+	public void init(Map<String, ? extends Constraint> paramMap)
             throws InvalidMaskException
     {
         super.init(paramMap);
@@ -105,7 +99,8 @@ public class IntegerRangeValidator
                  *
                  * @return the result of the comparison
                  */
-                public boolean compareValues(int compare, Integer thisValue, Integer refValue)
+                @Override
+				public boolean compareValues(int compare, Integer thisValue, Integer refValue)
                 {
                     boolean result = true;
 
@@ -167,7 +162,8 @@ public class IntegerRangeValidator
      * @exception ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
-    public void assertValidity(final Field<Integer> testField)
+    @Override
+	public void assertValidity(final Field<Integer> testField)
         throws ValidationException
     {
         super.assertValidity(testField);

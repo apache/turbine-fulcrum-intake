@@ -20,7 +20,6 @@ package org.apache.fulcrum.intake.validator;
  */
 
 import java.text.ParseException;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -73,18 +72,6 @@ public class BooleanValidator
     }
 
     /**
-     * Constructor to use when initialising Object
-     *
-     * @param paramMap
-     * @throws InvalidMaskException
-     */
-    public BooleanValidator(Map<String, Constraint> paramMap)
-            throws InvalidMaskException
-    {
-        super(paramMap);
-    }
-
-    /**
      * Determine whether a testValue meets the criteria specified
      * in the constraints defined for this validator
      *
@@ -92,7 +79,8 @@ public class BooleanValidator
      * @exception ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
-    public void assertValidity(String testValue)
+    @Override
+	public void assertValidity(String testValue)
             throws ValidationException
     {
         super.assertValidity(testValue);
@@ -111,7 +99,7 @@ public class BooleanValidator
     }
 
     /**
-     * Parses a srting value into a Boolean object.
+     * Parses a string value into a Boolean object.
      *
      * @param stringValue the value to parse
      * @return a <code>Boolean</a> object

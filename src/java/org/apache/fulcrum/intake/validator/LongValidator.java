@@ -19,9 +19,7 @@ package org.apache.fulcrum.intake.validator;
  * under the License.
  */
 
-import java.text.ParseException;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * Validates Longs with the following constraints in addition to those
@@ -46,18 +44,6 @@ public class LongValidator
         extends NumberValidator<Long>
 {
     /**
-     * Constructor to use when initialising Object
-     *
-     * @param paramMap
-     * @throws InvalidMaskException
-     */
-    public LongValidator(Map<String, Constraint> paramMap)
-            throws InvalidMaskException
-    {
-        super(paramMap);
-    }
-
-    /**
      * Default Constructor
      */
     public LongValidator()
@@ -70,7 +56,7 @@ public class LongValidator
      * @see org.apache.fulcrum.intake.validator.NumberValidator#parseNumber(java.lang.String, java.util.Locale)
      */
     @Override
-    protected Long parseNumber(String stringValue, Locale locale) throws ParseException
+    protected Long parseNumber(String stringValue, Locale locale) throws NumberFormatException
     {
         return Long.valueOf(stringValue);
     }

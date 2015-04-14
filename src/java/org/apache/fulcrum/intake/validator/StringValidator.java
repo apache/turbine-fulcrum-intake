@@ -57,21 +57,6 @@ public class StringValidator
     /** The message to report if the mask constraint is not satisfied */
     protected String maskMessage = null;
 
-
-    /**
-     * Constructor
-     *
-     * @param paramMap a <code>Map</code> of <code>Rule</code>'s
-     * containing constraints on the input.
-     * @exception InvalidMaskException An invalid mask was specified for one of the rules
-
-    */
-    public StringValidator(Map<String, Constraint> paramMap)
-            throws InvalidMaskException
-    {
-        super(paramMap);
-    }
-
     /**
      * Default constructor
      */
@@ -88,7 +73,8 @@ public class StringValidator
      * containing constraints on the input.
      * @exception InvalidMaskException An invalid mask was specified for one of the rules
      */
-    public void init(Map<String, ? extends Constraint> paramMap)
+    @Override
+	public void init(Map<String, ? extends Constraint> paramMap)
             throws InvalidMaskException
     {
         super.init(paramMap);
@@ -111,7 +97,8 @@ public class StringValidator
      * @exception ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
-    public void assertValidity(String testValue)
+    @Override
+	public void assertValidity(String testValue)
             throws ValidationException
     {
         super.assertValidity(testValue);

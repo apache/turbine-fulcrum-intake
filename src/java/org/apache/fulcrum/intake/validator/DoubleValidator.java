@@ -22,7 +22,6 @@ package org.apache.fulcrum.intake.validator;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * Validates Doubles with the following constraints in addition to those
@@ -48,18 +47,6 @@ public class DoubleValidator
         extends NumberValidator<Double>
 {
     /**
-     * Constructor to use when initialising Object
-     *
-     * @param paramMap
-     * @throws InvalidMaskException
-     */
-    public DoubleValidator(Map<String, Constraint> paramMap)
-            throws InvalidMaskException
-    {
-        super(paramMap);
-    }
-
-    /**
      * Default Constructor
      */
     public DoubleValidator()
@@ -72,10 +59,17 @@ public class DoubleValidator
      * @see org.apache.fulcrum.intake.validator.NumberValidator#parseNumber(java.lang.String, java.util.Locale)
      */
     @Override
-    protected Double parseNumber(String stringValue, Locale locale) throws ParseException
+    protected Double parseNumber(String stringValue, Locale locale) throws NumberFormatException
     {
         NumberFormat nf = NumberFormat.getInstance(locale);
 
-        return Double.valueOf(nf.parse(stringValue).doubleValue());
+        try
+        {
+			return Double.valueOf(nf.parse(stringValue).doubleValue());
+		}
+        catch (ParseException e)
+        {
+        	throw new NumberFormatException(e.getMessage());
+		}
     }
 }
