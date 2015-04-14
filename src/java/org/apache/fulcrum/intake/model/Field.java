@@ -773,9 +773,10 @@ public abstract class Field<T> implements Serializable, LogEnabled
      *
      * @return an <code>Object</code> value
      */
-    public Object getTestValue()
+    @SuppressWarnings("unchecked")
+	public <TT> TT getTestValue()
     {
-        return testValue;
+        return (TT)testValue;
     }
 
     /**
@@ -803,7 +804,7 @@ public abstract class Field<T> implements Serializable, LogEnabled
 
         if (getTestValue() != null)
         {
-            val = (T) getTestValue();
+            val = getTestValue();
         }
 
         if (val == null)
@@ -861,7 +862,9 @@ public abstract class Field<T> implements Serializable, LogEnabled
     {
         try
         {
-            validValue = (T)getter.invoke(obj);
+            @SuppressWarnings("unchecked") // invoke returns Object
+			T t = (T)getter.invoke(obj);
+			validValue = t;
         }
         catch (IllegalAccessException e)
         {
