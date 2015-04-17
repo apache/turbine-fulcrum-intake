@@ -30,7 +30,10 @@ import org.apache.fulcrum.intake.validator.ShortValidator;
 public class ShortField
         extends Field<Short>
 {
-    /**
+    /** Serial version */
+	private static final long serialVersionUID = -5838127207028024370L;
+
+	/**
      * Constructor.
      *
      * @param field xml field definition object
@@ -48,7 +51,8 @@ public class ShortField
      *
      * @param prop Parameter for the default values
      */
-    public void setDefaultValue(String prop)
+    @Override
+	public void setDefaultValue(String prop)
     {
         defaultValue = null;
 
@@ -68,7 +72,8 @@ public class ShortField
      *
      * @param prop The value to use if the field is empty.
      */
-    public void setEmptyValue(String prop)
+    @Override
+	public void setEmptyValue(String prop)
     {
         emptyValue = null;
 
@@ -90,7 +95,8 @@ public class ShortField
      * @return the value to use when the field is empty or an Object that
      * wraps the empty value for primitive types.
      */
-    protected Object getSafeEmptyValue()
+    @Override
+	protected Object getSafeEmptyValue()
     {
         if (isMultiValued)
         {
@@ -108,7 +114,8 @@ public class ShortField
      *
      * @return A suitable validator
      */
-    protected String getDefaultValidator()
+    @Override
+	protected String getDefaultValidator()
     {
         return ShortValidator.class.getName();
     }
@@ -116,7 +123,8 @@ public class ShortField
     /**
      * Sets the value of the field from data in the parser.
      */
-    protected void doSetValue()
+    @Override
+	protected void doSetValue()
     {
         if (isMultiValued)
         {

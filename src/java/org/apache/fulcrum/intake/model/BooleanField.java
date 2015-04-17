@@ -30,7 +30,10 @@ import org.apache.fulcrum.intake.validator.BooleanValidator;
 public class BooleanField
         extends Field<Boolean>
 {
-    /**
+    /** Serial version */
+	private static final long serialVersionUID = 6689670469518374083L;
+
+	/**
      * Constructor.
      *
      * @param field xml field definition object
