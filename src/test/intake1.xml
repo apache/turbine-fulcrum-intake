@@ -55,4 +55,76 @@
             <rule name="invalidNumber" value="">Not a number</rule>
         </field>
     </group>
+    
+    <group name="ValidationTest" key="vt">
+        <field name="StringTestField" key="stf" type="String">
+            <rule name="required" value="true">Required</rule>
+            <rule name="minLength" value="2">Too short</rule>
+            <rule name="maxLength" value="10">Too long</rule>
+            <rule name="mask" value="[A-Z]+">Uppercase letters only</rule>
+        </field>
+		<field name="BooleanTestField" key="btf" type="boolean">
+            <rule name="required" value="true">Required</rule>
+		</field>
+		<field name="BigDecimalTestField" key="bdtf" type="BigDecimal">
+            <rule name="required" value="true">Required</rule>
+            <rule name="invalidNumber" value="">Not a number</rule>
+            <rule name="minValue" value="3.0">Too small</rule>
+            <rule name="maxValue" value="30.4">Too big</rule>
+		</field>
+		<field name="IntegerTestField" key="itf" type="int">
+            <rule name="required" value="true">Required</rule>
+            <rule name="invalidNumber" value="">Not a number</rule>
+            <rule name="minValue" value="3">Too small</rule>
+            <rule name="maxValue" value="30">Too big</rule>
+		</field>
+        <field name="IntegerToTestField" key="ittf" type="int" validator="IntegerRangeValidator">
+            <rule name="required" value="true">Required</rule>
+            <rule name="invalidNumber" value="">Not a number</rule>
+            <rule name="greater-than" value="IntegerTestField">To-int must be greater than From-int</rule>
+        </field>
+		<field name="FloatTestField" key="ftf" type="float">
+            <rule name="required" value="true">Required</rule>
+            <rule name="invalidNumber" value="">Not a number</rule>
+            <rule name="minValue" value="3.0">Too small</rule>
+            <rule name="maxValue" value="30.4">Too big</rule>
+        </field>
+		<field name="FileItemTestField" key="fitf" type="FileItem">
+            <rule name="required" value="true">Required</rule>
+        </field>
+		<field name="DateStringTestField" key="dstf" type="DateString">
+            <rule name="required" value="true">Required</rule>
+            <rule name="format" value="MM/dd/yyyy">Bad format</rule>
+            <rule name="format1" value="dd.MM.yyyy">Bad format</rule>
+            <rule name="flexible" value="true" />
+        </field>
+	    <field name="DateToTestField" key="dttf" type="DateString" validator="DateRangeValidator">
+            <rule name="required" value="true">Required</rule>
+            <rule name="format" value="MM/dd/yyyy">Bad format</rule>
+	        <rule name="greater-than" value="DateStringTestField">To-Date must be greater than From-Date</rule>
+	    </field>
+		<field name="DoubleTestField" key="dtf" type="double">
+            <rule name="required" value="true">Required</rule>
+            <rule name="invalidNumber" value="">Not a number</rule>
+            <rule name="minValue" value="3.0">Too small</rule>
+            <rule name="maxValue" value="30.4">Too big</rule>
+        </field>
+		<field name="ShortTestField" key="shtf" type="short">
+            <rule name="required" value="true">Required</rule>
+            <rule name="invalidNumber" value="">Not a number</rule>
+            <rule name="minValue" value="3">Too small</rule>
+            <rule name="maxValue" value="30">Too big</rule>
+        </field>
+		<field name="LongTestField" key="ltf" type="long">
+            <rule name="required" value="true">Required</rule>
+            <rule name="invalidNumber" value="">Not a number</rule>
+            <rule name="minValue" value="3">Too small</rule>
+            <rule name="maxValue" value="30">Too big</rule>
+        </field>
+		<field name="CustomTestField" key="ctf" type="custom" 
+		    fieldClass="org.apache.fulcrum.intake.test.MyField">
+            <rule name="required" value="true">Required</rule>
+        </field>
+    </group>
+    
 </input-data>

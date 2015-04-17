@@ -93,7 +93,7 @@ public class IntakeTest extends BaseUnitTest
 
         Field<?> userNameField = group.get("Username");
 
-        ParserService ps = (ParserService) this.resolve( ParserService.class.getName() );
+        ParserService ps = (ParserService) this.resolve( ParserService.ROLE );
         ValueParser pp = ps.getParser(DefaultParameterParser.class);
 
         pp.setString(userNameField.getKey(), "Joe");
@@ -114,7 +114,7 @@ public class IntakeTest extends BaseUnitTest
 
         Field<?> userNameField = group.get("Username");
 
-        ParserService ps = (ParserService) this.resolve( ParserService.class.getName() );
+        ParserService ps = (ParserService) this.resolve( ParserService.ROLE );
         ValueParser pp = ps.getParser(DefaultParameterParser.class);
 
         pp.setString("loginGroupKey_0loginUsernameKey", "Joe");
@@ -171,7 +171,7 @@ public class IntakeTest extends BaseUnitTest
         assertTrue("The Default Validator of an intake Field type int should be IntegerValidator", (multiValueField.getValidator() instanceof IntegerValidator));
         assertTrue("An intake Field type int, which is multiValued, should be multiValued", multiValueField.isMultiValued());
 
-        ParserService ps = (ParserService) this.resolve( ParserService.class.getName() );
+        ParserService ps = (ParserService) this.resolve( ParserService.ROLE );
         ValueParser pp = ps.getParser(DefaultParameterParser.class);
 
         int[] values = new int[] { 1, 2 };
