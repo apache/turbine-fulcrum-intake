@@ -294,11 +294,6 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             			if (field instanceof LogEnabled)
             			{
             				((LogEnabled)field).enableLogging(getLogger());
-
-            				if (field.getValidator() != null && field.getValidator() instanceof LogEnabled)
-            				{
-                				((LogEnabled)field.getValidator()).enableLogging(getLogger());
-            				}
             			}
     				}
         		}
