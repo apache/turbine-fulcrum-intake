@@ -28,6 +28,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.fulcrum.intake.model.Field;
 import org.apache.fulcrum.intake.model.Group;
+import org.apache.fulcrum.intake.validator.FieldReference.Comparison;
 
 /**
  * Validates a DateString field in dependency on another DateString field.
@@ -102,25 +103,25 @@ public class DateRangeValidator
                  * @return the result of the comparison
                  */
                 @Override
-				public boolean compareValues(int compare, Date thisValue, Date refValue)
+				public boolean compareValues(Comparison compare, Date thisValue, Date refValue)
                 {
                     boolean result = true;
 
                     switch (compare)
                     {
-                        case FieldReference.COMPARE_LT:
+                        case LT:
                             result = thisValue.before(refValue);
                             break;
 
-                        case FieldReference.COMPARE_LTE:
+                        case LTE:
                             result = !thisValue.after(refValue);
                             break;
 
-                        case FieldReference.COMPARE_GT:
+                        case GT:
                             result = thisValue.after(refValue);
                             break;
 
-                        case FieldReference.COMPARE_GTE:
+                        case GTE:
                             result = !thisValue.before(refValue);
                             break;
                     }
@@ -136,13 +137,13 @@ public class DateRangeValidator
             String key = entry.getKey();
             Constraint constraint = entry.getValue();
 
-            int compare = FieldReference.getCompareType(key);
+            Comparison compare = FieldReference.getComparisonType(key);
 
-            if (compare != 0)
+            if (compare != null)
             {
                 // found matching constraint
                 FieldReference fieldref = new FieldReference();
-                fieldref.setCompare(compare);
+                fieldref.setComparison(compare);
                 fieldref.setFieldName(constraint.getValue());
                 fieldref.setMessage(constraint.getMessage());
 

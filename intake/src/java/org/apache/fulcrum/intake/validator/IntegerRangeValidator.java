@@ -21,11 +21,13 @@ package org.apache.fulcrum.intake.validator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.fulcrum.intake.model.Field;
 import org.apache.fulcrum.intake.model.Group;
+import org.apache.fulcrum.intake.validator.FieldReference.Comparison;
 
 /**
  * Validates an int field in dependency on another int field.
@@ -100,25 +102,25 @@ public class IntegerRangeValidator
                  * @return the result of the comparison
                  */
                 @Override
-				public boolean compareValues(int compare, Integer thisValue, Integer refValue)
+				public boolean compareValues(Comparison compare, Integer thisValue, Integer refValue)
                 {
                     boolean result = true;
 
                     switch (compare)
                     {
-                        case FieldReference.COMPARE_LT:
+                        case LT:
                             result = thisValue.compareTo(refValue) < 0;
                             break;
 
-                        case FieldReference.COMPARE_LTE:
+                        case LTE:
                             result = thisValue.compareTo(refValue) <= 0;
                             break;
 
-                        case FieldReference.COMPARE_GT:
+                        case GT:
                             result = thisValue.compareTo(refValue) > 0;
                             break;
 
-                        case FieldReference.COMPARE_GTE:
+                        case GTE:
                             result = thisValue.compareTo(refValue) >= 0;
                             break;
                     }
@@ -134,13 +136,13 @@ public class IntegerRangeValidator
             String key = entry.getKey();
             Constraint constraint = entry.getValue();
 
-            int compare = FieldReference.getCompareType(key);
+            Comparison compare = FieldReference.getComparisonType(key);
 
-            if (compare != 0)
+            if (compare != null)
             {
                 // found matching constraint
                 FieldReference fieldref = new FieldReference();
-                fieldref.setCompare(compare);
+                fieldref.setComparison(compare);
                 fieldref.setFieldName(constraint.getValue());
                 fieldref.setMessage(constraint.getMessage());
 
@@ -169,6 +171,7 @@ public class IntegerRangeValidator
         super.assertValidity(testField);
 
         Group thisGroup = testField.getGroup();
+        Locale locale = testField.getLocale();
 
         if (testField.isMultiValued())
         {
@@ -176,14 +179,14 @@ public class IntegerRangeValidator
 
             for (int i = 0; i < stringValues.length; i++)
             {
-                assertValidity(stringValues[i], thisGroup);
+                assertValidity(stringValues[i], thisGroup, locale);
             }
         }
         else
         {
             String testValue = (String)testField.getTestValue();
 
-            assertValidity(testValue, thisGroup);
+            assertValidity(testValue, thisGroup, locale);
         }
     }
 
@@ -193,16 +196,27 @@ public class IntegerRangeValidator
      *
      * @param testValue a <code>String</code> to be tested
      * @param group the group this field belongs to
+     * @param locale the locale for this field
      *
      * @exception ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
-    public void assertValidity(final String testValue, final Group group)
+    public void assertValidity(final String testValue, final Group group, final Locale locale)
         throws ValidationException
     {
         if (required || StringUtils.isNotEmpty(testValue))
         {
-            Integer testInt = new Integer(testValue);
+            Integer testInt;
+
+			try
+			{
+				testInt = parseNumber(testValue, locale);
+			}
+			catch (NumberFormatException e)
+			{
+				errorMessage = invalidNumberMessage;
+				throw new ValidationException(invalidNumberMessage);
+			}
 
             try
             {

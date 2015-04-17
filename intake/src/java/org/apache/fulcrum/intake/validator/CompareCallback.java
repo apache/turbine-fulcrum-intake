@@ -1,5 +1,7 @@
 package org.apache.fulcrum.intake.validator;
 
+import org.apache.fulcrum.intake.validator.FieldReference.Comparison;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -36,5 +38,5 @@ public interface CompareCallback<T>
      *
      * @return the result of the comparison
      */
-    public boolean compareValues(int compare, T thisValue, T refValue);
+    public boolean compareValues(Comparison compare, T thisValue, T refValue);
 }
