@@ -42,7 +42,10 @@ import org.apache.fulcrum.intake.validator.DateStringValidator;
 public class DateStringField
         extends Field<Date>
 {
-    /** date format */
+    /** Serial version */
+	private static final long serialVersionUID = 3659498567870484883L;
+
+	/** date format */
     private DateFormat df = null;
 
     /**
@@ -69,7 +72,8 @@ public class DateStringField
      *
      * @param prop Parameter for the default values
      */
-    public void setDefaultValue(String prop)
+    @Override
+	public void setDefaultValue(String prop)
     {
         defaultValue = null;
 
@@ -97,7 +101,8 @@ public class DateStringField
      *
      * @param prop The value to use if the field is empty.
      */
-    public void setEmptyValue(String prop)
+    @Override
+	public void setEmptyValue(String prop)
     {
         emptyValue = null;
 
@@ -122,7 +127,8 @@ public class DateStringField
      *
      * @return "DateStringValidator"
      */
-    protected String getDefaultValidator()
+    @Override
+	protected String getDefaultValidator()
     {
         return DateStringValidator.class.getName();
     }
@@ -130,7 +136,8 @@ public class DateStringField
     /**
      * Sets the value of the field from data in the parser.
      */
-    protected void doSetValue()
+    @Override
+	protected void doSetValue()
     {
         if (isMultiValued)
         {
@@ -194,7 +201,8 @@ public class DateStringField
      *
      * @return a String representation
      */
-    public String toString()
+    @Override
+	public String toString()
     {
         String s = null;
         Object value = getValue();

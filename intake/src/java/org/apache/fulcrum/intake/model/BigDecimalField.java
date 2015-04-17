@@ -35,7 +35,10 @@ import org.apache.fulcrum.intake.validator.BigDecimalValidator;
 public class BigDecimalField
         extends Field<BigDecimal>
 {
-    /**
+    /** Serial version */
+	private static final long serialVersionUID = -8356433008715252236L;
+
+	/**
      * Constructor.
      *
      * @param field xml field definition object
@@ -53,7 +56,8 @@ public class BigDecimalField
      *
      * @param prop Parameter for the default values
      */
-    public void setDefaultValue(String prop)
+    @Override
+	public void setDefaultValue(String prop)
     {
         defaultValue = null;
 
@@ -73,7 +77,8 @@ public class BigDecimalField
      *
      * @param prop The value to use if the field is empty.
      */
-    public void setEmptyValue(String prop)
+    @Override
+	public void setEmptyValue(String prop)
     {
         emptyValue = null;
 
@@ -90,7 +95,8 @@ public class BigDecimalField
      *
      * @return A suitable validator
      */
-    protected String getDefaultValidator()
+    @Override
+	protected String getDefaultValidator()
     {
         return BigDecimalValidator.class.getName();
     }
@@ -98,7 +104,8 @@ public class BigDecimalField
     /**
      * Sets the value of the field from data in the parser.
      */
-    protected void doSetValue()
+    @Override
+	protected void doSetValue()
     {
         if (isMultiValued)
         {

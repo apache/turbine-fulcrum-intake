@@ -34,8 +34,10 @@ import org.apache.fulcrum.intake.validator.StringValidator;
 public class StringField
         extends Field<String>
 {
+    /** Serial version */
+	private static final long serialVersionUID = -7218385325093690333L;
 
-    /**
+	/**
      * Constructor.
      *
      * @param field xml field definition object
@@ -53,7 +55,8 @@ public class StringField
      *
      * @return class name of the default validator
      */
-    protected String getDefaultValidator()
+    @Override
+	protected String getDefaultValidator()
     {
         return StringValidator.class.getName();
     }
@@ -63,7 +66,8 @@ public class StringField
      *
      * @param prop Parameter for the default values
      */
-    public void setDefaultValue(String prop)
+    @Override
+	public void setDefaultValue(String prop)
     {
         defaultValue = prop;
     }
@@ -76,7 +80,8 @@ public class StringField
      *
      * @param prop The value to use if the field is empty.
      */
-    public void setEmptyValue(String prop)
+    @Override
+	public void setEmptyValue(String prop)
     {
         emptyValue = prop;
     }
@@ -84,7 +89,8 @@ public class StringField
     /**
      * Sets the value of the field from data in the parser.
      */
-    protected void doSetValue()
+    @Override
+	protected void doSetValue()
     {
         if (isMultiValued)
         {
@@ -109,7 +115,8 @@ public class StringField
      * @param v  Value to assign to required.
      * @param message an error message
      */
-    public void setRequired(boolean v, String message)
+    @Override
+	public void setRequired(boolean v, String message)
     {
         this.required = v;
         if (v)
