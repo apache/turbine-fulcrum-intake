@@ -30,8 +30,10 @@ import org.apache.fulcrum.intake.validator.LongValidator;
 public class LongField
         extends Field<Long>
 {
+    /** Serial version */
+	private static final long serialVersionUID = -7142823708600937188L;
 
-    /**
+	/**
      * Constructor.
      *
      * @param field xml field definition object
@@ -49,7 +51,8 @@ public class LongField
      *
      * @param prop Parameter for the default values
      */
-    public void setDefaultValue(String prop)
+    @Override
+	public void setDefaultValue(String prop)
     {
         defaultValue = null;
 
@@ -69,7 +72,8 @@ public class LongField
      *
      * @param prop The value to use if the field is empty.
      */
-    public void setEmptyValue(String prop)
+    @Override
+	public void setEmptyValue(String prop)
     {
         emptyValue = null;
 
@@ -91,7 +95,8 @@ public class LongField
      * @return the value to use when the field is empty or an Object that
      * wraps the empty value for primitive types.
      */
-    protected Object getSafeEmptyValue()
+    @Override
+	protected Object getSafeEmptyValue()
     {
         if (isMultiValued)
         {
@@ -108,7 +113,8 @@ public class LongField
      *
      * @return A suitable validator
      */
-    protected String getDefaultValidator()
+    @Override
+	protected String getDefaultValidator()
     {
         return LongValidator.class.getName();
     }
@@ -116,7 +122,8 @@ public class LongField
     /**
      * Sets the value of the field from data in the parser.
      */
-    protected void doSetValue()
+    @Override
+	protected void doSetValue()
     {
         if (isMultiValued)
         {

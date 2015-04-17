@@ -36,8 +36,10 @@ import org.apache.fulcrum.parser.ValueParser;
 public class FileItemField
         extends Field<FileItem>
 {
+    /** Serial version */
+	private static final long serialVersionUID = -963692413506822188L;
 
-    /**
+	/**
      * Constructor.
      *
      * @param field xml field definition object
@@ -58,7 +60,8 @@ public class FileItemField
      * @param prop Parameter for the default values
      * @throws TurbineRuntimeException
      */
-    public void setDefaultValue(String prop)
+    @Override
+	public void setDefaultValue(String prop)
     {
         if (prop != null)
         {
@@ -78,7 +81,8 @@ public class FileItemField
      * @param prop Parameter for the empty values
      * @throws TurbineRuntimeException
      */
-    public void setEmptyValue(String prop)
+    @Override
+	public void setEmptyValue(String prop)
     {
         if (prop != null)
         {
@@ -95,7 +99,8 @@ public class FileItemField
      *
      * @return A suitable validator
      */
-    protected String getDefaultValidator()
+    @Override
+	protected String getDefaultValidator()
     {
         return FileValidator.class.getName();
     }
@@ -110,7 +115,8 @@ public class FileItemField
      * @return a <code>Field</code> value
      * @exception IntakeException if an error occurs
      */
-    public Field<FileItem> init(ValueParser vp)
+    @Override
+	public Field<FileItem> init(ValueParser vp)
             throws IntakeException
     {
         super.parser = vp;
@@ -138,7 +144,8 @@ public class FileItemField
      *
      * @return the valid flag
      */
-    public boolean validate()
+    @Override
+	public boolean validate()
     {
         ParameterParser pp = (ParameterParser) super.parser;
         if (isMultiValued)
@@ -207,7 +214,8 @@ public class FileItemField
     /**
      * Sets the value of the field from data in the parser.
      */
-    protected void doSetValue()
+    @Override
+	protected void doSetValue()
     {
         ParameterParser pp = (ParameterParser) super.parser;
         if (isMultiValued)
