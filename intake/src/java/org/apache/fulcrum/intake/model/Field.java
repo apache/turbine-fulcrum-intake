@@ -19,9 +19,6 @@ package org.apache.fulcrum.intake.model;
  * under the License.
  */
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -232,29 +229,15 @@ public abstract class Field<T> implements Serializable, LogEnabled
             validatorClassName = defaultValidatorPackage + validatorClassName;
         }
 
-        if (validatorClassName != null)
-        {
-            validator = createValidator(validatorClassName);
-        }
-        else
-        {
-            validator = null;
-        }
-
-        if (validator instanceof LogEnabled)
-        {
-        	((LogEnabled)validator).enableLogging(log);
-        }
-
         // field may have been declared as always required in the xml spec
-        Rule reqRule = field.getRuleMap().get("required");
+        Rule reqRule = field.getRuleMap().get(Validator.REQUIRED_RULE_NAME);
         if (reqRule != null)
         {
             alwaysRequired = Boolean.valueOf(reqRule.getValue()).booleanValue();
             ifRequiredMessage = reqRule.getMessage();
         }
 
-        Rule maxLengthRule = field.getRuleMap().get("maxLength");
+        Rule maxLengthRule = field.getRuleMap().get(Validator.MAX_LENGTH_RULE_NAME);
         if (maxLengthRule != null)
         {
             maxSize = maxLengthRule.getValue();
@@ -416,6 +399,17 @@ public abstract class Field<T> implements Serializable, LogEnabled
      */
     public Validator<T> getValidator()
     {
+    	if (validator == null && validatorClassName != null)
+        {
+            try
+            {
+				validator = createValidator(validatorClassName);
+			}
+            catch (IntakeException e)
+            {
+            	log.error("Could not create validator", e);
+			}
+        }
         return validator;
     }
 
@@ -621,6 +615,7 @@ public abstract class Field<T> implements Serializable, LogEnabled
     public boolean validate()
     {
         log.debug(name + ": validate()");
+        Validator<T> v = getValidator();
 
         if (isMultiValued)
         {
@@ -638,7 +633,7 @@ public abstract class Field<T> implements Serializable, LogEnabled
                 }
             }
 
-            if (validator != null)
+            if (v != null)
             {
                 // set the test value as a String[] which might be replaced by
                 // the correct type if the input is valid.
@@ -646,7 +641,7 @@ public abstract class Field<T> implements Serializable, LogEnabled
 
                 try
                 {
-                    validator.assertValidity(this);
+                    v.assertValidity(this);
                 }
                 catch (ValidationException ve)
                 {
@@ -668,7 +663,7 @@ public abstract class Field<T> implements Serializable, LogEnabled
                 log.debug(name + ": Single Valued, Value is " + stringValue);
             }
 
-            if (validator != null)
+            if (v != null)
             {
                 // set the test value as a String which might be replaced by
                 // the correct type if the input is valid.
@@ -676,7 +671,7 @@ public abstract class Field<T> implements Serializable, LogEnabled
 
                 try
                 {
-                    validator.assertValidity(this);
+                    v.assertValidity(this);
                     log.debug(name + ": Value is ok");
                     doSetValue();
                 }
@@ -1104,6 +1099,11 @@ public abstract class Field<T> implements Serializable, LogEnabled
                     + validatorClassName + ")", e);
         }
 
+        if (v instanceof LogEnabled)
+        {
+        	((LogEnabled)v).enableLogging(log);
+        }
+
         // this should always be true for now
         // (until bean property initialization is implemented)
         if (v instanceof InitableByConstraintMap)
@@ -1118,42 +1118,5 @@ public abstract class Field<T> implements Serializable, LogEnabled
         }
 
         return v;
-    }
-    /**
-     * Serialize field to ObjectOutputStream
-     *
-     * @param oos the ObjectOutputStream
-     * @throws IOException
-     */
-    private void writeObject( ObjectOutputStream oos ) throws IOException
-    {
-        oos.defaultWriteObject();
-    }
-
-    /**
-     * De-serialize field from ObjectInputStream, recreate validator, getter and setter
-     *
-     * @param ois the ObjectInputStream
-     * @throws IOException
-     */
-    private void readObject( ObjectInputStream ois ) throws IOException
-    {
-        try
-        {
-            ois.defaultReadObject();
-
-            if (validatorClassName != null)
-            {
-                validator = createValidator(validatorClassName);
-            }
-        }
-        catch (ClassNotFoundException e)
-        {
-            throw new IOException("Could not create validator instance " + validatorClassName, e);
-        }
-        catch (IntakeException e)
-        {
-            throw new IOException("Could not create validator instance " + validatorClassName, e);
-        }
     }
 }
