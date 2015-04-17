@@ -60,32 +60,52 @@ import org.apache.fulcrum.intake.model.Group;
  */
 public class FieldReference
 {
-    /** Rule name for "&lt;" comparison */
-    public static final String RANGE_LT = "less-than";
+	public static enum Comparison
+	{
+	    /** Rule for "&lt;" comparison */
+		LT ("less-than"),
 
-    /** Rule name for "&gt;" comparison */
-    public static final String RANGE_GT = "greater-than";
+		/** Rule for "&gt;" comparison */
+		GT ("greater-than"),
 
-    /** Rule name for "&lt;=" comparison */
-    public static final String RANGE_LTE = "less-than-or-equal";
+	    /** Rule for "&lt;=" comparison */
+		LTE ("less-than-or-equal"),
 
-    /** Rule name for "&gt;=" comparison */
-    public static final String RANGE_GTE = "greater-than-or-equal";
+	    /** Rule for "&gt;=" comparison */
+		GTE ("greater-than-or-equal");
 
-    /** Integer value for "&lt;" comparison */
-    public static final int COMPARE_LT = 1;
+		private final String text;
 
-    /** Integer value for "&gt;" comparison */
-    public static final int COMPARE_GT = 2;
+		private Comparison(String text)
+		{
+			this.text = text;
+		}
 
-    /** Integer value for "&lt;=" comparison */
-    public static final int COMPARE_LTE = 3;
+		@Override
+		public String toString()
+		{
+			return text;
+		}
 
-    /** Integer value for "&gt;=" comparison */
-    public static final int COMPARE_GTE = 4;
+		public static Comparison fromString(String string)
+		{
+		    if (string != null)
+		    {
+		    	for (Comparison c : Comparison.values())
+		    	{
+		    		if (string.equals(c.text))
+		    		{
+		    			return c;
+		    		}
+		    	}
+		    }
+
+		    return null;
+		}
+	}
 
     /** Numeric comparison */
-    private int compare = 0;
+    private Comparison compare = null;
 
     /** Name of referenced field */
     private String fieldName = null;
@@ -104,7 +124,7 @@ public class FieldReference
     /**
      * @return the comparison type
      */
-    public int getCompare()
+    public Comparison getComparison()
     {
         return compare;
     }
@@ -112,7 +132,7 @@ public class FieldReference
     /**
      * @param compare the comparison type to set
      */
-    public void setCompare(int compare)
+    public void setComparison(Comparison compare)
     {
         this.compare = compare;
     }
@@ -155,28 +175,9 @@ public class FieldReference
      * @param key the string representation of a comparison operator
      * @return the numeric representation of the given comparison operator
      */
-    public static int getCompareType(String key)
+    public static Comparison getComparisonType(String key)
     {
-        int compareType = 0;
-
-        if (key.equals(RANGE_LT))
-        {
-            compareType = COMPARE_LT;
-        }
-        else if (key.equals(RANGE_LTE))
-        {
-            compareType = COMPARE_LTE;
-        }
-        else if (key.equals(RANGE_GT))
-        {
-            compareType = COMPARE_GT;
-        }
-        else if (key.equals(RANGE_GTE))
-        {
-            compareType = COMPARE_GTE;
-        }
-
-        return compareType;
+    	return Comparison.fromString(key);
     }
 
     /**
@@ -216,7 +217,7 @@ public class FieldReference
 
                     if (refField.isValid())
                     {
-                        comp_true = compareCallback.compareValues(ref.getCompare(),
+                        comp_true = compareCallback.compareValues(ref.getComparison(),
                                 value,
                                 refField.getValue());
                     }
