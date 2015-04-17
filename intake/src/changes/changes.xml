@@ -26,6 +26,9 @@
 
   <body>
      <release version="1.2.0" date="in Subversion">
+      <action dev="tv" type="add">
+        Add validation tests
+      </action>
       <action dev="tv" type="fix">
         Fix parsing of numbers, improve test
       </action>
