@@ -25,7 +25,9 @@
   </properties>
 
   <body>
-     <release version="1.2.0" date="in Subversion">
+     <release version="1.2.1" date="in Subversion">
+     </release>
+     <release version="1.2.0" date="2015-04-18">
       <action dev="tv" type="add">
         Add validation tests
       </action>
