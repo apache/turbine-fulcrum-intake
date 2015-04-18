@@ -19,7 +19,6 @@ package org.apache.fulcrum.intake.validator;
  * under the License.
  */
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,12 +66,6 @@ public class DateStringValidator
 
     /** A flag that is passed to the DateFormat lenient feature */
     private boolean flexible = false;
-
-    /**  */
-    private DateFormat df = null;
-
-    /**  */
-    private SimpleDateFormat sdf = null;
 
     /**
      * Default Constructor
@@ -127,17 +120,6 @@ public class DateStringValidator
         {
             flexible = Boolean.valueOf(constraint.getValue()).booleanValue();
         }
-
-        if (dateFormats.size() == 0)
-        {
-            df = DateFormat.getInstance();
-            df.setLenient(flexible);
-        }
-        else
-        {
-            sdf = new SimpleDateFormat();
-            sdf.setLenient(flexible);
-        }
     }
 
     /**
@@ -188,6 +170,9 @@ public class DateStringValidator
             throw new ParseException("Input string was null", -1);
         }
 
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        sdf.setLenient(flexible);
+
         for (int i = 1; i < dateFormats.size() && date == null; i++)
         {
             sdf.applyPattern(dateFormats.get(i));
@@ -216,9 +201,10 @@ public class DateStringValidator
             }
         }
 
-        if (date == null && df != null)
+        if (date == null)
         {
-            date = df.parse(s);
+            // Try default
+            date = SimpleDateFormat.getInstance().parse(s);
         }
 
         // if the date still has not been parsed at this point, throw
@@ -241,11 +227,13 @@ public class DateStringValidator
     public String format(Date date)
     {
         String s = null;
-        if (date != null)
+
+        if (date != null && !dateFormats.isEmpty())
         {
-            sdf.applyPattern(dateFormats.get(0));
+            SimpleDateFormat sdf = new SimpleDateFormat(dateFormats.get(0));
             s = sdf.format(date);
         }
+
         return s;
     }
 
