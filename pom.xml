@@ -162,11 +162,10 @@
                 </goals>
                 <configuration>
                   <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
-                  <descriptorRefs>
-                    <descriptorRef>bin</descriptorRef>
-                    <descriptorRef>project</descriptorRef>
-                    <descriptorRef>src</descriptorRef>
-                  </descriptorRefs>
+                  <descriptors>
+                    <descriptor>src/assembly/binaries.xml</descriptor>
+                    <descriptor>src/assembly/source.xml</descriptor>
+                  </descriptors>
                   <tarLongFileFormat>gnu</tarLongFileFormat>
                 </configuration>
               </execution>
