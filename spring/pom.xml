@@ -54,10 +54,11 @@
       <optional>true</optional>
     </dependency>
     <!-- Spring depedencies - these are optional so you have to declare your Spring dependency manually -->
+    <!--
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring</artifactId>
-      <version>${spring.version}</version>    
+      <version>2.5.6</version>    
       <optional>true</optional>
       <exclusions>
         <exclusion>
@@ -65,6 +66,13 @@
           <artifactId>mail</artifactId>
         </exclusion>
       </exclusions>            
+    </dependency>    
+    -->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>${spring.version}</version>
+        <optional>true</optional>
     </dependency>    
     <!-- testing dependencies -->
     <dependency>
@@ -88,7 +96,7 @@
     <fulcrum.release.version>1.0.0</fulcrum.release.version>
     <fulcrum.rc.version>RC1</fulcrum.rc.version>      
     <!-- the spring version to pick up -->
-    <spring.version>2.5.6</spring.version>    
+    <spring.version>4.1.6.RELEASE</spring.version>
   </properties>  
   
   <profiles>
