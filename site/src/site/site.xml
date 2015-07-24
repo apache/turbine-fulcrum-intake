@@ -33,9 +33,8 @@
   <body>
 
     <links>
-      <item name="Apache"  href="http://www.apache.org"/>
       <item name="Turbine" href="http://turbine.apache.org/" />      
-      <item name="Fulcrum" href="http://turbine.apache.org/fulcrum" />
+      <item name="Apache"  href="http://www.apache.org"/>
     </links>
   
     <menu name="Fulcrum">
@@ -57,6 +56,12 @@
       <item name="PBE"                   href="/fulcrum-pbe/"/>
       <item name="Pool"                  href="/fulcrum-pool/"/>
       <item name="Quartz"                href="/fulcrum-quartz/"/>
+      <item name="Security"              href="/fulcrum-security/" collapse="true">
+        <item name="Security API"          href="/fulcrum-security/fulcrum-security-api/"/>
+        <item name="Memory Impl"           href="/fulcrum-security/fulcrum-security-memory/"/>
+        <item name="Hibernate Impl"        href="/fulcrum-security/fulcrum-security-hibernate/"/>
+        <item name="Torque Impl"           href="/fulcrum-security/fulcrum-security-torque/"/>
+      </item>      
       <item name="Spring"          		 href="/fulcrum-spring/"/>      
       <item name="Test Container"         href="/fulcrum-testcontainer/"/>
       <item name="Upload"                 href="/fulcrum-upload/"/>
@@ -83,32 +88,10 @@
         <item name="OSWorkflow"            href="/fulcrum-osworkflow/"/>
         <item name="OSWorkflow Example"    href="/fulcrum-osworkflow-example/"/>
       </item>
-      <item name="Security"              href="/sites/security.html" collapse="true">
-        <item name="Site"                  href="/fulcrum-security-site/"/>
-        <item name="Security API"          href="/fulcrum-security-api/"/>
-        <item name="Security SPI"          href="/fulcrum-security-spi/"/>
-        <item name="Memory Impl"           href="/fulcrum-security-memory/"/>
-        <item name="Hibernate Impl"        href="/fulcrum-security-hibernate/"/>
-        <item name="NT Impl"               href="/fulcrum-security-nt/"/>
-        <item name="Torque Impl"           href="/fulcrum-security-torque/"/>
-        <item name="Adapter Turbine"       href="/fulcrum-security-adapter-turbine/"/>
-        <item name="Adapter OpenSymphony"  href="/fulcrum-security-adapter-opensymphony/"/>
-      </item>      
       <item name="XMLRPC"                 href="/fulcrum-xmlrpc/"/>      
     </menu>
 
-    <menu name="Howtos (old)">
-      <item name="JSP Service"            href="/howto/jsp-service.html"/>
-      <item name="Template Service"       href="/howto/template-service.html"/>
-      <item name="Velocity Service"       href="/howto/velocity-service.html"/>
-    </menu>
-    
     <menu ref="reports" inherit="bottom" />
 
-    <menu name="ASF" inherit="bottom">
-      <item name="Sponsorship"           href="http://www.apache.org/foundation/sponsorship.html" />
-      <item name="Thanks"                href="http://www.apache.org/foundation/thanks.html" />
-    </menu>
-    
   </body>            
 </project>

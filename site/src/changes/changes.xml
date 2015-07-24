@@ -26,6 +26,9 @@
 
   <body>
     <release version="2.0.0" date="SVN">
+     <action dev="tv" type="update">
+       Moved security site to proper
+     </action>
      <action dev="gk" type="update">
        Changed to SCM-publish-plugin for site deployment (as provided by turbine parent v3)
      </action>

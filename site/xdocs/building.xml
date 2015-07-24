@@ -22,9 +22,9 @@
 
   <properties>
     <title>Building Fulcrum</title>
-    <author email="pete@kazmier.com">Pete Kazmier</author>
+    <!-- author email="pete@kazmier.com">Pete Kazmier</author>
     <author email="quintonm@bellsouth.net">Quinton McCombs</author>
-    <author email="epugh@upstate.com">Eric Pugh</author>
+    <author email="epugh@upstate.com">Eric Pugh</author -->
   </properties>
 
   <body>
@@ -56,23 +56,7 @@
        This will build a local copy of the web site in the 'target/site' directory. 
        Note, this uses a LOT of memory. If you can't build all of them, build them individually.  
       </p>
-      <h4>Maven 1 Build</h4>
-            <p>  
-        For Maven 1 modules please refer to the Maven 1 <a
-        href="http://maven.apache.org/maven-1.x/start/">Getting
-        Started</a> documents.
-        Building a Maven 1 component is done inside the component folder using 'maven fulcrum:build'. 
-      </p>
-       <subsection name="Current Build Issues">
-        <p>
-          <strong>Missing JARS!</strong>  There are some jar files that you must manually
-          install due to licensing restrictions.  Javamail.jar will need to be downloaded.
-          Note, when you download it from Sun's site, you will need to rename it from mail.jar
-          to javamail-1.3.1.jar and place it in your MAVEN_REPO/javamail/jars/ directory.  You
-          will also need to download jdbc-2.0.jar as well.  Lastly, for the Hibernate security
-          provider, you need Sun's JTA jar file.  Currently, the easiest place to go is <a href="http://www.hibernate.org">
-          Hibernate</a> and download the jar from there by downloading the current distribution.
-        </p>
+      <subsection name="Current Build Issues">
         <p>
           Depending on your version of Maven, you may have various problems with
           the reports being generated, or you may run out of memory when you do a
@@ -85,18 +69,6 @@
         <source><![CDATA[
 $ maven -pl parser,crypto site'
 ]]></source>
-         <h4>Maven 1 Build</h4>
-<source><![CDATA[
-$ maven multiproject:site -Dmaven.test.skip=true -Dmaven.multiproject.excludes=security/*.*,cache/*.*,scheduler/*.*'
-]]></source>
-      </subsection>
-      <subsection name="Maven Repositories">
-        <p>
-          If you are willing to build with an "unofficial" repository, you can uncomment
-          the <code>maven.repo</code> property in the project.properties file.  This will
-          allow Maven to download from a Turbine repository the various jars that are not
-          currently in the main Maven repository.
-        </p>
       </subsection>
     </section>
   </body>
