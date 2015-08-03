@@ -23,8 +23,15 @@
     <author email="epugh@upstate.com">Eric Pugh</author>
     <!-- author email="quintonm@bellsouth.net">Quinton McCombs</author -->
   </properties>
-
   <body>
+    <release version="1.0.7" date="in Subversion">
+      <action type="update" dev="gk">
+       Added JUnit 4 Support
+      </action>
+      <action type="update" dev="sgoeschl">
+       Making the log level for the YAAFIContainer configurable
+      </action>      
+    </release> 
     <release version="1.0.6" date="2009-05-03">
       <action dev="tv" type="add">
         Added a Maven-2 build
