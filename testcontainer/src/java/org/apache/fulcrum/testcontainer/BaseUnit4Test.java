@@ -29,6 +29,9 @@ import org.junit.After;
  * first request for a component. This allows the tester to populate the configurationFileName and
  * roleFileName, possible one per test.
  * 
+ * JUnit 4 Version of BaseUnitTest class.
+ * 
+ * @see BaseUnitTest JUnit3 Version. 
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>

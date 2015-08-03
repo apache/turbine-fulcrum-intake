@@ -26,6 +26,10 @@ import org.apache.avalon.framework.logger.ConsoleLogger;
  * Base class for unit tests for components. This version doesn't load the container until the
  * first request for a component. This allows the tester to populate the configurationFileName and
  * roleFileName, possible one per test.
+ * 
+ * This class uses JUnit 3.
+ * 
+ * @see BaseUnit4Test JUnit4 Version
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
