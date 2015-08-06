@@ -1,114 +1,111 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <parent>
-    <artifactId>turbine-parent</artifactId>
-       <groupId>org.apache.turbine</groupId>
-       <version>3</version>
-  </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>turbine-parent</artifactId>
+        <groupId>org.apache.turbine</groupId>
+        <version>3</version>
+    </parent>
 
-  <modelVersion>4.0.0</modelVersion>
-  <artifactId>fulcrum-resourcemanager</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
-  <name>Fulcrum ResourceManager</name>
-  <inceptionYear>2005</inceptionYear>
-  <description>Fulcrum ResourceManager Service</description>
-  <url>http://turbine.apache.org/fulcrum/fulcrum-resourcemanager</url>
-		
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/resourcemanager/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/resourcemanager/</developerConnection>
-    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/resourcemanager/</url>
-  </scm>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>fulcrum-resourcemanager</artifactId>
+    <version>1.0.2-SNAPSHOT</version>
+    <name>Fulcrum ResourceManager</name>
+    <inceptionYear>2005</inceptionYear>
+    <description>Fulcrum ResourceManager Service</description>
+    <url>http://turbine.apache.org/fulcrum/fulcrum-resourcemanager</url>
 
-  <distributionManagement>
-    <site>
-      <id>apache.website</id>
-      <name>Fulcrum Website</name>
-      <url>${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/fulcrum/fulcrum-resourcemanager/</url>
-    </site>    
-  </distributionManagement>
-	
-  <developers>
-    <developer>
-      <name>Siegfried Goeschl</name>
-      <id>sgoeschl</id>
-      <email>sgoeschl@apache.org</email>
-      <organization />
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-  </developers>
+    <scm>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/resourcemanager/</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/resourcemanager/
+        </developerConnection>
+        <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/resourcemanager/</url>
+    </scm>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.avalon.framework</groupId>
-      <artifactId>avalon-framework-api</artifactId>
-      <version>4.3.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.fulcrum</groupId>
-      <artifactId>fulcrum-pbe</artifactId>
-      <version>1.0.1</version>
-    </dependency>
-    <!-- testing dependencies -->
-    <dependency>
-      <groupId>org.apache.fulcrum</groupId>
-      <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0.6</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.fulcrum</groupId>
-      <artifactId>fulcrum-yaafi</artifactId>
-      <version>1.0.6</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-
-  <build>
-    <sourceDirectory>${basedir}/src/java</sourceDirectory>
-    <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
-
-    <testResources>
-      <testResource>
-        <targetPath />
-        <directory>${basedir}/src/test/resources</directory>
-        <includes>
-          <include>**/*</include>
-        </includes>
-      </testResource>
-    </testResources>
-  </build>
-
-  <reporting>
-      <plugins>
-          <plugin>
-            <!-- get test coverage for regression tests -->
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>cobertura-maven-plugin</artifactId>
-            <version>2.3</version>
-          </plugin>
-      </plugins>
-  </reporting>
-  <properties>  
-    <!-- Default configuration for compiler source and target JVM -->
-    <maven.compile.source>1.4</maven.compile.source>
-    <maven.compile.target>1.4</maven.compile.target>
-    <fulcrum.release.version>1.0.1</fulcrum.release.version>
-    <fulcrum.rc.version>RC2</fulcrum.rc.version>
-  </properties>  
-
-  <profiles>
-    <profile>
-      <id>rc</id>
-      <distributionManagement>
-        <!-- Cannot define in parent ATM, see COMMONSSITE-26 -->
+    <distributionManagement>
         <site>
-          <id>apache.website</id>
-          <name>Apache Fulcrum Release Candidate Staging Site</name>
-          <url>${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/builds/fulcrum/${fulcrum.componentid}/${fulcrum.release.version}/${fulcrum.rc.version}/site</url>
+            <id>apache.website</id>
+            <name>Fulcrum Website</name>
+            <url>
+                ${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/fulcrum/fulcrum-resourcemanager/
+            </url>
         </site>
-      </distributionManagement>
-    </profile>
-  </profiles>
+    </distributionManagement>
+
+    <developers>
+        <developer>
+            <name>Siegfried Goeschl</name>
+            <id>sgoeschl</id>
+            <email>sgoeschl@apache.org</email>
+            <organization/>
+            <roles>
+                <role>Java Developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.avalon.framework</groupId>
+            <artifactId>avalon-framework-api</artifactId>
+            <version>4.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.fulcrum</groupId>
+            <artifactId>fulcrum-pbe</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <!-- testing dependencies -->
+        <dependency>
+            <groupId>org.apache.fulcrum</groupId>
+            <artifactId>fulcrum-testcontainer</artifactId>
+            <version>1.0.6</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.fulcrum</groupId>
+            <artifactId>fulcrum-yaafi</artifactId>
+            <version>1.0.6</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>${basedir}/src/java</sourceDirectory>
+        <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
+    </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <!-- get test coverage for regression tests -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.3</version>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <properties>
+        <!-- Default configuration for compiler source and target JVM -->
+        <maven.compile.source>1.4</maven.compile.source>
+        <maven.compile.target>1.4</maven.compile.target>
+        <fulcrum.release.version>1.0.1</fulcrum.release.version>
+        <fulcrum.rc.version>RC2</fulcrum.rc.version>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>rc</id>
+            <distributionManagement>
+                <!-- Cannot define in parent ATM, see COMMONSSITE-26 -->
+                <site>
+                    <id>apache.website</id>
+                    <name>Apache Fulcrum Release Candidate Staging Site</name>
+                    <url>
+                        ${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/builds/fulcrum/${fulcrum.componentid}/${fulcrum.release.version}/${fulcrum.rc.version}/site
+                    </url>
+                </site>
+            </distributionManagement>
+        </profile>
+    </profiles>
 </project>
