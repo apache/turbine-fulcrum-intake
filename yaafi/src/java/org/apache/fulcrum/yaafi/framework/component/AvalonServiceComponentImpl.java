@@ -46,7 +46,7 @@ import org.apache.fulcrum.yaafi.framework.util.Validate;
 
 /**
  * This class implements a service component singleton with
- * an arbitray lifecycle.
+ * an arbitrary lifecycle.
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
@@ -179,7 +179,7 @@ public class AvalonServiceComponentImpl
         }
         catch (Throwable t)
         {
-            String msg = "Resumimg the following service failed : " + this.getShorthand();
+            String msg = "Resuming the following service failed : " + this.getShorthand();
             this.getParentLogger().error( msg, t );
             lastThrowable = t;
         }

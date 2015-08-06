@@ -109,7 +109,17 @@ public class ServiceContainerConfiguration
     /** Constructor */
     public ServiceContainerConfiguration()
     {
-        this.logger = new ConsoleLogger();
+        this(ConsoleLogger.LEVEL_DEBUG);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param logLevel the log level for the console logger.
+     */
+    public ServiceContainerConfiguration(int logLevel)
+    {
+        this.logger = new ConsoleLogger(logLevel);
         this.containerFlavour = ServiceConstants.AVALON_CONTAINER_YAAFI;
         this.serviceContainerClazzName = ServiceConstants.CLAZZ_NAME;
         this.componentRolesLocation = ServiceConstants.COMPONENT_ROLE_VALUE;

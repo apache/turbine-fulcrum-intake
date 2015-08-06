@@ -29,7 +29,6 @@ import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerConfiguration;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
 
-
 /**
  * An example of the embedding of a YAAFI kernel inside an
  * arbitrary application.
@@ -58,7 +57,7 @@ public class Main implements Runnable, Disposable
     /** the interval to check for termination */
     private static final int SLEEP_TIME = 100;
 
-    /** the timeout for joing the shutdown thread */
+    /** the timeout for joining the shutdown thread */
     private static final int JOIN_TIME = 1000;
 
     /** The service manager */
@@ -211,7 +210,7 @@ public class Main implements Runnable, Disposable
 
     /**
      * Determines the file location of the given name. If the name denotes
-     * a relative file location it will be rsolved using the application
+     * a relative file location it will be resolved using the application
      * home directory.
      *
      * @param baseDir the base directory
@@ -262,7 +261,7 @@ public class Main implements Runnable, Disposable
 
     /**
      * Depending on the configuration this method might block
-     * the calling thread or return immediatly. We currently
+     * the calling thread or return immediately. We currently
      * poll a volatile variable which is not the most elegant
      * solution.
      */
@@ -564,7 +563,7 @@ public class Main implements Runnable, Disposable
 
         ServiceContainerConfiguration config = new ServiceContainerConfiguration();
 
-        // intialize the Avalon container
+        // initialize the Avalon container
 
         config.setLogger( this.getLogger() );
         config.setApplicationRootDir( this.getApplicationHome() );

@@ -47,14 +47,17 @@ public class Container extends AbstractLogEnabled implements Initializable, Disp
     /** Component manager */
     private ServiceContainer manager;
 
+    /** The log level of the container */
+    private int logLevel = ConsoleLogger.LEVEL_INFO;
+
     /**
      * Constructor
      */
     public Container()
     {
         // org.apache.log4j.BasicConfigurator.configure();
-        this.enableLogging( new ConsoleLogger( ConsoleLogger.LEVEL_DEBUG ) );
-        this.config = new ServiceContainerConfiguration();
+        this.enableLogging( new ConsoleLogger( logLevel ) );
+        this.config = new ServiceContainerConfiguration( logLevel );
     }
 
     /**
@@ -73,7 +76,7 @@ public class Container extends AbstractLogEnabled implements Initializable, Disp
         this.config.setComponentConfigurationLocation( configFileName );
         this.config.setComponentRolesLocation( roleFileName );
         this.config.setParametersLocation( parametersFileName );
-        this.config.setLogger( new ConsoleLogger( ConsoleLogger.LEVEL_DEBUG ) );
+        this.config.setLogger( new ConsoleLogger( logLevel ) );
 
         File configFile = new File(configFileName);
 

@@ -20,7 +20,7 @@ package org.apache.fulcrum.yaafi.cli;
  */
 
 /**
-* Extremly simply command line parsing class.
+* Extremely simply command line parsing class.
 */
 
 public class Getopt
@@ -44,7 +44,7 @@ public class Getopt
      * Constructor.
      *
      * @param args the command line parameters
-     * @param prefix the prefix for command line paramters
+     * @param prefix the prefix for command line parameters
      */
     public Getopt( String[] args, String prefix )
     {
@@ -61,6 +61,8 @@ public class Getopt
     }
 
     /**
+     * Does the command-line options exist?
+     *
      * @param option the option we are looking for
      * @return is the given option contained in the command line arguments?
      */
@@ -80,6 +82,7 @@ public class Getopt
 
     /**
      * Returns the string value for the given option.
+     *
      * @param option the option
      * @return the associated value
      */
@@ -90,6 +93,7 @@ public class Getopt
 
     /**
      * Returns the string value for the given option.
+     *
      * @param option the option
      * @param defaultValue the default value if the option is not defined
      * @return the associated value
@@ -101,6 +105,7 @@ public class Getopt
 
     /**
      * Returns the boolean value for the given option.
+     *
      * @param option the option
      * @return the associated value
      */
@@ -112,6 +117,7 @@ public class Getopt
 
     /**
      * Returns the boolean value for the given option.
+     *
      * @param option the option
      * @param defaultValue the default value if the option is not defined
      * @return the associated value
@@ -124,6 +130,7 @@ public class Getopt
 
     /**
      * Get the given argument.
+     *
      * @param index the index of the command line argument
      * @return the commandl ine argument
      */
@@ -133,7 +140,9 @@ public class Getopt
     }
 
     /**
-     * @option the option
+     * Find a command-line option.
+     *
+     * @param option the option
      * @return the index of the give option or -1 otherwise
      */
     private int find( String option )
@@ -154,13 +163,13 @@ public class Getopt
     }
 
     /**
-     * Determines if a value is defined for the given option
-     * @param option the given option
+     * Determines if a value is defined for the given option.
+     *
      * @return true if a value is defined
      */
     private boolean hasValue( int index )
     {
-        String value = null;
+        String value;
 
         if( (index+1) < this.length() )
         {
@@ -182,9 +191,9 @@ public class Getopt
     }
 
     /**
-     * Get the value of a command line option
+     * Get the value of a command line option.
+     *
      * @param option the option
-     * @param defaultValue the default value if the option was not found
      * @return the value of the option
      */
     private String getValue( String option )
