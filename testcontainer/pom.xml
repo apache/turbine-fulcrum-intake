@@ -41,7 +41,7 @@
     <site>
       <id>apache.website</id>
       <name>Fulcrum Website</name>
-      <url>${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/fulcrum/fulcrum-testcontainer/</url>
+      <url>http://turbine.apache.org/fulcrum/fulcrum-testcontainer/</url>
     </site>    
   </distributionManagement>
 	
