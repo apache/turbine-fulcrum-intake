@@ -18,7 +18,8 @@
  under the License.
 -->
 <fulcrum-yaafi>
-  <reconfigurationDelay>0</reconfigurationDelay>
+  <reconfigurationDelay>1</reconfigurationDelay>
+  <disposalDelay>1</disposalDelay>
   <hasDynamicProxies>true</hasDynamicProxies>
   <componentRoles>
     <location>./src/test/TestRoleConfig.xml</location>

@@ -19,6 +19,13 @@ package org.apache.fulcrum.yaafi.framework.container;
  * under the License.
  */
 
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Properties;
+
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
@@ -43,14 +50,11 @@ import org.apache.fulcrum.yaafi.framework.crypto.CryptoStreamFactory;
 import org.apache.fulcrum.yaafi.framework.role.RoleConfigurationParser;
 import org.apache.fulcrum.yaafi.framework.role.RoleConfigurationParserImpl;
 import org.apache.fulcrum.yaafi.framework.role.RoleEntry;
-import org.apache.fulcrum.yaafi.framework.util.*;
-
-import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Properties;
+import org.apache.fulcrum.yaafi.framework.util.ConfigurationUtil;
+import org.apache.fulcrum.yaafi.framework.util.InputStreamLocator;
+import org.apache.fulcrum.yaafi.framework.util.StringUtils;
+import org.apache.fulcrum.yaafi.framework.util.ToStringBuilder;
+import org.apache.fulcrum.yaafi.framework.util.Validate;
 
 /**
  * Yet another avalon framework implementation (YAAFI).
@@ -61,8 +65,11 @@ import java.util.Properties;
 public class ServiceContainerImpl
     implements ServiceContainer, ServiceConstants
 {
-    /** the timeout before reconfiguring the container or services */
-    private static final int RECONFIGURATION_DELAY = 2000;
+    /** Default timeout before disposing the container */
+    private static final int DISPOSAL_DELAY_DEFAULT = 0;
+
+    /** Default timeout before reconfiguring the container or services */
+    private static final int RECONFIGURATION_DELAY_DEFAULT = 2000;
 
     /** The role configuration file to be used */
     private String componentRolesLocation;
@@ -119,13 +126,19 @@ public class ServiceContainerImpl
     private Parameters parameters;
 
     /** Is this instance already disposed? */
-    private boolean isDisposed;
+    private volatile boolean isAlreadyDisposed;
+
+    /** Is this instance currently disposed? */
+    private volatile boolean isCurrentlyDisposing;
 
     /** The type of container where YAAFI is embedded */
     private String containerFlavour;
 
-    /** The ms to wait before triggering a reconfiguration of the container os service */
+    /** The ms to wait before triggering a reconfiguration of the container or service */
     private int reconfigurationDelay;
+
+    /** The ms to wait before triggering a disposal of the container */
+    private int disposalDelay;
 
     /** global flag for enabling/disabling dynamic proxies */
     private boolean hasDynamicProxies;
@@ -150,7 +163,6 @@ public class ServiceContainerImpl
     {
         super();
 
-        this.reconfigurationDelay = RECONFIGURATION_DELAY;
         this.containerFlavour = COMPONENT_CONTAINERFLAVOUR_VALUE;
         this.componentRolesFlavour = COMPONENT_ROLECONFIGFLAVOUR_VALUE;
 
@@ -162,7 +174,9 @@ public class ServiceContainerImpl
         this.isComponentRolesEncrypted = "false";
         this.isParametersEncrypted = "false";
 
-        this.isDisposed = false;
+        this.isAlreadyDisposed = false;
+        this.isCurrentlyDisposing = false;
+
         this.serviceList = new ArrayList();
         this.serviceMap = new HashMap();
 
@@ -172,7 +186,8 @@ public class ServiceContainerImpl
         this.fallbackServiceManagerList = new ArrayList();
         this.defaultInterceptorServiceList = new ArrayList();
 
-        this.reconfigurationDelay = RECONFIGURATION_DELAY;
+        this.disposalDelay = DISPOSAL_DELAY_DEFAULT;
+        this.reconfigurationDelay = RECONFIGURATION_DELAY_DEFAULT;
     }
 
     /**
@@ -214,7 +229,14 @@ public class ServiceContainerImpl
 
         this.reconfigurationDelay =
             configuration.getChild(RECONFIGURATION_DELAY_KEY).getValueAsInteger(
-                RECONFIGURATION_DELAY
+                    RECONFIGURATION_DELAY_DEFAULT
+                );
+
+        // retrieve the disposal delay
+
+        this.disposalDelay =
+                configuration.getChild(DISPOSAL_DELAY_KEY).getValueAsInteger(
+                        DISPOSAL_DELAY_DEFAULT
                 );
 
         // evaluate if we are using dynamic proxies
@@ -467,7 +489,8 @@ public class ServiceContainerImpl
 
         // we are up and running
 
-        this.isDisposed = false;
+        this.isCurrentlyDisposing = false;
+        this.isAlreadyDisposed = false;
         this.getLogger().debug( "YAAFI Avalon Service Container is up and running");
     }
 
@@ -477,45 +500,55 @@ public class ServiceContainerImpl
      *
      * @see org.apache.avalon.framework.activity.Disposable#dispose()
      */
-    public synchronized void dispose()
+    public void dispose()
     {
-        if( this.isDisposed )
+        if( this.isCurrentlyDisposing() || this.isAlreadyDisposed() )
         {
             return;
         }
+
+        this.isCurrentlyDisposing = true;
 
         if( this.getLogger() != null )
         {
             this.getLogger().debug("Disposing all services");
         }
 
-        // de-commission all services
+        // wait some time before disposing all services
 
-        this.decommissionAll(this.getServiceList());
+        waitForDisposal();
 
-        // dispose all services
-
-        this.disposeAll( this.getServiceList() );
-
-        // clean up
-
-        this.getServiceList().clear();
-        this.getServiceMap().clear();
-
-        this.componentRolesLocation = null;
-        this.componentConfigurationLocation = null;
-        this.context = null;
-        this.parametersLocation = null;
-        this.roleConfiguration = null;
-        this.serviceConfiguration = null;
-        this.parameters = null;
-        this.fallbackServiceManagerList = null;
-        this.defaultInterceptorServiceList = null;
-        this.isDisposed = true;
-
-        if( this.getLogger() != null )
+        synchronized (this)
         {
-            this.getLogger().debug( "All services are disposed" );
+            // de-commission all services
+
+            this.decommissionAll(this.getServiceList());
+
+            // dispose all services
+
+            this.disposeAll(this.getServiceList());
+
+            // clean up
+
+            this.getServiceList().clear();
+            this.getServiceMap().clear();
+
+            this.componentRolesLocation = null;
+            this.componentConfigurationLocation = null;
+            this.context = null;
+            this.parametersLocation = null;
+            this.roleConfiguration = null;
+            this.serviceConfiguration = null;
+            this.parameters = null;
+            this.fallbackServiceManagerList = null;
+            this.defaultInterceptorServiceList = null;
+            this.isCurrentlyDisposing = false;
+            this.isAlreadyDisposed = true;
+
+            if( this.getLogger() != null )
+            {
+                this.getLogger().debug( "All services are disposed" );
+            }
         }
     }
 
@@ -648,6 +681,11 @@ public class ServiceContainerImpl
 
         boolean result;
 
+        if(this.isCurrentlyDisposing() || this.isAlreadyDisposed())
+        {
+            return false;
+        }
+
         synchronized(this)
         {
             // look at our available service
@@ -689,6 +727,13 @@ public class ServiceContainerImpl
 
         Object result = null;
         ServiceComponent serviceManagerComponent;
+
+        if(this.isAlreadyDisposed())
+        {
+            String msg = "The container is disposed an no services are available";
+            this.getLogger().error( msg );
+            throw new ServiceException( name, msg );
+        }
 
         try
         {
@@ -1184,6 +1229,14 @@ public class ServiceContainerImpl
         }
     }
 
+    private boolean isCurrentlyDisposing() {
+        return isCurrentlyDisposing;
+    }
+
+    private boolean isAlreadyDisposed() {
+        return isAlreadyDisposed;
+    }
+
     /**
      * @return The list of currently know services
      */
@@ -1594,6 +1647,22 @@ public class ServiceContainerImpl
         try
         {
             Thread.sleep(this.reconfigurationDelay);
+        }
+        catch(InterruptedException e)
+        {
+            // nothing to do
+        }
+    }
+
+    /**
+     * Wait for the time configured as 'disposalDelay' before
+     * disposing the container.
+     */
+    private void waitForDisposal()
+    {
+        try
+        {
+            Thread.sleep(this.disposalDelay);
         }
         catch(InterruptedException e)
         {

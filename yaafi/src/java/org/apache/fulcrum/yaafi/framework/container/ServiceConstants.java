@@ -75,6 +75,9 @@ public interface ServiceConstants extends AvalonYaafiConstants
     /** property to lookup the reconfigurationDelay */
     String RECONFIGURATION_DELAY_KEY = "reconfigurationDelay";
 
+    /** property to lookup the reconfigurationDelay */
+    String DISPOSAL_DELAY_KEY = "disposalDelay";
+
     /** property to lookup a list of service managers */
     String SERVICEMANAGER_LIST_KEY = "serviceManagers";
 
