@@ -29,13 +29,9 @@ import org.apache.avalon.framework.component.Component;
  */
 public interface SimpleComponent extends Component
 {
-
-    static final String ROLE = SimpleComponent.class.getName();
-
+    String ROLE = SimpleComponent.class.getName();
 
     void test();
-
-    public String getAppRoot();
-
-    public String getAppRoot2();
+    String getAppRoot();
+    String getAppRoot2();
 }

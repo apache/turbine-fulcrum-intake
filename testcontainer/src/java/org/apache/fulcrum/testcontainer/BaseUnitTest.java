@@ -63,8 +63,6 @@ public class BaseUnitTest extends TestCase
     /**
 	 * Gets the configuration file name for the container should use for this test. By default it
 	 * is src/test/TestComponentConfig.
-	 *
-	 * @param configurationFileName
 	 */
     protected void setConfigurationFileName(String configurationFileName)
     {
@@ -74,8 +72,6 @@ public class BaseUnitTest extends TestCase
     /**
 	 * Override the role file name for the container should use for this test. By default it is
 	 * src/test/TestRoleConfig.
-	 *
-	 * @param roleFileName
 	 */
     protected void setRoleFileName(String roleFileName)
     {
@@ -110,6 +106,7 @@ public class BaseUnitTest extends TestCase
         }
         container = null;
     }
+
     /**
 	 * Gets the configuration file name for the container should use for this test.
 	 *
@@ -119,6 +116,7 @@ public class BaseUnitTest extends TestCase
     {
         return configurationFileName;
     }
+
     /**
 	 * Gets the role file name for the container should use for this test.
 	 *
@@ -128,6 +126,7 @@ public class BaseUnitTest extends TestCase
     {
         return roleFileName;
     }
+
     /**
      * Gets the parameter file name for the container should use for this test.
      *
@@ -137,6 +136,7 @@ public class BaseUnitTest extends TestCase
     {
         return parameterFileName;
     }
+
     /**
 	 * Returns an instance of the named component. Starts the container if it hasn't been started.
 	 *
@@ -160,19 +160,17 @@ public class BaseUnitTest extends TestCase
 
     /**
      * Helper method for converting to and from Merlin Unit TestCase.
-     * @param roleName
-     * @return
-     * @throws ComponentException
      */
     protected Object resolve(String roleName) throws ComponentException
     {
         return lookup(roleName);
     }
+
     /**
-	 * Releases the component
-	 *
-	 * @param component
-	 */
+     * Releases the component.
+     *
+     * @param component component to be released
+     */
     protected void release(Object component)
     {
         if (container != null)

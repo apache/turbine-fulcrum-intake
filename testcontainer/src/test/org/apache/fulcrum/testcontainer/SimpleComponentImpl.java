@@ -21,12 +21,12 @@ package org.apache.fulcrum.testcontainer;
 
 import java.io.File;
 
-import org.apache.avalon.framework.logger.AbstractLogEnabled;
-import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.context.Contextualizable;
+import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
+import org.apache.avalon.framework.context.Contextualizable;
+import org.apache.avalon.framework.logger.AbstractLogEnabled;
 
 /**
  * Interface of the component
@@ -62,12 +62,13 @@ public class SimpleComponentImpl
     {
         appRoot = (String) context.get("componentAppRoot");
         if (context.get("urn:avalon:home") instanceof File){
-            appRoot2 = ((File)(context.get("urn:avalon:home"))).toString();
+            appRoot2 = (context.get("urn:avalon:home")).toString();
         }
         else {
             appRoot2 = (String)context.get("urn:avalon:home");
         }
     }
+
     /**
      * @return Returns the appRoot.
      */

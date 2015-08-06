@@ -19,6 +19,8 @@ package org.apache.fulcrum.testcontainer;
  * under the License.
  */
 
+import java.io.File;
+
 import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
@@ -26,8 +28,6 @@ import org.apache.avalon.framework.logger.ConsoleLogger;
 import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerConfiguration;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
-
-import java.io.File;
 
 /**
  * This is a simple YAAFI based container that can be used in unit test
@@ -47,7 +47,7 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
     private int logLevel = ConsoleLogger.LEVEL_DEBUG;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public YAAFIContainer()
     {
@@ -56,7 +56,9 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
     }
 
     /**
-     * Constructor
+     * Constructor.
+     *
+     * @param logLevel the log level to be used
      */
     public YAAFIContainer(int logLevel)
     {
@@ -94,7 +96,7 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
         try
         {
             initialize();
-            getLogger().info("YaffiContainer ready.");
+            getLogger().info("YAFFI Container ready.");
         }
         catch (Exception e)
         {
@@ -108,7 +110,7 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
     // -------------------------------------------------------------
 
     /**
-     * Initializes the container
+     * Initializes the container.
      *
      * @throws Exception generic exception
      */
@@ -120,7 +122,7 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
     }
 
     /**
-     * Disposes of the container and releases resources
+     * Disposes of the container and releases resources.
      */
     public void dispose()
     {
@@ -129,11 +131,11 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
         {
             this.manager.dispose();
         }
-        getLogger().info("YaffiContainer has been disposed.");
+        getLogger().info("YAFFI Container has been disposed.");
     }
 
     /**
-     * Returns an instance of the named component
+     * Returns an instance of the named component.
      *
      * @param roleName Name of the role the component fills.
      * @throws ComponentException generic exception
@@ -163,9 +165,9 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
     }
 
     /**
-     * Releases the component
+     * Releases the component.
      *
-     * @param component
+     * @param component component to be released
      */
     public void release(Object component)
     {

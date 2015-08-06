@@ -17,13 +17,16 @@ package org.apache.fulcrum.testcontainer;
  * specific language governing permissions and limitations
  * under the License.
  */
-import static org.junit.Assert.*;
+import java.io.File;
 
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.framework.logger.ConsoleLogger;
 import org.junit.Test;
 
-import java.io.File;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 /**
  * Basic testing of the Container
  *
@@ -34,8 +37,6 @@ public class YaafiContainerTest extends BaseUnit4Test
 {
     /**
      * Constructor for test.
-     *
-     * @param testName name of the test being executed
      */
     public YaafiContainerTest()
     {
@@ -54,7 +55,6 @@ public class YaafiContainerTest extends BaseUnit4Test
         try
         {
             sc = (SimpleComponent) this.lookup(SimpleComponent.class.getName());
-            //sc = (SimpleComponent) this.lookup("SimpleComponent");
         }
         catch (ComponentException e)
         {
@@ -66,6 +66,7 @@ public class YaafiContainerTest extends BaseUnit4Test
         assertEquals(sc.getAppRoot(),sc.getAppRoot2());
         this.release(sc);
     }
+
     @Test
     public void testAlternativeRoles()
     {
@@ -87,14 +88,17 @@ public class YaafiContainerTest extends BaseUnit4Test
         sc.test();
         this.release(sc);
     }
+
     @Test
     public void testLoadingContainerWithNoRolesfileFails()
     {
-        SimpleComponent sc = null;
+        this.setLogLevel(ConsoleLogger.LEVEL_DISABLED);
+
         this.setRoleFileName(null);
+
         try
         {
-            sc = (SimpleComponent) this.lookup(SimpleComponent.class.getName());
+            this.lookup(SimpleComponent.class.getName());
             fail("We should fail");
         }
         catch (ComponentException e)

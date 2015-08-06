@@ -45,7 +45,7 @@ public class BaseUnit4Test
     /** Key used in the context for defining the application root */
     public static String COMPONENT_APP_ROOT = Container.COMPONENT_APP_ROOT;
 
-    /** Pick the default container to be Yaafi **/
+    /** Pick the default container to be YAAFI **/
     public static String containerType = CONTAINER_YAAFI;
 
     /** Use INFO for ConsoleLogger */
@@ -53,20 +53,22 @@ public class BaseUnit4Test
 
     /** Container for the components */
     private Container container;
+
     /** Setup our default configurationFileName */
     private String configurationFileName = "src/test/TestComponentConfig.xml";
+
     /** Setup our default roleFileName */
     private String roleFileName = "src/test/TestRoleConfig.xml";
+
     /** Setup our default parameterFileName */
     private String parameterFileName = null;
+
     /** Set the log level (only works for YAAFI container) */
     private int logLevel = defaultLogLevel;
 
     /**
      * Gets the configuration file name for the container should use for this test. By default it
      * is src/test/TestComponentConfig.
-     *
-     * @param configurationFileName
      */
     protected void setConfigurationFileName(String configurationFileName)
     {
@@ -76,8 +78,6 @@ public class BaseUnit4Test
     /**
      * Override the role file name for the container should use for this test. By default it is
      * src/test/TestRoleConfig.
-     *
-     * @param roleFileName
      */
     protected void setRoleFileName(String roleFileName)
     {
@@ -93,8 +93,6 @@ public class BaseUnit4Test
 
     /**
      * Constructor for test.
-     *
-     * @param testName name of the test being executed
      */
     public BaseUnit4Test()
     {
@@ -112,6 +110,7 @@ public class BaseUnit4Test
         }
         container = null;
     }
+
     /**
      * Gets the configuration file name for the container should use for this test.
      *
@@ -121,6 +120,7 @@ public class BaseUnit4Test
     {
         return configurationFileName;
     }
+
     /**
      * Gets the role file name for the container should use for this test.
      *
@@ -130,6 +130,7 @@ public class BaseUnit4Test
     {
         return roleFileName;
     }
+
     /**
      * Gets the parameter file name for the container should use for this test.
      *
@@ -139,6 +140,7 @@ public class BaseUnit4Test
     {
         return parameterFileName;
     }
+
     /**
      * Returns an instance of the named component. Starts the container if it hasn't been started.
      *
@@ -161,9 +163,9 @@ public class BaseUnit4Test
     }
 
     /**
-     * Releases the component
+     * Releases the component.
      *
-     * @param component
+     * @param component component to be released
      */
     protected void release(Object component)
     {

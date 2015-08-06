@@ -31,19 +31,17 @@ import org.apache.avalon.framework.component.ComponentException;
 public interface Container extends Initializable, Disposable
 {
 	/** Key used in the context for defining the application root */
-    public static String COMPONENT_APP_ROOT = "componentAppRoot";
+    String COMPONENT_APP_ROOT = "componentAppRoot";
 
     /** Alternate Merlin Friendly Key used in the context for defining the application root */
-    public static String URN_AVALON_HOME = "urn:avalon:home";
+    String URN_AVALON_HOME = "urn:avalon:home";
 
     /** Alternate Merlin Friendly Key used in the context for defining the application root */
-    public static String URN_AVALON_TEMP = "urn:avalon:temp";
+    String URN_AVALON_TEMP = "urn:avalon:temp";
 
-    public void startup(String configFileName, String roleFileName, String parametersFileName);
+    void startup(String configFileName, String roleFileName, String parametersFileName);
 
-    public Object lookup(String roleName) throws ComponentException;
+    Object lookup(String roleName) throws ComponentException;
 
-    public void release(Object component);
-
-
+    void release(Object component);
 }
