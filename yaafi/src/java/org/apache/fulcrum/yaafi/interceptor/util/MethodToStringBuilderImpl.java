@@ -21,8 +21,6 @@ package org.apache.fulcrum.yaafi.interceptor.util;
 
 import java.lang.reflect.Method;
 
-import org.apache.fulcrum.yaafi.framework.util.StringUtils;
-
 /**
  * Creates a string representation of java.lang.reflect.Method
  *
@@ -107,7 +105,7 @@ public class MethodToStringBuilderImpl implements InterceptorToStringBuilder
     {
         try
         {
-            StringBuffer buffer = new StringBuffer(BUF_SIZE);
+            StringBuilder buffer = new StringBuilder(BUF_SIZE);
 
             Class returnType = method.getReturnType();
             Class declaringClass = method.getDeclaringClass();
@@ -117,13 +115,13 @@ public class MethodToStringBuilderImpl implements InterceptorToStringBuilder
 
             if ((this.mode & INCLUDE_RETURNTYPE) == 1)
             {
-                buffer.append( this.stripDefaultPackage(returnType.getName()));
+                buffer.append( returnType.getSimpleName() );
                 buffer.append( ' ');
             }
 
             // print class and method
 
-            buffer.append( this.stripDefaultPackage(declaringClass.getName()));
+            buffer.append( declaringClass.getSimpleName() ) ;
             buffer.append( '.');
             buffer.append( method.getName() );
             buffer.append( '(');
@@ -132,7 +130,7 @@ public class MethodToStringBuilderImpl implements InterceptorToStringBuilder
 
             for (int i = 0; i < params.length; i++)
             {
-                buffer.append( this.stripDefaultPackage(params[i].getName()) );
+                buffer.append( params[i].getSimpleName() );
                 if (i < (params.length - 1))
                 {
                     buffer.append(",");
@@ -145,23 +143,7 @@ public class MethodToStringBuilderImpl implements InterceptorToStringBuilder
         }
         catch (Throwable t)
         {
-            return "<" + t + ">";
-        }
-    }
-
-    /**
-     * Strips "java.lang" from the argument other than arrays
-     */
-    private String stripDefaultPackage( String arg )
-    {
-        if( arg.charAt(0) == '[' )
-        {
-            // this is an array
-            return StringUtils.replaceChars(arg,';','#');
-        }
-        else
-        {
-            return StringUtils.replace( arg, "java.lang.", "");
+            return "<" + t.getClass().getSimpleName() + ">";
         }
     }
 }

@@ -1,4 +1,4 @@
-package org.apache.fulcrum.yaafi.interceptor.jamon;
+package org.apache.fulcrum.yaafi.interceptor.javasimon;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -22,10 +22,11 @@ package org.apache.fulcrum.yaafi.interceptor.jamon;
  * Expose the start()/stop() methods for performance monitors independent from their concrete
  * implementation.
  *
+ * @since 1.0.7
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
-public interface JamonPerformanceMonitor
+public interface JavaSimonPerformanceMonitor
 {
     /** Start the monitor. */
     void start();
@@ -38,11 +39,4 @@ public interface JamonPerformanceMonitor
      * @param throwable the throwable
      */
     void stop(Throwable throwable);
-
-    /**
-     * Create a performance report
-     * @return the textual performance report
-     * @throws Exception generating the report failed
-     */
-    String createReport() throws Exception;
 }

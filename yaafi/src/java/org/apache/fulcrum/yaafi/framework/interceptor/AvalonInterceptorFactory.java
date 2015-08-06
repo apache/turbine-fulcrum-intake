@@ -63,13 +63,13 @@ public class AvalonInterceptorFactory
         Validate.notNull(serviceInterceptorList,"serviceInterceptorList");
         Validate.notNull(serviceDelegate,"serviceDelegate");
 
-        Object result = null;
+        Object result;
 
         Class clazz = serviceDelegate.getClass();
         ClassLoader classLoader = clazz.getClassLoader();
         List interfaceList = Clazz.getAllInterfaces(clazz);
 
-        // get the service interfaces to avoid lookups
+        // get the service interfaces to avoid look-ups
 
         AvalonInterceptorService[] avalonInterceptorServices = resolve(
             serviceManager,
@@ -103,7 +103,7 @@ public class AvalonInterceptorFactory
     private static AvalonInterceptorService[] resolve( ServiceManager serviceManager, String[] interceptorList )
         throws ServiceException
     {
-        String interceptorServiceName = null;
+        String interceptorServiceName;
         AvalonInterceptorService[] result = new AvalonInterceptorService[interceptorList.length];
 
         for( int i=0; i<interceptorList.length; i++ )

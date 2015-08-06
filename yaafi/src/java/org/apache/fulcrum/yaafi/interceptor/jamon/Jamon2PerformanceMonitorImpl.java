@@ -19,15 +19,15 @@ package org.apache.fulcrum.yaafi.interceptor.jamon;
  * under the License.
  */
 
+import java.lang.reflect.Method;
+
 import com.jamonapi.Monitor;
 import com.jamonapi.MonitorFactory;
 import com.jamonapi.RangeHolder;
 import org.apache.fulcrum.yaafi.interceptor.util.MethodToStringBuilderImpl;
 
-import java.lang.reflect.Method;
-
 /**
- * Ecapsulating the JAMon 2.x related API calls. JAMon 2.x allows for a much
+ * Encapsulating the JAMon 2.x related API calls. JAMon 2.x allows for a much
  * more powerful integration with Avalon services :
  * <ul>
  *  <li>custom ranges/units</li>
@@ -49,7 +49,7 @@ public class Jamon2PerformanceMonitorImpl implements JamonPerformanceMonitor
     /** is monitoring enabled */
     private boolean isActive;
 
-    /** the method currenty monitored */
+    /** the method currently monitored */
     private Method method;
 
     /** the global JAMON monitor */
@@ -119,7 +119,6 @@ public class Jamon2PerformanceMonitorImpl implements JamonPerformanceMonitor
             this.monitor.stop();  
         }
     }
-
 
     /**
      * Create a performance report.

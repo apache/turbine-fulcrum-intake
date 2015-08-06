@@ -303,7 +303,7 @@ public abstract class ServiceComponentImpl
     }
 
     /**
-     * @return Returns the paramaters.
+     * @return Returns the parameters.
      */
     public Parameters getParamaters()
     {

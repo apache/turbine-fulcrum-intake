@@ -37,6 +37,11 @@
     shorthand="JamonInterceptorService"
     default-class="org.apache.fulcrum.yaafi.interceptor.jamon.JamonInterceptorServiceImpl"
   />
+  <role
+    name="org.apache.fulcrum.yaafi.interceptor.javasimon.JavaSimonInterceptorService"
+    shorthand="JavaSimonInterceptorService"
+    default-class="org.apache.fulcrum.yaafi.interceptor.javasimon.JavaSimonInterceptorServiceImpl"
+  />
   <!-- Use minimal role entry -->
   <role
     name="org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerService"

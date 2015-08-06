@@ -36,6 +36,7 @@
   </parameters>
   <interceptors>
     <interceptor>org.apache.fulcrum.yaafi.interceptor.jamon.JamonInterceptorService</interceptor>
+    <interceptor>org.apache.fulcrum.yaafi.interceptor.javasimon.JavaSimonInterceptorService</interceptor>
     <interceptor>org.apache.fulcrum.yaafi.interceptor.performance.PerformanceInterceptorService</interceptor>
     <interceptor>org.apache.fulcrum.yaafi.interceptor.logging.LoggingInterceptorService</interceptor>
   </interceptors>

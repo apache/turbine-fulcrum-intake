@@ -81,7 +81,7 @@
 
   <JamonInterceptorService>
     <isEnabled>true</isEnabled>
-    <performanceMonitorClassName>org.apache.fulcrum.yaafi.interceptor.jamon.Jamon1PerformanceMonitorImpl</performanceMonitorClassName>
+    <performanceMonitorClassName>org.apache.fulcrum.yaafi.interceptor.jamon.Jamon2PerformanceMonitorImpl</performanceMonitorClassName>
     <reportTimeout>60000</reportTimeout>
     <reportFile>./target/jamon.html</reportFile>
     <reportOnExit>true</reportOnExit>
@@ -89,6 +89,29 @@
       <service name="*"/>
     </services>
   </JamonInterceptorService>
+
+  <!--
+    JavaSimonInterceptorSerivce
+
+    isEnabled := is the interceptor enabled
+    performanceMonitorClassName := the performance monitor implementation to interact with JAMon
+    reportTimeout := the timeout between generating a JAMON report (No report = 0)
+    reportFile := the file for the JAMON report
+    reportOnExit := create a HTML report on disposal
+    services := the list of services being monitored
+    services/service@name := the name of the service being monitored
+  -->
+
+  <JavaSimonInterceptorSerivce>
+    <isEnabled>true</isEnabled>
+    <performanceMonitorClassName>org.apache.fulcrum.yaafi.interceptor.javasimon.JavaSimonInterceptorServiceImpl</performanceMonitorClassName>
+    <reportTimeout>60000</reportTimeout>
+    <reportFile>./target/javasimon.html</reportFile>
+    <reportOnExit>true</reportOnExit>
+    <services>
+      <service name="*"/>
+    </services>
+  </JavaSimonInterceptorSerivce>
 
   <!--
     AdviceService

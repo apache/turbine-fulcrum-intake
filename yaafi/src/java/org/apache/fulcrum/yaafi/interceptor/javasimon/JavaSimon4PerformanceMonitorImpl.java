@@ -1,4 +1,4 @@
-package org.apache.fulcrum.yaafi.interceptor.jamon;
+package org.apache.fulcrum.yaafi.interceptor.javasimon;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -21,27 +21,34 @@ package org.apache.fulcrum.yaafi.interceptor.jamon;
 
 import java.lang.reflect.Method;
 
-import com.jamonapi.Monitor;
-import com.jamonapi.MonitorFactory;
 import org.apache.fulcrum.yaafi.interceptor.util.MethodToStringBuilderImpl;
+import org.javasimon.SimonManager;
+import org.javasimon.Split;
+import org.javasimon.Stopwatch;
 
 /**
- * Ecapsulating the JAMon 1.x related API calls
+ * Encapsulating the JAMon 2.x related API calls. JAMon 2.x allows for a much
+ * more powerful integration with Avalon services :
+ * <ul>
+ *  <li>custom ranges/units</li>
+ *  <li>exception monitoring</li>
+ *  <li>smooth web interface</li>
+ * </ul>
  *
- * @deprecated JAMon 1.x is ancient so it is a good idea to upgrade to 2.x
+ * @since 1.0.7
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
-public class Jamon1PerformanceMonitorImpl implements JamonPerformanceMonitor
+public class JavaSimon4PerformanceMonitorImpl implements JavaSimonPerformanceMonitor
 {
     /** is monitoring enabled */
     private boolean isActive;
 
-    /** the method currenty monitored */
+    /** the method currently monitored */
     private Method method;
 
-    /** the global JAMON monitor */
-    private Monitor monitor;
+    /** the split for this invocation */
+    private Split split;
 
     /**
      * Constructor.
@@ -50,7 +57,8 @@ public class Jamon1PerformanceMonitorImpl implements JamonPerformanceMonitor
      * @param method the method to be monitored
      * @param isActive is this an active monitor
      */
-    public Jamon1PerformanceMonitorImpl(String serviceName, Method method, Boolean isActive) {
+    public JavaSimon4PerformanceMonitorImpl(String serviceName, Method method, Boolean isActive)
+    {
         this.method = method;
         this.isActive = isActive.booleanValue();
     }
@@ -62,36 +70,40 @@ public class Jamon1PerformanceMonitorImpl implements JamonPerformanceMonitor
     {
         if(this.isActive)
         {
-            MethodToStringBuilderImpl methodToStringBuilder = new MethodToStringBuilderImpl(this.method, 0);
-            String methodSignature = methodToStringBuilder.toString();
-            this.monitor = MonitorFactory.start(methodSignature);
+            String methodSignature = createMethodSignature(this.method, 0);
+            Stopwatch stopwatch = SimonManager.getStopwatch(methodSignature);
+            this.split = stopwatch.start();
         }
     }
 
     /**
-     * Start the monitor.
+     * Stop the monitor
      */
     public void stop()
     {
-        if(this.isActive)
+        if(this.isActive) 
         {
-            this.monitor.stop();
+            this.split.stop();
         }
     }
 
     /**
-     * Stop the monitor based on an Throwable.
+     * Stop the monitor
      */
     public void stop(Throwable throwable)
     {
-        this.stop();
+        if(this.isActive)
+        {
+            this.split.stop();
+        }
     }
 
     /**
-     * Create a performance report
+     * Create a method signature - JavaSimon does not look names with '#' in it.
      */
-    public String createReport() throws Exception
+    private String createMethodSignature(Method method, int mode)
     {
-        return MonitorFactory.getRootMonitor().getReport();
+        MethodToStringBuilderImpl methodToStringBuilder = new MethodToStringBuilderImpl(method, mode);
+        return methodToStringBuilder.toString().replace("#", "[]");
     }
 }

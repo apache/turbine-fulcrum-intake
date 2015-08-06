@@ -22,9 +22,10 @@ package org.apache.fulcrum.yaafi.framework.interceptor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.fulcrum.yaafi.framework.util.Validate;
 import org.apache.fulcrum.yaafi.framework.util.ToStringBuilder;
+import org.apache.fulcrum.yaafi.framework.util.Validate;
 
 /**
  * The InvocationHandler invoked when a service call is routed through
@@ -48,7 +49,7 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
     private AvalonInterceptorService [] serviceInterceptorList;
 
     /** counts the current transactions */
-    private static volatile long transactionCounter = 0L;
+    private static AtomicLong transactionCounter = new AtomicLong(0);
 
     /** the current transaction id */
     private Long transactionId;
@@ -139,7 +140,7 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
     public Object invoke(Object proxy, Method method, Object [] args)
         throws Throwable
     {
-        Object result = null;
+        Object result;
 
         // create the interceptor context for current method call
 
@@ -168,6 +169,11 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
             this.onError(context,e.getTargetException());
             throw e.getTargetException();
         }
+        catch (Throwable t)
+        {
+            this.onError(context,t);
+            throw t;
+        }
         finally
         {
             // decrement the service invocation depth
@@ -192,7 +198,8 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
     {
         for( int i=0; i<this.getServiceInterceptorList().length; i++ )
         {
-            this.getServiceInterceptorList()[i].onEntry(context);
+            AvalonInterceptorService avalonInterceptorService = this.getServiceInterceptorList()[i];
+            avalonInterceptorService.onEntry(context);
         }
     }
 
@@ -206,7 +213,8 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
     {
         for( int i=this.getServiceInterceptorList().length-1; i>=0; i-- )
         {
-            this.getServiceInterceptorList()[i].onExit(context,result);
+            AvalonInterceptorService avalonInterceptorService = this.getServiceInterceptorList()[i];
+            avalonInterceptorService.onExit(context, result);
         }
     }
 
@@ -220,7 +228,8 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
     {
         for( int i=this.getServiceInterceptorList().length-1; i>=0; i-- )
         {
-            this.getServiceInterceptorList()[i].onError(context,t);
+            AvalonInterceptorService avalonInterceptorService = this.getServiceInterceptorList()[i];
+            avalonInterceptorService.onError(context, t);
         }
     }
 
@@ -231,15 +240,14 @@ public class AvalonInterceptorInvocationHandler implements InvocationHandler
      */
     private boolean createTransactionId(AvalonInterceptorContext context)
     {
-        Long currentTransactionId = null;
+        Long currentTransactionId;
 
-        if( context.hasTransactionId() == false )
+        if( !context.hasTransactionId() )
         {
             // create a new transaction id
 
-            currentTransactionId = new Long(
-                ++AvalonInterceptorInvocationHandler.transactionCounter
-                );
+            currentTransactionId = transactionCounter.incrementAndGet();
+            this.transactionId = currentTransactionId;
 
             // store it in the TLS
 
