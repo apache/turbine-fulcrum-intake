@@ -25,6 +25,15 @@
 
   <body>
     <release version="1.0.7-SNAPSHOT" date="as in SVN">
+      <action dev="sgoeschl" type="add" issue="TRB-97" data="2015-08-06">
+        Integrate JavaSimon for performance monitoring
+      </action>
+      <action dev="sgoeschl" type="update" data="2015-08-06">
+        Fixing typos and cleaning up code to keep IntelliJ happy.
+      </action>
+      <action dev="sgoeschl" type="update" issue="TRB-96" data="2015-08-06">
+        Provide a more graceful shutdown of Fulcrum services
+      </action>
       <action dev="sgoeschl" type="update" data="2015-03-19">
         Upgrading to jamon-2.81.
       </action>      
