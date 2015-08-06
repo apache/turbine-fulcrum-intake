@@ -29,7 +29,7 @@ import org.apache.avalon.framework.logger.ConsoleLogger;
  * 
  * This class uses JUnit 3.
  * 
- * @see BaseUnit4Test JUnit4 Version
+ * @see BaseUnit4Test
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>

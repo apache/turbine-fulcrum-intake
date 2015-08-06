@@ -23,7 +23,7 @@ import org.apache.avalon.framework.logger.ConsoleLogger;
 import org.junit.After;
 
 /**
- * Alternative Base class to @see BaseUnitTest, but for unit 4 tests for components. 
+ * Alternative Base class to {@link BaseUnitTest} for component tests. 
  * 
  * This version doesn't load the container until the
  * first request for a component. This allows the tester to populate the configurationFileName and
@@ -31,7 +31,7 @@ import org.junit.After;
  * 
  * JUnit 4 Version of BaseUnitTest class.
  * 
- * @see BaseUnitTest JUnit3 Version. 
+ * @see BaseUnitTest 
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
