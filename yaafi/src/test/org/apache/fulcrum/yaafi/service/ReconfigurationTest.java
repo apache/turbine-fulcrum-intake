@@ -70,6 +70,7 @@ public class ReconfigurationTest extends TestCase
 
     /**
      * Trigger the ReconfigurationService by instantiating it manually.
+     *  @throws Exception
      */
     public void testReconfigurationService() throws Exception
     {

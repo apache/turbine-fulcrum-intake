@@ -88,7 +88,8 @@ public class AdviceServiceTest extends TestCase implements DependentTestComponen
     }
 
     /**
-     * Advice a StringBuffer based on the CharSequence interface
+     *  Advice a StringBuffer based on the CharSequence interface
+     * @throws Exception
      */
     public void testSimpleAdvice() throws Exception
     {

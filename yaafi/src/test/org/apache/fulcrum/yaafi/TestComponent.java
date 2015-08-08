@@ -88,7 +88,9 @@ public interface TestComponent
 
     /**
      * Do something for the given time
+     * 
      * @param millis
+     * @param arg
      */
     public void doSomething(long millis, Object arg);
 }

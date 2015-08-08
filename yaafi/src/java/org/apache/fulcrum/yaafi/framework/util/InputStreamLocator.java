@@ -75,6 +75,8 @@ public class InputStreamLocator
      * Locate the file with the given position using the following steps
      *
      * @param location the location of the source to be loaded
+     * @return
+     * @throws IOException
      */
     public InputStream locate( String location ) throws IOException
     {

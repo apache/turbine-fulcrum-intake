@@ -179,7 +179,7 @@ public class Validate
      * expression.</p>
      *
      * <pre>
-     * Validate.isTrue( i > 0 );
+     * Validate.isTrue( i &gt; 0 );
      * Validate.isTrue( myObject.isOk() );
      * </pre>
      *

@@ -252,6 +252,7 @@ public class AvalonServiceComponentImpl
 
     /**
      * @see org.apache.avalon.framework.logger.LogEnabled#enableLogging(org.apache.avalon.framework.logger.Logger)
+     * @param logger
      */
     public void enableLogging(Logger logger)
     {
@@ -302,9 +303,11 @@ public class AvalonServiceComponentImpl
         }
     }
 
-    /**
-     * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
-     */
+   /**
+    * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
+    * @param serviceManager
+    * @throws ServiceException
+    */
     public void service(ServiceManager serviceManager) throws ServiceException
     {
         Object rawInstance = this.getRawInstance(false);
@@ -360,9 +363,11 @@ public class AvalonServiceComponentImpl
         }
     }
 
-    /**
-     * @see org.apache.avalon.framework.parameters.Parameterizable#parameterize(org.apache.avalon.framework.parameters.Parameters)
-     */
+/**
+ * @see org.apache.avalon.framework.parameters.Parameterizable#parameterize(org.apache.avalon.framework.parameters.Parameters)
+ * @param parameters
+ * @throws ParameterException
+ */
     public void parameterize(Parameters parameters) throws ParameterException
     {
         Object rawInstance = this.getRawInstance(false);
@@ -551,9 +556,11 @@ public class AvalonServiceComponentImpl
         }
     }
 
-    /**
-     * @see org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.apache.avalon.framework.configuration.Configuration)
-     */
+	/**
+	 * @see org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.apache.avalon.framework.configuration.Configuration)
+	 * @param configuration
+	 * @throws ConfigurationException
+	 */
     public void reconfigure(Configuration configuration) throws ConfigurationException
     {
         Validate.notNull( configuration, "configuration" );
