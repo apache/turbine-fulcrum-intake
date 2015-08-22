@@ -48,26 +48,37 @@
 		scriptEngines/scriptEngine/isCached := cache the scripts or reload it each time from the ResourceManagerService
 		scriptEngines/scriptEngine/isCompiled := precompile the script (if supported by the scripting engine)
 		scriptEngines/scriptEngine/location := the associated domain name of ResourceManagerService
-		scriptEngines/scriptEngine/preLoad := a list of scripts to load on startup
-		scriptEngines/scriptEngine/preLoad/script := a single script to load on startup
+		scriptEngines/scriptEngine/preload := a list of scripts to load on startup
+		scriptEngines/scriptEngine/preload/script := a single script to load on startup
+		scriptEngines/scriptEngine/startup := a list of scripts to execute during service startup
+		scriptEngines/scriptEngine/startup/script := a single script to execute during service startup
+		scriptEngines/scriptEngine/shutdown := a list of scripts to execute during service disposal
+		scriptEngines/scriptEngine/shutdown/script := a single script to execute during service disposal 		
 	-->
 
   <ScriptService>
   	<scriptEngines>
-  		<scriptEngine>
-  			<name>javascript</name>
-            <extension>js</extension>
-            <isCached>true</isCached>
-  			<isCompiled>true</isCompiled>
-  			<location>js</location>
-  			<preLoad>
+      <scriptEngine>
+  		  <name>javascript</name>
+        <extension>js</extension>
+        <isCached>true</isCached>
+        <isCompiled>true</isCompiled>
+  	    <location>js</location>
+  	    <preload>
   		    <script>InvocableIntf.js</script>
-  			</preLoad>
-  		</scriptEngine>
+  	    </preload>
+        <startup>
+          <script>Startup.js</script>
+          <script>Startup.js</script>
+        </startup>
+        <shutdown>
+          <script>Shutdown.js</script>
+        </shutdown>                    
+      </scriptEngine>
   	</scriptEngines>
   	<scriptConfiguration>
   	  <isDebug>true</isDebug>
   	</scriptConfiguration>
   </ScriptService>
-
+  
 </componentConfig>

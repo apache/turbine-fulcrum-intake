@@ -16,29 +16,5 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import java.io.File;
-import java.util.Properties;
-
-// 1) parse the arguments
-
-int foo = bar.intValue();
-
-// 2) access the avalonContext
-
-File applicationDir = avalonContext.getApplicationDir();
-File tempDir = avalonContext.getTempDir();
-
-// 3) create a property instance
-
-Properties props = new Properties();
-props.setProperty( "foo", bar.toString());
-assert( props.size() == 1 );
-props.clear();
-assert( props.size() == 0 );
-
-// 4) return a result
-
-int result = foo*10;
-
-return result;
+ 
+avalonContext.getLogger().info("Executing a shutdown script ...");

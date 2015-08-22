@@ -20,8 +20,9 @@ package org.apache.fulcrum.script.impl;
  */
 
 import java.util.List;
-
+import javax.script.Bindings;
 import javax.script.ScriptEngine;
+import javax.script.SimpleBindings;
 
 /**
  * An entry of the script engine.
@@ -49,7 +50,16 @@ public class ScriptEngineEntry
     private ScriptEngine scriptEngine;
 
     /** a list of scripts to execute during initialization */
-    private List scriptList;
+    private List preLoadedScripts;
+
+    /** a list of scripts to execute during startup */
+    private List startupScripts;
+
+    /** a list of scripts to execute during shutdown */
+    private List shutdownScripts;
+
+    /** the script engine bindings after executing the pre-loaded scripts */
+    private Bindings defaultBindings;
 
     /**
      * Constructor
@@ -80,6 +90,7 @@ public class ScriptEngineEntry
         this.isCompiled = isCompiled;
         this.location = location;
         this.scriptEngine = scriptEngine;
+        this.defaultBindings = new SimpleBindings();
     }
 
     /**
@@ -117,7 +128,8 @@ public class ScriptEngineEntry
     /**
      * @return Returns the script extension
      */
-    public String getExtension() {
+    public String getExtension()
+    {
         return extension;
     }
 
@@ -130,19 +142,51 @@ public class ScriptEngineEntry
     }
 
     /**
-     * @return Returns the scriptList.
+     * @return Returns the pre-loaded scripts.
      */
-    public List getScriptList()
+    public List getPreLoadedScripts()
     {
-        return scriptList;
+        return preLoadedScripts;
     }
 
     /**
-     * @param scriptList The scriptList to set.
+     * @param scriptList The list of pre-loaded scripts
      */
-    public void setScriptList(List scriptList)
+    public void setPreloadScripts(List scriptList)
     {
-        Validate.notNull(scriptList, "scriptList");
-        this.scriptList = scriptList;
+        Validate.notNull(scriptList, "preLoadedScripts");
+        this.preLoadedScripts = scriptList;
+    }
+
+    public List getStartupScripts()
+    {
+        return startupScripts;
+    }
+
+    public void setStartupScripts(List startupScripts)
+    {
+        Validate.notNull(startupScripts, "startupScripts");
+        this.startupScripts = startupScripts;
+    }
+
+    public List getShutdownScripts()
+    {
+        return shutdownScripts;
+    }
+
+    public void setShutdownScripts(List shutdownScripts)
+    {
+        Validate.notNull(shutdownScripts, "shutdownScripts");
+        this.shutdownScripts = shutdownScripts;
+    }
+
+    public Bindings getDefaultBindings()
+    {
+        return defaultBindings;
+    }
+
+    public void setDefaultBindings(Bindings defaultBindings)
+    {
+        this.defaultBindings = defaultBindings;
     }
 }

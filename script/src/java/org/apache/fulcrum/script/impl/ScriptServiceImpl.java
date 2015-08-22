@@ -34,6 +34,7 @@ import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import javax.script.SimpleBindings;
 
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Initializable;
@@ -64,7 +65,7 @@ public class ScriptServiceImpl
     /** the script manager */
     private ScriptEngineManager scriptEngineManager;
 
-    /** the mapof scripting engines to use */
+    /** the map of scripting engines to use */
     private HashMap scriptEngineMap;
 
     /** maps from a script name to a script */
@@ -136,10 +137,6 @@ public class ScriptServiceImpl
             this.getLogger().error(msg);
             throw new ConfigurationException(msg);
         }
-
-        // evaluate the scripts defined in the onLoad section
-
-        this.preloadScripts();
     }
 
     /**
@@ -149,6 +146,14 @@ public class ScriptServiceImpl
     {
         ScriptAvalonContext avalonContext = this.createScriptAvalonContext();
         this.scriptEngineManager.put("avalonContext", avalonContext);
+
+        // evaluate the scripts defined in the onLoad section
+
+        this.onPreloadScripts();
+
+        // execute the startup scripts
+
+        this.onStartupScripts();
     }
 
     /**
@@ -169,6 +174,10 @@ public class ScriptServiceImpl
      */
     public void dispose()
     {
+        // execute the shutdown scripts
+
+        this.onShutdownScripts();
+
         super.dispose();
         this.scriptCache.clear();
         this.scriptCache = null;
@@ -210,7 +219,7 @@ public class ScriptServiceImpl
 
     }
 
-    /* (non-Javadoc)
+    /**
      * @see org.apache.fulcrum.script.ScriptService#eval(java.lang.String, javax.script.ScriptContext)
      */
     public Object eval(String scriptName, ScriptContext context)
@@ -298,7 +307,7 @@ public class ScriptServiceImpl
      * @param args the arguments for the script method
      * @return a scripting object implementing the given interface
      * @throws ScriptException script execution failed
-     * @throws NoSuchMethodException the script method was nout found
+     * @throws NoSuchMethodException the script method was not found
      */
     private Object call(String engineName, String name, Object[] args)
     	throws ScriptException, NoSuchMethodException
@@ -354,8 +363,8 @@ public class ScriptServiceImpl
         ScriptEngineEntry scriptEngineEntry = this.getScriptEngineEntry(engineName);
         String location = scriptEngineEntry.getLocation();
 
-        String result = null;
-        byte[] scriptContent = null;
+        String result;
+        byte[] scriptContent;
         String[] scriptContext = {};
 
         scriptContent = this.getResourceManagerService().read(
@@ -372,15 +381,15 @@ public class ScriptServiceImpl
      * Creates a compiled script.
      *
      * @param engineName the script engine to use
-     * @param scriptName the name of the scipt to compile
-     * @param scriptContent the name  scipt to compile
+     * @param scriptName the name of the script to compile
+     * @param scriptContent the name  script to compile
      * @return the compiled script
      * @throws ScriptException failed to compile the script
      */
     private CompiledScript compileScript( String engineName, String scriptName, String scriptContent )
         throws ScriptException
     {
-        CompiledScript result = null;
+        CompiledScript result;
 
         try
         {
@@ -420,7 +429,7 @@ public class ScriptServiceImpl
     private Object doEval( ScriptCacheEntry scriptCacheEntry, Bindings binding, ScriptContext scriptContext )
         throws ScriptException
     {
-        Object result = null;
+        Object result;
         String scriptName = scriptCacheEntry.getScriptName();
         ScriptEngineEntry scriptEngineEntry = this.getScriptEngineEntry(scriptCacheEntry.getEngineName());
         ScriptEngine scriptEngine = scriptEngineEntry.getScriptEngine();
@@ -487,13 +496,13 @@ public class ScriptServiceImpl
      * @param name the name of the script method
      * @param args the script method parameters
      * @return the result of the script invocation
-     * @throws ScriptException if an error occurrs during invocation of the method.
+     * @throws ScriptException if an error occurs during invocation of the method.
      * @throws NoSuchMethodException if method with given name or matching argument types cannot be found.
      */
     private Object doCall( String engineName, String name, Object[] args )
     	throws ScriptException, NoSuchMethodException
     {
-        Object result = null;
+        Object result;
         ScriptEngineEntry scriptEngineEntry = this.getScriptEngineEntry(engineName);
         ScriptEngine scriptEngine = scriptEngineEntry.getScriptEngine();
         Invocable invocable = (Invocable) scriptEngine;
@@ -537,7 +546,7 @@ public class ScriptServiceImpl
      */
     private Object doGetInterface( String engineName, Class clazz )
     {
-        Object result = null;
+        Object result;
         ScriptEngineEntry scriptEngineEntry = this.getScriptEngineEntry(engineName);
         ScriptEngine scriptEngine = scriptEngineEntry.getScriptEngine();
         Invocable invocable = (Invocable) scriptEngine;
@@ -573,7 +582,7 @@ public class ScriptServiceImpl
      */
     private ScriptAvalonContext createScriptAvalonContext()
     {
-        ScriptAvalonContextImpl result = null;
+        ScriptAvalonContextImpl result;
 
         ScriptServiceManagerImpl scriptServiceManager = new ScriptServiceManagerImpl(
             this.getServiceManager(),
@@ -621,7 +630,7 @@ public class ScriptServiceImpl
         String engineName = this.getEngineName(scriptName);
         ScriptCacheEntry scriptCacheEntry = null;
         ScriptEngineEntry scriptEngineEntry = this.getScriptEngineEntry(engineName);
-        String plainScript = null;
+        String plainScript;
         CompiledScript compiledScript = null;
         boolean isInCache = false;
 
@@ -697,22 +706,44 @@ public class ScriptServiceImpl
 
         ScriptEngineEntry result = new ScriptEngineEntry(name, extension, isCached, isCompiled, location, scriptEngine);
 
-        // evaluate the given scripts
+        // collect the names of the 'pre-loaded' scripts
 
-        ArrayList scriptList = new ArrayList();
-        Configuration[] scriptListConfiguration = configuration.getChild("preLoad").getChildren("script");
-        for( int i=0; i<scriptListConfiguration.length; i++ )
+        ArrayList preloadScripts = new ArrayList();
+        Configuration[] preloadScriptListConfiguration = configuration.getChild("preload").getChildren("script");
+        for( int i=0; i<preloadScriptListConfiguration.length; i++ )
         {
-            scriptList.add(scriptListConfiguration[i].getValue());
+            preloadScripts.add(preloadScriptListConfiguration[i].getValue());
         }
 
-        result.setScriptList(scriptList);
+        result.setPreloadScripts(preloadScripts);
+
+        // collect the names of the 'startup' scripts
+
+        ArrayList startupScripts = new ArrayList();
+        Configuration[] startupScriptListConfiguration = configuration.getChild("startup").getChildren("script");
+        for( int i=0; i<startupScriptListConfiguration.length; i++ )
+        {
+            startupScripts.add(startupScriptListConfiguration[i].getValue());
+        }
+
+        result.setStartupScripts(startupScripts);
+
+        // collect the names of the 'shutdown' scripts
+
+        ArrayList shutdownScripts = new ArrayList();
+        Configuration[] shutdownScriptListConfiguration = configuration.getChild("shutdown").getChildren("script");
+        for( int i=0; i< shutdownScriptListConfiguration.length; i++ )
+        {
+            shutdownScripts.add(shutdownScriptListConfiguration[i].getValue());
+        }
+
+        result.setShutdownScripts(shutdownScripts);
 
         return result;
     }
 
     /**
-     * @param engineName the name of the scriptng engine
+     * @param engineName the name of the scripting engine
      * @return the ScriptEngineEntry
      */
     private ScriptEngineEntry getScriptEngineEntry( String engineName)
@@ -770,7 +801,7 @@ public class ScriptServiceImpl
             }
         }
 
-        throw new IllegalArgumentException("Unknow script extension : " + extension);
+        throw new IllegalArgumentException("Unknown script extension : " + extension);
     }
 
     /**
@@ -804,18 +835,21 @@ public class ScriptServiceImpl
     }
 
     /**
-     * Preload the scripts defined in the onLoad section
+     * Pre-load the scripts defined in the onLoad section.
      */
-    private void preloadScripts()
+    private void onPreloadScripts()
     {
+        getLogger().debug("Executing the pre-loaded scripts");
+
         Iterator iter = this.getScriptEngineMap().keySet().iterator();
 
         while( iter.hasNext() )
         {
+            Bindings scriptEngineDefaultBindings = new SimpleBindings();
             String engineName = (String) iter.next();
             ScriptEngineEntry scriptEngineEntry = this.getScriptEngineEntry(engineName);
             ScriptEngine scriptEngine = scriptEngineEntry.getScriptEngine();
-            Object[] scriptList = scriptEngineEntry.getScriptList().toArray();
+            Object[] scriptList = scriptEngineEntry.getPreLoadedScripts().toArray();
 
             for( int i=0; i<scriptList.length; i++ )
             {
@@ -825,6 +859,7 @@ public class ScriptServiceImpl
                 {
                     String plainScript = this.loadScript(engineName, scriptName);
                     scriptEngine.eval(plainScript);
+                    scriptEngineDefaultBindings.putAll(scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE));
                 }
                 catch (Exception e)
                 {
@@ -833,6 +868,78 @@ public class ScriptServiceImpl
                     throw new RuntimeException(msg);
                 }
             }
+
+            scriptEngineEntry.setDefaultBindings(scriptEngineDefaultBindings);
         }
     }
+
+    /**
+     * Execute the startup scripts
+     */
+    private void onStartupScripts()
+    {
+        getLogger().debug("Executing the startup scripts");
+
+        Iterator iter = this.getScriptEngineMap().keySet().iterator();
+
+        while( iter.hasNext() )
+        {
+            String engineName = (String) iter.next();
+            ScriptEngineEntry scriptEngineEntry = this.getScriptEngineEntry(engineName);
+            Object[] scriptList = scriptEngineEntry.getStartupScripts().toArray();
+
+            for( int i=0; i<scriptList.length; i++ )
+            {
+                String scriptName = scriptList[i].toString();
+
+                try
+                {
+                    this.eval(scriptName);
+                }
+                catch (Exception e)
+                {
+                    String msg = "Unable to execute the following startup script : " + scriptName;
+                    this.getLogger().error(msg, e);
+                    throw new RuntimeException(msg);
+                }
+            }
+        }
+
+        getLogger().debug("Finished executing the startup scripts");
+    }
+
+    /**
+     * Execute the shutdown scripts.
+     */
+    private void onShutdownScripts()
+    {
+        getLogger().debug("Executing the shutdown scripts");
+
+        Iterator iter = this.getScriptEngineMap().keySet().iterator();
+
+        while( iter.hasNext() )
+        {
+            String engineName = (String) iter.next();
+            ScriptEngineEntry scriptEngineEntry = this.getScriptEngineEntry(engineName);
+            Object[] scriptList = scriptEngineEntry.getShutdownScripts().toArray();
+
+            for( int i=0; i<scriptList.length; i++ )
+            {
+                String scriptName = scriptList[i].toString();
+
+                try
+                {
+                    this.eval(scriptName);
+                }
+                catch (Throwable t)
+                {
+                    String msg = "Unable to execute the following shutdown script : " + scriptName;
+                    this.getLogger().error(msg, t);
+                }
+            }
+        }
+
+        getLogger().debug("Finished executing the shutdown scripts");
+    }
+
 }

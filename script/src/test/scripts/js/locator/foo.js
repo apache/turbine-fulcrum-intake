@@ -16,9 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-testMe();
 
-function testMe(aBar)
+function testMe() 
 {
   return "locator/foo.js";
 }
+
+testMe();
+

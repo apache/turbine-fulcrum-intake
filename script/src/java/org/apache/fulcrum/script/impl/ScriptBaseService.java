@@ -55,16 +55,16 @@ public abstract class ScriptBaseService
     /** context key for temporary directory */
     private final static String URN_AVALON_TEMP = "impl.workDir";
 
-    /** The context supplied by the avalon framework */
+    /** The context supplied by the Avalon framework */
     private Context context;
 
-    /** The service manager supplied by the avalon framework */
+    /** The service manager supplied by the Avalon framework */
     private ServiceManager serviceManager;
 
-    /** The configuraton supplied by the avalon framework */
+    /** The configuration supplied by the Avalon framework */
     private Configuration configuration;
 
-    /** The parameters supplied by the avalon framework */
+    /** The parameters supplied by the Avalon framework */
     private Parameters parameters;
 
     /** the Avalon application directory */
@@ -86,9 +86,9 @@ public abstract class ScriptBaseService
      */
     public void contextualize(Context context) throws ContextException
     {
-        this.context        = context;
+        this.context = context;
         this.applicationDir = (File) context.get(URN_AVALON_HOME);
-        this.tempDir        = (File) context.get(URN_AVALON_TEMP);
+        this.tempDir = (File) context.get(URN_AVALON_TEMP);
     }
 
     /**

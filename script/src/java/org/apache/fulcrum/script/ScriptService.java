@@ -19,12 +19,12 @@ package org.apache.fulcrum.script;
  * under the License.
  */
 
+import java.io.IOException;
 import javax.script.Bindings;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.io.IOException;
 
 /**
  * An Avalon service to execute scripts based on JSR-223.
@@ -49,7 +49,7 @@ public interface ScriptService
      * @param scriptName the name of the script
      * @return true if the script exists
      */
-    boolean exists( String scriptName );
+    boolean exists(String scriptName);
 
     /**
      * Executes the specified script. The default ScriptContext
@@ -60,7 +60,7 @@ public interface ScriptService
      * @throws IOException loading the script failed
      * @throws ScriptException if an error occurrs during script execution.
      */
-    Object eval( String scriptName ) throws IOException, ScriptException;
+    Object eval(String scriptName) throws IOException, ScriptException;
 
     /**
      * Executes the script using the Namespace argument
@@ -71,9 +71,9 @@ public interface ScriptService
      * @param bindings The binding of attributes
      * @return result from the executed script
      * @throws IOException loading the script failed
-     * @throws ScriptException if an error occurrs during script execution.
+     * @throws ScriptException if an error occurs during script execution.
      */
-    Object eval( String scriptName, Bindings bindings ) throws IOException, ScriptException;
+    Object eval(String scriptName, Bindings bindings) throws IOException, ScriptException;
 
     /**
      * Causes the immediate execution of the script. State left in the engine
@@ -85,9 +85,9 @@ public interface ScriptService
      * @param context The ScriptContext passed to the script engine.
      * @return result from the executed script
      * @throws IOException loading the script failed
-     * @throws ScriptException if an error occurrs during script execution.
+     * @throws ScriptException if an error occurs during script execution.
      */
-    Object eval( String scriptName, ScriptContext context ) throws IOException, ScriptException;
+    Object eval(String scriptName, ScriptContext context) throws IOException, ScriptException;
 
     /**
      * Calls a procedure compiled during a previous script execution,
@@ -99,7 +99,7 @@ public interface ScriptService
      * @throws ScriptException if an error occurrs during script execution
      * @throws NoSuchMethodException If method with given name or matching argument types cannot be found.
      */
-    Object call( String name, Object[] args ) throws ScriptException, NoSuchMethodException;
+    Object call(String name, Object[] args) throws ScriptException, NoSuchMethodException;
 
     /**
      * Return an object implementing the given interface. It
@@ -111,5 +111,5 @@ public interface ScriptService
      * @param clazz the interface to implement
      * @return an scripted object implementing the given interface.
      */
-    Object getInterface( Class clazz );
+    Object getInterface(Class clazz);
 }

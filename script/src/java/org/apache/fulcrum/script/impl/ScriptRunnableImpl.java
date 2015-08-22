@@ -45,7 +45,7 @@ public class ScriptRunnableImpl implements ScriptRunnable
     /** the result of the execution */
     private Object result;
 
-    /** the execption thrown by the scipt if any */
+    /** the exception thrown by the script if any */
     private Exception exception;
 
     /**

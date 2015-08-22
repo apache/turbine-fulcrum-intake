@@ -32,6 +32,8 @@ while (loop == 1) {
 	if (state == 2) {
 		loop = 0
 	}
+
+	Thread.sleep(100);
 }
 println("-----End of script-----\n");
 

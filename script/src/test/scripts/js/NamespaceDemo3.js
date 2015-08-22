@@ -5,7 +5,7 @@
  * regarding copyright ownership.  The ASF licenses this file
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
+ * with the License.  You may obtain a copy of the License at                                                                                                                 ~
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -17,21 +17,30 @@
  * under the License.
  */
 
-print("\n-----Starting script");
+importClass(Packages.java.lang.Thread);
+
+println("\n-----Starting script");
 
 var initial = parseInt(state);
-print("In script....Initial state is " + initial);
+println("In script....Initial state is " + initial);
 var loop = 1;
-while (loop == 1) {
-	print("Script continues at state = " + state);
-	if (parseInt(state) != initial) {
-		print("State changed (state = " + state + "). Exit script.");
-		loop = 0;
-	}
-	//it may take the script engine too long to start
-	if (parseInt(state)==2) {
-		loop = 0;
-	}
-}
-print("-----End of script-----\n");
+while (loop == 1)
+{
 
+    println("Script continues at state = " + state);
+
+    if (parseInt(state) != initial)
+    {
+        println("State changed (state = " + state + "). Exit script.");
+        loop = 0;
+    }
+
+    //it may take the script engine too long to start
+    if (parseInt(state) == 2)
+    {
+        loop = 0;
+    }
+
+    Thread.sleep(100)
+}
+println("-----End of script-----\n");

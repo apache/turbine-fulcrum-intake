@@ -20,49 +20,49 @@
 
 <componentConfig>
 
-    <!--
-      ResourceManagerService
+  <!--
+    ResourceManagerService
+    
+    domain := one or more domain definitions
+    domain@name := the name of a domain
+    domain@type := an optional implementation class - defaults to FileResourceManager
+    domain/suffix := the extension of the resources to manage
+    domain/location := the location were the resources reside
+    domain/useLocator := enable/disable the locator feature
+  -->
+  <ResourceManagerService>
+    <domain name="groovy">
+      <suffix>groovy</suffix>
+      <location>./src/test/scripts/groovy</location>
+      <useLocator>true</useLocator>
+    </domain>
+  </ResourceManagerService>
 
-      domain := one or more domain definitions
-      domain@name := the name of a domain
-      domain@type := an optional implementation class - defaults to FileResourceManager
-      domain/suffix := the extension of the resources to manage
-      domain/location := the location were the resources reside
-      domain/useLocator := enable/disable the locator feature
-    -->
-    <ResourceManagerService>
-        <domain name="groovy">
-            <suffix>groovy</suffix>
-            <location>./src/test/scripts/groovy</location>
-            <useLocator>true</useLocator>
-        </domain>
-    </ResourceManagerService>
+	<!--
+		ScriptService
 
-    <!--
-         ScriptService
+		scriptEngines := the list of available script engines
+		scriptEngines/scriptEngine := configuration of a single script engine
+		scriptEngines/scriptEngine/name := the name of the script engine
+		scriptEngines/scriptEngine/isCached := cache the scripts or reload it each time from the ResourceManagerService
+		scriptEngines/scriptEngine/isCompiled := precompile the script (if supported by the scripting engine)
+		scriptEngines/scriptEngine/location := the associated domain name of ResourceManagerService
+		scriptEngines/scriptEngine/preLoad := a list of scripts to load on startup
+		scriptEngines/scriptEngine/preLoad/script := a single script to load on startup
+	-->
 
-         scriptEngines := the list of available script engines
-         scriptEngines/scriptEngine := configuration of a single script engine
-         scriptEngines/scriptEngine/name := the name of the script engine
-         scriptEngines/scriptEngine/isCached := cache the scripts or reload it each time from the ResourceManagerService
-         scriptEngines/scriptEngine/isCompiled := precompile the script (if supported by the scripting engine)
-         scriptEngines/scriptEngine/location := the associated domain name of ResourceManagerService
-         scriptEngines/scriptEngine/preLoad := a list of scripts to load on startup
-         scriptEngines/scriptEngine/preLoad/script := a single script to load on startup
-     -->
-
-    <ScriptService>
-        <scriptEngines>
-            <scriptEngine>
-                <name>groovy</name>
-                <isCached>true</isCached>
-                <isCompiled>true</isCompiled>
-                <location>groovy</location>
-            </scriptEngine>
-        </scriptEngines>
-        <scriptConfiguration>
-            <isDebug>true</isDebug>
-        </scriptConfiguration>
-    </ScriptService>
+  <ScriptService>
+  	<scriptEngines>
+  		<scriptEngine>
+  			<name>groovy</name>
+  			<isCached>true</isCached>
+  			<isCompiled>true</isCompiled>
+  			<location>groovy</location>
+  		</scriptEngine>
+  	</scriptEngines>
+  	<scriptConfiguration>
+  	  <isDebug>true</isDebug>
+  	</scriptConfiguration>
+  </ScriptService>
 
 </componentConfig>
