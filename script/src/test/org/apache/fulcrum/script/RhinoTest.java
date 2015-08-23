@@ -69,8 +69,10 @@ public class RhinoTest extends AbstractScriptTest
         // tests from the JSR-223 Reference implementation
         suite.addTest(new RhinoTest("testCompilableInterface"));
         suite.addTest(new RhinoTest("testInvocableIntf"));
-        suite.addTest(new RhinoTest("testNamespaceDemo2"));
         suite.addTest(new RhinoTest("testNamespaceDemo3"));
+
+        // this test does not work any longer with Nashorn
+        // suite.addTest(new RhinoTest("testNamespaceDemo2"));
 
         return suite;
     }

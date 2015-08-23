@@ -17,30 +17,18 @@
  * under the License.
  */
 
-importClass(Packages.java.lang.Thread);
-
-println("\n-----Starting script");
-
 var initial = parseInt(state);
-println("In script....Initial state is " + initial);
 var loop = 1;
+
 while (loop == 1)
 {
-
-    println("Script continues at state = " + state);
-
     if (parseInt(state) != initial)
     {
-        println("State changed (state = " + state + "). Exit script.");
         loop = 0;
     }
 
-    //it may take the script engine too long to start
     if (parseInt(state) == 2)
     {
         loop = 0;
     }
-
-    Thread.sleep(100)
 }
-println("-----End of script-----\n");

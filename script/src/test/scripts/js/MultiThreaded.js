@@ -17,9 +17,13 @@
  * under the License.
  */
 
-importPackage(java.lang);
+function sleep(millis)
+{
+    var date = new Date();
+    var curDate = null;
+    do { curDate = new Date(); }
+    while(curDate-date < millis);
+}
 
-avalonContext.getLogger().debug( Thread.currentThread().getName() + " - Starting to run" );
-Thread.sleep(1000);
+sleep(1000);
 foo = foo * 2.0;
-avalonContext.getLogger().debug( Thread.currentThread().getName() + " - Finished running" );

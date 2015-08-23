@@ -17,9 +17,5 @@
  * under the License.
  */
 
-print("\n-----Start executing script...");
 var value = key.getVal();
-print("The current value of key is " + value);
-print("\nReplacing value of key with \"new value\"");
 key = "new value";
-print("-----End of script-----\n");

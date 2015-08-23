@@ -17,17 +17,16 @@
  * under the License.
  */
 
-importPackage(java.util);
 var counter;
-switch (parseInt(count)) {
-	case 0:
-		counter = "first time"; break;
-	case 1:
-		counter = "second time"; break;
-	case 2:
-		counter = "third time";
+
+switch (parseInt(count))
+{
+    case 0:
+        counter = "first time";
+        break;
+    case 1:
+        counter = "second time";
+        break;
+    case 2:
+        counter = "third time";
 }
-// print("\nRun compiled script, the " + counter);
-// print ( "\nCurrentTime in milliSecond = " + currentTime );
-var time = new java.util.Date( new java.lang.Long( currentTime).longValue() );
-print("Current time is " + time);

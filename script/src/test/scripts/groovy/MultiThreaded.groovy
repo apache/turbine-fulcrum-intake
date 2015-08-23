@@ -35,6 +35,6 @@
 * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
 */
 
-avalonContext.getLogger().debug( Thread.currentThread().getName() + " - Starting to run" );
+Thread.sleep(1000);
 foo = foo * 2.0;
-avalonContext.getLogger().debug( Thread.currentThread().getName() + " - Finished running" );
+return foo;

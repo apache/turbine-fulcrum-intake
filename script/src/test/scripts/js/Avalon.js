@@ -17,8 +17,6 @@
  * under the License.
  */
 
-importPackage(java.util);
-
 testMe(bar);
 
 function testMe(aBar)
@@ -36,16 +34,16 @@ function testMe(aBar)
   var parameters = avalonContext.getParameters();
   var configuration = avalonContext.getConfiguration();
   var isDebug = configuration.getChild("isDebug").getValueAsBoolean(false);
-  serviceManager.lookup("org.apache.fulcrum.script.ScriptService").exists("Avalon");
 
-  print("applicationDir = " + applicationDir);
-  print("tempDir = " + tempDir);
-  print("isDebug = " + isDebug);
-  logger.info("Logging from within a script ... :-)");
+  serviceManager.lookup("org.apache.fulcrum.script.ScriptService");
+
+  logger.debug("applicationDir = " + applicationDir);
+  logger.debug("tempDir = " + tempDir);
+  logger.debug("isDebug = " + isDebug);
 
   // 3) create a property instance
 
-  var props = new Properties();
+  var props = new java.util.Properties();
   props.setProperty( "foo", bar );
   if( props.size() != 1 ) throw "setting a property failed";
   props.clear();

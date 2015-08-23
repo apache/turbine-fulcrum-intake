@@ -114,7 +114,7 @@ public abstract class AbstractScriptTest extends BaseUnitTest
      */
     public void testNamespaceDemo2() throws Exception
     {
-        ScriptEngine eng = this.scriptService.getScriptEngine();
+        ScriptEngine engine = this.scriptService.getScriptEngine();
 
         // create two simple namespaces
         SimpleBindings eNamespace = new SimpleBindings();
@@ -123,22 +123,22 @@ public abstract class AbstractScriptTest extends BaseUnitTest
         cNamespace.put("key", new Testobj("Original ENGINE_SCOPE in context."));
 
         // use external namespace instead of the default one
-        eng.setBindings(eNamespace, ScriptContext.ENGINE_SCOPE);
-        System.out.println("Starting value of key in engine scope is \"" + eng.get("key") + "\"");
-        assertEquals("Testobj containing Original engine scope.", eng.get("key").toString().trim());
+        engine.setBindings(eNamespace, ScriptContext.ENGINE_SCOPE);
+        System.out.println("Starting value of key in engine scope is \"" + engine.get("key") + "\"");
+        assertEquals("Testobj containing Original engine scope.", engine.get("key").toString().trim());
 
         //execute script using the namespace
         this.scriptService.eval("NamespaceDemo2");
-        System.out.println("Ending value of key in engine scope is \"" + eng.get("key") + "\"");
-        assertEquals("new value", eng.get("key"));
+        System.out.println("Ending value of key in engine scope is \"" + engine.get("key") + "\"");
+        assertEquals("new value", engine.get("key"));
 
         // create a scriptcontext and set its engine scope namespace
         ScriptContext ctxt = new SimpleScriptContext();
         ctxt.setBindings(cNamespace, ScriptContext.ENGINE_SCOPE);
 
         this.scriptService.eval("NamespaceDemo2", ctxt);
-        System.out.println("Ending value of key in engine scope is \"" + eng.get("key") + "\"");
-        assertEquals("new value", eng.get("key"));
+        System.out.println("Ending value of key in engine scope is \"" + engine.get("key") + "\"");
+        assertEquals("new value", engine.get("key"));
         System.out.println("Ending value of key in ENGINE_SCOPE of context is " + ctxt.getAttribute("key", ScriptContext.ENGINE_SCOPE));
         assertEquals("new value", ctxt.getAttribute("key", ScriptContext.ENGINE_SCOPE));
     }
@@ -238,33 +238,31 @@ public abstract class AbstractScriptTest extends BaseUnitTest
     public void testMultithreadingScript() throws Exception
     {
         Hashtable args0 = new Hashtable();
-        args0.put("foo", new Double(0));
+        args0.put("foo", new Double(1));
         ScriptRunnable runnable0 = new ScriptRunnableImpl(this.scriptService, "MultiThreaded", args0);
+        Thread thread0 = new Thread(runnable0, "Thread0");
 
         Hashtable args1 = new Hashtable();
-        args1.put("foo", new Double(1));
+        args1.put("foo", new Double(2));
         ScriptRunnable runnable1 = new ScriptRunnableImpl(this.scriptService, "MultiThreaded", args1);
         Thread thread1 = new Thread(runnable1, "Thread1");
 
         Hashtable args2 = new Hashtable();
-        args2.put("foo", new Double(2));
+        args2.put("foo", new Double(4));
         ScriptRunnable runnable2 = new ScriptRunnableImpl(this.scriptService, "MultiThreaded", args2);
         Thread thread2 = new Thread(runnable2, "Thread2");
 
+        thread0.start();
         thread1.start();
         thread2.start();
-        runnable0.run();
 
-        assertTrue(runnable0.getResult() == runnable0.getResult());
-        assertTrue(runnable1.getResult() == runnable1.getResult());
-        assertTrue(runnable2.getResult() == runnable2.getResult());
-
+        thread0.join();
         thread1.join();
         thread2.join();
 
-        assertEquals(new Double(0), args0.get("foo"));
-        assertEquals(new Double(2), args1.get("foo"));
-        assertEquals(new Double(4), args2.get("foo"));
+        assertEquals(new Double(2), runnable0.getResult());
+        assertEquals(new Double(4), runnable1.getResult());
+        assertEquals(new Double(8), runnable2.getResult());
     }
 
     /**
