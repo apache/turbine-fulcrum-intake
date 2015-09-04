@@ -32,7 +32,7 @@
       <p> This component is really just a test container for testing the other components. This
         container is not meant to be used in a production environment. </p>
       <p> In order to save you a little coding, a base class has been provided for your test cases.
-        Simply extend <code>org.apache.fulcrum.testcontainer.BaseUnitTest</code> and you are ready
+        Simply extend <code>org.apache.fulcrum.testcontainer.BaseUnitTest</code> for JUnit3 or <code>org.apache.fulcrum.testcontainer.BaseUnit4Test</code> for JUnit 4 support and you are ready
         to go. </p>
     </section>
 
