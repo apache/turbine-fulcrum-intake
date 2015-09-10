@@ -26,16 +26,16 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fulcrum-yaafi</artifactId>
-  <version>1.0.7</version>
+  <version>1.0.8-SNAPSHOT</version>
   <name>Fulcrum YAAFI</name>
   <inceptionYear>2004</inceptionYear>
   <description>A light-weight Avalon container</description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-yaafi</url>
 		
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-yaafi-1.0.7</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-yaafi-1.0.7</developerConnection>
-    <url>http://svn.apache.org/viewvc/turbine/fulcrum/tags/fulcrum-yaafi-1.0.7</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/yaafi/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/yaafi/</developerConnection>
+    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/yaafi/</url>
   </scm>
 
   
