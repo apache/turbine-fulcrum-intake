@@ -54,20 +54,20 @@ Steps
   // Hint: Add -Dgpg.useagent=false helps, if running from a windows machine to avoid hanging while gpg plugin signing process ..
   mvn release:perform 
   
-  You could find more Information here: http://www.sonatype.com/books/nexus-book/reference/staging.html
+  // You could find more Information here: http://www.sonatype.com/books/nexus-book/reference/staging.html
   
 5) Close the staging
-  Login and close in Nexus Repo
+  // Login and close in Nexus Repo
   https://repository.apache.org/index.html#stagingRepositories
-  More Information available: https://www.apache.org/dev/publishing-maven-artifacts.html#close-stage
+  // More Information available: https://www.apache.org/dev/publishing-maven-artifacts.html#close-stage
   
 6) Prepare Voting Information and Voting
   ....
   
 7) Either Promote / Publish or Drop and Restage
-  http://www.apache.org/dev/publishing-maven-artifacts.html#promote
-  http://www.apache.org/dev/publishing-maven-artifacts.html#drop
-  After Drop "reverse merge the release prepare, manually delete tag in svn repo and drop staged repository in nexus and start again with step 1.
+  // http://www.apache.org/dev/publishing-maven-artifacts.html#promote
+  // http://www.apache.org/dev/publishing-maven-artifacts.html#drop
+  // After Drop "reverse merge the release prepare, manually delete tag in svn repo and drop staged repository in nexus and start again with step 1.
   
 8)  Stage the latest documentation 
   // http://maven.apache.org/developers/website/deploy-component-reference-documentation.html
@@ -77,11 +77,16 @@ Steps
   mvn clean site site:stage scm-publish:publish-scm -Dusername=<username> -Dpassword=<pw>
  
 9) Distribution 
-  // Cft. http://www.apache.org/dev/release.html#host-GA and http://www.apache.org/dev/release-publishing.html#distribution
-  // SVN checkout target distribution from https://dist.apache.org/repos/dist/release/turbine/<...>/<...>
-  // SVN checkout released source from https://svn.apache.org/repos/asf/turbine/<..>/<..>
-  // Generate artifacts (check local repo or target for artifacts)
+  // http://www.apache.org/dev/release#upload-ci,
+  // http://www.apache.org/dev/release.html#host-GA and 
+  // http://www.apache.org/dev/release-publishing.html#distribution
+  // - SVN checkout target distribution from https://dist.apache.org/repos/dist/release/turbine/<...>/<...>
+  // - SVN checkout released source from https://svn.apache.org/repos/asf/turbine/<..>/tags/<..>
+  // - Generate artifacts (check local repo and target for artifacts) from released version:
   mvn clean install package -Papache-release -DcreateChecksum=true
-  // SVN Add <binaries>, <sources> artifacts (jar/zip/tar.gz,asc,md5,sha1 files) to target repo
-  // SVN Remove old releases binaries and sources 
+  
+  // - SVN Add <binaries>, <sources> artifacts (jar/zip/tar.gz,asc,md5,sha1 files) to target repo
+  // - SVN Remove old releases binaries and sources 
+  // After repos/dist is updated an automatic email will be generated, if no update of the release database is done:
+  https://reporter.apache.org/addrelease.html?turbine
    
