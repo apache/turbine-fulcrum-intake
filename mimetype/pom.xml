@@ -24,6 +24,7 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fulcrum-mimetype</artifactId>
+  <groupId>org.apache.fulcrum</groupId>
   <version>1.0.6-SNAPSHOT</version>
   <name>Fulcrum Mimetype</name>
   <inceptionYear>2004</inceptionYear>

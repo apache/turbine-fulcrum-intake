@@ -8,6 +8,7 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fulcrum-jetty</artifactId>
+  <groupId>org.apache.fulcrum</groupId>
   <version>1.0.1-SNAPSHOT</version>
   <name>Fulcrum Jetty</name>
   <inceptionYear>2008</inceptionYear>

@@ -25,6 +25,7 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
+  <groupId>org.apache.fulcrum</groupId>
   <artifactId>fulcrum-hsqldb</artifactId>
   <version>1.0.1-SNAPSHOT</version>
   <name>Fulcrum HSQLDB</name>

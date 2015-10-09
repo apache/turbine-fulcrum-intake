@@ -24,6 +24,7 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fulcrum-localization</artifactId>
+  <groupId>org.apache.fulcrum</groupId>
   <version>1.0.7-SNAPSHOT</version>
   <name>Fulcrum Localization</name>
   <inceptionYear>2005</inceptionYear>

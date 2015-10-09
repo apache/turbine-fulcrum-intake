@@ -7,6 +7,7 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fulcrum-spring</artifactId>
+  <groupId>org.apache.fulcrum</groupId>
   <version>1.0.1-SNAPSHOT</version>
   <name>Fulcrum Spring</name>
   <inceptionYear>2008</inceptionYear>
