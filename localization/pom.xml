@@ -18,8 +18,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <artifactId>turbine-parent</artifactId>
-       <groupId>org.apache.turbine</groupId>
-       <version>3</version>
+    <groupId>org.apache.turbine</groupId>
+    <version>3</version>
+    <relativePath></relativePath><!-- ignore default value -->
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -97,21 +98,22 @@
     <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
-      <version>2.4</version>
+      <version>2.6</version>
     </dependency>
     
     <!-- testing dependencies -->
     <dependency>
       <groupId>org.apache.fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0.6</version>
+      <version>1.0.7</version>
       <scope>test</scope>
     </dependency>
     
     <dependency>
-      <groupId>org.apache.fulcrum</groupId>
+      <!-- groupId>org.apache.fulcrum</groupId-->
+      <groupId>org.apache.turbine</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
-      <version>1.0.6</version>
+      <version>1.0.7</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

@@ -162,7 +162,7 @@
           <td>String</td>
           <td>[1..n]</td>
           <td>
-            The name of the bundle
+            The name of the bundle (first one is default bundle)
           </td>
         </tr>
       </table>
