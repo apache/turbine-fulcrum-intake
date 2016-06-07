@@ -37,7 +37,7 @@ import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.thread.ThreadSafe;
 import org.apache.commons.configuration.CompositeConfiguration;
-import org.apache.commons.configuration.ConfigurationFactory;
+import org.apache.commons.configuration.DefaultConfigurationBuilder;
 import org.apache.commons.configuration.JNDIConfiguration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.SystemConfiguration;
@@ -82,7 +82,7 @@ public class DefaultConfigurationService
      * The property specifying the location where to read in the configuration
      * path from.
      */
-    String CONFIGURATION_PATH = "configurationPath";
+    private static final String CONFIGURATION_PATH = "configurationPath";
 
     private String applicationRoot;
 
@@ -91,7 +91,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#addProperty(java.lang.String, java.lang.Object)
      */
-    public void addProperty(String arg0, Object arg1)
+    @Override
+	public void addProperty(String arg0, Object arg1)
     {
         configuration.addProperty(arg0, arg1);
     }
@@ -99,7 +100,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#clearProperty(java.lang.String)
      */
-    public void clearProperty(String arg0)
+    @Override
+	public void clearProperty(String arg0)
     {
         configuration.clearProperty(arg0);
     }
@@ -107,7 +109,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#containsKey(java.lang.String)
      */
-    public boolean containsKey(String arg0)
+    @Override
+	public boolean containsKey(String arg0)
     {
         return configuration.containsKey(arg0);
     }
@@ -115,7 +118,8 @@ public class DefaultConfigurationService
     /**
      * @see java.lang.Object#equals(java.lang.Object)
      */
-    public boolean equals(Object obj)
+    @Override
+	public boolean equals(Object obj)
     {
         return configuration.equals(obj);
     }
@@ -123,7 +127,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getBoolean(java.lang.String)
      */
-    public boolean getBoolean(String arg0)
+    @Override
+	public boolean getBoolean(String arg0)
     {
         return configuration.getBoolean(arg0);
     }
@@ -131,7 +136,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getBoolean(java.lang.String, boolean)
      */
-    public boolean getBoolean(String arg0, boolean arg1)
+    @Override
+	public boolean getBoolean(String arg0, boolean arg1)
     {
         return configuration.getBoolean(arg0, arg1);
     }
@@ -139,7 +145,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getBoolean(java.lang.String, java.lang.Boolean)
      */
-    public Boolean getBoolean(String arg0, Boolean arg1)
+    @Override
+	public Boolean getBoolean(String arg0, Boolean arg1)
     {
         return configuration.getBoolean(arg0, arg1);
     }
@@ -147,7 +154,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getByte(java.lang.String)
      */
-    public byte getByte(String arg0)
+    @Override
+	public byte getByte(String arg0)
     {
         return configuration.getByte(arg0);
     }
@@ -155,7 +163,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getByte(java.lang.String, byte)
      */
-    public byte getByte(String arg0, byte arg1)
+    @Override
+	public byte getByte(String arg0, byte arg1)
     {
         return configuration.getByte(arg0, arg1);
     }
@@ -163,7 +172,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getByte(java.lang.String, java.lang.Byte)
      */
-    public Byte getByte(String arg0, Byte arg1)
+    @Override
+	public Byte getByte(String arg0, Byte arg1)
     {
         return configuration.getByte(arg0, arg1);
     }
@@ -171,7 +181,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getDouble(java.lang.String)
      */
-    public double getDouble(String arg0)
+    @Override
+	public double getDouble(String arg0)
     {
         return configuration.getDouble(arg0);
     }
@@ -179,7 +190,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getDouble(java.lang.String, double)
      */
-    public double getDouble(String arg0, double arg1)
+    @Override
+	public double getDouble(String arg0, double arg1)
     {
         return configuration.getDouble(arg0, arg1);
     }
@@ -187,7 +199,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getDouble(java.lang.String, java.lang.Double)
      */
-    public Double getDouble(String arg0, Double arg1)
+    @Override
+	public Double getDouble(String arg0, Double arg1)
     {
         return configuration.getDouble(arg0, arg1);
     }
@@ -195,7 +208,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getFloat(java.lang.String)
      */
-    public float getFloat(String arg0)
+    @Override
+	public float getFloat(String arg0)
     {
         return configuration.getFloat(arg0);
     }
@@ -203,7 +217,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getFloat(java.lang.String, float)
      */
-    public float getFloat(String arg0, float arg1)
+    @Override
+	public float getFloat(String arg0, float arg1)
     {
         return configuration.getFloat(arg0, arg1);
     }
@@ -211,7 +226,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getFloat(java.lang.String, java.lang.Float)
      */
-    public Float getFloat(String arg0, Float arg1)
+    @Override
+	public Float getFloat(String arg0, Float arg1)
     {
         return configuration.getFloat(arg0, arg1);
     }
@@ -219,7 +235,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getInt(java.lang.String)
      */
-    public int getInt(String arg0)
+    @Override
+	public int getInt(String arg0)
     {
         return configuration.getInt(arg0);
     }
@@ -227,7 +244,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getInt(java.lang.String, int)
      */
-    public int getInt(String arg0, int arg1)
+    @Override
+	public int getInt(String arg0, int arg1)
     {
         return configuration.getInt(arg0, arg1);
     }
@@ -235,7 +253,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getInteger(java.lang.String, java.lang.Integer)
      */
-    public Integer getInteger(String arg0, Integer arg1)
+    @Override
+	public Integer getInteger(String arg0, Integer arg1)
     {
         return configuration.getInteger(arg0, arg1);
     }
@@ -243,7 +262,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getKeys()
      */
-    public Iterator getKeys()
+    @Override
+	public Iterator<String> getKeys()
     {
         return configuration.getKeys();
     }
@@ -251,7 +271,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getKeys(java.lang.String)
      */
-    public Iterator getKeys(String arg0)
+    @Override
+	public Iterator<String> getKeys(String arg0)
     {
         return configuration.getKeys(arg0);
     }
@@ -259,7 +280,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getLong(java.lang.String)
      */
-    public long getLong(String arg0)
+    @Override
+	public long getLong(String arg0)
     {
         return configuration.getLong(arg0);
     }
@@ -267,7 +289,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getLong(java.lang.String, java.lang.Long)
      */
-    public Long getLong(String arg0, Long arg1)
+    @Override
+	public Long getLong(String arg0, Long arg1)
     {
         return configuration.getLong(arg0, arg1);
     }
@@ -275,7 +298,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getLong(java.lang.String, long)
      */
-    public long getLong(String arg0, long arg1)
+    @Override
+	public long getLong(String arg0, long arg1)
     {
         return configuration.getLong(arg0, arg1);
     }
@@ -283,7 +307,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getProperties(java.lang.String)
      */
-    public Properties getProperties(String arg0)
+    @Override
+	public Properties getProperties(String arg0)
     {
         return configuration.getProperties(arg0);
     }
@@ -291,7 +316,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getProperty(java.lang.String)
      */
-    public Object getProperty(String arg0)
+    @Override
+	public Object getProperty(String arg0)
     {
         return configuration.getProperty(arg0);
     }
@@ -299,7 +325,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getShort(java.lang.String)
      */
-    public short getShort(String arg0)
+    @Override
+	public short getShort(String arg0)
     {
         return configuration.getShort(arg0);
     }
@@ -307,7 +334,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getShort(java.lang.String, java.lang.Short)
      */
-    public Short getShort(String arg0, Short arg1)
+    @Override
+	public Short getShort(String arg0, Short arg1)
     {
         return configuration.getShort(arg0, arg1);
     }
@@ -315,7 +343,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getShort(java.lang.String, short)
      */
-    public short getShort(String arg0, short arg1)
+    @Override
+	public short getShort(String arg0, short arg1)
     {
         return configuration.getShort(arg0, arg1);
     }
@@ -323,7 +352,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getString(java.lang.String)
      */
-    public String getString(String arg0)
+    @Override
+	public String getString(String arg0)
     {
         return configuration.getString(arg0);
     }
@@ -331,7 +361,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getString(java.lang.String, java.lang.String)
      */
-    public String getString(String arg0, String arg1)
+    @Override
+	public String getString(String arg0, String arg1)
     {
         return configuration.getString(arg0, arg1);
     }
@@ -339,7 +370,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getStringArray(java.lang.String)
      */
-    public String[] getStringArray(String arg0)
+    @Override
+	public String[] getStringArray(String arg0)
     {
         return configuration.getStringArray(arg0);
     }
@@ -347,7 +379,8 @@ public class DefaultConfigurationService
     /**
      * @see java.lang.Object#hashCode()
      */
-    public int hashCode()
+    @Override
+	public int hashCode()
     {
         return configuration.hashCode();
     }
@@ -355,7 +388,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#isEmpty()
      */
-    public boolean isEmpty()
+    @Override
+	public boolean isEmpty()
     {
         return configuration.isEmpty();
     }
@@ -363,7 +397,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#setProperty(java.lang.String, java.lang.Object)
      */
-    public void setProperty(String arg0, Object arg1)
+    @Override
+	public void setProperty(String arg0, Object arg1)
     {
         configuration.setProperty(arg0, arg1);
     }
@@ -371,7 +406,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#subset(java.lang.String)
      */
-    public org.apache.commons.configuration.Configuration subset(String arg0)
+    @Override
+	public org.apache.commons.configuration.Configuration subset(String arg0)
     {
         return configuration.subset(arg0);
     }
@@ -379,7 +415,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getBigDecimal(java.lang.String)
      */
-    public BigDecimal getBigDecimal(String arg0)
+    @Override
+	public BigDecimal getBigDecimal(String arg0)
     {
         return configuration.getBigDecimal(arg0);
     }
@@ -387,7 +424,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getBigDecimal(java.lang.String, java.math.BigDecimal)
      */
-    public BigDecimal getBigDecimal(String arg0, BigDecimal arg1)
+    @Override
+	public BigDecimal getBigDecimal(String arg0, BigDecimal arg1)
     {
         return configuration.getBigDecimal(arg0, arg1);
     }
@@ -395,7 +433,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getBigInteger(java.lang.String)
      */
-    public BigInteger getBigInteger(String arg0)
+    @Override
+	public BigInteger getBigInteger(String arg0)
     {
         return configuration.getBigInteger(arg0);
     }
@@ -403,7 +442,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getBigInteger(java.lang.String, java.math.BigInteger)
      */
-    public BigInteger getBigInteger(String arg0, BigInteger arg1)
+    @Override
+	public BigInteger getBigInteger(String arg0, BigInteger arg1)
     {
         return configuration.getBigInteger(arg0, arg1);
     }
@@ -411,7 +451,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getList(java.lang.String)
      */
-    public List getList(String arg0)
+    @Override
+	public List<Object> getList(String arg0)
     {
         return configuration.getList(arg0);
     }
@@ -419,7 +460,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#getList(java.lang.String, java.util.List)
      */
-    public List getList(String arg0, List arg1)
+    @Override
+	public List<Object> getList(String arg0, List<?> arg1)
     {
         return configuration.getList(arg0, arg1);
     }
@@ -427,7 +469,8 @@ public class DefaultConfigurationService
     /**
      * @see java.lang.Object#toString()
      */
-    public String toString()
+    @Override
+	public String toString()
     {
         return configuration.toString();
     }
@@ -435,7 +478,8 @@ public class DefaultConfigurationService
     /**
      * @see org.apache.commons.configuration.Configuration#clear()
      */
-    public void clear()
+    @Override
+	public void clear()
     {
         configuration.clear();
     }
@@ -444,7 +488,8 @@ public class DefaultConfigurationService
      * Avalon component lifecycle method
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
-    public void configure(Configuration conf) throws ConfigurationException
+    @Override
+	public void configure(Configuration conf) throws ConfigurationException
     {
         configuration = new CompositeConfiguration();
 
@@ -467,12 +512,11 @@ public class DefaultConfigurationService
                 throw new ConfigurationException("XML file for ConfigurationFactory can not be found:" +file.getAbsolutePath());
             }
 
-            ConfigurationFactory configurationFactory =
-                new ConfigurationFactory(file.getAbsolutePath());
-            configurationFactory.setBasePath(applicationRoot);
+            DefaultConfigurationBuilder configurationBuilder = new DefaultConfigurationBuilder(file);
+            configurationBuilder.setConfigurationBasePath(applicationRoot);
             try
             {
-                configuration.addConfiguration(configurationFactory.getConfiguration());
+                configuration.addConfiguration(configurationBuilder.getConfiguration());
             }
             catch (Exception e)
             {
@@ -600,7 +644,8 @@ public class DefaultConfigurationService
      * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
      * @avalon.entry key="urn:avalon:home" type="java.io.File"
      */
-    public void contextualize(Context context) throws ContextException
+    @Override
+	public void contextualize(Context context) throws ContextException
     {
         try
         {

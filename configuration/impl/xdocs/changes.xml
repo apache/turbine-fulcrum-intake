@@ -24,10 +24,15 @@
   </properties>
 
   <body>
-    <release version="1.0.3" date="">
+    <release version="1.1.0" date="in SVN">
+      <action dev="tv" type="update">
+        Upgrade to commons-configuration-1.10, remove deprecated ConfigurationFactory.
+      </action>
+      <action dev="tv" type="add">
+        Add configuration options for multiple data sources
+      </action>
       <action dev="epugh" type="update">
-        Upgrade to commons-configuration-1.1, remove deprecated
-        getVector() methods.
+        Upgrade to commons-configuration-1.1, remove deprecated getVector() methods.
       </action>
       <action dev="epugh" type="update">
         Bump versions of dependencies.
