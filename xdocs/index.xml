@@ -52,7 +52,7 @@
     Additionally, Fulcrum offers the Yaafi component.  Yaafi (Yet Another Avalon Framework
     Implementation) is a very simple container that is meant to be used with singleton
     components.  It is perfect for unit testing your components.  You can then run them in
-    any other Avalon container like ECM, Phoenix, Excaliber, etc..
+    any other Avalon container like ECM, Phoenix, Excalibur, etc..
    </p>
  </section>
 
