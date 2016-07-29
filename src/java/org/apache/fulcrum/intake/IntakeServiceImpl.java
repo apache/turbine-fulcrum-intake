@@ -846,7 +846,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                 new Group.GroupFactory(appData);
 
             GenericKeyedObjectPoolConfig poolConfig = new GenericKeyedObjectPoolConfig();
-            poolConfig.setMaxTotal(maxPooledGroups);
+            poolConfig.setMaxTotalPerKey(maxPooledGroups);
             poolConfig.setJmxEnabled(true);
             poolConfig.setJmxNamePrefix("fulcrum-intake-pool-" + counter++);
 
