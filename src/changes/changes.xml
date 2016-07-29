@@ -26,6 +26,9 @@
 
   <body>
      <release version="1.2.1" date="in Subversion">
+      <action dev="tv" type="fix">
+        Fix sizing of group pool
+      </action>
      </release>
      <release version="1.2.0" date="2015-04-18">
       <action dev="tv" type="add">
