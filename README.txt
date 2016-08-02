@@ -85,6 +85,9 @@ Steps
   // - Generate artifacts (check local repo and target for artifacts) from released version:
   mvn clean install package -Papache-release -DcreateChecksum=true
   
+  // If not all jars are included (assembly plugin _SHOULD_ run after jar generation), run a second time without clean
+  // If no md5 files are in the target folder, check local repo
+  
   // - SVN Add <binaries>, <sources> artifacts (jar/zip/tar.gz,asc,md5,sha1 files) to target repo
   // - SVN Remove old releases binaries and sources 
   // After repos/dist is updated an automatic email will be generated, if no update of the release database is done:

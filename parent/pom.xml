@@ -78,7 +78,7 @@
   </profiles>
 
   <properties>
-    <turbine.surefire.version>2.12.4</turbine.surefire.version>
-    <turbine.surefire-report.version>2.12.4</turbine.surefire-report.version>
+    <turbine.surefire.version>2.19.1</turbine.surefire.version>
+    <turbine.surefire-report.version>2.19.1</turbine.surefire-report.version>
   </properties>
 </project>
