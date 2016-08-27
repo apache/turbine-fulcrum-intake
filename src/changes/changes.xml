@@ -25,7 +25,9 @@
   </properties>
 
   <body>
-     <release version="1.2.1" date="in Subversion">
+     <release version="1.2.2" date="in Subversion">
+     </release>
+     <release version="1.2.1" date="2016-08-27">
       <action dev="tv" type="fix">
         Fix sizing of group pool
       </action>
