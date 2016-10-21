@@ -19,10 +19,17 @@ package org.apache.fulcrum.intake;
  * under the License.
  */
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.File;
 
 import org.apache.fulcrum.intake.model.Group;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit4Test;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Eric Pugh
@@ -30,30 +37,28 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class IntakeServiceTest extends BaseUnitTest
+public class IntakeServiceTest extends BaseUnit4Test
 {
     private static final File BASEDIR = new File( System.getProperty( "basedir" ));
 
     private IntakeService intakeService = null;
 
     /**
-      * Defines the testcase name for JUnit.
+      * Defines the testcase for JUnit4.
       *
-      * @param name the testcase's name.
       */
-    public IntakeServiceTest(String name) {
-        super(name);
+    public IntakeServiceTest() {
     }
 
+    @Before
     public void setUp() throws Exception
     {
-        super.setUp();
         File appData = new File( BASEDIR, "target/appData.ser");
         if(appData.exists()){
             appData.delete();
         }
         try {
-            intakeService = (IntakeService) this.resolve( IntakeService.class.getName() );
+            intakeService = (IntakeService) this.lookup( IntakeService.class.getName() );
         } catch (Throwable e) {
             fail(e.getMessage());
         }
@@ -61,6 +66,7 @@ public class IntakeServiceTest extends BaseUnitTest
 
     }
 
+    @Test
     public void testBasicConfigLoads() throws Exception {
 
         Group group = intakeService.getGroup("LoginGroup");

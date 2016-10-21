@@ -93,7 +93,14 @@ public class XmlField
     @XmlAttribute
     private String emptyValue;
 
+    /**
+     * Jaxb set the collection of rules for this field
+     *
+     * @param rules the rules to set
+     */
+    @XmlElement(name="rule")
     private List<Rule> rules;
+    
     private Map<String, Rule> ruleMap;
 
     private Group parent;
@@ -259,22 +266,6 @@ public class XmlField
     public List<Rule> getRules()
     {
         return rules;
-    }
-
-    /**
-     * Set the collection of rules for this field
-     *
-     * @param rules the rules to set
-     */
-    @XmlElement(name="rule")
-    public void setRules(List<Rule> rules)
-    {
-        this.rules = rules;
-        this.ruleMap.clear();
-        for (Rule rule : rules)
-        {
-            ruleMap.put(rule.getName(), rule);
-        }
     }
 
     /**
