@@ -19,6 +19,10 @@ package org.apache.fulcrum.intake;
  * under the License.
  */
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 import java.util.Locale;
 
 import org.apache.fulcrum.intake.model.Field;
@@ -36,27 +40,32 @@ import org.apache.fulcrum.intake.validator.ValidationException;
 import org.apache.fulcrum.parser.DefaultParameterParser;
 import org.apache.fulcrum.parser.ParserService;
 import org.apache.fulcrum.parser.ValueParser;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit4Test;
+import org.junit.Test;
 /**
  * Test the validators
  *
  * @author <a href="tv@apache.org">Thomas Vandahl</a>
  */
-public class IntakeValidatonTest extends BaseUnitTest
+/**
+ * Test the validators
+ *
+ * @author <a href="tv@apache.org">Thomas Vandahl</a>
+ */
+public class IntakeValidatonTest extends BaseUnit4Test
 {
-    /**
-     * Defines the testcase name for JUnit.
+	/**
+     * Defines the testcase for JUnit4.
      *
-     * @param name the testcase's name.
      */
-    public IntakeValidatonTest(String name)
+    public IntakeValidatonTest()
     {
-        super(name);
     }
 
+    @Test
     public void testStringValidation() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
         Group group = is.getGroup("ValidationTest");
         assertNotNull(group);
 
@@ -111,9 +120,10 @@ public class IntakeValidatonTest extends BaseUnitTest
         }
     }
 
+    @Test
     public void testBooleanValidation() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
         Group group = is.getGroup("ValidationTest");
         assertNotNull(group);
 
@@ -147,10 +157,10 @@ public class IntakeValidatonTest extends BaseUnitTest
             fail("Validator should not throw ValidationException");
         }
     }
-
+    @Test
     public void testBigDecimalValidation() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
         Group group = is.getGroup("ValidationTest");
         assertNotNull(group);
 
@@ -216,9 +226,10 @@ public class IntakeValidatonTest extends BaseUnitTest
         }
     }
 
+    @Test
     public void testIntegerValidation() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
         Group group = is.getGroup("ValidationTest");
         assertNotNull(group);
 
@@ -274,13 +285,14 @@ public class IntakeValidatonTest extends BaseUnitTest
         }
     }
 
+    @Test
     public void testIntegerRangeValidation() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
         Group group = is.getGroup("ValidationTest");
         assertNotNull(group);
 
-        ParserService ps = (ParserService) this.resolve( ParserService.ROLE );
+        ParserService ps = (ParserService) this.lookup( ParserService.ROLE );
         ValueParser pp = ps.getParser(DefaultParameterParser.class);
 
         pp.add("vt_0itf", "15");
@@ -329,9 +341,10 @@ public class IntakeValidatonTest extends BaseUnitTest
         }
     }
 
+    @Test
     public void testFloatValidation() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
         Group group = is.getGroup("ValidationTest");
         assertNotNull(group);
 
@@ -397,9 +410,10 @@ public class IntakeValidatonTest extends BaseUnitTest
         }
     }
 
+    @Test
     public void testDateStringValidation() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
         Group group = is.getGroup("ValidationTest");
         assertNotNull(group);
 
@@ -464,13 +478,14 @@ public class IntakeValidatonTest extends BaseUnitTest
         }
     }
 
+    @Test
     public void testDateRangeValidation() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
         Group group = is.getGroup("ValidationTest");
         assertNotNull(group);
 
-        ParserService ps = (ParserService) this.resolve( ParserService.ROLE );
+        ParserService ps = (ParserService) this.lookup( ParserService.ROLE );
         ValueParser pp = ps.getParser(DefaultParameterParser.class);
 
         pp.add("vt_0dstf", "12/23/2001");
@@ -519,9 +534,10 @@ public class IntakeValidatonTest extends BaseUnitTest
         }
     }
 
+    @Test
     public void testDoubleValidation() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
         Group group = is.getGroup("ValidationTest");
         assertNotNull(group);
 
@@ -587,9 +603,10 @@ public class IntakeValidatonTest extends BaseUnitTest
         }
     }
 
+    @Test
     public void testShortValidation() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
         Group group = is.getGroup("ValidationTest");
         assertNotNull(group);
 
@@ -645,9 +662,10 @@ public class IntakeValidatonTest extends BaseUnitTest
         }
     }
 
+    @Test
     public void testLongValidation() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
         Group group = is.getGroup("ValidationTest");
         assertNotNull(group);
 

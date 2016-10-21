@@ -20,7 +20,10 @@ package org.apache.fulcrum.intake.model;
  */
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
@@ -210,6 +213,18 @@ public class FieldAdapter extends XmlAdapter<XmlField, Field<?>>
         FieldCtor fieldCtor = null;
         Field<?> field = null;
         String type = xmlField.getType();
+        
+        List<Rule> rules = xmlField.getRules();
+        if (rules != null ) 
+        {
+        
+        	xmlField.getRuleMap().clear();
+        	Map<String,Rule> ruleMap = xmlField.getRuleMap();
+        	for (Rule rule : rules)
+	        {
+	            ruleMap.put(rule.getName(), rule);
+	        }
+        }
 
         fieldCtor = fieldCtors.get(type);
         if (fieldCtor == null)
@@ -231,8 +246,36 @@ public class FieldAdapter extends XmlAdapter<XmlField, Field<?>>
     @Override
     public Field<?> unmarshal(XmlField xmlField) throws Exception
     {
-        return getInstance(xmlField, xmlField.getGroup());
+    	Field<?> field = getInstance(xmlField, xmlField.getGroup());
+    	
+    	processDataInGroupContext(xmlField, field);        
+    	
+    	return field;
     }
+
+	private void processDataInGroupContext(XmlField xmlField, Field<?> field) {
+		Group group = xmlField.getGroup();
+    	Map<String, Field<?>> fields = group.fields;
+    	
+    	int defaultSize = 5;
+        if (fields == null) 
+        {
+        	fields = new HashMap<String, Field<?>>((int) (1.25 * defaultSize + 1));
+        }
+    	
+    	List<Field<?>> fieldsArray = null; // fieldsArray
+    	if (group.fieldsArray == null) 
+    	{
+        	fieldsArray = new ArrayList<Field<?>>();
+        } else 
+        {
+        	fieldsArray= new ArrayList<Field<?>>(Arrays.asList(group.fieldsArray));// resizable not size -fixed
+        }
+        fieldsArray.add(field);
+        fields.put(field.getName(), field);
+        group.fields = fields;
+        group.fieldsArray = fieldsArray.toArray(new Field<?>[]{});
+	}
 
     /**
      * @see javax.xml.bind.annotation.adapters.XmlAdapter#marshal(java.lang.Object)

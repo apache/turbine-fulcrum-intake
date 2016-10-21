@@ -1039,7 +1039,7 @@ public abstract class Field<T> implements Serializable, LogEnabled
     /**
      * Gets the maximum size of the field.  This is useful when
      * building the HTML input tag.  The maxSize is set with the maxLength
-     * rule.  If this rul was not set, an enmpty string is returned.
+     * rule.  If this rule was not set, an empty string is returned.
      */
     public String getMaxSize()
     {
