@@ -19,6 +19,8 @@ package org.apache.fulcrum.intake;
  * under the License.
  */
 
+import static org.junit.Assert.*;
+
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -36,7 +38,9 @@ import org.apache.fulcrum.intake.validator.ValidationException;
 import org.apache.fulcrum.parser.DefaultParameterParser;
 import org.apache.fulcrum.parser.ParserService;
 import org.apache.fulcrum.parser.ValueParser;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit4Test;
+import org.junit.Ignore;
+import org.junit.Test;
 /**
  * Test the facade class for the service
  *
@@ -44,16 +48,14 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  * @author <a href="mailto:jh@byteaction.de">J&uuml;rgen Hoffmann</a>
  * @version $Id$
  */
-public class IntakeTest extends BaseUnitTest
+public class IntakeTest extends BaseUnit4Test
 {
-    /**
-     * Defines the testcase name for JUnit.
+	 /**
+     * Defines the testcase for JUnit4.
      *
-     * @param name the testcase's name.
      */
-    public IntakeTest(String name)
+    public IntakeTest()
     {
-        super(name);
     }
 
 
@@ -61,6 +63,7 @@ public class IntakeTest extends BaseUnitTest
      * This looks strange to me. A test should not bother with explicit initialization.
      * That's the task of the container.
      */
+    @Ignore
     public void OFFtestFacadeNotConfigured() throws Exception
     {
 		assertFalse(IntakeServiceFacade.isInitialized());
@@ -74,10 +77,11 @@ public class IntakeTest extends BaseUnitTest
         }
     }
 
+    @Test
     public void testFacadeConfigured() throws Exception
     {
         // this.lookup causes the workflow service to be configured.
-        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
         Group group = is.getGroup("LoginGroup");
         assertNotNull(group);
         assertTrue(IntakeServiceFacade.isInitialized());
@@ -85,15 +89,16 @@ public class IntakeTest extends BaseUnitTest
 		assertNotNull(group);
     }
 
+    @Test
     public void testInterfaceMapTo() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
         Group group = is.getGroup("LoginIfcGroup");
         assertNotNull(group);
 
         Field<?> userNameField = group.get("Username");
 
-        ParserService ps = (ParserService) this.resolve( ParserService.ROLE );
+        ParserService ps = (ParserService) this.lookup( ParserService.ROLE );
         ValueParser pp = ps.getParser(DefaultParameterParser.class);
 
         pp.setString(userNameField.getKey(), "Joe");
@@ -106,15 +111,16 @@ public class IntakeTest extends BaseUnitTest
         assertEquals("User names should be equal", "Joe", form.getUsername());
     }
 
+    @Test
     public void testParserInit() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
         Group group = is.getGroup("LoginGroup");
         assertNotNull(group);
 
         Field<?> userNameField = group.get("Username");
 
-        ParserService ps = (ParserService) this.resolve( ParserService.ROLE );
+        ParserService ps = (ParserService) this.lookup( ParserService.ROLE );
         ValueParser pp = ps.getParser(DefaultParameterParser.class);
 
         pp.setString("loginGroupKey_0loginUsernameKey", "Joe");
@@ -126,9 +132,10 @@ public class IntakeTest extends BaseUnitTest
         assertEquals("The field should have the value Joe", "Joe", userNameField.getValue());
     }
 
+    @Test
     public void testEmptyBooleanField() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
         Group group = is.getGroup("BooleanTest");
         assertNotNull(group);
         assertTrue(IntakeServiceFacade.isInitialized());
@@ -138,9 +145,10 @@ public class IntakeTest extends BaseUnitTest
         assertFalse("An Empty intake Field type boolean should not be required", booleanField.isRequired());
     }
 
+    @Test
     public void testBooleanField() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
         Group group = is.getGroup("BooleanTest");
         assertNotNull(group);
         assertTrue(IntakeServiceFacade.isInitialized());
@@ -150,9 +158,10 @@ public class IntakeTest extends BaseUnitTest
         assertFalse("An intake Field type boolean, which is not required, should not be required", booleanField.isRequired());
     }
 
+    @Test
     public void testRequiredBooleanField() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
         Group group = is.getGroup("BooleanTest");
         assertNotNull(group);
         assertTrue(IntakeServiceFacade.isInitialized());
@@ -162,16 +171,17 @@ public class IntakeTest extends BaseUnitTest
         assertTrue("An intake Field type boolean, which is required, should be required", booleanField.isRequired());
     }
 
+    @Test
     public void testMultiValueField() throws Exception
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
         Group group = is.getGroup("NumberTest");
         assertNotNull(group);
         Field<?> multiValueField = group.get("MultiIntegerTestField");
         assertTrue("The Default Validator of an intake Field type int should be IntegerValidator", (multiValueField.getValidator() instanceof IntegerValidator));
         assertTrue("An intake Field type int, which is multiValued, should be multiValued", multiValueField.isMultiValued());
 
-        ParserService ps = (ParserService) this.resolve( ParserService.ROLE );
+        ParserService ps = (ParserService) this.lookup( ParserService.ROLE );
         ValueParser pp = ps.getParser(DefaultParameterParser.class);
 
         int[] values = new int[] { 1, 2 };
@@ -185,9 +195,10 @@ public class IntakeTest extends BaseUnitTest
         assertTrue("The field should have the value [1, 2]", Arrays.equals(values, (int[])multiValueField.getValue()));
     }
 
+    @Test
     public void testInvalidNumberMessage() throws Exception // TRB-74
     {
-        IntakeService is = (IntakeService) this.resolve( IntakeService.ROLE );
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
         Group group = is.getGroup("NumberTest");
         assertNotNull(group);
 

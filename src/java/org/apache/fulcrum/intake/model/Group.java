@@ -346,14 +346,14 @@ public class Group implements Serializable, LogEnabled
     {
         if (fieldsArray == null)
         {
-            return new ArrayList<Field<?>>();
+            return null;// new ArrayList<Field<?>>();
         }
 
         return Arrays.asList(fieldsArray);
     }
 
     /**
-     * Set a collection of fields for this group
+     * Jaxb sets the collection of fields for this group
      *
      * @param fields the fields to set
      */
@@ -361,16 +361,6 @@ public class Group implements Serializable, LogEnabled
     @XmlJavaTypeAdapter(FieldAdapter.class)
     protected void setFields(List<Field<?>> inputFields)
     {
-        int size = inputFields.size();
-        fields = new HashMap<String, Field<?>>((int) (1.25 * size + 1));
-        fieldsArray = new Field[size];
-
-        for (int i = size - 1; i >= 0; i--)
-        {
-            Field<?> field = inputFields.get(i);
-            fieldsArray[i] = field;
-            fields.put(field.getName(), field);
-        }
     }
 
     /**
