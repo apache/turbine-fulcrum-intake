@@ -98,7 +98,7 @@ public class BooleanField
     @Override
 	protected Object getSafeEmptyValue()
     {
-        if (isMultiValued)
+        if (isMultiValued())
         {
             return new boolean[0];
         }
@@ -125,7 +125,7 @@ public class BooleanField
     @Override
 	protected void doSetValue()
     {
-        if (isMultiValued)
+        if (isMultiValued())
         {
             Boolean[] inputs = parser.getBooleanObjects(getKey());
             boolean[] values = new boolean[inputs.length];
