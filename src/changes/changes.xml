@@ -26,6 +26,12 @@
 
   <body>
      <release version="1.2.2" date="in Subversion">
+      <action dev="tv" type="update">
+        Move all post-processing to afterUnmarshal(), privatize a number of fields
+      </action>
+      <action dev="gk" type="fix">
+        Fix modified JAXB parsing with Java 8
+      </action>
      </release>
      <release version="1.2.1" date="2016-08-27">
       <action dev="tv" type="fix">
