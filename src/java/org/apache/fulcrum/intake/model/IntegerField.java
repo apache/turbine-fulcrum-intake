@@ -98,7 +98,7 @@ public class IntegerField
     @Override
 	protected Object getSafeEmptyValue()
     {
-        if (isMultiValued)
+        if (isMultiValued())
         {
             return new int[0];
         }
@@ -126,7 +126,7 @@ public class IntegerField
     @Override
 	protected void doSetValue()
     {
-        if (isMultiValued)
+        if (isMultiValued())
         {
             Integer[] inputs = parser.getIntObjects(getKey());
             int[] values = new int[inputs.length];

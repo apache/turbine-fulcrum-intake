@@ -98,7 +98,7 @@ public class LongField
     @Override
 	protected Object getSafeEmptyValue()
     {
-        if (isMultiValued)
+        if (isMultiValued())
         {
             return new long[0];
         }
@@ -125,7 +125,7 @@ public class LongField
     @Override
 	protected void doSetValue()
     {
-        if (isMultiValued)
+        if (isMultiValued())
         {
             Long[] inputs = parser.getLongObjects(getKey());
             long[] values = new long[inputs.length];

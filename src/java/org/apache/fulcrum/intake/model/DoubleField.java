@@ -99,7 +99,7 @@ public class DoubleField
     @Override
 	protected Object getSafeEmptyValue()
     {
-        if (isMultiValued)
+        if (isMultiValued())
         {
             return new double[0];
         }
@@ -127,7 +127,7 @@ public class DoubleField
     @Override
 	protected void doSetValue()
     {
-        if (isMultiValued)
+        if (isMultiValued())
         {
             Double[] inputs = parser.getDoubleObjects(getKey());
             double[] values = new double[inputs.length];

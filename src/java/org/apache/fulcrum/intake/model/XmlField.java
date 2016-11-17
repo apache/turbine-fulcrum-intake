@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,14 +94,7 @@ public class XmlField
     @XmlAttribute
     private String emptyValue;
 
-    /**
-     * Jaxb set the collection of rules for this field
-     *
-     * @param rules the rules to set
-     */
-    @XmlElement(name="rule")
     private List<Rule> rules;
-    
     private Map<String, Rule> ruleMap;
 
     private Group parent;
@@ -112,6 +106,7 @@ public class XmlField
      */
     public XmlField()
     {
+        rules = new ArrayList<Rule>();
         ruleMap = new HashMap<String, Rule>();
     }
 
@@ -269,6 +264,17 @@ public class XmlField
     }
 
     /**
+     * Set the collection of rules for this field
+     *
+     * @param rules the rules to set
+     */
+    @XmlElement(name="rule")
+    public void setRules(List<Rule> rules)
+    {
+        this.rules = rules;
+    }
+
+    /**
      * The collection of rules for this field keyed by
      * parameter name.
      *
@@ -288,6 +294,14 @@ public class XmlField
     public void afterUnmarshal(Unmarshaller um, Object parent)
     {
         this.parent = (Group)parent;
+
+        // Build map
+        this.ruleMap.clear();
+        for (Rule rule : rules)
+        {
+            ruleMap.put(rule.getName(), rule);
+        }
+
         if (mapToObject == null)
         {
             // if a mapToProperty exists, set the object to this group's default

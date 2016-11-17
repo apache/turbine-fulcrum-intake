@@ -119,23 +119,20 @@ public class FileItemField
 	public Field<FileItem> init(ValueParser vp)
             throws IntakeException
     {
-        super.parser = vp;
-
         if (!(vp instanceof ParameterParser))
         {
             throw new IntakeException(
                     "FileItemFields can only be used with ParameterParser");
         }
 
-        validFlag = true;
+        super.init(vp);
 
         if (parser.containsKey(getKey()))
         {
-            setFlag = true;
+            setSet(true);
             validate();
         }
 
-        initialized = true;
         return this;
     }
 
@@ -148,23 +145,23 @@ public class FileItemField
 	public boolean validate()
     {
         ParameterParser pp = (ParameterParser) super.parser;
-        if (isMultiValued)
+        if (isMultiValued())
         {
             FileItem[] ss = pp.getFileItems(getKey());
             // this definition of not set might need refined.  But
             // not sure the situation will arise.
             if (ss.length == 0)
             {
-                setFlag = false;
+                setSet(false);
             }
 
-            if (validator != null)
+            if (getValidator() != null)
             {
                 for (int i = 0; i < ss.length; i++)
                 {
                     try
                     {
-                        ((FileValidator) validator).assertValidity(ss[i]);
+                        ((FileValidator) getValidator()).assertValidity(ss[i]);
                     }
                     catch (ValidationException ve)
                     {
@@ -173,7 +170,7 @@ public class FileItemField
                 }
             }
 
-            if (setFlag && validFlag)
+            if (isSet() && isValid())
             {
                 doSetValue();
             }
@@ -183,16 +180,16 @@ public class FileItemField
             FileItem s = pp.getFileItem(getKey());
             if (s == null || s.getSize() == 0)
             {
-                setFlag = false;
+                setSet(false);
             }
 
-            if (validator != null)
+            if (getValidator() != null)
             {
                 try
                 {
-                    ((FileValidator) validator).assertValidity(s);
+                    ((FileValidator) getValidator()).assertValidity(s);
 
-                    if (setFlag)
+                    if (isSet())
                     {
                         doSetValue();
                     }
@@ -202,13 +199,13 @@ public class FileItemField
                     setMessage(ve.getMessage());
                 }
             }
-            else if (setFlag)
+            else if (isSet())
             {
                 doSetValue();
             }
         }
 
-        return validFlag;
+        return isValid();
     }
 
     /**
@@ -218,7 +215,7 @@ public class FileItemField
 	protected void doSetValue()
     {
         ParameterParser pp = (ParameterParser) super.parser;
-        if (isMultiValued)
+        if (isMultiValued())
         {
             setTestValue(pp.getFileItems(getKey()));
         }

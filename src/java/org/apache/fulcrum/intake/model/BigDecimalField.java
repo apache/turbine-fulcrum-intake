@@ -107,7 +107,7 @@ public class BigDecimalField
     @Override
 	protected void doSetValue()
     {
-        if (isMultiValued)
+        if (isMultiValued())
         {
             BigDecimal[] values = parser.getBigDecimals(getKey());
 
