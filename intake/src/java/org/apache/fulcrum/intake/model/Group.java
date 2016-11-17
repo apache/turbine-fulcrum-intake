@@ -21,9 +21,10 @@ package org.apache.fulcrum.intake.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 import javax.xml.bind.Unmarshaller;
@@ -103,33 +104,42 @@ public class Group implements Serializable, LogEnabled
     /**
      * A map of the fields in this group mapped by field name.
      */
-    protected Map<String, Field<?>> fields;
+    private Map<String, Field<?>> fieldsByName;
 
     /**
      * Map of the fields by mapToObject
      */
-    protected Map<String, Field<?>[]> mapToObjectFields;
+    private Map<String, Field<?>[]> mapToObjectFields;
 
     /**
-     * An array of fields in this group.
+     * A list of fields in this group.
      */
-    protected Field<?>[] fieldsArray;
+    private LinkedList<Field<?>> fields;
 
     /**
      * The object id used to associate this group to a bean
      * for one request cycle
      */
-    protected String oid;
+    private String oid;
 
     /**
      * The object containing the request data
      */
-    protected ValueParser pp;
+    private ValueParser pp;
 
     /**
      * A flag to help prevent duplicate hidden fields declaring this group.
      */
-    protected boolean isDeclared;
+    private boolean isDeclared;
+
+    /**
+     * Default constructor
+     */
+    public Group()
+    {
+        super();
+        this.fields = new LinkedList<Field<?>>();
+    }
 
     /**
 	 * Enable Avalon Logging
@@ -162,15 +172,16 @@ public class Group implements Serializable, LogEnabled
     {
         this.oid = key;
         this.pp = pp;
-        for (int i = fieldsArray.length - 1; i >= 0; i--)
+        for (ListIterator<Field<?>> i = fields.listIterator(fields.size()); i.hasPrevious();)
         {
-            fieldsArray[i].init(pp);
+            i.previous().init(pp);
         }
-        for (int i = fieldsArray.length - 1; i >= 0; i--)
+        for (ListIterator<Field<?>> i = fields.listIterator(fields.size()); i.hasPrevious();)
         {
-            if (fieldsArray[i].isSet() && !fieldsArray[i].isValidated())
+            Field<?> field = i.previous();
+            if (field.isSet() && !field.isValidated())
             {
-                fieldsArray[i].validate();
+                field.validate();
             }
         }
         return this;
@@ -226,10 +237,11 @@ public class Group implements Serializable, LogEnabled
      */
     public String[] getFieldNames()
     {
-        String nameList[] = new String[fieldsArray.length];
-        for (int i = 0; i < nameList.length; i++)
+        String nameList[] = new String[fields.size()];
+        int i = 0;
+        for (Field<?> f : fields)
         {
-            nameList[i] = fieldsArray[i].name;
+            nameList[i++] = f.getName();
         }
         return nameList;
     }
@@ -327,9 +339,9 @@ public class Group implements Serializable, LogEnabled
     public Field<?> get(String fieldName)
             throws IntakeException
     {
-        if (fields.containsKey(fieldName))
+        if (fieldsByName.containsKey(fieldName))
         {
-            return fields.get(fieldName);
+            return fieldsByName.get(fieldName);
         }
         else
         {
@@ -344,16 +356,11 @@ public class Group implements Serializable, LogEnabled
      */
     public List<Field<?>> getFields()
     {
-        if (fieldsArray == null)
-        {
-            return null;// new ArrayList<Field<?>>();
-        }
-
-        return Arrays.asList(fieldsArray);
+        return fields;
     }
 
     /**
-     * Jaxb sets the collection of fields for this group
+     * Set a collection of fields for this group
      *
      * @param fields the fields to set
      */
@@ -361,6 +368,7 @@ public class Group implements Serializable, LogEnabled
     @XmlJavaTypeAdapter(FieldAdapter.class)
     protected void setFields(List<Field<?>> inputFields)
     {
+        fields = new LinkedList<Field<?>>(inputFields);
     }
 
     /**
@@ -371,14 +379,15 @@ public class Group implements Serializable, LogEnabled
     public boolean isAllValid()
     {
         boolean valid = true;
-        for (int i = fieldsArray.length - 1; i >= 0; i--)
+        for (ListIterator<Field<?>> i = fields.listIterator(fields.size()); i.hasPrevious();)
         {
-            valid &= fieldsArray[i].isValid();
-            if (log.isDebugEnabled() && !fieldsArray[i].isValid())
+            Field<?> field = i.previous();
+            valid &= field.isValid();
+            if (log.isDebugEnabled() && !field.isValid())
             {
                 log.debug("Group(" + oid + "): " + name + "; Field: "
-                        + fieldsArray[i].name + "; value=" +
-                        fieldsArray[i].getValue() + " is invalid!");
+                        + field.getName() + "; value=" +
+                        field.getValue() + " is invalid!");
             }
         }
         return valid;
@@ -549,9 +558,9 @@ public class Group implements Serializable, LogEnabled
                         pp.add(gid, groups[i]);
                     }
                 }
-                for (int i = fieldsArray.length - 1; i >= 0; i--)
+                for (ListIterator<Field<?>> i = fields.listIterator(fields.size()); i.hasPrevious();)
                 {
-                    fieldsArray[i].removeFromRequest();
+                    i.previous().removeFromRequest();
                 }
             }
         }
@@ -609,9 +618,9 @@ public class Group implements Serializable, LogEnabled
         result.append(" key=\"").append(getGID()).append("\"");
         result.append(">\n");
 
-        if (fieldsArray != null)
+        if (fields != null)
         {
-            for (Field<?> field : fieldsArray)
+            for (Field<?> field : fields)
             {
                 result.append(field);
             }
@@ -641,11 +650,20 @@ public class Group implements Serializable, LogEnabled
     public void afterUnmarshal(Unmarshaller um, Object parent)
     {
         this.parent = (AppData)parent;
+
+        // Build map
+        fieldsByName = new HashMap<String, Field<?>>((int) (1.25 * fields.size() + 1));
+
+        for (Field<?> field : fields)
+        {
+            fieldsByName.put(field.getName(), field);
+        }
+
         Map<String, List<Field<?>>> mapToObjectFieldLists =
-                new HashMap<String, List<Field<?>>>((int) (1.25 * fieldsArray.length + 1));
+                new HashMap<String, List<Field<?>>>((int) (1.25 * fields.size() + 1));
 
         // Fix fields
-        for (Field<?> field : fieldsArray)
+        for (Field<?> field : fields)
         {
             if (StringUtils.isNotEmpty(field.mapToObject))
             {
@@ -656,7 +674,7 @@ public class Group implements Serializable, LogEnabled
             List<Field<?>> tmpFields = mapToObjectFieldLists.get(field.getMapToObject());
             if (tmpFields == null)
             {
-                tmpFields = new ArrayList<Field<?>>(fieldsArray.length);
+                tmpFields = new ArrayList<Field<?>>(fields.size());
                 mapToObjectFieldLists.put(field.getMapToObject(), tmpFields);
             }
 
@@ -664,7 +682,7 @@ public class Group implements Serializable, LogEnabled
         }
 
         // Change the mapToObjectFields values to Field[]
-        mapToObjectFields = new HashMap<String, Field<?>[]>((int) (1.25 * fieldsArray.length + 1));
+        mapToObjectFields = new HashMap<String, Field<?>[]>((int) (1.25 * fields.size() + 1));
 
         for (Map.Entry<String, List<Field<?>>> entry : mapToObjectFieldLists.entrySet())
         {
@@ -717,9 +735,10 @@ public class Group implements Serializable, LogEnabled
             Group group = pooledGroup.getObject();
             group.oid = null;
             group.pp = null;
-            for (int i = group.fieldsArray.length - 1; i >= 0; i--)
+            for (ListIterator<Field<?>> i = group.fields.listIterator(group.fields.size());
+                    i.hasPrevious();)
             {
-                group.fieldsArray[i].dispose();
+                i.previous().dispose();
             }
             group.isDeclared = false;
         }

@@ -98,7 +98,7 @@ public class ShortField
     @Override
 	protected Object getSafeEmptyValue()
     {
-        if (isMultiValued)
+        if (isMultiValued())
         {
             return new short[0];
         }
@@ -126,7 +126,7 @@ public class ShortField
     @Override
 	protected void doSetValue()
     {
-        if (isMultiValued)
+        if (isMultiValued())
         {
             Integer[] inputs = parser.getIntObjects(getKey());
             short[] values = new short[inputs.length];

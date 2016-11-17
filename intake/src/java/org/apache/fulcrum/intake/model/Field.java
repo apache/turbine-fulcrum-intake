@@ -69,49 +69,49 @@ public abstract class Field<T> implements Serializable, LogEnabled
     // the following are set from the xml file and are permanent (final)
 
     /** Name of the field. */
-    protected final String name;
+    private final String name;
 
     /** Key used to identify the field in the parser */
-    protected final String key;
+    private final String key;
 
     /** Display size of the field */
-    protected final String displaySize;
+    private final String displaySize;
 
     /** Class name of the object to which the field is mapped */
     protected String mapToObject;
 
     /** Optional property name of the object to which the field is mapped */
-    protected String mapToProperty;
+    private String mapToProperty;
 
     /** Class name of the validator (for deserialization) */
-    protected String validatorClassName;
+    private String validatorClassName;
 
     /** Used to validate the contents of the field */
-    protected transient Validator<T> validator;
+    private transient Validator<T> validator;
 
     /** Getter method in the mapped object used to populate the field */
-    protected Method getter;
+    private Method getter;
 
     /** Setter method in the mapped object used to store the value of field */
-    protected Method setter;
+    private Method setter;
 
     /** Error message set on the field if required and not set by parser */
-    protected String ifRequiredMessage;
+    private String ifRequiredMessage;
 
     /** Does this field accept multiple values? */
-    protected final boolean isMultiValued;
+    private final boolean isMultiValued;
 
     /** Group to which the field belongs */
-    protected final Group group;
+    private final Group group;
 
     /** Is this field always required?  This is only set through the XML file */
-    protected boolean alwaysRequired;
+    private boolean alwaysRequired;
 
     /**
      * Value of the field if an error occurs while getting
      * the value from the mapped object
      */
-    protected T onError;
+    private T onError;
 
     /** Default value of the field */
     protected T defaultValue;
@@ -120,7 +120,7 @@ public abstract class Field<T> implements Serializable, LogEnabled
     protected T emptyValue;
 
     /** Display name of the field to be used on data entry forms... */
-    protected String displayName;
+    private String displayName;
 
     /** Max size of the field */
     private String maxSize;
@@ -128,25 +128,25 @@ public abstract class Field<T> implements Serializable, LogEnabled
     // these are reset when the Field is returned to the pool
 
     /** Has the field has been set from the parser? */
-    protected boolean setFlag;
+    private boolean setFlag;
 
     /** Has the field passed the validation test? */
-    protected boolean validFlag;
+    private boolean validFlag;
 
     /** Has the field been validated? */
-    protected boolean validated;
+    private boolean validated;
 
     /** Does the field require a value? */
-    protected boolean required;
+    private boolean required;
 
     /** Has the field has been set from the parser? */
-    protected boolean initialized;
+    private boolean initialized;
 
     /** Error message, is any, resulting from validation */
-    protected String message;
+    private String message;
 
     /** Mapped object used to set the initial field value */
-    protected Retrievable retrievable;
+    private Retrievable retrievable;
 
     /** Locale of the field */
     private Locale locale;
@@ -312,8 +312,8 @@ public abstract class Field<T> implements Serializable, LogEnabled
             throws IntakeException
     {
         this.parser = pp;
-        validFlag = true;
-        validated = false;
+        setValid(true);
+        setValidated(false);
 
         this.locale = pp.getLocale();
 
@@ -601,6 +601,30 @@ public abstract class Field<T> implements Serializable, LogEnabled
     }
 
     /**
+     * @param setFlag the setFlag to set
+     */
+    protected void setSet(boolean setFlag)
+    {
+        this.setFlag = setFlag;
+    }
+
+    /**
+     * @param validFlag the validFlag to set
+     */
+    protected void setValid(boolean validFlag)
+    {
+        this.validFlag = validFlag;
+    }
+
+    /**
+     * @param validated the validated to set
+     */
+    protected void setValidated(boolean validated)
+    {
+        this.validated = validated;
+    }
+
+    /**
      * @deprecated Call validate() instead (with no parameters).
      */
     @Deprecated
@@ -617,7 +641,7 @@ public abstract class Field<T> implements Serializable, LogEnabled
         log.debug(name + ": validate()");
         Validator<T> v = getValidator();
 
-        if (isMultiValued)
+        if (isMultiValued())
         {
             stringValues = parser.getStrings(getKey());
 
@@ -961,7 +985,7 @@ public abstract class Field<T> implements Serializable, LogEnabled
     }
 
     /**
-     * Used to throw an IntakeException when an error occurs execuing the
+     * Used to throw an IntakeException when an error occurs executing the
      * get/set method of the mapped persistent object.
      *
      * @param type Type of method. (setter/getter)
@@ -1027,7 +1051,7 @@ public abstract class Field<T> implements Serializable, LogEnabled
     }
 
     /**
-     * Gets the diplay size of the field.  This is useful when
+     * Gets the display size of the field.  This is useful when
      * building the HTML input tag.  If no displaySize was set,
      * an empty string is returned.
      */

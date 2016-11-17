@@ -92,7 +92,7 @@ public class StringField
     @Override
 	protected void doSetValue()
     {
-        if (isMultiValued)
+        if (isMultiValued())
         {
             String[] ss = parser.getStrings(getKey());
             String[] sval = new String[ss.length];
@@ -118,16 +118,16 @@ public class StringField
     @Override
 	public void setRequired(boolean v, String message)
     {
-        this.required = v;
+        super.setRequired(v, message);
         if (v)
         {
-            if (isMultiValued)
+            if (isMultiValued())
             {
                 String[] ss = (String[]) getTestValue();
                 if (ss == null || ss.length == 0)
                 {
-                    validFlag = false;
-                    this.message = message;
+                    setValid(false);
+                    setMessage(message);
                 }
                 else
                 {
@@ -142,17 +142,17 @@ public class StringField
                     }
                     if (!set)
                     {
-                        validFlag = false;
-                        this.message = message;
+                        setValid(false);
+                        setMessage(message);
                     }
                 }
             }
             else
             {
-                if (!setFlag || StringUtils.isEmpty((String)getTestValue()))
+                if (!isSet() || StringUtils.isEmpty((String)getTestValue()))
                 {
-                    validFlag = false;
-                    this.message = message;
+                    setValid(false);
+                    setMessage(message);
                 }
             }
         }

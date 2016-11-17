@@ -27,6 +27,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.IntakeRuntimeException;
 import org.apache.fulcrum.intake.validator.DateStringValidator;
+import org.apache.fulcrum.intake.validator.Validator;
 
 
 /**
@@ -60,6 +61,7 @@ public class DateStringField
     {
         super(field, group);
 
+        Validator<?> validator = getValidator();
         if (validator == null || !(validator instanceof DateStringValidator))
         {
             df = DateFormat.getInstance();
@@ -139,7 +141,7 @@ public class DateStringField
     @Override
 	protected void doSetValue()
     {
-        if (isMultiValued)
+        if (isMultiValued())
         {
             String[] inputs = parser.getStrings(getKey());
             Date[] values = new Date[inputs.length];
@@ -185,6 +187,7 @@ public class DateStringField
     {
         Date date = null;
         // FIXME: Canonicalize user-entered date strings.
+        Validator<?> validator = getValidator();
         if (validator != null && validator instanceof DateStringValidator)
         {
             date = ((DateStringValidator) validator).parse(dateString);
@@ -206,6 +209,7 @@ public class DateStringField
     {
         String s = null;
         Object value = getValue();
+        Validator<?> validator = getValidator();
         if (value == null)
         {
             s = "";

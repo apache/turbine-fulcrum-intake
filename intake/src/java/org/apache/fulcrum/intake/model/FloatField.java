@@ -99,7 +99,7 @@ public class FloatField
     @Override
 	protected Object getSafeEmptyValue()
     {
-        if (isMultiValued)
+        if (isMultiValued())
         {
             return new float[0];
         }
@@ -127,7 +127,7 @@ public class FloatField
     @Override
 	protected void doSetValue()
     {
-        if (isMultiValued)
+        if (isMultiValued())
         {
             Float[] inputs = parser.getFloatObjects(getKey());
             float[] values = new float[inputs.length];
