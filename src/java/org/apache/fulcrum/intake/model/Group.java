@@ -155,6 +155,7 @@ public class Group implements Serializable, LogEnabled
      *
      * @param pp a <code>ValueParser</code> value
      * @return this Group
+     * @throws IntakeException if at least one field could not be initialized
      */
     public Group init(ValueParser pp) throws IntakeException
     {
@@ -165,8 +166,10 @@ public class Group implements Serializable, LogEnabled
      * Initializes the Group with parameters from RunData
      * corresponding to key.
      *
+     * @param key the group id
      * @param pp a <code>ValueParser</code> value
      * @return this Group
+     * @throws IntakeException if at least one field could not be initialized
      */
     public Group init(String key, ValueParser pp) throws IntakeException
     {
@@ -314,7 +317,7 @@ public class Group implements Serializable, LogEnabled
      *
      * @param pp a <code>ValueParser</code> value
      * @return an <code>ArrayList</code> value
-     * @exception IntakeException if an error occurs
+     * @throws IntakeException if an error occurs
      */
     public List<Group> getObjects(ValueParser pp) throws IntakeException
     {
@@ -332,8 +335,10 @@ public class Group implements Serializable, LogEnabled
     }
 
     /**
-     * Get the Field .
-     * @return Field.
+     * Get the Field
+     *
+     * @param fieldName the name of the field
+     * @return the named field
      * @throws IntakeException indicates the field could not be found.
      */
     public Field<?> get(String fieldName)
@@ -351,7 +356,7 @@ public class Group implements Serializable, LogEnabled
     }
 
     /**
-     * Get the list of Fields .
+     * Get the list of Fields.
      * @return list of Fields
      */
     public List<Field<?>> getFields()
@@ -362,7 +367,7 @@ public class Group implements Serializable, LogEnabled
     /**
      * Set a collection of fields for this group
      *
-     * @param fields the fields to set
+     * @param inputFields the fields to set
      */
     @XmlElement(name="field")
     @XmlJavaTypeAdapter(FieldAdapter.class)
@@ -447,6 +452,8 @@ public class Group implements Serializable, LogEnabled
      * test passes call setProperties.  Use this method when some data is
      * known to be invalid, but you still want to set the object properties
      * that are valid.
+     *
+     * @param obj the object to set the properties for
      */
     public void setValidProperties(Object obj)
     {
@@ -591,6 +598,8 @@ public class Group implements Serializable, LogEnabled
     /**
      * A xhtml valid hidden input field that notifies intake of the
      * group's presence.
+     *
+     * @param sb the string builder to append the HTML to
      */
     public void appendHtmlFormInput(StringBuilder sb)
     {

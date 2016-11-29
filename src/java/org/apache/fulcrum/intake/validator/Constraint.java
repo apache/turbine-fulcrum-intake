@@ -36,16 +36,22 @@ public interface Constraint
 {
     /**
      * Get the name of the constraint.
+     *
+     * @return the constraint name
      */
     String getName();
 
     /**
      * Get the value of the constraint.
+     *
+     * @return the constraint value
      */
     String getValue();
 
     /**
      * Get the error message.
+     *
+     * @return the constraint error message
      */
     String getMessage();
 }

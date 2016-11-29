@@ -30,6 +30,7 @@ import org.apache.fulcrum.intake.model.Field;
  * listed in DefaultValidator.
  *
  * <table>
+ * <caption>Validation rules</caption>
  * <tr><th>Name</th><th>Valid Values</th><th>Default Value</th></tr>
  * <tr><td>minValue</td><td>greater than BigDecimal.MIN_VALUE</td>
  * <td>&nbsp;</td></tr>
@@ -69,11 +70,11 @@ public abstract class NumberValidator<T extends Number>
 
     /**
      * Extract the relevant parameters from the constraints listed
-     * in <rule> tags within the intake.xml file.
+     * in &lt;rule&gt; tags within the intake.xml file.
      *
      * @param paramMap a <code>Map</code> of <code>rule</code>'s
      * containing constraints on the input.
-     * @exception InvalidMaskException an invalid mask was specified
+     * @throws InvalidMaskException an invalid mask was specified
      */
     @Override
 	public void init(Map<String, ? extends Constraint> paramMap)
@@ -136,7 +137,7 @@ public abstract class NumberValidator<T extends Number>
      * in the constraints defined for this validator
      *
      * @param field a <code>Field</code> to be tested
-     * @exception ValidationException containing an error message if the
+     * @throws ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
     @Override
@@ -165,7 +166,7 @@ public abstract class NumberValidator<T extends Number>
      *
      * @param testValue a <code>String</code> to be tested
      * @param locale the Locale of the associated field
-     * @exception ValidationException containing an error message if the
+     * @throws ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
     public void assertValidity(String testValue, Locale locale) throws ValidationException

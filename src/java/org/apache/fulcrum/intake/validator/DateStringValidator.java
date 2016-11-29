@@ -33,6 +33,7 @@ import org.apache.commons.lang.StringUtils;
  * listed in DefaultValidator.
  *
  * <table>
+ * <caption>Validation rules</caption>
  * <tr><th>Name</th><th>Valid Values</th><th>Default Value</th></tr>
  * <tr><td>format</td><td>see SimpleDateFormat javadoc</td>
  * <td>&nbsp;</td></tr>
@@ -79,8 +80,8 @@ public class DateStringValidator
     /**
      * Constructor to use when initializing Object
      *
-     * @param paramMap
-     * @throws InvalidMaskException
+     * @param paramMap a map of parameters
+     * @throws InvalidMaskException one of the mask rules is invalid
      */
     @Override
 	public void init(Map<String, ? extends Constraint> paramMap)
@@ -127,7 +128,7 @@ public class DateStringValidator
      * in the constraints defined for this validator
      *
      * @param testValue a <code>String</code> to be tested
-     * @exception ValidationException containing an error message if the
+     * @throws ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
     @Override
@@ -157,6 +158,8 @@ public class DateStringValidator
      * format that includes a 4 digit year, but that will parse the date using
      * a format that accepts 2 digit years.
      *
+     * @param s possibly a date string
+     * @return the date parsed
      * @throws ParseException indicates that the string could not be
      * parsed into a date.
      */
