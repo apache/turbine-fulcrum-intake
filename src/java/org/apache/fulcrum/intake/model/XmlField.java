@@ -121,6 +121,8 @@ public class XmlField
 
 	/**
 	 * Return Avalon logger
+	 *
+	 * @return the logger
 	 */
 	public Logger getLogger()
 	{
@@ -129,6 +131,8 @@ public class XmlField
 
     /**
      * Get the name of the property
+     *
+     * @return the raw name of the property
      */
     public String getRawName()
     {
@@ -137,6 +141,8 @@ public class XmlField
 
     /**
      * Get the name of the property
+     *
+     * @return the name of the property with underscores removed
      */
     public String getName()
     {
@@ -145,6 +151,8 @@ public class XmlField
 
     /**
      * Get the display name of the property
+     *
+     * @return the display name of the property
      */
     public String getDisplayName()
     {
@@ -154,6 +162,8 @@ public class XmlField
     /**
      * Gets the display size of the field.  This is
      * useful for constructing the HTML input tag.
+     *
+     * @return the display size for the field
      */
     public String getDisplaySize()
     {
@@ -162,6 +172,8 @@ public class XmlField
 
     /**
      * Get the parameter key of the property
+     *
+     * @return the key of the property
      */
     public String getKey()
     {
@@ -170,6 +182,8 @@ public class XmlField
 
     /**
      * Get the type of the property
+     *
+     * @return the type of the field
      */
     public String getType()
     {
@@ -177,7 +191,9 @@ public class XmlField
     }
 
     /**
-     * can this field have several values?
+     * Can this field have several values?
+     *
+     * @return true if the field can have multiple values
      */
     public boolean isMultiValued()
     {
@@ -186,6 +202,8 @@ public class XmlField
 
     /**
      * Get the name of the object that takes this input
+     *
+     * @return the name of the mapped object
      */
     public String getMapToObject()
     {
@@ -194,6 +212,8 @@ public class XmlField
 
     /**
      * Get the property method that takes this input
+     *
+     * @return the property this field is mapped to
      */
     public String getMapToProperty()
     {
@@ -209,6 +229,8 @@ public class XmlField
 
     /**
      * Get the className of the validator
+     *
+     * @return the validator class name
      */
     public String getValidator()
     {
@@ -237,6 +259,8 @@ public class XmlField
 
     /**
      * Get the parent XmlGroup of the field
+     *
+     * @return the group this field belongs to
      */
     public Group getGroup()
     {
@@ -317,6 +341,8 @@ public class XmlField
     /**
      * String representation of the column. This
      * is an xml representation.
+     *
+     * @return the value of this field as an XML representation
      */
     @Override
     public String toString()

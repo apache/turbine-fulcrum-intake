@@ -71,7 +71,7 @@ public interface Validator<T>
      * in the constraints defined for this validator
      *
      * @param field a <code>Field</code> to be tested
-     * @exception ValidationException containing an error message if the
+     * @throws ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
     void assertValidity(Field<T> field)
@@ -93,7 +93,7 @@ public interface Validator<T>
      * in the constraints defined for this validator
      *
      * @param testValue a <code>String</code> to be tested
-     * @exception ValidationException containing an error message if the
+     * @throws ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
     void assertValidity(String testValue)

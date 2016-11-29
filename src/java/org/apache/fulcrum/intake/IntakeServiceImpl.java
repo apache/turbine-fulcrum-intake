@@ -548,8 +548,8 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      * @param propName
      *            the name of the property.
      * @return the setter.
-     * @throws ClassNotFoundException
-     * @throws IntrospectionException
+     * @throws ClassNotFoundException if the class specified could not be loaded
+     * @throws IntrospectionException if the property setter could not be called
      */
     @Override
     public Method getFieldSetter(String className, String propName)
@@ -607,8 +607,8 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      * @param propName
      *            the name of the property.
      * @return the getter.
-     * @throws ClassNotFoundException
-     * @throws IntrospectionException
+     * @throws ClassNotFoundException if the class specified could not be loaded
+     * @throws IntrospectionException if the property getter could not be called
      */
     @Override
     public Method getFieldGetter(String className, String propName)

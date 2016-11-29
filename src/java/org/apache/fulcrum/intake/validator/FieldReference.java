@@ -30,6 +30,7 @@ import org.apache.fulcrum.intake.model.Group;
  * comparisons are supported:
  *
  * <table>
+ * <caption>Validation rules</caption>
  * <tr>
  *   <th>Name</th><th>Valid Values</th><th>Default Value</th>
  * </tr>
@@ -188,7 +189,9 @@ public class FieldReference
      * @param value the parsed value of the related field
      * @param group the group the related field belongs to
      *
-     * @throws ValidationException
+     * @param <T> the field type
+     *
+     * @throws ValidationException if the validation against at least one related field fails
      */
     public static <T> void checkReferences(List<FieldReference> fieldReferences, CompareCallback<T> compareCallback,
             T value, Group group)

@@ -26,6 +26,7 @@ import java.util.Locale;
  * listed in NumberValidator and DefaultValidator.
  *
  * <table>
+ * <caption>Validation rules</caption>
  * <tr><th>Name</th><th>Valid Values</th><th>Default Value</th></tr>
  * <tr><td>minValue</td><td>greater than Long.MIN_VALUE</td>
  * <td>&nbsp;</td></tr>

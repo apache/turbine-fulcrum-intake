@@ -42,7 +42,7 @@ import org.apache.fulcrum.parser.ValueParser;
  * Base class for Intake generated input processing classes.
  *
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
- * @author <a href="mailto:dlr@finemaltcoding.com>Daniel Rall</a>
+ * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @author <a href="mailto:jh@byteaction.de">J&uuml;rgen Hoffmann</a>
@@ -183,8 +183,6 @@ public abstract class Field<T> implements Serializable, LogEnabled
      * @param group a <code>Group</code> value
      * @throws IntakeException indicates the validator was not valid or
      * could not be loaded.
-     * @throws SystemError only occurs is the Validation object does not
-     * extend InitableByConstraintMap
      */
     public Field(XmlField field, Group group) throws IntakeException
     {
@@ -415,6 +413,8 @@ public abstract class Field<T> implements Serializable, LogEnabled
 
     /**
      * Get the name of the object that takes this input
+     *
+     * @return the name of the mapped object
      */
     public String getMapToObject()
     {
@@ -517,6 +517,8 @@ public abstract class Field<T> implements Serializable, LogEnabled
      * Use in a hidden field assign a default value in the event the
      * field is absent from the query parameters.  Used to track checkboxes,
      * since they only show up if checked.
+     *
+     * @return the value if not in the request
      */
     public String getValueIfAbsent()
     {
@@ -575,6 +577,8 @@ public abstract class Field<T> implements Serializable, LogEnabled
      * used in building data entry forms and serve as a
      * user friendly description of the data contained in
      * the field.
+     *
+     * @param newDisplayName the new display name for the field
      */
     public void setDisplayName(String newDisplayName)
     {
@@ -593,6 +597,8 @@ public abstract class Field<T> implements Serializable, LogEnabled
 
     /**
      * Sets an error message.  The field is also marked as invalid.
+     *
+     * @param message the new error message
      */
     public void setMessage(String message)
     {
@@ -601,6 +607,8 @@ public abstract class Field<T> implements Serializable, LogEnabled
     }
 
     /**
+     * Set the internal flag that the field has been set
+     *
      * @param setFlag the setFlag to set
      */
     protected void setSet(boolean setFlag)
@@ -609,6 +617,8 @@ public abstract class Field<T> implements Serializable, LogEnabled
     }
 
     /**
+     * Set the internal flag that the field is valid
+     *
      * @param validFlag the validFlag to set
      */
     protected void setValid(boolean validFlag)
@@ -617,6 +627,8 @@ public abstract class Field<T> implements Serializable, LogEnabled
     }
 
     /**
+     * Set the internal flag that the field has been validated
+     *
      * @param validated the validated to set
      */
     protected void setValidated(boolean validated)
@@ -625,16 +637,9 @@ public abstract class Field<T> implements Serializable, LogEnabled
     }
 
     /**
-     * @deprecated Call validate() instead (with no parameters).
-     */
-    @Deprecated
-    protected boolean validate(ValueParser pp)
-    {
-        return validate();
-    }
-
-    /**
      * Compares request data with constraints and sets the valid flag.
+     *
+     * @return true if the validation succeeded
      */
     public boolean validate()
     {
@@ -757,7 +762,7 @@ public abstract class Field<T> implements Serializable, LogEnabled
      * be used as the initial value.
      *
      * @return an <code>Object</code> value
-     * @exception IntakeException indicates the value could not be
+     * @throws IntakeException indicates the value could not be
      * returned from the mapped object
      */
     public T getInitialValue() throws IntakeException
@@ -790,7 +795,8 @@ public abstract class Field<T> implements Serializable, LogEnabled
     /**
      * Get the value input by a user that will be validated.
      *
-     * @return an <code>Object</code> value
+     * @param <TT> the type of the test value
+     * @return an <code>TT</code> value
      */
     @SuppressWarnings("unchecked")
 	public <TT> TT getTestValue()
@@ -873,6 +879,8 @@ public abstract class Field<T> implements Serializable, LogEnabled
     /**
      * Loads the valid value from a bean
      *
+     * @param obj the object whose getter to call
+     *
      * @throws IntakeException indicates a problem during the execution of the
      * object's getter method
      */
@@ -912,6 +920,8 @@ public abstract class Field<T> implements Serializable, LogEnabled
 
     /**
      * Calls a setter method on obj, if this field has been set.
+     *
+     * @param obj the object whose setter to call
      *
      * @throws IntakeException indicates a problem during the execution of the
      * object's setter method
@@ -1052,8 +1062,10 @@ public abstract class Field<T> implements Serializable, LogEnabled
 
     /**
      * Gets the display size of the field.  This is useful when
-     * building the HTML input tag.  If no displaySize was set,
+     * building the HTML input tag. If no displaySize was set,
      * an empty string is returned.
+     *
+     * @return the size information for this field
      */
     public String getDisplaySize()
     {
@@ -1063,7 +1075,9 @@ public abstract class Field<T> implements Serializable, LogEnabled
     /**
      * Gets the maximum size of the field.  This is useful when
      * building the HTML input tag.  The maxSize is set with the maxLength
-     * rule.  If this rule was not set, an empty string is returned.
+     * rule. If this rule was not set, an empty string is returned.
+     *
+     * @return the maximum size information of the field
      */
     public String getMaxSize()
     {
