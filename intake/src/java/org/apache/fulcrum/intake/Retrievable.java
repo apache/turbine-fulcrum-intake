@@ -30,13 +30,18 @@ public interface Retrievable
     /**
      * get an id that differentiates this object from others
      * of its class.
+     *
+     * @return the unique key identifying the object
      */
     String getQueryKey();
 
     /**
      * set an id that differentiates this object from others
      * of its class.
+     *
+     * @param key the identifying key
+     *
+     * @throws Exception if the key could not be set
      */
     void setQueryKey(String key) throws Exception;
-
 }

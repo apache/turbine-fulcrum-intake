@@ -34,6 +34,7 @@ import org.apache.fulcrum.intake.validator.FieldReference.Comparison;
  * Validates a DateString field in dependency on another DateString field.
  *
  * <table>
+ * <caption>Validation rules</caption>
  * <tr>
  *   <th>Name</th><th>Valid Values</th><th>Default Value</th>
  * </tr>
@@ -82,8 +83,8 @@ public class DateRangeValidator
     /**
      * Constructor to use when initializing Object
      *
-     * @param paramMap
-     * @throws InvalidMaskException
+     * @param paramMap a map of parameters
+     * @throws InvalidMaskException one of the mask rules is invalid
      */
     @Override
 	public void init(Map<String, ? extends Constraint> paramMap)
@@ -162,7 +163,7 @@ public class DateRangeValidator
      * in the constraints defined for this validator
      *
      * @param testField a <code>Field</code> to be tested
-     * @exception ValidationException containing an error message if the
+     * @throws ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
     @Override
@@ -197,7 +198,7 @@ public class DateRangeValidator
      * @param testValue a <code>String</code> to be tested
      * @param group the group this field belongs to
      *
-     * @exception ValidationException containing an error message if the
+     * @throws ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
     public void assertValidity(final String testValue, final Group group)

@@ -26,14 +26,14 @@ import org.apache.fulcrum.intake.model.Group;
 
 /**
  * This is a Facade class for IntakeService.
- * 
+ *
  * This class provides static methods that call related methods of the
  * implementation of the IntakeService used by the System, according to the
  * settings in your intake.xml file.
- * 
+ *
  * Note: How should a facade class work? It seems to me that maybe it should
  * only have a hook into the Avalon Component Manager somehow?
- * 
+ *
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
@@ -41,7 +41,6 @@ import org.apache.fulcrum.intake.model.Group;
 public class IntakeServiceFacade
 {
     /** Static instance of the intakeService. */
-
     private static IntakeService intakeService;
 
     /**
@@ -56,7 +55,7 @@ public class IntakeServiceFacade
     /**
      * Gets an instance of a named group either from the pool or by calling the
      * Factory Service if the pool is empty.
-     * 
+     *
      * @param groupName
      *            the name of the group.
      * @return a Group instance.
@@ -74,7 +73,7 @@ public class IntakeServiceFacade
 
     /**
      * Puts a group back to the pool.
-     * 
+     *
      * @param instance
      *            the object instance to recycle.
      * @throws IntakeException
@@ -87,7 +86,7 @@ public class IntakeServiceFacade
 
     /**
      * Gets the current size of the pool for a named group.
-     * 
+     *
      * @param groupName
      *            the name of the group.
      * @return the current pool size
@@ -101,7 +100,7 @@ public class IntakeServiceFacade
 
     /**
      * Names of all the defined groups.
-     * 
+     *
      * @return array of names.
      */
     public static String[] getGroupNames()
@@ -111,7 +110,7 @@ public class IntakeServiceFacade
 
     /**
      * Gets the key (usually a short identifier) for a group.
-     * 
+     *
      * @param groupName
      *            the name of the group.
      * @return the the key.
@@ -123,7 +122,7 @@ public class IntakeServiceFacade
 
     /**
      * Gets the group name given its key.
-     * 
+     *
      * @param groupKey
      *            the key.
      * @return groupName the name of the group.
@@ -135,14 +134,14 @@ public class IntakeServiceFacade
 
     /**
      * Gets the Method that can be used to set a property.
-     * 
+     *
      * @param className
      *            the name of the object.
      * @param propName
      *            the name of the property.
      * @return the setter.
-     * @throws ClassNotFoundException
-     * @throws IntrospectionException
+     * @throws ClassNotFoundException if the class specified could not be loaded
+     * @throws IntrospectionException if the property setter could not be called
      */
     public static Method getFieldSetter(String className, String propName) throws IntrospectionException, ClassNotFoundException
     {
@@ -151,14 +150,14 @@ public class IntakeServiceFacade
 
     /**
      * Gets the Method that can be used to get a property value.
-     * 
+     *
      * @param className
      *            the name of the object.
      * @param propName
      *            the name of the property.
      * @return the getter.
-     * @throws ClassNotFoundException
-     * @throws IntrospectionException
+     * @throws ClassNotFoundException if the class specified could not be loaded
+     * @throws IntrospectionException if the property getter could not be called
      */
     public static Method getFieldGetter(String className, String propName) throws IntrospectionException, ClassNotFoundException
     {
@@ -167,7 +166,7 @@ public class IntakeServiceFacade
 
     /**
      * Utility method for accessing the service implementation
-     * 
+     *
      * @return a IntakeService implementation instance
      */
     private static IntakeService getService()

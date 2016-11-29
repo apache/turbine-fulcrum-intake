@@ -33,7 +33,7 @@ import org.apache.fulcrum.intake.IntakeException;
 /**
  * A class for holding application data structures.
  *
- * @author <a href="mailto:jmcnally@collab.net>John McNally</a>
+ * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
@@ -63,6 +63,7 @@ public class AppData implements Serializable
      * This method is used in the IntakeService to register all the
      * groups with and without prefix in the service.
      *
+     * @return the list of groups
      */
     public List<Group> getGroups()
     {

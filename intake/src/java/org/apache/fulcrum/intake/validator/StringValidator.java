@@ -29,6 +29,7 @@ import org.apache.commons.lang.StringUtils;
  * A validator that will compare a testValue against the following
  * constraints:
  * <table>
+ * <caption>Validation rules</caption>
  * <tr><th>Name</th><th>Valid Values</th><th>Default Value</th></tr>
  * <tr><td>required</td><td>true|false</td><td>false</td></tr>
  * <tr><td>mask</td><td>regexp</td><td>&nbsp;</td></tr>
@@ -67,11 +68,11 @@ public class StringValidator
 
     /**
      * Extract the relevant parameters from the constraints listed
-     * in <rule> tags within the intake.xml file.
+     * in &lt;rule&gt; tags within the intake.xml file.
      *
      * @param paramMap a <code>Map</code> of <code>Rule</code>'s
      * containing constraints on the input.
-     * @exception InvalidMaskException An invalid mask was specified for one of the rules
+     * @throws InvalidMaskException An invalid mask was specified for one of the rules
      */
     @Override
 	public void init(Map<String, ? extends Constraint> paramMap)
@@ -94,7 +95,7 @@ public class StringValidator
      * in the constraints defined for this validator
      *
      * @param testValue a <code>String</code> to be tested
-     * @exception ValidationException containing an error message if the
+     * @throws ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
     @Override

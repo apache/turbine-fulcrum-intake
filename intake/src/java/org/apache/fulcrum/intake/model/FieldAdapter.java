@@ -201,6 +201,7 @@ public class FieldAdapter extends XmlAdapter<XmlField, Field<?>>
      * in the xml file.
      *
      * @param xmlField a <code>XmlField</code> value
+     * @param xmlGroup the group this field belongs to
      * @return a <code>Field</code> value
      * @throws IntakeException indicates that an unknown type was specified for a field.
      */
