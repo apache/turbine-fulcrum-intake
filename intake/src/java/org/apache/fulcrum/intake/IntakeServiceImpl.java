@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -797,9 +798,9 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
             String groupPrefix = appData.getGroupPrefix();
 
-            for (int i = glist.size() - 1; i >= 0; i--)
+            for (ListIterator<Group> i = glist.listIterator(glist.size()); i.hasPrevious();)
             {
-                Group g = glist.get(i);
+                Group g = i.previous();
                 String groupName = g.getIntakeGroupName();
 
                 boolean registerUnqualified = registerGroup(groupName, g, appData, true);

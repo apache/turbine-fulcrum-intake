@@ -61,7 +61,7 @@ public class LongField
             return;
         }
 
-        defaultValue = new Long(prop);
+        defaultValue = Long.valueOf(prop);
     }
 
     /**
@@ -82,7 +82,7 @@ public class LongField
             return;
         }
 
-        emptyValue = new Long(prop);
+        emptyValue = Long.valueOf(prop);
     }
 
     /**

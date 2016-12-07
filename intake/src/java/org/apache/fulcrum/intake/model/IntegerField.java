@@ -61,7 +61,7 @@ public class IntegerField
             return;
         }
 
-        defaultValue = new Integer(prop);
+        defaultValue = Integer.valueOf(prop);
     }
 
     /**
@@ -82,7 +82,7 @@ public class IntegerField
             return;
         }
 
-        emptyValue = new Integer(prop);
+        emptyValue = Integer.valueOf(prop);
     }
 
     /**
