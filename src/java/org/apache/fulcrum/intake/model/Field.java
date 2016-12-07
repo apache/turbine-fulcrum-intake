@@ -107,12 +107,6 @@ public abstract class Field<T> implements Serializable, LogEnabled
     /** Is this field always required?  This is only set through the XML file */
     private boolean alwaysRequired;
 
-    /**
-     * Value of the field if an error occurs while getting
-     * the value from the mapped object
-     */
-    private T onError;
-
     /** Default value of the field */
     protected T defaultValue;
 
@@ -830,11 +824,6 @@ public abstract class Field<T> implements Serializable, LogEnabled
         if (getTestValue() != null)
         {
             val = getTestValue();
-        }
-
-        if (val == null)
-        {
-            val = onError;
         }
 
         return val;
