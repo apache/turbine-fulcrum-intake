@@ -175,6 +175,29 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>java8</id>
+      <activation>
+        <jdk>[1.8,)</jdk>
+      </activation>
+      <reporting>
+        <plugins>
+          <!-- Use Java 8 compatible Findbugs version -->
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>findbugs-maven-plugin</artifactId>
+            <version>3.0.1</version>
+            <configuration>
+              <threshold>Normal</threshold>
+            </configuration>
+          </plugin>
+        </plugins>
+      </reporting>
+      <properties>
+        <!-- ignore doclint errors (should be warnings) -->
+        <additionalparam>-Xdoclint:none</additionalparam>
+      </properties>
+    </profile>
   </profiles>
 
   <properties>

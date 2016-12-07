@@ -20,7 +20,6 @@ package org.apache.fulcrum.intake;
  */
 
 import java.beans.IntrospectionException;
-
 import java.lang.reflect.Method;
 
 import org.apache.fulcrum.intake.model.Group;
@@ -32,9 +31,9 @@ import org.apache.fulcrum.intake.model.Group;
  * <p>Localization of Intake's error messages can be accomplished
  * using Turbine's <code>LocalizationTool</code> from a Velocity template
  * as follows:
- * <blockquote><code></pre>
+ * <code>
  * $l10n.get($intake.SomeGroup.SomeField.Message)
- * </pre></code></blockquote>
+ * </code>
  * </p>
  *
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
@@ -98,7 +97,7 @@ public interface IntakeService
      * Gets the current size of the pool for a named group.
      *
      * @param groupName the name of the group.
-     *
+     * @return the size of the group pool
      * @throws IntakeException The passed group name does not exist.
      */
     int getSize(String groupName)
@@ -133,8 +132,8 @@ public interface IntakeService
      * @param className the name of the object.
      * @param propName the name of the property.
      * @return the setter.
-     * @throws ClassNotFoundException
-     * @throws IntrospectionException
+     * @throws ClassNotFoundException if the class specified could not be loaded
+     * @throws IntrospectionException if the property setter could not be called
      */
     Method getFieldSetter(String className, String propName)
             throws ClassNotFoundException, IntrospectionException;
@@ -145,14 +144,9 @@ public interface IntakeService
      * @param className the name of the object.
      * @param propName the name of the property.
      * @return the getter.
-     * @throws ClassNotFoundException
-     * @throws IntrospectionException
+     * @throws ClassNotFoundException if the class specified could not be loaded
+     * @throws IntrospectionException if the property getter could not be called
      */
     Method getFieldGetter(String className, String propName)
             throws ClassNotFoundException, IntrospectionException;
 }
-
-
-
-
-

@@ -55,10 +55,10 @@ public class FileItemField
     /**
      * It is not possible to set the default value for this field type.
      * Calling this method with a non-null parameter will result in a
-     * TurbineRuntimeException
+     * IntakeRuntimeException
      *
      * @param prop Parameter for the default values
-     * @throws TurbineRuntimeException
+     * @throws IntakeRuntimeException if the parameter is not null
      */
     @Override
 	public void setDefaultValue(String prop)
@@ -76,10 +76,10 @@ public class FileItemField
     /**
      * It is not possible to set the empty value for this field type.
      * Calling this method with a non-null parameter will result in a
-     * TurbineRuntimeException
+     * IntakeRuntimeException
      *
      * @param prop Parameter for the empty values
-     * @throws TurbineRuntimeException
+     * @throws IntakeRuntimeException if the parameter is not null
      */
     @Override
 	public void setEmptyValue(String prop)
@@ -113,7 +113,7 @@ public class FileItemField
      *
      * @param vp a <code>ValueParser</code> value
      * @return a <code>Field</code> value
-     * @exception IntakeException if an error occurs
+     * @throws IntakeException if an error occurs
      */
     @Override
 	public Field<FileItem> init(ValueParser vp)

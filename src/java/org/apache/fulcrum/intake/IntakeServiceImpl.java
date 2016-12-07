@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -548,8 +549,8 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      * @param propName
      *            the name of the property.
      * @return the setter.
-     * @throws ClassNotFoundException
-     * @throws IntrospectionException
+     * @throws ClassNotFoundException if the class specified could not be loaded
+     * @throws IntrospectionException if the property setter could not be called
      */
     @Override
     public Method getFieldSetter(String className, String propName)
@@ -607,8 +608,8 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      * @param propName
      *            the name of the property.
      * @return the getter.
-     * @throws ClassNotFoundException
-     * @throws IntrospectionException
+     * @throws ClassNotFoundException if the class specified could not be loaded
+     * @throws IntrospectionException if the property getter could not be called
      */
     @Override
     public Method getFieldGetter(String className, String propName)
@@ -797,9 +798,9 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
             String groupPrefix = appData.getGroupPrefix();
 
-            for (int i = glist.size() - 1; i >= 0; i--)
+            for (ListIterator<Group> i = glist.listIterator(glist.size()); i.hasPrevious();)
             {
-                Group g = glist.get(i);
+                Group g = i.previous();
                 String groupName = g.getIntakeGroupName();
 
                 boolean registerUnqualified = registerGroup(groupName, g, appData, true);

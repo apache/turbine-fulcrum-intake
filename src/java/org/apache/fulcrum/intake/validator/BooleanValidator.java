@@ -76,7 +76,7 @@ public class BooleanValidator
      * in the constraints defined for this validator
      *
      * @param testValue a <code>String</code> to be tested
-     * @exception ValidationException containing an error message if the
+     * @throws ValidationException containing an error message if the
      * testValue did not pass the validation tests.
      */
     @Override
@@ -102,7 +102,8 @@ public class BooleanValidator
      * Parses a string value into a Boolean object.
      *
      * @param stringValue the value to parse
-     * @return a <code>Boolean</a> object
+     * @return a <code>Boolean</code> object
+     * @throws ParseException if the value cannot be parsed to a boolean
      */
     public Boolean parse(String stringValue)
             throws ParseException

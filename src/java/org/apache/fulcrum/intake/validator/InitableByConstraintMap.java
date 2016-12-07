@@ -32,11 +32,11 @@ public interface InitableByConstraintMap
 {
     /**
      * Extract the relevant parameters from the constraints listed
-     * in <input-param> tags within the intake.xml file.
+     * in &lt;input-param&gt; tags within the intake.xml file.
      *
      * @param inputParameters a <code>Map</code> of <code>Constraint</code>'s
      * containing rules and error messages.
-     * @exception InvalidMaskException one of the mask rules is invalid
+     * @throws InvalidMaskException one of the mask rules is invalid
      */
     void init(Map<String, ? extends Constraint> inputParameters)
             throws InvalidMaskException;
