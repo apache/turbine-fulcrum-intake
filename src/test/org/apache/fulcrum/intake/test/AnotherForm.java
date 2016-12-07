@@ -1,6 +1,5 @@
 package org.apache.fulcrum.intake.test;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,28 +19,31 @@ package org.apache.fulcrum.intake.test;
  * under the License.
  */
 
-
 /**
  * Test form for Intake
  *
  * @author <a href="mailto:epugh@upstate.com">epugh@upstate.com</a>
  * @version $Id$
  */
-public class AnotherForm {
+public class AnotherForm
+{
 
-  private String username;
-  /**
-   * @return
-   */
-  public String getUsername() {
-    return username;
-  }
+    private String username;
 
-  /**
-   * @param username
-   */
-  public void setUsername(String username) {
-    this.username = username;
-  }
+    /**
+     * @return the user name
+     */
+    public String getUsername()
+    {
+        return username;
+    }
+
+    /**
+     * @param username
+     */
+    public void setUsername(String username)
+    {
+        this.username = username;
+    }
 
 }
