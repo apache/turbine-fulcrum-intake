@@ -125,7 +125,7 @@ public class Group implements Serializable, LogEnabled
     /**
      * The object containing the request data
      */
-    private ValueParser pp;
+    private transient ValueParser pp;
 
     /**
      * A flag to help prevent duplicate hidden fields declaring this group.

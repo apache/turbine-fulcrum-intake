@@ -61,7 +61,7 @@ public class ShortField
             return;
         }
 
-        defaultValue = new Short(prop);
+        defaultValue = Short.valueOf(prop);
     }
 
     /**
@@ -82,7 +82,7 @@ public class ShortField
             return;
         }
 
-        emptyValue = new Short(prop);
+        emptyValue = Short.valueOf(prop);
     }
 
     /**
