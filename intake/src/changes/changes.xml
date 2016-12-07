@@ -27,7 +27,7 @@
   <body>
      <release version="1.2.3" date="in Subversion">
      </release>
-     <release version="1.2.2" date="2016-11-27">
+     <release version="1.2.2" date="2016-12-07">
       <action dev="tv" type="update">
         Move all post-processing to afterUnmarshal(), privatize a number of fields
       </action>
