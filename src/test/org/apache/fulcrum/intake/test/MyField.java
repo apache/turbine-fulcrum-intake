@@ -26,6 +26,9 @@ import org.apache.fulcrum.intake.model.XmlField;
 public class MyField extends StringField
 {
 
+    /** Serial version */
+    private static final long serialVersionUID = 1L;
+
     public MyField(XmlField field, Group group) throws IntakeException
     {
         super(field, group);
