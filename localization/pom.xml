@@ -138,6 +138,11 @@
   </profiles>
   
   <properties>
+    <!-- used for profile apache-release -->
+    <turbine.site.path>fulcrum/fulcrum-localization</turbine.site.path>
+    <turbine.scmPubCheckoutDirectory>${turbine.site.cache}/fulcrum/localization</turbine.scmPubCheckoutDirectory>
+    <turbine.site.cache>${project.build.directory}/turbine-sites</turbine.site.cache>
+    <siteContent.path>${project.build.directory}/staging</siteContent.path>
     <!-- This bits are used for the staging directory -->
     <fulcrum.release.version>1.0.6</fulcrum.release.version>
     <fulcrum.rc.version>RC1</fulcrum.rc.version>  

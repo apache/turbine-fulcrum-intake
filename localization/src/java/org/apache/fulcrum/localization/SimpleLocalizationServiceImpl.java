@@ -112,7 +112,8 @@ public class SimpleLocalizationServiceImpl
      * 
      * @see {@link Configurable}
      */
-    public void configure(Configuration conf) throws ConfigurationException
+    @Override
+	public void configure(Configuration conf) throws ConfigurationException
     {
         Locale jvmDefault = Locale.getDefault();
         defaultLanguage =
@@ -149,7 +150,8 @@ public class SimpleLocalizationServiceImpl
     /**
      * Called the first time the Service is used.
      */
-    public void initialize() throws Exception
+    @Override
+	public void initialize() throws Exception
     {
         // initBundleNames(null);
         defaultLocale = new Locale(defaultLanguage, defaultCountry);
@@ -198,7 +200,8 @@ public class SimpleLocalizationServiceImpl
     /**
      * Retrieves the default language (specified in the config file).
      */
-    public String getDefaultLanguage()
+    @Override
+	public String getDefaultLanguage()
     {
         return defaultLanguage;
     }
@@ -206,7 +209,8 @@ public class SimpleLocalizationServiceImpl
     /**
      * Retrieves the default country (specified in the config file).
      */
-    public String getDefaultCountry()
+    @Override
+	public String getDefaultCountry()
     {
         return defaultCountry;
     }
@@ -215,7 +219,8 @@ public class SimpleLocalizationServiceImpl
      * Retrieves the default Locale (as created from default
      * language and default country).
      */
-    public Locale getDefaultLocale()
+    @Override
+	public Locale getDefaultLocale()
     {
         return defaultLocale;
     }
@@ -223,7 +228,8 @@ public class SimpleLocalizationServiceImpl
     /**
      * @see org.apache.fulcrum.localization.SimpleLocalizationService#getDefaultBundleName()
      */
-    public String getDefaultBundleName()
+    @Override
+	public String getDefaultBundleName()
     {
         return (bundleNames.length > 0 ? bundleNames[0] : "");
     }
@@ -231,15 +237,17 @@ public class SimpleLocalizationServiceImpl
     /**
      * @see org.apache.fulcrum.localization.SimpleLocalizationService#getBundleNames()
      */
-    public String[] getBundleNames()
+    @Override
+	public String[] getBundleNames()
     {
-        return (String[]) bundleNames.clone();
+        return bundleNames.clone();
     }
     
     /**
      * @see org.apache.fulcrum.localization.SimpleLocalizationService#getBundle()
      */
-    public ResourceBundle getBundle()
+    @Override
+	public ResourceBundle getBundle()
     {
         return getBundle(getDefaultBundleName(), (Locale) null);
     }
@@ -247,7 +255,8 @@ public class SimpleLocalizationServiceImpl
     /**
      * @see org.apache.fulcrum.localization.SimpleLocalizationService#getBundle(String)
      */
-    public ResourceBundle getBundle(String bundleName)
+    @Override
+	public ResourceBundle getBundle(String bundleName)
     {
         return getBundle(bundleName, (Locale) null);
     }
@@ -262,7 +271,8 @@ public class SimpleLocalizationServiceImpl
      * indicated by the default language and country).
      * @return A localized ResourceBundle.
      */
-    public ResourceBundle getBundle(String bundleName, Locale locale)
+    @Override
+	public ResourceBundle getBundle(String bundleName, Locale locale)
     {
         // Assure usable inputs.
         bundleName =
@@ -421,7 +431,8 @@ public class SimpleLocalizationServiceImpl
      *
      * @param defaultBundle Name of default bundle.
      */
-    public void setBundle(String defaultBundle)
+    @Override
+	public void setBundle(String defaultBundle)
     {
         if (bundleNames.length > 0)
         {
@@ -443,7 +454,8 @@ public class SimpleLocalizationServiceImpl
      * @exception MissingResourceException Specified key cannot be matched.
      * @see org.apache.fulcrum.localization.SimpleLocalizationService#getString(String, Locale, String)
      */
-    public String getString(String bundleName, Locale locale, String key)
+    @Override
+	public String getString(String bundleName, Locale locale, String key)
       throws MissingResourceException
     {
         String value = null;
@@ -500,7 +512,8 @@ public class SimpleLocalizationServiceImpl
      * @param key The key to retrieve the value for.
      * @return The value mapped to the key.
      */
-    public String getString(String key)
+    @Override
+	public String getString(String key)
     {
         return getString(getDefaultBundleName(), getDefaultLocale(), key);
     }
@@ -530,7 +543,8 @@ public class SimpleLocalizationServiceImpl
     /**
      * @see org.apache.fulcrum.localization.SimpleLocalizationService#format(String, Locale, String, Object)
      */
-    public String format(
+    @Override
+	public String format(
         String bundleName,
         Locale locale,
         String key,
@@ -542,7 +556,8 @@ public class SimpleLocalizationServiceImpl
     /**
      * @see org.apache.fulcrum.localization.SimpleLocalizationService#format(String, Locale, String, Object, Object)
      */
-    public String format(
+    @Override
+	public String format(
         String bundleName,
         Locale locale,
         String key,
@@ -557,11 +572,15 @@ public class SimpleLocalizationServiceImpl
      * <code>ResourceBundle</code> referenced by
      * <code>bundleName</code>, then formats that value for the
      * specified <code>Locale</code> using <code>args</code>.
+     * 
+     * If <code>locale</code> is <code>null</code>, {@link #getDefaultLocale()} will be checked.
+     * If <code>bundleName</code> is <code>null</code>, {@link #getDefaultBundleName()} will be checked (cft. {@link #getBundle(String, Locale)}.
      *
      * @return Localized, formatted text identified by
      * <code>key</code>.
      */
-    public String format(
+    @Override
+	public String format(
         String bundleName,
         Locale locale,
         String key,
