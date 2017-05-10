@@ -24,7 +24,9 @@
     <!-- author email="quintonm@bellsouth.net">Quinton McCombs</author -->
   </properties>
   <body>
-    <release version="1.0.7" date="in Subversion">
+    <release version="1.0.8" date="in Subversion">      
+    </release> 
+    <release version="1.0.7" date="2015-08-08">
       <action type="update" dev="gk">
        Added JUnit 4 Support
       </action>
