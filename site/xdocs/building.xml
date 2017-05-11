@@ -21,7 +21,7 @@
 <document>
 
   <properties>
-    <title>Building Fulcrum</title>
+    <title>Download and Building Fulcrum</title>
     <!-- author email="pete@kazmier.com">Pete Kazmier</author>
     <author email="quintonm@bellsouth.net">Quinton McCombs</author>
     <author email="epugh@upstate.com">Eric Pugh</author -->
@@ -29,30 +29,47 @@
 
   <body>
 
-    <section name="Building Fulcrum">
+    <section name="Binary And Source Distributions">
+      <p>
+        If you already know how to use Fulcrum and simply want the latest
+        binaries or source, you can get them from the
+        <a target="_blank" href="http://www.apache.org/dyn/closer.cgi/turbine/fulcrum">Apache Mirror System</a>.
+      </p>
+    </section>
+
+    <section name="Building all Fulcrum components">
       <p>
         Building Fulcrum from SVN is now very easy because it has been
         Maven-enabled.  Before you begin, you'll need to check out the
         <code>turbine-fulcrum</code> SVN repository (if you are
         not familiar with the Apache SVN repositories, please refer to
         the <a href="http://apache.org/dev/version-control.html">documentation</a>).
+        <source>
+        svn checkout http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/
+        </source>
       </p>
-    <h4>Maven 2 Build</h4>
+    <h4>Maven 3 Build</h4>
       <p>
-        Please refer to the Maven 2/3 <a
+        Please refer to the Maven 3 <a
         href="http://maven.apache.org/guides/getting-started/">Getting
         Started</a> document for instructions on how to install and
         use Maven.
       </p>
       <p>
         From the root directory of the Fulcrum project (where you checked
-        out the code to or unpacked a source distribution), simply type 'mvn install'
-        and press enter.  This will start a process that will
+        out the code to or unpacked a source distribution), simply run 
+        <source>
+        mvn install
+        </source>
+         This will start a process that will
         build each component.  After the component is built, it will be
         installed into you local maven repository. 
        </p>
       <p>
-       To build a local copy of the documentation, use 'mvn site'. 
+       To build a local copy of the documentation, use this: 
+       <source>
+        mvn site
+        </source>
        This will build a local copy of the web site in the 'target/site' directory. 
        Note, this uses a LOT of memory. If you can't build all of them, build them individually.  
       </p>
@@ -61,14 +78,14 @@
           Depending on your version of Maven, you may have various problems with
           the reports being generated, or you may run out of memory when you do a
           complete build.  One approach to take is to turn off running unit tests
-          and excluding various components:
-         </p>
-        <h4>Maven 2 Build</h4>
-        <p>You could use the <strong>-pl (--projects)</strong> maven command line option. Yet another approach would be to use custom profile.
-        </p>
-        <source><![CDATA[
-$ maven -pl parser,crypto site'
-]]></source>
+      <source><![CDATA[
+    $  mvn site -DskipTests=true
+   ]]></source>
+         and/or excluding various components:
+         </p>   
+       <source><![CDATA[
+    $  mvn -pl parser,crypto site
+    ]]></source>
       </subsection>
     </section>
   </body>

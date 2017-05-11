@@ -30,10 +30,10 @@
    <p>
      Fulcrum was originally created as part of the Turbine 3 effort.  The idea
      was to be able to decouple the services from Turbine 2 allowing them to be
-     used on both projects.
+     used on both projects. Turbine 4 uses now (2017) more than 15 Fulcrum components.
    </p>
    <p>
-     Fulcrum is currently evolving into a component repository based on the Avalon framework.
+     Fulcrum has evolved into a component repository based on the Avalon framework.
      Each service is being converted into a stand alone component that can
      be released independently of the other components.  This will allow the
      Turbine project to to release components as they change instead of having
@@ -49,7 +49,7 @@
      documented in the docs for each component.
    </p>
    <p>
-    Additionally, Fulcrum offers the Yaafi component.  Yaafi (Yet Another Avalon Framework
+    Additionally, Fulcrum offers the <a href="https://turbine.apache.org/fulcrum/fulcrum-yaafi/">Yaafi component</a>.  Yaafi (Yet Another Avalon Framework
     Implementation) is a very simple container that is meant to be used with singleton
     components.  It is perfect for unit testing your components.  You can then run them in
     any other Avalon container like ECM, Phoenix, Excalibur, etc..
