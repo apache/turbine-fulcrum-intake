@@ -34,24 +34,28 @@ More Information
   
 Steps
 1) Local Testing
-  // Verify gpg.homedir, gpg.useagent, gpg.passphrase. Check, if -Dgpg.useagent=false is needed
+  // Verify gpg.homedir, gpg.useagent, gpg.passphrase. Check, if -Dgpg.useagent=false is needed,  see below comment to pinentry.
   mvn clean site install -Papache-release -Dgpg.passphrase=<xx> 
   // multi module
   mvn release:prepare -DdryRun=true -DautoVersionSubmodules=true -Papache-release 
   // single
   mvn release:prepare -DdryRun=true -Papache-release 
+  // 
   mvn release:clean
 
 2) Remote Testing
+  // explicit authentication with -Dusername=<username> -Dpassword=<pw>
   // multi module
-  mvn release:prepare -DautoVersionSubmodules=true -P apache-release -Dusername=<username> -Dpassword=<pw>
+  mvn release:prepare -DautoVersionSubmodules=true -P apache-release
+  // success will be on the master build, the others are skipped
   // single
-  mvn release:prepare -P apache-release -Dusername=<username> -Dpassword=<pw>
+  mvn release:prepare -P apache-release
   // Helpful hint from Apache Website: If you're located in Europe then release:prepare may fail with 'Unable to tag SCM' and ' svn: No such revision X '. Wait 10 seconds and run mvn release:prepare again.
   
 4) Release Preparing
   // performs an upload to repository.apache.org/service/local/staging/deploy/maven2/
-  // Hint: Add -Dgpg.useagent=false helps, if running from a windows machine to avoid hanging while gpg plugin signing process ..
+  // Hint: Add -Dgpg.useagent=false helps, if running from a windows machine to avoid hanging while gpg plugin signing process 
+  // .. this may happen, if you do not define the pinentry-program in gpg-agent.conf correctly ..
   mvn release:perform 
   
   // You could find more Information here: http://www.sonatype.com/books/nexus-book/reference/staging.html
@@ -67,7 +71,8 @@ Steps
 7) Either Promote / Publish or Drop and Restage
   // http://www.apache.org/dev/publishing-maven-artifacts.html#promote
   // http://www.apache.org/dev/publishing-maven-artifacts.html#drop
-  // After Drop "reverse merge the release prepare, manually delete tag in svn repo and drop staged repository in nexus and start again with step 1.
+  // After Drop "reverse merge the release prepare (i.e. mvn release:rollback if possible),
+  // manually delete tag in svn repo (svn delete ..) and drop staged repository in nexus and start again with step 1.
   
 8)  Stage the latest documentation 
   // http://maven.apache.org/developers/website/deploy-component-reference-documentation.html

@@ -59,6 +59,31 @@
     <module>yaafi-crypto</module>        
     <module>yaafi</module>        
   </modules>
+  
+  <build>
+    <plugins>
+      <!-- run optionally
+            mvn org.owasp:dependency-check-maven:aggregate 
+            do not use it as reporting plugin, as it exposes file paths to artifacts 
+            check each possible vulnerability carefully, find more info about how to read, false positives et al. here: https://jeremylong.github.io/DependencyCheck/dependency-check-maven/plugin-info.html
+       -->
+      <plugin>
+          <groupId>org.owasp</groupId>
+          <artifactId>dependency-check-maven</artifactId>
+          <version>2.1.1</version> 
+          <executions>
+              <execution>
+                  <goals>
+                      <goal>aggregate</goal>
+                  </goals>
+              </execution>
+          </executions>
+          <!--configuration> 
+             <suppressionFiles>true</suppressionFiles>
+          </configuration--> 
+        </plugin>
+      </plugins>
+   </build>
 
 </project>
 
