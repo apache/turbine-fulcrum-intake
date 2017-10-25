@@ -58,12 +58,12 @@ Steps
   // .. this may happen, if you do not define the pinentry-program in gpg-agent.conf correctly ..
   mvn release:perform 
   
-  // You could find more Information here: http://www.sonatype.com/books/nexus-book/reference/staging.html
+  // You could find more information here: http://www.sonatype.com/books/nexus-book/reference/staging.html
   
 5) Close the staging
   // Login and close in Nexus Repo
   https://repository.apache.org/index.html#stagingRepositories
-  // More Information available: https://www.apache.org/dev/publishing-maven-artifacts.html#close-stage
+  // More information available: https://www.apache.org/dev/publishing-maven-artifacts.html#close-stage
   
 6) Prepare Voting Information and Voting
   ....
@@ -78,8 +78,12 @@ Steps
   // http://maven.apache.org/developers/website/deploy-component-reference-documentation.html
   // SVN Checkout <tagged release version> source
   // Generate and Publish Site
+  // multi module 
   mvn site site:stage scm-publish:publish-scm -Dscmpublish.dryRun=true
   mvn clean site site:stage scm-publish:publish-scm -Dusername=<username> -Dpassword=<pw>
+  // single module (omit site:stage, which reqires site element definition in distributionManagement)
+  mvn site scm-publish:publish-scm -Dscmpublish.dryRun=true
+  mvn clean site scm-publish:publish-scm -Dusername=<username> -Dpassword=<pw>
  
 9) Distribution 
   // http://www.apache.org/dev/release#upload-ci,
