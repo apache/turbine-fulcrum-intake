@@ -776,25 +776,32 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             um.setSchema(schemaFactory.newSchema(schemaURL));
             appDataElements = new HashMap<AppData, File>();
 
-            for (File xmlFile : xmlFiles)
-            {
-            	if ( xmlFile.canRead() )
-            	{
-	                getLogger().debug("Now parsing: " + xmlFile);
-	                
-	                // fix for parallel deployment, passing file directly results in file not found exception
-	                FileInputStream fis = new FileInputStream(xmlFile);
-	                AppData appData = (AppData)um.unmarshal(fis);
-	                fis.close();
-	
-	                if ( appData != null ) {
-	                	appDataElements.put(appData, xmlFile);
-	                	getLogger().debug("Saving appData for " + xmlFile);
-	                }
-            	} else {
-            		throw new Exception("Could not read Intake XML File: " + xmlFile.getPath());
-            	}
-            }
+			for (File xmlFile : xmlFiles) {
+				getLogger().debug("Now parsing: " + xmlFile);
+				FileInputStream fis = null;
+				try {
+					// fix for parallel deployment, passing file directly results in file not found
+					// exception
+					fis = new FileInputStream(xmlFile);
+					AppData appData = (AppData) um.unmarshal(fis);
+
+					if ( fis != null )
+						fis.close();
+
+					appDataElements.put(appData, xmlFile);
+					getLogger().debug("Saving appData for " + xmlFile);
+				} catch (Exception e) {
+					getLogger().debug("Error parsing Intake xml file: " + e.getMessage());
+				} finally {
+					if (fis != null) {
+						try {
+							fis.close();
+						} catch (IOException e) {
+							getLogger().debug("Intake xml file could not be opened");
+						}
+					}
+				}
+			}
 
             getLogger().debug("Parsing took " + (System.currentTimeMillis() - timer));
 
