@@ -778,11 +778,22 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
             for (File xmlFile : xmlFiles)
             {
-                getLogger().debug("Now parsing: " + xmlFile);
-                AppData appData = (AppData)um.unmarshal(xmlFile);
-
-                appDataElements.put(appData, xmlFile);
-                getLogger().debug("Saving appData for " + xmlFile);
+            	if ( xmlFile.canRead() )
+            	{
+	                getLogger().debug("Now parsing: " + xmlFile);
+	                
+	                // fix for parallel deployment, passing file directly results in file not found exception
+	                FileInputStream fis = new FileInputStream(xmlFile);
+	                AppData appData = (AppData)um.unmarshal(fis);
+	                fis.close();
+	
+	                if ( appData != null ) {
+	                	appDataElements.put(appData, xmlFile);
+	                	getLogger().debug("Saving appData for " + xmlFile);
+	                }
+            	} else {
+            		throw new Exception("Could not read Intake XML File: " + xmlFile.getPath());
+            	}
             }
 
             getLogger().debug("Parsing took " + (System.currentTimeMillis() - timer));
