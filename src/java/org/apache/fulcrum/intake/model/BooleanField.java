@@ -133,7 +133,7 @@ public class BooleanField
             for (int i = 0; i < inputs.length; i++)
             {
                 values[i] = inputs[i] == null
-                        ? (getEmptyValue()).booleanValue()
+                        ? getEmptyValue().booleanValue()
                         : inputs[i].booleanValue();
             }
 
@@ -156,7 +156,7 @@ public class BooleanField
         boolean result = false;
         try
         {
-            result = (getValue()).booleanValue();
+            result = getValue().booleanValue();
         }
         catch (Exception e)
         {

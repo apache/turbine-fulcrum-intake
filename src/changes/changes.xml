@@ -28,8 +28,11 @@
      <release version="1.2.4" date="in Subversion">
      </release>
      <release version="1.2.3" date="2018-02-11">
+      <action type="fix" dev="tv" issue="TRB-94" due-to="Tilo Villwock">
+        Intake's Validator and the BaseValueParser don't parse inputs the same way
+      </action>
       <action dev="tv" type="update">
-        Update dependencies commons-lang3, commons-pool2
+        Update dependencies commons-lang3 3.5, commons-pool2 2.5.0
       </action>
       <action dev="painter" type="fix">
         Fix FileNotFoundException during parallel deployment with Tomcat

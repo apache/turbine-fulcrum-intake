@@ -38,5 +38,5 @@ public interface CompareCallback<T>
      *
      * @return the result of the comparison
      */
-    public boolean compareValues(Comparison compare, T thisValue, T refValue);
+    boolean compareValues(Comparison compare, T thisValue, T refValue);
 }

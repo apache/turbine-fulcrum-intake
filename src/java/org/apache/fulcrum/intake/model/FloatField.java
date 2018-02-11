@@ -135,7 +135,7 @@ public class FloatField
             for (int i = 0; i < inputs.length; i++)
             {
                 values[i] = inputs[i] == null
-                        ? (getEmptyValue()).floatValue()
+                        ? getEmptyValue().floatValue()
                         : inputs[i].floatValue();
             }
 

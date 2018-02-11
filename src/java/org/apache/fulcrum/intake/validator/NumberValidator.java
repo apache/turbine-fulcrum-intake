@@ -1,5 +1,9 @@
 package org.apache.fulcrum.intake.validator;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.ParsePosition;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -131,6 +135,38 @@ public abstract class NumberValidator<T extends Number>
      * @throws NumberFormatException if the value could not be parsed
      */
     protected abstract T parseNumber(String stringValue, Locale locale) throws NumberFormatException;
+
+    /**
+     * Helper method to parse a number object out of a string
+     *
+     * @param stringValue the string value
+     * @param locale the locale to use while parsing
+     *
+     * @return the Number
+     *
+     * @throws NumberFormatException if the value could not be parsed
+     */
+    protected Number parseIntoNumber(String stringValue, Locale locale) throws NumberFormatException
+    {
+        NumberFormat nf = NumberFormat.getInstance(locale);
+
+        try
+        {
+            ParsePosition pos = new ParsePosition(0);
+            Number number = nf.parse(stringValue, pos);
+
+            if (pos.getIndex() != stringValue.length())
+            {
+                throw new ParseException("Could not parse string completely", pos.getErrorIndex());
+            }
+
+            return number;
+        }
+        catch (ParseException e)
+        {
+            throw new NumberFormatException(e.getMessage());
+        }
+    }
 
     /**
      * Determine whether a field meets the criteria specified

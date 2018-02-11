@@ -20,8 +20,6 @@ package org.apache.fulcrum.intake.validator;
  */
 
 import java.math.BigDecimal;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.Locale;
 
 
@@ -64,16 +62,7 @@ public class BigDecimalValidator
     @Override
     protected BigDecimal parseNumber(String stringValue, Locale locale) throws NumberFormatException
     {
-        NumberFormat nf = NumberFormat.getInstance(locale);
-
-        try
-        {
-            Number number = nf.parse(stringValue);
-            return new BigDecimal(number.doubleValue());
-		}
-        catch (ParseException e)
-        {
-        	throw new NumberFormatException(e.getMessage());
-		}
+        Number number = parseIntoNumber(stringValue, locale);
+        return new BigDecimal(number.doubleValue());
     }
 }
