@@ -133,7 +133,7 @@ public class LongField
             for (int i = 0; i < inputs.length; i++)
             {
                 values[i] = inputs[i] == null
-                        ? (getEmptyValue()).longValue()
+                        ? getEmptyValue().longValue()
                         : inputs[i].longValue();
             }
 

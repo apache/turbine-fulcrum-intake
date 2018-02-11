@@ -134,7 +134,7 @@ public class ShortField
             for (int i = 0; i < inputs.length; i++)
             {
                 values[i] = inputs[i] == null
-                        ? (getEmptyValue()).shortValue()
+                        ? getEmptyValue().shortValue()
                         : inputs[i].shortValue();
             }
 

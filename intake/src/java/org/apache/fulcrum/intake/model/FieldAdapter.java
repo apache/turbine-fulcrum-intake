@@ -193,7 +193,7 @@ public class FieldAdapter extends XmlAdapter<XmlField, Field<?>>
 
     protected interface FieldCtor
     {
-        public Field<?> getInstance(XmlField f, Group g) throws IntakeException;
+        Field<?> getInstance(XmlField f, Group g) throws IntakeException;
     }
 
     /**
