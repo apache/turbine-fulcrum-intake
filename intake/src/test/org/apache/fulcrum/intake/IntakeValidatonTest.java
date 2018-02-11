@@ -224,6 +224,17 @@ public class IntakeValidatonTest extends BaseUnit4Test
         {
             fail("Validator should not throw ValidationException");
         }
+
+        // TRB-94
+        try
+        {
+            v.assertValidity("13,3m", Locale.GERMANY);
+            fail("Validator should throw ValidationException");
+        }
+        catch (ValidationException ve)
+        {
+            assertEquals("Not a number", ve.getMessage());
+        }
     }
 
     @Test
@@ -282,6 +293,17 @@ public class IntakeValidatonTest extends BaseUnit4Test
         catch (ValidationException ve)
         {
             fail("Validator should not throw ValidationException");
+        }
+
+        // TRB-94
+        try
+        {
+            v.assertValidity("13m", Locale.GERMANY);
+            fail("Validator should throw ValidationException");
+        }
+        catch (ValidationException ve)
+        {
+            assertEquals("Not a number", ve.getMessage());
         }
     }
 
@@ -407,6 +429,17 @@ public class IntakeValidatonTest extends BaseUnit4Test
         catch (ValidationException ve)
         {
             fail("Validator should not throw ValidationException");
+        }
+
+        // TRB-94
+        try
+        {
+            v.assertValidity("13,3m", Locale.GERMANY);
+            fail("Validator should throw ValidationException");
+        }
+        catch (ValidationException ve)
+        {
+            assertEquals("Not a number", ve.getMessage());
         }
     }
 
@@ -601,6 +634,17 @@ public class IntakeValidatonTest extends BaseUnit4Test
         {
             fail("Validator should not throw ValidationException");
         }
+
+        // TRB-94
+        try
+        {
+            v.assertValidity("13,3m", Locale.GERMANY);
+            fail("Validator should throw ValidationException");
+        }
+        catch (ValidationException ve)
+        {
+            assertEquals("Not a number", ve.getMessage());
+        }
     }
 
     @Test
@@ -660,6 +704,17 @@ public class IntakeValidatonTest extends BaseUnit4Test
         {
             fail("Validator should not throw ValidationException");
         }
+
+        // TRB-94
+        try
+        {
+            v.assertValidity("13m", Locale.GERMANY);
+            fail("Validator should throw ValidationException");
+        }
+        catch (ValidationException ve)
+        {
+            assertEquals("Not a number", ve.getMessage());
+        }
     }
 
     @Test
@@ -718,6 +773,17 @@ public class IntakeValidatonTest extends BaseUnit4Test
         catch (ValidationException ve)
         {
             fail("Validator should not throw ValidationException");
+        }
+
+        // TRB-94
+        try
+        {
+            v.assertValidity("13m", Locale.GERMANY);
+            fail("Validator should throw ValidationException");
+        }
+        catch (ValidationException ve)
+        {
+            assertEquals("Not a number", ve.getMessage());
         }
     }
 
