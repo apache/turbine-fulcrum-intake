@@ -45,11 +45,11 @@ public class IntakeServiceFacade
 
     /**
      * Return whether the intake service has been initialized.
-     * @return true if the service has been initialzed
+     * @return true if the service has been initialized
      */
     public static boolean isInitialized()
     {
-        return (!(intakeService == null));
+        return intakeService != null;
     }
 
     /**
@@ -91,7 +91,7 @@ public class IntakeServiceFacade
      *            the name of the group.
      * @return the current pool size
      * @throws IntakeException
-     *             A non existant group was passed
+     *             A non-existent group was passed
      */
     public static int getSize(String groupName) throws IntakeException
     {

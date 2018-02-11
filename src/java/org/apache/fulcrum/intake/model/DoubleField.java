@@ -135,7 +135,7 @@ public class DoubleField
             for (int i = 0; i < inputs.length; i++)
             {
                 values[i] = inputs[i] == null
-                        ? (getEmptyValue()).doubleValue()
+                        ? getEmptyValue().doubleValue()
                         : inputs[i].doubleValue();
             }
 
