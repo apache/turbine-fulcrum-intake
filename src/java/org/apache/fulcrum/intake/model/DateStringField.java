@@ -23,7 +23,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.IntakeRuntimeException;
 import org.apache.fulcrum.intake.validator.DateStringValidator;
