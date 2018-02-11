@@ -19,7 +19,7 @@ package org.apache.fulcrum.intake.model;
  * under the License.
  */
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.validator.StringValidator;
 

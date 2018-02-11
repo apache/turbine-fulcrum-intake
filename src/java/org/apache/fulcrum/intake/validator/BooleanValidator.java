@@ -21,7 +21,7 @@ package org.apache.fulcrum.intake.validator;
 
 import java.text.ParseException;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Validator for boolean field types.<br><br>
