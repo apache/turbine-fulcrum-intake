@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.avalon.framework.logger.LogEnabled;
 import org.apache.avalon.framework.logger.Logger;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * A Class for holding data about a property used in an Application.
