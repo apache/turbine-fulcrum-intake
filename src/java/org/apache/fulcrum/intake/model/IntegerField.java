@@ -134,7 +134,7 @@ public class IntegerField
             for (int i = 0; i < inputs.length; i++)
             {
                 values[i] = inputs[i] == null
-                        ? (getEmptyValue()).intValue()
+                        ? getEmptyValue().intValue()
                         : inputs[i].intValue();
             }
 
