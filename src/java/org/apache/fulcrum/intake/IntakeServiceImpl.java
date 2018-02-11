@@ -776,35 +776,35 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             um.setSchema(schemaFactory.newSchema(schemaURL));
             appDataElements = new HashMap<AppData, File>();
 
-			for (File xmlFile : xmlFiles) {
-				getLogger().debug("Now parsing: " + xmlFile);
-				FileInputStream fis = null;
-				try {
-					// fix for parallel deployment, passing file directly results in file not found
-					// exception
-					fis = new FileInputStream(xmlFile);
-					AppData appData = (AppData) um.unmarshal(fis);
+            for (File xmlFile : xmlFiles)
+            {
+                getLogger().debug("Now parsing: " + xmlFile);
+                FileInputStream fis = null;
+                try
+                {
+                    fis = new FileInputStream(xmlFile);
+                    AppData appData = (AppData) um.unmarshal(fis);
 
-					if ( fis != null )
-						fis.close();
-
-					appDataElements.put(appData, xmlFile);
-					getLogger().debug("Saving appData for " + xmlFile);
-				} catch (Exception e) {
-					getLogger().debug("Error parsing Intake xml file: " + e.getMessage());
-				} finally {
-					if (fis != null) {
-						try {
-							fis.close();
-						} catch (IOException e) {
-							getLogger().debug("Intake xml file could not be opened");
-						}
-					}
-				}
-			}
+                    appDataElements.put(appData, xmlFile);
+                    getLogger().debug("Saving AppData for " + xmlFile);
+                }
+                finally
+                {
+                    if (fis != null)
+                    {
+                        try
+                        {
+                            fis.close();
+                        }
+                        catch (IOException e)
+                        {
+                            getLogger().warn("Could not close file " + xmlFile);
+                        }
+                    }
+                }
+            }
 
             getLogger().debug("Parsing took " + (System.currentTimeMillis() - timer));
-
             saveSerialized(serialDataPath, appDataElements);
         }
 
