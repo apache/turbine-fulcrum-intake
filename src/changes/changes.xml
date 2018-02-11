@@ -25,7 +25,15 @@
   </properties>
 
   <body>
-     <release version="1.2.3" date="in Subversion">
+     <release version="1.2.4" date="in Subversion">
+     </release>
+     <release version="1.2.3" date="2018-02-11">
+      <action dev="tv" type="update">
+        Update dependencies commons-lang3, commons-pool2
+      </action>
+      <action dev="painter" type="fix">
+        Fix FileNotFoundException during parallel deployment with Tomcat
+      </action>
      </release>
      <release version="1.2.2" date="2016-12-07">
       <action dev="tv" type="update">
