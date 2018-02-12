@@ -25,7 +25,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.fulcrum</groupId>
   <artifactId>fulcrum-intake</artifactId>
-  <version>1.2.4-SNAPSHOT</version>
+  <version>1.2.3-SNAPSHOT</version>
   <name>Fulcrum Intake Service</name>
   <inceptionYear>2005</inceptionYear>
   <description>This Service provides rule-based input validation</description>
