@@ -1,4 +1,22 @@
 --------------------------------------------------------------------------
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+--------------------------------------------------------------------------
+
 F U L C R U M
 --------------------------------------------------------------------------
 
@@ -18,6 +36,14 @@ instructions on building.  This document is available here:
 
 https://maven.apache.org/guides/getting-started/
 
+-------------------------------------------
+GIT READONLY
+-------------------------------------------
+
+You could use git to checkout current trunk:
+
+git clone https://github.com/apache/turbine-fulcrum.git
+git checkout -b remote-trunk remotes/origin/trunk
 
 --------------------------------------------------------------------------
 COMPONENT DEVELOPMENT  
@@ -93,6 +119,9 @@ Steps
   // - SVN checkout released source from https://svn.apache.org/repos/asf/turbine/<..>/tags/<..>
   // - Generate artifacts (check local repo and target for artifacts) from released version:
   mvn clean install package -Papache-release -DcreateChecksum=true
+  // generate checksums in dist source/binaries folde. More information here: https://checker.apache.org/doc/README.html and 
+  // https://checker.apache.org/dist/verify.html
+  
   
   // If not all jars are included (assembly plugin _SHOULD_ run after jar generation), run a second time without clean
   // If no md5 files are in the target folder, check local repo
