@@ -126,4 +126,16 @@ public class CryptoServiceTest extends BaseUnitTest
         assertEquals("SHA1 Encryption failed ", preDefinedResult, output);
 
     }
+    
+        public void testJavaCryptSha256() throws Exception
+    {
+  
+        String preDefinedResult = "XBSqev4ilv7P7852G2rL5WgX3FLy8VzfOY+tVq+xjek=";
+        CryptoAlgorithm ca = sc.getCryptoAlgorithm("java");
+        ca.setCipher("SHA-256");
+        String output = ca.encrypt(preDefinedInput);
+        assertEquals("SHA256 Encryption failed ", preDefinedResult, output);
+
+    }
+    
 }
