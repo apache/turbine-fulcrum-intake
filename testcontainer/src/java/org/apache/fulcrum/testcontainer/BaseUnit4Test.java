@@ -1,5 +1,20 @@
 package org.apache.fulcrum.testcontainer;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Vector;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,6 +36,8 @@ package org.apache.fulcrum.testcontainer;
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.framework.logger.ConsoleLogger;
 import org.junit.After;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 /**
  * Alternative Base class to {@link BaseUnitTest} for component tests. 
@@ -173,5 +190,80 @@ public class BaseUnit4Test
         {
             container.release(component);
         }
+    }
+    
+    public Map<String,Object> attributes = new HashMap<String,Object>();
+    public int maxInactiveInterval = 0;
+
+    protected HttpServletRequest getMockRequest()
+    {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpSession session = mock(HttpSession.class);
+
+        doAnswer(new Answer<Object>()
+        {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable
+            {
+                String key = (String) invocation.getArguments()[0];
+                return attributes.get(key);
+            }
+        }).when(session).getAttribute(anyString());
+
+        doAnswer(new Answer<Object>()
+        {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable
+            {
+                String key = (String) invocation.getArguments()[0];
+                Object value = invocation.getArguments()[1];
+                attributes.put(key, value);
+                return null;
+            }
+        }).when(session).setAttribute(anyString(), any());
+
+        when(session.getMaxInactiveInterval()).thenReturn(maxInactiveInterval);
+
+        doAnswer(new Answer<Integer>()
+        {
+            @Override
+            public Integer answer(InvocationOnMock invocation) throws Throwable
+            {
+                return Integer.valueOf(maxInactiveInterval);
+            }
+        }).when(session).getMaxInactiveInterval();
+
+        doAnswer(new Answer<Object>()
+        {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable
+            {
+                Integer value = (Integer) invocation.getArguments()[0];
+                maxInactiveInterval = value.intValue();
+                return null;
+            }
+        }).when(session).setMaxInactiveInterval(anyInt());
+
+        when(session.isNew()).thenReturn(true);
+        when(request.getSession()).thenReturn(session);
+
+        when(request.getServerName()).thenReturn("bob");
+        when(request.getProtocol()).thenReturn("http");
+        when(request.getScheme()).thenReturn("scheme");
+        when(request.getPathInfo()).thenReturn("damn");
+        when(request.getServletPath()).thenReturn("damn2");
+        when(request.getContextPath()).thenReturn("wow");
+        when(request.getContentType()).thenReturn("html/text");
+
+        when(request.getCharacterEncoding()).thenReturn("US-ASCII");
+        when(request.getServerPort()).thenReturn(8080);
+        when(request.getLocale()).thenReturn(Locale.US);
+
+        when(request.getHeader("Content-type")).thenReturn("html/text");
+        when(request.getHeader("Accept-Language")).thenReturn("en-US");
+
+        Vector<String> v = new Vector<String>();
+        when(request.getParameterNames()).thenReturn(v.elements());
+        return request;
     }
 }
