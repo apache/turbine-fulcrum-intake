@@ -1,25 +1,7 @@
 package org.apache.fulcrum.intake.model;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
+import javax.servlet.http.Part;
 
-import org.apache.commons.fileupload.FileItem;
 import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.IntakeRuntimeException;
 import org.apache.fulcrum.intake.validator.FileValidator;
@@ -33,8 +15,8 @@ import org.apache.fulcrum.parser.ValueParser;
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
  */
-public class FileItemField
-        extends Field<FileItem>
+public class UploadPartField
+        extends Field<Part>
 {
     /** Serial version */
 	private static final long serialVersionUID = -963692413506822188L;
@@ -46,7 +28,7 @@ public class FileItemField
      * @param group xml group definition object
      * @throws IntakeException thrown by superclass
      */
-    public FileItemField(XmlField field, Group group)
+    public UploadPartField(XmlField field, Group group)
             throws IntakeException
     {
         super(field, group);
@@ -116,13 +98,13 @@ public class FileItemField
      * @throws IntakeException if an error occurs
      */
     @Override
-	public Field<FileItem> init(ValueParser vp)
+	public Field<Part> init(ValueParser vp)
             throws IntakeException
     {
         if (!(vp instanceof ParameterParser))
         {
             throw new IntakeException(
-                    "FileItemFields can only be used with ParameterParser");
+                    "UploadPartFields can only be used with ParameterParser");
         }
 
         super.init(vp);
@@ -147,7 +129,7 @@ public class FileItemField
         ParameterParser pp = (ParameterParser) super.parser;
         if (isMultiValued())
         {
-            FileItem[] ss = pp.getFileItems(getKey());
+            Part[] ss = pp.getParts(getKey());
             // this definition of not set might need refined.  But
             // not sure the situation will arise.
             if (ss.length == 0)
@@ -177,7 +159,7 @@ public class FileItemField
         }
         else
         {
-            FileItem s = pp.getFileItem(getKey());
+            Part s = pp.getPart(getKey());
             if (s == null || s.getSize() == 0)
             {
                 setSet(false);
@@ -217,11 +199,11 @@ public class FileItemField
         ParameterParser pp = (ParameterParser) super.parser;
         if (isMultiValued())
         {
-            setTestValue(pp.getFileItems(getKey()));
+            setTestValue(pp.getParts(getKey()));
         }
         else
         {
-            setTestValue(pp.getFileItem(getKey()));
+            setTestValue(pp.getPart(getKey()));
         }
     }
 }
