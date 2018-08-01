@@ -155,9 +155,12 @@
                     <enumeration value="BigDecimal"></enumeration>
                     <enumeration value="int"></enumeration>
                     <enumeration value="float"></enumeration>
+                    <!-- deprecated -->
                     <enumeration value="FileItem"></enumeration>
+                    <enumeration value="UploadPart"></enumeration>
                     <enumeration value="String"></enumeration>
                     <enumeration value="DateString"></enumeration>
+                    <!-- unsupported -->
                     <enumeration value="ComboKey"></enumeration>
                     <enumeration value="double"></enumeration>
                     <enumeration value="short"></enumeration>
