@@ -25,7 +25,25 @@
   </properties>
 
   <body>
-     <release version="1.2.4" date="in Subversion">
+     <release version="2.0.0" date="in Subversion">
+      <action dev="tv" type="update">
+        Move Field creation to typesafe enum
+      </action>
+      <action dev="tv" type="update">
+        Deprecate field type FileItem
+      </action>
+      <action dev="tv" type="add">
+        Add new field type UploadPart to support Servlet 3.1 upload handling
+      </action>
+      <action dev="tv" type="remove">
+        Remove dependency on fulcrum-upload
+      </action>
+      <action dev="tv" type="update">
+        INCOMPATIBLE: Update dependency servlet-api to 3.1.0
+      </action>
+      <action dev="tv" type="update">
+        Update dependencies commons-lang3 3.7, fulcrum-parser 2.0.0
+      </action>
      </release>
      <release version="1.2.3" date="2018-02-11">
       <action type="fix" dev="tv" issue="TRB-94" due-to="Tilo Villwock">

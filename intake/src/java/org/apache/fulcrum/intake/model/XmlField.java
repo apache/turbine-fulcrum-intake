@@ -71,7 +71,7 @@ public class XmlField
     private String displaySize;
 
     @XmlAttribute
-    private String type = "String";
+    private FieldType type = FieldType.FIELD_STRING;
 
     @XmlAttribute
     private boolean multiValued = false;
@@ -185,7 +185,7 @@ public class XmlField
      *
      * @return the type of the field
      */
-    public String getType()
+    public FieldType getType()
     {
         return type;
     }
@@ -350,7 +350,7 @@ public class XmlField
         StringBuilder result = new StringBuilder();
         result.append(" <field name=\"").append(name).append("\"")
             .append(" key=\"").append(key).append("\"")
-            .append(" type=\"").append(type).append("\"");
+            .append(" type=\"").append(type.value()).append("\"");
 
         if (displayName != null)
         {
