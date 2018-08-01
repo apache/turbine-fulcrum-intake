@@ -18,13 +18,11 @@
  under the License.
 -->
 <componentConfig>
-
     <factory/>
     <parser>
         <parameterEncoding>utf-8</parameterEncoding>
         <automaticUpload>true</automaticUpload>
     </parser>
-    <upload repository="target" sizeMax="1048576" sizeThreshold="10240"/>
     <intake>
        <serialDataPath>target/appData.ser</serialDataPath>
        <xmlPaths>
