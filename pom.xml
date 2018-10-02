@@ -73,6 +73,31 @@
   </developers>
 
   <dependencies>
+
+    <!-- uncomment if using Java 9 JDK or later -->
+    <!--
+    <dependency>
+        <groupId>javax.xml.bind</groupId>
+        <artifactId>jaxb-api</artifactId>
+        <version>2.3.0</version>
+    </dependency>
+    <dependency>
+        <groupId>com.sun.xml.bind</groupId>
+        <artifactId>jaxb-impl</artifactId>
+        <version>2.3.0</version>
+    </dependency>
+    <dependency>
+        <groupId>com.sun.xml.bind</groupId>
+        <artifactId>jaxb-core</artifactId>
+        <version>2.3.0</version>
+    </dependency>
+    <dependency>
+        <groupId>javax.activation</groupId>
+        <artifactId>activation</artifactId>
+        <version>1.1.1</version>
+    </dependency>
+    -->
+
     <dependency>
       <groupId>org.apache.avalon.framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
@@ -121,6 +146,22 @@
     <sourceDirectory>${basedir}/src/java</sourceDirectory>
     <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
 
+    <!-- uncomment plugins if using JDK 9 or later -->
+    <!--
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+                <forkMode>always</forkMode>
+                <argLine>--add-modules java.xml.bind</argLine>
+                <argLine>--add-modules java.activation</argLine>
+                <argLine>--add-opens=java.base/java.lang=ALL-UNNAMED --illegal-access=deny</argLine>
+            </configuration>
+        </plugin>
+    </plugins>
+    -->
+
     <resources>
       <resource>
         <directory>src/dtd</directory>
@@ -143,4 +184,5 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <turbine.site.path>fulcrum/fulcrum-intake</turbine.site.path>
   </properties>  
+
 </project>
