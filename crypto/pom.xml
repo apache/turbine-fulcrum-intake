@@ -24,6 +24,7 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
+  <groupId>org.apache.fulcrum</groupId>
   <artifactId>fulcrum-crypto</artifactId>
   <version>1.0.8-SNAPSHOT</version>
   <name>Fulcrum Crypto</name>
