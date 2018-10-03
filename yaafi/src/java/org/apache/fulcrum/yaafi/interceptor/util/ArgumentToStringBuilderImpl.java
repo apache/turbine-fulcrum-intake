@@ -65,7 +65,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
     private int maxArgLength;
 
     /** the result of the invocation */
-    private StringBuffer buffer;
+    private StringBuilder buffer;
 
     /** the target object */
     private Object target;
@@ -77,7 +77,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
     {
         this.mode = ArgumentToStringBuilderImpl.defaultMode;
         this.maxArgLength = MAX_LINE_LENGTH;
-        this.buffer = new StringBuffer();
+        this.buffer = new StringBuilder();
     }
 
     /**
@@ -113,7 +113,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
      */
     public ArgumentToStringBuilderImpl(Object target, int maxArgLength, int mode)
     {
-        this.buffer = new StringBuffer();
+        this.buffer = new StringBuilder();
         this.target = target;
         this.maxArgLength = maxArgLength;
         this.mode = mode;
@@ -307,7 +307,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
      */
     protected String toString(Object[] array)
     {
-        StringBuffer temp = new StringBuffer();
+        StringBuilder temp = new StringBuilder();
         ArgumentToStringBuilderImpl toStringBuilder = null;
 
         if( array == null )
@@ -352,7 +352,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
      */
     protected String toString(boolean[] array)
     {
-        StringBuffer temp = new StringBuffer();
+        StringBuilder temp = new StringBuilder();
 
         if( array == null )
         {
@@ -391,7 +391,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
      */
     protected String toString(char[] array)
     {
-        StringBuffer temp = new StringBuffer();
+        StringBuilder temp = new StringBuilder();
 
         if( array == null )
         {
@@ -430,7 +430,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
      */
     protected String toString(short[] array)
     {
-        StringBuffer temp = new StringBuffer();
+        StringBuilder temp = new StringBuilder();
 
         if( array == null )
         {
@@ -469,7 +469,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
      */
     protected String toString(int[] array)
     {
-        StringBuffer temp = new StringBuffer();
+        StringBuilder temp = new StringBuilder();
 
         if( array == null )
         {
@@ -508,7 +508,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
      */
     protected String toString(long[] array)
     {
-        StringBuffer temp = new StringBuffer();
+        StringBuilder temp = new StringBuilder();
 
         if( array == null )
         {
@@ -547,7 +547,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
      */
     protected String toString(float[] array)
     {
-        StringBuffer temp = new StringBuffer();
+        StringBuilder temp = new StringBuilder();
 
         if( array == null )
         {
@@ -586,7 +586,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
      */
     protected String toString(double[] array)
     {
-        StringBuffer temp = new StringBuffer();
+        StringBuilder temp = new StringBuilder();
 
         if( array == null )
         {
@@ -624,7 +624,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
      */
     protected String toString(String string)
     {
-        StringBuffer temp = new StringBuffer();
+        StringBuilder temp = new StringBuilder();
 
         if( string == null )
         {
@@ -650,7 +650,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
      */
     protected String toString(byte[] array)
     {
-        StringBuffer temp = new StringBuffer();
+        StringBuilder temp = new StringBuilder();
 
         if( array == null )
         {
@@ -674,7 +674,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
     protected String toString(Collection collection)
     {
         int index = 0;
-        StringBuffer temp = new StringBuffer();
+        StringBuilder temp = new StringBuilder();
         ArgumentToStringBuilderImpl toStringBuilder = null;
 
         if( collection == null )
@@ -727,7 +727,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
      */
     protected String toString(Dictionary dictionary)
     {
-        StringBuffer temp = new StringBuffer();
+        StringBuilder temp = new StringBuilder();
 
         if( dictionary == null )
         {
@@ -773,7 +773,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
             if( temp.startsWith(className) == false )
             {
                 int hashCode = object.hashCode();
-                StringBuffer tempBuffer = new StringBuffer();
+                StringBuilder tempBuffer = new StringBuilder();
                 tempBuffer.append(className);
                 tempBuffer.append('@');
                 tempBuffer.append(hashCode);
@@ -995,30 +995,30 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
     protected String format( String source )
     {
         boolean isTruncated = false;
-        StringBuffer stringBuffer = new StringBuffer(source);
+        StringBuilder stringBuilder = new StringBuilder(source);
 
         // trim the string to avoid dumping tons of data
 
-        if( stringBuffer.length() > this.getMaxArgLength() )
+        if( stringBuilder.length() > this.getMaxArgLength() )
         {
-            stringBuffer.delete(this.getMaxArgLength()-1, stringBuffer.length());
+            stringBuilder.delete(this.getMaxArgLength()-1, stringBuilder.length());
             isTruncated = true;
         }
 
         // remove the line breaks and tabs for logging output and replace
 
-        for( int i=0; i<stringBuffer.length(); i++ )
+        for( int i=0; i<stringBuilder.length(); i++ )
         {
-            if( ( stringBuffer.charAt(i) == '\r' ) ||
-                ( stringBuffer.charAt(i) == '\n' ) ||
-                ( stringBuffer.charAt(i) == '\t' )  )
+            if( ( stringBuilder.charAt(i) == '\r' ) ||
+                ( stringBuilder.charAt(i) == '\n' ) ||
+                ( stringBuilder.charAt(i) == '\t' )  )
             {
-                stringBuffer.setCharAt(i,' ');
+                stringBuilder.setCharAt(i,' ');
             }
 
-            if( ( stringBuffer.charAt(i) == SEPERATOR ) )
+            if( ( stringBuilder.charAt(i) == SEPERATOR ) )
             {
-                stringBuffer.setCharAt(i,' ');
+                stringBuilder.setCharAt(i,' ');
             }
         }
 
@@ -1028,14 +1028,14 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
         {
             if (source.endsWith("]"))
             {
-                stringBuffer.append(" ...]");
+                stringBuilder.append(" ...]");
             }
             else
             {
-                stringBuffer.append(" ...");
+                stringBuilder.append(" ...");
             }
         }
 
-        return stringBuffer.toString();
+        return stringBuilder.toString();
     }
 }

@@ -122,7 +122,7 @@ public class SendDeliveryStatusImpl implements SendDeliveryStatus
     /** @see Object#toString() */
     public String toString()
     {
-        StringBuffer result = new StringBuffer(128);
+        StringBuilder result = new StringBuilder(128);
         result.append(this.getClass().getName());
         result.append('@');
         result.append(Integer.toHexString(this.hashCode()));

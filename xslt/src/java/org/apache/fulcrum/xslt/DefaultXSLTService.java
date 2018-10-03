@@ -105,7 +105,7 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      */
     private URL getStyleURL(String style)
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         sb.append(path);
 
@@ -438,7 +438,7 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      */
     public void configure(Configuration conf) throws ConfigurationException
     {
-        StringBuffer sb = new StringBuffer(conf.getAttribute(STYLESHEET_PATH,
+        StringBuilder sb = new StringBuilder(conf.getAttribute(STYLESHEET_PATH,
                 "/"));
 
         // is URL?

@@ -487,7 +487,7 @@ public class GroovyServiceImpl
      */
     protected String dumpSignature( String scriptName, Object[] args )
     {
-        StringBuffer scriptSignature = new StringBuffer();
+        StringBuilder scriptSignature = new StringBuilder();
 
         scriptSignature.append( "Groovy" );
         scriptSignature.append( "#" );
@@ -547,7 +547,7 @@ public class GroovyServiceImpl
 
     protected String dumpResult( String scriptName, Object result )
     {
-        StringBuffer resultSignature = new StringBuffer();
+        StringBuilder resultSignature = new StringBuilder();
 
         resultSignature.append( "Groovy" );
         resultSignature.append( "#" );

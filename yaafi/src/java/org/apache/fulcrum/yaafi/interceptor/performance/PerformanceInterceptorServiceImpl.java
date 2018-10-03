@@ -45,7 +45,7 @@ public class PerformanceInterceptorServiceImpl
 	  /** the maximum length of a dumped argument */
 	  private static final int MAX_ARG_LENGTH = 100;
 
-    /** default length of the StringBuffer */
+    /** default length of the StringBuilder */
     private static final int BUFFER_LENGTH = 2000;
 
     /** seperator for the arguments in the logfile */
@@ -245,7 +245,7 @@ public class PerformanceInterceptorServiceImpl
         Method method = interceptorContext.getMethod();
         Object[] args = interceptorContext.getArgs();
         MethodToStringBuilderImpl methodToStringBuilder = new MethodToStringBuilderImpl(method);
-        StringBuffer result = new StringBuffer(BUFFER_LENGTH);
+        StringBuilder result = new StringBuilder(BUFFER_LENGTH);
 
         result.append(interceptorContext.getTransactionId());
         result.append(SEPERATOR);
@@ -275,7 +275,7 @@ public class PerformanceInterceptorServiceImpl
      */
     protected String toString( Object[] args )
     {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         ArgumentToStringBuilderImpl toStringBuilder = null;
 
         if( args == null )

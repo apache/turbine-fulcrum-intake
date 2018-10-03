@@ -37,7 +37,7 @@ public class MethodToStringBuilderImpl implements InterceptorToStringBuilder
     /** our current formatting mode */
     private int mode;
 
-    /** initial size for the StringBuffer */
+    /** initial size for the StringBuilder */
     private static final int BUF_SIZE = 512;
 
     /** the method we are dumping */

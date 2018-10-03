@@ -1249,7 +1249,7 @@ public class CommonsEmailServiceImpl
         if( addressList != null )
         {
             int lim = addressList.length;
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
 
             for( int i=0; i<lim; i++ )
             {
@@ -1492,7 +1492,7 @@ public class CommonsEmailServiceImpl
      */
     private String getLogMsg( MimeMessage mimeMessage )
     {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         try
         {

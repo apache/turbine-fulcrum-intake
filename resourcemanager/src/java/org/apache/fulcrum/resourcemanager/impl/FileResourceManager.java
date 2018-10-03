@@ -513,7 +513,7 @@ public class FileResourceManager
      */
     private String createResourceFileName( String[] context, String resourceName )
     {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         if( ( context != null ) && ( context.length > 0 ) )
         {

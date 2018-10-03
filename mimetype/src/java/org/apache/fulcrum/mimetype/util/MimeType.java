@@ -166,7 +166,7 @@ public class MimeType
         }
 
         // Get the type.
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         while ((start < length) &&
                ((look = spec.charAt(start)) != '/'))
         {
@@ -508,7 +508,7 @@ public class MimeType
     {
         if (mimeTypeString == null)
         {
-            StringBuffer sb = new StringBuffer(mimeType);
+            StringBuilder sb = new StringBuilder(mimeType);
             sb.append('/');
             sb.append(mimeSubtype);
             String[] na = parameterNames;

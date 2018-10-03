@@ -688,7 +688,7 @@ public class Dump extends HttpServlet
         {
             if (o.getClass().isArray())
             {
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 if (!o.getClass().getComponentType().isPrimitive())
                 {
                     Object[] array= (Object[])o;

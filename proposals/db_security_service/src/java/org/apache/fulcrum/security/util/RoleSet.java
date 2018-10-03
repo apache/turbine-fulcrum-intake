@@ -148,7 +148,7 @@ public class RoleSet
      */
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("RoleSet contains:\n");
 
         for(Iterator it = elements(); it.hasNext(); )

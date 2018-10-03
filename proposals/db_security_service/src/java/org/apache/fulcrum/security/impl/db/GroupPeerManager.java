@@ -208,7 +208,7 @@ public class GroupPeerManager
      */
     public static String getColumnName(String name)
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(getTableName());
         sb.append(".");
         sb.append(name);

@@ -435,7 +435,7 @@ public class CharSetMap
     private String searchCharSet(String[] items)
     {
         String charset;
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = items.length; i > 0; i--)
         {
             charset = searchCharSet(items,sb,i);
@@ -457,7 +457,7 @@ public class CharSetMap
    * @return the found charset or an empty string.
    */
     private String searchCharSet(String[] items,
-                                 StringBuffer base,
+                                 StringBuilder base,
                                  int count)
     {
         if ((--count >= 0) &&

@@ -199,7 +199,7 @@ public class JettyServiceTest extends BaseUnitTest
      */
     private String getURLContent(String urlString) throws Exception
     {
-        StringBuffer result = new StringBuffer(8192);
+        StringBuilder result = new StringBuilder(8192);
         URL url = new URL(urlString);
         InputStream is = url.openStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));

@@ -174,7 +174,7 @@ public class YaafiContainerBean extends AvalonContainerBean
      */
     public String toString()
     {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         result.append(getClass().getName()).append("@").append(Integer.toHexString(hashCode()));
         result.append('[');
         result.append("beanName=").append(this.getBeanName());

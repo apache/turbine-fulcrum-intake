@@ -291,7 +291,7 @@ public class LoggingInterceptorServiceImpl
         StopWatch stopWatch,
         Object result )
     {
-        StringBuffer methodSignature = new StringBuffer();
+        StringBuilder methodSignature = new StringBuilder();
         InterceptorToStringBuilder toStringBuilder = this.createArgumentToStringBuilder(result);
 
         methodSignature.append( this.toString(avalonInterceptorContext, stopWatch, ON_EXIT) );
@@ -316,7 +316,7 @@ public class LoggingInterceptorServiceImpl
         StopWatch stopWatch,
         Throwable throwable )
     {
-        StringBuffer methodSignature = new StringBuffer();
+        StringBuilder methodSignature = new StringBuilder();
         InterceptorToStringBuilder toStringBuilder = this.createArgumentToStringBuilder(throwable);
 
         methodSignature.append( this.toString(avalonInterceptorContext, stopWatch, ON_ERROR) );
@@ -339,7 +339,7 @@ public class LoggingInterceptorServiceImpl
     protected String toString(
         AvalonInterceptorContext interceptorContext, StopWatch stopWatch, int mode )
     {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         Method method = interceptorContext.getMethod();
         Object[] args = interceptorContext.getArgs();
         InterceptorToStringBuilder toStringBuilder = null;

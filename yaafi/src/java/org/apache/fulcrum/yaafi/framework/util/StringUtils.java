@@ -114,7 +114,7 @@ public class StringUtils
             return text;
         }
 
-        StringBuffer buf = new StringBuffer(text.length());
+        StringBuilder buf = new StringBuilder(text.length());
         int start = 0, end = 0;
         while ((end = text.indexOf(repl, start)) != -1) {
             buf.append(text.substring(start, end)).append(with);
@@ -208,7 +208,7 @@ public class StringUtils
             replaceChars = "";
         }
         boolean modified = false;
-        StringBuffer buf = new StringBuffer( str.length() );
+        StringBuilder buf = new StringBuilder( str.length() );
         for (int i = 0; i < str.length(); i++)
         {
             char ch = str.charAt( i );
@@ -274,9 +274,9 @@ public class StringUtils
      * @param isLenient ignore failures
      * @return String target string with replacements.
      */
-    public static StringBuffer stringSubstitution(String argStr, Map vars, boolean isLenient)
+    public static StringBuilder stringSubstitution(String argStr, Map vars, boolean isLenient)
     {
-        StringBuffer argBuf = new StringBuffer();
+        StringBuilder argBuf = new StringBuilder();
         int argStrLength = argStr.length();
 
         for (int cIdx = 0 ; cIdx < argStrLength;)
@@ -287,7 +287,7 @@ public class StringUtils
             switch (ch)
             {
                 case '$':
-                    StringBuffer nameBuf = new StringBuffer();
+                    StringBuilder nameBuf = new StringBuilder();
                     del = argStr.charAt(cIdx+1);
                     if( del == '{')
                     {

@@ -150,7 +150,7 @@ public abstract class SecuritySet
      */
     public String toString()
     {
-        StringBuffer sbuf = new StringBuffer(12 * size());
+        StringBuilder sbuf = new StringBuilder(12 * size());
         Iterator i = set.iterator();
         while (i.hasNext()) 
         {

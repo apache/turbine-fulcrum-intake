@@ -154,7 +154,7 @@ public class PermissionSet
      */
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("PermissionSet contains:\n");
 
         for(Iterator it = elements(); it.hasNext(); )

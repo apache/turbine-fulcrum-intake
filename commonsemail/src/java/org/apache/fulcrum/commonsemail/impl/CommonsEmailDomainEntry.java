@@ -310,7 +310,7 @@ public class CommonsEmailDomainEntry
      */
     public String toString()
     {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         
         result.append(getClass().getName() + "@" + Integer.toHexString(hashCode()));
         

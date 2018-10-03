@@ -52,7 +52,7 @@ public class WordWrapUtils {
      */
     public static String wrapText(String str, String newline, int wrapColumn) {
         StringTokenizer lineTokenizer = new StringTokenizer(str, newline, true);
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuilder stringBuffer = new StringBuilder();
 
         while (lineTokenizer.hasMoreTokens()) {
             try {
@@ -84,7 +84,7 @@ public class WordWrapUtils {
      * @return a line with newlines inserted
      */
     private static String wrapLine(String line, String newline, int wrapColumn) {
-        StringBuffer wrappedLine = new StringBuffer();
+        StringBuilder wrappedLine = new StringBuilder();
 
         while (line.length() > wrapColumn) {
             int spaceToWrapAt = line.lastIndexOf(' ', wrapColumn);
@@ -156,7 +156,7 @@ public class WordWrapUtils {
         width++;
 
         // our best guess as to an initial size
-        StringBuffer buffer = new StringBuffer(sz / width * delim.length() + sz);
+        StringBuilder buffer = new StringBuilder(sz / width * delim.length() + sz);
 
         // every line will include a delim on the end
         width = width - delim.length();

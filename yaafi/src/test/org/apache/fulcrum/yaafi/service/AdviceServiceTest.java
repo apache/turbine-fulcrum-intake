@@ -88,13 +88,13 @@ public class AdviceServiceTest extends TestCase implements DependentTestComponen
     }
 
     /**
-     *  Advice a StringBuffer based on the CharSequence interface
+     *  Advice a StringBuilder based on the CharSequence interface
      * @throws Exception
      */
     public void testSimpleAdvice() throws Exception
     {
         String[] interceptorList = { LoggingInterceptorService.class.getName() };
-        StringBuffer unadvicedObject = new StringBuffer("foo");
+        StringBuilder unadvicedObject = new StringBuilder("foo");
         CharSequence advicedObject = (CharSequence) this.service.advice(unadvicedObject );
 
         int length = advicedObject.length();
@@ -104,12 +104,12 @@ public class AdviceServiceTest extends TestCase implements DependentTestComponen
     }
 
     /**
-     * Advice a StringBuffer based on the CharSequence interface
+     * Advice a StringBuilder based on the CharSequence interface
      */
     public void testSimpleObject() throws Exception
     {
         String[] interceptorList = { LoggingInterceptorService.class.getName() };
-        StringBuffer unadvicedObject = new StringBuffer("foo");
+        StringBuilder unadvicedObject = new StringBuilder("foo");
         CharSequence advicedObject = (CharSequence) this.service.advice("adviced", interceptorList, unadvicedObject );
 
         int length = advicedObject.length();
@@ -119,11 +119,11 @@ public class AdviceServiceTest extends TestCase implements DependentTestComponen
     }
 
     /**
-     * Advice a StringBuffer based on the CharSequenceInterface with default interceptors
+     * Advice a StringBuilder based on the CharSequenceInterface with default interceptors
      */
     public void testDefaultAdvice() throws Exception
     {
-        StringBuffer unadvicedObject = new StringBuffer("foo");
+        StringBuilder unadvicedObject = new StringBuilder("foo");
         CharSequence advicedObject = (CharSequence) this.service.advice("default adviced", unadvicedObject );
 
         advicedObject.length();
@@ -142,12 +142,12 @@ public class AdviceServiceTest extends TestCase implements DependentTestComponen
     }
 
     /**
-     * Advice a StringBuffer based on the CharSequenceInterface
+     * Advice a StringBuilder based on the CharSequenceInterface
      */
     public void testMultipleProxies() throws Exception
     {
         String[] interceptorList = { LoggingInterceptorService.class.getName() };
-        StringBuffer unadvicedObject = new StringBuffer("foo");
+        StringBuilder unadvicedObject = new StringBuilder("foo");
         CharSequence advicedObject = (CharSequence) this.service.advice("first advice", interceptorList, unadvicedObject);
         CharSequence advicedAdvicedObject = (CharSequence) this.service.advice("second advice", interceptorList, advicedObject );
 
@@ -156,7 +156,7 @@ public class AdviceServiceTest extends TestCase implements DependentTestComponen
     }
 
     /**
-     * Advice a StringBuffer based on the CharSequenceInterface
+     * Advice a StringBuilder based on the CharSequenceInterface
      */
     public void test()
     {

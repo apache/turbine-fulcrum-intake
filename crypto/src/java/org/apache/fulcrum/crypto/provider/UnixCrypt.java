@@ -95,7 +95,7 @@ public class UnixCrypt
             Random randomGenerator = new java.util.Random();
             int numSaltChars = SALT_CHARS.length;
 
-            seed = (new StringBuffer())
+            seed = (new StringBuilder())
                 .append(SALT_CHARS[Math.abs(randomGenerator.nextInt())
                                    % numSaltChars])
                 .append(SALT_CHARS[Math.abs(randomGenerator.nextInt())

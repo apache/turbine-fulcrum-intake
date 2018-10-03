@@ -31,7 +31,7 @@ package org.apache.fulcrum.yaafi.framework.util;
  */
 public class ToStringBuilder
 {
-    private StringBuffer buffer = new StringBuffer();
+    private StringBuilder buffer = new StringBuilder();
 
     private int mode;
     private int attributeCount;

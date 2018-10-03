@@ -490,8 +490,8 @@ public class Main implements Runnable, Disposable
      */
     public String toString()
     {
-        StringBuffer result = new StringBuffer();
-        StringBuffer argsLine = new StringBuffer();
+        StringBuilder result = new StringBuilder();
+        StringBuilder argsLine = new StringBuilder();
 
         result.append(getClass().getName() + "@" + Integer.toHexString(hashCode()));
 
