@@ -47,11 +47,11 @@
       <artifactId>dom4j</artifactId>
       <version>1.6.1</version>
     </dependency>
-    <dependency>
-      <groupId>jaxen</groupId>
-      <artifactId>jaxen</artifactId>
-      <version>1.1-beta-6</version>
-    </dependency>
+	<dependency>
+	    <groupId>jaxen</groupId>
+	    <artifactId>jaxen</artifactId>
+	    <version>1.1.6</version>
+	</dependency>
     <dependency>
       <groupId>velocity</groupId>
       <artifactId>velocity</artifactId>
@@ -75,13 +75,13 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0.5</version>
+      <version>1.0.8-SNAPSHOT</version>
     </dependency>
 
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
-      <version>1.0.5</version>
+      <version>1.0.8-SNAPSHOT</version>
     </dependency>
 
   <!-- Needed for Gump -->

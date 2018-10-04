@@ -36,13 +36,13 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0.5</version>
+      <version>1.0.8-SNAPSHOT</version>
     </dependency>
 
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
-      <version>1.0.5</version>
+      <version>1.0.8-SNAPSHOT</version>
     </dependency>
 
   </dependencies>
