@@ -130,14 +130,14 @@
     <dependency>
       <groupId>org.apache.fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0.7</version>
+      <version>1.0.8-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <!-- be aware to adapt group-id to org.apache.fulcrum again after version 1.0.7 -->
     <dependency>
-      <groupId>org.apache.turbine</groupId>
+      <groupId>org.apache.fulcrum</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
-      <version>1.0.7</version>
+      <version>1.0.8-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
