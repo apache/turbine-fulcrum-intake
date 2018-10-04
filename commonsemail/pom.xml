@@ -38,7 +38,7 @@
   <name>Fulcrum CommonsEmail</name>
   <inceptionYear>2004</inceptionYear>
   <description>Fulcrum CommonsEmail Service</description>
-  <url>http://turbine.apache.org/fulcrum/fulcrum-jetty</url>
+  <url>http://turbine.apache.org/fulcrum/fulcrum-commonsemail</url>
 		
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/commonsemail/</connection>
@@ -75,19 +75,19 @@
     <dependency>
     	<groupId>org.apache.commons</groupId>
     	<artifactId>commons-email</artifactId>
-        <version>1.3.3</version>
+        <version>1.5</version>
     </dependency>
     <!-- testing dependencies -->
     <dependency>
       <groupId>org.apache.fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0.6</version>
+      <version>1.0.8-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.fulcrum</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
-      <version>1.0.6</version>
+      <version>1.0.8-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
