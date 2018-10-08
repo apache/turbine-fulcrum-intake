@@ -280,7 +280,7 @@ public class UnixCrypt
     {
         Random randomGenerator = new Random();
         int numSaltChars = saltChars.length;
-        String salt = "" + saltChars[Math.abs(randomGenerator.nextInt()) % numSaltChars] + saltChars[Math.abs(randomGenerator.nextInt()) % numSaltChars];
+        String salt = "" + saltChars[Math.abs(randomGenerator.nextInt() % numSaltChars)] + saltChars[Math.abs(randomGenerator.nextInt() % numSaltChars)];
         return crypt(salt, original);
     }
 

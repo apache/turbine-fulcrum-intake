@@ -25,7 +25,7 @@ import java.io.IOException;
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.logger.Log4JLogger;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerConfiguration;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;

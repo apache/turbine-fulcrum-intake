@@ -136,7 +136,7 @@ public class CommonsConfigurationCCPResolver extends
                             PropertiesConfiguration prop = new PropertiesConfiguration(confFile);
                             configuration.addConfiguration(prop);
                         }
-                        catch (org.apache.commons.configuration.ConfigurationException e)
+                        catch (org.apache.commons.configuration2.ConfigurationException e)
                         {
                             throw new ConfigurationException("Property Configuration could not be created", c, e);
                         }
@@ -170,7 +170,7 @@ public class CommonsConfigurationCCPResolver extends
                             XMLConfiguration xml = new XMLConfiguration(confFile);
                             configuration.addConfiguration(xml);
                         }
-                        catch (org.apache.commons.configuration.ConfigurationException e)
+                        catch (org.apache.commons.configuration2.ConfigurationException e)
                         {
                             throw new ConfigurationException("XML Configuration could not be created", c, e);
                         }

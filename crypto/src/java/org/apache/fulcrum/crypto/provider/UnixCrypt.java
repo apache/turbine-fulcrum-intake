@@ -96,10 +96,10 @@ public class UnixCrypt
             int numSaltChars = SALT_CHARS.length;
 
             seed = (new StringBuilder())
-                .append(SALT_CHARS[Math.abs(randomGenerator.nextInt())
-                                   % numSaltChars])
-                .append(SALT_CHARS[Math.abs(randomGenerator.nextInt())
-                                   % numSaltChars])
+                .append(SALT_CHARS[Math.abs(randomGenerator.nextInt()
+                                   % numSaltChars)])
+                .append(SALT_CHARS[Math.abs(randomGenerator.nextInt()
+                                   % numSaltChars)])
                 .toString();
         }
 

@@ -118,10 +118,19 @@ public class DefaultConfigurationService
     /**
      * @see java.lang.Object#equals(java.lang.Object)
      */
-    @Override
+	@Override
 	public boolean equals(Object obj)
     {
-        return configuration.equals(obj);
+        if (obj == configuration) {
+            return true;
+          }
+          if (obj == null) {
+            return false;
+          }
+          if (configuration.getClass() == obj.getClass()) {
+            return configuration.equals(((CompositeConfiguration)obj));
+          }
+          return false;    	
     }
 
     /**
