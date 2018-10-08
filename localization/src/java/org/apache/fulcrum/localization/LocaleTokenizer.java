@@ -28,6 +28,8 @@ import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
+import org.apache.fulcrum.localization.LocaleTokenizer.AcceptLanguage;
+
 /**
  * Parses the HTTP <code>Accept-Language</code> header as per section
  * 14.4 of RFC 2068 (HTTP 1.1 header field definitions).
@@ -58,7 +60,7 @@ public class LocaleTokenizer
     /**
      * The parsed locales.
      */
-    private ArrayList locales = new ArrayList(3);
+    private ArrayList<AcceptLanguage> locales = new ArrayList<AcceptLanguage>(3);
 
     /**
      * Parses the <code>Accept-Language</code> header.
@@ -154,7 +156,7 @@ public class LocaleTokenizer
      * Struct representing an element of the HTTP
      * <code>Accept-Language</code> header.
      */
-    protected static class AcceptLanguage implements Comparable
+    protected static class AcceptLanguage implements Comparable<Object>
     {
         /**
          * The language and country.

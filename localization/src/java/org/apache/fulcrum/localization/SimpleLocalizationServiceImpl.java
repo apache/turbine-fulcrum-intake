@@ -80,7 +80,7 @@ public class SimpleLocalizationServiceImpl
      * Bundle name keys a HashMap of the ResourceBundles in this
      * service (which is in turn keyed by Locale).
      */
-    private HashMap bundles = null;
+    private HashMap<String, HashMap<Locale, ResourceBundle>> bundles = null;
     /**
      * The list of default bundles to search.
      */
@@ -104,7 +104,7 @@ public class SimpleLocalizationServiceImpl
      */
     public SimpleLocalizationServiceImpl()
     {
-        bundles = new HashMap();
+        bundles = new HashMap<String, HashMap<Locale, ResourceBundle>>();
     }
 
     /**
@@ -283,7 +283,7 @@ public class SimpleLocalizationServiceImpl
         }
         // Find/retrieve/cache bundle.
         ResourceBundle rb = null;
-        HashMap bundlesByLocale = (HashMap) bundles.get(bundleName);
+        HashMap<?, ?> bundlesByLocale = (HashMap<?, ?>) bundles.get(bundleName);
         if (bundlesByLocale != null)
         {
             // Cache of bundles by locale for the named bundle exists.
@@ -314,7 +314,7 @@ public class SimpleLocalizationServiceImpl
         Locale locale)
         throws MissingResourceException
     {
-        HashMap bundlesByLocale = (HashMap) bundles.get(bundleName);
+        HashMap<Locale, ResourceBundle> bundlesByLocale = (HashMap<Locale, ResourceBundle>) bundles.get(bundleName);
         ResourceBundle rb =
             (bundlesByLocale == null
                 ? null
@@ -323,8 +323,8 @@ public class SimpleLocalizationServiceImpl
         {
             bundlesByLocale =
                 (bundlesByLocale == null
-                    ? new HashMap(3)
-                    : new HashMap(bundlesByLocale));
+                    ? new HashMap<Locale, ResourceBundle>(3)
+                    : new HashMap<Locale, ResourceBundle>(bundlesByLocale));
             try
             {
                 rb = ResourceBundle.getBundle(bundleName, locale);
@@ -341,7 +341,7 @@ public class SimpleLocalizationServiceImpl
             {
                 // Cache bundle.
                 bundlesByLocale.put(rb.getLocale(), rb);
-                HashMap bundlesByName = new HashMap(bundles);
+                HashMap<String, HashMap<Locale, ResourceBundle>> bundlesByName = new HashMap<String, HashMap<Locale, ResourceBundle>>(bundles);
                 bundlesByName.put(bundleName, bundlesByLocale);
                 this.bundles = bundlesByName;
             }
@@ -367,7 +367,7 @@ public class SimpleLocalizationServiceImpl
     private ResourceBundle findBundleByLocale(
         String bundleName,
         Locale locale,
-        Map bundlesByLocale)
+        Map<Locale, ResourceBundle> bundlesByLocale)
     {
         ResourceBundle rb = null;
         if (!StringUtils.isNotEmpty(locale.getCountry())
