@@ -32,7 +32,9 @@
   <inceptionYear>2001</inceptionYear>
 
   <modules>  
+    <!--
     <module>cache</module>    
+    -->
     <module>commonsemail</module>
     <module>configuration/impl</module>    
     <module>crypto</module>    
