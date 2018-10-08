@@ -57,8 +57,9 @@ public class TestComponentTest extends BaseUnitTest
         assertNotNull( testComponent.getUrnAvalonName() );
         assertNotNull( testComponent.getUrnAvalonPartition() );
 
-        Object [] temp = new Object[10];
-        System.out.println(temp.toString());
+        // Not sure what this code was for, but causing a findbugs error
+        //Object [] temp = new Object[10];
+        //System.out.println(temp.toString());
 
         try
         {

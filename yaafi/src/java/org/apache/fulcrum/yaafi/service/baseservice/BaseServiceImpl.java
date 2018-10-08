@@ -232,7 +232,10 @@ public abstract class BaseServiceImpl
      */
     protected void release(Object object)
     {
-        this.release(object);
+    	if ( object != null )
+    	{
+    		object = null;
+    	}
     }
 
     /**
