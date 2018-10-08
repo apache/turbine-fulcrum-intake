@@ -85,10 +85,13 @@ public class FileValidator
             fileData = null;
         }
 
-        String content;
+        String content = null;
         try
         {
-            content = new String(fileData, charset);
+        	if ( fileData != null )
+        	{
+        		content = new String(fileData, charset);
+        	}
         }
         catch (UnsupportedEncodingException e)
         {
