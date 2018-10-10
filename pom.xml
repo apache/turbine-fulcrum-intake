@@ -32,34 +32,44 @@
   <inceptionYear>2001</inceptionYear>
 
   <modules>  
-    <!--
-    <module>cache</module>    
-    -->
-    <module>commonsemail</module>
-    <module>configuration/impl</module>    
+
+    <!-- turbine/torque dependencies -->
+
+    <!-- FIXME: cache is broken -->
+    <!-- <module>cache</module> -->
+
     <module>crypto</module>    
     <module>factory</module>    
-    <module>localization</module>    
-    <module>hsqldb</module>    
     <module>intake</module>    
-    <module>jetty</module>    
     <module>json/api</module>   
+    <module>localization</module>    
     <module>mimetype</module>        
     <module>parser</module>    
-    <module>pbe</module>    
     <module>pool</module>    
     <module>quartz</module>        
-    <module>resourcemanager</module>    
-    <module>script</module>    
     <module>security</module>    
     <module>servicemanager</module>    
-    <module>spring</module>            
     <module>testcontainer</module>    
+    <!-- turbine-webapp archetype references fulcrum-upload -->
     <module>upload</module>        
-    <module>xmlrpc</module>        
-    <module>xslt</module>        
     <module>yaafi-crypto</module>        
     <module>yaafi</module>        
+
+    <!-- Potentially dormant modules -->
+    <!--
+        <module>commonsemail</module>
+        <module>configuration/impl</module>    
+        <module>hsqldb</module>    
+        <module>jetty</module>    
+        <module>mimetype</module>        
+        <module>pbe</module>    
+        <module>resourcemanager</module>    
+        <module>script</module>    
+        <module>spring</module>            
+        <module>xmlrpc</module>        
+        <module>xslt</module>        
+    -->
+
   </modules>
   
   <build>
@@ -69,10 +79,10 @@
             do not use it as reporting plugin, as it exposes file paths to artifacts 
             check each possible vulnerability carefully, find more info about how to read, false positives et al. here: https://jeremylong.github.io/DependencyCheck/dependency-check-maven/plugin-info.html
        -->
-      <plugin>
+        <plugin>
           <groupId>org.owasp</groupId>
           <artifactId>dependency-check-maven</artifactId>
-          <version>2.1.1</version> 
+          <version>3.3.2</version>
           <executions>
               <execution>
                   <goals>
