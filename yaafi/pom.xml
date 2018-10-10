@@ -96,7 +96,7 @@
     <dependency>
       <groupId>org.javasimon</groupId>
       <artifactId>javasimon-core</artifactId>
-      <version>4.0.1</version>
+      <version>4.1.4</version>
       <optional>true</optional>
     </dependency>
     <!-- Testing dependencies -->
