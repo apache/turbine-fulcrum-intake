@@ -65,9 +65,9 @@ public class AvalonInterceptorFactory
 
         Object result;
 
-        Class clazz = serviceDelegate.getClass();
+        Class<? extends Object> clazz = serviceDelegate.getClass();
         ClassLoader classLoader = clazz.getClassLoader();
-        List interfaceList = Clazz.getAllInterfaces(clazz);
+        List<?> interfaceList = Clazz.getAllInterfaces(clazz);
 
         // get the service interfaces to avoid look-ups
 

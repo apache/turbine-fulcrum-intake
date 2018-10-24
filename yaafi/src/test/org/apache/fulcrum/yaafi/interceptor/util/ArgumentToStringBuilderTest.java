@@ -233,7 +233,7 @@ public class ArgumentToStringBuilderTest extends TestCase
      */
     public void testArrayList()
     {
-        ArrayList target = new ArrayList();
+        ArrayList<String> target = new ArrayList<>();
         target.add("foo");
         target.add("bar");
 

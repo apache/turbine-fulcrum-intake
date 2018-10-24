@@ -48,7 +48,7 @@ public class BaseInterceptorServiceImpl
     private static final String WILDCARD = "*";
 
     /** contains the services being monitored by the interceptor */
-    private HashSet serviceSet;
+    private HashSet<String> serviceSet;
 
     /** is the interceptor service enabled */
     private boolean isEnabled;
@@ -78,7 +78,7 @@ public class BaseInterceptorServiceImpl
      */
     public BaseInterceptorServiceImpl()
     {
-        this.serviceSet = new HashSet();
+        this.serviceSet = new HashSet<String>();
     }
 
     /**
@@ -270,7 +270,7 @@ public class BaseInterceptorServiceImpl
     /**
      * @return Returns the serviceMap.
      */
-    private HashSet getServiceSet()
+    private HashSet<String> getServiceSet()
     {
         return serviceSet;
     }

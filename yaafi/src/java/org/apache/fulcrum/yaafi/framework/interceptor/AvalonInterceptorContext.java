@@ -36,7 +36,7 @@ public interface AvalonInterceptorContext
     /**
      * @return Returns the context for the given request.
      */
-    Map getRequestContext();
+    Map<String, Object> getRequestContext();
 
     /**
      * @return Returns the serviceDelegate.

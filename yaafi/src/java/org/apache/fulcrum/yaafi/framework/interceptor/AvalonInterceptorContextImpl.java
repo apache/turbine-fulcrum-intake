@@ -63,7 +63,7 @@ public class AvalonInterceptorContextImpl implements AvalonInterceptorContext
     private Object[] args;
 
     /** context information associated with the current invocation */
-    private HashMap requestContext;
+    private Map<String, Object> requestContext;
 
     /** context information associated with the current thread */
     private static ThreadLocalStorageImpl tls = new ThreadLocalStorageImpl();
@@ -97,13 +97,13 @@ public class AvalonInterceptorContextImpl implements AvalonInterceptorContext
         this.serviceDelegate = serviceDelegate;
         this.method = method;
         this.args = args;
-        this.requestContext = new HashMap();
+        this.requestContext = new HashMap<String, Object>();
     }
 
     /**
      * @return Returns the context for the given request.
      */
-    public final Map getRequestContext()
+    public final Map<String, Object> getRequestContext()
     {
         return requestContext;
     }
