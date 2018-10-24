@@ -22,7 +22,7 @@
   <parent>
     <artifactId>turbine-parent</artifactId>
        <groupId>org.apache.turbine</groupId>
-       <version>4</version>
+       <version>5</version>
   </parent>
   <artifactId>fulcrum</artifactId>
   <packaging>pom</packaging>
