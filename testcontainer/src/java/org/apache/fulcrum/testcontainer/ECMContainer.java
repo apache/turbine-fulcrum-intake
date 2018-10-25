@@ -145,10 +145,11 @@ public class ECMContainer extends AbstractLogEnabled implements Container
     {
         return this.manager.lookup(roleName);
     }
+    
     /**
      * Releases the component
      *
-     * @param component
+     * @param component instance of the component to release
      */
     public void release(Component component)
     {

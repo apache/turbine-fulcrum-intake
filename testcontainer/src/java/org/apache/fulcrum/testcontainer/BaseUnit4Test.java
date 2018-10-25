@@ -56,17 +56,17 @@ import org.mockito.stubbing.Answer;
  */
 public class BaseUnit4Test
 {
-    public static final String CONTAINER_ECM="CONTAINER_ECM";
-    public static final String CONTAINER_YAAFI="CONTAINER_YAAFI";
+    public static final String CONTAINER_ECM = "CONTAINER_ECM";
+    public static final String CONTAINER_YAAFI = "CONTAINER_YAAFI";
 
     /** Key used in the context for defining the application root */
-    public static String COMPONENT_APP_ROOT = Container.COMPONENT_APP_ROOT;
+    public static final String COMPONENT_APP_ROOT = Container.COMPONENT_APP_ROOT;
 
     /** Pick the default container to be YAAFI **/
     public static String containerType = CONTAINER_YAAFI;
 
     /** Use INFO for ConsoleLogger */
-    public static int defaultLogLevel = ConsoleLogger.LEVEL_INFO;
+    public static final int defaultLogLevel = ConsoleLogger.LEVEL_INFO;
 
     /** Container for the components */
     private Container container;
@@ -83,9 +83,17 @@ public class BaseUnit4Test
     /** Set the log level (only works for YAAFI container) */
     private int logLevel = defaultLogLevel;
 
+    /** Hash map to store attributes for the test **/
+    public Map<String,Object> attributes = new HashMap<String,Object>();
+    
+    /** set the Max inactive interval **/
+    public int maxInactiveInterval = 0;
+    
     /**
      * Gets the configuration file name for the container should use for this test. By default it
      * is src/test/TestComponentConfig.
+     * 
+     * @param configurationFileName the location of the config file
      */
     protected void setConfigurationFileName(String configurationFileName)
     {
@@ -95,6 +103,8 @@ public class BaseUnit4Test
     /**
      * Override the role file name for the container should use for this test. By default it is
      * src/test/TestRoleConfig.
+     * 
+     * @param roleFileName location of the role file
      */
     protected void setRoleFileName(String roleFileName)
     {
@@ -102,7 +112,10 @@ public class BaseUnit4Test
     }
 
     /**
-     * Set the console logger level,
+     * Set the console logger level
+     * 
+     * @see org.apache.avalon.framework.logger.ConsoleLogger for debugging levels
+     * @param logLevel set valid logging level
      */
     protected void setLogLevel(int logLevel) {
         this.logLevel = logLevel;
@@ -159,9 +172,12 @@ public class BaseUnit4Test
     }
 
     /**
-     * Returns an instance of the named component. Starts the container if it hasn't been started.
+     * Returns an instance of the named component. 
+     * This method will also start the container if it
+     * has not been started already
      *
      * @param roleName Name of the role the component fills.
+     * @return instance of the component
      * @throws ComponentException generic exception
      */
     protected Object lookup(String roleName) throws ComponentException
@@ -192,9 +208,12 @@ public class BaseUnit4Test
         }
     }
     
-    public Map<String,Object> attributes = new HashMap<String,Object>();
-    public int maxInactiveInterval = 0;
 
+    /**
+     * Get a mock requestion 
+     *
+     * @return HttpServletRequest a mock servlet request
+     */
     protected HttpServletRequest getMockRequest()
     {
         HttpServletRequest request = mock(HttpServletRequest.class);
@@ -253,13 +272,13 @@ public class BaseUnit4Test
         when(request.getPathInfo()).thenReturn("damn");
         when(request.getServletPath()).thenReturn("damn2");
         when(request.getContextPath()).thenReturn("wow");
-        when(request.getContentType()).thenReturn("html/text");
+        when(request.getContentType()).thenReturn("text/html");
 
         when(request.getCharacterEncoding()).thenReturn("US-ASCII");
         when(request.getServerPort()).thenReturn(8080);
         when(request.getLocale()).thenReturn(Locale.US);
 
-        when(request.getHeader("Content-type")).thenReturn("html/text");
+        when(request.getHeader("Content-type")).thenReturn("text/html");
         when(request.getHeader("Accept-Language")).thenReturn("en-US");
 
         Vector<String> v = new Vector<String>();

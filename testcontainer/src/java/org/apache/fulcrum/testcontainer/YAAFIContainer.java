@@ -157,7 +157,7 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
      * Releases the component implementing the Component interface. This
      * interface is deprecated but still around in Fulcrum
      *
-     * @param component
+     * @param component instance of the component to release
      */
     public void release(Component component)
     {

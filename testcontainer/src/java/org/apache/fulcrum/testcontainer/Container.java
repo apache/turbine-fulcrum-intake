@@ -26,7 +26,7 @@ import org.apache.avalon.framework.component.ComponentException;
 /**
  * This is a simple interface around the ECM and Yaafi containers
  *
- * @author <a href="mailto:epugh at opensourceconnections.com">Eric Pugh</a>
+ * @author <a href="mailto:epugh@opensourceconnections.com">Eric Pugh</a>
  */
 public interface Container extends Initializable, Disposable
 {

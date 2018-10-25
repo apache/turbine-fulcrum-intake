@@ -41,28 +41,33 @@ public class BaseUnitTest extends TestCase
     public static final String CONTAINER_YAAFI="CONTAINER_YAAFI";
 
     /** Key used in the context for defining the application root */
-    public static String COMPONENT_APP_ROOT = Container.COMPONENT_APP_ROOT;
+    public static final String COMPONENT_APP_ROOT = Container.COMPONENT_APP_ROOT;
 
     /** Pick the default container to be Yaafi **/
-    public static String containerType = CONTAINER_YAAFI;
+    public static final String containerType = CONTAINER_YAAFI;
 
     /** Use INFO for ConsoleLogger */
-    public static int defaultLogLevel = ConsoleLogger.LEVEL_INFO;
+    public static final int defaultLogLevel = ConsoleLogger.LEVEL_INFO;
 
     /** Container for the components */
     private Container container;
+    
     /** Setup our default configurationFileName */
     private String configurationFileName = "src/test/TestComponentConfig.xml";
+    
     /** Setup our default roleFileName */
     private String roleFileName = "src/test/TestRoleConfig.xml";
+    
     /** Setup our default parameterFileName */
     private String parameterFileName = null;
+    
     /** Set the log level (only works for YAAFI container) */
     private int logLevel = defaultLogLevel;
 
     /**
 	 * Gets the configuration file name for the container should use for this test. By default it
 	 * is src/test/TestComponentConfig.
+	 * @param configurationFileName the location of the config file
 	 */
     protected void setConfigurationFileName(String configurationFileName)
     {
@@ -72,6 +77,8 @@ public class BaseUnitTest extends TestCase
     /**
 	 * Override the role file name for the container should use for this test. By default it is
 	 * src/test/TestRoleConfig.
+	 * 
+	 * @param roleFileName location of the role file
 	 */
     protected void setRoleFileName(String roleFileName)
     {
@@ -79,7 +86,10 @@ public class BaseUnitTest extends TestCase
     }
 
     /**
-     * Set the console logger level,
+     * Set the console logger level
+     * 
+     * @see org.apache.avalon.framework.logger.ConsoleLogger for debugging levels
+     * @param logLevel set valid logging level
      */
     protected void setLogLevel(int logLevel) {
         this.logLevel = logLevel;
@@ -138,10 +148,13 @@ public class BaseUnitTest extends TestCase
     }
 
     /**
-	 * Returns an instance of the named component. Starts the container if it hasn't been started.
-	 *
-	 * @param roleName Name of the role the component fills.
-	 * @throws ComponentException generic exception
+     * Returns an instance of the named component. 
+     * This method will also start the container if it
+     * has not been started already
+     *
+     * @param roleName Name of the role the component fills.
+     * @return instance of the component
+     * @throws ComponentException generic exception
 	 */
     protected Object lookup(String roleName) throws ComponentException
     {
@@ -160,6 +173,10 @@ public class BaseUnitTest extends TestCase
 
     /**
      * Helper method for converting to and from Merlin Unit TestCase.
+     * 
+     * @param roleName the role name to resolve
+     * @return the component matching the role
+     * @throws ComponentException generic exception
      */
     protected Object resolve(String roleName) throws ComponentException
     {
