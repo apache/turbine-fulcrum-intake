@@ -24,7 +24,6 @@
   <version position="left" />
   <publishDate format="dd MMM yyyy"/>
   <body>
-    <head></head>
     <menu name="Overview">
       <item name="Main"                           href="/index.html"/>
       <item name="Downloads"                      href="/downloads.html"/>
@@ -64,6 +63,5 @@
       <item name="Design Considerations"          href="/design.html"/>
       <item name="Todo's"                         href="/todo.html"/>
     </menu>  
-  ${reports}
   </body>            
 </project>

@@ -52,16 +52,18 @@ public abstract class ComponentConfigurationPropertiesResolverBaseImpl
     /** the container configuration */
     private Configuration configuration;
 
-    /*
+    /**
      * @see org.apache.avalon.framework.logger.LogEnabled#enableLogging(org.apache.avalon.framework.logger.Logger)
+     * @param logger the logger instance 
      */
     public void enableLogging(Logger logger)
     {
         this.logger = logger;
     }
 
-    /*
+    /**
      * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
+     * @param context the Context to add
      */
     public void contextualize(Context context) throws ContextException
     {
@@ -70,6 +72,7 @@ public abstract class ComponentConfigurationPropertiesResolverBaseImpl
 
     /**
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
+     * @param configuration the configuration object to use
      */
     public void configure(Configuration configuration) throws ConfigurationException
     {
@@ -126,6 +129,8 @@ public abstract class ComponentConfigurationPropertiesResolverBaseImpl
     /**
      * Creates an InputStream using a Locator.
      * @return the InputStrem or null if the resource was not found
+     * @param location the location of the file
+     * @throws IOException if file not found
      */
     protected InputStream createInputStream(String location) throws IOException
     {
@@ -135,6 +140,7 @@ public abstract class ComponentConfigurationPropertiesResolverBaseImpl
 
     /**
      * Add the Avalon context variables.
+     * @param properties properties to be set
      */
     protected void addAvalonContext(Properties properties) throws ContextException
     {
@@ -159,10 +165,15 @@ public abstract class ComponentConfigurationPropertiesResolverBaseImpl
             );
     }
 
-    protected Properties loadProperties(String location) throws Exception
+    
+    /**
+     * Set properties from a file location
+     * @param fileLocation file location of properties properties to be set
+     */
+    protected Properties loadProperties(String fileLocation) throws Exception
     {
         Properties result = new Properties();
-        InputStream is = this.createInputStream(location);
+        InputStream is = this.createInputStream(fileLocation);
 
         try
         {
@@ -174,14 +185,14 @@ public abstract class ComponentConfigurationPropertiesResolverBaseImpl
             }
             else
             {
-                this.getLogger().debug("Unable to load the following optional file :" + location);
+                this.getLogger().debug("Unable to load the following optional file :" + fileLocation);
             }
 
             return result;
         }
         catch ( Exception e )
         {
-            String msg = "Unable to parse the following file : " + location;
+            String msg = "Unable to parse the following file : " + fileLocation;
             this.getLogger().error( msg , e );
             throw e;
         }

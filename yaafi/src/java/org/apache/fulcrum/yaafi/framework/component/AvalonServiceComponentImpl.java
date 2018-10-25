@@ -252,7 +252,7 @@ public class AvalonServiceComponentImpl
 
     /**
      * @see org.apache.avalon.framework.logger.LogEnabled#enableLogging(org.apache.avalon.framework.logger.Logger)
-     * @param logger
+     * @param logger logger to enable
      */
     public void enableLogging(Logger logger)
     {
@@ -276,6 +276,8 @@ public class AvalonServiceComponentImpl
 
     /**
      * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
+     * @param context the context to add to this service
+     * @throws ContextException
      */
     public void contextualize(Context context) throws ContextException
     {
@@ -305,8 +307,8 @@ public class AvalonServiceComponentImpl
 
    /**
     * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
-    * @param serviceManager
-    * @throws ServiceException
+    * @param serviceManager instance of the service manager to work with
+    * @throws ServiceException throws exception if service failed for any reason
     */
     public void service(ServiceManager serviceManager) throws ServiceException
     {

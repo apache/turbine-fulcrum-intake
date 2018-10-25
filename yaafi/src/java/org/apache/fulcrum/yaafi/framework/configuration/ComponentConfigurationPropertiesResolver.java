@@ -39,6 +39,7 @@ public interface ComponentConfigurationPropertiesResolver
      *
      * @param defaults the default properties
      * @return the custom properties
+     * @throws Exception throws an exception if failed to resolve
      */
     Properties resolve(Properties defaults) throws Exception;
 }

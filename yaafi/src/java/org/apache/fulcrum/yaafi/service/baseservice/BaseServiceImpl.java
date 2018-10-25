@@ -204,6 +204,8 @@ public abstract class BaseServiceImpl
 
     /**
      * @see org.apache.avalon.framework.service.ServiceManager#hasService(java.lang.String)
+     * @param key name of the service to test for
+     * @return boolean indicator if the service exists
      */
     protected boolean hasService(String key)
     {
@@ -212,6 +214,8 @@ public abstract class BaseServiceImpl
 
     /**
      * @see org.apache.avalon.framework.service.ServiceManager#lookup(java.lang.String)
+     * @param key name of service to lookup from the service manager
+     * @return reference to the service
      */
     protected Object lookup(String key)
     {
@@ -228,6 +232,7 @@ public abstract class BaseServiceImpl
     }
 
     /**
+     * @param object service to release
      * @see org.apache.avalon.framework.service.ServiceManager#release(java.lang.Object)
      */
     protected void release(Object object)

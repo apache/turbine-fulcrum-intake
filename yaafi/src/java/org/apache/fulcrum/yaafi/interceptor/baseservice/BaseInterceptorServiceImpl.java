@@ -32,7 +32,7 @@ import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorContext;
 import org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorService;
-import org.apache.fulcrum.yaafi.framework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * A base service providing common functionality for interceptors

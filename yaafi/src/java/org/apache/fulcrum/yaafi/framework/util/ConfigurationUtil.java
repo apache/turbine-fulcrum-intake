@@ -107,10 +107,94 @@ public class ConfigurationUtil
     }
 
     /**
-     * @return the expand a string
+     * Perform a series of substitutions. The substitutions
+     * are performed by replacing ${variable} in the target
+     * string with the value of provided by the key "variable"
+     * in the provided hashtable.
+     *
+     * The unexpanded ${variable} is always written to 
+     * the string buffer. 
+     *
+     * @param argStr target string
+     * @param vars name/value pairs used for substitution
+     * @return String target string with replacements.
      */
-    private static String expand(String value, Map vars)
+    private static String expand(String argStr, Map vars)
     {
-        return StringUtils.stringSubstitution(value, vars, true).toString();
+    	// ignore failures
+    	boolean isLenient = true;
+    	
+    	StringBuilder argBuf = new StringBuilder();
+        int argStrLength = argStr.length();
+
+        for (int cIdx = 0 ; cIdx < argStrLength;)
+        {
+            char ch = argStr.charAt(cIdx);
+            char del = ' ';
+
+            switch (ch)
+            {
+                case '$':
+                    StringBuilder nameBuf = new StringBuilder();
+                    del = argStr.charAt(cIdx+1);
+                    if( del == '{')
+                    {
+                        cIdx++;
+
+                        for (++cIdx ; cIdx < argStr.length(); ++cIdx)
+                        {
+                            ch = argStr.charAt(cIdx);
+                            if (ch != '}')
+                                nameBuf.append(ch);
+                            else
+                                break;
+                        }
+
+                        if (nameBuf.length() > 0)
+                        {
+                            Object value = vars.get(nameBuf.toString());
+
+                            if (value != null)
+                            {
+                                argBuf.append(value.toString());
+                            }
+                            else
+                            {
+                                if (!isLenient)
+                                {
+                                    throw new RuntimeException("No value found for : " + nameBuf );
+                                }
+                                else
+                                {
+                                    argBuf.append("${").append(nameBuf).append("}");
+                                }
+                            }
+
+                            del = argStr.charAt(cIdx);
+
+                            if( del != '}')
+                            {
+                                throw new RuntimeException("Delimineter not found for : " + nameBuf );
+                            }
+                        }
+
+                        cIdx++;
+                    }
+                    else
+                    {
+                        argBuf.append(ch);
+                        ++cIdx;
+                    }
+
+                    break;
+
+                default:
+                    argBuf.append(ch);
+                    ++cIdx;
+                    break;
+            }
+        }
+
+        return argBuf.toString();    	
     }
 }

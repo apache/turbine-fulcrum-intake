@@ -180,6 +180,8 @@ public class ShutdownEntry
 
     /**
      * Creates an InputStream
+     * @return InputStream of the location
+     * @throws IOException
      */
     public InputStream locate() throws IOException
     {
@@ -188,6 +190,8 @@ public class ShutdownEntry
 
     /**
      * Creates a message digest
+     * @param is Input stream
+     * @return byte array of the input stream
      */
     private byte[] getDigest( InputStream is )
         throws Exception

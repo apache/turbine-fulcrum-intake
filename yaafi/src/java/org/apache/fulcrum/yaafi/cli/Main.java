@@ -106,7 +106,11 @@ public class Main implements Runnable, Disposable
         this.applicationHome        = ".";
         this.tempHome               = System.getProperty("java.io.tmpdir",".");
         this.applicationName        = "main";
-        this.args                   = ( this.args != null ? this.args : new String[0] );
+        
+        // Arguments are specified in the constructor, but if 
+        // null, set to an empty string array
+        if ( this.args == null ) { this.args = new String[0]; }
+
         this.isBlocking             = false;
         this.hasShutdownHook        = true;
         this.isInitialized          = false;

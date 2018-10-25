@@ -271,6 +271,7 @@ public class PerformanceInterceptorServiceImpl
     /**
      * Prints the argument list.
      *
+     * @param args array of arguments
      * @return the debug output
      */
     protected String toString( Object[] args )

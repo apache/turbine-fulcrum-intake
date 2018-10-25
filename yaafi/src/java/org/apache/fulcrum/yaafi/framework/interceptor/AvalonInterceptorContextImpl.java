@@ -91,7 +91,7 @@ public class AvalonInterceptorContextImpl implements AvalonInterceptorContext
         Validate.notNull(serviceDelegate,"serviceDelegate");
         Validate.notNull(method,"method");
 
-        this.invocationId = new Long(++AvalonInterceptorContextImpl.invocationCounter);
+        this.invocationId = Long.valueOf(++AvalonInterceptorContextImpl.invocationCounter);
         this.serviceName = serviceName;
         this.serviceShorthand = serviceShorthand;
         this.serviceDelegate = serviceDelegate;
@@ -199,11 +199,11 @@ public class AvalonInterceptorContextImpl implements AvalonInterceptorContext
         if( invocationDepth != null )
         {
             int currInvocationDepth = invocationDepth.intValue();
-            this.getThreadContext().put(INVOCATIONDEPTH_KEY, new Integer(++currInvocationDepth));
+            this.getThreadContext().put(INVOCATIONDEPTH_KEY, Integer.valueOf(++currInvocationDepth));
         }
         else
         {
-            this.getThreadContext().put(INVOCATIONDEPTH_KEY, new Integer(0));
+            this.getThreadContext().put(INVOCATIONDEPTH_KEY, Integer.valueOf(0));
         }
     }
 
@@ -217,7 +217,7 @@ public class AvalonInterceptorContextImpl implements AvalonInterceptorContext
         if( invocationDepth != null )
         {
             int currInvocationDepth = invocationDepth.intValue();
-            this.getThreadContext().put(INVOCATIONDEPTH_KEY, new Integer(--currInvocationDepth));
+            this.getThreadContext().put(INVOCATIONDEPTH_KEY, Integer.valueOf(--currInvocationDepth));
         }
     }
 

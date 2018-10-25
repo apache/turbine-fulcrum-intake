@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Iterator;
 
-import org.apache.fulcrum.yaafi.framework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Creates a string representation of method argument.
@@ -50,7 +50,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
     private static final int MAX_LINE_LENGTH = 2000;
 
     /** seperator for the arguments in the logfile */
-    private static final char SEPERATOR = ';';
+    private static final String SEPERATOR = ";";
 
     /** the output for a NULL value **/
     private static final String NULL_STRING = "<null>";
@@ -621,6 +621,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
      * Create a string representation of a String.
      *
      * @param string the string to print
+     * @return the result
      */
     protected String toString(String string)
     {
@@ -991,39 +992,33 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
      * away excessive fluff.
      *
      * @param source the source string
+     * @return formatted string
      */
     protected String format( String source )
     {
         boolean isTruncated = false;
+
+        // test for null or empty string
+        if ( StringUtils.isEmpty(source) )
+        	return "";
+
+        // remove the line breaks and tabs for logging output and replace
+        StringUtils.replace(source,  "\r",  " ");
+        StringUtils.replace(source,  "\n",  " ");
+        StringUtils.replace(source,  "\t",  " ");
+        StringUtils.replace(source,  SEPERATOR,  " ");
+
+        // Build the output
         StringBuilder stringBuilder = new StringBuilder(source);
 
         // trim the string to avoid dumping tons of data
-
         if( stringBuilder.length() > this.getMaxArgLength() )
         {
             stringBuilder.delete(this.getMaxArgLength()-1, stringBuilder.length());
             isTruncated = true;
         }
-
-        // remove the line breaks and tabs for logging output and replace
-
-        for( int i=0; i<stringBuilder.length(); i++ )
-        {
-            if( ( stringBuilder.charAt(i) == '\r' ) ||
-                ( stringBuilder.charAt(i) == '\n' ) ||
-                ( stringBuilder.charAt(i) == '\t' )  )
-            {
-                stringBuilder.setCharAt(i,' ');
-            }
-
-            if( ( stringBuilder.charAt(i) == SEPERATOR ) )
-            {
-                stringBuilder.setCharAt(i,' ');
-            }
-        }
-
+        
         // show the user that we truncated the ouptut
-
         if( isTruncated )
         {
             if (source.endsWith("]"))
@@ -1035,7 +1030,6 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
                 stringBuilder.append(" ...");
             }
         }
-
         return stringBuilder.toString();
     }
 }

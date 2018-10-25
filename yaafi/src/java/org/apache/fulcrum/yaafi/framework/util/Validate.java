@@ -29,7 +29,7 @@ import java.util.Map;
  * deemed invalid, an IllegalArgumentException is thrown. For example:</p>
  *
  * <pre>
- * Validate.isTrue( i > 0, "The value must be greater than zero: ", i);
+ * Validate.isTrue( i &gt; 0, "The value must be greater than zero: ", i);
  * Validate.notNull( surname, "The surname must not be null");
  * </pre>
  *
@@ -93,7 +93,7 @@ public class Validate
      * expression.</p>
      *
      * <pre>
-     * Validate.isTrue( i > 0, "The value must be greater than zero: ", i);
+     * Validate.isTrue( i &gt; 0, "The value must be greater than zero: ", i);
      * </pre>
      *
      * <p>For performance reasons, the long value is passed as a separate parameter and
@@ -121,7 +121,7 @@ public class Validate
      * expression.</p>
      *
      * <pre>
-     * Validate.isTrue( d > 0.0, "The value must be greater than zero: ", d);
+     * Validate.isTrue( d &gt; 0.0, "The value must be greater than zero: ", d);
      * </pre>
      *
      * <p>For performance reasons, the double value is passed as a separate parameter and
@@ -150,7 +150,7 @@ public class Validate
      * expression.</p>
      *
      * <pre>
-     * Validate.isTrue( (i > 0), "The value must be greater than zero");
+     * Validate.isTrue( (i &gt; 0), "The value must be greater than zero");
      * Validate.isTrue( myObject.isOk(), "The object is not OK");
      * </pre>
      *

@@ -40,9 +40,9 @@ package org.apache.fulcrum.yaafi.interceptor.util;
  * Thus you cannot now call stop before start, resume before suspend or
  * unsplit before split.</p>
  *
- * <p>1. split(), suspend(), or stop() cannot be invoked twice<br />
- * 2. unsplit() may only be called if the watch has been split()<br />
- * 3. resume() may only be called if the watch has been suspend()<br />
+ * <p>1. split(), suspend(), or stop() cannot be invoked twice <br>
+ * 2. unsplit() may only be called if the watch has been split()<br>
+ * 3. resume() may only be called if the watch has been suspend()<br>
  * 4. start() cannot be called twice without calling reset()</p>
  *
  * @author Henri Yandell

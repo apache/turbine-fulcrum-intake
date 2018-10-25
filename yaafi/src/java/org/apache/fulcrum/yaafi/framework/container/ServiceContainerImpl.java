@@ -52,9 +52,11 @@ import org.apache.fulcrum.yaafi.framework.role.RoleConfigurationParserImpl;
 import org.apache.fulcrum.yaafi.framework.role.RoleEntry;
 import org.apache.fulcrum.yaafi.framework.util.ConfigurationUtil;
 import org.apache.fulcrum.yaafi.framework.util.InputStreamLocator;
-import org.apache.fulcrum.yaafi.framework.util.StringUtils;
 import org.apache.fulcrum.yaafi.framework.util.ToStringBuilder;
 import org.apache.fulcrum.yaafi.framework.util.Validate;
+
+import org.apache.commons.lang3.StringUtils;
+
 
 /**
  * Yet another avalon framework implementation (YAAFI).
@@ -837,7 +839,6 @@ public class ServiceContainerImpl
     public String toString()
     {
         ToStringBuilder toStringBuilder = new ToStringBuilder(this);
-
         toStringBuilder.append("applicationRootDir", this.getApplicationRootDir());
         toStringBuilder.append("tempRootDir", this.getTempRootDir());
         toStringBuilder.append("componentRolesLocation", this.componentRolesLocation);

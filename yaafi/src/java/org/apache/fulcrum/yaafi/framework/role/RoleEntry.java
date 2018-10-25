@@ -22,7 +22,7 @@ package org.apache.fulcrum.yaafi.framework.role;
 import java.util.Collection;
 
 /**
- * Contains the data of a <role> element.
+ * Contains the data of a role element.
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
