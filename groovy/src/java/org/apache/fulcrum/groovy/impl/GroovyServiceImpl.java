@@ -35,8 +35,8 @@ import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
-import org.apache.commons.lang.Validate;
-import org.apache.commons.lang.exception.NestableRuntimeException;
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.exception.ContextedRuntimeException;
 import org.apache.fulcrum.groovy.GroovyRunnable;
 import org.apache.fulcrum.groovy.GroovyService;
 import org.apache.fulcrum.resourcemanager.ResourceManagerService;
@@ -284,7 +284,7 @@ public class GroovyServiceImpl
         }
         catch (ServiceException e)
         {
-            throw new NestableRuntimeException( e );
+            throw new ContextedRuntimeException( e );
         }
     }
 
@@ -389,7 +389,7 @@ public class GroovyServiceImpl
         {
             String msg= "Execution of the script failed : " + scriptName;
             this.getLogger().error( msg, e );
-            throw new NestableRuntimeException( msg ,e );
+            throw new ContextedRuntimeException( msg ,e );
         }
         finally
         {
@@ -426,7 +426,7 @@ public class GroovyServiceImpl
         {
             String msg= "Execution of the script failed : " + scriptName;
             this.getLogger().error( msg, e );
-            throw new NestableRuntimeException( msg ,e );
+            throw new ContextedRuntimeException( msg ,e );
         }
     }
 
@@ -474,7 +474,7 @@ public class GroovyServiceImpl
         {
             String msg = "Parsing the script failed : " + scriptName;
             this.getLogger().error( msg, e );
-            throw new NestableRuntimeException( msg ,e );
+            throw new ContextedRuntimeException( msg ,e );
         }
     }
 

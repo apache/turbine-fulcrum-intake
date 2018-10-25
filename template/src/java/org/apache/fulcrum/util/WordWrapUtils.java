@@ -22,7 +22,7 @@ package org.apache.fulcrum.util;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 /**
  * <code>WordWrapUtils</code> is a utility class to assist with word wrapping.
  *

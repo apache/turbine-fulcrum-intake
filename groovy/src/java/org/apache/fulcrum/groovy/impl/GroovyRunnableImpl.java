@@ -19,7 +19,7 @@ package org.apache.fulcrum.groovy.impl;
  * under the License.
  */
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.apache.fulcrum.groovy.GroovyRunnable;
 import org.apache.fulcrum.groovy.GroovyService;
 
