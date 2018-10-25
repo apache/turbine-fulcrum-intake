@@ -56,19 +56,16 @@
     <module>yaafi</module>        
 
     <!-- Potentially dormant modules -->
-    <!--
-        <module>commonsemail</module>
-        <module>configuration/impl</module>    
-        <module>hsqldb</module>    
-        <module>jetty</module>    
-        <module>mimetype</module>        
-        <module>pbe</module>    
-        <module>resourcemanager</module>    
-        <module>script</module>    
-        <module>spring</module>            
-        <module>xmlrpc</module>        
-        <module>xslt</module>        
-    -->
+    <module>commonsemail</module>
+    <module>configuration/impl</module>    
+    <module>hsqldb</module>    
+    <module>jetty</module>    
+    <module>pbe</module>    
+    <module>resourcemanager</module>    
+    <module>script</module>    
+    <module>spring</module>            
+    <module>xmlrpc</module>        
+    <module>xslt</module>        
 
   </modules>
   
