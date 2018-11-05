@@ -102,7 +102,7 @@ public interface LocalizationService extends SimpleLocalizationService
      * Parses the <code>Accept-Language</code> header and attempts to
      * create a <code>Locale</code> from it.
      *
-     * @param header The language header (i.e. <code>en, es;q=0.8,
+     * @param languageHeader The language header (i.e. <code>en, es;q=0.8,
      * zh-TW;q=0.1</code>), or <code>null</code> for the locale
      * corresponding to the default language and country.
      * @return The parsed locale, or a locale corresponding to the

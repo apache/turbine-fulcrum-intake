@@ -33,13 +33,15 @@ import org.apache.commons.lang3.StringUtils;
  *
  * <p>Usage example:</p>
  *
- * <blockquote><code><pre>
+ * <pre>
+ * <code>
  * LocalizationService ls = (LocalizationService) TurbineServices
  *     .getInstance().getService(LocalizationService.SERVICE_NAME);
- * </pre></code></blockquote>
+ * </code>
+ * </pre>
  *
  * <p>Then call {@link #getString(String, Locale, String)}, or one of
- * four methods to retrieve a ResourceBundle:
+ * four methods to retrieve a ResourceBundle:</p>
  *
  * <ul>
  * <li>getBundle("MyBundleName")</li>
@@ -47,7 +49,7 @@ import org.apache.commons.lang3.StringUtils;
  * <li>etBundle("MyBundleName", HttpServletRequest)</li>
  * <li>getBundle("MyBundleName", Locale)</li>
  * <li>etc.</li>
- * </ul></p>
+ * </ul>
  *
  * @author <a href="mailto:jm@mediaphil.de">Jonas Maurus</a>
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
@@ -57,8 +59,8 @@ import org.apache.commons.lang3.StringUtils;
  * @author <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
- * @avalon.component name="localization" lifestyle="singleton"
- * @avalon.service type="org.apache.fulcrum.localization.LocalizationService"
+ * avalon.component name="localization" lifestyle="singleton"
+ * avalon.service type="org.apache.fulcrum.localization.LocalizationService"
  */
 public class DefaultLocalizationService
     extends SimpleLocalizationServiceImpl

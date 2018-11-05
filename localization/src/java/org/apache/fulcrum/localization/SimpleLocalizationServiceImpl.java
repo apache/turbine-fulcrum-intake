@@ -40,19 +40,21 @@ import org.apache.commons.lang3.StringUtils;
  *
  * <p>Usage example:</p>
  *
- * <blockquote><code><pre>
+ * <pre>
+ * <code>
  * SimpleLocalizationService ls = (SimpleLocalizationService) TurbineServices
  *     .getInstance().getService(SimpleLocalizationService.SERVICE_NAME);
- * </pre></code></blockquote>
+ * </code>
+ * </pre>
  *
  * <p>Then call {@link #getString(String, Locale, String)}, or one of
- * two methods to retrieve a ResourceBundle:
+ * two methods to retrieve a ResourceBundle:</p>
  *
  * <ul>
  * <li>getBundle("MyBundleName")</li>
  * <li>getBundle("MyBundleName", Locale)</li>
  * <li>etc.</li>
- * </ul></p>
+ * </ul>
  *
  * @author <a href="mailto:jm@mediaphil.de">Jonas Maurus</a>
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
@@ -62,8 +64,9 @@ import org.apache.commons.lang3.StringUtils;
  * @author <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id: DefaultLocalizationService.java 535465 2007-05-05 06:58:06Z tv $
- * @avalon.component name="localization" lifestyle="singleton"
- * @avalon.service type="org.apache.fulcrum.localization.SimpleLocalizationService"
+ * 
+ * avalon.component name="localization" lifestyle="singleton"
+ * avalon.service type="org.apache.fulcrum.localization.SimpleLocalizationService"
  */
 public class SimpleLocalizationServiceImpl
     extends AbstractLogEnabled
@@ -110,7 +113,10 @@ public class SimpleLocalizationServiceImpl
     /**
      * Avalon lifecycle method
      * 
-     * @see {@link Configurable}
+     * {@link org.apache.avalon.framework.configuration.Configurable}
+     * 
+     * @param conf the configuration
+     * @throws ConfigurationException if failed to configure
      */
     @Override
 	public void configure(Configuration conf) throws ConfigurationException
@@ -149,6 +155,8 @@ public class SimpleLocalizationServiceImpl
     
     /**
      * Called the first time the Service is used.
+     * 
+     * @throws Exception generic exception
      */
     @Override
 	public void initialize() throws Exception
@@ -164,7 +172,7 @@ public class SimpleLocalizationServiceImpl
     /**
      * Initialize list of default bundle names.
      *
-     * @param ignored names Ignored.
+     * @param intBundleNames set bundle names
      */
     protected void initBundleNames(String[] intBundleNames)
     {
@@ -199,6 +207,8 @@ public class SimpleLocalizationServiceImpl
     
     /**
      * Retrieves the default language (specified in the config file).
+     * 
+     * @return the default language
      */
     @Override
 	public String getDefaultLanguage()
@@ -208,6 +218,8 @@ public class SimpleLocalizationServiceImpl
     
     /**
      * Retrieves the default country (specified in the config file).
+     * 
+     * @return the default country
      */
     @Override
 	public String getDefaultCountry()
@@ -218,6 +230,8 @@ public class SimpleLocalizationServiceImpl
     /**
      * Retrieves the default Locale (as created from default
      * language and default country).
+     * 
+     * @return the default locale
      */
     @Override
 	public Locale getDefaultLocale()
@@ -226,7 +240,9 @@ public class SimpleLocalizationServiceImpl
     }
 
     /**
-     * @see org.apache.fulcrum.localization.SimpleLocalizationService#getDefaultBundleName()
+     * {@link org.apache.fulcrum.localization.SimpleLocalizationService#getDefaultBundleName()}
+     * 
+     * @return the default bundle name
      */
     @Override
 	public String getDefaultBundleName()
@@ -235,7 +251,9 @@ public class SimpleLocalizationServiceImpl
     }
     
     /**
-     * @see org.apache.fulcrum.localization.SimpleLocalizationService#getBundleNames()
+     * {@link org.apache.fulcrum.localization.SimpleLocalizationService#getBundleNames()}
+     * 
+     * @return list of bundle names available
      */
     @Override
 	public String[] getBundleNames()
@@ -244,7 +262,9 @@ public class SimpleLocalizationServiceImpl
     }
     
     /**
-     * @see org.apache.fulcrum.localization.SimpleLocalizationService#getBundle()
+     * {@link org.apache.fulcrum.localization.SimpleLocalizationService#getBundle()}
+     * 
+     * @return the default resource bundle
      */
     @Override
 	public ResourceBundle getBundle()
@@ -253,7 +273,10 @@ public class SimpleLocalizationServiceImpl
     }
     
     /**
-     * @see org.apache.fulcrum.localization.SimpleLocalizationService#getBundle(String)
+     * {@link org.apache.fulcrum.localization.SimpleLocalizationService#getBundle(String)}
+     * 
+     * @param bundleName the name of a bundle
+     * @return the resource bundle
      */
     @Override
 	public ResourceBundle getBundle(String bundleName)
@@ -307,7 +330,12 @@ public class SimpleLocalizationServiceImpl
      * relatively expensive in terms of memory use, but is optimized
      * for run-time speed in the usual case.
      *
-     * @exception MissingResourceException Bundle not found.
+     * @param bundleName Name of bundle (or <code>null</code> for the
+     * default bundle).
+     * @param locale The locale (or <code>null</code> for the locale
+     * indicated by the default language and country).
+     * @throws MissingResourceException Bundle not found.
+     * @return a localized resource bundle
      */
     private synchronized ResourceBundle cacheBundle(
         String bundleName,
@@ -363,6 +391,14 @@ public class SimpleLocalizationServiceImpl
      *
      * <p>Since we're really just guessing at possible bundles to use,
      * we don't ever throw <code>MissingResourceException</code>.</p>
+     * 
+     * @param bundleName Name of bundle (or <code>null</code> for the
+     * default bundle).
+     * @param locale The locale (or <code>null</code> for the locale
+     * indicated by the default language and country).
+     * @param bundleByLocale map of locales and resource bundles
+     * @return a localized resource bundle
+     * 
      */
     private ResourceBundle findBundleByLocale(
         String bundleName,
@@ -410,6 +446,11 @@ public class SimpleLocalizationServiceImpl
      * <code>ResourceBundle.getBundle(String, Locale)</code> method,
      * returning <code>null</code> instead of throwing
      * <code>MissingResourceException</code>.
+     * 
+     * @param bundleName Name of bundle (or <code>null</code> for the
+     * default bundle).
+     * @param locale The locale (or <code>null</code> for the locale
+     * indicated by the default language and country).
      */
     private final ResourceBundle getBundleIgnoreException(
         String bundleName,
@@ -451,8 +492,9 @@ public class SimpleLocalizationServiceImpl
     }
     
     /**
-     * @exception MissingResourceException Specified key cannot be matched.
-     * @see org.apache.fulcrum.localization.SimpleLocalizationService#getString(String, Locale, String)
+     * 
+     * {@link org.apache.fulcrum.localization.SimpleLocalizationService#getString(String, Locale, String)}
+     * @throws MissingResourceException Specified key cannot be matched.
      */
     @Override
 	public String getString(String bundleName, Locale locale, String key)
@@ -523,6 +565,10 @@ public class SimpleLocalizationServiceImpl
      * Gets localized text from a bundle if it's there.  Otherwise,
      * returns <code>null</code> (ignoring a possible
      * <code>MissingResourceException</code>).
+     * 
+     * @param rb resource bundle 
+     * @param key The key to retrieve the value for.
+     * @return name of resource
      */
     protected final String getStringOrNull(ResourceBundle rb, String key)
     {
@@ -541,7 +587,11 @@ public class SimpleLocalizationServiceImpl
     }
     
     /**
-     * @see org.apache.fulcrum.localization.SimpleLocalizationService#format(String, Locale, String, Object)
+     * {@link org.apache.fulcrum.localization.SimpleLocalizationService#format(String, Locale, String, Object)}
+     * @param bundleName the bundle name
+     * @param locale locale
+     * @param key key to lookup
+     * @param arg1 bundle arguments
      */
     @Override
 	public String format(
@@ -554,7 +604,7 @@ public class SimpleLocalizationServiceImpl
     }
     
     /**
-     * @see org.apache.fulcrum.localization.SimpleLocalizationService#format(String, Locale, String, Object, Object)
+     * {@link org.apache.fulcrum.localization.SimpleLocalizationService#format(String, Locale, String, Object, Object)}
      */
     @Override
 	public String format(

@@ -42,6 +42,11 @@ public class LocalizationTest extends BaseUnitTest
         super( name );
     }
 
+    /**
+     * Perform test setup
+     * 
+     * @throws Exception generic exception
+     */
     public void setUp() throws Exception
     {
         super.setUp();
@@ -54,10 +59,20 @@ public class LocalizationTest extends BaseUnitTest
             fail(e.getMessage());
         }
     }
+    
+    
+    /**
+     * Test init
+     */
     public void testInitialization()
     {
         assertTrue(true);
     }
+    
+    /**
+     * Test localization
+     * @throws Exception generic exception
+     */
     public void testLocalization() throws Exception
     {
         // Test retrieval of text using multiple default bundles
@@ -118,11 +133,12 @@ public class LocalizationTest extends BaseUnitTest
     /**
      * Putting this in a seperate testcase because it fails..  Why?  I don't know.  I have never
      * used localization, so I leave it to brains better then mine. -dep
-     * @todo Figure out why this test fails.
-     * @throws Exception
+     * 
+     * @throws Exception generic exception
      */
     public void OFFtestRetrievingOddLocale() throws Exception
     {
+    	// TODO Figure out why this test fails!
         String s = ls.getString(null, new Locale("fr", "US"), "key3");
         assertEquals("Unable to retrieve localized text for locale: fr", "[fr] value3", s);
     }

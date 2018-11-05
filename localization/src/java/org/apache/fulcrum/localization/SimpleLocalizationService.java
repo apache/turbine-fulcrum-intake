@@ -51,18 +51,23 @@ public interface SimpleLocalizationService
     /**
      * Retrieves the default language (as specified in the config
      * file).
+     * @return the default language
      */
     String getDefaultLanguage();
 
     /**
      * Retrieves the default country (as specified in the config
      * file).
+     * 
+     * @return the default country
      */
     String getDefaultCountry();
 
     /**
      * Retrieves the default Locale (as created from default
      * language and default country).
+     * 
+     * @return the default locale
      */
     Locale getDefaultLocale();
 
@@ -70,6 +75,8 @@ public interface SimpleLocalizationService
      * Retrieves the name of the default bundle (as specified in the
      * config file), or the first in the list if there are more than
      * one.
+     * 
+     * @return the default bundle name
      */
     String getDefaultBundleName();
 
@@ -117,6 +124,7 @@ public interface SimpleLocalizationService
      * @param locale Locale to get text for.
      * @param key Name of the text to retrieve.
      * @return Localized text.
+     * @throws MissingResourceException if the resource is not found
      */
     String getString(String bundleName, Locale locale, String key) throws MissingResourceException;
     
@@ -156,7 +164,9 @@ public interface SimpleLocalizationService
      * @param key The identifier for the localized text to retrieve,
      * @param arg1 The object to use as {0} when formatting the localized text.
      * @param arg2 The object to use as {1} when formatting the localized text.
+     * 
      * @return Formatted localized text.
+     * 
      * @see #format(String, Locale, String, Object[])
      */
     String format(String bundleName, Locale locale,
