@@ -34,7 +34,7 @@ import java.security.GeneralSecurityException;
  *   <li>method to create more or less secure passwords</li>
  *   <li>creation of cipher streams for transparent encryption/decryption</li>
  *   <li>generic encryption/decryption methods</li>
- * <ul>
+ * </ul>
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
@@ -66,8 +66,8 @@ public interface PBEService
      * @param is the input stream to be wrapped
      * @param password the password to be used
      * @return an decrypting input stream
-     * @exception GeneralSecurityException accessing the JCE failed
-     * @exception IOException an IOException occured during processing
+     * @throws GeneralSecurityException accessing the JCE failed
+     * @throws IOException an IOException occured during processing
      */
     InputStream getInputStream( InputStream is, char[] password )
         throws GeneralSecurityException, IOException;
@@ -78,8 +78,8 @@ public interface PBEService
      * @param is the input stream to be wrapped
      * @param password the password to be used
      * @return an decrypting input stream
-     * @exception GeneralSecurityException accessing the JCE failed
-     * @exception IOException an IOException occured during processing
+     * @throws GeneralSecurityException accessing the JCE failed
+     * @throws IOException an IOException occured during processing
      */
     InputStream getSmartInputStream( InputStream is, char[] password )
         throws GeneralSecurityException, IOException;
@@ -90,8 +90,8 @@ public interface PBEService
      * @param os the output stream to be wrapped
      * @param password the password to be used
      * @return an decrypting input stream
-     * @exception GeneralSecurityException accessing the JCE failed
-     * @exception IOException an IOException occured during processing
+     * @throws GeneralSecurityException accessing the JCE failed
+     * @throws IOException an IOException occured during processing
      */
     OutputStream getOutputStream( OutputStream os, char[] password )
         throws GeneralSecurityException, IOException;
@@ -119,8 +119,8 @@ public interface PBEService
      * @param source the source object
      * @param target the target object
      * @param password the password to use for encryption
-     * @exception GeneralSecurityException accessing the JCE failed
-     * @exception IOException an IOException occured during processing
+     * @throws GeneralSecurityException accessing the JCE failed
+     * @throws IOException an IOException occured during processing
      */
     public void encrypt( Object source, Object target, char[] password )
         throws GeneralSecurityException, IOException;
@@ -148,8 +148,8 @@ public interface PBEService
      * @param source the source object
      * @param target the target object
      * @param password the password to use for decryption
-     * @exception GeneralSecurityException accessing the JCE failed
-     * @exception IOException an IOException occured during processing
+     * @throws GeneralSecurityException accessing the JCE failed
+     * @throws IOException an IOException occured during processing
      */
     public void decrypt( Object source, Object target, char[] password )
         throws GeneralSecurityException, IOException;
@@ -160,8 +160,8 @@ public interface PBEService
      * @param plainText the plain text to be encrypted
      * @param password the password for encryption
      * @return the encrypted string
-     * @exception GeneralSecurityException accessing the JCE failed
-     * @exception IOException an IOException occured during processing
+     * @throws GeneralSecurityException accessing the JCE failed
+     * @throws IOException an IOException occured during processing
      */
     String encryptString( String plainText, char[] password )
         throws GeneralSecurityException, IOException;
@@ -173,8 +173,8 @@ public interface PBEService
      * @param cipherText the encrypted text to be decrypted
      * @param password the password for decryption
      * @return the decrypted string
-     * @exception GeneralSecurityException accessing the JCE failed
-     * @exception IOException an IOException occured during processing
+     * @throws GeneralSecurityException accessing the JCE failed
+     * @throws IOException an IOException occured during processing
      */
     String decryptString( String cipherText, char[] password )
         throws GeneralSecurityException, IOException;

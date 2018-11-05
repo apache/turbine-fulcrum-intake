@@ -78,6 +78,7 @@ public class PBEServiceTest extends BaseUnitTest
 
     /**
      * Create the default password do be used.
+     * @throws Exception generic exception
      */
     public void testCreateDefaultPassword() throws Exception
     {
@@ -89,6 +90,7 @@ public class PBEServiceTest extends BaseUnitTest
 
     /**
      * Create a password with a user-supplied seed value.
+     * @throws Exception generic exception
      */
     public void testCreatePassword() throws Exception
     {
@@ -101,6 +103,7 @@ public class PBEServiceTest extends BaseUnitTest
 
     /**
      * Test encryption and decryption of Strings
+     * @throws Exception generic exception
      */
     public void testEncryptDecryptStringUsingDefaultPassword() throws Exception
     {
@@ -113,6 +116,7 @@ public class PBEServiceTest extends BaseUnitTest
     /**
      * Test encryption and decryption of Strings with
      * a caller-supplied password
+     * @throws Exception generic exception
      */
     public void testEncryptDecryptStringUsingCustomPassword() throws Exception
     {
@@ -125,6 +129,7 @@ public class PBEServiceTest extends BaseUnitTest
 
     /**
      * Test encryption and decryption of binary data using the default password.
+     * @throws Exception generic exception
      */
     public void testBinaryEncryptDecrypt() throws Exception
     {
@@ -156,6 +161,7 @@ public class PBEServiceTest extends BaseUnitTest
 
     /**
      * Test encryption/decryption based on streams.
+     * @throws Exception generic exception
      */
     public void testStreamCiphers() throws Exception
     {
@@ -184,6 +190,7 @@ public class PBEServiceTest extends BaseUnitTest
 
     /**
      * Test a few of the convinience methods.
+     * @throws Exception generic exception
      */
     public void testConvinienceEncryption() throws Exception
     {

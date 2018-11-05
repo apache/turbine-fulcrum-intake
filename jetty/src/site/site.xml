@@ -26,6 +26,6 @@
       <item name="Overview"            href="/index.html"/>
       <item name="Configuration"       href="/configuration.html"/>
     </menu>  
-    ${reports}
+    <menu ref="reports"></menu>
   </body>
 </project>
