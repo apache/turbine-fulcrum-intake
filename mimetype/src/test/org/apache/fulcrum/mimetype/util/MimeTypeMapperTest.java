@@ -57,7 +57,7 @@ public class MimeTypeMapperTest extends TestCase
 
     /**
      * Constructor for MimeTypeMapperTest.
-     * @param arg0
+     * @param arg0 default arguments
      */
     public MimeTypeMapperTest(String arg0)
     {
