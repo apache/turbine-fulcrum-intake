@@ -211,10 +211,9 @@ public enum FieldType implements Serializable
      *
      * @param f the XML object
      * @param g the group this field belongs to
-     * @return a Field<?> instance
+     * @return a Field&lt;?&gt; instance
      *
-     * @throws IntakeException
-     *             if the field could not be created
+     * @throws IntakeException if the field could not be created
      */
     public abstract Field<?> getInstance(XmlField f, Group g) throws IntakeException;
 }

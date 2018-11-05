@@ -68,13 +68,13 @@ import org.apache.fulcrum.intake.model.Group;
  * This service provides access to input processing objects based on an XML
  * specification.
  *
+ * avalon.component name="intake"
+ * avalon.service type="org.apache.fulcrum.intake.IntakeService"
+ *
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
- *
- * @avalon.component name="intake"
- * @avalon.service type="org.apache.fulcrum.intake.IntakeService"
  */
 public class IntakeServiceImpl extends AbstractLogEnabled implements
         IntakeService, Configurable, Initializable, Contextualizable,
@@ -880,8 +880,13 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
     }
 
     /**
-     * @see org.apache.avalon.framework.context.Contextualizable
-     * @avalon.entry key="urn:avalon:home" type="java.io.File"
+     * Note that the avalon.entry key="urn:avalon:home" 
+     * and the type is {@link java.io.File}
+     * 
+     * {@link org.apache.avalon.framework.context.Contextualizable#contextualize(Context)}
+     * 
+     * @param context the Context to use
+     * @throws ContextException if the context is not found
      */
     @Override
     public void contextualize(Context context) throws ContextException
@@ -892,7 +897,10 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
     /**
      * Avalon component lifecycle method
      *
-     * @avalon.dependency type="org.apache.fulcrum.localization.LocalizationService"
+     * avalon.dependency type="org.apache.fulcrum.localization.LocalizationService"
+     * 
+     * @param manager the service manager
+     * @throws ServiceException generic exception
      */
     @Override
     public void service(ServiceManager manager) throws ServiceException
