@@ -47,6 +47,9 @@ import org.apache.commons.configuration.XMLConfiguration;
  * Starts up a commons configuration Configuration object via an
  * Avalon container.
  *
+ * avalon.component name="config" lifestyle="singleton"
+ * avalon.service type="org.apache.commons.configuration.Configuration"
+ * avalon.attribute key="urn:composition:deployment.timeout" value="0"
  *
  * The component configuration is carved after the
  * <a href="http://commons.apache.org/configuration/howto_configurationfactory.html">CompositeConfiguraton</a>
@@ -69,9 +72,6 @@ import org.apache.commons.configuration.XMLConfiguration;
  * @author <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
- * @avalon.component name="config" lifestyle="singleton"
- * @avalon.service type="org.apache.commons.configuration.Configuration"
- * @avalon.attribute key="urn:composition:deployment.timeout" value="0"
  *
  */
 public class DefaultConfigurationService
@@ -115,22 +115,23 @@ public class DefaultConfigurationService
         return configuration.containsKey(arg0);
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj)
     {
-        if (obj == configuration) {
-            return true;
-          }
-          if (obj == null) {
-            return false;
-          }
-          if (configuration.getClass() == obj.getClass()) {
-            return configuration.equals(((CompositeConfiguration)obj));
-          }
-          return false;    	
+		if ( obj == null ) {
+			return false;
+		} else {
+			if ( (obj instanceof CompositeConfiguration) == false )
+			{
+				return false;
+			} else {
+				CompositeConfiguration mObj = (CompositeConfiguration) obj;
+				return mObj.equals( this.configuration );
+			}
+		}
     }
 
     /**
@@ -649,9 +650,9 @@ public class DefaultConfigurationService
         }
     }
 
-    /**
+    /* (non-Javadoc)
+     * avalon.entry key="urn:avalon:home" type="java.io.File"
      * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
-     * @avalon.entry key="urn:avalon:home" type="java.io.File"
      */
     @Override
 	public void contextualize(Context context) throws ContextException

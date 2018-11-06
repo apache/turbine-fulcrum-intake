@@ -36,13 +36,16 @@ public class ConfigTest extends BaseUnitTest
     /**
      * Constructor for test.
      *
-     * @param testName name of the test being executed
+     * @param name name of the test being executed
      */
     public ConfigTest(String name)
     {
         super( name );
     }
 
+    /* (non-Javadoc)
+     * @see junit.framework.TestCase#setUp()
+     */
     public void setUp() throws Exception
     {
         super.setUp();
@@ -60,7 +63,6 @@ public class ConfigTest extends BaseUnitTest
 
     /**
      * Verifies that the ConfigurationFactory works properly.
-     *
      */
     public void testLoad()
     {
