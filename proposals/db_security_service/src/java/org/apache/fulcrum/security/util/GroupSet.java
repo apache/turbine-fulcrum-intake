@@ -143,7 +143,7 @@ public class GroupSet
     /**
      * Print out a GroupSet as a String
      *
-     * @returns The Group Set as String
+     * @return The Group Set as String
      *
      */
     public String toString()

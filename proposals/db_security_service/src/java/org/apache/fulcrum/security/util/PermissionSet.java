@@ -149,7 +149,7 @@ public class PermissionSet
     /**
      * Print out a PermissionSet as a String
      *
-     * @returns The Permission Set as String
+     * @return The Permission Set as String
      *
      */
     public String toString()
