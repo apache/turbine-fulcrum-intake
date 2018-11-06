@@ -1,5 +1,28 @@
 package org.apache.fulcrum.commonsemail.impl;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.WeakHashMap;
+
+import javax.activation.DataSource;
+import javax.mail.Address;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.event.TransportEvent;
+import javax.mail.event.TransportListener;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -38,27 +61,6 @@ import org.apache.commons.mail.MultiPartEmail;
 import org.apache.commons.mail.SimpleEmail;
 import org.apache.fulcrum.commonsemail.CommonsEmailService;
 import org.apache.fulcrum.commonsemail.SendDeliveryStatus;
-
-import javax.activation.DataSource;
-import javax.mail.Address;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.event.TransportEvent;
-import javax.mail.event.TransportListener;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-import java.util.WeakHashMap;
 
 /**
  * A service taking care of most of the commons-email configuration such as
@@ -108,7 +110,7 @@ public class CommonsEmailServiceImpl
     private volatile boolean isInitialized;
 
     /** keep track of the incoming TransportEvents using MimeMessage ==> SendDeliveryStatus */
-    private Map sendDeliveryStatusMap;
+    private Map<MimeMessage, SendDeliveryStatusImpl> sendDeliveryStatusMap;
 
     /**
      * Constructor
@@ -117,7 +119,7 @@ public class CommonsEmailServiceImpl
     {
         this.fileNameCounter = (int) System.currentTimeMillis() % 1000;
         this.simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HHmmssSSS");
-        this.sendDeliveryStatusMap = new WeakHashMap();
+        this.sendDeliveryStatusMap = new WeakHashMap<MimeMessage, SendDeliveryStatusImpl>();
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -441,39 +443,6 @@ public class CommonsEmailServiceImpl
     }
 
     /**
-     * @see org.apache.fulcrum.commonsemail.CommonsEmailService#createHtmlEmail(java.lang.String, java.util.Hashtable)
-     */
-    public HtmlEmail createHtmlEmail(String domainName, Hashtable content)
-        throws EmailException
-    {
-        HtmlEmail result = this.createHtmlEmail(domainName);
-        this.setEmailContent(result,content);
-        return result;
-    }
-
-    /**
-     * @see org.apache.fulcrum.commonsemail.CommonsEmailService#createMultiPartEmail(java.lang.String, java.util.Hashtable)
-     */
-    public MultiPartEmail createMultiPartEmail(String domainName,
-        Hashtable content) throws EmailException
-    {
-        MultiPartEmail result = this.createMultiPartEmail(domainName);
-        this.setEmailContent(result,content);
-        return result;
-    }
-
-    /**
-     * @see org.apache.fulcrum.commonsemail.CommonsEmailService#createSimpleEmail(java.lang.String, java.util.Hashtable)
-     */
-    public SimpleEmail createSimpleEmail(String domainName, Hashtable content)
-        throws EmailException
-    {
-        SimpleEmail result = this.createSimpleEmail(domainName);
-        this.setEmailContent(result,content);
-        return result;
-    }
-
-    /**
      * @see org.apache.fulcrum.commonsemail.CommonsEmailService#getSendDeliveryStatus(javax.mail.internet.MimeMessage) 
      */
     public SendDeliveryStatus getSendDeliveryStatus( MimeMessage mimeMessage ) throws MessagingException
@@ -618,7 +587,6 @@ public class CommonsEmailServiceImpl
 
     /**
      * @return Returns the serviceTempDir.
-     * @noinspection WeakerAccess
      */
     protected File getServiceTempDir()
     {
@@ -633,7 +601,6 @@ public class CommonsEmailServiceImpl
      * @param mimeMessage the MimeMessage to be send
      * @return the updated MimeMessage
      * @throws MessagingException the post-processing failed
-     * @noinspection WeakerAccess
      */
     protected MimeMessage onPostProcessMimeMessage(MimeMessage mimeMessage)
         throws MessagingException
@@ -710,15 +677,15 @@ public class CommonsEmailServiceImpl
      */
     private void addMimeMessageHeaders(CommonsEmailDomainEntry domain, MimeMessage mimeMessage) throws MessagingException
     {
-        Hashtable headers = domain.getHeaders();
+        @SuppressWarnings("unchecked")
+		Hashtable<String, String> headers = domain.getHeaders();
 
         if (headers != null && headers.size() > 0)
         {
-            Iterator iteratorHeaderNames = headers.keySet().iterator();
-            while (iteratorHeaderNames.hasNext())
-            {
-                String headerName = (String) iteratorHeaderNames.next();
-                String headerValue = (String) headers.get(headerName);
+        	for ( Entry<String, String> entry : headers.entrySet() )
+        	{
+                String headerName = entry.getKey();
+                String headerValue = entry.getValue();
                 String[] currHeaderValues = mimeMessage.getHeader(headerName) ;
                 boolean newHeaderValueExists = false;
 
@@ -1026,7 +993,8 @@ public class CommonsEmailServiceImpl
      * @param email the email to configure
      * @throws EmailException the configuration failed
      */
-    private void configure( String domainName, Email email )
+    @SuppressWarnings("unchecked")
+	private void configure( String domainName, Email email )
         throws EmailException
     {
         CommonsEmailDomainEntry domain = this.getDomain(domainName);
@@ -1293,7 +1261,7 @@ public class CommonsEmailServiceImpl
      * @param content the content of the email
      * @throws EmailException configuring failed
      */
-    private void setEmailContent( Email email, Hashtable content )
+    private void setEmailContent( Email email, Hashtable<?, ?> content )
         throws EmailException
     {
         try
@@ -1353,7 +1321,7 @@ public class CommonsEmailServiceImpl
 
             if( toEmail != null )
             {
-                ArrayList toRecipients = new ArrayList();
+                ArrayList<InternetAddress> toRecipients = new ArrayList<InternetAddress>();
 
                 if( toName != null )
                 {
@@ -1374,7 +1342,7 @@ public class CommonsEmailServiceImpl
 
             if( ccEmail != null )
             {
-                ArrayList ccRecipients = new ArrayList();
+                ArrayList<InternetAddress> ccRecipients = new ArrayList<InternetAddress>();
 
                 if( ccName != null )
                 {
@@ -1395,7 +1363,7 @@ public class CommonsEmailServiceImpl
 
             if( bccEmail != null )
             {
-                ArrayList bccRecipients = new ArrayList();
+                ArrayList<InternetAddress> bccRecipients = new ArrayList<InternetAddress>();
 
                 if( bccName != null )
                 {
@@ -1442,11 +1410,11 @@ public class CommonsEmailServiceImpl
             {
                 Object attachment;
                 MultiPartEmail multiPartEmail = (MultiPartEmail) email;
-                Collection attachments = (Collection) content.get(Email.ATTACHMENTS);
+                Collection<?> attachments = (Collection<?>) content.get(Email.ATTACHMENTS);
 
                 if( attachments != null  )
                 {
-                    Iterator iter = attachments.iterator();
+                    Iterator<?> iter = attachments.iterator();
 
                     while( iter.hasNext() )
                     {
@@ -1615,4 +1583,25 @@ public class CommonsEmailServiceImpl
         MimeMessage mimeMessage = (MimeMessage) transportEvent.getMessage();
         return (SendDeliveryStatusImpl) this.getSendDeliveryStatus(mimeMessage);
     }
+
+	@Override
+	public SimpleEmail createSimpleEmail(String domainName, Hashtable content) throws EmailException {
+        SimpleEmail result = this.createSimpleEmail(domainName);
+        this.setEmailContent(result,content);
+        return result;
+	}
+
+	@Override
+	public MultiPartEmail createMultiPartEmail(String domainName, Hashtable content) throws EmailException {
+        MultiPartEmail result = this.createMultiPartEmail(domainName);
+        this.setEmailContent(result,content);
+        return result;
+	}
+
+	@Override
+	public HtmlEmail createHtmlEmail(String domainName, Hashtable content) throws EmailException {
+        HtmlEmail result = this.createHtmlEmail(domainName);
+        this.setEmailContent(result,content);
+        return result;
+	}
 }
