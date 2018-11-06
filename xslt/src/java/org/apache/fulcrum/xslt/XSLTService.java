@@ -91,7 +91,7 @@ public interface XSLTService
      * @param params A set of parameters that will be forwarded to the XSLT
      * @throws Exception the transformation failed
      */
-    void transform(String xslName, Reader in, Writer out, Map params) throws Exception;
+    void transform(String xslName, Reader in, Writer out, Map<?, ?> params) throws Exception;
 
     /**
      * Uses an xsl file to transform xml input from a reader and returns a
@@ -103,7 +103,7 @@ public interface XSLTService
      * @return the transformed output
      * @throws Exception the transformation failed
      */
-    String transform(String xslName, Reader in, Map params) throws Exception;
+    String transform(String xslName, Reader in, Map<?, ?> params) throws Exception;
 
     /**
      * Uses an xsl file to transform xml input from a DOM note and writes the
@@ -115,7 +115,7 @@ public interface XSLTService
      * @param params A set of parameters that will be forwarded to the XSLT
      * @throws Exception the transformation failed
      */
-    void transform(String xslName, Node in, Writer out, Map params) throws Exception;
+    void transform(String xslName, Node in, Writer out, Map<?, ?> params) throws Exception;
 
     /**
      * Uses an xsl file to transform xml input from a DOM note and returns a
@@ -127,7 +127,7 @@ public interface XSLTService
      * @return the transformed output
      * @throws Exception the transformation failed
      */
-    String transform(String xslName, Node in, Map params) throws Exception;
+    String transform(String xslName, Node in, Map<?, ?> params) throws Exception;
 
     /**
      * Uses an xsl file without any xml input.
@@ -137,7 +137,7 @@ public interface XSLTService
      * @return the transformed output
      * @throws Exception the transformation failed
      */
-    String transform(String xslName, Map params) throws Exception;
+    String transform(String xslName, Map<?, ?> params) throws Exception;
 
     /**
      * Uses an xsl file without any xml input.
@@ -145,9 +145,8 @@ public interface XSLTService
      * @param xslName The name of the file that contains the xsl stylesheet
      * @param out The writer for the transformed output.
      * @param params A set of parameters that will be forwarded to the XSLT
-     * @return the transformed output
      * @throws Exception the transformation failed
      */
-    void transform(String xslName, Writer out, Map params) throws Exception;
+    void transform(String xslName, Writer out, Map<?, ?> params) throws Exception;
 
 }

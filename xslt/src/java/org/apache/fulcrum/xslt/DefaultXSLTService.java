@@ -25,9 +25,11 @@ import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
@@ -36,8 +38,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.configuration.Configurable;
@@ -49,8 +49,8 @@ import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
-import org.w3c.dom.Node;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 /**
  * Implementation of the Turbine XSLT Service. It transforms xml with a given
@@ -84,7 +84,7 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
     /**
      * Cache of compiled Templates.
      */
-    protected Hashtable cache = new Hashtable();
+    protected Hashtable<URL, Templates> cache = new Hashtable<URL, Templates>();
 
     protected final static String STYLESHEET_PATH = "path";
 
@@ -188,7 +188,7 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
         }
     }
 
-    protected void transform(String xslName, Source xmlin, Result xmlout, Map params)
+    protected void transform(String xslName, Source xmlin, Result xmlout, Map<?, ?> params)
             throws Exception
     {
         try
@@ -198,9 +198,8 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
 
             if (params != null)
             {
-                for (Iterator it = params.entrySet().iterator(); it.hasNext(); )
-                {
-                    Map.Entry entry = (Map.Entry) it.next();
+            	for ( Entry<?, ?> entry : params.entrySet() )
+            	{
                     transformer.setParameter(String.valueOf(entry.getKey()), entry.getValue());
                 }
             }
@@ -304,7 +303,7 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      * @param params
      *            A set of parameters that will be forwarded to the XSLT
      */
-    public void transform(String xslName, Reader in, Writer out, Map params)
+    public void transform(String xslName, Reader in, Writer out, Map<?, ?> params)
             throws Exception
     {
         Source xmlin = new StreamSource(in);
@@ -323,7 +322,7 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      * @param params
      *            A set of parameters that will be forwarded to the XSLT
      */
-    public String transform(String xslName, Reader in, Map params)
+    public String transform(String xslName, Reader in, Map<?, ?> params)
             throws Exception
     {
         StringWriter sw = new StringWriter();
@@ -344,7 +343,7 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      * @param params
      *            A set of parameters that will be forwarded to the XSLT
      */
-    public void transform(String xslName, Node in, Writer out, Map params)
+    public void transform(String xslName, Node in, Writer out, Map<?, ?> params)
             throws Exception
     {
         Source xmlin = new DOMSource(in);
@@ -363,7 +362,7 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      * @param params
      *            A set of parameters that will be forwarded to the XSLT
      */
-    public String transform(String xslName, Node in, Map params)
+    public String transform(String xslName, Node in, Map<?, ?> params)
             throws Exception
     {
         StringWriter sw = new StringWriter();
@@ -379,7 +378,7 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      * @return the transformed output
      * @throws Exception the transformation failed
      */
-    public String transform(String xslName, Map params) throws Exception {
+    public String transform(String xslName, Map<?, ?> params) throws Exception {
 
         StringWriter sw = new StringWriter();
         transform(xslName, sw, params);
@@ -394,7 +393,7 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      * @param params A set of parameters that will be forwarded to the XSLT
      * @throws Exception the transformation failed
      */
-    public void transform(String xslName, Writer out, Map params) throws Exception {
+    public void transform(String xslName, Writer out, Map<?, ?> params) throws Exception {
 
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
