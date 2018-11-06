@@ -51,14 +51,14 @@ public class DefaultNamingService
      * A global HashTable of Property objects which are initialised using
      * parameters from the ResourcesFile
      */
-    private static Hashtable contextPropsList = null;
+    private static Hashtable<String, Properties> contextPropsList = null;
 
-    private Hashtable initialContexts = new Hashtable();
+    private Hashtable<String, InitialContext> initialContexts = new Hashtable<String, InitialContext>();
 
     /**
       * Return the Context with the specified name.
       *
-      * @param name The name of the context.
+      * @param contextName The name of the context.
       * @return The context with the specified name, or null if no
       * context exists with that name.
       */
@@ -90,13 +90,13 @@ public class DefaultNamingService
 
     // ---------------- Avalon Lifecycle Methods ---------------------
 
-    /**
-     * Avalon component lifecycle method
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
     public void configure(Configuration conf) throws ConfigurationException
     {
 
-        contextPropsList = new Hashtable();
+        contextPropsList = new Hashtable<String, Properties>();
         Configuration[] keys = conf.getChildren();
         if (keys != null)
         {
@@ -135,14 +135,14 @@ public class DefaultNamingService
         return properties;
     }
 
-    /**
-     * Avalon component lifecycle method
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.activity.Initializable#initialize()
      */
     public void initialize() throws Exception
     {
         try
         {
-            Enumeration contextPropsKeys = contextPropsList.keys();
+            Enumeration<String> contextPropsKeys = contextPropsList.keys();
             while (contextPropsKeys.hasMoreElements())
             {
                 String key = (String) contextPropsKeys.nextElement();

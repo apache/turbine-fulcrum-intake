@@ -24,6 +24,12 @@
   </properties>
 
   <body>
+    <release version="1.0.3" date="in SVN">
+     <action dev="painter" type="update">
+        Upgrade to Maven 3.x and cleanup javadoc
+        Should probably move to the attic
+      </action>
+    </release>
     <release version="1.0.2" date="2004-11-24">
      <action dev="epugh" type="add">
         Initial conversion to Avalon component.

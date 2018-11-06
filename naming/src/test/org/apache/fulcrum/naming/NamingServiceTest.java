@@ -47,7 +47,7 @@ public class NamingServiceTest extends BaseUnitTest
     /**
      * Simple test that adds, retrieves, and deletes 2 object.
      *
-     * @throws Exception
+     * @throws Exception generic exception
      */
     public void testGettingNamingService() throws Exception
     {
