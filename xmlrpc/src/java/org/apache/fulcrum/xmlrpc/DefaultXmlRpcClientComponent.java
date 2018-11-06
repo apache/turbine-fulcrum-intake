@@ -1,6 +1,5 @@
 package org.apache.fulcrum.xmlrpc;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,7 +19,6 @@ package org.apache.fulcrum.xmlrpc;
  * under the License.
  */
 
-
 import org.apache.xmlrpc.XmlRpcClient;
 
 import java.io.IOException;
@@ -32,41 +30,34 @@ import org.apache.xmlrpc.XmlRpcException;
 /**
  * Default implementation of the client-side XML RPC component.
  *
- * @avalon.component version="1.0" name="xmlrpc-client" lifestyle="singleton"
- * @avalon.service   version="1.0" type="org.apache.fulcrum.xmlrpc.XmlRpcClientComponent"
+ * avalon.component version="1.0" name="xmlrpc-client" lifestyle="singleton"
+ * avalon.service version="1.0"   type="org.apache.fulcrum.xmlrpc.XmlRpcClientComponent"
+ * 
  * @author <a href="mailto:jason@zenplex.com">Jason van Zyl</a>
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
- * @version $Id$
+ * @version $Id: DefaultXmlRpcClientComponent.java 535465 2007-05-05 06:58:06Z
+ *          tv $
  */
-public class DefaultXmlRpcClientComponent
-    extends AbstractXmlRpcComponent
-    implements XmlRpcClientComponent
-{
-    /** Default Constructor. */
-    public DefaultXmlRpcClientComponent()
-    {
-        // nothing to do
-    }
+public class DefaultXmlRpcClientComponent extends AbstractXmlRpcComponent implements XmlRpcClientComponent {
+	/** Default Constructor. */
+	public DefaultXmlRpcClientComponent() {
+	}
 
-    /**
-     * Client's interface to XML-RPC.
-     *
-     * The return type is Object which you'll need to cast to
-     * whatever you are expecting.
-     *
-     * @param url A URL.
-     * @param methodName A String with the method name.
-     * @param params A Vector with the parameters.
-     * @return An Object.
-     * @exception XmlRpcException
-     * @exception IOException
-     */
-    public Object executeRpc(URL url,
-                             String methodName,
-                             Vector params)
-        throws IOException, XmlRpcException
-    {
-        XmlRpcClient client = new XmlRpcClient ( url );
-        return client.execute(methodName, params);
-    }
+	/**
+	 * Client's interface to XML-RPC.
+	 *
+	 * The return type is Object which you'll need to cast to whatever you are
+	 * expecting.
+	 *
+	 * @param url        A URL.
+	 * @param methodName A String with the method name.
+	 * @param params     A Vector with the parameters.
+	 * @return An Object.
+	 * @throws XmlRpcException if unable to parse
+	 * @throws IOException     if resource not found
+	 */
+	public Object executeRpc(URL url, String methodName, Vector params) throws IOException, XmlRpcException {
+		XmlRpcClient client = new XmlRpcClient(url);
+		return client.execute(methodName, params);
+	}
 }

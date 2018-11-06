@@ -41,10 +41,8 @@ import java.net.Socket;
 /**
  * Default implementation of the server-side XML RPC component.
  *
- * @todo Handle XmlRpc.setDebug(boolean)
- *
- * @avalon.component version="1.0" name="xmlrpc-server" lifestyle="singleton"
- * @avalon.service   version="1.0" type="org.apache.fulcrum.xmlrpc.XmlRpcServerComponent"
+ * avalon.component version="1.0" name="xmlrpc-server" lifestyle="singleton"
+ * avalon.service   version="1.0" type="org.apache.fulcrum.xmlrpc.XmlRpcServerComponent"
  *
  * @author <a href="mailto:jason@zenplex.com">Jason van Zyl</a>
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
@@ -54,6 +52,9 @@ public class DefaultXmlRpcServerComponent
     extends AbstractXmlRpcComponent
     implements Startable, Disposable, Serviceable, ThreadSafe, XmlRpcServerComponent
 {
+	
+	// TODO Handle XmlRpc.setDebug(boolean)
+	
     /** The service manager for this component. */
     private ServiceManager manager;
 
@@ -88,6 +89,9 @@ public class DefaultXmlRpcServerComponent
     // Lifecycle Management
     // ----------------------------------------------------------------------
 
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.xmlrpc.AbstractXmlRpcComponent#configure(org.apache.avalon.framework.configuration.Configuration)
+     */
     public void configure(Configuration configuration)
         throws ConfigurationException
     {
@@ -123,18 +127,8 @@ public class DefaultXmlRpcServerComponent
         deniedClients = configuration.getChildren("deniedClients");
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
-     * @avalon.dependency key="handler.0" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
-     * @avalon.dependency key="handler.1" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
-     * @avalon.dependency key="handler.2" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
-     * @avalon.dependency key="handler.3" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
-     * @avalon.dependency key="handler.4" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
-     * @avalon.dependency key="handler.5" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
-     * @avalon.dependency key="handler.6" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
-     * @avalon.dependency key="handler.7" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
-     * @avalon.dependency key="handler.8" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
-     * @avalon.dependency key="handler.9" type="com.apache.xmlrpc.XmlRpcHandler" optional="true"
      */
     public void service(ServiceManager manager)
         throws ServiceException
@@ -146,6 +140,9 @@ public class DefaultXmlRpcServerComponent
     // S T A R T A B L E
     // ------------------------------------------------------------------------
 
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.activity.Startable#start()
+     */
     public void start()
         throws Exception
     {
@@ -155,6 +152,7 @@ public class DefaultXmlRpcServerComponent
 
     /**
      * This function initializes the XmlRpcService.
+     * @throws Exception generic exception
      */
     public void initialize()
         throws Exception
@@ -254,8 +252,8 @@ public class DefaultXmlRpcServerComponent
         }
     }
 
-    /**
-     * Shuts down this service, stopping running threads.
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.activity.Startable#stop()
      */
     public void stop()
         throws Exception
@@ -283,8 +281,10 @@ public class DefaultXmlRpcServerComponent
     // D I S P O S A B L E
     // ------------------------------------------------------------------------
 
-    /**
+    /*
      * Unregisters all handlers and disposes of the server.
+     * (non-Javadoc)
+     * @see org.apache.avalon.framework.activity.Disposable#dispose()
      */
     public void dispose()
     {
@@ -309,8 +309,8 @@ public class DefaultXmlRpcServerComponent
      * Register an Object as a default handler for the service.
      *
      * @param handler The handler to use.
-     * @exception XmlRpcException
-     * @exception IOException
+     * @throws XmlRpcException if unable to parse
+     * @throws IOException if resource not found
      */
     public void registerHandler(Object handler)
         throws XmlRpcException, IOException
@@ -341,7 +341,7 @@ public class DefaultXmlRpcServerComponent
      *
      * @param handlerName The name the handler is registered under.
      * @param handlerClass The name of the class to use as a handler.
-     * @exception Exception Couldn't instantiate handler.
+     * @throws Exception Couldn't instantiate handler.
      */
     private void registerClassHandler(String handlerName, String handlerClass)
         throws Exception
@@ -377,7 +377,7 @@ public class DefaultXmlRpcServerComponent
      *
      * @param handlerName The name to register this handle as.
      * @param handlerRole The role of the component serving as the handler.
-     * @exception Exception If the component could not be looked up.
+     * @throws Exception If the component could not be looked up.
      */
     private void registerComponentHandler(String handlerName,
                                           String handlerRole)
@@ -398,36 +398,32 @@ public class DefaultXmlRpcServerComponent
         webserver.removeHandler(handlerName);
     }
 
-    /**
+    /*
      * Switch client filtering on/off.
      *
      * @param state Whether to filter clients.
-     *
-     * @see #acceptClient(java.lang.String)
-     * @see #denyClient(java.lang.String)
+     * @see org.apache.fulcrum.xmlrpc.XmlRpcServerComponent#setParanoid(boolean)
      */
     public void setParanoid(boolean state)
     {
         webserver.setParanoid(state);
     }
 
-    /**
+    /*
      * Add an IP address to the list of accepted clients. The parameter can
      * contain '*' as wildcard character, e.g. "192.168.*.*". You must
      * call setParanoid(true) in order for this to have
      * any effect.
      *
      * @param address The address to add to the list.
-     *
-     * @see #denyClient(java.lang.String)
-     * @see #setParanoid(boolean)
+     * @see org.apache.fulcrum.xmlrpc.XmlRpcServerComponent#acceptClient(java.lang.String)
      */
     public void acceptClient(String address)
     {
         webserver.acceptClient(address);
     }
 
-    /**
+    /*
      * Add an IP address to the list of denied clients. The parameter can
      * contain '*' as wildcard character, e.g. "192.168.*.*". You must call
      * setParanoid(true) in order for this to have any effect.
@@ -436,6 +432,7 @@ public class DefaultXmlRpcServerComponent
      *
      * @see #acceptClient(java.lang.String)
      * @see #setParanoid(boolean)
+     * @see org.apache.fulcrum.xmlrpc.XmlRpcServerComponent#denyClient(java.lang.String)
      */
     public void denyClient(String address)
     {

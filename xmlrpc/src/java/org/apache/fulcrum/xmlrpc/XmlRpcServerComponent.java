@@ -28,7 +28,6 @@ import org.apache.xmlrpc.XmlRpcException;
 /**
  * The interface a server-side XmlRpcService implements.
  *
- * @avalon.service version="1.0"
  * @author <a href="mailto:josh@stonecottage.com">Josh Lucas</a>
  * @author <a href="mailto:magnus@handtolvur.is">Magnús Þór Torfason</a>
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
@@ -47,8 +46,8 @@ public interface XmlRpcServerComponent
      * @param handlerName The name under which we want
      * to register the service
      * @param handler The handler object
-     * @exception XmlRpcException
-     * @exception IOException
+     * @throws XmlRpcException if an XmlRpcException occurs
+     * @throws IOException if resource is not found
      */
     void registerHandler(String handlerName, Object handler)
         throws XmlRpcException, IOException;
@@ -58,8 +57,8 @@ public interface XmlRpcServerComponent
      * the XmlRpc Server part.
      *
      * @param handler The handler object
-     * @exception XmlRpcException
-     * @exception IOException
+     * @throws XmlRpcException if an XmlRpcException occurs
+     * @throws IOException if resource is not found
      */
     void registerHandler(Object handler)
         throws XmlRpcException, IOException;
@@ -75,6 +74,7 @@ public interface XmlRpcServerComponent
      * Switch client filtering on/off.
      * @see #acceptClient(java.lang.String)
      * @see #denyClient(java.lang.String)
+     * @param state filtering state
      */
     void setParanoid(boolean state);
 
@@ -86,6 +86,7 @@ public interface XmlRpcServerComponent
      *
      * @see #denyClient(java.lang.String)
      * @see #setParanoid(boolean)
+     * @param address The client address
      */
     void acceptClient(String address);
 
@@ -96,6 +97,7 @@ public interface XmlRpcServerComponent
      *
      * @see #acceptClient(java.lang.String)
      * @see #setParanoid(boolean)
+     * @param address the client to deny
      */
     void denyClient(String address);
 }

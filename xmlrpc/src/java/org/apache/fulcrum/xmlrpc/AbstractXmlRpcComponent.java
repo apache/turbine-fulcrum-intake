@@ -31,8 +31,6 @@ import org.apache.xmlrpc.XmlRpc;
  * Common code for the XML RPC components. This processes the system-properties and parser entries
  * from the config.
  *
- * @todo Handle XmlRpc.setDebug(boolean)
- *
  * @author <a href="mailto:jason@zenplex.com">Jason van Zyl</a>
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
@@ -41,6 +39,9 @@ public abstract class AbstractXmlRpcComponent
     extends AbstractLogEnabled
     implements Configurable, Initializable
 {
+	
+	// TODO Handle XmlRpc.setDebug(boolean)
+	
     /** SAX Parser class. */
     protected String saxParserClass;
 
@@ -53,6 +54,9 @@ public abstract class AbstractXmlRpcComponent
     // Lifecycle Management
     // ----------------------------------------------------------------------
 
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
+     */
     public void configure(Configuration configuration)
         throws ConfigurationException
     {

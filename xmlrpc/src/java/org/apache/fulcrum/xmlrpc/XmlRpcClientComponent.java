@@ -30,7 +30,6 @@ import org.apache.xmlrpc.XmlRpcException;
 /**
  * The interface a client-side XmlRpcService implements.
  *
- * @avalon.service version="1.0"
  * @author <a href="mailto:josh@stonecottage.com">Josh Lucas</a>
  * @author <a href="mailto:magnus@handtolvur.is">Magnús Þór Torfason</a>
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
@@ -50,8 +49,8 @@ public interface XmlRpcClientComponent
      * @param methodName A String with the method name.
      * @param params A Vector with the parameters.
      * @return An Object.
-     * @exception XmlRpcException
-     * @exception IOException
+     * @throws XmlRpcException if an XmlRpcException occurs
+     * @throws IOException if resource is not found
      */
     Object executeRpc(URL url,
                       String methodName,
