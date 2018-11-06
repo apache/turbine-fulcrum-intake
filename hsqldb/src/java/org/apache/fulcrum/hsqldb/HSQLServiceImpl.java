@@ -39,7 +39,6 @@ import org.hsqldb.persist.HsqlProperties;
  * The component is configured from the componentConfig.xml file by specifying
  * attributes on the service element
  * </p>
- * <p>
  *
  * <dl>
  * <dt>database</dt>
@@ -59,7 +58,7 @@ import org.hsqldb.persist.HsqlProperties;
  *
  * Example:
  *  ...
- *  <HSQLService database="./target" dbname="test" trace="true" silent="false" start="true" port="9001"/>
+ *  &lt;HSQLService database="./target" dbname="test" trace="true" silent="false" start="true" port="9001"/&gt;
  *  ...
  *
  * @author <a href="mailto:pti@elex.be">Peter Tillemans</a>
