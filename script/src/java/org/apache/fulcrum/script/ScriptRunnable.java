@@ -26,20 +26,20 @@ import java.util.Map;
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
-public interface ScriptRunnable extends Runnable
-{
-    /**
-     * Set the arguments for script execution.
-     *
-     * @param args The args to be used.
-     */
-    void setArgs(Map args);
+public interface ScriptRunnable extends Runnable {
+	/**
+	 * Set the arguments for script execution.
+	 *
+	 * @param args The args to be used.
+	 */
+	void setArgs(Map args);
 
-    /**
-     *
-     * Get the result from script execution.
-     * 
-     * @return Returns the result.
-     */
-    Object getResult() throws Exception;
+	/**
+	 *
+	 * Get the result from script execution.
+	 * 
+	 * @return Returns the result.
+	 * @throws Exception generic exception
+	 */
+	Object getResult() throws Exception;
 }

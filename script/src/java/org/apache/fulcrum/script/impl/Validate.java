@@ -29,7 +29,7 @@ import java.util.Map;
  * deemed invalid, an IllegalArgumentException is thrown. For example:</p>
  *
  * <pre>
- * Validate.isTrue( i > 0, "The value must be greater than zero: ", i);
+ * Validate.isTrue( i &gt; 0, "The value must be greater than zero: ", i);
  * Validate.notNull( surname, "The surname must not be null");
  * </pre>
  *
@@ -92,7 +92,7 @@ public class Validate
      * expression.</p>
      *
      * <pre>
-     * Validate.isTrue( i > 0, "The value must be greater than zero: ", i);
+     * Validate.isTrue( i &gt; 0, "The value must be greater than zero: ", i);
      * </pre>
      *
      * <p>For performance reasons, the long value is passed as a separate parameter and
@@ -103,7 +103,7 @@ public class Validate
      * @param value  the value to append to the message in case of error
      * @throws IllegalArgumentException if expression is <code>false</code>
      */
-    public static void isTrue(boolean expression, String message, long value)
+    public static void isTrue(boolean expression, String message, long value) throws IllegalArgumentException
     {
         if (expression == false)
         {
@@ -120,7 +120,7 @@ public class Validate
      * expression.</p>
      *
      * <pre>
-     * Validate.isTrue( d > 0.0, "The value must be greater than zero: ", d);
+     * Validate.isTrue( d &gt; 0.0, "The value must be greater than zero: ", d);
      * </pre>
      *
      * <p>For performance reasons, the double value is passed as a separate parameter and
@@ -133,6 +133,7 @@ public class Validate
      * @throws IllegalArgumentException if expression is <code>false</code>
      */
     public static void isTrue(boolean expression, String message, double value)
+    	throws IllegalArgumentException
     {
         if (expression == false)
         {
@@ -149,7 +150,7 @@ public class Validate
      * expression.</p>
      *
      * <pre>
-     * Validate.isTrue( (i > 0), "The value must be greater than zero");
+     * Validate.isTrue( (i &gt; 0), "The value must be greater than zero");
      * Validate.isTrue( myObject.isOk(), "The object is not OK");
      * </pre>
      *
@@ -162,6 +163,7 @@ public class Validate
      * @throws IllegalArgumentException if expression is <code>false</code>
      */
     public static void isTrue(boolean expression, String message)
+    	throws IllegalArgumentException
     {
         if (expression == false)
         {
@@ -178,7 +180,7 @@ public class Validate
      * expression.</p>
      *
      * <pre>
-     * Validate.isTrue( i > 0 );
+     * Validate.isTrue( i &gt; 0 );
      * Validate.isTrue( myObject.isOk() );
      * </pre>
      *
@@ -188,6 +190,7 @@ public class Validate
      * @throws IllegalArgumentException if expression is <code>false</code>
      */
     public static void isTrue(boolean expression)
+    	throws IllegalArgumentException
     {
         if (expression == false)
         {
@@ -213,6 +216,7 @@ public class Validate
      * @throws IllegalArgumentException if the object is <code>null</code>
      */
     public static void notNull(Object object, String message)
+    	throws IllegalArgumentException
     {
         if (object == null)
         {
@@ -234,6 +238,7 @@ public class Validate
      * @throws IllegalArgumentException if the object is <code>null</code>
      */
     public static void notNull(Object object)
+    	throws IllegalArgumentException
     {
         if (object == null)
         {
@@ -257,6 +262,7 @@ public class Validate
      * @throws IllegalArgumentException if the array is empty
      */
     public static void notEmpty(Object [] array, String message)
+    	throws IllegalArgumentException
     {
         if (array == null || array.length == 0)
         {
@@ -278,6 +284,7 @@ public class Validate
      * @throws IllegalArgumentException if the array is empty
      */
     public static void notEmpty(Object [] array)
+    	throws IllegalArgumentException
     {
         if (array == null || array.length == 0)
         {
@@ -300,7 +307,8 @@ public class Validate
      * @param message  the exception message you would like to see if the collection is empty
      * @throws IllegalArgumentException if the collection is empty
      */
-    public static void notEmpty(Collection collection, String message)
+    public static void notEmpty(Collection<?> collection, String message)
+    	throws IllegalArgumentException
     {
         if (collection == null || collection.size() == 0)
         {
@@ -321,7 +329,8 @@ public class Validate
      * @param collection  the collection to check is not empty
      * @throws IllegalArgumentException if the collection is empty
      */
-    public static void notEmpty(Collection collection)
+    public static void notEmpty(Collection<?> collection)
+    	throws IllegalArgumentException
     {
         if (collection == null || collection.size() == 0)
         {
@@ -345,7 +354,8 @@ public class Validate
      * @param message  the exception message you would like to see if the map is empty
      * @throws IllegalArgumentException if the map is empty
      */
-    public static void notEmpty(Map map, String message)
+    public static void notEmpty(Map<?, ?> map, String message)
+    	throws IllegalArgumentException
     {
         if (map == null || map.size() == 0)
         {
@@ -366,7 +376,8 @@ public class Validate
      * @param map  the map to check is not empty
      * @throws IllegalArgumentException if the map is empty
      */
-    public static void notEmpty(Map map)
+    public static void notEmpty(Map<?, ?> map)
+    	throws IllegalArgumentException
     {
         if (map == null || map.size() == 0)
         {
@@ -439,6 +450,7 @@ public class Validate
      *  elements or is <code>null</code>
      */
     public static void noNullElements(Object [] array, String message)
+    	throws IllegalArgumentException    
     {
         Validate.notNull( array );
         for (int i = 0; i < array.length; i++)
@@ -469,6 +481,7 @@ public class Validate
      *  elements or is <code>null</code>
      */
     public static void noNullElements(Object [] array)
+    		throws IllegalArgumentException
     {
         Validate.notNull( array );
         for (int i = 0; i < array.length; i++)
@@ -502,10 +515,11 @@ public class Validate
      * @throws IllegalArgumentException if the collection has
      *  <code>null</code> elements or is <code>null</code>
      */
-    public static void noNullElements(Collection collection, String message)
+    public static void noNullElements(Collection<?> collection, String message)
+    	throws IllegalArgumentException
     {
         Validate.notNull( collection );
-        for (Iterator it = collection.iterator(); it.hasNext();)
+        for (Iterator<?> it = collection.iterator(); it.hasNext();)
         {
             if (it.next() == null)
             {
@@ -531,11 +545,11 @@ public class Validate
      * @throws IllegalArgumentException if the collection has
      *  <code>null</code> elements or is <code>null</code>
      */
-    public static void noNullElements(Collection collection)
+    public static void noNullElements(Collection<?> collection) throws IllegalArgumentException
     {
         Validate.notNull( collection );
         int i = 0;
-        for (Iterator it = collection.iterator(); it.hasNext(); i++)
+        for (Iterator<?> it = collection.iterator(); it.hasNext(); i++)
         {
             if (it.next() == null)
             {
@@ -560,12 +574,12 @@ public class Validate
      * @param message  the exception message if the <code>Collection</code> has elements not of type <code>clazz</code>
      * @since 2.1
      */
-    public static void allElementsOfType(Collection collection, Class clazz,
-        String message)
+    public static void allElementsOfType(Collection<?> collection, Class<?> clazz,
+        String message) throws IllegalArgumentException
     {
         Validate.notNull( collection );
         Validate.notNull( clazz );
-        for (Iterator it = collection.iterator(); it.hasNext();)
+        for (Iterator<?> it = collection.iterator(); it.hasNext();)
         {
             if (clazz.isInstance( it.next() ) == false)
             {
@@ -594,12 +608,13 @@ public class Validate
      *            the <code>Class</code> which the collection's elements are expected to be, not null
      * @since 2.1
      */
-    public static void allElementsOfType(Collection collection, Class clazz)
+    public static void allElementsOfType(Collection<?> collection, Class<?> clazz)
+    	throws IllegalArgumentException
     {
         Validate.notNull( collection );
         Validate.notNull( clazz );
         int i = 0;
-        for (Iterator it = collection.iterator(); it.hasNext(); i++)
+        for (Iterator<?> it = collection.iterator(); it.hasNext(); i++)
         {
             if (clazz.isInstance( it.next() ) == false)
             {

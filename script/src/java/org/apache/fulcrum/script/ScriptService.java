@@ -106,7 +106,7 @@ public interface ScriptService
      * uses the default scripting engine defined in the role
      * configuration. This method only works if it is supported
      * by underlying scripting engine, e.g. Javascript but not
-     * Groovy, by implementing the interface <bold>Invocable</bold>
+     * Groovy, by implementing the interface <b>Invocable</b>
      *
      * @param clazz the interface to implement
      * @return an scripted object implementing the given interface.
