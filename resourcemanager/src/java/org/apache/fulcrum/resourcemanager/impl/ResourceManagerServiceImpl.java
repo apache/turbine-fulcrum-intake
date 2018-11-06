@@ -60,7 +60,7 @@ public class ResourceManagerServiceImpl
     private Configuration[] domainConfigurationList;
 
     /** The list of registered domains */
-    private Hashtable domainList;
+    private Hashtable<String, ResourceManager> domainList;
 
     /////////////////////////////////////////////////////////////////////////
     // Avalon Service Lifecycle Implementation
@@ -71,10 +71,10 @@ public class ResourceManagerServiceImpl
      */
     public ResourceManagerServiceImpl()
     {
-        this.domainList = new Hashtable();
+        this.domainList = new Hashtable<String, ResourceManager>();
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
      */
     public void contextualize(Context context) throws ContextException
@@ -82,7 +82,7 @@ public class ResourceManagerServiceImpl
         this.context = context;
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
      */
     public void service(ServiceManager serviceManager) throws ServiceException
@@ -90,7 +90,7 @@ public class ResourceManagerServiceImpl
         this.serviceManager = serviceManager;
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
     public void configure(Configuration cfg) throws ConfigurationException
@@ -98,7 +98,7 @@ public class ResourceManagerServiceImpl
         this.domainConfigurationList = cfg.getChildren();
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.avalon.framework.activity.Initializable#initialize()
      */
     public void initialize() throws Exception
@@ -112,7 +112,7 @@ public class ResourceManagerServiceImpl
         }
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.avalon.framework.activity.Disposable#dispose()
      */
     public void dispose()
@@ -142,7 +142,7 @@ public class ResourceManagerServiceImpl
     // Service interface implementation
     /////////////////////////////////////////////////////////////////////////
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.resourcemanager.ResourceManagerService#create(java.lang.String, java.lang.String, java.lang.Object)
      */
     public void create(String domain, String resourcePath, Object resourceContent) throws IOException
@@ -151,7 +151,7 @@ public class ResourceManagerServiceImpl
         resourceManager.create( resourcePath, resourceContent );
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.resourcemanager.ResourceManagerService#delete(java.lang.String, java.lang.String)
      */
     public boolean delete(String domain, String resourcePath)
@@ -161,7 +161,7 @@ public class ResourceManagerServiceImpl
         return resourceManager.delete( resourcePath );
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.resourcemanager.ResourceManagerService#exists(java.lang.String)
      */
     public boolean exists(String domain)
@@ -169,7 +169,7 @@ public class ResourceManagerServiceImpl
         return this.getDomainList().containsKey( domain );
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.resourcemanager.ResourceManagerService#exists(java.lang.String, java.lang.String)
      */
     public boolean exists(String domain, String resourceName)
@@ -178,7 +178,7 @@ public class ResourceManagerServiceImpl
         return resourceManager.exists( resourceName );
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.resourcemanager.ResourceManagerService#exists(java.lang.String, java.lang.String[], java.lang.String)
      */
     public boolean exists(String domain, String[]context, String resourceName)
@@ -187,14 +187,14 @@ public class ResourceManagerServiceImpl
         return resourceManager.exists( context, resourceName );
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.resourcemanager.ResourceManagerService#listDomains()
      */
     public String[] listDomains()
     {
         String key;
-        Enumeration keys = this.getDomainList().keys();
-        ArrayList result = new ArrayList();
+        Enumeration<String> keys = this.getDomainList().keys();
+        ArrayList<String> result = new ArrayList<String>();
 
         while( keys.hasMoreElements() )
         {
@@ -205,7 +205,7 @@ public class ResourceManagerServiceImpl
         return (String[]) result.toArray( new String[result.size()] );
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.resourcemanager.ResourceManagerService#listResources(java.lang.String)
      */
     public String[] listResources(String domain)
@@ -214,7 +214,7 @@ public class ResourceManagerServiceImpl
         return resourceManager.listResources();
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.resourcemanager.ResourceManagerService#read(java.lang.String, java.lang.String)
      */
     public byte[] read(String domain, String resourcePath)
@@ -224,7 +224,7 @@ public class ResourceManagerServiceImpl
         return resourceManager.read( resourcePath );
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.resourcemanager.ResourceManagerService#update(java.lang.String, java.lang.String, java.lang.Object)
      */
     public void update(String domain, String resourcePath, Object resourceContent)
@@ -234,7 +234,7 @@ public class ResourceManagerServiceImpl
         resourceManager.update( resourcePath, resourceContent );
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.resourcemanager.ResourceManagerService#getResourceURL(java.lang.String, java.lang.String[], java.lang.String)
      */
     public URL getResourceURL(String domain, String[] context, String resourceName)
@@ -243,7 +243,7 @@ public class ResourceManagerServiceImpl
         return resourceManager.getResourceURL( context, resourceName );
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.resourcemanager.ResourceManagerService#read(java.lang.String, java.lang.String[], java.lang.String)
      */
     public byte [] read(String domain, String[] context, String resourceName)
@@ -253,7 +253,7 @@ public class ResourceManagerServiceImpl
         return resourceManager.read( context, resourceName );
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.resourcemanager.ResourceManagerService#locate(java.lang.String, java.lang.String[], java.lang.String)
      */
     public String locate(String domain, String[] context, String resourceName)
@@ -269,7 +269,7 @@ public class ResourceManagerServiceImpl
     /**
      * @return Returns the domainList.
      */
-    protected Hashtable getDomainList()
+    protected Hashtable<String, ResourceManager> getDomainList()
     {
         return domainList;
     }

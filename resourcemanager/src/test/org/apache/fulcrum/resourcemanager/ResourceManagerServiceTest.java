@@ -46,6 +46,9 @@ public class ResourceManagerServiceTest extends BaseUnitTest
         super(name);
     }
 
+    /* (non-Javadoc)
+     * @see junit.framework.TestCase#setUp()
+     */
     protected void setUp() throws Exception
     {
         super.setUp();
@@ -57,6 +60,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
 
     /**
      * Test basic CRUD for the domain "script"
+     * @throws Exception generic exception
      */
     public void testResourceCRUD() throws Exception
     {
@@ -105,6 +109,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
 
     /**
      * Test getting a list of domains
+     * @throws Exception generic exception
      */
     public void testListDomains() throws Exception
     {
@@ -122,6 +127,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
 
     /**
      * Test the locator
+     * @throws Exception generic exception
      */
     public void testLocator() throws Exception
     {
@@ -199,6 +205,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
 
     /**
      * Try to access an unknown domain
+     * @throws Exception generic exception
      */
     public void testUnknownDomain() throws Exception
     {
@@ -218,6 +225,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
 
     /**
      * Create a resource file using the various input data types
+     * @throws Exception generic exception
      */
     public void testCreateResources() throws Exception
     {
@@ -274,7 +282,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
 
     /**
      * Get the URL of the underlying resource.
-     * @throws Exception
+     * @throws Exception generic exception
      */
     public void testGetResourceURL() throws Exception
     {
@@ -293,6 +301,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
 
     /**
      * Create a resource file using the various input data types
+     * @throws Exception generic exception
      */
     public void testAutoDecrytpion() throws Exception
     {
@@ -325,6 +334,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
      * Use a proper limit and run the test in a seperate VM to find
      * instabilities. Don't use this in Maven since it blows up due
      * to the caching of the JUNIT reports and output onstdout.
+     * @throws Exception generic exception
      */
     public void _testLongRunningBehaviour() throws Exception
     {

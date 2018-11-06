@@ -70,7 +70,7 @@ public interface ResourceManager
      *
      * @param resourcePath the path of the resource
      * @param resourceContent the content of the resource
-     * @exception IOException accessing the resource failed
+     * @throws IOException accessing the resource failed
      */
     void create( String resourcePath, Object resourceContent )
         throws IOException;
@@ -80,7 +80,7 @@ public interface ResourceManager
      *
      * @param resourcePath the path of the resource
      * @return the content of the resource
-     * @exception IOException accessing the resource failed
+     * @throws IOException accessing the resource failed
      */
     byte[] read(  String resourcePath )
         throws IOException;
@@ -90,7 +90,7 @@ public interface ResourceManager
      *
      * @param resourcePath the path of the resource
      * @param resourceContent the content of resource
-     * @exception IOException accessing the resource failed
+     * @throws IOException accessing the resource failed
      */
     void update( String resourcePath, Object resourceContent )
         throws IOException;
@@ -100,7 +100,7 @@ public interface ResourceManager
      *
      * @param resourcePath the path of the resource
      * @return true if the resource was physically deleted
-     * @exception IOException accessing the resource failed
+     * @throws IOException accessing the resource failed
      */
     boolean delete( String resourcePath )
         throws IOException;
@@ -133,7 +133,7 @@ public interface ResourceManager
      * @param context the context to locate the resource
      * @param resourceName the name of the resource
      * @return the content of the resource
-     * @exception IOException accessing the resource failed
+     * @throws IOException accessing the resource failed
      */
     byte[] read( String[] context, String resourceName )
     	throws IOException;

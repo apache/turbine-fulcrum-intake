@@ -24,6 +24,11 @@
   </properties>
 
   <body>
+    <release version="1.0.2" date="in SVN">
+      <action dev="painter" type="update">
+        JavaDoc update, use commons-lang3
+      </action>
+    </release>  
     <release version="1.0.1" date="2011-09-20">
         <action dev="sgoeschl" type="update">
           Cleaned up the code.

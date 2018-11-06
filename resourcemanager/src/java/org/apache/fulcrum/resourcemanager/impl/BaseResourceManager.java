@@ -96,7 +96,7 @@ public abstract class BaseResourceManager
         // nothing to do
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
      */
     public void contextualize(Context context) throws ContextException
@@ -106,7 +106,7 @@ public abstract class BaseResourceManager
         this.tempDir        = (File) context.get("urn:avalon:temp");
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
      */
     public void service(ServiceManager serviceManager) throws ServiceException
@@ -114,7 +114,7 @@ public abstract class BaseResourceManager
         this.serviceManager = serviceManager;
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
     public void configure(Configuration configuration) throws ConfigurationException
@@ -124,7 +124,7 @@ public abstract class BaseResourceManager
         this.seed = "resourcemanager";
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.avalon.framework.activity.Initializable#initialize()
      */
     public void initialize() throws Exception
@@ -132,7 +132,7 @@ public abstract class BaseResourceManager
         // nothing to do
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.avalon.framework.activity.Disposable#dispose()
      */
     public void dispose()
@@ -146,7 +146,7 @@ public abstract class BaseResourceManager
         this.tempDir = null;
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.apache.avalon.framework.configuration.Configuration)
      */
     public void reconfigure(Configuration configuration)
@@ -209,6 +209,9 @@ public abstract class BaseResourceManager
 
     /**
      * Get the content as byte[].
+     * @param content content to convert
+     * @return byte array representation of the object
+     * @throws IOException if unable to read
      */
     protected byte[] getContent( Object content )
     	throws IOException
@@ -244,6 +247,9 @@ public abstract class BaseResourceManager
 
     /**
      * Extract a byte[] from the input stream.
+     * @param is input stream to read from
+     * @return byte array representation of the object
+     * @throws IOException if unable to read
      */
     protected byte[] getBytes( InputStream is )
     	throws IOException
@@ -324,6 +330,7 @@ public abstract class BaseResourceManager
 
     /**
      * @return the password for the resource manager
+     * @throws Exception generic exception
      */
     private char[] getPassword() throws Exception
 	{
@@ -334,6 +341,7 @@ public abstract class BaseResourceManager
      * Reads the given input stream and decrypts it if required
      * @param is the input stream to be read
      * @return the content of the input stream
+     * @throws IOException if unable to read
      */
     protected byte[] read( InputStream is )
     	throws IOException
@@ -356,6 +364,7 @@ public abstract class BaseResourceManager
      * Reads from an unencrypted input stream
      * @param is the source input stream
      * @return the content of the input stream
+     * @throws IOException if unable to read
      */
     private byte[] readPlain( InputStream is )
     	throws IOException
@@ -371,6 +380,7 @@ public abstract class BaseResourceManager
      * Reads a potentially encrypted input stream.
      * @param is the source input stream
      * @return the content of the input stream
+     * @throws IOException if unable to read
      */
     private byte[] readSmartEncrypted( InputStream is )
     	throws IOException
@@ -404,6 +414,7 @@ public abstract class BaseResourceManager
      * Reads a potentially encrypted input stream.
      * @param is the source input stream
      * @return the content of the input stream
+     * @throws IOException if unable to read
      */
     private byte[] readEncrypted( InputStream is )
     	throws IOException
@@ -439,6 +450,7 @@ public abstract class BaseResourceManager
      *
      * @param os the output stream to be written
      * @param content the content to be written
+     * @throws IOException if unable to read
      */
     protected void write( OutputStream os, byte[] content )
     	throws IOException
@@ -461,7 +473,8 @@ public abstract class BaseResourceManager
      * Write the given content without encryption.
      *
      * @param os the output stream
-     * @parwm content the content to be written
+     * @param content the content to be written
+     * @throws IOException if unable to read
      */
     private void writePlain( OutputStream os, byte[] content )
     	throws IOException
@@ -474,7 +487,8 @@ public abstract class BaseResourceManager
      * Write the given content and encrypt it.
      *
      * @param os the output stream
-     * @parwm content the content to be written
+     * @param content the content to be written
+     * @throws IOException if unable to read
      */
     private void writeEncrypted( OutputStream os, byte[] content )
     	throws IOException
