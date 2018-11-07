@@ -197,10 +197,10 @@ public class PBEServiceTest extends BaseUnitTest
         String plainText = "Nobody knows the troubles I have seen ...";
 
         this.getService().encrypt(plainText, new File("./target/temp/plain.enc.txt"), "mysecret".toCharArray());
-        this.getService().encrypt(new File("./project.xml"), new File("./target/temp/project.enc.xml"), "mysecret".toCharArray());
+        this.getService().encrypt(new File("./pom.xml"), new File("./target/temp/pom.enc.xml"), "mysecret".toCharArray());
 
         this.getService().decrypt(new File("./target/temp/plain.enc.txt"), new File("./target/temp/plain.dec.txt"), "mysecret".toCharArray());
-        this.getService().decrypt(new File("./target/temp/project.enc.xml"), new File("./target/temp/project.dec.xml"), "mysecret".toCharArray());
+        this.getService().decrypt(new File("./target/temp/pom.enc.xml"), new File("./target/temp/pom.dec.xml"), "mysecret".toCharArray());
 
 
     }

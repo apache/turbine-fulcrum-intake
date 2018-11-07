@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
@@ -15,88 +15,81 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <parent>
-     <artifactId>turbine-parent</artifactId>
-     <groupId>org.apache.turbine</groupId>
-     <version>5</version>
-  </parent>
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.apache.fulcrum</groupId>
-  <artifactId>fulcrum-script</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
-  <name>Fulcrum Script Component</name>
-  <inceptionYear>2004</inceptionYear>
-  <description>A JSR 223 scripting Avalon component</description>
-  <url>http://turbine.apache.org/fulcrum/fulcrum-script</url>
-		
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/script</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/script</developerConnection>
-    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/script</url>
-  </scm>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<artifactId>turbine-parent</artifactId>
+		<groupId>org.apache.turbine</groupId>
+		<version>5</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.apache.fulcrum</groupId>
+	<artifactId>fulcrum-script</artifactId>
+	<version>1.0.1-SNAPSHOT</version>
+	<name>Fulcrum Script Component</name>
+	<inceptionYear>2004</inceptionYear>
+	<description>A JSR 223 scripting Avalon component</description>
+	<url>http://turbine.apache.org/fulcrum/fulcrum-script</url>
 
-  <distributionManagement>
-    <site>
-      <id>apache.website</id>
-      <name>Fulcrum Website</name>
-      <url>http://turbine.apache.org/fulcrum/fulcrum-script/</url>
-    </site>    
-  </distributionManagement>
-	
-  <developers>
-    <developer>
-      <name>Siegfried Goeschl</name>
-      <id>sgoeschl</id>
-      <email>sgoeschl@apache.org</email>
-      <organization />
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-  </developers>
+	<scm>
+		<connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/script</connection>
+		<developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/script</developerConnection>
+		<url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/script</url>
+	</scm>
 
-  <dependencies>
-        <dependency>
-            <groupId>org.apache.fulcrum</groupId>
-            <artifactId>fulcrum-resourcemanager</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
-        </dependency>
-        <!-- Testing dependencies -->
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <version>2.4.4</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-jsr223</artifactId>
-            <version>2.4.4</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.fulcrum</groupId>
-            <artifactId>fulcrum-testcontainer</artifactId>
-            <version>1.0.8-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.fulcrum</groupId>
-            <artifactId>fulcrum-yaafi</artifactId>
-            <version>1.0.8-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>    
-  </dependencies>
+	<developers>
+		<developer>
+			<name>Siegfried Goeschl</name>
+			<id>sgoeschl</id>
+			<email>sgoeschl@apache.org</email>
+			<organization />
+			<roles>
+				<role>Java Developer</role>
+			</roles>
+		</developer>
+	</developers>
 
-  <build>
-    <sourceDirectory>${basedir}/src/java</sourceDirectory>
-    <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
-  </build>
- 
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.fulcrum</groupId>
+			<artifactId>fulcrum-resourcemanager</artifactId>
+			<version>1.0.2-SNAPSHOT</version>
+		</dependency>
+		<!-- Testing dependencies -->
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-all</artifactId>
+			<version>2.4.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-jsr223</artifactId>
+			<version>2.4.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.fulcrum</groupId>
+			<artifactId>fulcrum-testcontainer</artifactId>
+			<version>1.0.8-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.fulcrum</groupId>
+			<artifactId>fulcrum-yaafi</artifactId>
+			<version>1.0.8-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
-  <properties>
-    <turbine.site.path>fulcrum/fulcrum-script</turbine.site.path>
-  </properties>
-	
+	<build>
+		<sourceDirectory>${basedir}/src/java</sourceDirectory>
+		<testSourceDirectory>${basedir}/src/test</testSourceDirectory>
+	</build>
+
+	<properties>
+		<turbine.site.path>fulcrum/fulcrum-script</turbine.site.path>
+	</properties>
+
 </project>

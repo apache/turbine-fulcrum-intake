@@ -37,14 +37,6 @@
     <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/testcontainer</url>
   </scm>
 
-  <distributionManagement>
-    <site>
-      <id>apache.website</id>
-      <name>Fulcrum Website</name>
-      <url>http://turbine.apache.org/fulcrum/fulcrum-testcontainer/</url>
-    </site>    
-  </distributionManagement>
-	
   <developers>
     <developer>
       <name>Siegfried Goeschl</name>
@@ -126,7 +118,6 @@
       </plugin>
     </plugins>
   </build>
- 
 
   <properties>
     <turbine.site.path>fulcrum/fulcrum-testcontainer</turbine.site.path>

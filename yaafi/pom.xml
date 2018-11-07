@@ -38,15 +38,6 @@
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/yaafi/</developerConnection>
     <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/yaafi/</url>
   </scm>
-
-  
-  <distributionManagement>
-    <site>
-      <id>apache.website</id>
-      <name>Fulcrum Yaafi Website</name>
-      <url>http://turbine.apache.org/fulcrum/fulcrum-yaafi/</url>
-    </site>    
-  </distributionManagement>
 	
   <developers>
     <developer>
@@ -118,12 +109,9 @@
   <build>
     <sourceDirectory>${basedir}/src/java</sourceDirectory>
     <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
-	<plugins>
-	  </plugins>
   </build>
   
   <properties>
-    <!-- This bits are used for the staging directory -->
     <turbine.site.path>fulcrum/fulcrum-yaafi</turbine.site.path>
   </properties>  
 </project>
