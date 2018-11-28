@@ -107,10 +107,10 @@ public class ServiceContainerImpl
     private ServiceManager parentServiceManager;
 
     /** The list of services instantiated */
-    private List serviceList;
+    private List<ServiceComponent> serviceList;
 
     /** The map of services used for the lookup */
-    private HashMap serviceMap;
+    private HashMap<String, ServiceComponent> serviceMap;
 
     /** The Avalon role configuration loaded by this class */
     private Configuration roleConfiguration;
@@ -146,10 +146,10 @@ public class ServiceContainerImpl
     private boolean hasDynamicProxies;
 
     /** The list of interceptor services applied to all services */
-    private ArrayList defaultInterceptorServiceList;
+    private ArrayList<String> defaultInterceptorServiceList;
 
     /** The list of ServiceManagers as fallback service lookup */
-    private ArrayList fallbackServiceManagerList;
+    private ArrayList<String> fallbackServiceManagerList;
 
     /** the configuration for running the ComponentConfigurationPropertiesResolver */
     private Configuration componentConfigurationPropertiesResolverConfig;
@@ -179,14 +179,14 @@ public class ServiceContainerImpl
         this.isAlreadyDisposed = false;
         this.isCurrentlyDisposing = false;
 
-        this.serviceList = new ArrayList();
-        this.serviceMap = new HashMap();
+        this.serviceList = new ArrayList<ServiceComponent>();
+        this.serviceMap = new HashMap<String, ServiceComponent>();
 
         this.applicationRootDir = new File( new File("").getAbsolutePath() );
         this.tempRootDir = new File( System.getProperty("java.io.tmpdir",".") );
 
-        this.fallbackServiceManagerList = new ArrayList();
-        this.defaultInterceptorServiceList = new ArrayList();
+        this.fallbackServiceManagerList = new ArrayList<String>();
+        this.defaultInterceptorServiceList = new ArrayList<String>();
 
         this.disposalDelay = DISPOSAL_DELAY_DEFAULT;
         this.reconfigurationDelay = RECONFIGURATION_DELAY_DEFAULT;
@@ -458,7 +458,7 @@ public class ServiceContainerImpl
 
         // create the service implementation instances
 
-        List currServiceList = this.createServiceComponents(
+        List<ServiceComponent> currServiceList = this.createServiceComponents(
             this.roleConfiguration,
             this.getLogger()
             );
@@ -639,7 +639,7 @@ public class ServiceContainerImpl
     public synchronized RoleEntry[] getRoleEntries()
     {
         ServiceComponent serviceComponent;
-        List serviceList = this.getServiceList();
+        List<ServiceComponent> serviceList = this.getServiceList();
         RoleEntry[] result = new RoleEntry[serviceList.size()];
 
         for( int i=0; i<result.length; i++ )
@@ -1052,7 +1052,7 @@ public class ServiceContainerImpl
     /**
      * @return Returns the serviceMap.
      */
-    private HashMap getServiceMap()
+    private HashMap<String, ServiceComponent> getServiceMap()
     {
         return this.serviceMap;
     }
@@ -1063,7 +1063,7 @@ public class ServiceContainerImpl
      * @param serviceList the list of available services
      * @throws Exception the incarnation of a service failed
      */
-    private void incarnateAll(List serviceList)
+    private void incarnateAll(List<ServiceComponent> serviceList)
         throws Exception
     {
         ServiceComponent serviceComponent;
@@ -1164,7 +1164,7 @@ public class ServiceContainerImpl
      *
      * @param serviceList the list of services to decommission
      */
-    private void decommissionAll(List serviceList)
+    private void decommissionAll(List<ServiceComponent> serviceList)
     {
         for( int i=serviceList.size()-1; i>=0; i-- )
         {
@@ -1201,7 +1201,7 @@ public class ServiceContainerImpl
      *
      * @param serviceList the list of services to dispose
      */
-    private void disposeAll(List serviceList)
+    private void disposeAll(List<ServiceComponent> serviceList)
     {
         for( int i=serviceList.size()-1; i>=0; i-- )
         {
@@ -1241,7 +1241,7 @@ public class ServiceContainerImpl
     /**
      * @return The list of currently know services
      */
-    private List getServiceList()
+    private List<ServiceComponent> getServiceList()
     {
         return this.serviceList;
     }
@@ -1249,7 +1249,7 @@ public class ServiceContainerImpl
     /**
      * @param list The list of known services
      */
-    private void setServiceList(List list)
+    private void setServiceList(List<ServiceComponent> list)
     {
         this.serviceList = list;
     }
@@ -1271,13 +1271,13 @@ public class ServiceContainerImpl
      * @return the list of service components
      * @throws ConfigurationException creating the service instance failed
      */
-    private List createServiceComponents(Configuration roleConfiguration, Logger logger )
+    private List<ServiceComponent> createServiceComponents(Configuration roleConfiguration, Logger logger )
         throws ConfigurationException
     {
         Validate.notNull(roleConfiguration,"roleConfiguration");
         Validate.notNull(logger,"logger");
 
-        ArrayList result = new ArrayList();
+        ArrayList<ServiceComponent> result = new ArrayList<ServiceComponent>();
         ServiceComponent serviceComponent = null;
 
         // create an appropriate instance of role configuration parser
@@ -1290,7 +1290,7 @@ public class ServiceContainerImpl
 
         // get the default interceptors defined for the container
 
-        ArrayList defaultInterceptorList = this.getDefaultInterceptorServiceList();
+        ArrayList<String> defaultInterceptorList = this.getDefaultInterceptorServiceList();
 
         // create the service components based on the role entries
 
@@ -1386,7 +1386,7 @@ public class ServiceContainerImpl
 
         try
         {
-            Class resolverClass = this.getClassLoader().loadClass( className );
+            Class<?> resolverClass = this.getClassLoader().loadClass( className );
             resolver = (ComponentConfigurationPropertiesResolver) resolverClass.newInstance();
             ContainerUtil.enableLogging(resolver, this.getLogger());
             ContainerUtil.contextualize(resolver, this.getContext());
@@ -1626,7 +1626,7 @@ public class ServiceContainerImpl
     /**
      * @return Returns the defaultInterceptorServiceList.
      */
-    private ArrayList getDefaultInterceptorServiceList()
+    private ArrayList<String> getDefaultInterceptorServiceList()
     {
         return defaultInterceptorServiceList;
     }

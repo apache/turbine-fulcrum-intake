@@ -43,7 +43,7 @@ public abstract class ServiceComponentImpl
     private RoleEntry roleEntry;
 
     /** the actual implementation class of the service component */
-    private Class implementationClazz;
+    private Class<?> implementationClazz;
 
     /** the instance of the implementation class of the service component */
     private Object instance;
@@ -92,7 +92,7 @@ public abstract class ServiceComponentImpl
     // Service Component Lifecycle Implementation
     /////////////////////////////////////////////////////////////////////////
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentLifecycle#loadImplemtationClass(java.lang.ClassLoader)
      */
     public void loadImplemtationClass(ClassLoader classLoader)
@@ -127,7 +127,7 @@ public abstract class ServiceComponentImpl
         }
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentLifecycle#getInstance()
      */
     public Object getInstance()
@@ -142,7 +142,7 @@ public abstract class ServiceComponentImpl
         return this.getRawInstance(true);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentLifecycle#incarnate()
      */
     public void incarnate() throws Exception
@@ -163,12 +163,12 @@ public abstract class ServiceComponentImpl
         }
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentLifecycle#reconfigure()
      */
     public abstract void reconfigure() throws Exception;
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentLifecycle#decommision()
      */
     public void decommision() throws Exception
@@ -177,7 +177,7 @@ public abstract class ServiceComponentImpl
         this.proxy = null;
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentLifecycle#dispose()
      */
     public void dispose()
@@ -194,40 +194,40 @@ public abstract class ServiceComponentImpl
         this.parameters = null;
     }
 
-    /**
-     * @param logger The logger to set.
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentLifecycle#setLogger(org.apache.avalon.framework.logger.Logger)
      */
     public void setLogger(Logger logger)
     {
         this.logger = logger;
     }
 
-    /**
-     * @param context The context to set.
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentLifecycle#setContext(org.apache.avalon.framework.context.Context)
      */
     public void setContext(Context context)
     {
         this.context = context;
     }
 
-    /**
-     * @param serviceManager The serviceManager to set.
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentLifecycle#setServiceManager(org.apache.avalon.framework.service.ServiceManager)
      */
     public void setServiceManager(ServiceManager serviceManager)
     {
         this.serviceManager = serviceManager;
     }
 
-    /**
-     * @param configuration The configuration to set.
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentLifecycle#setConfiguration(org.apache.avalon.framework.configuration.Configuration)
      */
     public void setConfiguration(Configuration configuration)
     {
         this.configuration = configuration;
     }
 
-    /**
-     * @param parameters The parameters to set.
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentLifecycle#setParameters(org.apache.avalon.framework.parameters.Parameters)
      */
     public void setParameters(Parameters parameters)
     {
@@ -246,7 +246,7 @@ public abstract class ServiceComponentImpl
         return this.getRoleEntry().isEarlyInit();
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponent#getName()
      */
     public String getName()
@@ -254,8 +254,8 @@ public abstract class ServiceComponentImpl
         return this.getRoleEntry().getName();
     }
 
-    /**
-     * @return Returns the roleEntry.
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponent#getRoleEntry()
      */
     public RoleEntry getRoleEntry()
     {
@@ -281,7 +281,7 @@ public abstract class ServiceComponentImpl
     /**
      * @return Returns the implementationClazz.
      */
-    public Class getImplementationClazz()
+    public Class<?> getImplementationClazz()
     {
         return this.implementationClazz;
     }
@@ -330,7 +330,7 @@ public abstract class ServiceComponentImpl
     // Class implementation
     /////////////////////////////////////////////////////////////////////////
 
-    /**
+    /* (non-Javadoc)
      * @see java.lang.Object#toString()
      */
     public String toString()
@@ -352,9 +352,10 @@ public abstract class ServiceComponentImpl
 
     /**
      * Create an instance of the service component implementation class
-     *
-     * @throws InstantiationException th
-     * @throws IllegalAccessException
+     * 
+     * @return instance of the service component class
+     * @throws InstantiationException if unable to instantiate
+     * @throws IllegalAccessException if unable to access
      */
     protected Object createInstance()
         throws InstantiationException, IllegalAccessException
@@ -371,12 +372,14 @@ public abstract class ServiceComponentImpl
 
     /**
      * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponent#incarnate()
+     * @throws Exception generic exception
      */
     protected abstract void incarnateInstance() throws Exception;
 
     /**
      * Get either the original service object or the dynamic proxy
      *
+     * @param useProxy set to true if using a proxy
      * @return Returns the raw instance, i.e. does not incarnate
      * the instance.
      */

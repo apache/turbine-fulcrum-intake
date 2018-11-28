@@ -53,6 +53,7 @@ public class AvalonToYaafiContextMapper
      *
      * @param tempRootDir current temp directory
      * @param context the existing context
+     * @param classLoader the classloader
      */
     public AvalonToYaafiContextMapper(
         File tempRootDir,

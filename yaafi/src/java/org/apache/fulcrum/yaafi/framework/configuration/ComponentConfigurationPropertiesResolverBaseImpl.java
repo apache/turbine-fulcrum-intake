@@ -141,6 +141,7 @@ public abstract class ComponentConfigurationPropertiesResolverBaseImpl
     /**
      * Add the Avalon context variables.
      * @param properties properties to be set
+     * @throws ContextException if context not found
      */
     protected void addAvalonContext(Properties properties) throws ContextException
     {
@@ -169,6 +170,8 @@ public abstract class ComponentConfigurationPropertiesResolverBaseImpl
     /**
      * Set properties from a file location
      * @param fileLocation file location of properties properties to be set
+     * @return the properties
+     * @throws Exception if unable to parse the properties file
      */
     protected Properties loadProperties(String fileLocation) throws Exception
     {

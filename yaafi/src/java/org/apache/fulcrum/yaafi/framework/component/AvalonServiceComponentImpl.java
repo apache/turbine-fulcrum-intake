@@ -71,8 +71,8 @@ public class AvalonServiceComponentImpl
     // Service Component Lifecycle Implementation
     /////////////////////////////////////////////////////////////////////////
 
-    /**
-     * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponent#incarnate()
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentImpl#incarnateInstance()
      */
     protected void incarnateInstance() throws Exception
     {
@@ -139,8 +139,8 @@ public class AvalonServiceComponentImpl
         }
     }
 
-    /**
-     * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponent#reconfigure()
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentImpl#reconfigure()
      */
     public void reconfigure() throws Exception
     {
@@ -197,10 +197,9 @@ public class AvalonServiceComponentImpl
         }
     }
 
-    /**
+    /* (non-Javadoc)
      * Stop and dispose the service implementation.
-     *
-     * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponent#decommision()
+     * @see org.apache.fulcrum.yaafi.framework.component.ServiceComponentImpl#decommision()
      */
     public void decommision() throws Exception
     {
@@ -277,7 +276,7 @@ public class AvalonServiceComponentImpl
     /**
      * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
      * @param context the context to add to this service
-     * @throws ContextException
+     * @throws ContextException if unable to contextualize
      */
     public void contextualize(Context context) throws ContextException
     {
@@ -338,6 +337,9 @@ public class AvalonServiceComponentImpl
 
     /**
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
+     * 
+     * @param configuration the configuration
+     * @throws ConfigurationException if fails to contextualize the config
      */
     public void configure(Configuration configuration) throws ConfigurationException
     {
@@ -365,11 +367,11 @@ public class AvalonServiceComponentImpl
         }
     }
 
-/**
- * @see org.apache.avalon.framework.parameters.Parameterizable#parameterize(org.apache.avalon.framework.parameters.Parameters)
- * @param parameters
- * @throws ParameterException
- */
+    /**
+     * @see org.apache.avalon.framework.parameters.Parameterizable#parameterize(org.apache.avalon.framework.parameters.Parameters)
+     * @param parameters the parameters
+     * @throws ParameterException if unable to set the parameters
+     */
     public void parameterize(Parameters parameters) throws ParameterException
     {
         Object rawInstance = this.getRawInstance(false);
@@ -398,6 +400,7 @@ public class AvalonServiceComponentImpl
 
     /**
      * @see org.apache.avalon.framework.activity.Initializable#initialize()
+     * @throws Exception generic exception
      */
     public void initialize() throws Exception
     {
@@ -427,6 +430,7 @@ public class AvalonServiceComponentImpl
 
     /**
      * @see org.apache.avalon.framework.activity.Executable#execute()
+     * @throws Exception generic exception
      */
     public void execute() throws Exception
     {
@@ -456,6 +460,7 @@ public class AvalonServiceComponentImpl
 
     /**
      * @see org.apache.avalon.framework.activity.Startable#start()
+     * @throws Exception generic exception
      */
     public void start() throws Exception
     {
@@ -485,6 +490,7 @@ public class AvalonServiceComponentImpl
 
     /**
      * @see org.apache.avalon.framework.activity.Startable#stop()
+     * @throws Exception generic exception
      */
     public void stop() throws Exception
     {
@@ -560,8 +566,8 @@ public class AvalonServiceComponentImpl
 
 	/**
 	 * @see org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.apache.avalon.framework.configuration.Configuration)
-	 * @param configuration
-	 * @throws ConfigurationException
+	 * @param configuration the configuration
+	 * @throws ConfigurationException if unable to configure
 	 */
     public void reconfigure(Configuration configuration) throws ConfigurationException
     {

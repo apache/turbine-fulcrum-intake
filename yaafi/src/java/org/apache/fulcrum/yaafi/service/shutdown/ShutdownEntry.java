@@ -181,7 +181,7 @@ public class ShutdownEntry
     /**
      * Creates an InputStream
      * @return InputStream of the location
-     * @throws IOException
+     * @throws IOException if unable to open the stream
      */
     public InputStream locate() throws IOException
     {
@@ -258,12 +258,12 @@ public class ShutdownEntry
     {
         byte[] buf = new byte[BUF_SIZE];
         int n = 0;
-        int total = 0;
+        //int total = 0;
 
         while ((n = is.read(buf)) > 0)
         {
             os.write(buf, 0, n);
-            total += n;
+            //total += n;
         }
 
         is.close();
