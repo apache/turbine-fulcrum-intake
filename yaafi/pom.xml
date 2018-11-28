@@ -71,14 +71,12 @@
       <version>4.3.1</version>
     </dependency>
     <!-- Optional decrytpion of configuration files -->
-    <!--
     <dependency>
-      <groupId>fulcrum</groupId>
+      <groupId>org.apache.fulcrum</groupId>
       <artifactId>fulcrum-yaafi-crypto</artifactId>
-      <version>1.0.6</version>
+      <version>1.0.7</version>
       <optional>true</optional>
     </dependency>
-    -->
     <dependency>
       <groupId>com.jamonapi</groupId>
       <artifactId>jamon</artifactId>
