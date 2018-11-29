@@ -15,6 +15,14 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.avalon.framework.component.ComponentException;
+import org.apache.avalon.framework.logger.ConsoleLogger;
+// import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -33,29 +41,24 @@ import javax.servlet.http.HttpSession;
  * specific language governing permissions and limitations
  * under the License.
  */
-import org.apache.avalon.framework.component.ComponentException;
-import org.apache.avalon.framework.logger.ConsoleLogger;
-import org.junit.After;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 /**
- * Alternative Base class to {@link BaseUnitTest} for component tests. 
+ * Alternative Base class to {@link BaseUnit4Test} for component tests. 
  * 
  * This version doesn't load the container until the
  * first request for a component. This allows the tester to populate the configurationFileName and
  * roleFileName, possible one per test.
  * 
- * JUnit 4 Version of BaseUnitTest class.
+ * JUnit 5 Version of BaseUnitTest class.
  * 
- * @see BaseUnitTest 
+ * @see {@link BaseUnit4Test} 
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
  */
-
-public class BaseUnit4Test
+//@RunWith(JUnitPlatform.class)
+public class BaseUnit5Test
 {
     public static final String CONTAINER_ECM = "CONTAINER_ECM";
     public static final String CONTAINER_YAAFI = "CONTAINER_YAAFI";
@@ -63,7 +66,7 @@ public class BaseUnit4Test
     /** Key used in the context for defining the application root */
     public static final String COMPONENT_APP_ROOT = Container.COMPONENT_APP_ROOT;
 
-    /** Pick the default container to be YAAFI **/
+    /** Pick the default container to be YAAFI, running in **/
     private String containerType = CONTAINER_YAAFI;
 
     /** Use INFO for ConsoleLogger */
@@ -125,14 +128,14 @@ public class BaseUnit4Test
     /**
      * Constructor for test.
      */
-    public BaseUnit4Test()
+    public BaseUnit5Test()
     {
     }
 
     /**
      * Clean up after each test is run.
      */
-    @After
+    @AfterEach
     public void tearDown()
     {
         if (container != null)

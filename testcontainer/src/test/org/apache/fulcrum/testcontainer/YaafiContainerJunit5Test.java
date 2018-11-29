@@ -1,5 +1,16 @@
 package org.apache.fulcrum.testcontainer;
 
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.io.File;
+
+import org.apache.avalon.framework.component.ComponentException;
+import org.apache.avalon.framework.logger.ConsoleLogger;
+import org.junit.jupiter.api.Test;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,36 +30,20 @@ package org.apache.fulcrum.testcontainer;
  * under the License.
  */
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.io.File;
-
-import org.apache.avalon.framework.component.ComponentException;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * Basic testing of the Container
  *
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
- * @version $Id$
+ * @version $Id: YaafiContainerTest.java 1694570 2015-08-06 20:35:41Z sgoeschl $
  */
-
-public class EcmContainerTest extends BaseUnit4Test
+public class YaafiContainerJunit5Test extends BaseUnit5Test
 {
     /**
-	 * Constructor for test.
-	 */
-    public EcmContainerTest()
+     * Constructor for test.
+     */
+    public YaafiContainerJunit5Test()
     {
-    }
-
-    @Before
-    public void setUp() throws Exception{
-        setContainerType( CONTAINER_ECM);
     }
 
     @Test
@@ -56,13 +51,14 @@ public class EcmContainerTest extends BaseUnit4Test
     {
         assertTrue(true);
     }
+
     @Test
     public void testComponentUsage()
     {
         SimpleComponent sc = null;
         try
         {
-            sc = (SimpleComponent) this.lookup(SimpleComponent.ROLE);
+            sc = (SimpleComponent) this.lookup(SimpleComponent.class.getName());
         }
         catch (ComponentException e)
         {
@@ -71,6 +67,7 @@ public class EcmContainerTest extends BaseUnit4Test
         }
         assertNotNull(sc);
         sc.test();
+        System.out.println( sc );
         assertEquals(sc.getAppRoot(),sc.getAppRoot2());
         this.release(sc);
     }
@@ -98,44 +95,31 @@ public class EcmContainerTest extends BaseUnit4Test
     }
 
     @Test
-    public void testLoadingContainerWithNoRolesfile()
+    public void testLoadingContainerWithNoRolesfileFails()
     {
-        SimpleComponent sc = null;
+        this.setLogLevel(ConsoleLogger.LEVEL_DISABLED);
 
         this.setRoleFileName(null);
-        this.setConfigurationFileName(
-            "src/test/TestComponentConfigIntegratedRoles.xml");
+
         try
         {
-            sc = (SimpleComponent) this.lookup(SimpleComponent.ROLE);
+            this.lookup(SimpleComponent.class.getName());
+            fail("We should fail");
         }
         catch (ComponentException e)
         {
             e.printStackTrace();
             fail(e.getMessage());
         }
-        assertTrue(sc instanceof AlternativeComponentImpl);
-        assertNotNull(sc);
-        sc.test();
-        this.release(sc);
+        catch (Exception e)
+        {
+            // We expect to fail with a ConfigurationException
+        }
     }
-
     @Test
-    public void testLoadingNonExistentFile()
+    public void testWithLogLevel() throws Exception
     {
-        this.setRoleFileName(null);
-        this.setConfigurationFileName("BogusFile.xml");
-        try
-        {
-            this.lookup(SimpleComponent.ROLE);
-        }
-        catch(RuntimeException re){
-            //good
-        }
-        catch (ComponentException e)
-        {
-
-            fail(e.getMessage());
-        }
+        this.setLogLevel(ConsoleLogger.LEVEL_ERROR);
+        this.lookup(SimpleComponent.class.getName());
     }
 }

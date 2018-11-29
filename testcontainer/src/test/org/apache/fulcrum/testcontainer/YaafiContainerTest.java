@@ -1,4 +1,5 @@
 package org.apache.fulcrum.testcontainer;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -23,10 +24,11 @@ import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.framework.logger.ConsoleLogger;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 /**
  * Basic testing of the Container
  *
@@ -62,6 +64,7 @@ public class YaafiContainerTest extends BaseUnit4Test
             fail(e.getMessage());
         }
         assertNotNull(sc);
+        System.out.println( sc );
         sc.test();
         assertEquals(sc.getAppRoot(),sc.getAppRoot2());
         this.release(sc);

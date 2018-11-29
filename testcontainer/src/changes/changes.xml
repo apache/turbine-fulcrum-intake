@@ -25,6 +25,9 @@
   </properties>
   <body>
     <release version="1.0.8" date="in Subversion">      
+      <action type="update" dev="gk">
+       Add support for JUnit 5
+      </action> 
     </release> 
     <release version="1.0.7" date="2015-08-08">
       <action type="update" dev="gk">

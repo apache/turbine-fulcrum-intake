@@ -53,7 +53,6 @@ public class ECMContainer extends AbstractLogEnabled implements Container
      */
     public ECMContainer()
     {
-        org.apache.log4j.BasicConfigurator.configure();
         this.enableLogging(lm.getLoggerForCategory("org.apache.fulcrum.testcontainer.Container"));
     }
     /**
