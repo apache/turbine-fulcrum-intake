@@ -151,7 +151,6 @@
     <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
     <testResources>
       <testResource>
-        <targetPath />
         <directory>${basedir}/src/test</directory>
         <includes>
           <include>*.xml</include>
