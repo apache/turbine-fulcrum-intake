@@ -1,5 +1,13 @@
 package org.apache.fulcrum.yaafi.framework.container;
 
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
+import org.apache.fulcrum.yaafi.TestComponent;
+import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerConfiguration;
+import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
+import org.apache.fulcrum.yaafi.framework.role.RoleEntry;
+import org.apache.fulcrum.yaafi.service.reconfiguration.ReconfigurationService;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -23,237 +31,217 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
-import org.apache.fulcrum.yaafi.TestComponent;
-import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerConfiguration;
-import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
-import org.apache.fulcrum.yaafi.framework.role.RoleEntry;
-import org.apache.fulcrum.yaafi.service.reconfiguration.ReconfigurationService;
-
-
 /**
  * Test suite for the ServiceLifecycleManager.
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
-public class ServiceLifecycleManagerTest extends TestCase
-{
-    private ServiceLifecycleManager lifecycleManager;
-    private ServiceContainer container;
+public class ServiceLifecycleManagerTest extends TestCase {
+	private ServiceLifecycleManager lifecycleManager;
+	private ServiceContainer container;
 
-    /**
-     * Constructor
-     * @param name the name of the test case
-     */
-    public ServiceLifecycleManagerTest( String name )
-    {
-        super(name);
-    }
+	/**
+	 * Constructor
+	 * 
+	 * @param name the name of the test case
+	 */
+	public ServiceLifecycleManagerTest(String name) {
+		super(name);
+	}
 
-    /**
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception
-    {
-        super.setUp();
-        ServiceContainerConfiguration config = new ServiceContainerConfiguration();
-        config.loadContainerConfiguration( "./src/test/TestYaafiContainerConfig.xml" );
-        this.container = ServiceContainerFactory.create( config );
-        this.lifecycleManager = this.container;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	protected void setUp() throws Exception {
+		super.setUp();
+		ServiceContainerConfiguration config = new ServiceContainerConfiguration();
+		config.loadContainerConfiguration("./src/test/TestYaafiContainerConfig.xml");
+		this.container = ServiceContainerFactory.create(config);
+		this.lifecycleManager = this.container;
+	}
 
-    /**
-     * @see junit.framework.TestCase#tearDown()
-     */
-    protected void tearDown() throws Exception
-    {
-        ServiceContainerFactory.dispose(this.container);
-        super.tearDown();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see junit.framework.TestCase#tearDown()
+	 */
+	protected void tearDown() throws Exception {
+		ServiceContainerFactory.dispose(this.container);
+		super.tearDown();
+	}
 
-    public static Test suite()
-    {
-        TestSuite suite= new TestSuite();
+	public static Test suite() {
+		TestSuite suite = new TestSuite();
 
-        suite.addTest( new ServiceLifecycleManagerTest("testGetServiceComponents") );
-        suite.addTest( new ServiceLifecycleManagerTest("testGeneralReconfiguration") );
-        suite.addTest( new ServiceLifecycleManagerTest("testGeneralDecommision") );
-        suite.addTest( new ServiceLifecycleManagerTest("testGeneralReconfigurationAndDecommision") );
-        suite.addTest( new ServiceLifecycleManagerTest("testIndividualDecommission") );
-        suite.addTest( new ServiceLifecycleManagerTest("testException") );
+		suite.addTest(new ServiceLifecycleManagerTest("testGetServiceComponents"));
+		suite.addTest(new ServiceLifecycleManagerTest("testGeneralReconfiguration"));
+		suite.addTest(new ServiceLifecycleManagerTest("testGeneralDecommision"));
+		suite.addTest(new ServiceLifecycleManagerTest("testGeneralReconfigurationAndDecommision"));
+		suite.addTest(new ServiceLifecycleManagerTest("testIndividualDecommission"));
+		suite.addTest(new ServiceLifecycleManagerTest("testException"));
 
-        return suite;
-    }
+		return suite;
+	}
 
-    /**
-     * Check our TestComponent.
-     *
-     * @throws Exception
-     */
-    private void checkTestComponent()
-        throws Exception
-    {
-        TestComponent testComponent = (TestComponent) container.lookup(
-            TestComponent.ROLE
-            );
+	/**
+	 * Check our TestComponent.
+	 * 
+	 * @throws Exception generic exception
+	 */
+	private void checkTestComponent() throws Exception {
+		TestComponent testComponent = (TestComponent) container.lookup(TestComponent.ROLE);
 
-        testComponent.test();
+		testComponent.test();
 
-        assertEquals( testComponent.getBar(), "BAR" );
-        assertEquals( testComponent.getFoo(), "FOO" );
+		assertEquals(testComponent.getBar(), "BAR");
+		assertEquals(testComponent.getFoo(), "FOO");
 
-        assertNotNull( testComponent.getUrnAvalonClassLoader() );
-        assertNotNull( testComponent.getUrnAvaloneHome() );
-        assertNotNull( testComponent.getUrnAvaloneTemp() );
-        assertNotNull( testComponent.getUrnAvalonName() );
-        assertNotNull( testComponent.getUrnAvalonPartition() );
-    }
+		assertNotNull(testComponent.getUrnAvalonClassLoader());
+		assertNotNull(testComponent.getUrnAvaloneHome());
+		assertNotNull(testComponent.getUrnAvaloneTemp());
+		assertNotNull(testComponent.getUrnAvalonName());
+		assertNotNull(testComponent.getUrnAvalonPartition());
+	}
 
-    /**
-     * Gets a list of all available services and dumps them
-     * on System.out.
-     */
-    public void testGetServiceComponents() throws Exception
-    {
-        RoleEntry[] list = this.lifecycleManager.getRoleEntries();
-        assertNotNull( list );
-        assertTrue( list.length > 0  );
+	/**
+	 * Gets a list of all available services and dumps them on System.out.
+	 * 
+	 * @throws Exception generic exception
+	 */
+	public void testGetServiceComponents() throws Exception {
+		RoleEntry[] list = this.lifecycleManager.getRoleEntries();
+		assertNotNull(list);
+		assertTrue(list.length > 0);
+		for (RoleEntry entry : list)
+			System.out.println(entry.toString());
+	}
 
-        for( int i=0; i<list.length; i++ )
-        {
-            System.out.println(list[i].toString());
-        }
-    }
+	/**
+	 * Reconfigure the all services
+	 * 
+	 * @throws Exception generic exception
+	 */
+	public void testGeneralReconfiguration() throws Exception {
+		RoleEntry[] list = this.lifecycleManager.getRoleEntries();
 
-    /**
-     * Reconfigure the all services
-     */
-    public void testGeneralReconfiguration() throws Exception
-    {
-        RoleEntry[] list = this.lifecycleManager.getRoleEntries();
+		for (int i = 0; i < list.length; i++) {
+			String serviceName = list[i].getName();
+			System.out.println("Reconfiguring " + serviceName + " ...");
 
-        for( int i=0; i<list.length; i++ )
-        {
-            String serviceName = list[i].getName();
-            System.out.println("Reconfiguring " + serviceName + " ...");
+			String[] serviceNames = { list[i].getName() };
+			this.lifecycleManager.reconfigure(serviceNames);
+			assertTrue(this.container.hasService(serviceName));
+			assertNotNull(this.container.lookup(serviceName));
+		}
+	}
 
-            String[] serviceNames = {list[i].getName()};
-            this.lifecycleManager.reconfigure(serviceNames);
-            assertTrue(this.container.hasService(serviceName));
-            assertNotNull(this.container.lookup(serviceName));
-        }
-    }
+	/**
+	 * Decommission and resurrect all services
+	 * 
+	 * @throws Exception generic exception
+	 */
+	public void testGeneralDecommision() throws Exception {
+		String serviceName = null;
+		RoleEntry[] list = this.lifecycleManager.getRoleEntries();
 
-    /**
-     * Decommission and resurrect all services
-     */
-    public void testGeneralDecommision() throws Exception
-    {
-        String serviceName = null;
-        RoleEntry[] list = this.lifecycleManager.getRoleEntries();
+		for (int i = 0; i < list.length; i++) {
+			serviceName = list[i].getName();
+			System.out.println("Decommissiong " + serviceName + " ...");
 
-        for( int i=0; i<list.length; i++ )
-        {
-            serviceName = list[i].getName();
-            System.out.println("Decommissiong " + serviceName + " ...");
+			assertTrue(this.container.hasService(serviceName));
+			this.lifecycleManager.decommision(serviceName);
+			assertTrue(this.container.hasService(serviceName));
+			this.container.lookup(serviceName);
+			assertTrue(this.container.hasService(serviceName));
+			this.lifecycleManager.decommision(serviceName);
+			assertTrue(this.container.hasService(serviceName));
+		}
+	}
 
-            assertTrue(this.container.hasService(serviceName));
-            this.lifecycleManager.decommision(serviceName);
-            assertTrue(this.container.hasService(serviceName));
-            this.container.lookup(serviceName);
-            assertTrue(this.container.hasService(serviceName));
-            this.lifecycleManager.decommision(serviceName);
-            assertTrue(this.container.hasService(serviceName));
-        }
-    }
+	/**
+	 * Decommission and resurrect all services
+	 * 
+	 * @throws Exception generic exception
+	 */
+	public void testGeneralReconfigurationAndDecommision() throws Exception {
+		String serviceName = null;
+		RoleEntry[] list = this.lifecycleManager.getRoleEntries();
+		DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
+		Configuration configuration = builder.buildFromFile("./src/test/TestReconfigurationConfig.xml");
 
-    /**
-     * Decommission and resurrect all services
-     */
-    public void testGeneralReconfigurationAndDecommision() throws Exception
-    {
-        String serviceName = null;
-        RoleEntry[] list = this.lifecycleManager.getRoleEntries();
-        DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
-        Configuration configuration = builder.buildFromFile( "./src/test/TestReconfigurationConfig.xml" );
+		for (int i = 0; i < list.length; i++) {
+			serviceName = list[i].getName();
+			String[] serviceNames = { list[i].getName() };
+			System.out.println("Processing " + serviceName + " ...");
 
-        for( int i=0; i<list.length; i++ )
-        {
-            serviceName = list[i].getName();
-            String[] serviceNames = {list[i].getName()};
-            System.out.println("Processing " + serviceName + " ...");
+			// reconfigure/decommission/reconfigure the service
+			this.lifecycleManager.reconfigure(serviceNames);
+			this.lifecycleManager.decommision(serviceName);
+			this.lifecycleManager.reconfigure(serviceNames);
 
-            // reconfigure/decommission/reconfigure the service
-            this.lifecycleManager.reconfigure(serviceNames);
-            this.lifecycleManager.decommision(serviceName);
-            this.lifecycleManager.reconfigure(serviceNames);
+			// run a reconfiguration over all services
+			this.container.reconfigure(configuration);
 
-            // run a reconfiguration over all services
-            this.container.reconfigure(configuration);
+			// reconfigure/decommission/reconfigure the service
+			this.container.lookup(serviceName);
+			this.lifecycleManager.reconfigure(serviceNames);
+			this.lifecycleManager.decommision(serviceName);
+			this.lifecycleManager.reconfigure(serviceNames);
+		}
+	}
 
-            // reconfigure/decommission/reconfigure the service
-            this.container.lookup(serviceName);
-            this.lifecycleManager.reconfigure(serviceNames);
-            this.lifecycleManager.decommision(serviceName);
-            this.lifecycleManager.reconfigure(serviceNames);
-        }
-    }
+	/**
+	 * Decommissions the TestComponent and ReconfigurationService to start them
+	 * again.
+	 * 
+	 * @throws Exception generic exception
+	 */
+	public void testIndividualDecommission() throws Exception {
+		String serviceName = null;
 
+		// teminate the TestComponent and run it again
 
-    /**
-     * Decommissions the TestComponent and ReconfigurationService
-     * to start them again.
-     */
-    public void testIndividualDecommission() throws Exception
-    {
-        String serviceName = null;
+		serviceName = TestComponent.class.getName();
 
-        // teminate the TestComponent and run it again
+		this.checkTestComponent();
+		this.lifecycleManager.decommision(serviceName);
+		this.checkTestComponent();
 
-        serviceName = TestComponent.class.getName();
+		// terminate the ReconfigurationService which is currently
+		// not instantiated and resurrect it. The moment the
+		// ReconfigurationService is instantiated it is starting to
+		// work
 
-        this.checkTestComponent();
-        this.lifecycleManager.decommision( serviceName );
-        this.checkTestComponent();
+		serviceName = ReconfigurationService.class.getName();
 
-        // terminate the ReconfigurationService which is currently
-        // not instantiated and resurrect it. The moment the
-        // ReconfigurationService is instantiated it is starting to
-        // work
+		this.lifecycleManager.decommision(ReconfigurationService.class.getName());
+		this.container.lookup(ReconfigurationService.class.getName());
 
-        serviceName = ReconfigurationService.class.getName();
+		// now we should see that the service is starting up
 
-        this.lifecycleManager.decommision( ReconfigurationService.class.getName() );
-        this.container.lookup( ReconfigurationService.class.getName() );
+		Thread.sleep(5000);
 
-        // now we should see that the service is starting up
+		// and terminate it again
 
-        Thread.sleep( 5000 );
+		this.lifecycleManager.decommision(ReconfigurationService.class.getName());
+	}
 
-        // and terminate it again
+	/**
+	 * Create an exception which should be handled by the JAMon interceptor.
+	 * 
+	 * @throws Exception generic exception
+	 */
+	public void testException() throws Exception {
+		TestComponent testComponent = (TestComponent) container.lookup(TestComponent.ROLE);
 
-        this.lifecycleManager.decommision( ReconfigurationService.class.getName() );
-    }
+		try {
+			testComponent.createException("testException", this);
+		} catch (Exception e) {
+			return;
+		}
 
-    /**
-     * Create an exception which should be handled by the JAMon interceptor.
-     */
-    public void testException() throws Exception
-    {
-      TestComponent testComponent = (TestComponent) container.lookup(
-          TestComponent.ROLE
-          );
-
-      try
-      {
-          testComponent.createException("testException", this);
-      }
-      catch(Exception e)
-      {
-          return;
-      }
-
-    }
+	}
 }

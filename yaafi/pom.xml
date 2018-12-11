@@ -1,115 +1,128 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Licensed to the Apache Software Foundation (ASF) under one
- or more contributor license agreements.  See the NOTICE file
- distributed with this work for additional information
- regarding copyright ownership.  The ASF licenses this file
- to you under the Apache License, Version 2.0 (the
- "License"); you may not use this file except in compliance
- with the License.  You may obtain a copy of the License at
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+       http://www.apache.org/licenses/LICENSE-2.0
 
- Unless required by applicable law or agreed to in writing,
- software distributed under the License is distributed on an
- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- KIND, either express or implied.  See the License for the
- specific language governing permissions and limitations
- under the License.
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <parent>
-       <artifactId>turbine-parent</artifactId>
-       <groupId>org.apache.turbine</groupId>
-       <version>5</version>
-  </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<artifactId>turbine-parent</artifactId>
+		<groupId>org.apache.turbine</groupId>
+		<version>5</version>
+	</parent>
 
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.apache.fulcrum</groupId>
-  <artifactId>fulcrum-yaafi</artifactId>
-  <version>1.0.8-SNAPSHOT</version>
-  <name>Fulcrum YAAFI</name>
-  <inceptionYear>2004</inceptionYear>
-  <description>A light-weight Avalon container</description>
-  <url>http://turbine.apache.org/fulcrum/fulcrum-yaafi</url>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.apache.fulcrum</groupId>
+	<artifactId>fulcrum-yaafi</artifactId>
+	<version>1.0.8-SNAPSHOT</version>
+	<name>Fulcrum YAAFI</name>
+	<inceptionYear>2004</inceptionYear>
+	<description>A light-weight Avalon container</description>
+	<url>http://turbine.apache.org/fulcrum/fulcrum-yaafi</url>
+
+	<scm>
+		<connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/yaafi/</connection>
+		<developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/yaafi/</developerConnection>
+		<url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/yaafi/</url>
+	</scm>
+
+	<developers>
+		<developer>
+			<name>Jeffery Painter</name>
+			<id>painter</id>
+			<email>painter@apache.org</email>
+			<organization>Apache</organization>
+			<roles>
+				<role>Java Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<name>Siegfried Goeschl</name>
+			<id>sgoeschl</id>
+			<email>sgoeschl@apache.org</email>
+			<organization>Apache</organization>
+			<roles>
+				<role>Java Developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.8.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>2.6</version>
+		</dependency>
 		
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/yaafi/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/yaafi/</developerConnection>
-    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/yaafi/</url>
-  </scm>
-	
-  <developers>
-    <developer>
-      <name>Siegfried Goeschl</name>
-      <id>sgoeschl</id>
-      <email>sgoeschl@apache.org</email>
-      <organization>Apache</organization>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-  </developers>
+		<!-- Avalon depedencies -->
+		<dependency>
+			<groupId>org.apache.avalon.framework</groupId>
+			<artifactId>avalon-framework-api</artifactId>
+			<version>4.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.avalon.framework</groupId>
+			<artifactId>avalon-framework-impl</artifactId>
+			<version>4.3.1</version>
+		</dependency>
+		<!-- Optional decrytpion of configuration files -->
+		<dependency>
+			<groupId>org.apache.fulcrum</groupId>
+			<artifactId>fulcrum-yaafi-crypto</artifactId>
+			<version>1.0.7</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.jamonapi</groupId>
+			<artifactId>jamon</artifactId>
+			<version>2.81</version>
+			<optional>true</optional>
+			<exclusions>
+				<exclusion>
+					<groupId>com.hazelcast</groupId>
+					<artifactId>hazelcast-all</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.javasimon</groupId>
+			<artifactId>javasimon-core</artifactId>
+			<version>4.1.4</version>
+			<optional>true</optional>
+		</dependency>
+		<!-- Testing dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+		</dependency>
+	</dependencies>
 
-  <dependencies>
-  
-	<dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>3.8.1</version>
-    </dependency>
-    
-    <!-- Avalon depedencies -->
-    <dependency>
-      <groupId>org.apache.avalon.framework</groupId>
-      <artifactId>avalon-framework-api</artifactId>
-      <version>4.3.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.avalon.framework</groupId>
-      <artifactId>avalon-framework-impl</artifactId>
-      <version>4.3.1</version>
-    </dependency>
-    <!-- Optional decrytpion of configuration files -->
-    <dependency>
-      <groupId>org.apache.fulcrum</groupId>
-      <artifactId>fulcrum-yaafi-crypto</artifactId>
-      <version>1.0.7</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>com.jamonapi</groupId>
-      <artifactId>jamon</artifactId>
-      <version>2.81</version>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>com.hazelcast</groupId>
-          <artifactId>hazelcast-all</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.javasimon</groupId>
-      <artifactId>javasimon-core</artifactId>
-      <version>4.1.4</version>
-      <optional>true</optional>
-    </dependency>
-    <!-- Testing dependencies -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>    
-  </dependencies>
+	<build>
+		<sourceDirectory>${basedir}/src/java</sourceDirectory>
+		<testSourceDirectory>${basedir}/src/test</testSourceDirectory>
+	</build>
 
-  <build>
-    <sourceDirectory>${basedir}/src/java</sourceDirectory>
-    <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
-  </build>
-  
-  <properties>
-    <turbine.site.path>fulcrum/fulcrum-yaafi</turbine.site.path>
-  </properties>  
+	<properties>
+		<turbine.site.path>fulcrum/fulcrum-yaafi</turbine.site.path>
+	</properties>
 </project>

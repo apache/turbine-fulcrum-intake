@@ -47,7 +47,7 @@ public class ServiceManagerServiceTest extends TestCase
         super(name);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see junit.framework.TestCase#setUp()
      */
     protected void setUp() throws Exception
@@ -58,7 +58,7 @@ public class ServiceManagerServiceTest extends TestCase
         this.container = ServiceContainerFactory.create( config );
     }
 
-    /**
+    /* (non-Javadoc)
      * @see junit.framework.TestCase#tearDown()
      */
     protected void tearDown() throws Exception
@@ -69,6 +69,7 @@ public class ServiceManagerServiceTest extends TestCase
 
     /**
      * Access the ServiceManagerService
+     * @throws Exception if service manager not found
      */
     public void testServiceManagerService() throws Exception
     {

@@ -38,7 +38,7 @@ public class DependentTestComponentImpl
     /** out test component */
     private TestComponent testComponent;
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
      */
     public void service(ServiceManager serviceManager) throws ServiceException
@@ -46,6 +46,9 @@ public class DependentTestComponentImpl
         this.testComponent = (TestComponent) serviceManager.lookup(TestComponent.ROLE);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.yaafi.DependentTestComponent#test()
+     */
     public void test()
     {
         this.testComponent.test();

@@ -21,7 +21,9 @@ package org.apache.fulcrum.yaafi.interceptor.jamon;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Writer;
 import java.lang.reflect.Method;
 
 import org.apache.avalon.framework.activity.Disposable;
@@ -35,290 +37,263 @@ import org.apache.fulcrum.yaafi.framework.reflection.Clazz;
 import org.apache.fulcrum.yaafi.interceptor.baseservice.BaseInterceptorServiceImpl;
 
 /**
- * A service using JAMon for performance monitoring. The implementation
- * relies on reflection to invoke JAMON to avoid compile-time coupling.
+ * A service using JAMon for performance monitoring. The implementation relies
+ * on reflection to invoke JAMON to avoid compile-time coupling.
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
-public class JamonInterceptorServiceImpl
-    extends BaseInterceptorServiceImpl
-    implements JamonInterceptorService, Reconfigurable, ThreadSafe, Disposable, Initializable
-{
+public class JamonInterceptorServiceImpl extends BaseInterceptorServiceImpl
+		implements JamonInterceptorService, Reconfigurable, ThreadSafe, Disposable, Initializable {
 	/** are the JAMon classes in the classpath */
 	private boolean isJamonAvailable;
 
-    /** the file to hold the report */
-    private File reportFile;
+	/** the file to hold the report */
+	private File reportFile;
 
-    /** the time in ms between two reports */
-    private long reportTimeout;
+	/** the time in ms between two reports */
+	private long reportTimeout;
 
-    /** do we create a report during disposal of the service */
-    private boolean reportOnExit;
+	/** do we create a report during disposal of the service */
+	private boolean reportOnExit;
 
-    /** the time when the next report is due */
-    private long nextReportTimestamp;
+	/** the time when the next report is due */
+	private long nextReportTimestamp;
 
-    /** the implementation class name for the performance monitor */
-    private String performanceMonitorClassName;
+	/** the implementation class name for the performance monitor */
+	private String performanceMonitorClassName;
 
-    /** the implementation class name for the performance monitor */
-    private Class performanceMonitorClass;
+	/** the implementation class name for the performance monitor */
+	private Class performanceMonitorClass;
 
-    /** the class name of the JAMon MonitorFactory */
-    private static final String MONITORFACTORY_CLASSNAME = "com.jamonapi.MonitorFactory";
+	/** the class name of the JAMon MonitorFactory */
+	private static final String MONITORFACTORY_CLASSNAME = "com.jamonapi.MonitorFactory";
 
-    /** the class name of the JAMon MonitorFactory */
-    private static final String DEFAULT_PERFORMANCEMONITOR_CLASSNAME = "org.apache.fulcrum.yaafi.interceptor.jamon.Jamon2PerformanceMonitorImpl";
+	/** the class name of the JAMon MonitorFactory */
+	private static final String DEFAULT_PERFORMANCEMONITOR_CLASSNAME = "org.apache.fulcrum.yaafi.interceptor.jamon.Jamon2PerformanceMonitorImpl";
 
-    /////////////////////////////////////////////////////////////////////////
-    // Avalon Service Lifecycle Implementation
-    /////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////
+	// Avalon Service Lifecycle Implementation
+	/////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Constructor
-     */
-    public JamonInterceptorServiceImpl()
-    {
-        super();
-    }
+	/**
+	 * Constructor
+	 */
+	public JamonInterceptorServiceImpl() {
+		super();
+	}
 
-    /**
-     * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
-     */
-    public void configure(Configuration configuration) throws ConfigurationException
-    {
-        super.configure(configuration);
-        this.reportTimeout = configuration.getChild("reportTimeout").getValueAsLong(0);
+	/**
+	 * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
+	 */
+	public void configure(Configuration configuration) throws ConfigurationException {
+		super.configure(configuration);
+		this.reportTimeout = configuration.getChild("reportTimeout").getValueAsLong(0);
 
-        // parse the performance monitor class name
-        this.performanceMonitorClassName = configuration.getChild("performanceMonitorClassName").getValue(DEFAULT_PERFORMANCEMONITOR_CLASSNAME);
+		// parse the performance monitor class name
+		this.performanceMonitorClassName = configuration.getChild("performanceMonitorClassName")
+				.getValue(DEFAULT_PERFORMANCEMONITOR_CLASSNAME);
 
-        // parse the report file name
-        String reportFileName = configuration.getChild("reportFile").getValue("./jamon.html");
-        this.reportFile = this.makeAbsoluteFile( reportFileName );
+		// parse the report file name
+		String reportFileName = configuration.getChild("reportFile").getValue("./jamon.html");
+		this.reportFile = this.makeAbsoluteFile(reportFileName);
 
-        // determine when to create the next report
-        this.nextReportTimestamp = System.currentTimeMillis() + this.reportTimeout;
+		// determine when to create the next report
+		this.nextReportTimestamp = System.currentTimeMillis() + this.reportTimeout;
 
-        // do we create a report on disposal
-        this.reportOnExit = configuration.getChild("reportOnExit").getValueAsBoolean(false);
-    }
+		// do we create a report on disposal
+		this.reportOnExit = configuration.getChild("reportOnExit").getValueAsBoolean(false);
+	}
 
-    /**
-     * @see org.apache.avalon.framework.activity.Initializable#initialize()
-     */
-    public void initialize() throws Exception
-    {
-        ClassLoader classLoader = this.getClassLoader();
+	/**
+	 * @see org.apache.avalon.framework.activity.Initializable#initialize()
+	 */
+	public void initialize() throws Exception {
+		ClassLoader classLoader = this.getClassLoader();
 
-        if (!Clazz.hasClazz(classLoader, MONITORFACTORY_CLASSNAME))
-        {
-            String msg = "The JamonInterceptorService is disabled since the JAMON classes are not found in the classpath";
-            this.getLogger().warn(msg);
-            this.isJamonAvailable = false;
-            return;
-        }
-        
-        if (!Clazz.hasClazz(classLoader, this.performanceMonitorClassName))
-        {
-            String msg = "The JamonInterceptorService is disabled since the performance monitor class is not found in the classpath";
-            this.getLogger().warn(msg);
-            this.isJamonAvailable = false;
-            return;
-        }
+		if (!Clazz.hasClazz(classLoader, MONITORFACTORY_CLASSNAME)) {
+			String msg = "The JamonInterceptorService is disabled since the JAMON classes are not found in the classpath";
+			this.getLogger().warn(msg);
+			this.isJamonAvailable = false;
+			return;
+		}
 
-        // load the performance monitor class
-        this.performanceMonitorClass = Clazz.getClazz(this.getClassLoader(), this.performanceMonitorClassName);
+		if (!Clazz.hasClazz(classLoader, this.performanceMonitorClassName)) {
+			String msg = "The JamonInterceptorService is disabled since the performance monitor class is not found in the classpath";
+			this.getLogger().warn(msg);
+			this.isJamonAvailable = false;
+			return;
+		}
 
-        // check if we can create an instance of the performance monitor class
-        JamonPerformanceMonitor testMonitor = this.createJamonPerformanceMonitor(null, null, true);
-        if(testMonitor == null)
-        {
-            String msg = "The JamonInterceptorService is disabled since the performance monitor can't be instantiated";
-            this.getLogger().warn(msg);
-            this.isJamonAvailable = false;
-            return;
-        }
+		// load the performance monitor class
+		this.performanceMonitorClass = Clazz.getClazz(this.getClassLoader(), this.performanceMonitorClassName);
 
-        this.getLogger().debug("The JamonInterceptorService is enabled");
-        this.isJamonAvailable = true;
-    }
+		// check if we can create an instance of the performance monitor class
+		JamonPerformanceMonitor testMonitor = this.createJamonPerformanceMonitor(null, null, true);
+		if (testMonitor == null) {
+			String msg = "The JamonInterceptorService is disabled since the performance monitor can't be instantiated";
+			this.getLogger().warn(msg);
+			this.isJamonAvailable = false;
+			return;
+		}
 
-        /**
-     * @see org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.apache.avalon.framework.configuration.Configuration)
-     */
-    public void reconfigure(Configuration configuration) throws ConfigurationException
-    {
-        super.reconfigure(configuration);
-        this.configure(configuration);
-    }
+		this.getLogger().debug("The JamonInterceptorService is enabled");
+		this.isJamonAvailable = true;
+	}
 
-    /**
-     * @see org.apache.avalon.framework.activity.Disposable#dispose()
-     */
-    public void dispose()
-    {
-        if( this.reportOnExit )
-        {
-            this.run();
-        }
+	/**
+	 * @see org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.apache.avalon.framework.configuration.Configuration)
+	 */
+	public void reconfigure(Configuration configuration) throws ConfigurationException {
+		super.reconfigure(configuration);
+		this.configure(configuration);
+	}
 
-        this.reportFile = null;
-    }
+	/**
+	 * @see org.apache.avalon.framework.activity.Disposable#dispose()
+	 */
+	public void dispose() {
+		if (this.reportOnExit) {
+			this.run();
+		}
 
-    /////////////////////////////////////////////////////////////////////////
-    // Service interface implementation
-    /////////////////////////////////////////////////////////////////////////
+		this.reportFile = null;
+	}
 
-    /**
-     * @see org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorService#onEntry(org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorContext)
-     */
-    public void onEntry(AvalonInterceptorContext interceptorContext)
-    {
-        if( this.isJamonAvailable()  )
-        {
-            this.writeReport();
+	/////////////////////////////////////////////////////////////////////////
+	// Service interface implementation
+	/////////////////////////////////////////////////////////////////////////
 
-            String serviceShortHand = interceptorContext.getServiceShorthand();
-            Method serviceMethod = interceptorContext.getMethod();
-            boolean isEnabled = this.isServiceMonitored(interceptorContext );
-            JamonPerformanceMonitor monitor = this.createJamonPerformanceMonitor(serviceShortHand, serviceMethod, isEnabled);
-            monitor.start();
-            interceptorContext.getRequestContext().put(this.getServiceName(), monitor);
-        }
-    }
+	/**
+	 * @see org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorService#onEntry(org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorContext)
+	 */
+	public void onEntry(AvalonInterceptorContext interceptorContext) {
+		if (this.isJamonAvailable()) {
+			this.writeReport();
 
-    /**
-     * @see org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorService#onExit(org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorContext, java.lang.Object)
-     */
-    public void onExit(AvalonInterceptorContext interceptorContext, Object result)
-    {
-        if( this.isJamonAvailable() )
-        {
-            JamonPerformanceMonitor monitor;
-            monitor = (JamonPerformanceMonitor) interceptorContext.getRequestContext().remove(this.getServiceName());
-            monitor.stop();
-        }
-    }
+			String serviceShortHand = interceptorContext.getServiceShorthand();
+			Method serviceMethod = interceptorContext.getMethod();
+			boolean isEnabled = this.isServiceMonitored(interceptorContext);
+			JamonPerformanceMonitor monitor = this.createJamonPerformanceMonitor(serviceShortHand, serviceMethod,
+					isEnabled);
+			monitor.start();
+			interceptorContext.getRequestContext().put(this.getServiceName(), monitor);
+		}
+	}
 
-    /**
-     * @see org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorService#onError(org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorContext, java.lang.Throwable)
-     */
-    public void onError(AvalonInterceptorContext interceptorContext,Throwable t)
-    {
-        if( this.isJamonAvailable() )
-        {
-            JamonPerformanceMonitor monitor;
-            monitor = (JamonPerformanceMonitor) interceptorContext.getRequestContext().remove(this.getServiceName());
-            monitor.stop(t);
-        }
-    }
+	/**
+	 * @see org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorService#onExit(org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorContext,
+	 *      java.lang.Object)
+	 */
+	public void onExit(AvalonInterceptorContext interceptorContext, Object result) {
+		if (this.isJamonAvailable()) {
+			JamonPerformanceMonitor monitor;
+			monitor = (JamonPerformanceMonitor) interceptorContext.getRequestContext().remove(this.getServiceName());
+			monitor.stop();
+		}
+	}
 
-    /**
-     * Writes the JAMON report to the file system.
-     *
-     * @see java.lang.Runnable#run()
-     */
-    public void run()
-    {
-        this.writeReport(this.reportFile);
-    }
+	/**
+	 * @see org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorService#onError(org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorContext,
+	 *      java.lang.Throwable)
+	 */
+	public void onError(AvalonInterceptorContext interceptorContext, Throwable t) {
+		if (this.isJamonAvailable()) {
+			JamonPerformanceMonitor monitor;
+			monitor = (JamonPerformanceMonitor) interceptorContext.getRequestContext().remove(this.getServiceName());
+			monitor.stop(t);
+		}
+	}
 
-    /////////////////////////////////////////////////////////////////////////
-    // Service Implementation
-    /////////////////////////////////////////////////////////////////////////
+	/**
+	 * Writes the JAMON report to the file system.
+	 *
+	 * @see java.lang.Runnable#run()
+	 */
+	public void run() {
+		this.writeReport(this.reportFile);
+	}
 
-    /**
-     * @return Returns true if JAMon is availble.
-     */
-    protected final boolean isJamonAvailable()
-    {
-        return this.isJamonAvailable;
-    }
+	/////////////////////////////////////////////////////////////////////////
+	// Service Implementation
+	/////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Factory method for creating an implementation of a JamonPerformanceMonitor.
-     *
-     * @param serviceName the service name
-     * @param method the method
-     * @param isEnabled is the monitor enabled
-     * @return the instance or <b>null</b> if the creation failed
-     */
-    protected JamonPerformanceMonitor createJamonPerformanceMonitor(String serviceName, Method method, boolean isEnabled)
-    {
-        JamonPerformanceMonitor result = null;
+	/**
+	 * @return Returns true if JAMon is availble.
+	 */
+	protected final boolean isJamonAvailable() {
+		return this.isJamonAvailable;
+	}
 
-        try
-        {
-            Class[] signature = { String.class, Method.class, Boolean.class };
-            Object[] args = { serviceName, method, (isEnabled) ? Boolean.TRUE : Boolean.FALSE};
-            result = (JamonPerformanceMonitor) Clazz.newInstance(this.performanceMonitorClass, signature, args);
-            return result;
-        }
-        catch(Exception e)
-        {
-            String msg = "Failed to create a performance monitor instance : " + this.performanceMonitorClassName;
-            this.getLogger().error(msg, e);
-            return result;
-        }
-    }
+	/**
+	 * Factory method for creating an implementation of a JamonPerformanceMonitor.
+	 *
+	 * @param serviceName the service name
+	 * @param method      the method
+	 * @param isEnabled   is the monitor enabled
+	 * @return the instance or <b>null</b> if the creation failed
+	 */
+	@SuppressWarnings("rawtypes")
+	protected JamonPerformanceMonitor createJamonPerformanceMonitor(String serviceName, Method method,
+			boolean isEnabled) {
+		JamonPerformanceMonitor result = null;
 
-    /**
-     * Write a report file
-     */
-    protected void writeReport()
-    {
-        if( this.reportTimeout > 0 )
-        {
-            long currTimestamp = System.currentTimeMillis();
+		try {
+			Class[] signature = { String.class, Method.class, Boolean.class };
+			Object[] args = { serviceName, method, (isEnabled) ? Boolean.TRUE : Boolean.FALSE };
+			result = (JamonPerformanceMonitor) Clazz.newInstance(this.performanceMonitorClass, signature, args);
+			return result;
+		} catch (Exception e) {
+			String msg = "Failed to create a performance monitor instance : " + this.performanceMonitorClassName;
+			this.getLogger().error(msg, e);
+			return result;
+		}
+	}
 
-            if( currTimestamp > this.nextReportTimestamp )
-            {
-                this.nextReportTimestamp = currTimestamp + this.reportTimeout;
-                this.writeReport(this.reportFile);
-            }
-        }
-    }
+	/**
+	 * Write a report file
+	 */
+	protected void writeReport() {
+		if (this.reportTimeout > 0) {
+			long currTimestamp = System.currentTimeMillis();
 
-    /**
-     * Write the HTML report to the given destination.
-     *
-     * @param reportFile the report destination
-     */
-    protected void writeReport( File reportFile )
-    {
-        PrintWriter printWriter = null;
+			if (currTimestamp > this.nextReportTimestamp) {
+				this.nextReportTimestamp = currTimestamp + this.reportTimeout;
+				this.writeReport(this.reportFile);
+			}
+		}
+	}
 
-        if( this.isJamonAvailable() )
-        {
-            try
-            {
-                if( this.getLogger().isDebugEnabled() )
-                {
-                    this.getLogger().debug( "Writing JAMOM report to " + reportFile.getAbsolutePath() );
-                }
+	/**
+	 * Write the HTML report to the given destination.
+	 *
+	 * @param reportFile the report destination
+	 */
+	protected void writeReport(File reportFile) {
+		PrintWriter printWriter = null;
 
-                FileOutputStream fos = new FileOutputStream( reportFile );
-                printWriter = new PrintWriter( fos );
-                JamonPerformanceMonitor monitor = this.createJamonPerformanceMonitor(null, null, true);
-                String report = monitor.createReport();
-                printWriter.write( report );
-                printWriter.close();
-            }
-            catch( Throwable t )
-            {
-                String msg = "Generating the JAMON report failed for " + reportFile.getAbsolutePath();
-                this.getLogger().error(msg,t);
-            }
-            finally
-            {
-                if( printWriter != null )
-                {
-                    printWriter.close();
-                }
-            }
-        }
-    }
+		if (this.isJamonAvailable()) {
+			try {
+				if (this.getLogger().isDebugEnabled()) {
+					this.getLogger().debug("Writing JAMOM report to " + reportFile.getAbsolutePath());
+				}
+
+				// Update to eliminate reliance on default encoding (DM_DEFAULT_ENCODING)
+				Writer w = new OutputStreamWriter(new FileOutputStream(reportFile), "UTF-8");
+				printWriter = new PrintWriter(w);
+
+				JamonPerformanceMonitor monitor = this.createJamonPerformanceMonitor(null, null, true);
+				String report = monitor.createReport();
+				printWriter.write(report);
+				printWriter.close();
+			} catch (Throwable t) {
+				String msg = "Generating the JAMON report failed for " + reportFile.getAbsolutePath();
+				this.getLogger().error(msg, t);
+			} finally {
+				if (printWriter != null) {
+					printWriter.close();
+				}
+			}
+		}
+	}
 }

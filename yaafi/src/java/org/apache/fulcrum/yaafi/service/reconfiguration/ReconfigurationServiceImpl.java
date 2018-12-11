@@ -116,7 +116,7 @@ public class ReconfigurationServiceImpl
 
         // parse the resources to monitor
 
-        Configuration entry = null;
+        // Configuration entry = null;
         Configuration services = null;
         Configuration[] serviceEntries = null;
         Configuration[] entryList = configuration.getChildren("entry");
@@ -126,10 +126,9 @@ public class ReconfigurationServiceImpl
         String[] serviceNameList = null;
         ReconfigurationEntry reconfigurationEntry = null;
         ReconfigurationEntry[] list = new ReconfigurationEntry[entryList.length];
-
-        for( int i=0; i<entryList.length; i++ )
+        int listIndex = 0;
+        for ( Configuration entry : entryList )
         {
-            entry = entryList[i];
             location = entry.getChild("location").getValue();
             services = entry.getChild("services",false);
 
@@ -154,7 +153,7 @@ public class ReconfigurationServiceImpl
                 serviceNameList
                 );
 
-            list[i] = reconfigurationEntry;
+            list[listIndex++] = reconfigurationEntry;
         }
 
         this.getLogger().debug( "Monitoring " + list.length + " resources" );
@@ -167,20 +166,14 @@ public class ReconfigurationServiceImpl
      */
     public void initialize() throws Exception
     {
-        // request a SHA-1 to make sure that it is supported
-
+    	// request a SHA-1 to make sure that it is supported
         MessageDigest.getInstance( "SHA1" );
 
-        // check that the ServiceManager inplements Reconfigurable
-
+        // check that the ServiceManager implements Reconfigurable
         if( (this.serviceManager instanceof ServiceLifecycleManager) == false )
-        {
-            String msg = "The ServiceManager instance does not implement ServiceLifecycleManager?!";
-            throw new IllegalArgumentException( msg );
-        }
-
+            throw new IllegalArgumentException( "The ServiceManager instance does not implement ServiceLifecycleManager!" );
+    	
         // create the worker thread polling the target
-
         this.workerThread = new Thread( this, "ReconfigurationService" );
     }
 
@@ -237,23 +230,16 @@ public class ReconfigurationServiceImpl
      */
     public void run()
     {
-        ReconfigurationEntry reconfigurationEntry = null;
         ReconfigurationEntry[] list = null;
-
         while( this.terminateNow == false )
         {
             list = this.getReconfigurationEntryList();
-
             try
             {
-                for( int i=0; i<list.length; i++ )
+            	for ( ReconfigurationEntry reconfigurationEntry : list )
                 {
-                    reconfigurationEntry = list[i];
-
                     if( reconfigurationEntry.hasChanged() )
-                    {
                         this.onReconfigure( reconfigurationEntry );
-                    }
                 }
 
                 Thread.sleep( this.interval );
@@ -288,7 +274,6 @@ public class ReconfigurationServiceImpl
         if( reconfigurationEntry.getServiceList() == null )
         {
             // reconfigure the whole container using Avalon Lifecycle Spec
-
             InputStream is = reconfigurationEntry.locate();
             DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
             Configuration configuration = builder.build(is);

@@ -45,7 +45,7 @@ public class DependentTestComponentTest extends BaseUnitTest
      * DependentTestComponentImpl uses a TestComponent which. Make
      * sure that the container resolves this cyclic dependency.
      *
-     * @throws Exception
+     * @throws Exception generic exception
      */
     public void testDependentTestComponent() throws Exception
     {

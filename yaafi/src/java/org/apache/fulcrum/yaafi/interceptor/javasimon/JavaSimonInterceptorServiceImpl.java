@@ -21,7 +21,9 @@ package org.apache.fulcrum.yaafi.interceptor.javasimon;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Writer;
 import java.lang.reflect.Method;
 
 import org.apache.avalon.framework.activity.Disposable;
@@ -65,7 +67,7 @@ public class JavaSimonInterceptorServiceImpl
     private String performanceMonitorClassName;
 
     /** the implementation class name for the performance monitor */
-    private Class performanceMonitorClass;
+    private Class<?> performanceMonitorClass;
 
     /** the class name of the JavaSimon factory */
     private static final String MONITORFACTORY_CLASSNAME = "org.javasimon.SimonManager";
@@ -176,7 +178,6 @@ public class JavaSimonInterceptorServiceImpl
     /**
      * @see org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorService#onEntry(AvalonInterceptorContext)
      */
-    @SuppressWarnings("unchecked")
     public void onEntry(AvalonInterceptorContext interceptorContext)
     {
         if( this.isJavaSimonAvailable()  )
@@ -248,7 +249,8 @@ public class JavaSimonInterceptorServiceImpl
      * @param isEnabled is the monitor enabled
      * @return the instance or <b>null</b> if the creation failed
      */
-    protected JavaSimonPerformanceMonitor createJavaSimonPerformanceMonitor(String serviceName, Method method, boolean isEnabled)
+    @SuppressWarnings("rawtypes")
+	protected JavaSimonPerformanceMonitor createJavaSimonPerformanceMonitor(String serviceName, Method method, boolean isEnabled)
     {
         JavaSimonPerformanceMonitor result = null;
 
@@ -302,8 +304,10 @@ public class JavaSimonInterceptorServiceImpl
                     this.getLogger().debug( "Writing JavaSimon report to " + reportFile.getAbsolutePath() );
                 }
 
-                FileOutputStream fos = new FileOutputStream( reportFile );
-                printWriter = new PrintWriter( fos );
+                // Update to eliminate reliance on default encoding (DM_DEFAULT_ENCODING)
+                Writer w = new OutputStreamWriter(new FileOutputStream(reportFile), "UTF-8");
+                printWriter = new PrintWriter( w );
+                
                 // JavaSimonPerformanceMonitor monitor = this.createJavaSimonPerformanceMonitor(null, null, true);
                 String report = "Not implemented yet ...";
                 printWriter.write( report );

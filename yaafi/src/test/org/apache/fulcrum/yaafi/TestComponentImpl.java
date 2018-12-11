@@ -56,12 +56,18 @@ public class TestComponentImpl
     public boolean decomissioned;
     public String componentName;
 
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.activity.Initializable#initialize()
+     */
     public void initialize() throws Exception
     {
         getLogger().debug("initialize() was called");
         decomissioned = false;
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
+     */
     public void contextualize(Context context) throws ContextException
     {
         this.urnAvaloneHome = (File) context.get( "urn:avalon:home" );
@@ -71,28 +77,43 @@ public class TestComponentImpl
         this.urnAvalonClassLoader = (ClassLoader) context.get( "urn:avalon:classloader" );
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
+     */
     public void configure(Configuration configuration) throws ConfigurationException
     {
         this.foo = configuration.getChild("FOO").getValue("FOO Not Found?!");
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.apache.avalon.framework.configuration.Configuration)
+     */
     public void reconfigure(Configuration configuration)
         throws ConfigurationException
     {
         this.configure(configuration);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.parameters.Parameterizable#parameterize(org.apache.avalon.framework.parameters.Parameters)
+     */
     public void parameterize(Parameters parameters) throws ParameterException
     {
         this.bar = parameters.getParameter("BAR", "BAR Not Found?!");
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.activity.Disposable#dispose()
+     */
     public void dispose()
     {
         getLogger().debug("dispose() was called");
         this.decomissioned=true;
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.yaafi.TestComponent#test()
+     */
     public void test()
     {
         setupLogger(this, "TestComponent");
@@ -168,14 +189,17 @@ public class TestComponentImpl
         return urnAvalonPartition;
     }
 
-    /**
-     * @see org.apache.fulcrum.yaafi.TestComponent#createException(String,Object)
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.yaafi.TestComponent#createException(java.lang.String, java.lang.Object)
      */
     public void createException(String reason, Object caller)
     {
         throw new RuntimeException(reason);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.yaafi.TestComponent#doSomething(long, java.lang.Object)
+     */
     public void doSomething(long millis, Object arg)
     {
         try

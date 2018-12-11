@@ -28,10 +28,10 @@ import org.apache.avalon.framework.configuration.Reconfigurable;
 import org.apache.fulcrum.yaafi.framework.interceptor.AvalonInterceptorContext;
 import org.apache.fulcrum.yaafi.framework.reflection.Clazz;
 import org.apache.fulcrum.yaafi.interceptor.baseservice.BaseInterceptorServiceImpl;
+import org.apache.fulcrum.yaafi.interceptor.util.ArgumentToStringBuilderImpl;
 import org.apache.fulcrum.yaafi.interceptor.util.DefaultToStringBuilderImpl;
 import org.apache.fulcrum.yaafi.interceptor.util.InterceptorToStringBuilder;
 import org.apache.fulcrum.yaafi.interceptor.util.MethodToStringBuilderImpl;
-import org.apache.fulcrum.yaafi.interceptor.util.ArgumentToStringBuilderImpl;
 import org.apache.fulcrum.yaafi.interceptor.util.StopWatch;
 
 /**
@@ -61,7 +61,7 @@ public class LoggingInterceptorServiceImpl
     private boolean monitorAllExceptions;
 
     /** the ReflectionToStringBuilder class */
-    private Class toStringBuilderClass;
+    private Class<?> toStringBuilderClass;
 
     /////////////////////////////////////////////////////////////////////////
     // Avalon Service Lifecycle Implementation
@@ -236,7 +236,7 @@ public class LoggingInterceptorServiceImpl
     /**
      * @return Returns the toStringBuilderClass.
      */
-    protected Class getToStringBuilderClass()
+    protected Class<?> getToStringBuilderClass()
     {
         return toStringBuilderClass;
     }

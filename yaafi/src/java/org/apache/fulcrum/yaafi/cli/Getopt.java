@@ -20,7 +20,7 @@ package org.apache.fulcrum.yaafi.cli;
  */
 
 /**
-* Extremely simply command line parsing class.
+* Extremely simple command line parsing class.
 */
 
 public class Getopt

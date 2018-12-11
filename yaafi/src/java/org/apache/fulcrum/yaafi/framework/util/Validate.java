@@ -22,6 +22,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * <p>Assists in validating arguments.</p>
  *
@@ -42,14 +44,11 @@ import java.util.Map;
  */
 public class Validate
 {
-    // Validate has no dependencies on other classes in Commons Lang at present
-
     /**
      * Constructor. This class should not normally be instantiated.
      */
     public Validate()
     {
-        // nothing to do
     }
 
     // isTrue
@@ -392,10 +391,8 @@ public class Validate
      */
     public static void notEmpty(String string, String message)
     {
-        if (string == null || string.length() == 0)
-        {
+    	if ( StringUtils.isEmpty(string) )
             throw new IllegalArgumentException( message );
-        }
     }
 
     /**
@@ -413,10 +410,8 @@ public class Validate
      */
     public static void notEmpty(String string)
     {
-        if (string == null || string.length() == 0)
-        {
+    	if ( StringUtils.isEmpty(string) )
             throw new IllegalArgumentException( "The validated string is empty" );
-        }
     }
 
     // notNullElements array

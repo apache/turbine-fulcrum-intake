@@ -25,8 +25,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.MessageDigest;
+import java.util.Arrays;
 
 import org.apache.avalon.framework.logger.Logger;
+import org.apache.commons.io.IOUtils;
 import org.apache.fulcrum.yaafi.framework.util.InputStreamLocator;
 
 /**
@@ -35,254 +37,191 @@ import org.apache.fulcrum.yaafi.framework.util.InputStreamLocator;
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
-public class ReconfigurationEntry
-{
-    /** buffer size for copy() */
-    private static final int BUF_SIZE = 1024;
+public class ReconfigurationEntry {
 
-    /** the location to monitor for changes */
-    private String location;
+	/** the location to monitor for changes */
+	private String location;
 
-    /** the list of services to be reconfigured */
-    private String[] serviceList;
+	/** the list of services to be reconfigured */
+	private String[] serviceList;
 
-    /** the last message digest of the location */
-    private byte[] digest;
+	/** the last message digest of the location */
+	private byte[] digest;
 
-    /** the locator to load the monitored resource */
-    private InputStreamLocator locator;
+	/** the locator to load the monitored resource */
+	private InputStreamLocator locator;
 
-    /** keep a notice for the very first invocation */
-    private boolean isFirstInvocation;
+	/** keep a notice for the very first invocation */
+	private boolean isFirstInvocation;
 
-    /** the logger to be used */
-    private Logger logger;
+	/** the logger to be used */
+	private Logger logger;
 
-    /**
-     * Constructor
-     *
-     * @param logger the logger to use
-     * @param applicationDir the home directory of the application
-     * @param location the location to monitor for changes
-     * @param serviceList the list of services to be reconfigured
-     */
-    public ReconfigurationEntry( Logger logger, File applicationDir, String location, String[] serviceList )
-    {
-        this.isFirstInvocation = true;
-        this.location = location;
-        this.locator  = new InputStreamLocator( applicationDir );
-        this.logger = logger;
-        this.serviceList = serviceList;
-    }
+	/**
+	 * Constructor
+	 *
+	 * @param logger         the logger to use
+	 * @param applicationDir the home directory of the application
+	 * @param location       the location to monitor for changes
+	 * @param serviceList    the list of services to be reconfigured
+	 */
+	public ReconfigurationEntry(Logger logger, File applicationDir, String location, String[] serviceList) {
+		this.isFirstInvocation = true;
+		this.location = location;
+		this.locator = new InputStreamLocator(applicationDir);
+		this.logger = logger;
+		this.serviceList = serviceList;
+	}
 
-    /**
-     * @return has the monitored location changed
-     */
-    public boolean hasChanged()
-    {
-        boolean result = false;
-        InputStream is = null;
-        byte[] currDigest = null;
+	/**
+	 * @return has the monitored location changed
+	 */
+	public boolean hasChanged() {
+		boolean result = false;
+		InputStream is = null;
+		byte[] currDigest = null;
 
-        try
-        {
-            // get a grip on our resource
+		try {
+			// get a grip on our resource
 
-            is = this.locate();
+			is = this.locate();
 
-            if( is == null )
-            {
-                String msg = "Unable to find the following resource : " + this.getLocation();
-                this.getLogger().warn(msg);
-            }
-            else
-            {
-                // calculate a SHA-1 digest
+			if (is == null) {
+				String msg = "Unable to find the following resource : " + this.getLocation();
+				this.getLogger().warn(msg);
+			} else {
+				// calculate a SHA-1 digest
+				currDigest = this.getDigest(is);
+				is.close();
+				is = null;
 
-                currDigest = this.getDigest(is);
-                is.close();
-                is = null;
+				if (this.isFirstInvocation() == true) {
+					isFirstInvocation = false;
+					this.getLogger().debug("Storing SHA-1 digest of " + this.getLocation());
+					this.setDigest(currDigest);
+				} else {
+					if (equals(this.digest, currDigest) == false) {
+						this.getLogger().debug("The following resource has changed : " + this.getLocation());
+						this.setDigest(currDigest);
+						result = true;
+					}
+				}
+			}
 
-                if( this.isFirstInvocation() == true )
-                {
-                    isFirstInvocation = false;
-                    this.getLogger().debug( "Storing SHA-1 digest of " + this.getLocation() );
-                    this.setDigest( currDigest );
-                }
-                else
-                {
-                    if( equals( this.digest, currDigest ) == false )
-                    {
-                        this.getLogger().debug( "The following resource has changed : " + this.getLocation() );
-                        this.setDigest( currDigest );
-                        result = true;
-                    }
-                }
-            }
+			return result;
+		} catch (Exception e) {
+			String msg = "The ShutdownService encountered an internal error";
+			this.getLogger().error(msg, e);
+			return false;
+		} finally {
+			if (is != null) {
+				try {
+					is.close();
+				} catch (Exception e) {
+					String msg = "Can't close the InputStream during error recovery";
+					this.getLogger().error(msg, e);
+				}
+			}
+		}
 
-            return result;
-        }
-        catch(Exception e)
-        {
-            String msg = "The ShutdownService encountered an internal error";
-            this.getLogger().error(msg,e);
-            return false;
-        }
-        finally
-        {
-            if( is != null )
-            {
-                try
-                {
-                    is.close();
-                }
-                catch (Exception e)
-                {
-                    String msg = "Can't close the InputStream during error recovery";
-                    this.getLogger().error(msg,e);
-                }
-            }
-        }
+	}
 
-    }
+	/**
+	 * @return Returns the serviceList.
+	 */
+	public String[] getServiceList() {
+		return serviceList;
+	}
 
-    /**
-     * @return Returns the serviceList.
-     */
-    public String [] getServiceList()
-    {
-        return serviceList;
-    }
+	/**
+	 * @return Returns the isFirstInvocation.
+	 */
+	private boolean isFirstInvocation() {
+		return isFirstInvocation;
+	}
 
-    /**
-     * @return Returns the isFirstInvocation.
-     */
-    private boolean isFirstInvocation()
-    {
-        return isFirstInvocation;
-    }
+	/**
+	 * @return Returns the location.
+	 */
+	private String getLocation() {
+		return location;
+	}
 
-    /**
-     * @return Returns the location.
-     */
-    private String getLocation()
-    {
-        return location;
-    }
+	/**
+	 * @return Returns the locator.
+	 */
+	private InputStreamLocator getLocator() {
+		return locator;
+	}
 
-    /**
-     * @return Returns the locator.
-     */
-    private InputStreamLocator getLocator()
-    {
-        return locator;
-    }
+	/**
+	 * Creates an InputStream.
+	 * 
+	 * @return the input stream
+	 * @throws IOException the creation failed
+	 */
+	public InputStream locate() throws IOException {
+		return this.getLocator().locate(this.getLocation());
+	}
 
-    /**
-     * Creates an InputStream.
-     * @return the input stream
-     * @throws IOException the creation failed
-     */
-    public InputStream locate() throws IOException
-    {
-        return this.getLocator().locate(this.getLocation());
-    }
+	/**
+	 * Creates a message digest.
+	 *
+	 * @param is the input stream as input for the message digest
+	 * @return the message digest
+	 * @throws Exception the creation failed
+	 */
+	private byte[] getDigest(InputStream is) throws Exception {
+		byte[] result = null;
+		byte[] content = null;
 
-    /**
-     * Creates a message digest.
-     *
-     * @param is the input stream as input for the message digest
-     * @return the message digest
-     * @throws Exception the creation failed
-     */
-    private byte[] getDigest( InputStream is )
-        throws Exception
-    {
-        byte[] result = null;
-        byte[] content = null;
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		copy(is, baos);
+		content = baos.toByteArray();
+		baos.close();
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        copy( is, baos );
-        content = baos.toByteArray();
-        baos.close();
+		MessageDigest sha1 = MessageDigest.getInstance("SHA1");
+		sha1.update(content);
+		result = sha1.digest();
 
-        MessageDigest sha1 = MessageDigest.getInstance( "SHA1" );
-        sha1.update( content );
-        result = sha1.digest();
+		return result;
+	}
 
-        return result;
-    }
+	/**
+	 * @param digest The digest to set.
+	 */
+	private void setDigest(byte[] digest) {
+		this.digest = digest;
+	}
 
-    /**
-     * @param digest The digest to set.
-     */
-    private void setDigest(byte [] digest)
-    {
-        this.digest = digest;
-    }
+	/**
+	 * Compares two byte[] for equality
+	 *
+	 * @param lhs the left-hand side
+	 * @param rhs the right-hand side
+	 * @return true if the byte[] are equal
+	 */
+	private static boolean equals(byte[] lhs, byte[] rhs) {
+		// JDK provided method
+		return Arrays.equals(lhs, rhs);
+	}
 
-    /**
-     * Compares two byte[] for equality
-     *
-     * @param lhs the left-hand side
-     * @param rhs the right-hand side
-     * @return true if the byte[] are equal
-     */
-    private static boolean equals(byte[] lhs, byte[] rhs)
-    {
-        if( lhs == rhs )
-        {
-            return true;
-        }
-        else if( lhs.length != rhs.length )
-        {
-            return false;
-        }
-        else
-        {
-            for( int i=0; i<lhs.length; i++ )
-            {
-                if( lhs[i] != rhs[i] )
-                {
-                    return false;
-                }
-            }
-        }
+	/**
+	 * Pumps the input stream to the output stream.
+	 *
+	 * @param is the source input stream
+	 * @param os the target output stream
+	 * @throws IOException the copying failed
+	 */
+	private static void copy(InputStream is, OutputStream os) throws IOException {
+		// Use commons managed code
+		IOUtils.copy(is, os);
+	}
 
-        return true;
-    }
-
-    /**
-     * Pumps the input stream to the output stream.
-     *
-     * @param is the source input stream
-     * @param os the target output stream
-     * @throws IOException the copying failed
-     */
-    private static void copy( InputStream is, OutputStream os )
-        throws IOException
-    {
-        byte[] buf = new byte[BUF_SIZE];
-        int n = 0;
-        int total = 0;
-
-        while ((n = is.read(buf)) > 0)
-        {
-            os.write(buf, 0, n);
-            total += n;
-        }
-
-        is.close();
-
-        os.flush();
-        os.close();
-    }
-
-    /**
-     * @return Returns the logger.
-     */
-    private Logger getLogger()
-    {
-        return logger;
-    }
+	/**
+	 * @return Returns the logger.
+	 */
+	private Logger getLogger() {
+		return logger;
+	}
 }

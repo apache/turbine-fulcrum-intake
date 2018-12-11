@@ -53,7 +53,7 @@ public class AdviceServiceTest extends TestCase implements DependentTestComponen
         super(name);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see junit.framework.TestCase#setUp()
      */
     protected void setUp() throws Exception
@@ -65,7 +65,7 @@ public class AdviceServiceTest extends TestCase implements DependentTestComponen
         service = (AdviceService) this.container.lookup(AdviceService.class.getName());
     }
 
-    /**
+    /* (non-Javadoc)
      * @see junit.framework.TestCase#tearDown()
      */
     protected void tearDown() throws Exception
@@ -89,7 +89,7 @@ public class AdviceServiceTest extends TestCase implements DependentTestComponen
 
     /**
      *  Advice a StringBuilder based on the CharSequence interface
-     * @throws Exception
+     * @throws Exception generic exception
      */
     public void testSimpleAdvice() throws Exception
     {
@@ -105,6 +105,7 @@ public class AdviceServiceTest extends TestCase implements DependentTestComponen
 
     /**
      * Advice a StringBuilder based on the CharSequence interface
+     * @throws Exception generic exception
      */
     public void testSimpleObject() throws Exception
     {
@@ -120,6 +121,7 @@ public class AdviceServiceTest extends TestCase implements DependentTestComponen
 
     /**
      * Advice a StringBuilder based on the CharSequenceInterface with default interceptors
+     * @throws Exception generic exception
      */
     public void testDefaultAdvice() throws Exception
     {
@@ -133,6 +135,7 @@ public class AdviceServiceTest extends TestCase implements DependentTestComponen
      * The test implements the DependentTestComponent interface therefore we
      * are able to intercept the invocation of test(). Whereas test() invokes
      * another advised component.
+     * @throws Exception generic exception
      */
     public void testChainedAdvices() throws Exception
     {
@@ -143,6 +146,7 @@ public class AdviceServiceTest extends TestCase implements DependentTestComponen
 
     /**
      * Advice a StringBuilder based on the CharSequenceInterface
+     * @throws Exception generic exception
      */
     public void testMultipleProxies() throws Exception
     {
@@ -155,8 +159,9 @@ public class AdviceServiceTest extends TestCase implements DependentTestComponen
         assertTrue(this.service.isAdviced(advicedAdvicedObject));
     }
 
-    /**
+    /* (non-Javadoc)
      * Advice a StringBuilder based on the CharSequenceInterface
+     * @see org.apache.fulcrum.yaafi.DependentTestComponent#test()
      */
     public void test()
     {

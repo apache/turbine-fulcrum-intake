@@ -24,6 +24,23 @@
   </properties>
 
   <body>
+    <release version="1.0.8" date="as in SVN">
+      <action dev="painter" type="update">
+        Update javasimon to 4.1.4
+      </action>
+      <action dev="painter" type="update">
+        Replace byte array and input stream methods to JDK and commons managed code
+      </action>
+      <action dev="painter" type="update">
+        Use new Turbine 5 parent pom
+      </action>
+      <action dev="painter" type="update">
+        Use junit 4.12
+      </action>
+      <action dev="painter" type="update">
+        Use Java 8, clean up some issues from findbugs
+      </action>
+    </release>  
     <release version="1.0.7-SNAPSHOT" date="as in SVN">
       <action dev="sgoeschl" type="add" issue="TRB-97" data="2015-08-06">
         Integrate JavaSimon for performance monitoring

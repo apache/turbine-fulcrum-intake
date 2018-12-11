@@ -1,5 +1,12 @@
 package org.apache.fulcrum.yaafi.service;
 
+import org.apache.avalon.framework.service.ServiceException;
+import org.apache.fulcrum.yaafi.TestComponent;
+import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
+import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerConfiguration;
+import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
+import org.apache.fulcrum.yaafi.service.reconfiguration.ReconfigurationService;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,80 +28,69 @@ package org.apache.fulcrum.yaafi.service;
 
 import junit.framework.TestCase;
 
-import org.apache.avalon.framework.service.ServiceException;
-import org.apache.fulcrum.yaafi.TestComponent;
-import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
-import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerConfiguration;
-import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
-import org.apache.fulcrum.yaafi.service.reconfiguration.ReconfigurationService;
-
 /**
- * Test suite for the ReconfigurationService. This test doesn't do
- * anything apart from running a minute so you have some time to tinker
- * with the component configuration file.
+ * Test suite for the ReconfigurationService. This test doesn't do anything
+ * apart from running a minute so you have some time to tinker with the
+ * component configuration file.
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
-public class ReconfigurationTest extends TestCase
-{
-    private ServiceContainer container = null;
+public class ReconfigurationTest extends TestCase {
+	private ServiceContainer container = null;
 
-    /**
-     * Constructor
-     * @param name the name of the test case
-     */
-    public ReconfigurationTest( String name )
-    {
-        super(name);
-    }
+	/**
+	 * Constructor
+	 * 
+	 * @param name the name of the test case
+	 */
+	public ReconfigurationTest(String name) {
+		super(name);
+	}
 
-    /**
-     * @see junit.framework.TestCase#tearDown()
-     */
-    protected void tearDown() throws Exception
-    {
-        ServiceContainerFactory.dispose(this.container);
-        super.tearDown();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see junit.framework.TestCase#tearDown()
+	 */
+	protected void tearDown() throws Exception {
+		ServiceContainerFactory.dispose(this.container);
+		super.tearDown();
+	}
 
-    /**
-     * @return get our simple test component
-     */
-    private TestComponent getTestComponent() throws ServiceException
-    {
-        return (TestComponent) container.lookup(
-            TestComponent.ROLE
-            );
-    }
+	/**
+	 * @return get our simple test component
+	 * @throws ServiceException if service not found
+	 */
+	private TestComponent getTestComponent() throws ServiceException {
+		return (TestComponent) container.lookup(TestComponent.ROLE);
+	}
 
-    /**
-     * Trigger the ReconfigurationService by instantiating it manually.
-     *  @throws Exception
-     */
-    public void testReconfigurationService() throws Exception
-    {
-        // instantiate a YAAFI container
+	/**
+	 * Trigger the ReconfigurationService by instantiating it manually.
+	 * 
+	 * @throws Exception generic exception
+	 */
+	public void testReconfigurationService() throws Exception {
+		// instantiate a YAAFI container
 
-        ServiceContainerConfiguration config = new ServiceContainerConfiguration();
-        config.loadContainerConfiguration( "./src/test/TestYaafiContainerConfig.xml" );
-        this.container = ServiceContainerFactory.create( config );
+		ServiceContainerConfiguration config = new ServiceContainerConfiguration();
+		config.loadContainerConfiguration("./src/test/TestYaafiContainerConfig.xml");
+		this.container = ServiceContainerFactory.create(config);
 
-        // the ReconfigurationService is configured to be instantiated on demand
-        // get an instance to start monitoring ...
+		// the ReconfigurationService is configured to be instantiated on demand
+		// get an instance to start monitoring ...
 
-        ReconfigurationService reconfigurationService = null;
+		ReconfigurationService reconfigurationService = null;
 
-        reconfigurationService = (ReconfigurationService) this.container.lookup(
-            ReconfigurationService.class.getName()
-            );
+		reconfigurationService = (ReconfigurationService) this.container.lookup(ReconfigurationService.class.getName());
 
-        assertNotNull(reconfigurationService);
+		assertNotNull(reconfigurationService);
 
-        // comment out if you want to tinker with componentConfiguration manually
+		// comment out if you want to tinker with componentConfiguration manually
 
-        // Thread.sleep(60000);
+		// Thread.sleep(60000);
 
-        this.getTestComponent().test();
-    }
+		this.getTestComponent().test();
+	}
 }

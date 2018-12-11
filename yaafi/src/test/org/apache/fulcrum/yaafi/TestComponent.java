@@ -82,15 +82,17 @@ public interface TestComponent
     String getUrnAvalonPartition();
 
     /**
-     * Alwayas throws an exception
+     * Always throws an exception
+     * @param reason reason for exception
+     * @param caller the method or class calling the exception
      */
     void createException(String reason, Object caller);
 
     /**
      * Do something for the given time
      * 
-     * @param millis
-     * @param arg
+     * @param millis time in miliseconds
+     * @param arg arguments
      */
     public void doSomething(long millis, Object arg);
 }
