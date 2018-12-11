@@ -59,11 +59,10 @@ public class SystemPropertyServiceImpl
     public void configure(Configuration configuration) throws ConfigurationException
     {
         Configuration[] systemProperties = configuration.getChildren("property");
-
-        for( int i=0; i<systemProperties.length; i++ )
+        for ( Configuration entry : systemProperties )
         {
-            String key = systemProperties[i].getAttribute("name");
-            String value = systemProperties[i].getValue();
+        	String key = entry.getAttribute("name");
+        	String value = entry.getValue();
             this.getLogger().debug( "Setting the value of " + key + " to " + value );
             System.setProperty( key, value );
         }
