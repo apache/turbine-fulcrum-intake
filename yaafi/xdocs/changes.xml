@@ -26,6 +26,12 @@
   <body>
     <release version="1.0.8" date="as in SVN">
       <action dev="painter" type="update">
+        Removed custom byte array handling code and updated to use JDK standard methods and IOUtils as needed
+      </action>
+      <action dev="painter" type="update">
+        Addressed all PMD static code analyzer issues and corrected where appropriate
+      </action>
+      <action dev="painter" type="update">
         Update javasimon to 4.1.4
       </action>
       <action dev="painter" type="update">
