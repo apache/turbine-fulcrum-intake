@@ -125,7 +125,7 @@ public class CryptoStreamFactory
             {
                 Class[] signature = {};
                 Object[] args = {};
-                Class clazz = Clazz.getClazz(clazzLoader, className);
+                Class<?> clazz = Clazz.getClazz(clazzLoader, className);
                 cryptoStreamFactory = Clazz.newInstance(clazz, signature, args);
             }
         }
