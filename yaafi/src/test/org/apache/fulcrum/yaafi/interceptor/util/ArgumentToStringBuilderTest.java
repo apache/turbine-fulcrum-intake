@@ -152,6 +152,7 @@ public class ArgumentToStringBuilderTest extends TestCase
 
     /**
      * Create a plain vanilla Java object
+     * @throws Exception generic exception
      */
     public void testPlainVanillaObject() throws Exception
     {

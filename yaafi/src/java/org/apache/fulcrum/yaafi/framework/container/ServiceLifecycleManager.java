@@ -79,6 +79,6 @@ public interface ServiceLifecycleManager
      * @param name the name of the service
      * @exception ServiceException the service was not found
      */
-    void decommision( String name )
+    void decommission( String name )
         throws ServiceException;
 }

@@ -41,10 +41,4 @@ public interface InterceptorToStringBuilder
      */
     void setMode(int mode);
 
-    /**
-     * Invokes the string builder.
-     *
-     * @see java.lang.Object#toString()
-     */
-    public String toString();
 }

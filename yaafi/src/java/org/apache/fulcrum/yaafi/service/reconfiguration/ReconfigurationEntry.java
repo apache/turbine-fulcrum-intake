@@ -1,29 +1,8 @@
 package org.apache.fulcrum.yaafi.service.reconfiguration;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.util.Arrays;
 
@@ -88,7 +67,7 @@ public class ReconfigurationEntry {
 
 			if (is == null) {
 				String msg = "Unable to find the following resource : " + this.getLocation();
-				this.getLogger().warn(msg);
+				this.logger.warn(msg);
 			} else {
 				// calculate a SHA-1 digest
 				currDigest = this.getDigest(is);
@@ -97,11 +76,11 @@ public class ReconfigurationEntry {
 
 				if (this.isFirstInvocation() == true) {
 					isFirstInvocation = false;
-					this.getLogger().debug("Storing SHA-1 digest of " + this.getLocation());
+					this.logger.debug("Storing SHA-1 digest of " + this.getLocation());
 					this.setDigest(currDigest);
 				} else {
 					if (equals(this.digest, currDigest) == false) {
-						this.getLogger().debug("The following resource has changed : " + this.getLocation());
+						this.logger.debug("The following resource has changed : " + this.getLocation());
 						this.setDigest(currDigest);
 						result = true;
 					}
@@ -111,7 +90,7 @@ public class ReconfigurationEntry {
 			return result;
 		} catch (Exception e) {
 			String msg = "The ShutdownService encountered an internal error";
-			this.getLogger().error(msg, e);
+			this.logger.error(msg, e);
 			return false;
 		} finally {
 			if (is != null) {
@@ -119,7 +98,7 @@ public class ReconfigurationEntry {
 					is.close();
 				} catch (Exception e) {
 					String msg = "Can't close the InputStream during error recovery";
-					this.getLogger().error(msg, e);
+					this.logger.error(msg, e);
 				}
 			}
 		}
@@ -148,20 +127,13 @@ public class ReconfigurationEntry {
 	}
 
 	/**
-	 * @return Returns the locator.
-	 */
-	private InputStreamLocator getLocator() {
-		return locator;
-	}
-
-	/**
 	 * Creates an InputStream.
 	 * 
 	 * @return the input stream
 	 * @throws IOException the creation failed
 	 */
 	public InputStream locate() throws IOException {
-		return this.getLocator().locate(this.getLocation());
+		return this.locator.locate(this.getLocation());
 	}
 
 	/**
@@ -175,10 +147,8 @@ public class ReconfigurationEntry {
 		byte[] result = null;
 		byte[] content = null;
 
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		copy(is, baos);
-		content = baos.toByteArray();
-		baos.close();
+		// convert to byte array
+		content = IOUtils.toByteArray(is);
 
 		MessageDigest sha1 = MessageDigest.getInstance("SHA1");
 		sha1.update(content);
@@ -206,22 +176,4 @@ public class ReconfigurationEntry {
 		return Arrays.equals(lhs, rhs);
 	}
 
-	/**
-	 * Pumps the input stream to the output stream.
-	 *
-	 * @param is the source input stream
-	 * @param os the target output stream
-	 * @throws IOException the copying failed
-	 */
-	private static void copy(InputStream is, OutputStream os) throws IOException {
-		// Use commons managed code
-		IOUtils.copy(is, os);
-	}
-
-	/**
-	 * @return Returns the logger.
-	 */
-	private Logger getLogger() {
-		return logger;
-	}
 }

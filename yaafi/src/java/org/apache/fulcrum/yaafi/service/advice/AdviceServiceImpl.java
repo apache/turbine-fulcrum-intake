@@ -100,18 +100,23 @@ public class AdviceServiceImpl extends AbstractLogEnabled
 		return this.advice(this.getDefaultInterceptorList(), object);
 	}
 
-	/**
-	 * @see org.apache.fulcrum.yaafi.service.advice.AdviceService#advice(java.lang.String,
-	 *      java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.fulcrum.yaafi.service.advice.AdviceService#advice(java.lang.
+	 * String, java.lang.Object)
 	 */
 	public Object advice(String name, Object object) {
 		Validate.notNull(object, "object");
 		return this.doAdvice(name, this.getDefaultInterceptorList(), object);
 	}
 
-	/**
-	 * @see org.apache.fulcrum.yaafi.service.advice.AdviceService#advice(java.lang.String[],
-	 *      java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.fulcrum.yaafi.service.advice.AdviceService#advice(java.lang.String
+	 * [], java.lang.Object)
 	 */
 	public Object advice(String[] interceptorList, Object object) {
 		Validate.notNull(object, "object");
@@ -119,22 +124,28 @@ public class AdviceServiceImpl extends AbstractLogEnabled
 		return this.doAdvice(className, interceptorList, object);
 	}
 
-	/**
-	 * @see org.apache.fulcrum.yaafi.service.advice.AdviceService#advice(java.lang.String,
-	 *      java.lang.String[], java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.fulcrum.yaafi.service.advice.AdviceService#advice(java.lang.
+	 * String, java.lang.String[], java.lang.Object)
 	 */
 	public Object advice(String name, String[] interceptorList, Object object) {
 		Validate.notNull(object, "object");
 		return this.doAdvice(name, interceptorList, object);
 	}
 
-	/**
-	 * @see org.apache.fulcrum.yaafi.service.advice.AdviceService#isAdviced(java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.fulcrum.yaafi.service.advice.AdviceService#isAdviced(java.lang.
+	 * Object)
 	 */
 	public boolean isAdviced(Object object) {
 		InvocationHandler invocationHandler = null;
 
-		if ((object != null) && Proxy.isProxyClass(object.getClass())) {
+		if (object != null && Proxy.isProxyClass(object.getClass())) {
 			invocationHandler = Proxy.getInvocationHandler(object);
 			return invocationHandler instanceof AvalonInterceptorInvocationHandler;
 		}

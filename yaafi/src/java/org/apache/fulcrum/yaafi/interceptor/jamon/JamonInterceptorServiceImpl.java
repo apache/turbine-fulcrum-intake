@@ -64,7 +64,7 @@ public class JamonInterceptorServiceImpl extends BaseInterceptorServiceImpl
 	private String performanceMonitorClassName;
 
 	/** the implementation class name for the performance monitor */
-	private Class performanceMonitorClass;
+	private Class<?> performanceMonitorClass;
 
 	/** the class name of the JAMon MonitorFactory */
 	private static final String MONITORFACTORY_CLASSNAME = "com.jamonapi.MonitorFactory";
@@ -240,7 +240,7 @@ public class JamonInterceptorServiceImpl extends BaseInterceptorServiceImpl
 
 		try {
 			Class[] signature = { String.class, Method.class, Boolean.class };
-			Object[] args = { serviceName, method, (isEnabled) ? Boolean.TRUE : Boolean.FALSE };
+			Object[] args = { serviceName, method, isEnabled ? Boolean.TRUE : Boolean.FALSE };
 			result = (JamonPerformanceMonitor) Clazz.newInstance(this.performanceMonitorClass, signature, args);
 			return result;
 		} catch (Exception e) {

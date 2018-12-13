@@ -116,7 +116,7 @@ public class AvalonServiceComponentImpl
             this.getImplementationClazz()
             );
 
-        if( (this.getRoleEntry().hasDynamicProxy()) && (isInterceptor == false ) )
+        if( this.getRoleEntry().hasDynamicProxy() && isInterceptor == false )
         {
             if( this.getParentLogger().isDebugEnabled() )
             {

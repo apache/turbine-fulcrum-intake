@@ -43,7 +43,7 @@ public class MainTest extends TestCase
         super(name);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see junit.framework.TestCase#tearDown()
      */
     protected void tearDown() throws Exception
@@ -54,6 +54,7 @@ public class MainTest extends TestCase
 
     /**
      * @return get our simple test component
+     * @throws ServiceException if the component is not found
      */
     private TestComponent getTestComponent() throws ServiceException
     {
@@ -64,6 +65,7 @@ public class MainTest extends TestCase
 
     /**
      * Initialize the CLI using a valid container configuration
+     * @throws Exception generic exception
      */
     public void testValidContainerConfiguration() throws Exception
     {
@@ -80,6 +82,7 @@ public class MainTest extends TestCase
 
     /**
      * Test the toString() method provding diagnostic information
+     * @throws Exception generic exception
      */
     public void testToString() throws Exception
     {
@@ -97,6 +100,7 @@ public class MainTest extends TestCase
 
     /**
      * Initialize the CLI using an invalid container configuration
+     * @throws Exception generic exception
      */
     public void testInvlidContainerConfiguration() throws Exception
     {

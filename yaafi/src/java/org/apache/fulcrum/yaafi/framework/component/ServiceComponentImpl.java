@@ -385,14 +385,10 @@ public abstract class ServiceComponentImpl
      */
     protected Object getRawInstance(boolean useProxy)
     {
-        if( useProxy && (this.proxy != null) )
-        {
+        if( useProxy && this.proxy != null)
             return this.proxy;
-        }
         else
-        {
             return this.instance;
-        }
     }
 
     /**

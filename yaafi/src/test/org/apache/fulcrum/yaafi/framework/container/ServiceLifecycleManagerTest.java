@@ -152,11 +152,11 @@ public class ServiceLifecycleManagerTest extends TestCase {
 			System.out.println("Decommissiong " + serviceName + " ...");
 
 			assertTrue(this.container.hasService(serviceName));
-			this.lifecycleManager.decommision(serviceName);
+			this.lifecycleManager.decommission(serviceName);
 			assertTrue(this.container.hasService(serviceName));
 			this.container.lookup(serviceName);
 			assertTrue(this.container.hasService(serviceName));
-			this.lifecycleManager.decommision(serviceName);
+			this.lifecycleManager.decommission(serviceName);
 			assertTrue(this.container.hasService(serviceName));
 		}
 	}
@@ -179,7 +179,7 @@ public class ServiceLifecycleManagerTest extends TestCase {
 
 			// reconfigure/decommission/reconfigure the service
 			this.lifecycleManager.reconfigure(serviceNames);
-			this.lifecycleManager.decommision(serviceName);
+			this.lifecycleManager.decommission(serviceName);
 			this.lifecycleManager.reconfigure(serviceNames);
 
 			// run a reconfiguration over all services
@@ -188,7 +188,7 @@ public class ServiceLifecycleManagerTest extends TestCase {
 			// reconfigure/decommission/reconfigure the service
 			this.container.lookup(serviceName);
 			this.lifecycleManager.reconfigure(serviceNames);
-			this.lifecycleManager.decommision(serviceName);
+			this.lifecycleManager.decommission(serviceName);
 			this.lifecycleManager.reconfigure(serviceNames);
 		}
 	}
@@ -207,7 +207,7 @@ public class ServiceLifecycleManagerTest extends TestCase {
 		serviceName = TestComponent.class.getName();
 
 		this.checkTestComponent();
-		this.lifecycleManager.decommision(serviceName);
+		this.lifecycleManager.decommission(serviceName);
 		this.checkTestComponent();
 
 		// terminate the ReconfigurationService which is currently
@@ -217,7 +217,7 @@ public class ServiceLifecycleManagerTest extends TestCase {
 
 		serviceName = ReconfigurationService.class.getName();
 
-		this.lifecycleManager.decommision(ReconfigurationService.class.getName());
+		this.lifecycleManager.decommission(ReconfigurationService.class.getName());
 		this.container.lookup(ReconfigurationService.class.getName());
 
 		// now we should see that the service is starting up
@@ -226,7 +226,7 @@ public class ServiceLifecycleManagerTest extends TestCase {
 
 		// and terminate it again
 
-		this.lifecycleManager.decommision(ReconfigurationService.class.getName());
+		this.lifecycleManager.decommission(ReconfigurationService.class.getName());
 	}
 
 	/**

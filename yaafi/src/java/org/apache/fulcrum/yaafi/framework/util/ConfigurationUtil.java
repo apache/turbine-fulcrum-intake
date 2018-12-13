@@ -45,7 +45,7 @@ public class ConfigurationUtil
      */
     public static void expand(Logger logger, DefaultConfiguration defaultConfiguration, Map<?, ?> vars) throws ConfigurationException
     {
-        if((vars == null) || (vars.size() == 0))
+        if( vars == null || vars.size() == 0)
         {
             return;
         }

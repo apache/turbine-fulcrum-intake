@@ -65,6 +65,7 @@ public class Container extends AbstractLogEnabled implements Initializable, Disp
      *
      * @param configFileName Name of the component configuration file
      * @param roleFileName Name of the role configuration file
+     * @param parametersFileName Name of the parameters file
      */
     public void startup(
         String configFileName,
@@ -102,10 +103,9 @@ public class Container extends AbstractLogEnabled implements Initializable, Disp
     // Avalon lifecycle interfaces
     // -------------------------------------------------------------
 
-    /**
+    /* (non-Javadoc)
      * Initializes the container
-     *
-     * @throws Exception generic exception
+     * @see org.apache.avalon.framework.activity.Initializable#initialize()
      */
     public void initialize() throws Exception
     {
@@ -128,6 +128,7 @@ public class Container extends AbstractLogEnabled implements Initializable, Disp
      * Returns an instance of the named component
      *
      * @param roleName Name of the role the component fills.
+     * @return the instance of the named component
      * @throws ComponentException generic exception
      */
     public Object lookup(String roleName) throws ComponentException
@@ -145,9 +146,9 @@ public class Container extends AbstractLogEnabled implements Initializable, Disp
 
     /**
      * Releases the component implementing the Component interface. This
-     * interface is depracted but still around in Fulcrum
+     * interface is deprecated but still around in Fulcrum
      *
-     * @param component
+     * @param component the named component to release
      */
     public void release(Component component)
     {
@@ -157,7 +158,7 @@ public class Container extends AbstractLogEnabled implements Initializable, Disp
     /**
      * Releases the component
      *
-     * @param component
+     * @param component the named component to release
      */
     public void release(Object component)
     {
@@ -166,15 +167,16 @@ public class Container extends AbstractLogEnabled implements Initializable, Disp
     }
 
     /**
-     * Decommision the service
+     * Decommission the service
      * @param name the name of the service
+     * @throws ServiceException if the service is not found
      */
-    protected void decommision( String name )
-        throws ServiceException, Exception
+    protected void decommission( String name )
+        throws ServiceException
     {
         if( this.manager != null )
         {
-            this.manager.decommision( name );
+            this.manager.decommission( name );
         }
     }
 }

@@ -73,7 +73,7 @@ public class TestComponentTest extends BaseUnitTest
 
     /**
      * Verify bug fix for not calling dispose method of components
-     * @throws Exception
+     * @throws Exception generic exception
      */
     public void testTestComponentDecomissioned() throws Exception
     {
