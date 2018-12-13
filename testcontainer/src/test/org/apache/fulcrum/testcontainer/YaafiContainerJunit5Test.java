@@ -10,6 +10,7 @@ import java.io.File;
 
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.framework.logger.ConsoleLogger;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -37,6 +38,7 @@ import org.junit.jupiter.api.Test;
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id: YaafiContainerTest.java 1694570 2015-08-06 20:35:41Z sgoeschl $
  */
+@DisplayName("Yaafi Container Test JUnit5")
 public class YaafiContainerJunit5Test extends BaseUnit5Test
 {
     /**

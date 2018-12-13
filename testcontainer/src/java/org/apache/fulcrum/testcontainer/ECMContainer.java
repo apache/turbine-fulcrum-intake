@@ -98,7 +98,7 @@ public class ECMContainer extends AbstractLogEnabled implements Container
         if (!roleFile.exists())
         {
             useRoles = false;
-            getLogger().info("Not using seperate roles file");
+            getLogger().info("Not using separate roles file");
         }
         // process configuration files
         DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();

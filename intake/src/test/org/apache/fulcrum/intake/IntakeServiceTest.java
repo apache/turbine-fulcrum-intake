@@ -1,5 +1,6 @@
 package org.apache.fulcrum.intake;
 
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,36 +20,41 @@ package org.apache.fulcrum.intake;
  * under the License.
  */
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+
 
 import java.io.File;
 
 import org.apache.fulcrum.intake.model.Group;
-import org.apache.fulcrum.testcontainer.BaseUnit4Test;
-import org.junit.Before;
-import org.junit.Test;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author Eric Pugh
  *
  */
-public class IntakeServiceTest extends BaseUnit4Test
+public class IntakeServiceTest extends BaseUnit5Test
 {
-    private static final File BASEDIR = new File( System.getProperty( "basedir" ));
+    private static final File BASEDIR = new File(".");// System.getProperty( "basedir" )
 
     private IntakeService intakeService = null;
 
     /**
-      * Defines the testcase for JUnit4.
+      * Defines the testcase for JUnit5.
       *
       */
-    public IntakeServiceTest() {
+    public IntakeServiceTest(TestInfo testInfo) {
+    	
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception
     {
         File appData = new File( BASEDIR, "target/appData.ser");
@@ -70,9 +76,7 @@ public class IntakeServiceTest extends BaseUnit4Test
         Group group = intakeService.getGroup("LoginGroup");
 
         File file = new File( BASEDIR, "target/appData.ser");
-        assertTrue(
-            "Make sure serialized data file exists:" + file,
-            file.exists());
+        assertTrue(file.exists(), "Make sure serialized data file exists:" + file);
 
         assertNotNull(group);
         assertEquals("loginGroupKey", group.getGID());

@@ -193,6 +193,7 @@ public class BaseUnit5Test
             }
             else {
                 container = new YAAFIContainer(logLevel);
+                //((LogEnabled)container).enableLogging(new Log4JLogger(LogManager.getLogger("avalon")));
             }
             container.startup(getConfigurationFileName(), getRoleFileName(),getParameterFileName());
         }

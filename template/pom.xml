@@ -35,14 +35,15 @@
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/template/</developerConnection>
     <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/template/</url>
   </scm>
-
-  <distributionManagement>
+  
+   <distributionManagement>
     <site>
-      <id>apache.website</id>
-      <name>Fulcrum Website</name>
-      <url>${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/fulcrum/fulcrum-template/</url>
-    </site>    
-  </distributionManagement>  
+        <id>turbine.apache.org</id>
+        <name>Fulcrum Template Website</name>
+        <url>http://turbine.apache.org/fulcrum/fulcrum-template/</url>
+      </site>    
+     </distributionManagement> 
+
 
   <dependencies>
     <dependency>
@@ -60,11 +61,11 @@
       <artifactId>commons-email</artifactId>
       <version>1.2</version>
     </dependency>
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.5</version>
-    </dependency>
+   <dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-lang3</artifactId>
+	    <version>3.8.1</version>
+	  </dependency>
     <dependency>
     	<groupId>org.apache.fulcrum</groupId>
     	<artifactId>fulcrum-yaafi</artifactId>

@@ -19,7 +19,6 @@ package org.apache.fulcrum.intake;
  * under the License.
  */
 
-import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -38,9 +37,18 @@ import org.apache.fulcrum.intake.validator.ValidationException;
 import org.apache.fulcrum.parser.DefaultParameterParser;
 import org.apache.fulcrum.parser.ParserService;
 import org.apache.fulcrum.parser.ValueParser;
-import org.apache.fulcrum.testcontainer.BaseUnit4Test;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 /**
  * Test the facade class for the service
  *
@@ -48,13 +56,13 @@ import org.junit.Test;
  * @author <a href="mailto:jh@byteaction.de">J&uuml;rgen Hoffmann</a>
  * @version $Id$
  */
-public class IntakeTest extends BaseUnit4Test
+public class IntakeTest extends BaseUnit5Test
 {
 	 /**
-     * Defines the testcase for JUnit4.
+     * Defines the testcase for JUnit5.
      *
      */
-    public IntakeTest()
+    public IntakeTest(TestInfo testInfo)
     {
     }
 
@@ -63,7 +71,7 @@ public class IntakeTest extends BaseUnit4Test
      * This looks strange to me. A test should not bother with explicit initialization.
      * That's the task of the container.
      */
-    @Ignore
+    @Disabled
     public void OFFtestFacadeNotConfigured() throws Exception
     {
 		assertFalse(IntakeServiceFacade.isInitialized());
@@ -108,7 +116,7 @@ public class IntakeTest extends BaseUnit4Test
         LoginForm form = new LoginForm();
         group.setProperties(form);
 
-        assertEquals("User names should be equal", "Joe", form.getUsername());
+        assertEquals("Joe", form.getUsername(), "User names should be equal");
     }
 
     @Test
@@ -126,10 +134,10 @@ public class IntakeTest extends BaseUnit4Test
         pp.setString("loginGroupKey_0loginUsernameKey", "Joe");
         group.init(pp);
 
-        assertTrue("The field should be set", userNameField.isSet());
-        assertTrue("The field should be validated", userNameField.isValidated());
-        assertTrue("The field should be valid", userNameField.isValid());
-        assertEquals("The field should have the value Joe", "Joe", userNameField.getValue());
+        assertTrue(userNameField.isSet(), "The field should be set");
+        assertTrue( userNameField.isValidated(), "The field should be validated");
+        assertTrue( userNameField.isValid(), "The field should be valid");
+        assertEquals("Joe", userNameField.getValue(), "The field should have the value Joe");
     }
 
     @Test
@@ -141,8 +149,8 @@ public class IntakeTest extends BaseUnit4Test
         assertTrue(IntakeServiceFacade.isInitialized());
         group = IntakeServiceFacade.getGroup("BooleanTest");
         Field<?> booleanField = group.get("EmptyBooleanTestField");
-        assertTrue("The Default Validator of an intake Field type boolean should be BooleanValidator", (booleanField.getValidator() instanceof BooleanValidator));
-        assertFalse("An Empty intake Field type boolean should not be required", booleanField.isRequired());
+        assertTrue( (booleanField.getValidator() instanceof BooleanValidator), "The Default Validator of an intake Field type boolean should be BooleanValidator");
+        assertFalse( booleanField.isRequired(), "An Empty intake Field type boolean should not be required");
     }
 
     @Test
@@ -154,8 +162,8 @@ public class IntakeTest extends BaseUnit4Test
         assertTrue(IntakeServiceFacade.isInitialized());
         group = IntakeServiceFacade.getGroup("BooleanTest");
         Field<?> booleanField = group.get("BooleanTestField");
-        assertTrue("The Default Validator of an intake Field type boolean should be BooleanValidator", (booleanField.getValidator() instanceof BooleanValidator));
-        assertFalse("An intake Field type boolean, which is not required, should not be required", booleanField.isRequired());
+        assertTrue( booleanField.getValidator() instanceof BooleanValidator, "The Default Validator of an intake Field type boolean should be BooleanValidator");
+        assertFalse( booleanField.isRequired(), "An intake Field type boolean, which is not required, should not be required");
     }
 
     @Test
@@ -167,8 +175,8 @@ public class IntakeTest extends BaseUnit4Test
         assertTrue(IntakeServiceFacade.isInitialized());
         group = IntakeServiceFacade.getGroup("BooleanTest");
         Field<?> booleanField = group.get("RequiredBooleanTestField");
-        assertTrue("The Default Validator of an intake Field type boolean should be BooleanValidator", (booleanField.getValidator() instanceof BooleanValidator));
-        assertTrue("An intake Field type boolean, which is required, should be required", booleanField.isRequired());
+        assertTrue( booleanField.getValidator() instanceof BooleanValidator, "The Default Validator of an intake Field type boolean should be BooleanValidator");
+        assertTrue( booleanField.isRequired(), "An intake Field type boolean, which is required, should be required");
     }
 
     @Test
@@ -178,8 +186,8 @@ public class IntakeTest extends BaseUnit4Test
         Group group = is.getGroup("NumberTest");
         assertNotNull(group);
         Field<?> multiValueField = group.get("MultiIntegerTestField");
-        assertTrue("The Default Validator of an intake Field type int should be IntegerValidator", (multiValueField.getValidator() instanceof IntegerValidator));
-        assertTrue("An intake Field type int, which is multiValued, should be multiValued", multiValueField.isMultiValued());
+        assertTrue( (multiValueField.getValidator() instanceof IntegerValidator), "The Default Validator of an intake Field type int should be IntegerValidator");
+        assertTrue( multiValueField.isMultiValued(), "An intake Field type int, which is multiValued, should be multiValued");
 
         ParserService ps = (ParserService) this.lookup( ParserService.ROLE );
         ValueParser pp = ps.getParser(DefaultParameterParser.class);
@@ -189,10 +197,10 @@ public class IntakeTest extends BaseUnit4Test
         pp.add("nt_0mitf", values[1]);
         group.init(pp);
 
-        assertTrue("The field should be set", multiValueField.isSet());
-        assertTrue("The field should be validated", multiValueField.isValidated());
-        assertTrue("The field should be valid", multiValueField.isValid());
-        assertTrue("The field should have the value [1, 2]", Arrays.equals(values, (int[])multiValueField.getValue()));
+        assertTrue( multiValueField.isSet(), "The field should be set");
+        assertTrue( multiValueField.isValidated(), "The field should be validated");
+        assertTrue( multiValueField.isValid(), "The field should be valid");
+        assertTrue( Arrays.equals(values, (int[])multiValueField.getValue()), "The field should have the value [1, 2]");
     }
 
     @Test
@@ -210,7 +218,7 @@ public class IntakeTest extends BaseUnit4Test
         }
         catch (ValidationException ve)
         {
-            assertEquals("Invalid number message is wrong.", "Entry was not a valid Integer", ve.getMessage());
+            assertEquals("Entry was not a valid Integer", ve.getMessage(), "Invalid number message is wrong.");
         }
 
         Field<?> longField = group.get("EmptyLongTestField");
@@ -221,7 +229,7 @@ public class IntakeTest extends BaseUnit4Test
         }
         catch (ValidationException ve)
         {
-            assertEquals("Invalid number message is wrong.", "Entry was not a valid Long", ve.getMessage());
+            assertEquals("Entry was not a valid Long", ve.getMessage(), "Invalid number message is wrong.");
         }
 
         Field<?> shortField = group.get("EmptyShortTestField");
@@ -232,7 +240,7 @@ public class IntakeTest extends BaseUnit4Test
         }
         catch (ValidationException ve)
         {
-            assertEquals("Invalid number message is wrong.", "Entry was not a valid Short", ve.getMessage());
+            assertEquals("Entry was not a valid Short", ve.getMessage(), "Invalid number message is wrong.");
         }
 
         Field<?> floatField = group.get("EmptyFloatTestField");
@@ -243,7 +251,7 @@ public class IntakeTest extends BaseUnit4Test
         }
         catch (ValidationException ve)
         {
-            assertEquals("Invalid number message is wrong.", "Entry was not a valid Float", ve.getMessage());
+            assertEquals("Entry was not a valid Float", ve.getMessage(), "Invalid number message is wrong.");
         }
 
         Field<?> doubleField = group.get("EmptyDoubleTestField");
@@ -254,7 +262,7 @@ public class IntakeTest extends BaseUnit4Test
         }
         catch (ValidationException ve)
         {
-            assertEquals("Invalid number message is wrong.", "Entry was not a valid Double", ve.getMessage());
+            assertEquals("Entry was not a valid Double", ve.getMessage(), "Invalid number message is wrong.");
         }
 
         Field<?> bigDecimalField = group.get("EmptyBigDecimalTestField");
@@ -265,7 +273,7 @@ public class IntakeTest extends BaseUnit4Test
         }
         catch (ValidationException ve)
         {
-            assertEquals("Invalid number message is wrong.", "Entry was not a valid BigDecimal", ve.getMessage());
+            assertEquals( "Entry was not a valid BigDecimal", ve.getMessage(), "Invalid number message is wrong.");
         }
 
         Field<?> numberField = group.get("NumberTestField");
@@ -276,7 +284,7 @@ public class IntakeTest extends BaseUnit4Test
         }
         catch (ValidationException ve)
         {
-            assertEquals("Invalid number message is wrong.", "Not a number", ve.getMessage());
+            assertEquals("Not a number", ve.getMessage(), "Entry was not a valid BigDecimal");
         }
     }
 }

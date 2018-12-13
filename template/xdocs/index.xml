@@ -70,7 +70,7 @@
 
     <source><![CDATA[
 
-    GlobalCacheService gs = null;
+    TemplateService gs = null;
     try
     {
         /*
@@ -78,7 +78,7 @@
          * If it doesn't exist or the item is stale,
          * the cache will throw an exception.
          */
-        gs = (GlobalCacheService)avalonComponentService.lookup(GlobalCacheService.ROLE)
+        gs = (TemplateService)avalonComponentService.lookup(TemplateService.ROLE)
 
         CachedObject obj = gs.getObject("cached_object");
 
