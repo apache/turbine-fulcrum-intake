@@ -51,7 +51,7 @@ import org.mockito.stubbing.Answer;
  * 
  * JUnit 5 Version of BaseUnitTest class.
  * 
- * @see {@link BaseUnit4Test} 
+ * @see BaseUnit4Test 
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
