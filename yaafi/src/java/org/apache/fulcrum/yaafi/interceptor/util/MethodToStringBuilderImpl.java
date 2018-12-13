@@ -107,8 +107,8 @@ public class MethodToStringBuilderImpl implements InterceptorToStringBuilder
         {
             StringBuilder buffer = new StringBuilder(BUF_SIZE);
 
-            Class returnType = method.getReturnType();
-            Class declaringClass = method.getDeclaringClass();
+            Class<?> returnType = method.getReturnType();
+            Class<?> declaringClass = method.getDeclaringClass();
             Class[] params = method.getParameterTypes();
 
             // print return type

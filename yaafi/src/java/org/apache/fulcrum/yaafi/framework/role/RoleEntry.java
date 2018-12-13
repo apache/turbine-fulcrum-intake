@@ -78,7 +78,7 @@ public interface RoleEntry
      *
      * @param collection the interceptors to be added
      */
-    public void addInterceptors( Collection collection );
+    public void addInterceptors( Collection<?> collection );
 
     /**
      * @return Returns the interceptorList.

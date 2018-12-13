@@ -150,13 +150,13 @@ public class ServiceContainerConfiguration
      * Add a hashtable to the context
      * @param hashtable the Hashtable to be added
      */
-    public void addToContext( Hashtable hashtable )
+    public void addToContext( Hashtable<?, ?> hashtable )
     {
         Validate.notNull(hashtable,"hashtable");
 
         String name = null;
         Object value = null;
-        Enumeration keys = hashtable.keys();
+        Enumeration<?> keys = hashtable.keys();
 
         while( keys.hasMoreElements() )
         {

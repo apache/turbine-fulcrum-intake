@@ -61,7 +61,7 @@ public class Clazz
      * @return the loaded class
      * @throws ClassNotFoundException the class was nout found
      */
-    public static Class getClazz( ClassLoader classLoader, String clazzName )
+    public static Class<?> getClazz( ClassLoader classLoader, String clazzName )
         throws ClassNotFoundException
     {
         return classLoader.loadClass( clazzName );
@@ -78,11 +78,11 @@ public class Clazz
      * @throws InstantiationException the target class could not be instantiated
      * @throws IllegalAccessException an field couldn't be accessed
      */
-    public static Object newInstance( Class clazz, Class[] signature, Object[] args )
+    public static Object newInstance( Class<?> clazz, Class[] signature, Object[] args )
         throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException
     {
         Object result = null;
-        Constructor constructor = clazz.getConstructor( signature );
+        Constructor<?> constructor = clazz.getConstructor( signature );
         result = constructor.newInstance( args );
         return result;
     }
@@ -119,7 +119,7 @@ public class Clazz
      * @throws IllegalAccessException an field couldn't be accessed
      */
 
-    public static Object invoke( Class clazz, String methodName, Class[] signature, Object[] args )
+    public static Object invoke( Class<?> clazz, String methodName, Class[] signature, Object[] args )
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException
     {
         Object result = null;
@@ -141,13 +141,13 @@ public class Clazz
      * @return the <code>List</code> of interfaces in order,
      *  <code>null</code> if null input
      */
-    public static List getAllInterfaces(Class cls)
+    public static List<?> getAllInterfaces(Class<?> cls)
     {
         if (cls == null)
         {
             return null;
         }
-        List list = new ArrayList();
+        List<Object> list = new ArrayList<Object>();
         while (cls != null)
         {
             Class [] interfaces = cls.getInterfaces();
@@ -157,10 +157,10 @@ public class Clazz
                 {
                     list.add( interfaces[i] );
                 }
-                List superInterfaces = getAllInterfaces( interfaces[i] );
-                for (Iterator it = superInterfaces.iterator(); it.hasNext();)
+                List<?> superInterfaces = getAllInterfaces( interfaces[i] );
+                for (Iterator<?> it = superInterfaces.iterator(); it.hasNext();)
                 {
-                    Class intface = (Class) it.next();
+                    Class<?> intface = (Class<?>) it.next();
                     if (list.contains( intface ) == false)
                     {
                         list.add( intface );

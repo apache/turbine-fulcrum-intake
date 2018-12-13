@@ -71,7 +71,7 @@ public class ServiceContainerFactory
         Validate.notNull(context,"context");
 
         String clazzName;
-        Class clazz = null;
+        Class<?> clazz = null;
         Configuration configuration = null;
         ServiceContainer result = null;
 

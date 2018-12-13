@@ -43,7 +43,7 @@ public class ConfigurationUtil
      * @param vars the map holding the variables
      * @throws ConfigurationException parsing the configuration failed
      */
-    public static void expand(Logger logger, DefaultConfiguration defaultConfiguration, Map vars) throws ConfigurationException
+    public static void expand(Logger logger, DefaultConfiguration defaultConfiguration, Map<?, ?> vars) throws ConfigurationException
     {
         if((vars == null) || (vars.size() == 0))
         {
@@ -119,7 +119,7 @@ public class ConfigurationUtil
      * @param vars name/value pairs used for substitution
      * @return String target string with replacements.
      */
-    private static String expand(String argStr, Map vars)
+    private static String expand(String argStr, Map<?, ?> vars)
     {
     	// ignore failures
     	boolean isLenient = true;

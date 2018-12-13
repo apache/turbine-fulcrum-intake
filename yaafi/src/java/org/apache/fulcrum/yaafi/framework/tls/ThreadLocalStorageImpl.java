@@ -38,7 +38,7 @@ public class ThreadLocalStorageImpl implements ThreadLocalStorage
 
     private CleanableThreadLocal local = new CleanableThreadLocal();
 
-    private static class CleanableThreadLocal extends ThreadLocal
+    private static class CleanableThreadLocal extends ThreadLocal<Object>
     {
         /**
          * <p>
@@ -53,7 +53,7 @@ public class ThreadLocalStorageImpl implements ThreadLocalStorage
             // and used it instead of creating a new map always after initialization (possibly
             // overwriting any variables created from within ThreadLocal.initialValue()).
 
-            Map map = new HashMap();
+            Map<String, Boolean> map = new HashMap<String, Boolean>();
             map.put(INITIALIZED_KEY, Boolean.TRUE);
 
             return map;
@@ -66,37 +66,33 @@ public class ThreadLocalStorageImpl implements ThreadLocalStorage
      * within {@link CleanableThreadLocal#initialValue()} because the notifier's thread local
      * variable will be overwritten and the listeners for the thread will be lost.
      */
-    private Map getThreadLocalVariable()
+    private Map<String, Object> getThreadLocalVariable()
     {
-        Map map = (Map) local.get();
+        Map<String, Object> map = (Map<String, Object>) local.get();
         return map;
     }
 
     public Object get(String key)
     {
-        Map map = getThreadLocalVariable();
-
+        Map<String, Object> map = getThreadLocalVariable();
         return map.get(key);
     }
 
     public void put(String key, Object value)
     {
-        Map map = getThreadLocalVariable();
-
+        Map<String, Object> map = getThreadLocalVariable();
         map.put(key, value);
     }
 
     public boolean containsKey(String key)
     {
-        Map map = getThreadLocalVariable();
-
+        Map<String, Object> map = getThreadLocalVariable();
         return map.containsKey(key);
     }
 
     public void clear()
     {
-        Map map = (Map) local.get();
-
+        Map<?, ?> map = (Map<?, ?>) local.get();
         if (map != null)
         {
             map.clear();

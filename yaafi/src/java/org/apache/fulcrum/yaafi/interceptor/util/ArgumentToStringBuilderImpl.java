@@ -247,7 +247,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
                 this.appendClassName(target);
                 this.appendHashCode(target);
                 this.appendChar('[');
-                this.append( this.toString((Collection) this.target) );
+                this.append( this.toString((Collection<?>) this.target) );
                 this.appendChar(']');
             }
             else if( this.target instanceof Dictionary )
@@ -255,7 +255,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
                 this.appendClassName(target);
                 this.appendHashCode(target);
                 this.appendChar('[');
-                this.append( this.toString((Dictionary) this.target) );
+                this.append( this.toString((Dictionary<?, ?>) this.target) );
                 this.appendChar(']');
             }
             else if( this.target instanceof Throwable )
@@ -672,7 +672,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
      * @param collection the collection to print
      * @return the result
      */
-    protected String toString(Collection collection)
+    protected String toString(Collection<?> collection)
     {
         int index = 0;
         StringBuilder temp = new StringBuilder();
@@ -688,7 +688,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
             temp.append(collection.size());
             temp.append(',');
 
-            Iterator iterator = collection.iterator();
+            Iterator<?> iterator = collection.iterator();
 
             while (iterator.hasNext())
             {
@@ -726,7 +726,7 @@ public class ArgumentToStringBuilderImpl implements InterceptorToStringBuilder
      * @param dictionary the collection to print
      * @return the result
      */
-    protected String toString(Dictionary dictionary)
+    protected String toString(Dictionary<?, ?> dictionary)
     {
         StringBuilder temp = new StringBuilder();
 

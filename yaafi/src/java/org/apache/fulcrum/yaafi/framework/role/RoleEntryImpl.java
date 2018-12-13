@@ -194,9 +194,9 @@ public class RoleEntryImpl implements RoleEntry {
 	 *
 	 * @param collection the interceptors to be added
 	 */
-	public void addInterceptors(Collection collection) {
+	public void addInterceptors(Collection<?> collection) {
 		String currInterceptorName = null;
-		Iterator iterator = collection.iterator();
+		Iterator<?> iterator = collection.iterator();
 
 		while (iterator.hasNext()) {
 			currInterceptorName = (String) iterator.next();
