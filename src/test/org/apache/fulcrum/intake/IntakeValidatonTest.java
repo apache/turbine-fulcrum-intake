@@ -19,10 +19,6 @@ package org.apache.fulcrum.intake;
  * under the License.
  */
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-
 import java.util.Locale;
 
 import org.apache.fulcrum.intake.model.Field;
@@ -40,8 +36,20 @@ import org.apache.fulcrum.intake.validator.ValidationException;
 import org.apache.fulcrum.parser.DefaultParameterParser;
 import org.apache.fulcrum.parser.ParserService;
 import org.apache.fulcrum.parser.ValueParser;
-import org.apache.fulcrum.testcontainer.BaseUnit4Test;
-import org.junit.Test;
+
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 /**
  * Test the validators
  *
@@ -52,13 +60,14 @@ import org.junit.Test;
  *
  * @author <a href="tv@apache.org">Thomas Vandahl</a>
  */
-public class IntakeValidatonTest extends BaseUnit4Test
+@DisplayName("Intake Validator Test")
+public class IntakeValidatonTest extends BaseUnit5Test
 {
 	/**
-     * Defines the testcase for JUnit4.
+     * Defines the testcase for JUnit5.
      *
      */
-    public IntakeValidatonTest()
+    public IntakeValidatonTest(TestInfo testInfo)
     {
     }
 
