@@ -168,10 +168,21 @@ public class LocaleTokenizer
          * <code>1.0</code>, they indicate increased user preference).
          */
         Float quality = DEFAULT_QUALITY;
-
-        public final int compareTo(Object acceptLang)
+        
+		@Override
+        public int compareTo(Object acceptLang)
         {
-            return quality.compareTo( ((AcceptLanguage) acceptLang).quality );
+			if ( acceptLang == null )
+				throw new NullPointerException("AcceptLanguage not found");
+			
+			if ( acceptLang instanceof AcceptLanguage )
+			{
+				Float q2 = ((AcceptLanguage) acceptLang).quality;
+				return quality.compareTo( q2 );
+			} else {
+				throw new NullPointerException("The object to compare is not the correct type");
+			}
+				
         }
     }
 }

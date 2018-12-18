@@ -74,31 +74,33 @@ public class SimpleLocalizationServiceImpl
 {
     /** Key Prefix for our bundles */
     private static final String BUNDLES = "bundles";
+    
     /**
      * The value to pass to <code>MessageFormat</code> if a
      * <code>null</code> reference is passed to <code>format()</code>.
      */
     private static final Object[] NO_ARGS = new Object[0];
+    
     /**
      * Bundle name keys a HashMap of the ResourceBundles in this
      * service (which is in turn keyed by Locale).
      */
     private HashMap<String, HashMap<Locale, ResourceBundle>> bundles = null;
+    
     /**
      * The list of default bundles to search.
      */
     private String[] bundleNames = null;
-    /**
-     * The default bundle name to use if not specified.
-     */
-    private String defaultBundleName = null;
+
     /**
      * The name of the default locale to use (includes language and
      * country).
      */
     private Locale defaultLocale = null;
+    
     /** The name of the default language to use. */
-    private String defaultLanguage;
+    private String defaultLanguage = null;
+    
     /** The name of the default country to use. */
     private String defaultCountry = null;
 
@@ -176,33 +178,10 @@ public class SimpleLocalizationServiceImpl
      */
     protected void initBundleNames(String[] intBundleNames)
     {
-        //System.err.println("cfg=" + getConfiguration());
-        if (defaultBundleName != null && defaultBundleName.length() > 0)
-        {
-            // Using old-style single bundle name property.
-            if (intBundleNames == null || intBundleNames.length <= 0)
-            {
-                bundleNames = new String[] { defaultBundleName };
-            }
-            else
-            {
-                // Prepend "default" bundle name.
-                String[] array = new String[intBundleNames.length + 1];
-                array[0] = defaultBundleName;
-                System.arraycopy(
-                    intBundleNames,
-                    0,
-                    array,
-                    1,
-                    intBundleNames.length);
-                bundleNames = array;
-            }
-        }
         if (intBundleNames == null)
-        {
             bundleNames = new String[0];
-        }
-        bundleNames = intBundleNames;
+        else
+        	bundleNames = intBundleNames;
     }
     
     /**
