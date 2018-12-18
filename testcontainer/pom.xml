@@ -25,16 +25,16 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.fulcrum</groupId>
   <artifactId>fulcrum-testcontainer</artifactId>
-  <version>1.0.8-SNAPSHOT</version>
+  <version>1.0.8</version>
   <name>Fulcrum Test Container</name>
   <inceptionYear>2004</inceptionYear>
   <description>A test framework for Avalon components</description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-testcontainer</url>
         
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/testcontainer</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/testcontainer</developerConnection>
-    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/testcontainer</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-testcontainer-1.0.8</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-testcontainer-1.0.8</developerConnection>
+    <url>http://svn.apache.org/viewvc/turbine/fulcrum/tags/fulcrum-testcontainer-1.0.8</url>
   </scm>
 
   <distributionManagement>
