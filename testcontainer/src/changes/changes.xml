@@ -24,11 +24,27 @@
     <!-- author email="quintonm@bellsouth.net">Quinton McCombs</author -->
   </properties>
   <body>
-    <release version="1.0.8" date="in Subversion">      
-      <action type="update" dev="gk">
-       Add support for JUnit 5
-      </action> 
-    </release> 
+    <release version="1.0.8" date="in Subversion">
+       <action type="update" dev="painter">
+        Update Fulcrum dependencies
+      </action>  
+       <action type="update" dev="gk">
+        Add support for JUnit 5.
+        Use in surefire testing now the default fork model ( reuseForks = true, forkCount=1).
+       </action>
+       <action type="update" dev="gk">
+        Update to Log4J2 Core with Log4J1.2 bridge v2.11.1, Jupiter v5.3.2, Platform v1.3.2.
+      </action>
+      <action type="fix" dev="painter">
+        Fix build, Javadoc, Update Mockito v2.23.0
+      </action>
+       <action type="update" dev="tv">
+        Update parent
+      </action>
+       <action type="update" dev="sgoeschl">
+        Clean up the source code and javadocs.
+      </action>
+    </release>
     <release version="1.0.7" date="2015-08-08">
       <action type="update" dev="gk">
        Added JUnit 4 Support

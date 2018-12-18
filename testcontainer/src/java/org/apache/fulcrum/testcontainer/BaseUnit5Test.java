@@ -57,7 +57,6 @@ import org.mockito.stubbing.Answer;
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
  */
-//@RunWith(JUnitPlatform.class)
 public class BaseUnit5Test
 {
     public static final String CONTAINER_ECM = "CONTAINER_ECM";

@@ -1,17 +1,5 @@
 package org.apache.fulcrum.testcontainer;
 
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.io.File;
-
-import org.apache.avalon.framework.component.ComponentException;
-import org.apache.avalon.framework.logger.ConsoleLogger;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -31,6 +19,17 @@ import org.junit.jupiter.api.Test;
  * under the License.
  */
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.io.File;
+
+import org.apache.avalon.framework.component.ComponentException;
+import org.apache.avalon.framework.logger.ConsoleLogger;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 /**
  * Basic testing of the Container
