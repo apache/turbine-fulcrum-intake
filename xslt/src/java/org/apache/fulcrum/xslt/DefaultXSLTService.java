@@ -265,7 +265,7 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      * @param out
      *            The writer for the transformed output
      */
-    public void transform(String xslName, org.w3c.dom.Node in, Writer out)
+    public void transform(String xslName, Node in, Writer out)
             throws Exception
     {
         Source xmlin = new DOMSource(in);
@@ -282,7 +282,7 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      * @param in
      *            The DOM Node to be transformed
      */
-    public String transform(String xslName, org.w3c.dom.Node in)
+    public String transform(String xslName, Node in)
             throws Exception
     {
         StringWriter sw = new StringWriter();
