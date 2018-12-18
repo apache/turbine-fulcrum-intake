@@ -25,6 +25,18 @@
 
   <body>
     <release version="1.0.8-SNAPSHOT" date="as in SVN">
+       <action dev="painter" type="update">
+         Use commons-codec for basic encryption algorithms
+       </action>
+       <action dev="painter" type="update">
+         PMD report cleanup
+       </action>
+       <action dev="painter" type="update">
+         Update to yaafi 1.0.8
+       </action>
+       <action dev="painter" type="update">
+         Derive from Turbine parent POM 5
+       </action>
     </release>
     <release version="1.0.7" date="2009-09-10">
       <action dev="sgoeschl" type="update">

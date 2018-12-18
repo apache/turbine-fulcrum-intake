@@ -21,7 +21,6 @@ package org.apache.fulcrum.crypto;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-import java.util.Hashtable;
 
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.configuration.Configurable;
@@ -46,10 +45,8 @@ import org.apache.avalon.framework.thread.ThreadSafe;
  */
 public class DefaultCryptoService extends AbstractLogEnabled
 		implements CryptoService, Configurable, Initializable, ThreadSafe {
-	//
-	// SJM: removed Component and Contextualizable, Startable
-	//
 
+	
 	/** Key Prefix for our algorithms */
 	private static final String ALGORITHM = "algorithm";
 
@@ -60,7 +57,7 @@ public class DefaultCryptoService extends AbstractLogEnabled
 	private static final String DEFAULT_CLASS = "org.apache.fulcrum.crypto.provider.JavaCrypt";
 
 	/** Names of the registered algorithms and the wanted classes */
-	private HashMap<String, String> algos = null;
+	private HashMap<String, String> algos = new HashMap<>();
 
 	/**
 	 * Returns a CryptoAlgorithm Object which represents the requested crypto
@@ -83,9 +80,6 @@ public class DefaultCryptoService extends AbstractLogEnabled
 			throw new NoSuchAlgorithmException("TurbineCryptoService: No Algorithm for " + algo + " found");
 		}
 		try {
-			// @todo should be created via factory service.
-			// Just trying to get something to work.
-			// ca = (CryptoAlgorithm) factoryService.getInstance(cryptoClass);
 			ca = (CryptoAlgorithm) Class.forName(cryptoClass).newInstance();
 		} catch (Exception e) {
 			throw new NoSuchAlgorithmException(
@@ -94,6 +88,7 @@ public class DefaultCryptoService extends AbstractLogEnabled
 		ca.setCipher(algo);
 		return ca;
 	}
+
 
 	// ---------------- Avalon Lifecycle Methods ---------------------
 
@@ -113,16 +108,13 @@ public class DefaultCryptoService extends AbstractLogEnabled
 		final Configuration algorithms = conf.getChild(ALGORITHM, false);
 		if (algorithms != null) {
 			Configuration[] nameVal = algorithms.getChildren();
-			for (int i = 0; i < nameVal.length; i++) {
-				String key = nameVal[i].getName();
-				String val = nameVal[i].getValue();
-				// getLogger.debug("Registered " + val
-				// + " for Crypto Algorithm " + key);
-				algos.put(key, val);
+			for ( Configuration entry : nameVal )
+			{
+				algos.put(entry.getName(), entry.getValue());
 			}
 		}
 	}
-
+	
 	/**
 	 * {@link org.apache.avalon.framework.activity.Initializable#initialize()}
 	 * 

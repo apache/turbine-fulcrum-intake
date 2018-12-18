@@ -1,6 +1,5 @@
 package org.apache.fulcrum.crypto.provider;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,14 +19,12 @@ package org.apache.fulcrum.crypto.provider;
  * under the License.
  */
 
-
 import org.apache.fulcrum.crypto.CryptoAlgorithm;
 
 /**
- * This is a dummy for "cleartext" encryption. It goes through
- * the notions of the CryptoAlgorithm interface but actually does
- * nothing. It can be used as a replacement for the "encrypt = no"
- * setting in TurbineResources.
+ * This is a dummy for "cleartext" encryption. It goes through the notions of
+ * the CryptoAlgorithm interface but actually does nothing. It can be used as a
+ * replacement for the "encrypt = no" setting in TurbineResources.
  *
  * Can be used as the default crypto algorithm
  *
@@ -35,60 +32,44 @@ import org.apache.fulcrum.crypto.CryptoAlgorithm;
  * @version $Id$
  */
 
-public class ClearCrypt
-    implements CryptoAlgorithm
-{
-    /**
-     * C'tor
-     *
-     */
+public class ClearCrypt implements CryptoAlgorithm {
+	
+	/**
+	 * Constructor
+	 */
+	public ClearCrypt() {
+	}
 
-    public ClearCrypt()
-    {
-    }
+	/**
+	 * This class never uses an algorithm, so this is just a dummy.
+	 *
+	 * @param cipher Cipher (ignored)
+	 */
+	public void setCipher(String cipher) {
+		/* dummy */
+	}
 
-    /**
-     * This class never uses an algorithm, so this is
-     * just a dummy.
-     *
-     * @param cipher    Cipher (ignored)
-     */
+	/**
+	 * This class never uses a seed, so this is just a dummy.
+	 *
+	 * @param seed Seed (ignored)
+	 */
+	public void setSeed(String seed) {
+		/* dummy */
+	}
 
-    public void setCipher(String cipher)
-    {
-        /* dummy */
-    }
+	/**
+	 * encrypt the supplied string with the requested cipher
+	 *
+	 * @param value The value to be encrypted
+	 * @return The encrypted value
+	 * @throws Exception An Exception of the underlying implementation.
+	 */
+	public String encrypt(String value) throws Exception {
+		/*
+		 * Ultra-clever implementation. ;-)
+		 */
 
-    /**
-     * This class never uses a seed, so this is
-     * just a dummy.
-     *
-     * @param seed        Seed (ignored)
-     */
-
-    public void setSeed(String seed)
-    {
-        /* dummy */
-    }
-
-    /**
-     * encrypt the supplied string with the requested cipher
-     *
-     * @param value       The value to be encrypted
-     *
-     * @return The encrypted value
-     *
-     * @throws Exception An Exception of the underlying implementation.
-     *
-     */
-
-    public String encrypt(String value)
-        throws Exception
-    {
-        /*
-         * Ultra-clever implementation. ;-)
-         */
-
-        return value;
-    }
+		return value;
+	}
 }

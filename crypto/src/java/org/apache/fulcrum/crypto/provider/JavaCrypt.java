@@ -1,6 +1,5 @@
 package org.apache.fulcrum.crypto.provider;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,23 +19,22 @@ package org.apache.fulcrum.crypto.provider;
  * under the License.
  */
 
-
 import java.security.MessageDigest;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.fulcrum.crypto.CryptoAlgorithm;
-import org.apache.fulcrum.crypto.impl.Base64;
 
 /**
- * Implements the normal java.security.MessageDigest stream cipers.
- * Base64 strings returned by this provider are correctly padded to
- * multiples of four bytes. If you run into interoperability problems
- * with other languages, especially perl and the Digest::MD5 module,
- * note that the md5_base64 function from this package incorrectly drops
- * the pad bytes. Use the MIME::Base64 package instead.
+ * Implements the normal java.security.MessageDigest stream cipers. Base64
+ * strings returned by this provider are correctly padded to multiples of four
+ * bytes. If you run into interoperability problems with other languages,
+ * especially perl and the Digest::MD5 module, note that the md5_base64 function
+ * from this package incorrectly drops the pad bytes. Use the MIME::Base64
+ * package instead.
  *
- * If you upgrade from Turbine 2.1 and suddently your old stored passwords
- * no longer work, please take a look at the OldJavaCrypt provider for
- * bug-to-bug compatibility.
+ * If you upgrade from Turbine 2.1 and suddently your old stored passwords no
+ * longer work, please take a look at the OldJavaCrypt provider for bug-to-bug
+ * compatibility.
  *
  * This provider can be used as the default crypto algorithm provider.
  *
@@ -44,79 +42,62 @@ import org.apache.fulcrum.crypto.impl.Base64;
  * @version $Id$
  */
 
-public class JavaCrypt
-    implements CryptoAlgorithm
-{
+public class JavaCrypt implements CryptoAlgorithm {
 
-    /** The default cipher */
-    public static final String DEFAULT_CIPHER = "SHA";
+	/** The default cipher */
+	public static final String DEFAULT_CIPHER = "SHA";
 
-    /** The cipher to use for encryption */
-    private String cipher = null;
+	/** The cipher to use for encryption */
+	private String cipher = null;
 
+	/**
+	 * Constructo
+	 *
+	 */
+	public JavaCrypt() {
+		this.cipher = DEFAULT_CIPHER;
+	}
 
-    /**
-     * C'tor
-     *
-     */
+	/**
+	 * Setting the actual cipher requested. If not called, then the default cipher
+	 * (SHA) is used.
+	 *
+	 * This will never throw an error even if there is no provider for this cipher.
+	 * The error will be thrown by encrypt() (Fixme?)
+	 *
+	 * @param cipher The cipher to use.
+	 *
+	 */
+	public void setCipher(String cipher) {
+		this.cipher = cipher;
+	}
 
-    public JavaCrypt()
-    {
-        this.cipher = DEFAULT_CIPHER;
-    }
+	/**
+	 * This class never uses a seed, so this is just a dummy.
+	 *
+	 * @param seed Seed (ignored)
+	 *
+	 */
+	public void setSeed(String seed) {
+		/* dummy */
+	}
 
-    /**
-     * Setting the actual cipher requested. If not
-     * called, then the default cipher (SHA) is used.
-     *
-     * This will never throw an error even if there is no
-     * provider for this cipher. The error will be thrown
-     * by encrypt() (Fixme?)
-     *
-     * @param cipher     The cipher to use.
-     *
-     */
+	/**
+	 * encrypt the supplied string with the requested cipher
+	 *
+	 * @param value The value to be encrypted
+	 * @return The encrypted value
+	 * @throws Exception An Exception of the underlying implementation.
+	 */
+	public String encrypt(String value) throws Exception {
+		MessageDigest md = MessageDigest.getInstance(cipher);
 
-    public void setCipher(String cipher)
-    {
-        this.cipher = cipher;
-    }
+		// We need to use unicode here, to be independent of platform's
+		// default encoding. Thanks to SGawin for spotting this.
+		byte[] digest = md.digest(value.getBytes("UTF-8"));
 
-    /**
-     * This class never uses a seed, so this is
-     * just a dummy.
-     *
-     * @param seed        Seed (ignored)
-     *
-     */
-
-    public void setSeed(String seed)
-    {
-        /* dummy */
-    }
-
-    /**
-     * encrypt the supplied string with the requested cipher
-     *
-     * @param value       The value to be encrypted
-     *
-     * @return The encrypted value
-     *
-     * @throws Exception An Exception of the underlying implementation.
-     */
-
-    public String encrypt(String value)
-        throws Exception
-    {
-        MessageDigest md = MessageDigest.getInstance(cipher);
-
-        // We need to use unicode here, to be independent of platform's
-        // default encoding. Thanks to SGawin for spotting this.
-        byte[] digest = md.digest(value.getBytes("UTF-8"));
-
-        // Base64-encode the digest.
-        byte[] encodedDigest = Base64.encodeBase64(digest);
-        return (encodedDigest == null ? null :
-                new String(encodedDigest));
-    }
+		// Base64-encode the digest.
+		byte[] encodedDigest = Base64.encodeBase64(digest);
+		return (encodedDigest == null ? null : new String(encodedDigest, "UTF-8"));
+	}
 }

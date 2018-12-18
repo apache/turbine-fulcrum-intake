@@ -19,9 +19,7 @@ package org.apache.fulcrum.crypto.provider;
  * under the License.
  */
 
-
 import org.apache.fulcrum.crypto.CryptoAlgorithm;
-
 import java.util.Random;
 
 /**
@@ -31,78 +29,60 @@ import java.util.Random;
  * @version $Id$
  */
 
-public class UnixCrypt
-    implements CryptoAlgorithm
-{
+public class UnixCrypt implements CryptoAlgorithm {
 
-    /** The seed to use */
-    private String seed = null;
+	/** The seed to use */
+	private String seed = null;
 
-    /** standard Unix crypt chars (64) */
-    private static final char[] SALT_CHARS =
-        (("abcdefghijklmnopqrstuvwxyz" +
-         "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789./").toCharArray());
+	/** standard Unix crypt chars (64) */
+	private static final char[] SALT_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789./"
+			.toCharArray();
 
+	/**
+	 * Constructor
+	 */
+	public UnixCrypt() {
+	}
 
-    /**
-     * C'tor
-     *
-     */
+	/**
+	 * This class never uses anything but UnixCrypt, so it is just a dummy (Fixme:
+	 * Should we throw an exception if something is requested that we don't support?
+	 *
+	 * @param cipher Cipher (ignored)
+	 */
+	public void setCipher(String cipher) {
+		/* dummy */
+	}
 
-    public UnixCrypt()
-    {
-    }
+	/**
+	 * Setting the seed for the UnixCrypt algorithm. If a null value is supplied, or
+	 * no seed is set, then a random seed is used.
+	 *
+	 * @param seed The seed value to use.
+	 */
+	public void setSeed(String seed) {
+		this.seed = seed;
+	}
 
-    /**
-     * This class never uses anything but
-     * UnixCrypt, so it is just a dummy
-     * (Fixme: Should we throw an exception if
-     * something is requested that we don't support?
-     *
-     * @param cipher    Cipher (ignored)
-     */
+	/**
+	 * encrypt the supplied string with the requested cipher
+	 *
+	 * @param value The value to be encrypted
+	 * @return The encrypted value
+	 * @throws Exception An Exception of the underlying implementation.
+	 */
+	public String encrypt(String value) throws Exception {
 
-    public void setCipher(String cipher)
-    {
-        /* dummy */
-    }
+		if (seed == null) {
+			Random randomGenerator = new Random();
+			int numSaltChars = SALT_CHARS.length;
+			StringBuilder sb = new StringBuilder();
+			sb.append(SALT_CHARS[Math.abs(randomGenerator.nextInt() % numSaltChars)])
+					.append(SALT_CHARS[Math.abs(randomGenerator.nextInt() % numSaltChars)]).toString();
+			seed = sb.toString();
+		}
 
-    /**
-     * Setting the seed for the UnixCrypt
-     * algorithm. If a null value is supplied,
-     * or no seed is set, then a random seed is used.
-     *
-     * @param seed     The seed value to use.
-     */
-
-    public void setSeed(String seed)
-    {
-        this.seed = seed;
-    }
-
-    /**
-     * encrypt the supplied string with the requested cipher
-     *
-     * @param value       The value to be encrypted
-     * @return The encrypted value
-     * @throws Exception An Exception of the underlying implementation.
-     */
-    public String encrypt(String value)
-        throws Exception
-    {
-        if (seed == null)
-        {
-            Random randomGenerator = new java.util.Random();
-            int numSaltChars = SALT_CHARS.length;
-
-            seed = (new StringBuilder())
-                .append(SALT_CHARS[Math.abs(randomGenerator.nextInt()
-                                   % numSaltChars)])
-                .append(SALT_CHARS[Math.abs(randomGenerator.nextInt()
-                                   % numSaltChars)])
-                .toString();
-        }
-
-        return org.apache.fulcrum.crypto.impl.UnixCrypt.crypt(seed, value);
-    }
+		// use commons-codec to do the encryption
+		return org.apache.commons.codec.digest.UnixCrypt.crypt(value, seed);
+	}
 }
