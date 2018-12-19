@@ -25,6 +25,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -37,6 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @version $Id$
  */
 @DisplayName("Crypto Service Test")
+@RunWith(JUnitPlatform.class)
 public class CryptoServiceTest extends BaseUnit5Test
 {
     private CryptoService sc = null;
@@ -145,4 +148,13 @@ public class CryptoServiceTest extends BaseUnit5Test
         assertEquals( preDefinedResult, output, "SHA256 Encryption failed ");
     }
     
+    @Test
+    public void testJavaCryptSha512() throws Exception
+    {
+        String preDefinedResult = "QlxxOMtVn0FFAXF+DRQl8o/b+WKEG6Nc7QRdqf/LTTz/+bOaoE/JihM8uJqTW7JQm/l/TmnmVKuLaD7jdVAtJw==";
+        CryptoAlgorithm ca = sc.getCryptoAlgorithm("java");
+        ca.setCipher("SHA-512");
+        String output = ca.encrypt(preDefinedInput);
+        assertEquals( preDefinedResult, output, "SHA512 Encryption failed ");
+    }
 }
