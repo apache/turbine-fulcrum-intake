@@ -24,7 +24,9 @@
   </properties>
 
   <body>
-    <release version="1.0.8" date="as in SVN">
+    <release version="1.0.9" date="as in SVN">
+    </release>
+    <release version="1.0.8" date="2018-12-14">
       <action dev="painter" type="update">
         Removed custom byte array handling code and updated to use JDK standard methods and IOUtils as needed
       </action>
@@ -47,7 +49,7 @@
         Use Java 8, clean up some issues from findbugs
       </action>
     </release>  
-    <release version="1.0.7-SNAPSHOT" date="as in SVN">
+    <release version="1.0.7-SNAPSHOT" date="2015-11-10">
       <action dev="sgoeschl" type="add" issue="TRB-97" data="2015-08-06">
         Integrate JavaSimon for performance monitoring
       </action>
