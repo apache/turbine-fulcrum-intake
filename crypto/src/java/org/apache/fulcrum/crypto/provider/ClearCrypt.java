@@ -37,7 +37,8 @@ public class ClearCrypt implements CryptoAlgorithm {
 	/**
 	 * Constructor
 	 */
-	public ClearCrypt() {
+	public ClearCrypt() 
+	{
 	}
 
 	/**
@@ -45,7 +46,8 @@ public class ClearCrypt implements CryptoAlgorithm {
 	 *
 	 * @param cipher Cipher (ignored)
 	 */
-	public void setCipher(String cipher) {
+	public void setCipher(String cipher) 
+	{
 		/* dummy */
 	}
 
@@ -54,7 +56,8 @@ public class ClearCrypt implements CryptoAlgorithm {
 	 *
 	 * @param seed Seed (ignored)
 	 */
-	public void setSeed(String seed) {
+	public void setSeed(String seed) 
+	{
 		/* dummy */
 	}
 
@@ -65,7 +68,8 @@ public class ClearCrypt implements CryptoAlgorithm {
 	 * @return The encrypted value
 	 * @throws Exception An Exception of the underlying implementation.
 	 */
-	public String encrypt(String value) throws Exception {
+	public String encrypt(String value) throws Exception 
+	{
 		/*
 		 * Ultra-clever implementation. ;-)
 		 */

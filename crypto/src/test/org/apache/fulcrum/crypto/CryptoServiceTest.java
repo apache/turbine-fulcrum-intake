@@ -86,6 +86,7 @@ public class CryptoServiceTest extends BaseUnit5Test
         assertEquals( output, result, "Encryption failed ");
 
     }
+    
     @Test
     public void testClearCrypt() throws Exception
     {
@@ -96,6 +97,7 @@ public class CryptoServiceTest extends BaseUnit5Test
         assertEquals( preDefinedResult, output, "Encryption failed ");
 
     }
+    
     @Test
     @DisplayName("OldJavaCrypt: Truncated base64 from MD5 (Turbine 2.1) Test")
     public void testOldJavaCryptMd5() throws Exception
@@ -108,6 +110,7 @@ public class CryptoServiceTest extends BaseUnit5Test
         assertEquals( preDefinedResult, output, "MD5 Encryption failed ");
 
     }
+    
     @Test
     public void testOldJavaCryptSha1() throws Exception
     {
@@ -119,6 +122,7 @@ public class CryptoServiceTest extends BaseUnit5Test
         assertEquals( preDefinedResult, output, "SHA1 Encryption failed ");
 
     }
+    
     @Test
     public void testJavaCryptMd5() throws Exception
     {
@@ -128,6 +132,7 @@ public class CryptoServiceTest extends BaseUnit5Test
         String output = ca.encrypt(preDefinedInput);
         assertEquals( preDefinedResult, output, "MD5 Encryption failed ");
     }
+    
     @Test
     public void testJavaCryptSha1() throws Exception
     {
@@ -138,6 +143,7 @@ public class CryptoServiceTest extends BaseUnit5Test
         assertEquals( preDefinedResult, output, "SHA1 Encryption failed ");
 
     }
+    
     @Test
     public void testJavaCryptSha256() throws Exception
     {

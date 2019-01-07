@@ -41,7 +41,8 @@ public class UnixCrypt implements CryptoAlgorithm {
 	/**
 	 * Constructor
 	 */
-	public UnixCrypt() {
+	public UnixCrypt() 
+	{
 	}
 
 	/**
@@ -50,7 +51,8 @@ public class UnixCrypt implements CryptoAlgorithm {
 	 *
 	 * @param cipher Cipher (ignored)
 	 */
-	public void setCipher(String cipher) {
+	public void setCipher(String cipher) 
+	{
 		/* dummy */
 	}
 
@@ -60,7 +62,8 @@ public class UnixCrypt implements CryptoAlgorithm {
 	 *
 	 * @param seed The seed value to use.
 	 */
-	public void setSeed(String seed) {
+	public void setSeed(String seed) 
+	{
 		this.seed = seed;
 	}
 
@@ -71,8 +74,8 @@ public class UnixCrypt implements CryptoAlgorithm {
 	 * @return The encrypted value
 	 * @throws Exception An Exception of the underlying implementation.
 	 */
-	public String encrypt(String value) throws Exception {
-
+	public String encrypt(String value) throws Exception 
+	{
 		if (seed == null) {
 			Random randomGenerator = new Random();
 			int numSaltChars = SALT_CHARS.length;

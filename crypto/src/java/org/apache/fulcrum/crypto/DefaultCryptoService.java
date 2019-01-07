@@ -70,7 +70,8 @@ public class DefaultCryptoService extends AbstractLogEnabled
 	 * @throws NoSuchAlgorithmException Requested algorithm is not available
 	 *
 	 */
-	public CryptoAlgorithm getCryptoAlgorithm(String algo) throws NoSuchAlgorithmException {
+	public CryptoAlgorithm getCryptoAlgorithm(String algo) throws NoSuchAlgorithmException 
+	{
 		String cryptoClass = (String) algos.get(algo);
 		CryptoAlgorithm ca = null;
 		if (cryptoClass == null) {
@@ -98,8 +99,8 @@ public class DefaultCryptoService extends AbstractLogEnabled
 	 * @param conf the configuration
 	 * @throws ConfigurationException if not found
 	 */
-	public void configure(Configuration conf) throws ConfigurationException {
-		
+	public void configure(Configuration conf) throws ConfigurationException 
+	{
 		// Initialize the hash and setup default
 		// Can be overriden by default key from properties
 		this.algos = new HashMap<>();
@@ -120,14 +121,16 @@ public class DefaultCryptoService extends AbstractLogEnabled
 	 * 
 	 * @throws Exception generic exception
 	 */
-	public void initialize() throws Exception {
+	public void initialize() throws Exception 
+	{
 		getLogger().debug("initialize()");
 	}
 
 	/**
 	 * Avalon component lifecycle method
 	 */
-	public void dispose() {
+	public void dispose() 
+	{
 		algos = null;
 	}
 

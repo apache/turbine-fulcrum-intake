@@ -54,7 +54,8 @@ public class JavaCrypt implements CryptoAlgorithm {
 	 * Constructo
 	 *
 	 */
-	public JavaCrypt() {
+	public JavaCrypt() 
+	{
 		this.cipher = DEFAULT_CIPHER;
 	}
 
@@ -68,7 +69,8 @@ public class JavaCrypt implements CryptoAlgorithm {
 	 * @param cipher The cipher to use.
 	 *
 	 */
-	public void setCipher(String cipher) {
+	public void setCipher(String cipher) 
+	{
 		this.cipher = cipher;
 	}
 
@@ -78,7 +80,8 @@ public class JavaCrypt implements CryptoAlgorithm {
 	 * @param seed Seed (ignored)
 	 *
 	 */
-	public void setSeed(String seed) {
+	public void setSeed(String seed) 
+	{
 		/* dummy */
 	}
 
@@ -89,7 +92,8 @@ public class JavaCrypt implements CryptoAlgorithm {
 	 * @return The encrypted value
 	 * @throws Exception An Exception of the underlying implementation.
 	 */
-	public String encrypt(String value) throws Exception {
+	public String encrypt(String value) throws Exception 
+	{
 		MessageDigest md = MessageDigest.getInstance(cipher);
 
 		// We need to use unicode here, to be independent of platform's

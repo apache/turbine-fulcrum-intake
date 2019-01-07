@@ -53,7 +53,8 @@ public class OldJavaCrypt implements CryptoAlgorithm {
 	/**
 	 * Constructor
 	 */
-	public OldJavaCrypt() {
+	public OldJavaCrypt() 
+	{
 		this.cipher = DEFAULT_CIPHER;
 	}
 
@@ -67,7 +68,8 @@ public class OldJavaCrypt implements CryptoAlgorithm {
 	 * @param cipher The cipher to use.
 	 *
 	 */
-	public void setCipher(String cipher) {
+	public void setCipher(String cipher) 
+	{
 		this.cipher = cipher;
 	}
 
@@ -77,7 +79,8 @@ public class OldJavaCrypt implements CryptoAlgorithm {
 	 * @param seed Seed (ignored)
 	 *
 	 */
-	public void setSeed(String seed) {
+	public void setSeed(String seed) 
+	{
 		/* dummy */
 	}
 
@@ -88,7 +91,8 @@ public class OldJavaCrypt implements CryptoAlgorithm {
 	 * @return The encrypted value
 	 * @throws Exception An Exception of the underlying implementation.
 	 */
-	public String encrypt(String value) throws Exception {
+	public String encrypt(String value) throws Exception 
+	{
 		MessageDigest md = MessageDigest.getInstance(cipher);
 		byte[] digest = md.digest(value.getBytes("UTF-8"));
 		byte[] base64 = Base64.encodeBase64(digest);
