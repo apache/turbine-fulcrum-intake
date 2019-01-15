@@ -25,16 +25,16 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fulcrum-mimetype</artifactId>
   <groupId>org.apache.fulcrum</groupId>
-  <version>1.0.6-SNAPSHOT</version>
+  <version>1.0.6</version>
   <name>Fulcrum Mimetype</name>
   <inceptionYear>2004</inceptionYear>
   <description>Fulcrum Mimetype Component</description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-mimetype/</url>
 		
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/mimetype/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/mimetype/</developerConnection>
-    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/mimetype/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-mimetype-1.0.6</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-mimetype-1.0.6</developerConnection>
+    <url>http://svn.apache.org/viewvc/turbine/fulcrum/tags/fulcrum-mimetype-1.0.6</url>
   </scm>
 
   <developers>
