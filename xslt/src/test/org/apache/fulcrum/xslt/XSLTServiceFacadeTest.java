@@ -1,5 +1,7 @@
 package org.apache.fulcrum.xslt;
 
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,6 +23,7 @@ package org.apache.fulcrum.xslt;
 
 
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.junit.jupiter.api.Test;
 
 
 /**
@@ -29,19 +32,10 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  * @author <a href="epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class XSLTServiceFacadeTest extends BaseUnitTest
+public class XSLTServiceFacadeTest extends BaseUnit5Test
 {
-    /**
-     * Defines the testcase name for JUnit.
-     *
-     * @param name the testcase's name.
-     */
-    public XSLTServiceFacadeTest(String name)
-    {
-        super(name);
-    }
 
-
+	@Test
     public void testWorkflowFacadeNotConfigured() throws Exception
     {
         try
@@ -54,6 +48,7 @@ public class XSLTServiceFacadeTest extends BaseUnitTest
         }
     }
 
+	@Test
     public void testWorkflowFacadeConfigured() throws Exception
     {
     	// this.lookup causes the workflow service to be configured.

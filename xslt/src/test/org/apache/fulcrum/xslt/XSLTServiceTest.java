@@ -1,5 +1,6 @@
 package org.apache.fulcrum.xslt;
 
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,15 +21,21 @@ package org.apache.fulcrum.xslt;
  */
 
 
-import org.apache.avalon.framework.component.ComponentException;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.Reader;
 import java.io.FileReader;
-import java.io.Writer;
 import java.io.FileWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.avalon.framework.component.ComponentException;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * XSLTServiceTest
@@ -37,23 +44,14 @@ import java.util.Map;
  * @author <a href="epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class XSLTServiceTest extends BaseUnitTest
+public class XSLTServiceTest extends BaseUnit5Test
 {
     private XSLTService xsltService = null;
 
-    /**
-     * Defines the testcase name for JUnit.
-     *
-     * @param name the testcase's name.
-     */
-    public XSLTServiceTest(String name)
-    {
-        super(name);
-    }
 
+    @BeforeEach
     protected void setUp() throws Exception
     {
-        super.setUp();
         try
         {
             xsltService = (XSLTService) this.lookup(XSLTService.ROLE);
@@ -68,6 +66,7 @@ public class XSLTServiceTest extends BaseUnitTest
      * Simple test that verify an object can be created and deleted.
      * @throws Exception the test failed
      */
+    @Test
     public void testPath() throws Exception
     {
         assertNotNull(xsltService);
@@ -79,6 +78,7 @@ public class XSLTServiceTest extends BaseUnitTest
      *
      * @throws Exception the test failed
      */
+    @Test
     public void testTransform() throws Exception
     {
         Reader reader = new FileReader("./pom.xml");
@@ -93,6 +93,7 @@ public class XSLTServiceTest extends BaseUnitTest
      *
      * @throws Exception the test failed
      */
+    @Test
     public void testTransformXsltOnly() throws Exception
     {
         Map values = new HashMap();
