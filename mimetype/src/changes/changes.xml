@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<document>
+  <properties>
+    <title>Fulcrum MIME type</title>
+    <author email="epugh@upstate.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+    <release version="1.0.6-SNAPSHOT" date="in SVN">
+      <action dev="painter" type="update">
+        Moved changes.xml location for inclusion in report generation
+      </action>
+      <action dev="painter" type="update">
+        Utilize Java 8 and simplified some of the data structures in CharSetMap for readability
+      </action>
+      <action dev="painter" type="update">
+        Added commons-lang3 dep for string tests
+      </action>
+      <action dev="painter" type="update">
+        Update unit tests to BaseUnit5Test
+      </action>
+      <action dev="painter" type="update">
+        Update to yaafi-1.0.8 and testcontainer 1.0.8
+      </action>
+      <action dev="sgoeschl" type="add">
+        Added 'mime.types' file and two tests.
+      </action>
+    </release>
+    <release version="1.0.5" date="2009-09-11">
+      <action dev="tv" type="update">
+        Moved build to Maven-2
+      </action>
+    </release> 
+    <release version="1.0.4" date="2004-11-24">
+      <action dev="epugh" type="update" due-to="Kostyantyn Shchekotykhin">
+        Merge api and impl jars into one project.
+      </action>
+      <action dev="epugh" type="remove">
+        Remove MimeTypeServiceFacadeTest, is should have never been in the
+        impl package anyway, and now MimeTypeServiceFacade is gone.
+      </action>
+      <action dev="epugh" type="remove">
+        Remove MimeTypeServiceFacade, it is a code smell.
+      </action>
+      <action dev="epugh" type="update">
+        Reimplement test based on TestContainer
+      </action>
+      <action dev="epugh" type="update">
+        Update to use Merlin 3.3.0
+      </action>
+      <action dev="epugh" type="add">
+        Committing first cut of Merlin enabled components..
+      </action>
+      <action dev="dlr" type="update">
+        Increase the smarts of MIME type auto-detection to handle
+        known file extensions specified with a capitalization which
+        may not match that of the definitions from your config file.
+      </action>
+    </release>
+
+    <release version="1.0-alpha-3" date="11-01-2003">
+      <action dev="epugh" type="add">
+        Initial creation of project.
+      </action>
+    </release>
+
+  </body>
+</document>
+
