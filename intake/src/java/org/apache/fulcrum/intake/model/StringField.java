@@ -98,7 +98,7 @@ public class StringField
             String[] sval = new String[ss.length];
             for (int i = 0; i < ss.length; i++)
             {
-                sval[i] = (StringUtils.isNotEmpty(ss[i])) ? ss[i] : (String) getEmptyValue();
+                sval[i] = StringUtils.isNotEmpty(ss[i]) ? ss[i] : (String) getEmptyValue();
             }
             setTestValue(sval);
         }

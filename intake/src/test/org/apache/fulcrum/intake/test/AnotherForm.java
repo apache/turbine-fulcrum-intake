@@ -39,7 +39,7 @@ public class AnotherForm
     }
 
     /**
-     * @param username
+     * @param username the user name
      */
     public void setUsername(String username)
     {

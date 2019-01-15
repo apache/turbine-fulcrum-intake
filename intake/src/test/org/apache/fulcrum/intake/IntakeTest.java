@@ -58,18 +58,20 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 public class IntakeTest extends BaseUnit5Test
 {
-	 /**
+    /**
      * Defines the testcase for JUnit5.
-     *
+     * @param testInfo defining the test
      */
     public IntakeTest(TestInfo testInfo)
     {
     }
 
 
-    /*
+    /**
      * This looks strange to me. A test should not bother with explicit initialization.
      * That's the task of the container.
+     * 
+     * @throws Exception generic exception
      */
     @Disabled
     public void OFFtestFacadeNotConfigured() throws Exception
@@ -85,6 +87,9 @@ public class IntakeTest extends BaseUnit5Test
         }
     }
 
+    /**
+     * @throws Exception generic exception
+     */
     @Test
     public void testFacadeConfigured() throws Exception
     {
@@ -97,6 +102,9 @@ public class IntakeTest extends BaseUnit5Test
 		assertNotNull(group);
     }
 
+    /**
+     * @throws Exception generic exception
+     */
     @Test
     public void testInterfaceMapTo() throws Exception
     {
@@ -119,6 +127,9 @@ public class IntakeTest extends BaseUnit5Test
         assertEquals("Joe", form.getUsername(), "User names should be equal");
     }
 
+    /**
+     * @throws Exception generic exception
+     */
     @Test
     public void testParserInit() throws Exception
     {
@@ -140,6 +151,9 @@ public class IntakeTest extends BaseUnit5Test
         assertEquals("Joe", userNameField.getValue(), "The field should have the value Joe");
     }
 
+    /**
+     * @throws Exception generic exception
+     */
     @Test
     public void testEmptyBooleanField() throws Exception
     {
@@ -153,6 +167,9 @@ public class IntakeTest extends BaseUnit5Test
         assertFalse( booleanField.isRequired(), "An Empty intake Field type boolean should not be required");
     }
 
+    /**
+     * @throws Exception generic exception
+     */
     @Test
     public void testBooleanField() throws Exception
     {
@@ -166,6 +183,9 @@ public class IntakeTest extends BaseUnit5Test
         assertFalse( booleanField.isRequired(), "An intake Field type boolean, which is not required, should not be required");
     }
 
+    /**
+     * @throws Exception generic exception
+     */
     @Test
     public void testRequiredBooleanField() throws Exception
     {
@@ -179,6 +199,9 @@ public class IntakeTest extends BaseUnit5Test
         assertTrue( booleanField.isRequired(), "An intake Field type boolean, which is required, should be required");
     }
 
+    /**
+     * @throws Exception generic exception
+     */
     @Test
     public void testMultiValueField() throws Exception
     {
@@ -203,6 +226,9 @@ public class IntakeTest extends BaseUnit5Test
         assertTrue( Arrays.equals(values, (int[])multiValueField.getValue()), "The field should have the value [1, 2]");
     }
 
+    /**
+     * @throws Exception generic exception
+     */
     @Test
     public void testInvalidNumberMessage() throws Exception // TRB-74
     {
