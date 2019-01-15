@@ -47,13 +47,17 @@ public class IntakeServiceTest extends BaseUnit5Test
     private IntakeService intakeService = null;
 
     /**
-      * Defines the testcase for JUnit5.
-      *
-      */
+     * Defines the testcase for JUnit5.
+     * 
+     * @param testInfo defining the test
+     */
     public IntakeServiceTest(TestInfo testInfo) {
     	
     }
 
+    /**
+     * @throws Exception generic exception
+     */
     @BeforeEach
     public void setUp() throws Exception
     {
@@ -70,6 +74,9 @@ public class IntakeServiceTest extends BaseUnit5Test
 
     }
 
+    /**
+     * @throws Exception generic exception
+     */
     @Test
     public void testBasicConfigLoads() throws Exception {
 

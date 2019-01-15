@@ -78,7 +78,12 @@ public class FileValidator
 
         try (InputStream fis = testValue.getInputStream())
         {
-            fis.read(fileData);
+            int byteSize = fis.read(fileData);
+            if ( fileData.length != byteSize )
+            {
+            	throw new ValidationException("Byte length mismatch found");
+            }
+            
         }
         catch (IOException e)
         {

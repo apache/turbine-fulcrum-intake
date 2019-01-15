@@ -35,6 +35,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.xml.XMLConstants;
@@ -744,7 +745,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             // Get the timestamp of the youngest file to be compared with
             // a serialized file. If it is younger than the serialized file,
             // then we have to parse the XML anyway.
-            timeStamp = (xmlFile.lastModified() > timeStamp) ? xmlFile
+            timeStamp = xmlFile.lastModified() > timeStamp ? xmlFile
                     .lastModified() : timeStamp;
         }
 
@@ -809,8 +810,14 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
         }
 
         int counter = 0;
-        for (AppData appData : appDataElements.keySet())
+        AppData appData;
+        File dataFile;
+        for ( Entry<AppData, File> entry : appDataElements.entrySet() )
         {
+        	// Set the entry pair
+        	appData = entry.getKey();
+        	dataFile = entry.getValue();
+        	
             int maxPooledGroups = 0;
             List<Group> glist = appData.getGroups();
 
@@ -828,7 +835,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
                     getLogger().info(
                             "Ignored redefinition of Group " + groupName
                                     + " or Key " + g.getGID() + " from "
-                                    + appDataElements.get(appData));
+                                    + dataFile);
                 }
 
                 if (groupPrefix != null)
@@ -864,7 +871,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             KeyedPooledObjectFactory<String, Group> factory =
                 new Group.GroupFactory(appData);
 
-            GenericKeyedObjectPoolConfig poolConfig = new GenericKeyedObjectPoolConfig();
+            GenericKeyedObjectPoolConfig<Group> poolConfig = new GenericKeyedObjectPoolConfig<Group>();
             poolConfig.setMaxTotalPerKey(maxPooledGroups);
             poolConfig.setJmxEnabled(true);
             poolConfig.setJmxNamePrefix("fulcrum-intake-pool-" + counter++);
@@ -883,7 +890,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      * Note that the avalon.entry key="urn:avalon:home" 
      * and the type is {@link java.io.File}
      * 
-     * {@link org.apache.avalon.framework.context.Contextualizable#contextualize(Context)}
+     * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
      * 
      * @param context the Context to use
      * @throws ContextException if the context is not found
@@ -898,6 +905,8 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      * Avalon component lifecycle method
      *
      * avalon.dependency type="org.apache.fulcrum.localization.LocalizationService"
+     * 
+     * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
      * 
      * @param manager the service manager
      * @throws ServiceException generic exception
