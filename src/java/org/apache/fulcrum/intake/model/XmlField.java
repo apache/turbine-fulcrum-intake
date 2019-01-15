@@ -326,15 +326,13 @@ public class XmlField
             ruleMap.put(rule.getName(), rule);
         }
 
-        if (mapToObject == null)
+        // if a mapToProperty exists, set the object to this group's default
+        if (mapToObject == null && 
+        		mapToProperty != null &&
+        		StringUtils.isNotEmpty(mapToProperty) &&
+        		this.parent.getDefaultMapToObject() != null)
         {
-            // if a mapToProperty exists, set the object to this group's default
-            if (mapToProperty != null
-                    && !"".equals(mapToProperty)
-                    && this.parent.getDefaultMapToObject() != null)
-            {
-                mapToObject = this.parent.getDefaultMapToObject();
-            }
+        	mapToObject = this.parent.getDefaultMapToObject();
         }
     }
 
