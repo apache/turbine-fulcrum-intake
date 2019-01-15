@@ -1,6 +1,5 @@
 package org.apache.fulcrum.localization;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -26,15 +25,19 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
- * <p>Provides localization functionality using the interface provided
+ * <p>
+ * Provides localization functionality using the interface provided
  * by <code>ResourceBundle</code>, plus leverages a "search path"
  * style traversal of the <code>ResourceBundle</code> objects named by
  * the <code>locale.default.bundles</code> to discover a value for a
- * given key.</p>
+ * given key.
+ * </p>
  *
- * <p>It is suggested that one handle
+ * <p>
+ * It is suggested that one handle
  * <a href="http://www.math.fu-berlin.de/~rene/www/java/tutorial/i18n/message/messageFormat.html">dealing with concatenated messages</a>
- * using <code>MessageFormat</code> and properties files.</p>
+ * using <code>MessageFormat</code> and properties files.
+ * </p>
  *
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>

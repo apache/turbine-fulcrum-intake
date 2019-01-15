@@ -24,6 +24,23 @@
   </properties>
 
   <body>
+    <release version="1.0.7" date="in SVN">
+	  <action dev="painter" type="update">
+        Moved changes.xml location for inclusion in report generation
+      </action>
+      <action dev="painter" type="update">
+        Update to Java 8
+      </action>
+      <action dev="painter" type="update">
+        Added commons-lang3
+      </action>
+      <action dev="painter" type="update">
+        Update unit tests to BaseUnit5Test
+      </action>
+      <action dev="painter" type="update">
+        Update to yaafi-1.0.8 and testcontainer 1.0.8
+      </action>    
+    </release>
     <release version="1.0.6" date="2009-06-18">
       <action dev="tv" type="add">
         Added a Maven-2 build.

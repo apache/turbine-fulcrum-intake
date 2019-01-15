@@ -19,72 +19,56 @@ package org.apache.fulcrum.localization;
  * under the License.
  */
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.Locale;
 import java.util.MissingResourceException;
 
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests the API of the
  * {@link org.apache.fulcrum.localization.LocalizationService}.
- * <br>
  *
  * @author <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:jason@zenplex.com">Jason van Zyl</a>
  */
-public class LocalizationTest extends BaseUnitTest
+public class LocalizationTest extends BaseUnit5Test
 {
 
-    private LocalizationService ls = null;
-    public LocalizationTest(String name)
-    {
-        super( name );
-    }
+    private LocalizationService localizationService = null;
 
-    /**
-     * Perform test setup
-     * 
-     * @throws Exception generic exception
-     */
+    @BeforeEach
     public void setUp() throws Exception
     {
-        super.setUp();
-        try
-        {
-            ls = (LocalizationService) this.resolve( LocalizationService.class.getName() );
-        }
-        catch (Throwable e)
-        {
-            fail(e.getMessage());
-        }
+    	localizationService = (LocalizationService) lookup(LocalizationService.ROLE);
     }
     
-    
-    /**
-     * Test init
-     */
-    public void testInitialization()
-    {
-        assertTrue(true);
-    }
     
     /**
      * Test localization
      * @throws Exception generic exception
      */
+    @Test
     public void testLocalization() throws Exception
     {
         // Test retrieval of text using multiple default bundles
-        String s = ls.getString(null, null, "key1");
-        assertEquals("Unable to retrieve localized text for locale: default", "value1", s);
-        s = ls.getString(null, new Locale("en", "US"), "key2");
-        assertEquals("Unable to retrieve localized text for locale: en-US", "value2", s);
-        s = ls.getString("org.apache.fulcrum.localization.BarBundle", new Locale("ko", "KR"), "key3");
-        assertEquals("Unable to retrieve localized text for locale: ko-KR", s, "[ko] value3");
+        String s = localizationService.getString(null, null, "key1");
+        assertEquals("value1", s, "Unable to retrieve localized text for locale: default");
+        
+        s = localizationService.getString(null, new Locale("en", "US"), "key2");
+        assertEquals("value2", s, "Unable to retrieve localized text for locale: en-US");
+        
+        s = localizationService.getString("org.apache.fulcrum.localization.BarBundle", new Locale("ko", "KR"), "key3");
+        assertEquals(s, "[ko] value3", "Unable to retrieve localized text for locale: ko-KR");
+        
         try
         {
-            ls.getString("DoesNotExist", new Locale("ko", ""), "key1");
+            localizationService.getString("DoesNotExist", new Locale("ko", ""), "key1");
             fail();
         }
         catch (MissingResourceException expectedFailure)
@@ -96,13 +80,15 @@ public class LocalizationTest extends BaseUnitTest
             // should not happen
             fail();
         }
+        
         // When a locale is used which cannot be produced for a given
         // bundle, fall back to the default locale.
-        s = ls.getString(null, new Locale("ko", "KR"), "key4");
-        assertEquals("Unable to retrieve localized text for locale: default", s, "value4");
+        s = localizationService.getString(null, new Locale("ko", "KR"), "key4");
+        assertEquals(s, "value4", "Unable to retrieve localized text for locale: default");
+        
         try
         {
-            ls.getString(null, null, "NoSuchKey");
+            localizationService.getString(null, null, "NoSuchKey");
             fail();
         }
         catch (MissingResourceException expectedFailure)
@@ -111,7 +97,7 @@ public class LocalizationTest extends BaseUnitTest
         }
     }
     
-    
+    @Test
     public void testGetString()
     {
         String key1 = "key1";
@@ -123,23 +109,25 @@ public class LocalizationTest extends BaseUnitTest
         String key4 = "key4";
         String value4 = "value4";
 
-        assertEquals(value1, ls.getString(key1));
-        assertEquals(value2, ls.getString(key2));
-        assertEquals(value3, ls.getString(key3));
-        assertEquals(value4, ls.getString(key4));
+        assertEquals(value1, localizationService.getString(key1));
+        assertEquals(value2, localizationService.getString(key2));
+        assertEquals(value3, localizationService.getString(key3));
+        assertEquals(value4, localizationService.getString(key4));
 
     }
     
     /**
-     * Putting this in a seperate testcase because it fails..  Why?  I don't know.  I have never
+     * Putting this in a separate test case because it fails..  Why?  I don't know.  I have never
      * used localization, so I leave it to brains better then mine. -dep
      * 
      * @throws Exception generic exception
      */
+    /*
     public void OFFtestRetrievingOddLocale() throws Exception
     {
     	// TODO Figure out why this test fails!
-        String s = ls.getString(null, new Locale("fr", "US"), "key3");
-        assertEquals("Unable to retrieve localized text for locale: fr", "[fr] value3", s);
+        String s = localizationService.getString(null, new Locale("fr", "US"), "key3");
+        assertEquals("[fr] value3", s, "Unable to retrieve localized text for locale: fr");
     }
+    */
 }

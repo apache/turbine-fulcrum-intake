@@ -1,6 +1,5 @@
 package org.apache.fulcrum.localization;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -28,8 +27,6 @@ import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
-import org.apache.fulcrum.localization.LocaleTokenizer.AcceptLanguage;
-
 /**
  * Parses the HTTP <code>Accept-Language</code> header as per section
  * 14.4 of RFC 2068 (HTTP 1.1 header field definitions).
@@ -38,7 +35,7 @@ import org.apache.fulcrum.localization.LocaleTokenizer.AcceptLanguage;
  * @version $Id$
  */
 public class LocaleTokenizer
-    implements Iterator
+    implements Iterator<Object>
 {
     /**
      * Separates elements of the <code>Accept-Language</code> HTTP

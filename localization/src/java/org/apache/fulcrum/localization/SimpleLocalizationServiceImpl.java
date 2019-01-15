@@ -34,9 +34,11 @@ import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * <p>This class is the single point of access to all localization
+ * <p>
+ * This class is the single point of access to all localization
  * resources.  It caches different ResourceBundles for different
- * Locales.</p>
+ * Locales.
+ * </p>
  *
  * <p>Usage example:</p>
  *
@@ -47,8 +49,10 @@ import org.apache.commons.lang3.StringUtils;
  * </code>
  * </pre>
  *
- * <p>Then call {@link #getString(String, Locale, String)}, or one of
- * two methods to retrieve a ResourceBundle:</p>
+ * <p>
+ * Then call {@link #getString(String, Locale, String)}, or one of
+ * two methods to retrieve a ResourceBundle:
+ * </p>
  *
  * <ul>
  * <li>getBundle("MyBundleName")</li>
@@ -163,7 +167,6 @@ public class SimpleLocalizationServiceImpl
     @Override
 	public void initialize() throws Exception
     {
-        // initBundleNames(null);
         defaultLocale = new Locale(defaultLanguage, defaultCountry);
         if (getLogger().isInfoEnabled())
         {
@@ -241,7 +244,7 @@ public class SimpleLocalizationServiceImpl
     }
     
     /**
-     * {@link org.apache.fulcrum.localization.SimpleLocalizationService#getBundle()}
+     * @see org.apache.fulcrum.localization.SimpleLocalizationService#getBundle()
      * 
      * @return the default resource bundle
      */
@@ -252,7 +255,7 @@ public class SimpleLocalizationServiceImpl
     }
     
     /**
-     * {@link org.apache.fulcrum.localization.SimpleLocalizationService#getBundle(String)}
+     * @see org.apache.fulcrum.localization.SimpleLocalizationService#getBundle(java.lang.String)
      * 
      * @param bundleName the name of a bundle
      * @return the resource bundle
@@ -264,6 +267,8 @@ public class SimpleLocalizationServiceImpl
     }
     
     /**
+     * @see org.apache.fulcrum.localization.SimpleLocalizationService#getBundle(java.lang.String, java.util.Locale)
+     * 
      * This method returns a ResourceBundle for the given bundle name
      * and the given Locale.
      *
@@ -385,7 +390,7 @@ public class SimpleLocalizationServiceImpl
         Map<Locale, ResourceBundle> bundlesByLocale)
     {
         ResourceBundle rb = null;
-        if (!StringUtils.isNotEmpty(locale.getCountry())
+        if (StringUtils.isEmpty(locale.getCountry())
             && defaultLanguage.equals(locale.getLanguage()))
         {
             /*
@@ -402,7 +407,7 @@ public class SimpleLocalizationServiceImpl
             }
         }
         else if (
-            !StringUtils.isNotEmpty(locale.getLanguage())
+            StringUtils.isEmpty(locale.getLanguage())
                 && defaultCountry.equals(locale.getCountry()))
         {
             Locale withDefaultLanguage =
@@ -413,6 +418,7 @@ public class SimpleLocalizationServiceImpl
                 rb = getBundleIgnoreException(bundleName, withDefaultLanguage);
             }
         }
+        
         if (rb == null && !defaultLocale.equals(locale))
         {
             rb = getBundleIgnoreException(bundleName, defaultLocale);
@@ -582,8 +588,8 @@ public class SimpleLocalizationServiceImpl
         return format(bundleName, locale, key, new Object[] { arg1 });
     }
     
-    /**
-     * {@link org.apache.fulcrum.localization.SimpleLocalizationService#format(String, Locale, String, Object, Object)}
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.localization.SimpleLocalizationService#format(java.lang.String, java.util.Locale, java.lang.String, java.lang.Object, java.lang.Object)
      */
     @Override
 	public String format(

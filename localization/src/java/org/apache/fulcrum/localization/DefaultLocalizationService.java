@@ -27,9 +27,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * <p>This class is the single point of access to all localization
+ * <p>
+ * This class is the single point of access to all localization
  * resources.  It caches different ResourceBundles for different
- * Locales.</p>
+ * Locales.
+ * </p>
  *
  * <p>Usage example:</p>
  *
@@ -40,8 +42,10 @@ import org.apache.commons.lang3.StringUtils;
  * </code>
  * </pre>
  *
- * <p>Then call {@link #getString(String, Locale, String)}, or one of
- * four methods to retrieve a ResourceBundle:</p>
+ * <p>
+ * Then call {@link #getString(String, Locale, String)}, or one of
+ * four methods to retrieve a ResourceBundle:
+ * </p>
  *
  * <ul>
  * <li>getBundle("MyBundleName")</li>
@@ -78,6 +82,8 @@ public class DefaultLocalizationService
      * This method returns a ResourceBundle given the bundle name and
      * the Locale information supplied in the HTTP "Accept-Language"
      * header.
+     * 
+     * @see org.apache.fulcrum.localization.LocalizationService#getBundle(java.lang.String, java.lang.String)
      *
      * @param bundleName Name of bundle.
      * @param languageHeader A String with the language header.
@@ -102,6 +108,8 @@ public class DefaultLocalizationService
     }
 
     /**
+     * @see org.apache.fulcrum.localization.LocalizationService#getBundle(java.lang.String, javax.servlet.http.HttpServletRequest)
+     * 
      * This method returns a ResourceBundle given the bundle name and
      * the Locale information supplied in the HTTP "Accept-Language"
      * header which is stored in HttpServletRequest.
@@ -116,8 +124,8 @@ public class DefaultLocalizationService
         return getBundle(bundleName, getLocale(req));
     }
 
-    /**
-     * @see org.apache.fulcrum.localization.LocalizationService#getLocale(HttpServletRequest)
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.localization.LocalizationService#getLocale(javax.servlet.http.HttpServletRequest)
      */
     public Locale getLocale(HttpServletRequest req)
     {
@@ -128,8 +136,8 @@ public class DefaultLocalizationService
         //        return (l != null ? l : getLocale(req.getHeader(ACCEPT_LANGUAGE)));
     }
 
-    /**
-     * @see org.apache.fulcrum.localization.LocalizationService#getLocale(String)
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.localization.LocalizationService#getLocale(java.lang.String)
      */
     public Locale getLocale(String header)
     {
