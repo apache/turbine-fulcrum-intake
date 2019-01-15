@@ -1,6 +1,5 @@
 package org.apache.fulcrum.mimetype.util;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,7 +19,6 @@ package org.apache.fulcrum.mimetype.util;
  * under the License.
  */
 
-
 import java.util.ArrayList;
 
 /**
@@ -37,24 +35,24 @@ public class MimeType
     /**
      * A list of well known MIME types.
      */
-    public static MimeType TEXT_HTML;
-    public static MimeType TEXT_WML;
-    public static MimeType TEXT_HDML;
-    public static MimeType TEXT_CHTML;
-    public static MimeType TEXT_PLAIN;
-    public static MimeType MULTIPART;
-    public static MimeType MULTIPART_FORM_DATA;
-    public static MimeType APPLICATION_POSTSCRIPT;
-    public static MimeType APPLICATION_OCTET_STREAM;
-    public static MimeType APPLICATION_X_JAVA_AGENT;
-    public static MimeType APPLICATION_X_WWW_FORM_URLENCODED;
-    public static MimeType MESSAGE_HTTP;
-    public static MimeType TEXT_CSS;
-    public static MimeType TEXT;
-    public static MimeType IMAGE_PNG;
-    public static MimeType IMAGE_GIF;
-    public static MimeType IMAGE_JPEG;
-    public static MimeType IMAGE_WBMP;
+    public static final MimeType TEXT_HTML;
+    public static final MimeType TEXT_WML;
+    public static final MimeType TEXT_HDML;
+    public static final MimeType TEXT_CHTML;
+    public static final MimeType TEXT_PLAIN;
+    public static final MimeType MULTIPART;
+    public static final MimeType MULTIPART_FORM_DATA;
+    public static final MimeType APPLICATION_POSTSCRIPT;
+    public static final MimeType APPLICATION_OCTET_STREAM;
+    public static final MimeType APPLICATION_X_JAVA_AGENT;
+    public static final MimeType APPLICATION_X_WWW_FORM_URLENCODED;
+    public static final MimeType MESSAGE_HTTP;
+    public static final MimeType TEXT_CSS;
+    public static final MimeType TEXT;
+    public static final MimeType IMAGE_PNG;
+    public static final MimeType IMAGE_GIF;
+    public static final MimeType IMAGE_JPEG;
+    public static final MimeType IMAGE_WBMP;
     static
     {
         TEXT_HTML =
@@ -136,7 +134,7 @@ public class MimeType
      */
     public MimeType(String spec)
     {
-        this(spec,true);
+        this(spec, true);
     }
 
     /**
@@ -154,12 +152,12 @@ public class MimeType
         int length = spec.length();
 
         // Skip leading/trailing blanks.
-        while ((start < length) &&
+        while ( start < length &&
                Character.isWhitespace(spec.charAt(start)))
         {
             start++;
         }
-        while ((length > start) &&
+        while ( length > start &&
                Character.isWhitespace(spec.charAt(length - 1)))
         {
             length--;
@@ -167,8 +165,8 @@ public class MimeType
 
         // Get the type.
         StringBuilder sb = new StringBuilder();
-        while ((start < length) &&
-               ((look = spec.charAt(start)) != '/'))
+        while ( start < length  &&
+               (look = spec.charAt(start)) != '/')
         {
             sb.append(look);
             start++;
@@ -183,8 +181,8 @@ public class MimeType
         // Get the subtype.
         start++;
         sb.setLength(0);
-        while ((start < length) &&
-               ((look = spec.charAt(start)) != ';') &&
+        while ( start < length  &&
+               (look = spec.charAt(start)) != ';' &&
                !Character.isWhitespace(look))
         {
             sb.append(look);
@@ -195,7 +193,7 @@ public class MimeType
         if (parsep)
         {
             // Get parameters, if any.
-            while ((start < length) &&
+            while ( start < length  &&
                    Character.isWhitespace(spec.charAt(start)))
             {
                 start++;
@@ -208,19 +206,19 @@ public class MimeType
                         "Syntax error in MIME type parameters " + spec);
                 }
                 start++;
-                ArrayList na = new ArrayList(4);
-                ArrayList va = new ArrayList(4);
+                ArrayList<String> na = new ArrayList<String>(4);
+                ArrayList<String> va = new ArrayList<String>(4);
                 while (start < length)
                 {
                     // Get the name.
-                    while ((start < length) &&
+                    while ( start < length  &&
                            Character.isWhitespace(spec.charAt(start)))
                     {
                         start++;
                     }
                     sb.setLength(0);
-                    while ((start < length) &&
-                           ((look=spec.charAt(start)) != '=') &&
+                    while ( start < length  &&
+                           (look=spec.charAt(start)) != '=' &&
                            !Character.isWhitespace(look))
                     {
                         sb.append(Character.toLowerCase(look));
@@ -229,7 +227,7 @@ public class MimeType
                     String name = sb.toString();
 
                     // Get the value.
-                    while ((start < length) &&
+                    while ( start < length  &&
                            Character.isWhitespace(spec.charAt(start)))
                     {
                         start++;
@@ -240,7 +238,7 @@ public class MimeType
                             "Syntax error in MIME type parameters " + spec);
                     }
                     start++ ;
-                    while ((start < length) &&
+                    while ( start < length  &&
                            Character.isWhitespace(spec.charAt(start)))
                     {
                         start++;
@@ -252,16 +250,16 @@ public class MimeType
                         start++;
                         delim = '"';
                     }
-                    while ((start < length) &&
-                           ((look = spec.charAt(start)) != delim) &&
-                           ((delim == '"') ||
+                    while ( start < length  &&
+                           ( look = spec.charAt(start) ) != delim &&
+                           ( delim == '"' ||
                             !Character.isWhitespace(look)))
                     {
                         sb.append(look);
                         start++;
                     }
-                    while ((start < length) &&
-                           (spec.charAt(start) != ';'))
+                    while ( start < length  &&
+                           spec.charAt(start) != ';')
                     {
                         start++;
                     }
@@ -304,8 +302,8 @@ public class MimeType
                     String names[],
                     String values[])
     {
-        if ((type == null) ||
-            (subtype == null))
+        if (type == null ||
+            subtype == null)
         {
             throw new NullPointerException("MIME type or subtype missing");
         }
@@ -389,7 +387,7 @@ public class MimeType
      * @param param the name opf the parameter.
      * @return true if the parameter found, otherwise false.
      */
-    public boolean hasParameter(String param)
+    public synchronized boolean hasParameter(String param)
     {
         String[] na = parameterNames;
         if (na != null)
@@ -412,7 +410,7 @@ public class MimeType
      * @param param the name of the parameter.
      * @return the value of the parameter, or null.
      */
-    public String getParameter(String param)
+    public synchronized String getParameter(String param)
     {
         String[] na = parameterNames;
         if (na != null)
@@ -475,9 +473,9 @@ public class MimeType
     public synchronized void addParameters(String[] params,
                                            String[] values)
     {
-        if ((params == null) ||
-            (values == null) ||
-            (params.length != values.length))
+        if (params == null ||
+            values == null ||
+            params.length != values.length)
             throw new IllegalArgumentException("Incorrect MIME type parameters");
 
         if (parameterNames != null)

@@ -1,6 +1,5 @@
 package org.apache.fulcrum.mimetype.util;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -23,6 +22,9 @@ package org.apache.fulcrum.mimetype.util;
 
 import java.io.File;
 import java.io.InputStream;
+
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 
 /**
@@ -159,7 +161,7 @@ public class MimeTypeMap
         {
             // Check whether the user directory contains mappings.
             path = System.getProperty("user.home");
-            if (path != null)
+            if ( StringUtils.isNotEmpty(path) )
             {
                 path = path + File.separator + MIMETYPE_RESOURCE;
                 mappers[MAP_HOME] = loadPath(path);
@@ -248,7 +250,7 @@ public class MimeTypeMap
      * @param file The file to look up a MIME type mapping for.
      * @return The MIME type, or {@link #DEFAULT_TYPE} if unmapped.
      */
-    public String getContentType(File file)
+    public synchronized String getContentType(File file)
     {
         return getContentType(file.getName());
     }
@@ -260,7 +262,7 @@ public class MimeTypeMap
      * mapping for.
      * @return The MIME type, or {@link #DEFAULT_TYPE} if unmapped.
      */
-    public String getContentType(String fileName)
+    public synchronized String getContentType(String fileName)
     {
         return getContentType(fileName, DEFAULT_TYPE);
     }
@@ -273,23 +275,18 @@ public class MimeTypeMap
      * @param def The default MIME type to use if no mapping exists.
      * @return The MIME type, or <code>def</code> if unmapped.
      */
-    public String getContentType(String fileName, String def)
+    public synchronized String getContentType(String fileName, String def)
     {
         String ext = parseFileExtension(fileName);
-        if (ext != null)
+        if ( StringUtils.isNotEmpty(ext) )
         {
             String mimeType;
-            MimeTypeMapper mapper;
-            for (int i = 0; i < mappers.length; i++)
+            for ( MimeTypeMapper mapper : mappers )
             {
-                mapper = mappers[i];
-                if (mapper != null)
+                mimeType = mapper.getContentType(ext);
+                if (mimeType != null)
                 {
-                    mimeType = mapper.getContentType(ext);
-                    if (mimeType != null)
-                    {
-                        return mimeType;
-                    }
+                    return mimeType;
                 }
             }
         }

@@ -1,6 +1,5 @@
 package org.apache.fulcrum.mimetype.util;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,16 +19,16 @@ package org.apache.fulcrum.mimetype.util;
  * under the License.
  */
 
-
-import java.util.Locale;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Properties;
 import java.io.File;
-import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map.Entry;
+import java.util.Properties;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * This class maintains a set of mappers defining mappings
@@ -68,54 +67,55 @@ public class CharSetMap
     /**
      * A common charset mapper for languages.
      */
-    private static HashMap commonMapper = new HashMap();
+    private static HashMap<String, String> commonMapper = new HashMap<>();
+    
     static
     {
-        commonMapper.put("ar","ISO-8859-6");
-        commonMapper.put("be","ISO-8859-5");
-        commonMapper.put("bg","ISO-8859-5");
-        commonMapper.put("ca","ISO-8859-1");
-        commonMapper.put("cs","ISO-8859-2");
-        commonMapper.put("da","ISO-8859-1");
-        commonMapper.put("de","ISO-8859-1");
-        commonMapper.put("el","ISO-8859-7");
-        commonMapper.put("en","ISO-8859-1");
-        commonMapper.put("es","ISO-8859-1");
-        commonMapper.put("et","ISO-8859-1");
-        commonMapper.put("fi","ISO-8859-1");
-        commonMapper.put("fr","ISO-8859-1");
-        commonMapper.put("hr","ISO-8859-2");
-        commonMapper.put("hu","ISO-8859-2");
-        commonMapper.put("is","ISO-8859-1");
-        commonMapper.put("it","ISO-8859-1");
-        commonMapper.put("iw","ISO-8859-8");
-        commonMapper.put("ja","Shift_JIS");
-        commonMapper.put("ko","EUC-KR");
-        commonMapper.put("lt","ISO-8859-2");
-        commonMapper.put("lv","ISO-8859-2");
-        commonMapper.put("mk","ISO-8859-5");
-        commonMapper.put("nl","ISO-8859-1");
-        commonMapper.put("no","ISO-8859-1");
-        commonMapper.put("pl","ISO-8859-2");
-        commonMapper.put("pt","ISO-8859-1");
-        commonMapper.put("ro","ISO-8859-2");
-        commonMapper.put("ru","ISO-8859-5");
-        commonMapper.put("sh","ISO-8859-5");
-        commonMapper.put("sk","ISO-8859-2");
-        commonMapper.put("sl","ISO-8859-2");
-        commonMapper.put("sq","ISO-8859-2");
-        commonMapper.put("sr","ISO-8859-5");
-        commonMapper.put("sv","ISO-8859-1");
-        commonMapper.put("tr","ISO-8859-9");
-        commonMapper.put("uk","ISO-8859-5");
-        commonMapper.put("zh","GB2312");
-        commonMapper.put("zh_TW","Big5");
+        commonMapper.put("ar", "ISO-8859-6");
+        commonMapper.put("be", "ISO-8859-5");
+        commonMapper.put("bg", "ISO-8859-5");
+        commonMapper.put("ca", "ISO-8859-1");
+        commonMapper.put("cs", "ISO-8859-2");
+        commonMapper.put("da", "ISO-8859-1");
+        commonMapper.put("de", "ISO-8859-1");
+        commonMapper.put("el", "ISO-8859-7");
+        commonMapper.put("en", "ISO-8859-1");
+        commonMapper.put("es", "ISO-8859-1");
+        commonMapper.put("et", "ISO-8859-1");
+        commonMapper.put("fi", "ISO-8859-1");
+        commonMapper.put("fr", "ISO-8859-1");
+        commonMapper.put("hr", "ISO-8859-2");
+        commonMapper.put("hu", "ISO-8859-2");
+        commonMapper.put("is", "ISO-8859-1");
+        commonMapper.put("it", "ISO-8859-1");
+        commonMapper.put("iw", "ISO-8859-8");
+        commonMapper.put("ja", "Shift_JIS");
+        commonMapper.put("ko", "EUC-KR");
+        commonMapper.put("lt", "ISO-8859-2");
+        commonMapper.put("lv", "ISO-8859-2");
+        commonMapper.put("mk", "ISO-8859-5");
+        commonMapper.put("nl", "ISO-8859-1");
+        commonMapper.put("no", "ISO-8859-1");
+        commonMapper.put("pl", "ISO-8859-2");
+        commonMapper.put("pt", "ISO-8859-1");
+        commonMapper.put("ro", "ISO-8859-2");
+        commonMapper.put("ru", "ISO-8859-5");
+        commonMapper.put("sh", "ISO-8859-5");
+        commonMapper.put("sk", "ISO-8859-2");
+        commonMapper.put("sl", "ISO-8859-2");
+        commonMapper.put("sq", "ISO-8859-2");
+        commonMapper.put("sr", "ISO-8859-5");
+        commonMapper.put("sv", "ISO-8859-1");
+        commonMapper.put("tr", "ISO-8859-9");
+        commonMapper.put("uk", "ISO-8859-5");
+        commonMapper.put("zh", "GB2312");
+        commonMapper.put("zh_TW", "Big5");
     }
 
     /**
      * An array of available charset mappers.
      */
-    private Map mappers[] = new Map[6];
+    private HashMap<Integer, HashMap<String, String>> mappers = new HashMap<Integer, HashMap<String, String>>();
 
     /**
      * Loads mappings from a stream.
@@ -124,12 +124,12 @@ public class CharSetMap
      * @return the mappings.
      * @throws IOException for an incorrect stream.
      */
-    protected static Map loadStream(InputStream input)
+    protected static HashMap<String, String> loadStream(InputStream input)
         throws IOException
     {
         Properties props = new Properties();
         props.load(input);
-        return new HashMap(props);
+        return convertPropertiesToHash(props);
     }
 
     /**
@@ -139,7 +139,7 @@ public class CharSetMap
      * @return the mappings.
      * @throws IOException for an incorrect file.
      */
-    protected static Map loadFile(File file)
+    protected static HashMap<String, String> loadFile(File file)
         throws IOException
     {
         return loadStream(new FileInputStream(file));
@@ -152,7 +152,7 @@ public class CharSetMap
      * @return the mappings.
      * @throws IOException for an incorrect file.
      */
-    protected static Map loadPath(String path)
+    protected static HashMap<String, String> loadPath(String path)
         throws IOException
     {
         return loadFile(new File(path));
@@ -164,7 +164,7 @@ public class CharSetMap
      * @param name a resource name.
      * @return the mappings.
      */
-    protected static Map loadResource(String name)
+    protected static HashMap<String, String> loadResource(String name)
     {
         InputStream input = CharSetMap.class.getResourceAsStream(name);
         if (input != null)
@@ -185,6 +185,19 @@ public class CharSetMap
     }
 
     /**
+     * Convert the properties obj to a hashmap
+     * @param props the properties
+     * @return HashMap of the properties
+     */
+    private static HashMap<String, String> convertPropertiesToHash(Properties props)
+    {
+        HashMap<String, String> map = new HashMap<>();
+        for (final String name: props.stringPropertyNames())
+            map.put(name, props.getProperty(name));
+        return map;
+    }
+    
+    /**
      * Constructs a new charset map with default mappers.
      */
     public CharSetMap()
@@ -194,10 +207,10 @@ public class CharSetMap
         {
             // Check whether the user directory contains mappings.
             path = System.getProperty("user.home");
-            if (path != null)
+            if ( StringUtils.isNotEmpty(path) )
             {
                 path = path + File.separator + CHARSET_RESOURCE;
-                mappers[MAP_HOME] = loadPath(path);
+                mappers.put(MAP_HOME, loadPath(path));
             }
         }
         catch (IOException x)
@@ -210,7 +223,7 @@ public class CharSetMap
             // Check whether the system directory contains mappings.
             path = System.getProperty("java.home") +
                 File.separator + "lib" + File.separator + CHARSET_RESOURCE;
-            mappers[MAP_SYS] = loadPath(path);
+            mappers.put(MAP_SYS, loadPath(path));
         }
         catch (IOException x)
         {
@@ -218,13 +231,13 @@ public class CharSetMap
         }
 
         // Check whether the current class jar contains mappings.
-        mappers[MAP_JAR] = loadResource("/META-INF/" + CHARSET_RESOURCE);
+        mappers.put(MAP_JAR, loadResource("/META-INF/" + CHARSET_RESOURCE));
 
         // Set the common mapper to have the lowest priority.
-        mappers[MAP_COM] = commonMapper;
+        mappers.put(MAP_COM, commonMapper);
 
         // Set the cache mapper to have the highest priority.
-        mappers[MAP_CACHE] = new Hashtable();
+        mappers.put(MAP_CACHE, new HashMap<String, String>());
     }
 
     /**
@@ -235,7 +248,7 @@ public class CharSetMap
     public CharSetMap(Properties props)
     {
         this();
-        mappers[MAP_PROG] = new HashMap(props);
+        mappers.put(MAP_PROG, convertPropertiesToHash(props));
     }
 
     /**
@@ -248,7 +261,7 @@ public class CharSetMap
         throws IOException
     {
         this();
-        mappers[MAP_PROG] = loadStream(input);
+        mappers.put(MAP_PROG, loadStream(input));
     }
 
     /**
@@ -261,7 +274,7 @@ public class CharSetMap
         throws IOException
     {
         this();
-        mappers[MAP_PROG] = loadFile(file);
+        mappers.put(MAP_PROG, loadFile(file));
     }
 
     /**
@@ -274,7 +287,7 @@ public class CharSetMap
         throws IOException
     {
         this();
-        mappers[MAP_PROG] = loadPath(path);
+        mappers.put(MAP_PROG, loadPath(path));
     }
 
     /**
@@ -283,15 +296,16 @@ public class CharSetMap
      * @param key the key for the charset.
      * @param charset the corresponding charset.
      */
-    public synchronized void setCharSet(String key,
+    @SuppressWarnings("unchecked")
+	public synchronized void setCharSet(String key,
                                         String charset)
     {
-        HashMap mapper = (HashMap) mappers[MAP_PROG];
+        HashMap<String, String> mapper = mappers.get(MAP_PROG);
         mapper = mapper != null ?
-            (HashMap) mapper.clone() : new HashMap();
+            (HashMap<String, String>) mapper.clone() : new HashMap<String, String>();
         mapper.put(key,charset);
-        mappers[MAP_PROG] = mapper;
-        mappers[MAP_CACHE].clear();
+        mappers.put(MAP_PROG, mapper);
+        mappers.get(MAP_CACHE).clear();
     }
 
     /**
@@ -302,7 +316,7 @@ public class CharSetMap
      * @param locale the locale.
      * @return the charset.
      */
-    public String getCharSet(Locale locale)
+    public synchronized String getCharSet(Locale locale)
     {
         // Check the cache first.
         String key = locale.toString();
@@ -314,6 +328,7 @@ public class CharSetMap
                 return DEFAULT_CHARSET;
             }
         }
+        
         String charset = searchCharSet(key);
         if (charset.length() == 0)
         {
@@ -327,7 +342,7 @@ public class CharSetMap
             {
                 charset = DEFAULT_CHARSET;
             }
-            mappers[MAP_CACHE].put(key,charset);
+            mappers.get(MAP_CACHE).put(key,charset);
         }
         return charset;
     }
@@ -348,12 +363,11 @@ public class CharSetMap
      * @param variant a variant field.
      * @return the charset.
      */
-    public String getCharSet(Locale locale,
+    public synchronized String getCharSet(Locale locale,
                              String variant)
     {
-        // Check the cache first.
-        if ((variant != null) &&
-            (variant.length() > 0))
+        // Check the cache first
+    	if ( StringUtils.isNotEmpty(variant) )
         {
             String key = locale.toString();
             if (key.length() == 0)
@@ -390,7 +404,7 @@ public class CharSetMap
                 {
                     charset = DEFAULT_CHARSET;
                 }
-                mappers[MAP_CACHE].put(key,charset);
+                mappers.get(MAP_CACHE).put(key,charset);
             }
             return charset;
         }
@@ -406,7 +420,7 @@ public class CharSetMap
      * @param key the key for the charset.
      * @return the found charset or the default one.
      */
-    public String getCharSet(String key)
+    public synchronized String getCharSet(String key)
     {
         String charset = searchCharSet(key);
         return charset.length() > 0 ? charset : DEFAULT_CHARSET;
@@ -419,7 +433,7 @@ public class CharSetMap
      * @param def the default charset if none is found.
      * @return the found charset or the given default.
      */
-    public String getCharSet(String key,
+    public synchronized String getCharSet(String key,
                              String def)
     {
         String charset = searchCharSet(key);
@@ -460,17 +474,15 @@ public class CharSetMap
                                  StringBuilder base,
                                  int count)
     {
-        if ((--count >= 0) &&
-            (items[count] != null) &&
-            (items[count].length() > 0))
+        if ( --count >= 0 && StringUtils.isNotEmpty(items[count]) )
         {
             String charset;
             base.insert(0,items[count]);
             int length = base.length();
             for (int i = count; i > 0; i--)
             {
-                if ((i == count) ||
-                    (i <= 1))
+                if ( i == count ||
+                     i <= 1 )
                 {
                     base.insert(0,'_');
                     length++;
@@ -498,32 +510,31 @@ public class CharSetMap
      */
     private String searchCharSet(String key)
     {
-        if ((key != null) &&
-            (key.length() > 0))
+    	if ( StringUtils.isNotEmpty(key) == true )
         {
             // Go through mappers.
-            Map mapper;
+    		int mapKey;
+    		HashMap<String, String> mapper;
             String charset;
-            for (int i = 0; i < mappers.length; i++)
+            for (  Entry<Integer, HashMap<String, String>> entry : mappers.entrySet() )
             {
-                mapper = mappers[i];
-                if (mapper != null)
+            	mapKey = entry.getKey();
+            	mapper = entry.getValue();
+                if (mapper != null && mapper.containsKey(key) )
                 {
-                    charset = (String) mapper.get(key);
-                    if (charset != null)
+            		charset = mapper.get(key);
+            		
+                    // Update the cache.
+                    if (mapKey > MAP_CACHE)
                     {
-                        // Update the cache.
-                        if (i > MAP_CACHE)
-                        {
-                            mappers[MAP_CACHE].put(key,charset);
-                        }
-                        return charset;
+                        mappers.get(MAP_CACHE).put(key, charset);
                     }
+                    return charset;
                 }
             }
 
             // Not found, add an empty string to the cache.
-            mappers[MAP_CACHE].put(key,"");
+            mappers.get(MAP_CACHE).put(key, "");
         }
         return "";
     }
@@ -537,9 +548,10 @@ public class CharSetMap
     protected synchronized void setCommonCharSet(String key,
                                                  String charset)
     {
-        HashMap mapper = (HashMap) ((HashMap) mappers[MAP_COM]).clone();
-        mapper.put(key,charset);
-        mappers[MAP_COM] = mapper;
-        mappers[MAP_CACHE].clear();
+        @SuppressWarnings("unchecked")
+		HashMap<String, String> mapper =  (HashMap<String, String>) mappers.get(MAP_COM).clone();
+        mapper.put(key, charset);
+        mappers.put(MAP_COM, mapper);
+        mappers.get(MAP_CACHE).clear();
     }
 }

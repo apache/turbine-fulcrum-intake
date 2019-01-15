@@ -91,7 +91,8 @@ public class DefaultMimeTypeService extends AbstractLogEnabled
 	/**
 	 * Constructs a new service.
 	 */
-	public DefaultMimeTypeService() {
+	public DefaultMimeTypeService() 
+	{
 	}
 
 	/**
@@ -101,7 +102,8 @@ public class DefaultMimeTypeService extends AbstractLogEnabled
 	 *
 	 * @param spec a MIME type extension specification to add.
 	 */
-	public void setContentType(String spec) {
+	public void setContentType(String spec) 
+	{
 		mimeTypeMap.setContentType(spec);
 	}
 
@@ -121,7 +123,8 @@ public class DefaultMimeTypeService extends AbstractLogEnabled
 	 * @param fileName The name of the file to look up a MIME type mapping for.
 	 * @return the MIME type string.
 	 */
-	public String getContentType(String fileName) {
+	public String getContentType(String fileName) 
+	{
 		return mimeTypeMap.getContentType(fileName);
 	}
 
@@ -132,7 +135,8 @@ public class DefaultMimeTypeService extends AbstractLogEnabled
 	 * @param def      The default MIME type to use if no mapping exists.
 	 * @return the MIME type string.
 	 */
-	public String getContentType(String fileName, String def) {
+	public String getContentType(String fileName, String def) 
+	{
 		return mimeTypeMap.getContentType(fileName, def);
 	}
 
@@ -142,7 +146,8 @@ public class DefaultMimeTypeService extends AbstractLogEnabled
 	 * @param file the file.
 	 * @return the MIME type.
 	 */
-	public MimeType getMimeContentType(File file) {
+	public MimeType getMimeContentType(File file) 
+	{
 		return mimeTypeMap.getMimeContentType(file);
 	}
 
@@ -152,7 +157,8 @@ public class DefaultMimeTypeService extends AbstractLogEnabled
 	 * @param name the name of the file.
 	 * @return the MIME type.
 	 */
-	public MimeType getMimeContentType(String name) {
+	public MimeType getMimeContentType(String name) 
+	{
 		return mimeTypeMap.getMimeContentType(name);
 	}
 
@@ -163,7 +169,8 @@ public class DefaultMimeTypeService extends AbstractLogEnabled
 	 * @param def the default type if none is found.
 	 * @return the MIME type.
 	 */
-	public MimeType getMimeContentType(String ext, String def) {
+	public MimeType getMimeContentType(String ext, String def) 
+	{
 		return mimeTypeMap.getMimeContentType(ext, def);
 	}
 
@@ -174,7 +181,8 @@ public class DefaultMimeTypeService extends AbstractLogEnabled
 	 * @param type the MIME type as a string.
 	 * @return the file name extension or null.
 	 */
-	public String getDefaultExtension(String type) {
+	public String getDefaultExtension(String type) 
+	{
 		return mimeTypeMap.getDefaultExtension(type);
 	}
 
@@ -185,7 +193,8 @@ public class DefaultMimeTypeService extends AbstractLogEnabled
 	 * @param mime the MIME type.
 	 * @return the file name extension or null.
 	 */
-	public String getDefaultExtension(MimeType mime) {
+	public String getDefaultExtension(MimeType mime) 
+	{
 		return mimeTypeMap.getDefaultExtension(mime);
 	}
 
@@ -195,7 +204,8 @@ public class DefaultMimeTypeService extends AbstractLogEnabled
 	 * @param key     the key for the charset.
 	 * @param charset the corresponding charset.
 	 */
-	public void setCharSet(String key, String charset) {
+	public void setCharSet(String key, String charset) 
+	{
 		charSetMap.setCharSet(key, charset);
 	}
 
@@ -207,7 +217,8 @@ public class DefaultMimeTypeService extends AbstractLogEnabled
 	 * @param locale the locale.
 	 * @return the charset.
 	 */
-	public String getCharSet(Locale locale) {
+	public String getCharSet(Locale locale) 
+	{
 		return charSetMap.getCharSet(locale);
 	}
 
@@ -223,7 +234,8 @@ public class DefaultMimeTypeService extends AbstractLogEnabled
 	 * @param variant a variant field.
 	 * @return the charset.
 	 */
-	public String getCharSet(Locale locale, String variant) {
+	public String getCharSet(Locale locale, String variant) 
+	{
 		return charSetMap.getCharSet(locale, variant);
 	}
 
@@ -233,7 +245,8 @@ public class DefaultMimeTypeService extends AbstractLogEnabled
 	 * @param key the key for the charset.
 	 * @return the found charset or the default one.
 	 */
-	public String getCharSet(String key) {
+	public String getCharSet(String key) 
+	{
 		return charSetMap.getCharSet(key);
 	}
 
@@ -244,13 +257,16 @@ public class DefaultMimeTypeService extends AbstractLogEnabled
 	 * @param def the default charset if none is found.
 	 * @return the found charset or the given default.
 	 */
-	public String getCharSet(String key, String def) {
+	public String getCharSet(String key, String def) 
+	{
 		return charSetMap.getCharSet(key, def);
 	}
 
-	private String getRealPath(String path) {
+	private String getRealPath(String path) 
+	{
 		String absolutePath = null;
-		if (applicationRoot == null) {
+		if (applicationRoot == null) 
+		{
 			absolutePath = new File(path).getAbsolutePath();
 		} else {
 			absolutePath = new File(applicationRoot, path).getAbsolutePath();
@@ -262,13 +278,16 @@ public class DefaultMimeTypeService extends AbstractLogEnabled
 	/**
 	 * Avalon component lifecycle method
 	 */
-	public void configure(Configuration conf) {
+	public void configure(Configuration conf) 
+	{
 		mimetypePath = conf.getAttribute(MIME_TYPES, null);
 		charsetPath = conf.getAttribute(CHARSETS, null);
-		if (mimetypePath != null) {
+		if (mimetypePath != null) 
+		{
 			mimetypePath = getRealPath(mimetypePath);
 		}
-		if (charsetPath != null) {
+		if (charsetPath != null) 
+		{
 			charsetPath = getRealPath(charsetPath);
 		}
 	}
@@ -276,23 +295,38 @@ public class DefaultMimeTypeService extends AbstractLogEnabled
 	/**
 	 * Avalon component lifecycle method
 	 */
-	public void initialize() throws Exception {
-		if (mimetypePath != null) {
-			try {
+	public void initialize() throws Exception 
+	{
+		if (mimetypePath != null) 
+		{
+			try 
+			{
 				mimeTypeMap = new MimeTypeMap(mimetypePath);
-			} catch (IOException x) {
+			} 
+			catch (IOException x) 
+			{
 				throw new Exception(mimetypePath, x);
 			}
-		} else {
+		} 
+		else 
+		{
 			mimeTypeMap = new MimeTypeMap();
 		}
-		if (charsetPath != null) {
-			try {
+		
+		if (charsetPath != null) 
+		{
+			try 
+			{
 				charSetMap = new CharSetMap(charsetPath);
-			} catch (IOException x) {
+			} 
+			catch (IOException x) 
+			{
 				throw new Exception(charsetPath, x);
 			}
-		} else {
+			
+		} 
+		else 
+		{
 			charSetMap = new CharSetMap();
 		}
 	}
@@ -305,7 +339,8 @@ public class DefaultMimeTypeService extends AbstractLogEnabled
 	 * @param context the context to use
 	 * @throws ContextException exception if context not found
 	 */
-	public void contextualize(Context context) throws ContextException {
+	public void contextualize(Context context) throws ContextException 
+	{
 		this.applicationRoot = context.get("urn:avalon:home").toString();
 	}
 

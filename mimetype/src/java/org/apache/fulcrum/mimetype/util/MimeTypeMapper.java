@@ -1,6 +1,7 @@
 package org.apache.fulcrum.mimetype.util;
 
 
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,17 +21,18 @@ package org.apache.fulcrum.mimetype.util;
  * under the License.
  */
 
-
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.StringReader;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.Map;
+import java.io.StringReader;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * This class defines mappings between MIME types and the corresponding
@@ -47,8 +49,8 @@ public class MimeTypeMapper
     /**
      * Mappings between MIME types and file name extensions.
      */
-    private HashMap mimeTypeExtensions = new HashMap();
-    protected HashMap extensionMimeTypes = new HashMap();
+    private HashMap<String, String> mimeTypeExtensions = new HashMap<String, String>();
+    protected HashMap<String, String> extensionMimeTypes = new HashMap<String, String>();
 
     /**
      * Constructs an empty MIME type mapper.
@@ -80,21 +82,14 @@ public class MimeTypeMapper
     public MimeTypeMapper(File file)
         throws IOException
     {
-        FileReader freader = new FileReader(file);
-        try
+        try (BufferedReader in = new BufferedReader(
+    		   new InputStreamReader(new FileInputStream(file), "UTF8")) )
         {
-            parse(new BufferedReader(freader));
+            parse(in);
         }
-        finally
+        catch (IOException x)
         {
-            try
-            {
-                freader.close();
-            }
-            catch (IOException x)
-            {
-                // ignore
-            }
+            // ignore
         }
     }
 
@@ -129,26 +124,20 @@ public class MimeTypeMapper
 
     /**
      * Gets a MIME content type corresponding to a specified file name
-     * extension.  If a mapping is initially not found, tries a second
-     * lookup using the provided extension in lower case.
+     * extension.
      *
      * @param ext The file name extension to resolve.
      * @return The MIME type, or <code>null</code> if not found.
      */
-    public String getContentType(String ext)
+    public synchronized String getContentType(String ext)
     {
-        String mimeType = (String) mimeTypeExtensions.get(ext);
-        if (mimeType == null && ext != null)
-        {
-            String lcExt = ext.toLowerCase();
-            if (!ext.equals(lcExt))
-            {
-                // Original file extension didn't resolve, but was
-                // mixed case.  Try it again with lower case chars.
-                mimeType = (String) mimeTypeExtensions.get(lcExt);
-            }
-        }
-        return mimeType;
+		if ( StringUtils.isNotEmpty(ext) &&
+				mimeTypeExtensions.containsKey(ext.toLowerCase()))
+		{
+			return mimeTypeExtensions.get(ext.toLowerCase());
+		} else {
+			return null;
+		}
     }
 
     /**
@@ -168,14 +157,15 @@ public class MimeTypeMapper
      * @param reader a reader to parse.
      * @throws IOException for an incorrect reader.
      */
-    protected synchronized void parse(BufferedReader reader)
+    @SuppressWarnings("unchecked")
+	protected synchronized void parse(BufferedReader reader)
         throws IOException
     {
       int l,count = 0;
       String next;
       String str = null;
-      HashMap mimeTypes = (HashMap) extensionMimeTypes.clone();
-      HashMap extensions = (HashMap) mimeTypeExtensions.clone();
+      HashMap<String, String> mimeTypes = (HashMap<String, String>) extensionMimeTypes.clone();
+      HashMap<String, String> extensions = (HashMap<String, String>) mimeTypeExtensions.clone();
       while ((next = reader.readLine()) != null)
       {
           str = str == null ? next : str + next;
@@ -215,13 +205,13 @@ public class MimeTypeMapper
      * @return the number of file name extensions parsed.
      */
     protected int parseMimeTypeExtension(String spec,
-                                         Map mimeTypes,
-                                         Map extensions)
+                                         Map<String, String> mimeTypes,
+                                         Map<String, String> extensions)
     {
         int count = 0;
         spec = spec.trim();
-        if ((spec.length() > 0) &&
-            (spec.charAt(0) != '#'))
+        if (spec.length() > 0 &&
+            spec.charAt(0) != '#')
         {
             StringTokenizer tokens = new StringTokenizer(spec);
             String type = tokens.nextToken();

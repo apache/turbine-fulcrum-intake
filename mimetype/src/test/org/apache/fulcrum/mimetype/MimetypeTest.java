@@ -1,3 +1,5 @@
+package org.apache.fulcrum.mimetype;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,14 +19,17 @@
  * under the License.
  */
 
-package org.apache.fulcrum.mimetype;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.util.Locale;
 
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
 import org.apache.fulcrum.mimetype.util.MimeType;
 import org.apache.fulcrum.mimetype.util.MimeTypeMapperTest;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for {@link DefaultMimeTypeService}.
@@ -35,29 +40,22 @@ import org.apache.fulcrum.mimetype.util.MimeTypeMapperTest;
  * @author Daniel Rall
  * @version $Id$
  */
-public class MimetypeTest extends BaseUnitTest
+public class MimetypeTest extends BaseUnit5Test
 {
     private MimeTypeService mimeTypeService = null;
 
-    /**
-     * Defines the testcase name for JUnit.
-     *
-     * @param name the testcase's name.
-     */
-    public MimetypeTest(String name)
-    {
-        super(name);
-    }
-
+    @BeforeEach
     public void setUp() throws Exception
     {
-        super.setUp();
-        mimeTypeService = (MimeTypeService) resolve(MimeTypeService.class.getName());
-
+        mimeTypeService = (MimeTypeService) lookup(MimeTypeService.ROLE);
         mimeTypeService.setContentType(MimeTypeMapperTest.MIME_TYPE + ' ' +
                                        MimeTypeMapperTest.KNOWN_EXTENSIONS);
     }
 
+    /**
+     * @throws Exception generic exception
+     */
+    @Test
     public void testGetCharSet() throws Exception
     {
         Locale locale = new Locale("en", "US");
@@ -65,6 +63,10 @@ public class MimetypeTest extends BaseUnitTest
         assertEquals("ISO-8859-1", s);
     }
 
+    /**
+     * @throws Exception generic exception
+     */
+    @Test
     public void testSetGetContentType() throws Exception
     {
         File f;
@@ -78,6 +80,10 @@ public class MimetypeTest extends BaseUnitTest
         }
     }
 
+    /**
+     * @throws Exception generic exception
+     */
+    @Test
     public void testGetDefaultExtensionForCrazy() throws Exception
     {
         String result = mimeTypeService.getDefaultExtension(MimeTypeMapperTest.MIME_TYPE);
@@ -87,11 +93,19 @@ public class MimetypeTest extends BaseUnitTest
         assertEquals("crazy", result);
     }
 
+    /**
+     * @throws Exception generic exception
+     */
+    @Test
     public void testGetDefaultExtensionForPdf() throws Exception
     {
         assertEquals("pdf", mimeTypeService.getDefaultExtension("application/pdf"));
     }
 
+    /**
+     * @throws Exception generic exception
+     */
+    @Test
     public void testGetContentTypeForPdf() throws Exception
     {
         assertEquals("application/pdf", mimeTypeService.getContentType("foo.pdf"));

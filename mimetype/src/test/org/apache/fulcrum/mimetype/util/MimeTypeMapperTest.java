@@ -19,7 +19,12 @@ package org.apache.fulcrum.mimetype.util;
  * under the License.
  */
 
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 /**
  * Tests for the MimeTypeMapper
@@ -28,7 +33,7 @@ import junit.framework.TestCase;
  * @author Daniel Rall
  *
  */
-public class MimeTypeMapperTest extends TestCase
+public class MimeTypeMapperTest extends BaseUnit5Test
 {
     /**
      * The MIME type used by most of our tests.
@@ -50,26 +55,14 @@ public class MimeTypeMapperTest extends TestCase
 
     private MimeTypeMapper mtm;
 
-    public static void main(String[] args)
-    {
-        junit.textui.TestRunner.run(MimeTypeMapperTest.class);
-    }
-
-    /**
-     * Constructor for MimeTypeMapperTest.
-     * @param arg0 default arguments
-     */
-    public MimeTypeMapperTest(String arg0)
-    {
-        super(arg0);
-    }
-
+    @BeforeEach
     public void setUp()
     {
         mtm = new MimeTypeMapper();
         mtm.setContentType(MIME_TYPE + ' ' + KNOWN_EXTENSIONS);
     }
 
+    @Test
     public void testGetSetContentType()
     {
         for (int i = 0; i < INPUT_EXTENSIONS.length; i++)
@@ -78,13 +71,13 @@ public class MimeTypeMapperTest extends TestCase
         }
     }
 
-    /* ### This is actually a test case for MimeTypeMap.
-	public void testGetDefaultExtension() throws Exception
+    /**
+     * @throws Exception generic exception
+     */
+    @Test
+	public void testGetMimeTypeExtension() throws Exception
     {
-        String result = mtm.getDefaultExtension(MIME_TYPE);
+        String result = mtm.getExtension(MIME_TYPE);
         assertEquals("crazy", result);
-        MimeType mt = new MimeType(MIME_TYPE);
-        result = mtm.getDefaultExtension(mt);
-        assertEquals("crazy", result);
-    }*/
+    }
 }
