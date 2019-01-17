@@ -45,10 +45,6 @@
         <li>
           <a href="http://turbine.apache.org/fulcrum/fulcrum-parser/">Fulcrum Parser Service</a>
         </li>
-        <li>
-          <a href="http://turbine.apache.org/fulcrum/fulcrum-upload/">Fulcrum Upload Service</a>
-          (optional)
-        </li>
       </ul>
     </p>
 
