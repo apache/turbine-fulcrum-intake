@@ -41,7 +41,7 @@
     <module>crypto</module>    
     <module>factory</module>    
     <module>intake</module>    
-    <module>json/api</module>   
+    <module>json</module>   
     <module>localization</module>    
     <module>mimetype</module>        
     <module>parser</module>    
