@@ -25,16 +25,16 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.fulcrum</groupId>
   <artifactId>fulcrum-xslt</artifactId>
-  <version>1.1.1-SNAPSHOT</version>
+  <version>1.1.1</version>
   <name>Fulcrum XSLT</name>
   <inceptionYear>2005</inceptionYear>
   <description>Fulcrum XSLT Service</description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-xslt</url>
 		
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/xslt/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/xslt/</developerConnection>
-    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/xslt/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-xslt-1.1.1</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-xslt-1.1.1</developerConnection>
+    <url>http://svn.apache.org/viewvc/turbine/fulcrum/tags/fulcrum-xslt-1.1.1</url>
   </scm>
 
   <developers>
