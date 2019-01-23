@@ -24,7 +24,7 @@
   </properties>
 
   <body>
-    <release version="1.0.9" date="as in SVN">
+    <release version="1.0.9-SNAPSHOT" date="as in SVN">
     </release>
     <release version="1.0.8" date="2018-12-14">
       <action dev="painter" type="update">

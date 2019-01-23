@@ -24,7 +24,9 @@
     <!-- author email="quintonm@bellsouth.net">Quinton McCombs</author -->
   </properties>
   <body>
-    <release version="1.0.8" date="in Subversion">
+    <release version="1.0.9" date="in SVN">
+    </release>
+    <release version="1.0.8" date="2019-01-06">
        <action type="update" dev="painter">
         Update Fulcrum dependencies
       </action>  
