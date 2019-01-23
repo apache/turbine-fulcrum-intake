@@ -46,9 +46,12 @@ import org.junit.jupiter.api.Test;
  */
 public class XSLTServiceTest extends BaseUnit5Test
 {
-    private XSLTService xsltService = null;
+    /** The XSLTService **/
+	private XSLTService xsltService = null;
 
-
+    /**
+     * @throws Exception generic exception
+     */
     @BeforeEach
     protected void setUp() throws Exception
     {
@@ -96,7 +99,7 @@ public class XSLTServiceTest extends BaseUnit5Test
     @Test
     public void testTransformXsltOnly() throws Exception
     {
-        Map values = new HashMap();
+        Map<String, String> values = new HashMap<String, String>();
         values.put("name", "Fulcrum");
         String result = xsltService.transform("hello.xslt", values );
         assertTrue(result.contains("Hello Fulcrum"));

@@ -182,7 +182,8 @@ public class XSLTServiceFacade
      * @return the transformed output
      * @throws Exception the transformation failed
      */
-    public String transform(String xslName, Map<?, ?> params) throws Exception {
+    public String transform(String xslName, Map<?, ?> params) throws Exception 
+    {
         return getService().transform(xslName, params);
     }
 
@@ -194,7 +195,8 @@ public class XSLTServiceFacade
      * @param params A set of parameters that will be forwarded to the XSLT
      * @throws Exception the transformation failed
      */    
-    public void transform(String xslName, Writer out, Map<?, ?> params) throws Exception {
+    public void transform(String xslName, Writer out, Map<?, ?> params) throws Exception 
+    {
         getService().transform(xslName, out, params);
     }
 }

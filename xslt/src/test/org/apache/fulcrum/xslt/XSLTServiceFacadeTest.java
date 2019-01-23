@@ -1,7 +1,5 @@
 package org.apache.fulcrum.xslt;
 
-import org.apache.fulcrum.testcontainer.BaseUnit5Test;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,10 +19,8 @@ import org.apache.fulcrum.testcontainer.BaseUnit5Test;
  * under the License.
  */
 
-
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
 import org.junit.jupiter.api.Test;
-
 
 /**
  * Test the XSLTServiceFacade.
@@ -32,28 +28,32 @@ import org.junit.jupiter.api.Test;
  * @author <a href="epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class XSLTServiceFacadeTest extends BaseUnit5Test
+public class XSLTServiceFacadeTest extends BaseUnit5Test 
 {
 
+	/**
+	 * @throws Exception generic exception
+	 */
 	@Test
-    public void testWorkflowFacadeNotConfigured() throws Exception
-    {
-        try
-        {
-            XSLTServiceFacade.getService();
-        }
-        catch (RuntimeException re)
-        {
-            //good;
-        }
-    }
+	public void testWorkflowFacadeNotConfigured() throws Exception 
+	{
+		try 
+		{
+			XSLTServiceFacade.getService();
+		} catch (RuntimeException re) {
+			// good;
+		}
+	}
 
+	/**
+	 * @throws Exception generic exception
+	 */
 	@Test
-    public void testWorkflowFacadeConfigured() throws Exception
-    {
-    	// this.lookup causes the workflow service to be configured.
+	public void testWorkflowFacadeConfigured() throws Exception 
+	{
+		// this.lookup causes the workflow service to be configured.
 		this.lookup(XSLTService.ROLE);
 		XSLTServiceFacade.getService();
-    }
+	}
 
 }

@@ -76,7 +76,7 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
     protected boolean caching = false;
 
     /**
-     * Path to style sheets used for tranforming well-formed XML documents. The
+     * Path to style sheets used for transforming well-formed XML documents. The
      * path is relative to the webapp context.
      */
     protected String path;
@@ -188,6 +188,15 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
         }
     }
 
+    /**
+     * Transform the XML file
+     * 
+     * @param xslName the name of the XSL file
+     * @param xmlin source xml
+     * @param xmlout resulting xml
+     * @param params A set of parameters that will be forwarded to the XSLT
+     * @throws Exception if the transform fails
+     */
     protected void transform(String xslName, Source xmlin, Result xmlout, Map<?, ?> params)
             throws Exception
     {
@@ -229,6 +238,8 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      *            The reader that passes the xml to be transformed
      * @param out
      *            The writer for the transformed output
+     *            
+     * @throws Exception if the transform fails            
      */
     public void transform(String xslName, Reader in, Writer out)
             throws Exception
@@ -246,6 +257,8 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      *            The name of the file that contains the xsl stylesheet.
      * @param in
      *            The reader that passes the xml to be transformed
+     *            
+     * @throws Exception if the transform fails            
      */
     public String transform(String xslName, Reader in) throws Exception
     {
@@ -258,12 +271,16 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      * Uses an xsl file to transform xml input from a DOM note and writes the
      * output to a writer.
      *
+     * @see org.apache.fulcrum.xslt.XSLTService#transform(java.lang.String, org.w3c.dom.Node, java.io.Writer)
+     *
      * @param xslName
      *            The name of the file that contains the xsl stylesheet.
      * @param in
      *            The DOM Node to be transformed
      * @param out
      *            The writer for the transformed output
+     *            
+     * @throws Exception if the transform fails            
      */
     public void transform(String xslName, Node in, Writer out)
             throws Exception
@@ -281,6 +298,8 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      *            The name of the file that contains the xsl stylesheet.
      * @param in
      *            The DOM Node to be transformed
+     *            
+     * @throws Exception if the transform fails            
      */
     public String transform(String xslName, Node in)
             throws Exception
@@ -302,6 +321,8 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      *            The writer for the transformed output
      * @param params
      *            A set of parameters that will be forwarded to the XSLT
+     *            
+     * @throws Exception if the transform fails            
      */
     public void transform(String xslName, Reader in, Writer out, Map<?, ?> params)
             throws Exception
@@ -321,6 +342,8 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      *            The reader that passes the xml to be transformed
      * @param params
      *            A set of parameters that will be forwarded to the XSLT
+     *            
+     * @throws Exception if the transform fails            
      */
     public String transform(String xslName, Reader in, Map<?, ?> params)
             throws Exception
@@ -342,6 +365,8 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      *            The writer for the transformed output
      * @param params
      *            A set of parameters that will be forwarded to the XSLT
+     *            
+     * @throws Exception if the transform fails            
      */
     public void transform(String xslName, Node in, Writer out, Map<?, ?> params)
             throws Exception
@@ -361,6 +386,8 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      *            The DOM Node to be transformed
      * @param params
      *            A set of parameters that will be forwarded to the XSLT
+     *            
+     * @throws Exception if the transform fails
      */
     public String transform(String xslName, Node in, Map<?, ?> params)
             throws Exception
@@ -376,10 +403,11 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      * @param xslName The name of the file that contains the xsl stylesheet.
      * @param params A set of parameters that will be forwarded to the XSLT
      * @return the transformed output
-     * @throws Exception the transformation failed
+     * 
+     * @throws Exception if the transform fails
      */
-    public String transform(String xslName, Map<?, ?> params) throws Exception {
-
+    public String transform(String xslName, Map<?, ?> params) throws Exception 
+    {
         StringWriter sw = new StringWriter();
         transform(xslName, sw, params);
         return sw.toString();
@@ -393,8 +421,8 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      * @param params A set of parameters that will be forwarded to the XSLT
      * @throws Exception the transformation failed
      */
-    public void transform(String xslName, Writer out, Map<?, ?> params) throws Exception {
-
+    public void transform(String xslName, Writer out, Map<?, ?> params) throws Exception 
+    {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         Document document = documentBuilder.newDocument();
@@ -437,8 +465,7 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
      */
     public void configure(Configuration conf) throws ConfigurationException
     {
-        StringBuilder sb = new StringBuilder(conf.getAttribute(STYLESHEET_PATH,
-                "/"));
+        StringBuilder sb = new StringBuilder(conf.getAttribute(STYLESHEET_PATH, "/"));
 
         // is URL?
         if (!sb.toString().matches("[a-zA-Z]{3,}://.*"))
@@ -469,6 +496,9 @@ public class DefaultXSLTService extends AbstractLogEnabled implements
         tfactory = TransformerFactory.newInstance();
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
+     */
     public void contextualize(Context context) throws ContextException
     {
         this.applicationRoot = context.get("urn:avalon:home").toString();
