@@ -20,22 +20,22 @@
     <artifactId>turbine-parent</artifactId>
     <groupId>org.apache.turbine</groupId>
     <version>5</version>
-    <relativePath></relativePath><!-- ignore default value -->
+    <relativePath /><!-- ignore default value -->
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fulcrum-localization</artifactId>
   <groupId>org.apache.fulcrum</groupId>
-  <version>1.0.7-SNAPSHOT</version>
+  <version>1.0.7</version>
   <name>Fulcrum Localization</name>
   <inceptionYear>2005</inceptionYear>
   <description>Fulcrum Localization Service</description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-localization</url>
 		
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/localization/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/localization/</developerConnection>
-    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/localization/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-localization-1.0.7</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-localization-1.0.7</developerConnection>
+    <url>http://svn.apache.org/viewvc/turbine/fulcrum/tags/fulcrum-localization-1.0.7</url>
   </scm>
 
   <developers>
