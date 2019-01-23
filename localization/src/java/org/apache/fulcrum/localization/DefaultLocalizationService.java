@@ -141,7 +141,7 @@ public class DefaultLocalizationService
      */
     public Locale getLocale(String header)
     {
-        if (!StringUtils.isEmpty(header))
+        if (StringUtils.isNotEmpty(header))
         {
             LocaleTokenizer tok = new LocaleTokenizer(header);
             if (tok.hasNext())

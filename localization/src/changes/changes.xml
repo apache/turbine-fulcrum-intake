@@ -24,7 +24,9 @@
   </properties>
 
   <body>
-    <release version="1.0.7" date="in SVN">
+    <release version="1.0.8" date="in SVN">
+    </release>
+    <release version="1.0.7" date="2019-01-23">
 	  <action dev="painter" type="update">
         Moved changes.xml location for inclusion in report generation
       </action>

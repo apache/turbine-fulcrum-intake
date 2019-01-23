@@ -353,7 +353,8 @@ public class SimpleLocalizationServiceImpl
             {
                 // Cache bundle.
                 bundlesByLocale.put(rb.getLocale(), rb);
-                HashMap<String, HashMap<Locale, ResourceBundle>> bundlesByName = new HashMap<String, HashMap<Locale, ResourceBundle>>(bundles);
+                HashMap<String, HashMap<Locale, ResourceBundle>> bundlesByName 
+                	= new HashMap<String, HashMap<Locale, ResourceBundle>>(bundles);
                 bundlesByName.put(bundleName, bundlesByLocale);
                 this.bundles = bundlesByName;
             }
