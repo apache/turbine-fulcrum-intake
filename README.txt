@@ -79,6 +79,12 @@ Steps
   // Helpful hint from Apache Website: If you're located in Europe then release:prepare may fail with 'Unable to tag SCM' and ' svn: No such revision X '. Wait 10 seconds and run mvn release:prepare again.
   
 4) Release Preparing
+  //  
+  // if you get a 401 error on the upload to repository.apache.org, make sure
+  // that your mvn security settings are in place ~/.m2/settings.xml and ~/.m2/settings-security.xml 
+  // For more information on setting up security see the encryption guide:
+  //    http://maven.apache.org/guides/mini/guide-encryption.html
+  //
   // performs an upload to repository.apache.org/service/local/staging/deploy/maven2/
   // Hint: Add -Dgpg.useagent=false helps, if running from a windows machine to avoid hanging while gpg plugin signing process 
   // .. this may happen, if you do not define the pinentry-program in gpg-agent.conf correctly ..
