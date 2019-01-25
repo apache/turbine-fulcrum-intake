@@ -20,22 +20,22 @@
     <groupId>org.apache.turbine</groupId>
     <artifactId>turbine-parent</artifactId>
     <version>5</version>
-    <relativePath></relativePath>
+    <relativePath />
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.fulcrum</groupId>
   <artifactId>fulcrum-crypto</artifactId>
-  <version>1.0.8-SNAPSHOT</version>
+  <version>1.0.8</version>
   <name>Fulcrum Crypto</name>
   <inceptionYear>2005</inceptionYear>
   <description>Fulcrum Crypto Service</description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-crypto</url>
 		
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/crypto/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/crypto/</developerConnection>
-    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/crypto/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-crypto-1.0.8</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-crypto-1.0.8</developerConnection>
+    <url>http://svn.apache.org/viewvc/turbine/fulcrum/tags/fulcrum-crypto-1.0.8</url>
   </scm>
 
   <developers>
