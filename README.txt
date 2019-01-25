@@ -105,6 +105,7 @@ Steps
   // http://www.apache.org/dev/publishing-maven-artifacts.html#drop
   // After Drop "reverse merge the release prepare (i.e. mvn release:rollback if possible),
   // manually delete tag in svn repo (svn delete ..) and drop staged repository in nexus and start again with step 1.
+  // refer to the failed vote Message-ID in the commit messages (svn, nexus).
   
 8)  Stage the latest documentation 
   // http://maven.apache.org/developers/website/deploy-component-reference-documentation.html

@@ -10,9 +10,11 @@ into .html files using Maven.
 
 Using scm-publish Plugin, cft. http://commons.apache.org/site-publish.html for publishing and turbine-parent plugin check the following list items:
 
-* Verify turbine.site.path is matching pubScmUrl property of goal scm-publish:publish-scm (e.g. by investigating the result of mvn help:effective-pom)
+* Read README, 8)  Stage the latest documentation 
 
-* Verify turbine.scmPubCheckoutDirectory is matching property checkoutDirectory of goal scm-publish:publish-scm.
+* Exercise: Run mvn help:effective-pom, save the result in a file and check by investigating it, that
+  - turbine.site.path is matching pubScmUrl property of goal scm-publish:publish-scm . Actually the variable turbine.scmPubUrl is using ${turbine.site.path} in turbine parent pom.
+  - turbine.scmPubCheckoutDirectory is matching property checkoutDirectory of goal scm-publish:publish-scm.
 
 * Once you have the site checked out locally, as it is multi-module project (with submodules) execute first 
   
@@ -34,6 +36,6 @@ This will build the documentation into the target/site/, resp. target/staging/ d
 
 This will generate the site into turbine.site.cache folder (target/turbine-sites by default) and print any changes to STDOUT. 
 
-* To deploy run the same command (adding -Dusername=<username> -Dpassword=<pw>) remove the argument scmpublish.dryRun or set it to false. Check if tryUpdate is set to false to get a clean working copy again). Alternatively, if you have set scmpublish.skipCheckin=true in the previous step, you have to do a manual commit. 
+* To deploy run the same command (check your credentials in ~/.m2/settings.xml), remove the argument scmpublish.dryRun or set it to false. Check if tryUpdate is set to false to get a clean working copy again). Alternatively, if you have set scmpublish.skipCheckin=true in the previous step, you have to do a manual commit. 
 
 
