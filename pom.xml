@@ -50,8 +50,6 @@
     <module>security</module>    
     <module>servicemanager</module>    
     <module>testcontainer</module>    
-    <!-- turbine-webapp archetype references fulcrum-upload -->
-    <module>upload</module>        
     <module>yaafi-crypto</module>        
     <module>yaafi</module>        
 
@@ -64,6 +62,7 @@
     <module>resourcemanager</module>    
     <module>script</module>    
     <module>spring</module>            
+    <module>upload</module>        
     <module>xmlrpc</module>        
     <module>xslt</module>        
 
