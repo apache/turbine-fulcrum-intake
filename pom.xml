@@ -52,6 +52,7 @@
     <module>testcontainer</module>    
     <module>yaafi-crypto</module>        
     <module>yaafi</module>        
+    <module>xslt</module>        
 
     <!-- Potentially dormant modules -->
     <module>commonsemail</module>
@@ -64,7 +65,6 @@
     <module>spring</module>            
     <module>upload</module>        
     <module>xmlrpc</module>        
-    <module>xslt</module>        
 
   </modules>
   
