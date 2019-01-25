@@ -69,12 +69,14 @@ public class CryptoServiceTest extends BaseUnit5Test
         String preDefinedResult = "z5EQaXpuu059c";
 
         CryptoAlgorithm ca = sc.getCryptoAlgorithm("unix");
+        
         /*
          * Test predefined Seed
          */
         ca.setSeed(preDefinedSeed);
         String output = ca.encrypt(preDefinedInput);
         assertEquals( preDefinedResult, output, "Encryption failed ");
+        
         /*
          * Test random Seed
          *
@@ -87,6 +89,10 @@ public class CryptoServiceTest extends BaseUnit5Test
 
     }
     
+    /**
+     * Test no encryption 
+     * @throws Exception exception
+     */
     @Test
     public void testClearCrypt() throws Exception
     {
@@ -98,6 +104,9 @@ public class CryptoServiceTest extends BaseUnit5Test
 
     }
     
+    /**
+     * @throws Exception exception
+     */
     @Test
     @DisplayName("OldJavaCrypt: Truncated base64 from MD5 (Turbine 2.1) Test")
     public void testOldJavaCryptMd5() throws Exception
@@ -111,6 +120,9 @@ public class CryptoServiceTest extends BaseUnit5Test
 
     }
     
+    /**
+     * @throws Exception exception
+     */
     @Test
     public void testOldJavaCryptSha1() throws Exception
     {
@@ -123,6 +135,9 @@ public class CryptoServiceTest extends BaseUnit5Test
 
     }
     
+    /**
+     * @throws Exception exception
+     */
     @Test
     public void testJavaCryptMd5() throws Exception
     {
@@ -133,6 +148,9 @@ public class CryptoServiceTest extends BaseUnit5Test
         assertEquals( preDefinedResult, output, "MD5 Encryption failed ");
     }
     
+    /**
+     * @throws Exception exception
+     */
     @Test
     public void testJavaCryptSha1() throws Exception
     {
@@ -144,6 +162,9 @@ public class CryptoServiceTest extends BaseUnit5Test
 
     }
     
+    /**
+     * @throws Exception exception
+     */
     @Test
     public void testJavaCryptSha256() throws Exception
     {
@@ -154,6 +175,9 @@ public class CryptoServiceTest extends BaseUnit5Test
         assertEquals( preDefinedResult, output, "SHA256 Encryption failed ");
     }
     
+    /**
+     * @throws Exception exception
+     */
     @Test
     public void testJavaCryptSha512() throws Exception
     {

@@ -41,8 +41,8 @@ import org.apache.fulcrum.crypto.CryptoAlgorithm;
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
-
-public class JavaCrypt implements CryptoAlgorithm {
+public class JavaCrypt implements CryptoAlgorithm 
+{
 
 	/** The default cipher */
 	public static final String DEFAULT_CIPHER = "SHA";
@@ -51,7 +51,7 @@ public class JavaCrypt implements CryptoAlgorithm {
 	private String cipher = null;
 
 	/**
-	 * Constructo
+	 * Constructor
 	 *
 	 */
 	public JavaCrypt() 
@@ -66,6 +66,8 @@ public class JavaCrypt implements CryptoAlgorithm {
 	 * This will never throw an error even if there is no provider for this cipher.
 	 * The error will be thrown by encrypt() (Fixme?)
 	 *
+	 * @see org.apache.fulcrum.crypto.CryptoAlgorithm#setCipher(java.lang.String)
+	 *
 	 * @param cipher The cipher to use.
 	 *
 	 */
@@ -77,6 +79,8 @@ public class JavaCrypt implements CryptoAlgorithm {
 	/**
 	 * This class never uses a seed, so this is just a dummy.
 	 *
+	 * @see org.apache.fulcrum.crypto.CryptoAlgorithm#setSeed(java.lang.String)
+	 * 
 	 * @param seed Seed (ignored)
 	 *
 	 */
@@ -86,7 +90,9 @@ public class JavaCrypt implements CryptoAlgorithm {
 	}
 
 	/**
-	 * encrypt the supplied string with the requested cipher
+	 * Encrypt the supplied string with the requested cipher
+	 *
+	 * @see org.apache.fulcrum.crypto.CryptoAlgorithm#encrypt(java.lang.String)
 	 *
 	 * @param value The value to be encrypted
 	 * @return The encrypted value

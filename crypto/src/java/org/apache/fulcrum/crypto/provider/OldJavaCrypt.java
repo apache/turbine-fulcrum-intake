@@ -41,9 +41,8 @@ import org.apache.fulcrum.crypto.CryptoAlgorithm;
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
-
-public class OldJavaCrypt implements CryptoAlgorithm {
-
+public class OldJavaCrypt implements CryptoAlgorithm 
+{
 	/** The default cipher */
 	public static final String DEFAULT_CIPHER = "SHA";
 
@@ -85,7 +84,7 @@ public class OldJavaCrypt implements CryptoAlgorithm {
 	}
 
 	/**
-	 * encrypt the supplied string with the requested cipher
+	 * Encrypt the supplied string with the requested cipher
 	 *
 	 * @param value The value to be encrypted
 	 * @return The encrypted value
@@ -96,10 +95,12 @@ public class OldJavaCrypt implements CryptoAlgorithm {
 		MessageDigest md = MessageDigest.getInstance(cipher);
 		byte[] digest = md.digest(value.getBytes("UTF-8"));
 		byte[] base64 = Base64.encodeBase64(digest);
+		
 		// from MD5 the digest has 16 bytes but for SHA1 it contains 20 bytes
-		// depending on the digest lenght the result is truncated
+		// depending on the digest length the result is truncated
 		int len = (digest.length == 16 ? 20 : 24);
 		byte[] result = new byte[len];
+		
 		System.arraycopy(base64, 0, result, 0, result.length);
 		return new String(result, "UTF-8");
 	}

@@ -40,8 +40,7 @@ import org.apache.avalon.framework.thread.ThreadSafe;
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
- * @version $Id: DefaultCryptoService.java 581797 2007-10-04 08:26:18Z sgoeschl
- *          $
+ * @version $Id$
  */
 public class DefaultCryptoService extends AbstractLogEnabled
 		implements CryptoService, Configurable, Initializable, ThreadSafe {
@@ -62,6 +61,8 @@ public class DefaultCryptoService extends AbstractLogEnabled
 	/**
 	 * Returns a CryptoAlgorithm Object which represents the requested crypto
 	 * algorithm.
+	 *
+	 * @see org.apache.fulcrum.crypto.CryptoService#getCryptoAlgorithm(java.lang.String)
 	 *
 	 * @param algo Name of the requested algorithm
 	 *
@@ -117,9 +118,11 @@ public class DefaultCryptoService extends AbstractLogEnabled
 	}
 	
 	/**
-	 * {@link org.apache.avalon.framework.activity.Initializable#initialize()}
+	 * Initialize the service
 	 * 
-	 * @throws Exception generic exception
+	 * @see org.apache.avalon.framework.activity.Initializable#initialize()
+	 * 
+	 * @throws Exception if initialization fails
 	 */
 	public void initialize() throws Exception 
 	{

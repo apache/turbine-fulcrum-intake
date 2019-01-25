@@ -31,7 +31,6 @@ import org.apache.fulcrum.crypto.CryptoAlgorithm;
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
-
 public class ClearCrypt implements CryptoAlgorithm {
 	
 	/**
@@ -48,7 +47,6 @@ public class ClearCrypt implements CryptoAlgorithm {
 	 */
 	public void setCipher(String cipher) 
 	{
-		/* dummy */
 	}
 
 	/**
@@ -58,22 +56,18 @@ public class ClearCrypt implements CryptoAlgorithm {
 	 */
 	public void setSeed(String seed) 
 	{
-		/* dummy */
 	}
 
 	/**
-	 * encrypt the supplied string with the requested cipher
+	 * This method performs no encryption and will simply
+	 * return the value passed
 	 *
 	 * @param value The value to be encrypted
-	 * @return The encrypted value
+	 * @return The original value
 	 * @throws Exception An Exception of the underlying implementation.
 	 */
 	public String encrypt(String value) throws Exception 
 	{
-		/*
-		 * Ultra-clever implementation. ;-)
-		 */
-
 		return value;
 	}
 }

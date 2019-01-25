@@ -1,6 +1,5 @@
 package org.apache.fulcrum.crypto;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,7 +19,6 @@ package org.apache.fulcrum.crypto;
  * under the License.
  */
 
-
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -30,6 +28,7 @@ import java.security.NoSuchAlgorithmException;
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:mcconnell@apache.org">Stephen McConnell</a>
+ * @version $Id$ 
  */
 public interface CryptoService
 {
@@ -39,10 +38,8 @@ public interface CryptoService
    * Returns a CryptoAlgorithm Object which represents the requested
    * crypto algorithm.
    *
-   * @param algo      Name of the requested algorithm
-   *
+   * @param algo Name of the requested algorithm
    * @return An Object representing the algorithm
-   *
    * @throws NoSuchAlgorithmException  Requested algorithm is not available
    *
    */

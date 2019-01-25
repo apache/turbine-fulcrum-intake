@@ -19,8 +19,9 @@ package org.apache.fulcrum.crypto.provider;
  * under the License.
  */
 
-import org.apache.fulcrum.crypto.CryptoAlgorithm;
 import java.util.Random;
+
+import org.apache.fulcrum.crypto.CryptoAlgorithm;
 
 /**
  * Implements Standard Unix crypt(3) for use with the Crypto Service.
@@ -28,8 +29,8 @@ import java.util.Random;
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
-
-public class UnixCrypt implements CryptoAlgorithm {
+public class UnixCrypt implements CryptoAlgorithm 
+{
 
 	/** The seed to use */
 	private String seed = null;
@@ -68,7 +69,7 @@ public class UnixCrypt implements CryptoAlgorithm {
 	}
 
 	/**
-	 * encrypt the supplied string with the requested cipher
+	 * Encrypt the supplied string with the requested cipher
 	 *
 	 * @param value The value to be encrypted
 	 * @return The encrypted value
@@ -76,7 +77,8 @@ public class UnixCrypt implements CryptoAlgorithm {
 	 */
 	public String encrypt(String value) throws Exception 
 	{
-		if (seed == null) {
+		if (seed == null) 
+		{
 			Random randomGenerator = new Random();
 			int numSaltChars = SALT_CHARS.length;
 			StringBuilder sb = new StringBuilder();
