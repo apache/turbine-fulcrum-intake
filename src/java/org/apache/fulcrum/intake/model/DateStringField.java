@@ -174,7 +174,7 @@ public class DateStringField
     }
 
     /**
-     * Parses a test date string using the Validator if is exists and
+     * Parses a test date string using the Validator if it exists and
      * is an instance of DateStringValidator.  Otherwise, DateFormat.parse()
      * is used.
      *

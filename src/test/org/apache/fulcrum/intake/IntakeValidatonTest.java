@@ -1,5 +1,6 @@
 package org.apache.fulcrum.intake;
 
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,6 +20,10 @@ package org.apache.fulcrum.intake;
  * under the License.
  */
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.Locale;
 
 import org.apache.fulcrum.intake.model.Field;
@@ -36,29 +41,17 @@ import org.apache.fulcrum.intake.validator.ValidationException;
 import org.apache.fulcrum.parser.DefaultParameterParser;
 import org.apache.fulcrum.parser.ParserService;
 import org.apache.fulcrum.parser.ValueParser;
-
 import org.apache.fulcrum.testcontainer.BaseUnit5Test;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 /**
  * Test the validators
  *
  * @author <a href="tv@apache.org">Thomas Vandahl</a>
- */
-/**
- * Test the validators
- *
- * @author <a href="tv@apache.org">Thomas Vandahl</a>
+ * @version $Id: IntakeValidatonTest.java 1851410 2019-03-199 11:17:05Z painter $
  */
 @DisplayName("Intake Validator Test")
 public class IntakeValidatonTest extends BaseUnit5Test
