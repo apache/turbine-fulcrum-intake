@@ -1,3 +1,5 @@
+package org.apache.fulcrum.intake.test;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,7 +18,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fulcrum.intake.test;
 
 import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.model.Group;
@@ -29,6 +30,11 @@ public class MyField extends StringField
     /** Serial version */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * @param field XmlFile to test
+     * @param group group to test
+     * @throws IntakeException if fail to find field in group
+     */
     public MyField(XmlField field, Group group) throws IntakeException
     {
         super(field, group);

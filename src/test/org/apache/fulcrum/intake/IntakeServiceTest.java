@@ -1,6 +1,5 @@
 package org.apache.fulcrum.intake;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,30 +19,29 @@ package org.apache.fulcrum.intake;
  * under the License.
  */
 
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 
 import org.apache.fulcrum.intake.model.Group;
 import org.apache.fulcrum.testcontainer.BaseUnit5Test;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * @author Eric Pugh
+ * Test for Intake service
  *
+ * @author <a href="mailto:epugh@upstate.com">epugh@upstate.com</a>
+ * @version $Id$
  */
 public class IntakeServiceTest extends BaseUnit5Test
 {
-    private static final File BASEDIR = new File(".");// System.getProperty( "basedir" )
-
+    private static final File BASEDIR = new File(".");
     private IntakeService intakeService = null;
 
     /**
@@ -51,8 +49,8 @@ public class IntakeServiceTest extends BaseUnit5Test
      * 
      * @param testInfo defining the test
      */
-    public IntakeServiceTest(TestInfo testInfo) {
-    	
+    public IntakeServiceTest(TestInfo testInfo) 
+    {
     }
 
     /**
@@ -78,8 +76,8 @@ public class IntakeServiceTest extends BaseUnit5Test
      * @throws Exception generic exception
      */
     @Test
-    public void testBasicConfigLoads() throws Exception {
-
+    public void testBasicConfigLoads() throws Exception 
+    {
         Group group = intakeService.getGroup("LoginGroup");
 
         File file = new File( BASEDIR, "target/appData.ser");
