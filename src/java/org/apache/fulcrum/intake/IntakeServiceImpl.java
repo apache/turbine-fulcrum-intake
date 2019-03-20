@@ -237,13 +237,17 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             }
             else
             {
-                // Maybe an old file from intake. Ignore it and try to delete
-                getLogger().info(
-                        "serialized object is not an intake map, ignoring");
+                // This could be old file from intake. Try to delete it
+                getLogger().info("serialized object is not an intake map, ignoring");
                 in.close();
                 in = null;
-                serialDataFile.delete(); // Try to delete the file lying
-                                            // around
+                
+                // Try to delete the file
+                boolean result = serialDataFile.delete();
+                if ( result == false )
+                {
+                	getLogger().error("Unknown serialized file could not be removed");
+                }
             }
         }
         catch (IOException e)
@@ -334,8 +338,19 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
         try
         {
-            serialData.createNewFile();
-            serialData.delete();
+            boolean result = serialData.createNewFile();
+            if ( result == false )
+            {
+            	getLogger().error("Could not create new serialized file");
+            }
+
+            // Try to delete the file
+            result = serialData.delete();
+            if ( result == false )
+            {
+            	getLogger().error("Serialized file could not be removed");
+            }
+            
         }
         catch (IOException e)
         {
