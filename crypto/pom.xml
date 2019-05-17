@@ -31,6 +31,14 @@
   <inceptionYear>2005</inceptionYear>
   <description>Fulcrum Crypto Service</description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-crypto</url>
+  
+  <!-- Required for staging to work -->
+    <distributionManagement>
+        <site>
+            <id>turbine.apache.org</id>
+            <url>https://turbine.apache.org/fulcrum/fulcrum-crypto/</url>
+        </site>
+    </distributionManagement>
 		
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/crypto/</connection>
@@ -98,6 +106,9 @@
 	
   <properties>
     <turbine.site.path>fulcrum/fulcrum-crypto</turbine.site.path>
+    <turbine.scmPubCheckoutDirectory>${turbine.site.cache}/fulcrum/crypto</turbine.scmPubCheckoutDirectory>
+    <turbine.site.cache>${project.build.directory}/turbine-sites</turbine.site.cache>
+    <siteContent.path>${project.build.directory}/staging</siteContent.path><!-- default stagingSiteURL -->
   </properties>  
     
 </project>
