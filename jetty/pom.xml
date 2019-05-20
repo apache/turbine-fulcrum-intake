@@ -32,6 +32,15 @@
 	<description>Avalon Component for an embeddable Jetty Servlet Container</description>
 	<url>http://turbine.apache.org/fulcrum/fulcrum-jetty/</url>
 
+
+	  <!-- Required for staging to work -->
+	  <distributionManagement>
+	     <site>
+		<id>turbine.apache.org</id>
+		<url>https://turbine.apache.org/fulcrum/fulcrum-jetty/</url>
+	     </site>
+	  </distributionManagement>
+
 	<scm>
 		<connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/jetty/</connection>
 		<developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/jetty/</developerConnection>
@@ -111,10 +120,14 @@
 		</profile>
 	</profiles>
 
-	<properties>
-		<turbine.site.path>fulcrum/fulcrum-jetty</turbine.site.path>
-		<!-- the Jetty version to pick up -->
-		<jetty.version>6.1.14</jetty.version>
-	</properties>
+  <properties>
+    <turbine.site.path>fulcrum/fulcrum-jetty</turbine.site.path>
+    <turbine.scmPubCheckoutDirectory>${turbine.site.cache}/fulcrum/jetty</turbine.scmPubCheckoutDirectory>
+    <turbine.site.cache>${project.build.directory}/turbine-sites</turbine.site.cache>
+    <siteContent.path>${project.build.directory}/staging</siteContent.path><!-- default stagingSiteURL -->
+
+    <!-- the Jetty version to pick up -->
+    <jetty.version>6.1.14</jetty.version>
+  </properties>
 
 </project>

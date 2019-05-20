@@ -30,6 +30,14 @@
   <inceptionYear>2004</inceptionYear>
   <description>Fulcrum Mimetype Component</description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-mimetype/</url>
+
+  <!-- Required for staging to work -->
+  <distributionManagement>
+     <site>
+        <id>turbine.apache.org</id>
+        <url>https://turbine.apache.org/fulcrum/fulcrum-mimetype/</url>
+     </site>
+  </distributionManagement>
 		
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/mimetype/</connection>
@@ -83,7 +91,10 @@
   </build>
 	
   <properties>
-  	<turbine.site.path>fulcrum/fulcrum-mimetype</turbine.site.path>
+    <turbine.site.path>fulcrum/fulcrum-mimetype</turbine.site.path>
+    <turbine.scmPubCheckoutDirectory>${turbine.site.cache}/fulcrum/mimetype</turbine.scmPubCheckoutDirectory>
+    <turbine.site.cache>${project.build.directory}/turbine-sites</turbine.site.cache>
+    <siteContent.path>${project.build.directory}/staging</siteContent.path><!-- default stagingSiteURL -->
   </properties>  
     
 </project>

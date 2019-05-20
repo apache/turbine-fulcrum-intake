@@ -33,6 +33,14 @@
 	<description>Fulcrum XMLRPC Service</description>
 	<url>http://turbine.apache.org/fulcrum/fulcrum-xmlrpc</url>
 
+  <!-- Required for staging to work -->
+  <distributionManagement>
+     <site>
+        <id>turbine.apache.org</id>
+        <url>https://turbine.apache.org/fulcrum/fulcrum-xmlrpc/</url>
+     </site>
+  </distributionManagement>
+
 	<scm>
 		<connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/xmlrpc/</connection>
 		<developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/xmlrpc/</developerConnection>
@@ -118,8 +126,11 @@
 		<testSourceDirectory>${basedir}/src/test</testSourceDirectory>
 	</build>
 
-	<properties>
-		<turbine.site.path>fulcrum/fulcrum-xmlrpc</turbine.site.path>
-	</properties>
+  <properties>
+    <turbine.site.path>fulcrum/fulcrum-xmlrpc</turbine.site.path>
+    <turbine.scmPubCheckoutDirectory>${turbine.site.cache}/fulcrum/xmlrpc</turbine.scmPubCheckoutDirectory>
+    <turbine.site.cache>${project.build.directory}/turbine-sites</turbine.site.cache>
+    <siteContent.path>${project.build.directory}/staging</siteContent.path><!-- default stagingSiteURL -->
+  </properties>
 
 </project>
