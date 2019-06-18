@@ -55,6 +55,37 @@
     any other Avalon container like ECM, Phoenix, Excalibur, etc..
    </p>
  </section>
+ 
+ <section name="Where do I get releases?">
+
+ <p>
+    Download the current main release sources and binaries through the Apache mirror system at 
+    <a href="http://www.apache.org/dyn/closer.cgi/turbine/fulcrum/">the fulcrum download site</a>.
+  </p>
+
+</section>
+
+<section name="How do I contribute, give feedback, fix bugs and so on?">
+
+<ul>
+    <li>
+        We have a <a href="https://turbine.apache.org/contact.html">Turbine mailing
+        lists</a> for discussion.</li>
+    <li>
+        Create issues and comments in Apache JIRA system <a href="https://issues.apache.org/jira/issues/?jql=project+%3D+TRB+AND+component+%3D+Fulcrum">Turbine (Component Fulcrum)
+        </a></li>
+    <li>
+        You can also access the <a href="https://svn.apache.org/viewvc/turbine/fulcrum/trunk/">Turbine Fulcrum SVN
+        repository</a></li>
+
+    <li>
+        You can access the <a href="https://github.com/apache/turbine-fulcrum/">Turbine Fulcrum sub project Git (read only)
+        repository</a></li>   
+  
+ 
+</ul>
+
+</section>
 
  </body>
 </document>
