@@ -32,7 +32,7 @@ import org.apache.turbine.services.Service;
 public interface YaafiComponentService
         extends Service, ServiceConstants
 {
-    /** The publically visible name of the service */
+    /** The publicly visible name of the service */
     String SERVICE_NAME = "AvalonComponentService";
 
     /** Where we write the Avalon Logger messages */
