@@ -61,6 +61,7 @@ More Information
 Steps
 1) Local Testing
   // Verify gpg.homedir, gpg.useagent, gpg.passphrase. Check, if -Dgpg.useagent=false is needed,  see below comment to pinentry.
+  // You may need to add additional profiles, e.g. -Papache-release,java8
   mvn clean site install -Papache-release -Dgpg.passphrase=<xx> 
   // multi module
   mvn release:prepare -DdryRun=true -DautoVersionSubmodules=true -Papache-release 
@@ -75,7 +76,7 @@ Steps
   mvn release:prepare -DautoVersionSubmodules=true -P apache-release
   // success will be on the master build, the others are skipped
   // single
-  mvn release:prepare -P apache-release
+  mvn release:prepare -Papache-release
   // Helpful hint from Apache Website: If you're located in Europe then release:prepare may fail with 'Unable to tag SCM' and ' svn: No such revision X '. Wait 10 seconds and run mvn release:prepare again.
   
 4) Release Preparing
@@ -111,6 +112,7 @@ Steps
   // http://maven.apache.org/developers/website/deploy-component-reference-documentation.html
   // SVN Checkout <tagged release version> source
   // Generate and Publish Site
+  // IMPORTANT: You may have clean up the checkoutDirectory of maven-scm-publish-plugin plugin after doing a dry run!
   // multi module 
   mvn site site:stage scm-publish:publish-scm -Dscmpublish.dryRun=true
   mvn clean site site:stage scm-publish:publish-scm -Dusername=<username> -Dpassword=<pw>

@@ -60,7 +60,8 @@
 
  <p>
     Download the current main release sources and binaries through the Apache mirror system at 
-    <a href="http://www.apache.org/dyn/closer.cgi/turbine/fulcrum/">the fulcrum download site</a>.
+    <a href="http://www.apache.org/dyn/closer.cgi/turbine/fulcrum/">the fulcrum download site</a>
+    or from <a href="https://github.com/apache/turbine-fulcrum/releases">Github Fulcrum Release</a> Section.
   </p>
 
 </section>

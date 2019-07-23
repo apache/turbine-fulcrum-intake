@@ -38,7 +38,7 @@
     </links>
   
     <menu name="Fulcrum">
-      <item name="Overview"              href="/"/>
+      <item name="Overview"              href="/index.html"/>
       <item name="Download and Build"              href="/building.html"/>
     </menu>
 
