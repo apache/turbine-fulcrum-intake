@@ -91,6 +91,6 @@ public class RhinoTest extends AbstractScriptTest
                         "fib(n);"; // this will be returned
 
         Number result = (Number) engine.eval(script);
-        assertEquals(55.0, result);
+        assertEquals(55, result.intValue());
     }
 }
