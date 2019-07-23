@@ -81,6 +81,11 @@
   </developers>
 
   <dependencies>
+	<dependency>
+	    <groupId>com.sun.xml.bind</groupId>
+	    <artifactId>jaxb-impl</artifactId>
+	    <version>2.1.2</version>
+	</dependency>
 
     <dependency>
       <groupId>org.apache.avalon.framework</groupId>
