@@ -19,10 +19,9 @@ package org.apache.fulcrum.commonsemail.impl;
  * under the License.
  */
 
-import org.omg.CORBA_2_3.portable.InputStream;
-
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 
@@ -80,7 +79,7 @@ public class CommonsEmailUtils
     }
 
     /**
-     * Convinience method to read a MimeMessage from a source.
+     * Convenience method to read a MimeMessage from a source.
      *
      * @param session the mail session
      * @param source the source of the MimeMessage

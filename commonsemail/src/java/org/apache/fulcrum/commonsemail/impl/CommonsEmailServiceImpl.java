@@ -580,7 +580,7 @@ public class CommonsEmailServiceImpl
     /**
      * @return Returns the serviceHomeDir.
      */
-    protected File getServiceHomeDir()
+    public File getServiceHomeDir()
     {
         return serviceHomeDir;
     }
@@ -588,7 +588,7 @@ public class CommonsEmailServiceImpl
     /**
      * @return Returns the serviceTempDir.
      */
-    protected File getServiceTempDir()
+    public File getServiceTempDir()
     {
         return serviceTempDir;
     }
@@ -919,10 +919,10 @@ public class CommonsEmailServiceImpl
      *   <li>revert to the default domain</li>
      * </ul>
      *
-     * @param name the user-suplplied name of the domain
+     * @param name the user-supplied name of the domain
      * @return the corresponding domain configuration
      */
-    protected CommonsEmailDomainEntry getDomain( String name )
+    public CommonsEmailDomainEntry getDomain( String name )
     {
         CommonsEmailDomainEntry result;
 

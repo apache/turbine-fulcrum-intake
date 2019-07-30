@@ -1,5 +1,7 @@
 package org.apache.fulcrum.commonsemail;
 
+import java.io.File;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -31,6 +33,7 @@ import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.MultiPartEmail;
 import org.apache.commons.mail.SimpleEmail;
+import org.apache.fulcrum.commonsemail.impl.CommonsEmailDomainEntry;
 
 /**
  * A service taking care of most of the commons-email configuration such as
@@ -231,4 +234,16 @@ public interface CommonsEmailService
      */
     SendDeliveryStatus getSendDeliveryStatus(MimeMessage mimeMessage)
         throws MessagingException;
+    
+    /**
+     * Get the current temporary directory for debugging purposes mainly.
+     */
+    public File getServiceTempDir();
+    
+    /**
+     * Get the current domain, for debugging purposes mainly. 
+     * @param name of the domain 
+     * @return the domain entry
+     */
+    public CommonsEmailDomainEntry getDomain( String name );
 }
