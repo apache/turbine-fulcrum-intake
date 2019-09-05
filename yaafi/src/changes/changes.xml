@@ -25,6 +25,9 @@
 
   <body>
     <release version="1.0.9-SNAPSHOT" date="as in SVN">
+      <action dev="painter" type="update">
+        Updating dependencies
+      </action>
     </release>
     <release version="1.0.8" date="2018-12-14">
       <action dev="painter" type="update">
