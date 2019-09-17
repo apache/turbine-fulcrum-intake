@@ -1,5 +1,12 @@
 package org.apache.fulcrum.script;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.platform.suite.api.ExcludeTags;
+import org.junit.platform.suite.api.IncludeClassNamePatterns;
+import org.junit.platform.suite.api.SuiteDisplayName;
+import org.junit.runner.RunWith;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,14 +26,18 @@ package org.apache.fulcrum.script;
  * under the License.
  */
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 
 /**
  * Regression test for Groovy
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
+
+@RunWith(JUnitPlatform.class)
+@SuiteDisplayName("JUnit Groovy Script Test Suite")
+@ExcludeTags("Ignore4Groovy")
+//@SelectPackages("org.apache.fulcrum.script")
+@IncludeClassNamePatterns("^(.*GroovyTest.*|.*AbstractScriptTest.*)$")
 public class GroovyTest extends AbstractScriptTest
 {
     /**
@@ -34,38 +45,16 @@ public class GroovyTest extends AbstractScriptTest
      *
      * @param name the testcase's name.
      */
-    public GroovyTest(String name)
+    public GroovyTest()
     {
-        super(name);
+        super();
         this.setConfigurationFileName("./src/test/TestGroovyComponentConfig.xml");
     }
-
+    
+    @BeforeEach
     protected void setUp() throws Exception
     {
         super.setUp();
     }
-
-    /**
-     * Add all of our test suites.
-     *
-     * @return the Groovy test suite
-     */
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite("GroovyTest");
-
-        suite.addTest(new GroovyTest("testHelloWorld"));
-        suite.addTest(new GroovyTest("testAvalonContext"));
-        suite.addTest(new GroovyTest("testExists"));
-        suite.addTest(new GroovyTest("testPerformance"));
-        suite.addTest(new GroovyTest("testMultithreadingScript"));
-        suite.addTest(new GroovyTest("testRuntimeErrorScript"));
-
-        // tests from the JSR-223 Reference implementation
-        suite.addTest(new GroovyTest("testCompilableInterface"));
-        suite.addTest(new GroovyTest("testNamespaceDemo2"));
-        suite.addTest(new GroovyTest("testNamespaceDemo3"));
-
-        return suite;
-    }
+    
 }

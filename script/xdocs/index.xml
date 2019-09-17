@@ -55,6 +55,7 @@
       </subsection>
 
       <subsection name="Scripting Language Support">
+        Following are the tested frameworks
         <table>
           <tr>
             <th>Language</th>
@@ -64,7 +65,7 @@
           <tr>
             <td><a href="http://www.mozilla.org/rhino">Rhino JavaScript</a></td>
             <td>Done</td>
-            <td>Works nicely</td>
+            <td>Works nicely. Since Java 8 ""Nashorn"</td>
           </tr>
           <tr>
             <td><a href="http://groovy.codehaus.org">Groovy</a></td>

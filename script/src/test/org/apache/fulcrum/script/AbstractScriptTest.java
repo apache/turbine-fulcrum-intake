@@ -1,5 +1,10 @@
 package org.apache.fulcrum.script;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,6 +25,7 @@ package org.apache.fulcrum.script;
  */
 
 import java.util.Hashtable;
+
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
@@ -27,14 +33,18 @@ import javax.script.SimpleBindings;
 import javax.script.SimpleScriptContext;
 
 import org.apache.fulcrum.script.impl.ScriptRunnableImpl;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 
 /**
  * Common test cases for all scripting languages.
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
-public abstract class AbstractScriptTest extends BaseUnitTest
+public abstract class AbstractScriptTest extends BaseUnit5Test
 {
     protected ScriptService scriptService;
 
@@ -43,14 +53,13 @@ public abstract class AbstractScriptTest extends BaseUnitTest
      *
      * @param name the test case name.
      */
-    public AbstractScriptTest(String name)
+    public AbstractScriptTest()
     {
-        super(name);
     }
 
+    @BeforeEach
     protected void setUp() throws Exception
     {
-        super.setUp();
         this.scriptService = (ScriptService) this.lookup(ScriptService.class.getName());
     }
 
@@ -59,6 +68,7 @@ public abstract class AbstractScriptTest extends BaseUnitTest
      *
      * @throws Exception the test failed
      */
+    @Test
     public void testCompilableInterface() throws Exception
     {
         for (int i = 0; i < 3; i++)
@@ -75,6 +85,7 @@ public abstract class AbstractScriptTest extends BaseUnitTest
      *
      * @throws Exception the test failed
      */
+    @Test
     public void testHelloWorld() throws Exception
     {
         this.scriptService.eval("HelloWorld");
@@ -88,6 +99,8 @@ public abstract class AbstractScriptTest extends BaseUnitTest
      *
      * @throws Exception the test failed
      */
+    @Tag("Ignore4Groovy")
+    @Test
     public void testInvocableIntf() throws Exception
     {
         MyInterface myInterface = (MyInterface) scriptService.getInterface(
@@ -112,7 +125,9 @@ public abstract class AbstractScriptTest extends BaseUnitTest
      *
      * @throws Exception the test failed
      */
-    public void testNamespaceDemo2() throws Exception
+    @Tag("Ignore4Rhino")
+    @Test
+    public void testNamespaceDemo2(TestInfo testInfo) throws Exception
     {
         ScriptEngine engine = this.scriptService.getScriptEngine();
 
@@ -128,15 +143,29 @@ public abstract class AbstractScriptTest extends BaseUnitTest
         assertEquals("Testobj containing Original engine scope.", engine.get("key").toString().trim());
 
         //execute script using the namespace
-        this.scriptService.eval("NamespaceDemo2");
+        Object result = this.scriptService.eval("NamespaceDemo2");
+        if (result != null ) {
+            System.out.println("Result is \"" + result + "\"");
+            assertEquals("new value", result);
+        }
+        
         System.out.println("Ending value of key in engine scope is \"" + engine.get("key") + "\"");
-        assertEquals("new value", engine.get("key"));
+        assertEquals("new value", engine.get("key"));            
+
 
         // create a scriptcontext and set its engine scope namespace
         ScriptContext ctxt = new SimpleScriptContext();
         ctxt.setBindings(cNamespace, ScriptContext.ENGINE_SCOPE);
 
-        this.scriptService.eval("NamespaceDemo2", ctxt);
+        Object result2 = this.scriptService.eval("NamespaceDemo2", ctxt);
+        
+        if (result2 != null ) {
+            System.out.println("Result is \"" + result2 + "\"");
+            assertEquals("new value", result2);
+        } 
+        System.out.println("Ending value of key in engine scope is \"" + engine.get("key") + "\"");
+        assertEquals("new value", engine.get("key"));            
+        
         System.out.println("Ending value of key in engine scope is \"" + engine.get("key") + "\"");
         assertEquals("new value", engine.get("key"));
         System.out.println("Ending value of key in ENGINE_SCOPE of context is " + ctxt.getAttribute("key", ScriptContext.ENGINE_SCOPE));
@@ -148,6 +177,7 @@ public abstract class AbstractScriptTest extends BaseUnitTest
      *
      * @throws Exception the test failed
      */
+    @Test
     public void testNamespaceDemo3() throws Exception
     {
         final int STATE1 = 1;
@@ -191,6 +221,7 @@ public abstract class AbstractScriptTest extends BaseUnitTest
      *
      * @throws Exception the test failed
      */
+    @Test
     public void testAvalonContext() throws Exception
     {
         SimpleBindings args = new SimpleBindings();
@@ -204,6 +235,7 @@ public abstract class AbstractScriptTest extends BaseUnitTest
      *
      * @throws Exception the test failed
      */
+    @Test
     public void testPerformance() throws Exception
     {
         long startTime = System.currentTimeMillis();
@@ -224,6 +256,7 @@ public abstract class AbstractScriptTest extends BaseUnitTest
      *
      * @throws Exception the test failed
      */
+    @Test
     public void testExists() throws Exception
     {
         assertTrue(this.scriptService.exists("HelloWorld"));
@@ -235,6 +268,7 @@ public abstract class AbstractScriptTest extends BaseUnitTest
      *
      * @throws Exception the test failed
      */
+    @Test
     public void testMultithreadingScript() throws Exception
     {
         Hashtable args0 = new Hashtable();
@@ -270,6 +304,7 @@ public abstract class AbstractScriptTest extends BaseUnitTest
      *
      * @throws Exception the test failed
      */
+    @Test
     public void testRuntimeErrorScript() throws Exception
     {
         try
@@ -287,6 +322,8 @@ public abstract class AbstractScriptTest extends BaseUnitTest
      *
      * @throws Exception the test failed
      */
+    @Tag("Ignore4Groovy")
+    @Test
     public void testCall() throws Exception
     {
         String newX = "New X String";
@@ -304,6 +341,7 @@ public abstract class AbstractScriptTest extends BaseUnitTest
      *
      * @throws Exception the test failed
      */
+    @Test
     public void testLocatorFunctionality() throws Exception
     {
         String result = null;

@@ -22,14 +22,26 @@ package org.apache.fulcrum.script;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.Assert;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.platform.suite.api.ExcludeTags;
+import org.junit.platform.suite.api.IncludeClassNamePatterns;
+import org.junit.platform.suite.api.SuiteDisplayName;
+import org.junit.runner.RunWith;
+
 
 /**
  * Regression test for Rhino Javascript
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
+@RunWith(JUnitPlatform.class)
+@SuiteDisplayName("JUnit Rhino Script Test Suite")
+@ExcludeTags("Ignore4Rhino")
+//@SelectPackages("org.apache.fulcrum.script")
+@IncludeClassNamePatterns("^(.*RhinoTest.*|.*AbstractScriptTest.*)$")
 public class RhinoTest extends AbstractScriptTest
 {
     /**
@@ -37,50 +49,26 @@ public class RhinoTest extends AbstractScriptTest
      *
      * @param name the testcase's name.
      */
-    public RhinoTest(String name)
+    public RhinoTest()
     {
-        super(name);
+        super();       
         this.setConfigurationFileName("./src/test/TestRhinoComponentConfig.xml");
     }
+    
 
+    @BeforeEach
     protected void setUp() throws Exception
     {
         super.setUp();
     }
 
     /**
-     * Add all of our test suites
-     */
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite("RhinoTest");
-
-        suite.addTest(new RhinoTest("testDirectInvocation"));
-
-        suite.addTest(new RhinoTest("testHelloWorld"));
-        suite.addTest(new RhinoTest("testAvalonContext"));
-        suite.addTest(new RhinoTest("testExists"));
-        suite.addTest(new RhinoTest("testPerformance"));
-        suite.addTest(new RhinoTest("testMultithreadingScript"));
-        suite.addTest(new RhinoTest("testRuntimeErrorScript"));
-        suite.addTest(new RhinoTest("testCall"));
-        suite.addTest(new RhinoTest("testLocatorFunctionality"));
-
-        // tests from the JSR-223 Reference implementation
-        suite.addTest(new RhinoTest("testCompilableInterface"));
-        suite.addTest(new RhinoTest("testInvocableIntf"));
-        suite.addTest(new RhinoTest("testNamespaceDemo3"));
-
-        // this test does not work any longer with Nashorn
-        // suite.addTest(new RhinoTest("testNamespaceDemo2"));
-
-        return suite;
-    }
-
-    /**
      * A quick test case for directly evaluating a script using the
      * plain JDK 1.6 or 1.7 implementation.
+     * 
+     * See also https://docs.oracle.com/javase/10/nashorn/JSNUG.pdf
      */
+    @Test
     public void testDirectInvocation() throws Exception
     {
         ScriptEngineManager factory = new ScriptEngineManager();
@@ -91,6 +79,6 @@ public class RhinoTest extends AbstractScriptTest
                         "fib(n);"; // this will be returned
 
         Number result = (Number) engine.eval(script);
-        assertEquals(55, result.intValue());
+        Assert.assertEquals(55, result.intValue());
     }
 }
