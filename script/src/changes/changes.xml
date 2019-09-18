@@ -24,6 +24,11 @@
   </properties>
 
   <body>
+    <release version="1.0.1-dev" date="in SVN">
+      <action dev="painter" type="update">
+        Move changes to standard dir
+      </action>
+    </release>
     <release version="1.0.0" date="in SVN">
       <action dev="seade" type="update">
         Updated Groovy dependency to 1.0-jsr-05.
