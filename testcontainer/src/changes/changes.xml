@@ -25,6 +25,9 @@
   </properties>
   <body>
     <release version="1.0.9" date="in SVN">
+       <action type="update" dev="painter">
+        Update junit and jupiter dependencies, source cleanup for Turbine compliance
+      </action>  
     </release>
     <release version="1.0.8" date="2019-01-06">
        <action type="update" dev="painter">
