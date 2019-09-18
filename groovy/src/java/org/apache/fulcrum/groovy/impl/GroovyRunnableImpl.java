@@ -28,109 +28,115 @@ import org.apache.fulcrum.groovy.GroovyService;
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
-public class GroovyRunnableImpl implements GroovyRunnable
-{
-    /** the name of the Groovy script to execute */
-    private String scriptName;
+public class GroovyRunnableImpl implements GroovyRunnable {
+	/** the name of the Groovy script to execute */
+	private String scriptName;
 
-    /** the service manager to locate the GroovyService */
-    private GroovyService groovyScriptExecutor;
+	/** the service manager to locate the GroovyService */
+	private GroovyService groovyScriptExecutor;
 
-    /** the arguments to execute the Groovy script */
-    private Object[] args;
+	/** the arguments to execute the Groovy script */
+	private Object[] args;
 
-    /** the result of the execution */
-    private Object result;
+	/** the result of the execution */
+	private Object result;
 
-    /** the execption thrown by the Groovy scipt if any */
-    private Throwable throwable;
+	/** the execption thrown by the Groovy scipt if any */
+	private Throwable throwable;
 
-    /**
-     * Constructor
-     *
-     * @param scriptName the name of the script to execute
-     * @param groovyScriptExecutor the service to execute the script
-     */
-    public GroovyRunnableImpl(
-        String scriptName,
-        GroovyService groovyScriptExecutor )
-    {
-        Validate.notEmpty( scriptName, "scriptName" );
-        Validate.notNull( groovyScriptExecutor, "groovyScriptExecutor" );
+	/**
+	 * Constructor
+	 *
+	 * @param scriptName           the name of the script to execute
+	 * @param groovyScriptExecutor the service to execute the script
+	 */
+	public GroovyRunnableImpl(String scriptName, GroovyService groovyScriptExecutor) 
+	{
+		Validate.notEmpty(scriptName, "scriptName");
+		Validate.notNull(groovyScriptExecutor, "groovyScriptExecutor");
 
-        this.scriptName = scriptName;
-        this.groovyScriptExecutor = groovyScriptExecutor;
-        this.args = new Object[0];
-    }
+		this.scriptName = scriptName;
+		this.groovyScriptExecutor = groovyScriptExecutor;
+		this.args = new Object[0];
+	}
 
-    /**
-     * @see java.lang.Runnable#run()
-     */
-    public void run()
-    {
-        try
-        {
-            this.result = null;
-            this.throwable = null;
+	/**
+	 * @see java.lang.Runnable#run()
+	 */
+	public void run() 
+	{
+		try 
+		{
+			this.result = null;
+			this.throwable = null;
+			this.result = this.groovyScriptExecutor.execute(this.getScriptName(), this.getArgs());
+		} 
+		catch (Throwable t) 
+		{
+			this.throwable = t;
+		}
+	}
 
-            this.result = this.groovyScriptExecutor.execute(
-                this.getScriptName(),
-                this.getArgs()
-                );
-        }
-        catch (Throwable t)
-        {
-            this.throwable = t;
-        }
-    }
+	/**
+	 * @return Returns the exception.
+	 */
+	public Throwable getThrowable() 
+	{
+		return this.throwable;
+	}
 
+	/**
+	 * @return Returns the result.
+	 */
+	public Object getResult() 
+	{
+		return result;
+	}
 
-    /**
-     * @return Returns the exception.
-     */
-    public Throwable getThrowable()
-    {
-        return this.throwable;
-    }
+	/**
+	 * @return Returns the scriptName.
+	 */
+	public String getScriptName() 
+	{
+		return scriptName;
+	}
 
-    /**
-     * @return Returns the result.
-     */
-    public Object getResult()
-    {
-        return result;
-    }
+	/**
+	 * @param args The args to set.
+	 */
+	public void setArgs(Object[] args) 
+	{
+		Validate.notNull(args, "args");
+		
+		// deep copy to avoid FindBugs
+		int size = args.length;
+		Object[] data = new Object[size];
+		for (int i = 0; i < data.length; i++) 
+		{
+			data[i] = args[i];
+		}
+		this.args = data;
+	}
 
-    /**
-     * @return Returns the scriptName.
-     */
-    public String getScriptName()
-    {
-        return scriptName;
-    }
+	/**
+	 * @return Returns the args.
+	 */
+	public Object[] getArgs() 
+	{
+		int size = args.length;
+		Object[] data = new Object[size];
+		for (int i = 0; i < data.length; i++) 
+		{
+			data[i] = args[i];
+		}
+		return data;
+	}
 
-    /**
-     * @param args The args to set.
-     */
-    public void setArgs(Object [] args)
-    {
-        Validate.notNull( args, "args" );
-        this.args = args;
-    }
-
-    /**
-     * @return Returns the args.
-     */
-    public Object [] getArgs()
-    {
-        return args;
-    }
-
-    /**
-     * @return was the execution successful?
-     */
-    public boolean getIsSuccessful()
-    {
-        return( this.getThrowable() == null ? true : false );
-    }
+	/**
+	 * @return was the execution successful?
+	 */
+	public boolean getIsSuccessful() 
+	{
+		return (this.getThrowable() == null ? true : false);
+	}
 }

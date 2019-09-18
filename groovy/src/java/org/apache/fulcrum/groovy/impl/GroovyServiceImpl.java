@@ -19,10 +19,6 @@ package org.apache.fulcrum.groovy.impl;
  * under the License.
  */
 
-import groovy.lang.Binding;
-import groovy.lang.GroovyShell;
-import groovy.lang.Script;
-
 import java.io.IOException;
 
 import org.apache.avalon.framework.activity.Disposable;
@@ -41,6 +37,10 @@ import org.apache.fulcrum.groovy.GroovyRunnable;
 import org.apache.fulcrum.groovy.GroovyService;
 import org.apache.fulcrum.resourcemanager.ResourceManagerService;
 import org.codehaus.groovy.control.CompilationFailedException;
+
+import groovy.lang.Binding;
+import groovy.lang.GroovyShell;
+import groovy.lang.Script;
 
 /**
  * Base implementation of the Avalon Groovy Service. Can be subclassed to support
@@ -81,7 +81,6 @@ public class GroovyServiceImpl
     public GroovyServiceImpl()
     {
         super();
-
         this.useCache = true;
         this.domain = "groovy";
     }
@@ -103,11 +102,9 @@ public class GroovyServiceImpl
         super.configure( cfg );
 
         // do we cache the Groovy scripts to improve performance ?
-
         this.useCache = cfg.getAttributeAsBoolean(CONFIG_USECACHE,true);
 
         // get the domain for the Groovy Scrips
-
         this.domain = cfg.getAttribute( CONFIG_DOMAIN, "groovy" );
     }
 
@@ -199,9 +196,7 @@ public class GroovyServiceImpl
         }
 
         // create the binding
-
         Binding binding = this.createBinding( scriptName, args );
-
 
         if( isInCache )
         {
@@ -215,7 +210,6 @@ public class GroovyServiceImpl
         }
 
         // dump the result for debugging
-
         if( this.getLogger().isDebugEnabled() )
         {
             this.getLogger().debug( this.dumpResult(scriptName,result) );
@@ -230,7 +224,6 @@ public class GroovyServiceImpl
     public GroovyRunnable createGroovyRunnable(String scriptName)
     {
         Validate.notEmpty( scriptName, "scriptName" );
-
         return new GroovyRunnableImpl(
             scriptName,
             this
@@ -314,7 +307,7 @@ public class GroovyServiceImpl
             scriptName
             );
 
-        result = new String( scriptContent );
+        result = new String(scriptContent);
         return result;
     }
 
@@ -344,7 +337,6 @@ public class GroovyServiceImpl
     protected GroovyAvalonContextImpl createGroovyAvalonContext( String scriptName )
     {
         GroovyAvalonContextImpl result = null;
-
         result = new GroovyAvalonContextImpl(
             this.getLogger().getChildLogger(scriptName),
             this.getServiceManager(),
