@@ -23,23 +23,23 @@
   <ResourceManagerService>
     <domain name="groovy">
       <suffix>groovy</suffix>
-      <location>./src/test/resources/scripts</location>
+      <location>src/test/resources/scripts</location>
       <useLocator>true</useLocator>
     </domain>
     <domain name="xslt">
       <suffix>xsl</suffix>
-      <location>./src/test/resources/xslt</location>
+      <location>src/test/resources/xslt</location>
       <useLocator>true</useLocator>
     </domain>
     <domain name="test">
       <suffix>txt</suffix>
-      <location>./src/test/resources/test</location>
+      <location>src/test/resources/test</location>
       <useLocator>false</useLocator>
       <useEncryption>true</useEncryption>
     </domain>
     <domain name="crypto">
       <suffix>txt</suffix>
-      <location>./src/test/resources/crypto</location>
+      <location>src/test/resources/crypto</location>
       <useLocator>false</useLocator>
       <useEncryption>auto</useEncryption>
     </domain>

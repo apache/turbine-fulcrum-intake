@@ -19,49 +19,44 @@ package org.apache.fulcrum.resourcemanager;
  * under the License.
  */
 
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.Properties;
 
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
-
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 /**
  * Testing script handling
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
-public class ResourceManagerServiceTest extends BaseUnitTest
+public class ResourceManagerServiceTest extends BaseUnit5Test
 {
 	private ResourceManagerService service;
 
-    /**
-     * Defines the testcase name for JUnit.
-     *
-     * @param name the testcase's name.
-     */
-    public ResourceManagerServiceTest(String name)
+    @BeforeEach
+    public void setUp() throws Exception
     {
-        super(name);
-    }
+    	service = (ResourceManagerService) lookup(ResourceManagerService.ROLE);
+    }    
 
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception
-    {
-        super.setUp();
-
-        this.service = (ResourceManagerService) this.lookup(
-            ResourceManagerService.class.getName()
-            );
-    }
 
     /**
      * Test basic CRUD for the domain "script"
      * @throws Exception generic exception
      */
+    @Test
     public void testResourceCRUD() throws Exception
     {
         String temp = null;
@@ -90,6 +85,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
     /**
      * Test getting a list of resources for the domain "xslt"
      */
+    @Test
     public void testListResources() throws Exception
     {
         String [] result = null;
@@ -111,6 +107,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
      * Test getting a list of domains
      * @throws Exception generic exception
      */
+    @Test
     public void testListDomains() throws Exception
     {
         // get a list of available domains
@@ -129,6 +126,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
      * Test the locator
      * @throws Exception generic exception
      */
+    @Test
     public void testLocator() throws Exception
     {
         String resourceDomain = "groovy";
@@ -207,10 +205,10 @@ public class ResourceManagerServiceTest extends BaseUnitTest
      * Try to access an unknown domain
      * @throws Exception generic exception
      */
+    @Test
     public void testUnknownDomain() throws Exception
     {
         String[] resourceContext = { "foo" };
-
         assertFalse( this.service.exists( "bogus" ) );
 
         try
@@ -227,6 +225,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
      * Create a resource file using the various input data types
      * @throws Exception generic exception
      */
+    @Test
     public void testCreateResources() throws Exception
     {
         String result = null;
@@ -284,6 +283,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
      * Get the URL of the underlying resource.
      * @throws Exception generic exception
      */
+    @Test
     public void testGetResourceURL() throws Exception
     {
         String resourceDomain = "groovy";
@@ -303,6 +303,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
      * Create a resource file using the various input data types
      * @throws Exception generic exception
      */
+    @Test
     public void testAutoDecrytpion() throws Exception
     {
         String result = null;
@@ -336,6 +337,7 @@ public class ResourceManagerServiceTest extends BaseUnitTest
      * to the caching of the JUNIT reports and output onstdout.
      * @throws Exception generic exception
      */
+    @Test
     public void _testLongRunningBehaviour() throws Exception
     {
         for( int i=0; i<10; i++ )

@@ -43,498 +43,349 @@ import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 import org.apache.fulcrum.resourcemanager.ResourceManager;
-import org.apache.fulcrum.pbe.PBEService;
 
 /**
- * Base class for a service implementation capturing the Avalon
- * configuration artifats
+ * Base class for a service implementation capturing the Avalon configuration
+ * artifacts
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
-public abstract class BaseResourceManager
-	extends AbstractLogEnabled
-    implements Contextualizable, Serviceable, Configurable,
-    	Initializable, Disposable, Reconfigurable, ResourceManager
+public abstract class BaseResourceManager extends AbstractLogEnabled implements Contextualizable, Serviceable,
+		Configurable, Initializable, Disposable, Reconfigurable, ResourceManager 
 {
-    /** the buffer size for copying streams */
-    private static final int BUF_SIZE = 1024;
+	
+	/** the buffer size for copying streams */
+	private static final int BUF_SIZE = 1024;
 
-    /** The context supplied by the avalon framework */
-    private Context context;
+	/** The context supplied by the avalon framework */
+	private Context context;
 
-    /** The service manager supplied by the avalon framework */
-    private ServiceManager serviceManager;
+	/** The service manager supplied by the avalon framework */
+	private ServiceManager serviceManager;
 
-    /** The configuration supplied by the avalon framework */
-    private Configuration configuration;
+	/** The configuration supplied by the avalon framework */
+	private Configuration configuration;
 
-    /** the Avalon application directory */
-    private File applicationDir;
+	/** the Avalon application directory */
+	private File applicationDir;
 
-    /** the Avalon temp directory */
-    private File tempDir;
+	/** the Avalon temp directory */
+	private File tempDir;
 
-    /** the name of the domain */
-    private String domain;
+	/** the name of the domain */
+	private String domain;
 
-    /** the seed to generate the password */
-    private String seed;
+	/** the seed to generate the password */
+	private String seed;
 
-    /** use transparent encryption/decryption */
-    private String useEncryption;
+	/** use transparent encryption/decryption */
+	private String useEncryption;
 
-    /////////////////////////////////////////////////////////////////////////
-    // Avalon Service Lifecycle Implementation
-    /////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////
+	// Avalon Service Lifecycle Implementation
+	/////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Constructor
-     */
-    public BaseResourceManager()
-    {
-        // nothing to do
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
-     */
-    public void contextualize(Context context) throws ContextException
-    {
-        this.context        = context;
-        this.applicationDir = (File) context.get("urn:avalon:home");
-        this.tempDir        = (File) context.get("urn:avalon:temp");
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
-     */
-    public void service(ServiceManager serviceManager) throws ServiceException
-    {
-        this.serviceManager = serviceManager;
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
-     */
-    public void configure(Configuration configuration) throws ConfigurationException
-    {
-        this.configuration = configuration;
-        this.setDomain( configuration.getAttribute("name") );
-        this.seed = "resourcemanager";
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.avalon.framework.activity.Initializable#initialize()
-     */
-    public void initialize() throws Exception
-    {
-        // nothing to do
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.avalon.framework.activity.Disposable#dispose()
-     */
-    public void dispose()
-    {
-        this.applicationDir = null;
-        this.configuration = null;
-        this.context = null;
-        this.domain = null;
-        this.seed = null;
-        this.serviceManager = null;
-        this.tempDir = null;
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.apache.avalon.framework.configuration.Configuration)
-     */
-    public void reconfigure(Configuration configuration)
-        throws ConfigurationException
-    {
-        this.configure(configuration);
-    }
-
-    /////////////////////////////////////////////////////////////////////////
-    // Service Implementation
-    /////////////////////////////////////////////////////////////////////////
-
-    /**
-     * @return Returns the configuration.
-     */
-    protected Configuration getConfiguration()
-    {
-        return this.configuration;
-    }
-
-    /**
-     * @return Returns the context.
-     */
-    protected Context getContext()
-    {
-        return this.context;
-    }
-
-    /**
-     * @return Returns the serviceManager.
-     */
-    protected ServiceManager getServiceManager()
-    {
-        return this.serviceManager;
-    }
-
-    /**
-     * @return Returns the applicationDir.
-     */
-    protected File getApplicationDir()
-    {
-        return applicationDir;
-    }
-
-    /**
-     * @return Returns the tempDir.
-     */
-    protected File getTempDir()
-    {
-        return tempDir;
-    }
-
-    /**
-     * @return Returns the domain.
-     */
-    public String getDomain()
-    {
-        return domain;
-    }
-
-    /**
-     * Get the content as byte[].
-     * @param content content to convert
-     * @return byte array representation of the object
-     * @throws IOException if unable to read
-     */
-    protected byte[] getContent( Object content )
-    	throws IOException
-    {
-        byte[] result = null;
-
-        if( content instanceof String )
-        {
-            result = ((String) content).getBytes();
-        }
-        else if( content instanceof byte[] )
-        {
-            result = (byte[]) content;
-        }
-        else if( content instanceof InputStream )
-        {
-            result = this.getBytes( (InputStream) content );
-        }
-        else if( content instanceof Properties )
-        {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ((Properties) content).store( baos, "Created by fulcrum-resourcemanager-service" );
-            result = baos.toByteArray();
-        }
-        else
-        {
-            String msg = "Don't know how to read " + content.getClass().getName();
-            throw new IllegalArgumentException( msg );
-        }
-
-        return result;
-    }
-
-    /**
-     * Extract a byte[] from the input stream.
-     * @param is input stream to read from
-     * @return byte array representation of the object
-     * @throws IOException if unable to read
-     */
-    protected byte[] getBytes( InputStream is )
-    	throws IOException
-    {
-        int ch;
-        byte[] data = null;
-
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        BufferedInputStream isReader = new BufferedInputStream( is );
-        BufferedOutputStream osWriter = new BufferedOutputStream( os );
-
-        while ((ch = isReader.read()) != -1)
-        {
-            osWriter.write(ch);
-        }
-
-        osWriter.flush();
-        data = os.toByteArray();
-        osWriter.close();
-        isReader.close();
-
-        return data;
-    }
-
-    /**
-     * @param domain The domain to set.
-     */
-    protected void setDomain(String domain)
-    {
-        this.domain = domain;
-    }
-
-    /**
-     * @return Returns the useEncryption.
-     */
-    protected String getUseEncryption()
-    {
-        return useEncryption;
-    }
-
-    /**
-     * @param useEncryption The useEncryption to set.
-     */
-    protected void setUseEncryption(String useEncryption)
-    {
-        this.useEncryption = useEncryption;
-    }
-
-    /**
-     * @return the instance of the PBEService
-     */
-    protected PBEService getPBEService()
-    {
-        String service = PBEService.class.getName();
-        PBEService result = null;
-
-        if( this.getServiceManager().hasService(service) )
-        {
-            try
-            {
-                result = (PBEService) this.getServiceManager().lookup(service);
-            }
-            catch (ServiceException e)
-            {
-                String msg = "The PBEService can't be accessed";
-                this.getLogger().error( msg, e );
-                throw new RuntimeException( msg );
-            }
-        }
-        else
-        {
-            String msg = "The PBEService is not registered";
-            throw new RuntimeException( msg );
-        }
-
-        return result;
-    }
-
-    /**
-     * @return the password for the resource manager
-     * @throws Exception generic exception
-     */
-    private char[] getPassword() throws Exception
+	/**
+	 * Constructor
+	 */
+	public BaseResourceManager() 
 	{
-	    return this.getPBEService().createPassword( this.seed.toCharArray() );
+		// nothing to do
 	}
 
-    /**
-     * Reads the given input stream and decrypts it if required
-     * @param is the input stream to be read
-     * @return the content of the input stream
-     * @throws IOException if unable to read
-     */
-    protected byte[] read( InputStream is )
-    	throws IOException
-    {
-        if( this.getUseEncryption().equalsIgnoreCase("true") )
-        {
-            return readEncrypted( is );
-        }
-        else if( this.getUseEncryption().equalsIgnoreCase("auto") )
-        {
-            return readSmartEncrypted( is );
-        }
-        else
-        {
-            return readPlain( is );
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache
+	 * .avalon.framework.context.Context)
+	 */
+	public void contextualize(Context context) throws ContextException 
+	{
+		this.context = context;
+		this.applicationDir = (File) context.get("urn:avalon:home");
+		this.tempDir = (File) context.get("urn:avalon:temp");
+	}
 
-    /**
-     * Reads from an unencrypted input stream
-     * @param is the source input stream
-     * @return the content of the input stream
-     * @throws IOException if unable to read
-     */
-    private byte[] readPlain( InputStream is )
-    	throws IOException
-    {
-        byte[] result = null;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        this.copy(is,baos);
-        result = baos.toByteArray();
-        return result;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.
+	 * framework.service.ServiceManager)
+	 */
+	public void service(ServiceManager serviceManager) throws ServiceException 
+	{
+		this.serviceManager = serviceManager;
+	}
 
-    /**
-     * Reads a potentially encrypted input stream.
-     * @param is the source input stream
-     * @return the content of the input stream
-     * @throws IOException if unable to read
-     */
-    private byte[] readSmartEncrypted( InputStream is )
-    	throws IOException
-    {
-        byte[] result = null;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.avalon.framework.configuration.Configurable#configure(org.apache.
+	 * avalon.framework.configuration.Configuration)
+	 */
+	public void configure(Configuration configuration) throws ConfigurationException 
+	{
+		this.configuration = configuration;
+		this.setDomain(configuration.getAttribute("name"));
+		this.seed = "resourcemanager";
+	}
 
-        try
-        {
-            char[] password = getPassword();
-            InputStream sdis = this.getPBEService().getSmartInputStream( is, password );
-            this.copy( sdis, baos );
-            result = baos.toByteArray();
-            return result;
-        }
-        catch (IOException e)
-        {
-            String msg = "Failed to process the input stream";
-            this.getLogger().error( msg, e );
-            throw e;
-        }
-        catch (Exception e)
-        {
-            String msg = "Failed to decrypt the input stream";
-            this.getLogger().error( msg, e );
-            throw new IOException( msg );
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.avalon.framework.activity.Initializable#initialize()
+	 */
+	public void initialize() throws Exception 
+	{
+		// nothing to do
+	}
 
-    /**
-     * Reads a potentially encrypted input stream.
-     * @param is the source input stream
-     * @return the content of the input stream
-     * @throws IOException if unable to read
-     */
-    private byte[] readEncrypted( InputStream is )
-    	throws IOException
-    {
-        byte[] result = null;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.avalon.framework.activity.Disposable#dispose()
+	 */
+	public void dispose() 
+	{
+		this.applicationDir = null;
+		this.configuration = null;
+		this.context = null;
+		this.domain = null;
+		this.seed = null;
+		this.serviceManager = null;
+		this.tempDir = null;
+	}
 
-        try
-        {
-            char[] password = getPassword();
-            InputStream sdis = this.getPBEService().getInputStream( is, password );
-            this.copy( sdis, baos );
-            result = baos.toByteArray();
-            return result;
-        }
-        catch (IOException e)
-        {
-            String msg = "Failed to process the input stream";
-            this.getLogger().error( msg, e );
-            throw e;
-        }
-        catch (Exception e)
-        {
-            String msg = "Failed to decrypt the input stream";
-            this.getLogger().error( msg, e );
-            throw new IOException( msg );
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.avalon.framework.configuration.Reconfigurable#reconfigure(org.
+	 * apache.avalon.framework.configuration.Configuration)
+	 */
+	public void reconfigure(Configuration configuration) throws ConfigurationException 
+	{
+		this.configure(configuration);
+	}
 
-    /**
-     * Write the given output stream and encrypts it if required. If the
-     * encryption mode is "auto" we also encryt it.
-     *
-     * @param os the output stream to be written
-     * @param content the content to be written
-     * @throws IOException if unable to read
-     */
-    protected void write( OutputStream os, byte[] content )
-    	throws IOException
-    {
-        if( this.getUseEncryption().equalsIgnoreCase("true") )
-        {
-            writeEncrypted( os, content );
-        }
-        else if( this.getUseEncryption().equalsIgnoreCase("auto") )
-        {
-            writeEncrypted( os, content );
-        }
-        else
-        {
-            writePlain( os, content );
-        }
-    }
+	/////////////////////////////////////////////////////////////////////////
+	// Service Implementation
+	/////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Write the given content without encryption.
-     *
-     * @param os the output stream
-     * @param content the content to be written
-     * @throws IOException if unable to read
-     */
-    private void writePlain( OutputStream os, byte[] content )
-    	throws IOException
-    {
-        ByteArrayInputStream bais = new ByteArrayInputStream(content);
-        this.copy( bais, os );
-    }
+	/**
+	 * @return Returns the configuration.
+	 */
+	protected Configuration getConfiguration() 
+	{
+		return this.configuration;
+	}
 
-    /**
-     * Write the given content and encrypt it.
-     *
-     * @param os the output stream
-     * @param content the content to be written
-     * @throws IOException if unable to read
-     */
-    private void writeEncrypted( OutputStream os, byte[] content )
-    	throws IOException
-    {
-        try
-        {
-            char[] password = this.getPassword();
-            ByteArrayInputStream bais = new ByteArrayInputStream(content);
-            OutputStream eos = this.getPBEService().getOutputStream( os, password );
-            this.copy(bais,eos);
-        }
-        catch (IOException e)
-        {
-            String msg = "Failed to process the output stream";
-            this.getLogger().error( msg, e );
-            throw e;
-        }
-        catch (Exception e)
-        {
-            String msg = "Failed to encrypt the input stream";
-            this.getLogger().error( msg, e );
-            throw new IOException( msg );
-        }
-    }
+	/**
+	 * @return Returns the context.
+	 */
+	protected Context getContext() 
+	{
+		return this.context;
+	}
 
-    /**
-     * Pumps the input stream to the output stream.
-     *
-     * @param is the source input stream
-     * @param os the target output stream
-     * @throws IOException the copying failed
-     */
-    private void copy( InputStream is, OutputStream os )
-        throws IOException
-    {
-        byte[] buf = new byte[BUF_SIZE];
-        int n = 0;
-        int total = 0;
+	/**
+	 * @return Returns the serviceManager.
+	 */
+	protected ServiceManager getServiceManager() 
+	{
+		return this.serviceManager;
+	}
 
-        while ((n = is.read(buf)) > 0)
-        {
-            os.write(buf, 0, n);
-            total += n;
-        }
+	/**
+	 * @return Returns the applicationDir.
+	 */
+	protected File getApplicationDir() 
+	{
+		return applicationDir;
+	}
 
-        os.flush();
-        os.close();
-    }
+	/**
+	 * @return Returns the tempDir.
+	 */
+	protected File getTempDir() 
+	{
+		return tempDir;
+	}
+
+	/**
+	 * @return Returns the domain.
+	 */
+	public String getDomain() 
+	{
+		return domain;
+	}
+
+	/**
+	 * Get the content as byte[].
+	 * 
+	 * @param content content to convert
+	 * @return byte array representation of the object
+	 * @throws IOException if unable to read
+	 */
+	protected byte[] getContent(Object content) throws IOException 
+	{
+		byte[] result = null;
+
+		if (content instanceof String) 
+		{
+			result = ((String) content).getBytes();
+		} 
+		else if (content instanceof byte[]) 
+		{
+			result = (byte[]) content;
+		} 
+		else if (content instanceof InputStream) 
+		{
+			result = this.getBytes((InputStream) content);
+		} 
+		else if (content instanceof Properties) 
+		{
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			((Properties) content).store(baos, "Created by fulcrum-resourcemanager-service");
+			result = baos.toByteArray();
+		} 
+		else 
+		{
+			String msg = "Don't know how to read " + content.getClass().getName();
+			throw new IllegalArgumentException(msg);
+		}
+
+		return result;
+	}
+
+	/**
+	 * Extract a byte[] from the input stream.
+	 * 
+	 * @param is input stream to read from
+	 * @return byte array representation of the object
+	 * @throws IOException if unable to read
+	 */
+	protected byte[] getBytes(InputStream is) throws IOException 
+	{
+		int ch;
+		byte[] data = null;
+
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		BufferedInputStream isReader = new BufferedInputStream(is);
+		BufferedOutputStream osWriter = new BufferedOutputStream(os);
+
+		while ((ch = isReader.read()) != -1) 
+		{
+			osWriter.write(ch);
+		}
+
+		osWriter.flush();
+		data = os.toByteArray();
+		osWriter.close();
+		isReader.close();
+
+		return data;
+	}
+
+	/**
+	 * @param domain The domain to set.
+	 */
+	protected void setDomain(String domain) 
+	{
+		this.domain = domain;
+	}
+
+	/**
+	 * @return Returns the useEncryption.
+	 */
+	protected String getUseEncryption() 
+	{
+		return useEncryption;
+	}
+
+	/**
+	 * @param useEncryption The useEncryption to set.
+	 */
+	protected void setUseEncryption(String useEncryption) 
+	{
+		this.useEncryption = useEncryption;
+	}
+
+
+	/**
+	 * Reads the given input stream and decrypts it if required
+	 * 
+	 * @param is the input stream to be read
+	 * @return the content of the input stream
+	 * @throws IOException if unable to read
+	 */
+	protected byte[] read(InputStream is) throws IOException 
+	{
+		return readPlain(is);
+	}
+
+	/**
+	 * Reads from an unencrypted input stream
+	 * 
+	 * @param is the source input stream
+	 * @return the content of the input stream
+	 * @throws IOException if unable to read
+	 */
+	private byte[] readPlain(InputStream is) throws IOException 
+	{
+		byte[] result = null;
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		this.copy(is, baos);
+		result = baos.toByteArray();
+		return result;
+	}
+
+	/**
+	 * Write the given output stream and encrypts it if required. If the encryption
+	 * mode is "auto" we also encryt it.
+	 *
+	 * @param os      the output stream to be written
+	 * @param content the content to be written
+	 * @throws IOException if unable to read
+	 */
+	protected void write(OutputStream os, byte[] content) throws IOException 
+	{
+		writePlain(os, content);
+	}
+
+	/**
+	 * Write the given content without encryption.
+	 *
+	 * @param os      the output stream
+	 * @param content the content to be written
+	 * @throws IOException if unable to read
+	 */
+	private void writePlain(OutputStream os, byte[] content) throws IOException 
+	{
+		ByteArrayInputStream bais = new ByteArrayInputStream(content);
+		this.copy(bais, os);
+	}
+
+	/**
+	 * Pumps the input stream to the output stream.
+	 *
+	 * @param is the source input stream
+	 * @param os the target output stream
+	 * @throws IOException the copying failed
+	 */
+	private void copy(InputStream is, OutputStream os) throws IOException 
+	{
+		byte[] buf = new byte[BUF_SIZE];
+		int n = 0;
+		while ((n = is.read(buf)) > 0) 
+		{
+			os.write(buf, 0, n);
+		}
+		os.flush();
+		os.close();
+	}
 }

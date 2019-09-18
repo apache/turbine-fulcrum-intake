@@ -39,7 +39,9 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
-public class FileResourceManager extends BaseResourceManager {
+public class FileResourceManager extends BaseResourceManager 
+{
+	
 	/** an optinal suffix to filter resources */
 	private String suffix;
 
@@ -62,9 +64,9 @@ public class FileResourceManager extends BaseResourceManager {
 	/**
 	 * Constructor
 	 */
-	public FileResourceManager() {
+	public FileResourceManager() 
+	{
 		super();
-
 		this.useLocator = true;
 		this.defaultDirectoryExcludes = new String[] { "CVS", ".svn" };
 	}
@@ -76,42 +78,43 @@ public class FileResourceManager extends BaseResourceManager {
 	 * org.apache.fulcrum.resourcemanager.impl.BaseResourceManager#configure(org.
 	 * apache.avalon.framework.configuration.Configuration)
 	 */
-	public void configure(Configuration cfg) throws ConfigurationException {
+	public void configure(Configuration cfg) throws ConfigurationException 
+	{
 		super.configure(cfg);
 
 		// the optional suffix - "*" is the usual wildcard suffix
-
 		this.suffix = cfg.getChild(CONFIG_KEY_SUFFIX).getValue("*");
 
 		// try to locate a resources automagically ?
-
 		this.useLocator = cfg.getChild(CONFIG_KEY_USELOCATOR).getValueAsBoolean(false);
 
 		// are we using encryption/decryption
-
 		this.setUseEncryption(cfg.getChild(CONFIG_KEY_USEENCRYPTION).getValue("false"));
 
 		// locate the directory where we the resources are located
-
 		String currLocationName = cfg.getChild(CONFIG_KEY_LOCATION).getValue();
 		File currLocation = new File(currLocationName);
 
-		if (currLocation.isAbsolute()) {
+		if (currLocation.isAbsolute()) 
+		{
 			this.resourceDir = currLocation;
-		} else {
+		} 
+		else 
+		{
 			this.resourceDir = new File(this.getApplicationDir(), currLocationName);
 		}
 
-		if (this.resourceDir.exists()) {
+		if (this.resourceDir.exists()) 
+		{
 			this.getLogger().debug("Using the resource directory : " + this.resourceDir.getAbsolutePath());
-		} else {
+		} 
+		else 
+		{
 			String msg = "The following resource directory is not found : " + this.resourceDir.getAbsolutePath();
-
 			throw new ConfigurationException(msg);
 		}
 
 		// load the file names of all resources and sort it
-
 		this.createResourceFileNameList();
 	}
 
@@ -120,9 +123,9 @@ public class FileResourceManager extends BaseResourceManager {
 	 * 
 	 * @see org.apache.fulcrum.resourcemanager.impl.BaseResourceManager#dispose()
 	 */
-	public void dispose() {
+	public void dispose() 
+	{
 		super.dispose();
-
 		this.suffix = null;
 		this.useLocator = false;
 		this.resourceDir = null;
@@ -136,7 +139,8 @@ public class FileResourceManager extends BaseResourceManager {
 	 * org.apache.fulcrum.resourcemanager.impl.BaseResourceManager#reconfigure(org.
 	 * apache.avalon.framework.configuration.Configuration)
 	 */
-	public void reconfigure(Configuration configuration) throws ConfigurationException {
+	public void reconfigure(Configuration configuration) throws ConfigurationException 
+	{
 		super.reconfigure(configuration);
 		this.configure(configuration);
 	}
@@ -151,7 +155,8 @@ public class FileResourceManager extends BaseResourceManager {
 	 * @see
 	 * org.apache.fulcrum.resourcemanager.ResourceManager#exists(java.lang.String)
 	 */
-	public synchronized boolean exists(String resourceName) {
+	public synchronized boolean exists(String resourceName) 
+	{
 		File resourceFile = this.findResourceFile(resourceName, this.resourceFileNameList);
 		return resourceFile != null;
 	}
@@ -161,16 +166,15 @@ public class FileResourceManager extends BaseResourceManager {
 	 * 
 	 * @see org.apache.fulcrum.resourcemanager.ResourceManager#listResources()
 	 */
-	public synchronized String[] listResources() {
+	public synchronized String[] listResources() 
+	{
 		String resourceDirName = this.getResourceDir().getAbsolutePath();
 		String[] fileList = this.resourceFileNameList;
 		String[] result = new String[fileList.length];
 
 		// remove the resource directory name
-
 		for (int i = 0; i < result.length; i++) {
 			String relativeName = fileList[i].substring(resourceDirName.length() + 1, fileList[i].length());
-
 			result[i] = relativeName;
 		}
 
@@ -184,7 +188,8 @@ public class FileResourceManager extends BaseResourceManager {
 	 * org.apache.fulcrum.resourcemanager.ResourceManager#create(java.lang.String,
 	 * java.lang.Object)
 	 */
-	public synchronized void create(String resourcePath, Object resourceContent) throws IOException {
+	public synchronized void create(String resourcePath, Object resourceContent) throws IOException 
+	{
 
 		File resourceFile = new File(this.getResourceDir(), resourcePath);
 		this.getLogger().debug("Creating resource : " + resourceFile.getAbsolutePath());
@@ -192,17 +197,23 @@ public class FileResourceManager extends BaseResourceManager {
 
 		// Try to prevent any leak from the outputstream
 		FileOutputStream fos = null;
-		try {
+		try 
+		{
 			fos = new FileOutputStream(resourceFile);
 			this.write(fos, byteContent);
 			fos.flush();
 			this.createResourceFileNameList();
 			
-		} finally {
-			try {
+		} 
+		finally 
+		{
+			try 
+			{
 				if ( fos != null )
 					fos.close();
-			} catch (IOException warn) {
+			} 
+			catch (IOException warn) 
+			{
 				throw warn;
 			}
 		}
@@ -214,29 +225,35 @@ public class FileResourceManager extends BaseResourceManager {
 	 * @see
 	 * org.apache.fulcrum.resourcemanager.ResourceManager#read(java.lang.String)
 	 */
-	public synchronized byte[] read(String resourcePath) throws IOException {
-
+	public synchronized byte[] read(String resourcePath) throws IOException 
+	{
 		// Result byte array
 		byte[] result = null;
 		File resourceFile = this.findResourceFile(resourcePath, this.resourceFileNameList);
 
-		if (resourceFile != null) {
+		if (resourceFile != null) 
+		{
 			this.getLogger().debug("Loading the resource : " + resourceFile.getAbsolutePath());
 			FileInputStream fis = null;
 
-			try {
+			try 
+			{
 				fis = new FileInputStream(resourceFile);
 				result = this.read(fis);
 
-			} finally {
-				try {
+			} 
+			finally 
+			{
+				try 
+				{
 					if ( fis != null )
 						fis.close();
-				} catch (IOException warn) {
+				} 
+				catch (IOException warn) 
+				{
 					throw warn;
 				}
 			}
-
 			return result;
 		} else {
 			String msg = "Unable to find the resource : " + resourcePath;
@@ -252,7 +269,8 @@ public class FileResourceManager extends BaseResourceManager {
 	 * org.apache.fulcrum.resourcemanager.ResourceManager#update(java.lang.String,
 	 * java.lang.Object)
 	 */
-	public synchronized void update(String resourcePath, Object resourceContent) throws IOException {
+	public synchronized void update(String resourcePath, Object resourceContent) throws IOException 
+	{
 		this.create(resourcePath, resourceContent);
 	}
 
@@ -262,18 +280,17 @@ public class FileResourceManager extends BaseResourceManager {
 	 * @see
 	 * org.apache.fulcrum.resourcemanager.ResourceManager#delete(java.lang.String)
 	 */
-	public synchronized boolean delete(String resourcePath) throws IOException {
+	public synchronized boolean delete(String resourcePath) throws IOException 
+	{
 		boolean result = false;
 		File file = new File(this.getResourceDir(), resourcePath);
 
 		// if a resource was deleted we have to update our resource list
 		// to avoid a stale entry
-
 		if (file.delete()) {
 			this.createResourceFileNameList();
 			result = true;
 		}
-
 		return result;
 	}
 
@@ -284,8 +301,9 @@ public class FileResourceManager extends BaseResourceManager {
 	 * org.apache.fulcrum.resourcemanager.ResourceManager#exists(java.lang.String[],
 	 * java.lang.String)
 	 */
-	public synchronized boolean exists(String[] context, String resourceName) {
-		return (this.locate(context, resourceName) != null);
+	public synchronized boolean exists(String[] context, String resourceName) 
+	{
+		return this.locate(context, resourceName) != null;
 	}
 
 	/*
@@ -295,7 +313,8 @@ public class FileResourceManager extends BaseResourceManager {
 	 * org.apache.fulcrum.resourcemanager.ResourceManager#read(java.lang.String[],
 	 * java.lang.String)
 	 */
-	public synchronized byte[] read(String[] context, String resourceName) throws IOException {
+	public synchronized byte[] read(String[] context, String resourceName) throws IOException 
+	{
 		String resourceFileName = this.createResourceFileName(context, resourceName);
 		return this.read(resourceFileName);
 	}
@@ -307,20 +326,18 @@ public class FileResourceManager extends BaseResourceManager {
 	 * org.apache.fulcrum.resourcemanager.ResourceManager#locate(java.lang.String[],
 	 * java.lang.String)
 	 */
-	public synchronized String locate(String[] context, String resourceName) {
+	public synchronized String locate(String[] context, String resourceName) 
+	{
 		String result = null;
 		String resourceDirName = this.getResourceDir().getAbsolutePath();
 		String resourceFileName = this.createResourceFileName(context, resourceName);
 		File resourceFile = this.findResourceFile(resourceFileName, this.resourceFileNameList);
-
-		if (resourceFile != null) {
+		if (resourceFile != null) 
+		{
 			String temp = resourceFile.getAbsolutePath();
-
 			result = temp.substring(resourceDirName.length() + 1, temp.length());
-
 			result = result.replace('\\', '/');
 		}
-
 		return result;
 	}
 
@@ -331,17 +348,23 @@ public class FileResourceManager extends BaseResourceManager {
 	 * org.apache.fulcrum.resourcemanager.ResourceManager#getResourceURL(java.lang.
 	 * String[], java.lang.String)
 	 */
-	public synchronized URL getResourceURL(String[] context, String resourceName) {
+	public synchronized URL getResourceURL(String[] context, String resourceName) 
+	{
 		String resourceFileName = this.createResourceFileName(context, resourceName);
 		File resourceFile = this.findResourceFile(resourceFileName, this.resourceFileNameList);
-
-		if (resourceFile != null) {
-			try {
+		if (resourceFile != null) 
+		{
+			try 
+			{
 				return resourceFile.toURI().toURL();
-			} catch (MalformedURLException e) {
+			} 
+			catch (MalformedURLException e) 
+			{
 				throw new RuntimeException(e.getMessage());
 			}
-		} else {
+		} 
+		else 
+		{
 			return null;
 		}
 	}
@@ -356,11 +379,13 @@ public class FileResourceManager extends BaseResourceManager {
 	 * @param directory the directory
 	 * @return true if the directory name is excluded
 	 */
-	private boolean isDirectoryExcluded(File directory) {
+	private boolean isDirectoryExcluded(File directory) 
+	{
 		String directoryName = directory.getName();
-
-		for (int i = 0; i < this.defaultDirectoryExcludes.length; i++) {
-			if (this.defaultDirectoryExcludes[i].equals(directoryName)) {
+		for (int i = 0; i < this.defaultDirectoryExcludes.length; i++) 
+		{
+			if (this.defaultDirectoryExcludes[i].equals(directoryName)) 
+			{
 				return true;
 			}
 		}
@@ -399,16 +424,19 @@ public class FileResourceManager extends BaseResourceManager {
 	 * @param resourceList the list of available resources
 	 * @return the resource file or <b>null</b> if it wasn't found
 	 */
-	private File findResourceFile(String resourceName, String[] resourceList) {
+	private File findResourceFile(String resourceName, String[] resourceList) 
+	{
 		File result = null;
 		String tempFileName;
 		String resourceFileName = new File(this.getResourceDir(), resourceName).getAbsolutePath();
+		boolean wasFound = Arrays.binarySearch(resourceList, resourceFileName) >= 0;
 
-		boolean wasFound = (Arrays.binarySearch(resourceList, resourceFileName) >= 0);
-
-		if (wasFound) {
+		if (wasFound) 
+		{
 			result = new File(resourceFileName);
-		} else if (this.isUseLocator()) {
+		} 
+		else if (this.isUseLocator()) 
+		{
 			// create a String[] with the directories contained in the resourceName
 			// e.g. [0]=foor [1]=bar resourceName=empty.groovy
 
@@ -427,10 +455,14 @@ public class FileResourceManager extends BaseResourceManager {
 			File[] fileList = new File[context.length + 1];
 			fileList[0] = new File(this.getResourceDir(), scriptBaseName);
 
-			for (int i = 1; i < context.length + 1; i++) {
-				if (i == 1) {
+			for (int i = 1; i < context.length + 1; i++) 
+			{
+				if (i == 1) 
+				{
 					baseFileName = context[i - 1];
-				} else {
+				} 
+				else 
+				{
 					baseFileName = baseFileName + File.separator + context[i - 1];
 				}
 
@@ -465,28 +497,36 @@ public class FileResourceManager extends BaseResourceManager {
 	 * @param suffix   an optional suffix to filter the result
 	 * @param result   list of all matching resources
 	 */
-	private void findAllResources(File startDir, String suffix, ArrayList<String> result) {
-		if (startDir.isDirectory() && startDir.canRead()) {
-
+	private void findAllResources(File startDir, String suffix, ArrayList<String> result) 
+	{
+		if (startDir.isDirectory() && startDir.canRead()) 
+		{
 			// listFiles could return null
 			File[] list = startDir.listFiles();
-
 			if (list != null) {
 
-				for (int i = 0; i < list.length; i++) {
-					// recursive search for all subdirectories
-
-					if (list[i].isDirectory()) {
-						// check that the subdirectory is not excluded from the seach
-						if (!this.isDirectoryExcluded(list[i])) {
+				for (int i = 0; i < list.length; i++) 
+				{
+					// recursive search for all sub-directories
+					if (list[i].isDirectory()) 
+					{
+						// check that the subd0irectory is not excluded from the search
+						if (!this.isDirectoryExcluded(list[i])) 
+						{
 							this.findAllResources(list[i], suffix, result);
 						}
-					} else {
-						if (!suffix.equals("*")) {
-							if (list[i].getName().endsWith(suffix)) {
+					} 
+					else 
+					{
+						if (!suffix.equals("*")) 
+						{
+							if (list[i].getName().endsWith(suffix)) 
+							{
 								result.add(list[i].getAbsolutePath());
 							}
-						} else {
+						} 
+						else 
+						{
 							result.add(list[i].getAbsolutePath());
 						}
 					}
@@ -502,23 +542,27 @@ public class FileResourceManager extends BaseResourceManager {
 	 * @param resourceName the name of the resource
 	 * @return a file name
 	 */
-	private String createResourceFileName(String[] context, String resourceName) {
+	private String createResourceFileName(String[] context, String resourceName) 
+	{
 		StringBuilder result = new StringBuilder();
-
-		if ((context != null) && (context.length > 0)) {
-			for (int i = 0; i < context.length; i++) {
-				if (context[i] != null) {
+		if (context != null && context.length > 0) 
+		{
+			for (int i = 0; i < context.length; i++) 
+			{
+				if (context[i] != null) 
+				{
 					result.append(context[i]);
 					result.append(File.separator);
-				} else {
-					String msg = "Don't know how to handle <null> in the context";
+				} 
+				else 
+				{
+					String msg = "Turbine does not know how to handle <null> in the context";
 					throw new IllegalArgumentException(msg);
 				}
 			}
 		}
 
 		result.append(resourceName);
-
 		return result.toString();
 	}
 }

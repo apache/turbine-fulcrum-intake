@@ -27,6 +27,8 @@
     <release version="1.0.2" date="in SVN">
       <action dev="painter" type="update">
         JavaDoc update, use commons-lang3
+        Move changes.xml to standard dir
+        Remove deps on fulcrum-pbe
       </action>
     </release>  
     <release version="1.0.1" date="2011-09-20">

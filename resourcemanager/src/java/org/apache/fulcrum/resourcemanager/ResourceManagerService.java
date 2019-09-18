@@ -22,6 +22,7 @@ package org.apache.fulcrum.resourcemanager;
 import java.io.IOException;
 import java.net.URL;
 
+
 /**
  * An Avalon service to manage resources based on a domain. The service
  * supports multiple domains and uses a context to locate a resource.
@@ -34,7 +35,10 @@ public interface ResourceManagerService
     // CRUD Functionality
     /////////////////////////////////////////////////////////////////////////
 
-    /**
+    /** Avalon role - used to id the component within the manager */
+    String ROLE = ResourceManagerService.class.getName();
+
+	/**
      * List all available domains.
      *
      * @return list of all available domains
