@@ -61,6 +61,7 @@
     <module>jetty</module>    
     <module>pbe</module>    
     <module>resourcemanager</module>    
+    <module>groovy</module>    
     <module>script</module>    
     <module>spring</module>            
     <module>upload</module>        
