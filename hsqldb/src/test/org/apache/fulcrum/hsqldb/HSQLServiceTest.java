@@ -129,7 +129,10 @@ public class HSQLServiceTest extends BaseUnitTest
     {
         Connection conn = this.getConnection("test");
         Statement stmt = conn.createStatement();
-        stmt.execute("SHUTDOWN;");
-        assertFalse("Server is still running", (service).isOnline());
+        stmt.execute("SHUTDOWN;"); // IMMEDIATELY does not change time
+        // sql shutdown seems to return immediately and not to wait: https://sourceforge.net/p/hsqldb/bugs/1400/ ?
+        Thread.sleep(250);
+        assertFalse("Server is still running "+ service.toString(), (service).isOnline());
     }
+    
 }

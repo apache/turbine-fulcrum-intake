@@ -27,8 +27,8 @@ import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.hsqldb.Server;
-import org.hsqldb.ServerConstants;
 import org.hsqldb.persist.HsqlProperties;
+import org.hsqldb.server.ServerConstants;
 
 /**
  * The original implementation was taken from
@@ -169,7 +169,7 @@ public class HSQLServiceImpl
     /////////////////////////////////////////////////////////////////////////
 
     public boolean isOnline() {
-        return server.getState() == ServerConstants.SERVER_STATE_ONLINE;
+        return server.getState() == org.hsqldb.server.ServerConstants.SERVER_STATE_ONLINE;
     }
 
 

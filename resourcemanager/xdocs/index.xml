@@ -50,7 +50,7 @@
       </p>
 
       <p>
-        The key motiviation is reuse the automatic location of a resource since I
+        The key motivation is reuse the automatic location of a resource since I
         implemented it a few times over the last two years. A couple services benefit
         from that behaviour, e.g. the fulcrum-dom4jxslt-service and fulcrum-groovy-service.
         Using a context and traversing up the file system allows to invoke different
