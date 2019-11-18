@@ -136,7 +136,7 @@ public class InputStreamLocator {
 		}
 
 		if (is == null) {
-			this.logger.info("Unable to find any resource with the name '" + location + "'");
+			this.logger.debug("Unable to find any resource with the name '" + location + "'");
 		}
 
 		return is;
