@@ -52,7 +52,7 @@
     <module>testcontainer</module>    
     <module>yaafi-crypto</module>        
     <module>yaafi</module>        
-    <module>xslt</module>        
+    <module>xslt</module>
 
     <!-- Potentially dormant modules -->
     <module>commonsemail</module>
