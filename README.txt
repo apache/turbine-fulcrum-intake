@@ -28,7 +28,7 @@ be used within any Avalon-compatible container.
 --------------------------------------------------------------------------
 B U I L D I N G
 --------------------------------------------------------------------------
-You must have Maven 2.x. or 3.x
+You must have Maven 3.x
 
 Building the Fulcrum from SVN is very easy.  Fulcrum has been
 Maven-enabled.  Please refer to the Maven Getting Started document for
@@ -67,6 +67,8 @@ Steps
   mvn release:prepare -DdryRun=true -DautoVersionSubmodules=true -Papache-release 
   // single
   mvn release:prepare -DdryRun=true -Papache-release 
+  // or to skip dependency check
+  mvn release:prepare -DdryRun=true -Papache-release -Ddependency.check.skip=true -DautoUpdate=false
   // 
   mvn release:clean
 
