@@ -67,8 +67,8 @@ Steps
   mvn release:prepare -DdryRun=true -DautoVersionSubmodules=true -Papache-release 
   // single
   mvn release:prepare -DdryRun=true -Papache-release 
-  // or to skip dependency check
-  mvn release:prepare -DdryRun=true -Papache-release -Ddependency.check.skip=true -DautoUpdate=false
+  // if dependency check is skipped by default
+  mvn release:prepare -DdryRun=true -Papache-release -Ddependency.check.skip=false
   // 
   mvn release:clean
 
