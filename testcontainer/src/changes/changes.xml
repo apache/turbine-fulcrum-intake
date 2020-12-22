@@ -19,12 +19,15 @@
 -->
 <document>
   <properties>
-    <title>Fulcrum</title>
+    <title>Fulcrum TestContainer</title>
     <author email="epugh@upstate.com">Eric Pugh</author>
     <!-- author email="quintonm@bellsouth.net">Quinton McCombs</author -->
   </properties>
   <body>
     <release version="1.0.9" date="in SVN">
+    <action type="update" dev="painter">
+        Update junit to 4.13.1, junit.jupiter.version to 5.7.0, junit.platform to 1.7.0
+      </action>  
        <action type="update" dev="painter">
         Update junit and jupiter dependencies, source cleanup for Turbine compliance
       </action>  
