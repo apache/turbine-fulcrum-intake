@@ -9,9 +9,7 @@
 	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
 	OF ANY KIND, either express or implied. See the License for the specific 
 	language governing permissions and limitations under the License. -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<artifactId>turbine-parent</artifactId>
 		<groupId>org.apache.turbine</groupId>
@@ -21,16 +19,16 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.apache.fulcrum</groupId>
 	<artifactId>fulcrum-testcontainer</artifactId>
-	<version>1.0.9-SNAPSHOT</version>
+	<version>1.0.9</version>
 	<name>Fulcrum Test Container</name>
 	<inceptionYear>2004</inceptionYear>
 	<description>A test framework for Avalon components</description>
 	<url>https://turbine.apache.org/fulcrum/fulcrum-testcontainer</url>
 
 	<scm>
-		<connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/testcontainer</connection>
-		<developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/testcontainer</developerConnection>
-		<url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/testcontainer</url>
+		<connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-testcontainer-1.0.9</connection>
+		<developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-testcontainer-1.0.9</developerConnection>
+		<url>http://svn.apache.org/viewvc/turbine/fulcrum/tags/fulcrum-testcontainer-1.0.9</url>
 	</scm>
 
 	<distributionManagement>
