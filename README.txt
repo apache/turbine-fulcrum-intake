@@ -63,12 +63,19 @@ Steps
   // Verify gpg.homedir, gpg.useagent, gpg.passphrase. Check, if -Dgpg.useagent=false is needed,  see below comment to pinentry.
   // You may need to add additional profiles, e.g. -Papache-release,java8
   mvn clean site install -Papache-release -Dgpg.passphrase=<xx> 
+  
   // multi module
-  mvn release:prepare -DdryRun=true -DautoVersionSubmodules=true -Papache-release 
+  // security check after mvn clean install
+  mvn org.owasp:dependency-check-maven:aggregate -Ddependency.check.skip=false -DskipTests=true
+  mvn release:prepare -DdryRun=true -DautoVersionSubmodules=true -Papache-release
+  
   // single
-  mvn release:prepare -DdryRun=true -Papache-release 
+  
   // if dependency check is skipped by default
-  mvn release:prepare -DdryRun=true -Papache-release -Ddependency.check.skip=false
+  // security check after mvn clean install
+  mvn org.owasp:dependency-check-maven:check -Ddependency.check.skip=false
+  
+  mvn release:prepare -DdryRun=true -Papache-release 
   // 
   mvn release:clean
 

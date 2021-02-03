@@ -41,7 +41,7 @@
     <url-pattern>/dump/*</url-pattern>
   </filter-mapping>
   
-  <filter>
+  <!--filter>
     <filter-name>GzipFilter</filter-name>
     <filter-class>org.mortbay.servlet.jetty.IncludableGzipFilter</filter-class>
     <init-param>
@@ -79,7 +79,7 @@
   <filter-mapping>
     <filter-name>Throttle</filter-name>
     <url-pattern>/dump/throttle/*</url-pattern>
-  </filter-mapping>
+  </filter-mapping-->
 
   <!-- Comment out to support PUT and DELETE
   <filter>

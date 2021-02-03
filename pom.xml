@@ -22,7 +22,7 @@
   <parent>
     <artifactId>turbine-parent</artifactId>
        <groupId>org.apache.turbine</groupId>
-       <version>7</version>
+       <version>8-SNAPSHOT</version>
   </parent>
   <artifactId>fulcrum</artifactId>
   <packaging>pom</packaging>
@@ -71,28 +71,29 @@
   </modules>
   
   <build>
-    <plugins>
-      <!-- run optionally
-            mvn org.owasp:dependency-check-maven:aggregate 
-            do not use it as reporting plugin, as it exposes file paths to artifacts 
-            check each possible vulnerability carefully, find more info about how to read, false positives et al. here: https://jeremylong.github.io/DependencyCheck/dependency-check-maven/plugin-info.html
-       -->
-        <plugin>
-          <groupId>org.owasp</groupId>
-          <artifactId>dependency-check-maven</artifactId>
-          <version>5.2.2</version>
-          <executions>
-              <execution>
-                  <goals>
-                      <goal>aggregate</goal>
-                  </goals>
-              </execution>
-          </executions>
-          <!--configuration> 
-             <suppressionFiles>true</suppressionFiles>
-          </configuration--> 
-        </plugin>
-      </plugins>
+     <pluginManagement>
+        <plugins>
+          <!-- run optionally
+                mvn org.owasp:dependency-check-maven:aggregate 
+                do not use it as reporting plugin, as it exposes file paths to artifacts 
+                check each possible vulnerability carefully, find more info about how to read, false positives et al. here: https://jeremylong.github.io/DependencyCheck/dependency-check-maven/plugin-info.html
+           -->
+            <plugin>
+              <groupId>org.owasp</groupId>
+              <artifactId>dependency-check-maven</artifactId>
+              <executions>
+                  <execution>
+                      <goals>
+                          <goal>check</goal>
+                      </goals>
+                  </execution>
+              </executions>
+              <!--configuration> 
+                 <suppressionFiles>true</suppressionFiles>
+              </configuration--> 
+            </plugin>
+          </plugins>
+     </pluginManagement>
    </build>
 
 </project>

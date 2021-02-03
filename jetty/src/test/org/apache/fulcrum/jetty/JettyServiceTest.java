@@ -191,7 +191,7 @@ public class JettyServiceTest extends BaseUnitTest
     }
 
     /**
-     * Quick-and-dirty implementation to downlaod te content from an URL.
+     * Quick-and-dirty implementation to download te content from an URL.
      *
      * @param urlString the URL to be invoked
      * @return the content loaded from the URL

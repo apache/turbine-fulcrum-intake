@@ -89,6 +89,20 @@
 			<version>${jetty.version}</version>
 			<scope>optional</scope>
 		</dependency>
+        <!--  Eclipse Jetty dependencies 
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-jsp</artifactId>
+            <version>9.2.30.v20200428</version>
+			<scope>optional</scope>
+		</dependency>
+         <jetty.version>9.4.29.v20200521</jetty.version>
+        -->
 		<!-- testing dependencies -->
 		<dependency>
 			<groupId>org.apache.fulcrum</groupId>
