@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
  * Basic testing of the Container
  *
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
- * @version $Id: YaafiContainerTest.java 1694570 2015-08-06 20:35:41Z sgoeschl $
+ * @version $Id$
  */
 @DisplayName("Yaafi Container Test JUnit5")
 public class YaafiContainerJunit5Test extends BaseUnit5Test

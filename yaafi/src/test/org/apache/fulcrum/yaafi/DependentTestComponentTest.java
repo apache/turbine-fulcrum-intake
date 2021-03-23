@@ -1,5 +1,7 @@
 package org.apache.fulcrum.yaafi;
 
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,8 +21,7 @@ package org.apache.fulcrum.yaafi;
  * under the License.
  */
 
-
-import org.apache.fulcrum.yaafi.testcontainer.BaseUnitTest;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test suite for ensuring that a dependent test component
@@ -30,16 +31,8 @@ import org.apache.fulcrum.yaafi.testcontainer.BaseUnitTest;
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
-public class DependentTestComponentTest extends BaseUnitTest
+public class DependentTestComponentTest extends BaseUnit5Test
 {
-    /**
-     * Constructor
-     * @param name the name of the test case
-     */
-    public DependentTestComponentTest( String name )
-    {
-        super(name);
-    }
 
     /**
      * DependentTestComponentImpl uses a TestComponent which. Make
@@ -47,6 +40,7 @@ public class DependentTestComponentTest extends BaseUnitTest
      *
      * @throws Exception generic exception
      */
+    @Test
     public void testDependentTestComponent() throws Exception
     {
         DependentTestComponent dependentTestComponent = (DependentTestComponent) this.lookup(

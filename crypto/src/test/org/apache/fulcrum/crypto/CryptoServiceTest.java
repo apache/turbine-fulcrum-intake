@@ -1,5 +1,7 @@
 package org.apache.fulcrum.crypto;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -25,10 +27,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
-import org.junit.platform.runner.JUnitPlatform;
-import org.junit.runner.RunWith;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 /**
@@ -39,7 +37,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @version $Id$
  */
 @DisplayName("Crypto Service Test")
-@RunWith(JUnitPlatform.class)
 public class CryptoServiceTest extends BaseUnit5Test
 {
     private CryptoService sc = null;

@@ -59,7 +59,7 @@ package org.apache.fulcrum.yaafi.interceptor.util;
  * @author Henri Yandell
  * @author Stephen Colebourne
  * @since 2.0
- * @version $Id: StopWatch.java,v 1.1 2005/09/29 13:18:37 sigi Exp $
+ * @version $Id$
  */
 public class StopWatch {
 

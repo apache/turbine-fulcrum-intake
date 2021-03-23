@@ -1,5 +1,7 @@
 package org.apache.fulcrum.yaafi.baseservice;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,10 +21,10 @@ package org.apache.fulcrum.yaafi.baseservice;
  * under the License.
  */
 
-
 import java.io.File;
 
-import org.apache.fulcrum.yaafi.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test suite for the project
@@ -30,26 +32,18 @@ import org.apache.fulcrum.yaafi.testcontainer.BaseUnitTest;
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
-public class DerivedServiceTest extends BaseUnitTest
+public class DerivedServiceTest extends BaseUnit5Test
 {
-    /**
-     * Constructor
-     * @param name the name of the test case
-     */
-    public DerivedServiceTest( String name )
-    {
-        super(name);
-    }
 
     /**
      * Lookup the service and invoke the test() method
+     * 
      * @throws Exception invocation failed
      */
+    @Test
     public void testDerivedService() throws Exception
     {
-        DerivedService derivedService = (DerivedService) this.lookup(
-            DerivedService.class.getName()
-            );
+        DerivedService derivedService = (DerivedService) this.lookup( DerivedService.class.getName() );
 
         // invoke the test() method on the service
 
@@ -58,12 +52,12 @@ public class DerivedServiceTest extends BaseUnitTest
         // determine absolute paths and files
 
         String fileName = "./src/test/TestRoleConfig.xml";
-        String absolutePath = derivedService.createAbsolutePath(fileName);
-        File absoluteFile = derivedService.createAbsoluteFile(fileName);
+        String absolutePath = derivedService.createAbsolutePath( fileName );
+        File absoluteFile = derivedService.createAbsoluteFile( fileName );
 
-        assertTrue(absoluteFile.isAbsolute());
-        assertTrue(absoluteFile.exists());
-        assertTrue(new File(absolutePath).isAbsolute());
-        assertTrue(new File(absolutePath).exists());
+        assertTrue( absoluteFile.isAbsolute() );
+        assertTrue( absoluteFile.exists() );
+        assertTrue( new File( absolutePath ).isAbsolute() );
+        assertTrue( new File( absolutePath ).exists() );
     }
 }

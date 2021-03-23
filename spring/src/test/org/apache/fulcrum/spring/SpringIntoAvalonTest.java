@@ -1,5 +1,14 @@
 package org.apache.fulcrum.spring;
 
+import org.apache.avalon.framework.service.ServiceException;
+import org.apache.avalon.framework.service.ServiceManager;
+import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
+import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerConfiguration;
+import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
+import org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyService;
+import org.springframework.beans.BeansException;
+import org.springframework.context.support.AbstractApplicationContext;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,16 +29,6 @@ package org.apache.fulcrum.spring;
  */
 
 import junit.framework.TestCase;
-
-import org.apache.avalon.framework.service.ServiceManager;
-import org.apache.avalon.framework.service.ServiceException;
-import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
-import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerConfiguration;
-import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
-import org.apache.fulcrum.yaafi.service.systemproperty.SystemPropertyService;
-import org.apache.fulcrum.spring.SpringFrameworkService;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.beans.BeansException;
 
 /**
  * Instantiate a Spring framework instance within an Avalon

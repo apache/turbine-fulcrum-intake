@@ -1,5 +1,8 @@
 package org.apache.fulcrum.xmlrpc;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -22,7 +25,9 @@ package org.apache.fulcrum.xmlrpc;
 import java.net.URL;
 import java.util.Vector;
 
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit testing for the XML-RPC component
@@ -30,24 +35,16 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
  */
-public class XmlRpcComponentTest extends BaseUnitTest
+public class XmlRpcComponentTest extends BaseUnit5Test
 {
-    /**
-     * Constructor for test.
-     *
-     * @param testName name of the test being executed
-     */
-    public XmlRpcComponentTest(String testName)
-    {
-        super(testName);
-    }
 
-
+    @Test
     public void testInitialize()
     {
         assertTrue(true);
     }
 
+    @Disabled
     public void OFFtestLookup() throws Exception
     {
         XmlRpcServerComponent xmlrpc = null;
@@ -58,6 +55,7 @@ public class XmlRpcComponentTest extends BaseUnitTest
         release(xmlrpc);
     }
 
+    @Test
     public void testHandler() throws Exception
     {
         // start the xml-rpc server
@@ -73,7 +71,7 @@ public class XmlRpcComponentTest extends BaseUnitTest
         URL server = new URL("http://localhost:12345/RPC2");
 
         // setup param from rpc call
-        Vector params = new Vector();
+        Vector<String> params = new Vector<String>();
         String testMessage = "Test message to be echoed back.";
         params.addElement(testMessage);
 

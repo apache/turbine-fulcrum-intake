@@ -23,6 +23,8 @@ import junit.framework.TestCase;
 
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.fulcrum.yaafi.TestComponent;
+import org.junit.After;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test suite for exercising the command line integration.
@@ -34,18 +36,11 @@ public class MainTest extends TestCase
 {
     private Main main;
 
-    /**
-     * Constructor
-     * @param name the name of the test case
-     */
-    public MainTest( String name )
-    {
-        super(name);
-    }
 
     /* (non-Javadoc)
      * @see junit.framework.TestCase#tearDown()
      */
+    @After
     protected void tearDown() throws Exception
     {
         this.main.dispose();
@@ -67,6 +62,7 @@ public class MainTest extends TestCase
      * Initialize the CLI using a valid container configuration
      * @throws Exception generic exception
      */
+    @Test
     public void testValidContainerConfiguration() throws Exception
     {
         String[] args = {
@@ -84,6 +80,7 @@ public class MainTest extends TestCase
      * Test the toString() method provding diagnostic information
      * @throws Exception generic exception
      */
+    @Test
     public void testToString() throws Exception
     {
         String[] args = {
@@ -102,6 +99,7 @@ public class MainTest extends TestCase
      * Initialize the CLI using an invalid container configuration
      * @throws Exception generic exception
      */
+    @Test
     public void testInvlidContainerConfiguration() throws Exception
     {
         String[] args = {

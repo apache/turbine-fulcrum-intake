@@ -21,7 +21,7 @@
 	<parent>
 		<artifactId>turbine-parent</artifactId>
 		<groupId>org.apache.turbine</groupId>
-		<version>5</version>
+		<version>7</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -89,7 +89,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.2</version>
+			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -105,7 +105,7 @@
            <turbine.site.cache>${project.build.directory}/turbine-sites</turbine.site.cache>
            <siteContent.path>${project.build.directory}/staging</siteContent.path><!-- default stagingSiteURL -->
 
-           <spring.version>4.1.6.RELEASE</spring.version>
+           <spring.version>4.3.30.RELEASE</spring.version>
 	</properties>
 
 </project>

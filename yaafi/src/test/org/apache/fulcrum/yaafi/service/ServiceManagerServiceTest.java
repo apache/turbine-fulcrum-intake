@@ -1,5 +1,8 @@
 package org.apache.fulcrum.yaafi.service;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,7 +22,6 @@ package org.apache.fulcrum.yaafi.service;
  * under the License.
  */
 
-import junit.framework.TestCase;
 
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
@@ -27,6 +29,9 @@ import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerConfiguration;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
 import org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerService;
 import org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerServiceImpl;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test suite for the ServiceManagereService.
@@ -34,43 +39,31 @@ import org.apache.fulcrum.yaafi.service.servicemanager.ServiceManagerServiceImpl
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
-public class ServiceManagerServiceTest extends TestCase
-{
+public class ServiceManagerServiceTest {
+
     private ServiceContainer container = null;
 
-    /**
-     * Constructor
-     * @param name the name of the test case
-     */
-    public ServiceManagerServiceTest( String name )
-    {
-        super(name);
-    }
 
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#setUp()
-     */
+
+    @BeforeEach
     protected void setUp() throws Exception
     {
-        super.setUp();
         ServiceContainerConfiguration config = new ServiceContainerConfiguration();
         config.loadContainerConfiguration( "./src/test/TestYaafiContainerConfig.xml" );
         this.container = ServiceContainerFactory.create( config );
     }
 
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#tearDown()
-     */
+    @AfterEach
     protected void tearDown() throws Exception
     {
         ServiceContainerFactory.dispose(this.container);
-        super.tearDown();
     }
 
     /**
      * Access the ServiceManagerService
      * @throws Exception if service manager not found
      */
+    @Test
     public void testServiceManagerService() throws Exception
     {
         ServiceManagerService serviceManagerService = ServiceManagerServiceImpl.getInstance();

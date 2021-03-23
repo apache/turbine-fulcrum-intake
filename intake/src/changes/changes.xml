@@ -25,7 +25,15 @@
   </properties>
 
   <body>
-     <release version="2.0.0" date="in Subversion">
+     <release version="2.0.1" date="in Subversion">
+        <action dev="gk" type="update">
+       Update dependencies testcontainer 1.0.9 (inherits junit)
+      </action>  
+      <action dev="painter" type="update">
+        Allow Java9+ build by adding dependency
+      </action>
+     </release> 
+     <release version="2.0.0" date="2019-03-25">
       <action dev="painter" type="update">
         Update to yaafi 1.0.8, testcontainer 1.0.8
       </action>

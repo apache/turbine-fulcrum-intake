@@ -27,7 +27,7 @@ import org.apache.fulcrum.intake.IntakeException;
  * Creates Field objects.
  *
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
- * @version $Id: FieldFactory.java 1200653 2011-11-11 00:05:28Z tv $
+ * @version $Id$
  */
 public class FieldAdapter extends XmlAdapter<XmlField, Field<?>>
 {

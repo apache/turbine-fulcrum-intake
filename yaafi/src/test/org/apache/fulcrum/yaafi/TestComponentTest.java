@@ -1,5 +1,12 @@
 package org.apache.fulcrum.yaafi;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.fulcrum.yaafi.testcontainer.BaseUnit5Test;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,7 +27,7 @@ package org.apache.fulcrum.yaafi;
  */
 
 
-import org.apache.fulcrum.yaafi.testcontainer.BaseUnitTest;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test suite for the project
@@ -28,17 +35,10 @@ import org.apache.fulcrum.yaafi.testcontainer.BaseUnitTest;
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
 
-public class TestComponentTest extends BaseUnitTest
+public class TestComponentTest extends BaseUnit5Test
 {
-    /**
-     * Constructor
-     * @param name the name of the test case
-     */
-    public TestComponentTest( String name )
-    {
-        super(name);
-    }
 
+    @Test
     public void testTestComponent() throws Exception
     {
         TestComponent testComponent = (TestComponent) this.lookup(
