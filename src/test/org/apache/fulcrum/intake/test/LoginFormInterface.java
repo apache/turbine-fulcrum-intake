@@ -23,7 +23,7 @@ package org.apache.fulcrum.intake.test;
  * Test form interface for Intake
  * 
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
- * @version $Id: LoginForm.java 535465 2007-05-05 06:58:06Z tv $
+ * @version $Id$
  */
 
 public interface LoginFormInterface
