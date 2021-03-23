@@ -25,7 +25,7 @@ import org.apache.fulcrum.intake.validator.FieldReference.Comparison;
  * Interface to define the compare operation betwen two field values
  *
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
- * @version $Id: DateStringValidator.java 534527 2007-05-02 16:10:59Z tv $
+ * @version $Id$
  */
 public interface CompareCallback<T>
 {

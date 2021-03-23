@@ -51,7 +51,7 @@ import org.junit.jupiter.api.TestInfo;
  * Test the validators
  *
  * @author <a href="tv@apache.org">Thomas Vandahl</a>
- * @version $Id: IntakeValidatonTest.java 1851410 2019-03-199 11:17:05Z painter $
+ * @version $Id$
  */
 @DisplayName("Intake Validator Test")
 public class IntakeValidatonTest extends BaseUnit5Test
