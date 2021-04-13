@@ -1,5 +1,10 @@
 package org.apache.fulcrum.pbe;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,37 +23,32 @@ package org.apache.fulcrum.pbe;
  * specific language governing permissions and limitations
  * under the License.
  */
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
 
-import java.io.*;
-
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
 import org.apache.fulcrum.jce.crypto.StreamUtil;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * PBEServiceTest
  *
  * @author <a href="mailto:siegfried.goeschl@it20one.at">Siegfried Goeschl</a>
  */
-public class PBEServiceTest extends BaseUnitTest
+public class PBEServiceTest extends BaseUnit5Test
 {
     private PBEService service;
 
     /**
-     * Defines the testcase name for JUnit.
-     *
-     * @param name the testcase's name.
-     */
-    public PBEServiceTest(String name)
-    {
-        super(name);
-    }
-
-    /**
      * Test setup
      */
+    @BeforeEach
     protected void setUp() throws Exception
     {
-        super.setUp();
 
         try
         {
@@ -80,6 +80,7 @@ public class PBEServiceTest extends BaseUnitTest
      * Create the default password do be used.
      * @throws Exception generic exception
      */
+    @Test
     public void testCreateDefaultPassword() throws Exception
     {
         char[] result = this.getService().createPassword();
@@ -92,6 +93,7 @@ public class PBEServiceTest extends BaseUnitTest
      * Create a password with a user-supplied seed value.
      * @throws Exception generic exception
      */
+    @Test
     public void testCreatePassword() throws Exception
     {
         char[] seed = "mysecret".toCharArray();
@@ -105,6 +107,7 @@ public class PBEServiceTest extends BaseUnitTest
      * Test encryption and decryption of Strings
      * @throws Exception generic exception
      */
+    @Test
     public void testEncryptDecryptStringUsingDefaultPassword() throws Exception
     {
         String source = "Nobody knows the troubles I have seen ...";
@@ -118,6 +121,7 @@ public class PBEServiceTest extends BaseUnitTest
      * a caller-supplied password
      * @throws Exception generic exception
      */
+    @Test
     public void testEncryptDecryptStringUsingCustomPassword() throws Exception
     {
         char[] myPassword = this.getService().createPassword("mysecret".toCharArray());
@@ -131,6 +135,7 @@ public class PBEServiceTest extends BaseUnitTest
      * Test encryption and decryption of binary data using the default password.
      * @throws Exception generic exception
      */
+    @Test
     public void testBinaryEncryptDecrypt() throws Exception
     {
         byte[] result;
@@ -163,6 +168,7 @@ public class PBEServiceTest extends BaseUnitTest
      * Test encryption/decryption based on streams.
      * @throws Exception generic exception
      */
+    @Test
     public void testStreamCiphers() throws Exception
     {
         byte[] cipherText;
@@ -192,6 +198,7 @@ public class PBEServiceTest extends BaseUnitTest
      * Test a few of the convinience methods.
      * @throws Exception generic exception
      */
+    @Test
     public void testConvinienceEncryption() throws Exception
     {
         String plainText = "Nobody knows the troubles I have seen ...";

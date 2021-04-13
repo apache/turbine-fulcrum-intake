@@ -32,5 +32,7 @@
     <cryptoSalt>4463657541544141</cryptoSalt>
     <cyrptoCount>20</cyrptoCount>
     <passwordCount>20</passwordCount>
+    <!-- optional algo, default SHA1 -->
+    <!-- algo>SHA-256</algo-->
   </PBEService>
 </componentConfig>

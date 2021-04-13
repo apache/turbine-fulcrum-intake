@@ -1,5 +1,7 @@
 package org.apache.fulcrum.pbe;
 
+import java.io.ByteArrayOutputStream;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -35,6 +37,7 @@ import org.apache.fulcrum.jce.crypto.CryptoUtil;
 import org.apache.fulcrum.jce.crypto.HexConverter;
 import org.apache.fulcrum.jce.crypto.PasswordFactory;
 import org.apache.fulcrum.jce.crypto.PasswordParameters;
+import org.apache.fulcrum.jce.crypto.StreamUtil;
 
 /**
  * Encapsulates an PBE (Password Based Encryption) functionality
@@ -58,6 +61,8 @@ public class PBEServiceImpl
 
     /** the default password */
     private char[] defaultPassword;
+    
+    private String algorithm = "";
 
     /**
      * Constructor
@@ -79,9 +84,11 @@ public class PBEServiceImpl
     {
         // read the parameters for CryptoStreamFactory
 
-        byte[] cryptoSalt = CryptoParameters.SALT;
+        byte[] cryptoSalt = CryptoParameters.Salt();
         int cryptoCount = configuration.getChild("cyrptoCount").getValueAsInteger(CryptoParameters.COUNT);
         String tempCryptoSalt = configuration.getChild("cryptoSalt").getValue("");
+        
+        this.algorithm = configuration.getChild("algo").getValue("SHA1");
 
         if( tempCryptoSalt.length() > 0 )
         {
@@ -97,9 +104,9 @@ public class PBEServiceImpl
 
         // read the parameters for PasswordFactory
 
-        this.passwordSalt = PasswordParameters.SALT;
+        this.passwordSalt = PasswordParameters.Salt();
         this.passwordCount = configuration.getChild("passwordCount").getValueAsInteger(PasswordParameters.COUNT);
-        this.defaultPassword = PasswordParameters.DEFAULTPASSWORD;
+        this.defaultPassword = PasswordParameters.DefaultPassword();
     }
 
 
@@ -112,7 +119,8 @@ public class PBEServiceImpl
      */
     public char[] createPassword() throws Exception
     {
-        return PasswordFactory.create(
+        //"SHA-256", default "SHA1"
+        return PasswordFactory.getInstance(algorithm).create(
             this.defaultPassword,
             this.passwordSalt,
             this.passwordCount
@@ -124,7 +132,7 @@ public class PBEServiceImpl
      */
     public char [] createPassword(char [] seed) throws Exception
     {
-        return PasswordFactory.create(
+        return PasswordFactory.getInstance(algorithm).create(
             seed,
             this.passwordSalt,
             this.passwordCount
@@ -137,7 +145,7 @@ public class PBEServiceImpl
     public String decryptString(String cipherText, char [] password)
         throws GeneralSecurityException, IOException
     {
-        return CryptoUtil.decryptString(
+        return CryptoUtil.getInstance().decryptString(
             this.getCryptoStreamFactory(),
             cipherText,
             password
@@ -150,10 +158,11 @@ public class PBEServiceImpl
     public String encryptString(String plainText, char [] password)
         throws GeneralSecurityException, IOException
     {
-        return CryptoUtil.encryptString(
+        return CryptoUtil.getInstance().encryptString(
             this.getCryptoStreamFactory(),
             plainText,
-            password
+            password,
+            false
             );
     }
 
@@ -199,12 +208,17 @@ public class PBEServiceImpl
     public void decrypt(Object source, Object target, char [] password)
         throws GeneralSecurityException, IOException
     {
-        CryptoUtil.decrypt(
-            this.getCryptoStreamFactory(),
-            source,
-            target,
-            password
-            );
+        InputStream is = StreamUtil.createInputStream(source);
+        OutputStream os = StreamUtil.createOutputStream(target);
+        InputStream dis = this.getCryptoStreamFactory().getInputStream(is, password);
+        StreamUtil.copy(dis, os);               
+        // protected
+//        CryptoUtil.getInstance().decrypt(
+//            this.getCryptoStreamFactory(),
+//            source,
+//            target,
+//            password
+//            );
     }
 
     /**
@@ -213,7 +227,7 @@ public class PBEServiceImpl
     public void encrypt(Object source, Object target, char [] password)
         throws GeneralSecurityException, IOException
     {
-        CryptoUtil.encrypt(
+        CryptoUtil.getInstance().encrypt(
             this.getCryptoStreamFactory(),
             source,
             target,
