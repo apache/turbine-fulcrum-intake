@@ -33,11 +33,9 @@
 
   <modules>  
 
-    <!-- turbine/torque dependencies -->
+    <!-- turbine / torque dependencies -->
 
-    <!-- FIXME: cache is broken -->
-    <!-- <module>cache</module> -->
-
+    <module>cache</module> 
     <module>crypto</module>    
     <module>factory</module>    
     <module>intake</module>    
@@ -50,6 +48,7 @@
     <module>security</module>    
     <module>servicemanager</module>    
     <module>testcontainer</module>    
+    <module>upload</module> 
     <module>yaafi-crypto</module>        
     <module>yaafi</module>        
     <module>xslt</module>
@@ -57,16 +56,15 @@
     <!-- Potentially dormant modules -->
     <module>commonsemail</module>
     <module>configuration/impl</module>    
-    <module>hsqldb</module>
-    <!-- needs upgrade to eclipse jetty -->    
-    <!--module>jetty</module-->    
+    <module>hsqldb</module>    
     <module>pbe</module>    
     <module>resourcemanager</module>    
     <module>groovy</module>    
     <module>script</module>    
     <module>spring</module>            
-    <module>upload</module>        
     <module>xmlrpc</module>        
+        <!-- needs upgrade to eclipse jetty -->    
+    <!--module>jetty</module-->
 
   </modules>
   

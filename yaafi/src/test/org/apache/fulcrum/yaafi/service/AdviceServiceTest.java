@@ -1,5 +1,6 @@
 package org.apache.fulcrum.yaafi.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -135,7 +136,7 @@ public class AdviceServiceTest  implements DependentTestComponent
         CharSequence advicedObject = (CharSequence) this.service.advice("first advice", interceptorList, unadvicedObject);
         CharSequence advicedAdvicedObject = (CharSequence) this.service.advice("second advice", interceptorList, advicedObject );
 
-        advicedAdvicedObject.length();
+        assertEquals(3, advicedAdvicedObject.length());
         assertTrue(this.service.isAdviced(advicedAdvicedObject));
     }
 
