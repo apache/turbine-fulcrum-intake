@@ -22,12 +22,18 @@
     <parser>
         <parameterEncoding>utf-8</parameterEncoding>
         <automaticUpload>true</automaticUpload>
+        <pool2>
+           <!--  cft. defaults in org.apache.commons.pool2.impl.BaseObjectPoolConfig and GenericKeyedObjectPoolConfig -->
+           <maxTotal>2048</maxTotal>
+           <blockWhenExhausted>false</blockWhenExhausted>
+           <maxWaitMillis>100</maxWaitMillis>
+        </pool2>
     </parser>
     <intake>
        <serialDataPath>target/appData.ser</serialDataPath>
        <xmlPaths>
-      	<xmlPath>src/test/intake1.xml</xmlPath>
-      	<xmlPath>src/test/intake2.xml</xmlPath>
+        <xmlPath>src/test/intake1.xml</xmlPath>
+        <xmlPath>src/test/intake2.xml</xmlPath>
        </xmlPaths>
     </intake>
 </componentConfig>
