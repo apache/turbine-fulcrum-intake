@@ -187,7 +187,7 @@ public class JettyServiceImpl
      * @param applicationDir the directory where to start the search
      * @param location the location of the source to be loaded
      * @return the input stream of the resource
-     * @exception IOException the operation failed
+     * @throws IOException the operation failed
      */
     private InputStream locate( File applicationDir, String location ) throws IOException
     {

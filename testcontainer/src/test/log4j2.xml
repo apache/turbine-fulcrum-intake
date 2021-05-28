@@ -25,8 +25,13 @@
 		<Logger name="org.apache.fulcrum" level="debug"
 			additivity="false">
 			<AppenderRef ref="console" />
-			<AppenderRef ref="avalonfile" />
+			<AppenderRef ref="logfile" />
 		</Logger>
+		<Logger name="org.apache.fulcrum.yaafi" level="debug"
+            additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="avalonfile" />
+        </Logger>
 		<Logger name="avalon" level="debug" additivity="false">
 			<AppenderRef ref="avalonfile" />
 		</Logger>

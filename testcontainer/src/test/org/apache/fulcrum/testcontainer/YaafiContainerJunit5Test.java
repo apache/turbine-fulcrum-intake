@@ -28,6 +28,7 @@ import java.io.File;
 
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.framework.logger.ConsoleLogger;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -40,12 +41,20 @@ import org.junit.jupiter.api.Test;
 @DisplayName("Yaafi Container Test JUnit5")
 public class YaafiContainerJunit5Test extends BaseUnit5Test
 {
+
     /**
      * Constructor for test.
      */
     public YaafiContainerJunit5Test()
     {
     }
+    
+    @BeforeEach
+    public void setup() {
+        setContainerType( CONTAINER_YAAFI);
+        this.setLogLevel(ConsoleLogger.LEVEL_INFO);
+    }
+    
 
     @Test
     public void testInitialization()
@@ -56,6 +65,7 @@ public class YaafiContainerJunit5Test extends BaseUnit5Test
     @Test
     public void testComponentUsage()
     {
+        this.setLogLevel(ConsoleLogger.LEVEL_DEBUG);
         SimpleComponent sc = null;
         try
         {

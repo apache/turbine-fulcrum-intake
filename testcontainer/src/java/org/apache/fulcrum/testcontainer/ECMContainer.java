@@ -64,6 +64,7 @@ public class ECMContainer extends AbstractLogEnabled implements Container
     public void startup(String configFileName, String roleFileName,String parametersFileName)
     {
         getLogger().debug("Starting container...");
+        getLogger().debug( "with logger: " + getLogger().getClass().getSimpleName());
         this.configFileName = configFileName;
         this.roleFileName = roleFileName;
         File configFile = new File(configFileName);

@@ -27,8 +27,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.File;
 
 import org.apache.avalon.framework.component.ComponentException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 /**
  * Basic testing of the Container
@@ -37,7 +38,7 @@ import org.junit.Test;
  * @version $Id$
  */
 
-public class EcmContainerTest extends BaseUnit4Test
+public class EcmContainerTest extends BaseUnit5Test
 {
     /**
 	 * Constructor for test.
@@ -46,7 +47,7 @@ public class EcmContainerTest extends BaseUnit4Test
     {
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception{
         setContainerType( CONTAINER_ECM);
     }

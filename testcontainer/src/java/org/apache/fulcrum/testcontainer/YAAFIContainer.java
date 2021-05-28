@@ -25,9 +25,13 @@ import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.logger.ConsoleLogger;
+import org.apache.fulcrum.testcontainer.avalon.logger.Log4J2Logger;
 import org.apache.fulcrum.yaafi.framework.container.ServiceContainer;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerConfiguration;
 import org.apache.fulcrum.yaafi.framework.factory.ServiceContainerFactory;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.config.Configurator;
 
 /**
  * This is a simple YAAFI based container that can be used in unit test
@@ -44,26 +48,50 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
     private ServiceContainer manager;
 
     /** The log level for the ConsoleLogger */
-    private int logLevel = ConsoleLogger.LEVEL_DEBUG;
+    //private int logLevel = ConsoleLogger.LEVEL_DEBUG;
+    private Level logLevel = Level.DEBUG;
+    
+    org.apache.logging.log4j.Logger logger;
 
     /**
      * Constructor.
      */
     public YAAFIContainer()
     {
-        this.enableLogging( new ConsoleLogger( logLevel ) );
+        //this.enableLogging( new ConsoleLogger( logLevel ) );
+        logger = LogManager.getLogger( "avalon" );
+        Configurator.setLevel( "avalon",logLevel );
+        this.enableLogging( new Log4J2Logger( logger ) );
         this.config = new ServiceContainerConfiguration();
     }
 
     /**
      * Constructor.
      *
-     * @param logLevel the log level to be used
+     * @param logLevel the log level to be used: {@link ConsoleLogger} LEVEL_*.
      */
     public YAAFIContainer(int logLevel)
     {
-        this.logLevel = logLevel;
-        this.enableLogging( new ConsoleLogger( logLevel ) );
+        logger = LogManager.getLogger( "avalon" );
+        if (logLevel == ConsoleLogger.LEVEL_DEBUG) {
+            this.logLevel = Level.DEBUG;
+        }  else if (logLevel == ConsoleLogger.LEVEL_DEBUG) {
+                this.logLevel = Level.DEBUG;
+        }  else if (logLevel == ConsoleLogger.LEVEL_INFO) {
+            this.logLevel = Level.INFO;
+        }  else if (logLevel == ConsoleLogger.LEVEL_WARN) {
+            this.logLevel = Level.WARN;
+        }  else if (logLevel == ConsoleLogger.LEVEL_ERROR) {
+            this.logLevel = Level.ERROR;
+        }  else if (logLevel == ConsoleLogger.LEVEL_FATAL) {
+            this.logLevel = Level.FATAL;
+        }  else if (logLevel == ConsoleLogger.LEVEL_DISABLED) {
+            this.logLevel = Level.OFF;
+        } else {
+            this.logLevel = Level.INFO;
+        }
+        Configurator.setLevel( "avalon", this.logLevel );
+        this.enableLogging( new Log4J2Logger( logger ) );
         this.config = new ServiceContainerConfiguration();
     }
 
@@ -78,12 +106,13 @@ public class YAAFIContainer extends AbstractLogEnabled implements Container
         String roleFileName,
         String parametersFileName )
     {
-        getLogger().debug("Starting container...");
+        getLogger().debug("Starting YAAFI container... ");
+        getLogger().debug( "with logger: " + getLogger().getClass().getName());
 
         this.config.setComponentConfigurationLocation( configFileName );
         this.config.setComponentRolesLocation( roleFileName );
         this.config.setParametersLocation( parametersFileName );
-        this.config.setLogger( new ConsoleLogger( logLevel ) );
+        this.config.setLogger( new Log4J2Logger( logger ) );
 
         File configFile = new File(configFileName);
 

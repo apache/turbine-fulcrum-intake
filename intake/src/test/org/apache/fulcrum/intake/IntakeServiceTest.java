@@ -28,6 +28,8 @@ import java.io.File;
 
 import org.apache.fulcrum.intake.model.Group;
 import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -43,6 +45,8 @@ public class IntakeServiceTest extends BaseUnit5Test
 {
     private static final File BASEDIR = new File(".");
     private IntakeService intakeService = null;
+    
+    protected static final Logger log = LogManager.getLogger( IntakeServiceTest.class );
 
     /**
      * Defines the testcase for JUnit5.

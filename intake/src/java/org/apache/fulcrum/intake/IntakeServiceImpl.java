@@ -736,6 +736,8 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
         Set<File> xmlFiles = new HashSet<File>();
 
         long timeStamp = 0;
+        
+        getLogger().debug("logger is " + getLogger().getClass().getSimpleName());
 
         for (String xmlPath : xmlPathes)
         {
