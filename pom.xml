@@ -20,6 +20,7 @@
     <groupId>org.apache.turbine</groupId>
     <artifactId>turbine-parent</artifactId>
     <version>8</version>
+    <relativePath></relativePath>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -102,14 +103,25 @@
     <dependency>
       <groupId>org.apache.fulcrum</groupId>
       <artifactId>fulcrum-parser</artifactId>
-      <version>2.0.0</version>
+      <version>2.0.1</version>
     </dependency>
-	<dependency>
-	    <groupId>javax.servlet</groupId>
-	    <artifactId>javax.servlet-api</artifactId>
-	    <version>3.1.0</version>
-	    <scope>provided</scope>
-	</dependency>
+    <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-pool2</artifactId>
+        <version>2.7.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.fulcrum</groupId>
+      <artifactId>fulcrum-pool</artifactId>
+      <version>1.0.5</version>
+    </dependency>
+
+    <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>3.1.0</version>
+        <scope>provided</scope>
+    </dependency>
     
     <!-- testing dependencies -->
     <dependency>
@@ -123,6 +135,13 @@
       <artifactId>fulcrum-yaafi</artifactId>
       <version>1.0.8</version>
       <scope>test</scope>
+    </dependency>
+    <!-- log4j2 only usable in testcontainer 1.0.10 -->
+    <dependency>
+       <groupId>org.apache.logging.log4j</groupId>
+       <artifactId>log4j-core</artifactId>
+       <version>${turbine.log4j2.version}</version>
+       <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -145,6 +164,17 @@
         </includes>
       </resource>
     </resources>
+    
+    <testResources>
+        <testResource>
+            <directory>src/test</directory>
+                <includes> 
+                <include>**/*.*</include> 
+            </includes>
+        </testResource>
+    </testResources>
+    
+
   </build>
 
   <properties>
