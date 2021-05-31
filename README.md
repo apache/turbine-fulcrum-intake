@@ -1,31 +1,19 @@
---------------------------------------------------------------------------
- Licensed to the Apache Software Foundation (ASF) under one
- or more contributor license agreements.  See the NOTICE file
- distributed with this work for additional information
- regarding copyright ownership.  The ASF licenses this file
- to you under the Apache License, Version 2.0 (the
- "License"); you may not use this file except in compliance
- with the License.  You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing,
- software distributed under the License is distributed on an
- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- KIND, either express or implied.  See the License for the
- specific language governing permissions and limitations
- under the License.
---------------------------------------------------------------------------
-
-# F U L C R U M
+# [Apache F U L C R U M](https://turbine.apache.org/fulcrum/)
 --------------------------------------------------------------------------
 
 Fulcrum is a collection of components originally part of the Turbine core
 project that are suitable for use in any environment.  They are designed to
 be used within any Avalon-compatible container.
 
+## U S A G E 
 
-### B U I L D I N G
+Apache Fulcrum components might be used standalone, e.g. Fulcrum Crypto, but 
+most components work best in an environment which uses the Fulcrum Yaafi service framework 
+(which is using the Avalon service lifecycle interfaces aka Avalon container).
+
+You can find a web framework, which is powered by Fulcrum here: [Apache Turbine](https://turbine.apache.org/).
+
+## B U I L D I N G
 --------------------------------------------------------------------------
 You must have Maven 3.x
 
@@ -35,8 +23,8 @@ instructions on building.  This document is available here:
 
 https://maven.apache.org/guides/getting-started/
 
--------------------------------------------
-### GIT READONLY
+
+### GIT READONLY (may change)
 -------------------------------------------
 
 You could use git to checkout current trunk:
@@ -44,8 +32,26 @@ You could use git to checkout current trunk:
     git clone https://github.com/apache/turbine-fulcrum.git
     
     git checkout -b remote-trunk remotes/origin/trunk
-
+    
+    
+ ### SVN 
+ --------------------------------------------------------------------------
+ 
+ Check it out with
+ 
+    svn co https://svn.apache.org/repos/asf/turbine/fulcrum/trunk fulcrum-trunk
+    
+## Documentation
 --------------------------------------------------------------------------
+
+Each component has its section [here](https://turbine.apache.org/fulcrum/).
+
+## Requirements
+--------------------------------------------------------------------------
+
+Fulcrum Components requires Java 8. Older components might require Java 7 only.
+    
+    -----------------------------------------------------------------------
 ## COMPONENT DEVELOPMENT  
 --------------------------------------------------------------------------
 ### Publishing Workflow
@@ -212,3 +218,7 @@ Omit site:stage, which reqires site element definition in distributionManagement
     mvn site scm-publish:publish-scm -Dscmpublish.dryRun=true
     mvn clean site scm-publish:publish-scm -Dusername=<username> -Dpassword=<pw>
 
+
+## License
+
+Apache Fulcrum is distributed under the [Apache License, version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).

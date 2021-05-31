@@ -32,7 +32,7 @@
     <skin>
     <groupId>org.apache.maven.skins</groupId>
     <artifactId>maven-fluido-skin</artifactId>
-    <version>1.9</version>
+    <version>1.8</version>
   </skin>
 
   <body>
@@ -52,9 +52,8 @@
       <item name="Crypto"                href="/fulcrum-crypto/"/>
       <item name="Factory"               href="/fulcrum-factory/"/>
       <item name="HsqlDB"                href="/fulcrum-hsqldb/"/>      
-      <item name="Intake"                href="/fulcrum-intake/"/>
-      <item name="Jetty"      			 href="/fulcrum-jetty/"/>      
-      <item name="JSON"      			 href="/fulcrum-json/"/> 
+      <item name="Intake"                href="/fulcrum-intake/"/>    
+      <item name="JSON"             href="/fulcrum-json/"/> 
       <item name="Localization"          href="/fulcrum-localization/"/>
       <item name="Mimetype"              href="/fulcrum-mimetype/"/>
       <item name="Parser"                href="/fulcrum-parser/"/>
@@ -67,7 +66,7 @@
         <item name="Hibernate Impl"        href="/fulcrum-security/fulcrum-security-hibernate/"/>
         <item name="Torque Impl"           href="/fulcrum-security/fulcrum-security-torque/"/>
       </item>      
-      <item name="Spring"          		 href="/fulcrum-spring/"/>      
+      <item name="Spring"          	     href="/fulcrum-spring/"/> 
       <item name="Test Container"         href="/fulcrum-testcontainer/"/>
       <item name="Upload"                 href="/fulcrum-upload/"/>
       <item name="XSLT"                   href="/fulcrum-xslt/"/>
@@ -77,7 +76,6 @@
 
     <menu name="Sandbox Components">
       <item name="CommonsEmail"          href="/fulcrum-commonsemail/"/>
-      <item name="JSON"              href="/fulcrum-json/"/>
       <item name="ResourceManager"       href="/fulcrum-resourcemanager/"/>
       <item name="Script"          		 href="/fulcrum-script/"/>
       <item name="Template"              href="/fulcrum-template/"/>
@@ -88,6 +86,7 @@
       <item name="Configuration"         href="/fulcrum-configuration-impl/"/>
       <item name="DVSL"                  href="/fulcrum-dvsl/"/>      
       <item name="Groovy"                href="/fulcrum-groovy/"/>      
+     <item name="Jetty"                href="/fulcrum-jetty/"/>  
       <item name="Naming"                href="/fulcrum-naming/"/>      
       <item name="OSWorkflow"            href="/sites/osworkflow.html" collapse="true">
         <item name="OSWorkflow"            href="/fulcrum-osworkflow/"/>
