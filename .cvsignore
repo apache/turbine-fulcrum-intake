@@ -1,9 +1,0 @@
-target
-velocity.log
-maven.log
-*~
-.classpath
-.project
-OldSite
-*.patch
-*.ser

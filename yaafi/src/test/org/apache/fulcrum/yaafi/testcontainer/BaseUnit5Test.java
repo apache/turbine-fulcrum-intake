@@ -24,8 +24,6 @@ import org.apache.avalon.framework.component.ComponentException;
 import org.apache.avalon.framework.service.ServiceException;
 import org.junit.jupiter.api.AfterEach;
 
-import junit.framework.TestCase;
-
 /**
  * Base class for unit tests for components. This version doesn't load the
  * container until the first request for a component. This allows the tester to
