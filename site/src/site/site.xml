@@ -32,7 +32,7 @@
     <skin>
     <groupId>org.apache.maven.skins</groupId>
     <artifactId>maven-fluido-skin</artifactId>
-    <version>1.8</version>
+    <version>1.9</version>
   </skin>
 
   <body>
@@ -86,12 +86,12 @@
       <item name="Configuration"         href="/fulcrum-configuration-impl/"/>
       <item name="DVSL"                  href="/fulcrum-dvsl/"/>      
       <item name="Groovy"                href="/fulcrum-groovy/"/>      
-     <item name="Jetty"                href="/fulcrum-jetty/"/>  
-      <item name="Naming"                href="/fulcrum-naming/"/>      
-      <item name="OSWorkflow"            href="/sites/osworkflow.html" collapse="true">
-        <item name="OSWorkflow"            href="/fulcrum-osworkflow/"/>
-        <item name="OSWorkflow Example"    href="/fulcrum-osworkflow-example/"/>
-      </item>
+      <item name="Jetty"                href="/fulcrum-jetty/"/>  
+       <item name="Naming"                href="/fulcrum-naming/"/>      
+       <item name="OSWorkflow"            href="/sites/osworkflow.html" collapse="true">
+           <item name="OSWorkflow"            href="/fulcrum-osworkflow/"/>
+           <item name="OSWorkflow Example"    href="/fulcrum-osworkflow-example/"/>
+       </item>
       <item name="XMLRPC"                 href="/fulcrum-xmlrpc/"/>      
     </menu>
 
