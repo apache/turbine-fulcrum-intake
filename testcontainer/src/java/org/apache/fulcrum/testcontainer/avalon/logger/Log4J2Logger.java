@@ -29,10 +29,13 @@ import org.apache.logging.log4j.LogManager;
  * A Log4J2 wrapper class for Logger.
  * 
  * - supports only minimal logging mechanism, without suppliers or objects.
+ * 
+ * Use org.apache.fulcrum.yaafi.framework.logger.Log4j2Logger instead.
  *
  * @author <a href="mailto:dev@turbine.apache.org">Turbine Development Team</a>
  * @version $Id$
  */
+@Deprecated
 public final class Log4J2Logger
     implements Logger
 {

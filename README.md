@@ -65,6 +65,7 @@ Deploy jars
 More Information:
   - https://www.apache.org/dev/publishing-maven-artifacts.html#prepare-poms
   - http://maven.apache.org/developers/website/deploy-component-reference-documentation.html
+  - https://infra.apache.org/publishing-maven-artifacts.html
   
 ##### Steps
 
