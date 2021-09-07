@@ -41,9 +41,9 @@
   </distributionManagement>
 		
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/intake/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/intake/</developerConnection>
-    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/intake/</url>
+    <connection>scm:git:https://gitbox.apache.org/repos/asf/turbine-fulcrum-intake.git</connection>
+    <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/turbine-fulcrum-intake.git</developerConnection>
+    <url>https://gitbox.apache.org/repos/asf/turbine-fulcrum-intake.git</url>
   </scm>
 
   <developers>
