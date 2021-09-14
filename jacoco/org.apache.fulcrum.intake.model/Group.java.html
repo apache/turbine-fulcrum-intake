@@ -1,0 +1,758 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Group.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Intake Service</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.intake.model</a> &gt; <span class="el_source">Group.java</span></div><h1>Group.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.intake.model;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import org.apache.avalon.framework.logger.LogEnabled;
+import org.apache.avalon.framework.logger.Logger;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.pool2.BaseKeyedPooledObjectFactory;
+import org.apache.commons.pool2.PooledObject;
+import org.apache.commons.pool2.impl.DefaultPooledObject;
+import org.apache.fulcrum.intake.IntakeException;
+import org.apache.fulcrum.intake.IntakeServiceFacade;
+import org.apache.fulcrum.intake.Retrievable;
+import org.apache.fulcrum.parser.ValueParser;
+
+/**
+ * Holds a group of Fields
+ *
+ * @author &lt;a href=&quot;mailto:jmcnally@collab.net&quot;&gt;John McNally&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:hps@intermeta.de&quot;&gt;Henning P. Schmiedehausen&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:quintonm@bellsouth.net&quot;&gt;Quinton McCombs&lt;/a&gt;
+ * @version $Id$
+ */
+@XmlType(name=&quot;group&quot;)
+@XmlAccessorType(XmlAccessType.NONE)
+public class Group implements Serializable, LogEnabled
+{
+    /** Serial version */
+    private static final long serialVersionUID = -5452725641409669284L;
+
+    public static final String EMPTY = &quot;&quot;;
+
+    /*
+     * An id representing a new object.
+     */
+    public static final String NEW = &quot;_0&quot;;
+
+    /** Logging */
+    private transient Logger log;
+
+    /**
+     * The key used to represent this group in a parameter.
+     * This key is usually a prefix as part of a field key.
+     */
+    @XmlAttribute(name=&quot;key&quot;, required=true)
+    private String gid;
+
+    /**
+     * The name used in templates and java code to refer to this group.
+     */
+    @XmlAttribute(required=true)
+    private String name;
+
+    /**
+     * The number of Groups with the same name that will be pooled.
+     */
+<span class="fc" id="L90">    @XmlAttribute</span>
+    private int poolCapacity = 128;
+
+    /**
+     * The default map object for this group
+     */
+    @XmlAttribute(name=&quot;mapToObject&quot;)
+    private String defaultMapToObject;
+
+    /**
+     * The parent element in the XML tree
+     */
+    private AppData parent;
+
+    /**
+     * A map of the fields in this group mapped by field name.
+     */
+    private Map&lt;String, Field&lt;?&gt;&gt; fieldsByName;
+
+    /**
+     * Map of the fields by mapToObject
+     */
+    private Map&lt;String, Field&lt;?&gt;[]&gt; mapToObjectFields;
+
+    /**
+     * A list of fields in this group.
+     */
+    private LinkedList&lt;Field&lt;?&gt;&gt; fields;
+
+    /**
+     * The object id used to associate this group to a bean
+     * for one request cycle
+     */
+    private String oid;
+
+    /**
+     * The object containing the request data
+     */
+    private transient ValueParser pp;
+
+    /**
+     * A flag to help prevent duplicate hidden fields declaring this group.
+     */
+    private boolean isDeclared;
+
+    /**
+     * Default constructor
+     */
+    public Group()
+    {
+<span class="fc" id="L140">        super();</span>
+<span class="fc" id="L141">        this.fields = new LinkedList&lt;Field&lt;?&gt;&gt;();</span>
+<span class="fc" id="L142">    }</span>
+
+    /**
+	 * Enable Avalon Logging
+	 */
+	@Override
+	public void enableLogging(Logger logger)
+	{
+<span class="fc" id="L150">		this.log = logger.getChildLogger(getClass().getSimpleName());</span>
+<span class="fc" id="L151">	}</span>
+
+	/**
+     * Initializes the default Group using parameters.
+     *
+     * @param pp a &lt;code&gt;ValueParser&lt;/code&gt; value
+     * @return this Group
+     * @throws IntakeException if at least one field could not be initialized
+     */
+    public Group init(ValueParser pp) throws IntakeException
+    {
+<span class="fc" id="L162">        return init(NEW, pp);</span>
+    }
+
+    /**
+     * Initializes the Group with parameters from RunData
+     * corresponding to key.
+     *
+     * @param key the group id
+     * @param pp a &lt;code&gt;ValueParser&lt;/code&gt; value
+     * @return this Group
+     * @throws IntakeException if at least one field could not be initialized
+     */
+    public Group init(String key, ValueParser pp) throws IntakeException
+    {
+<span class="fc" id="L176">        this.oid = key;</span>
+<span class="fc" id="L177">        this.pp = pp;</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        for (ListIterator&lt;Field&lt;?&gt;&gt; i = fields.listIterator(fields.size()); i.hasPrevious();)</span>
+        {
+<span class="fc" id="L180">            i.previous().init(pp);</span>
+        }
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        for (ListIterator&lt;Field&lt;?&gt;&gt; i = fields.listIterator(fields.size()); i.hasPrevious();)</span>
+        {
+<span class="fc" id="L184">            Field&lt;?&gt; field = i.previous();</span>
+<span class="pc bpc" id="L185" title="1 of 4 branches missed.">            if (field.isSet() &amp;&amp; !field.isValidated())</span>
+            {
+<span class="fc" id="L187">                field.validate();</span>
+            }
+<span class="fc" id="L189">        }</span>
+<span class="fc" id="L190">        return this;</span>
+    }
+
+    /**
+     * Initializes the group with properties from an object.
+     *
+     * @param obj a &lt;code&gt;Persistent&lt;/code&gt; value
+     * @return a &lt;code&gt;Group&lt;/code&gt; value
+     */
+    public Group init(Retrievable obj)
+    {
+<span class="nc" id="L201">        this.oid = obj.getQueryKey();</span>
+
+<span class="nc" id="L203">        Class&lt;?&gt; cls = obj.getClass();</span>
+<span class="nc bnc" id="L204" title="All 2 branches missed.">        while (cls != null)</span>
+        {
+<span class="nc" id="L206">            Field&lt;?&gt;[] flds = mapToObjectFields.get(cls.getName());</span>
+<span class="nc bnc" id="L207" title="All 2 branches missed.">            if (flds != null)</span>
+            {
+<span class="nc bnc" id="L209" title="All 2 branches missed.">                for (int i = flds.length - 1; i &gt;= 0; i--)</span>
+                {
+<span class="nc" id="L211">                    flds[i].init(obj);</span>
+                }
+            }
+
+            // Also check any interfaces
+<span class="nc" id="L216">            Class&lt;?&gt;[] interfaces = cls.getInterfaces();</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">            for (int idx = 0; idx &lt; interfaces.length; idx++)</span>
+            {
+<span class="nc" id="L219">                Field&lt;?&gt;[] interfaceFields =</span>
+<span class="nc" id="L220">                    mapToObjectFields.get(interfaces[idx].getName());</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">                if (interfaceFields != null)</span>
+                {
+<span class="nc bnc" id="L223" title="All 2 branches missed.">                    for (int i = 0; i &lt; interfaceFields.length; i++)</span>
+                    {
+<span class="nc" id="L225">                        interfaceFields[i].init(obj);</span>
+                    }
+                }
+            }
+
+<span class="nc" id="L230">            cls = cls.getSuperclass();</span>
+<span class="nc" id="L231">        }</span>
+
+<span class="nc" id="L233">        return this;</span>
+    }
+
+    /**
+     * Gets a list of the names of the fields stored in this object.
+     *
+     * @return A String array containing the list of names.
+     */
+    public String[] getFieldNames()
+    {
+<span class="nc" id="L243">        String nameList[] = new String[fields.size()];</span>
+<span class="nc" id="L244">        int i = 0;</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">        for (Field&lt;?&gt; f : fields)</span>
+        {
+<span class="nc" id="L247">            nameList[i++] = f.getName();</span>
+<span class="nc" id="L248">        }</span>
+<span class="nc" id="L249">        return nameList;</span>
+    }
+
+    /**
+     * Return the name given to this group.  The long name is to
+     * avoid conflicts with the get(String key) method.
+     *
+     * @return a &lt;code&gt;String&lt;/code&gt; value
+     */
+    public String getIntakeGroupName()
+    {
+<span class="fc" id="L260">        return name;</span>
+    }
+
+    /**
+     * Get the number of Group objects that will be pooled.
+     *
+     * @return an &lt;code&gt;int&lt;/code&gt; value
+     */
+    public int getPoolCapacity()
+    {
+<span class="fc" id="L270">        return poolCapacity;</span>
+    }
+
+    /**
+     * Get the part of the key used to specify the group.
+     * This is specified in the key attribute in the xml file.
+     *
+     * @return a &lt;code&gt;String&lt;/code&gt; value
+     */
+    public String getGID()
+    {
+<span class="fc" id="L281">        return gid;</span>
+    }
+
+    /**
+     * Get the part of the key that distinguishes a group
+     * from others of the same name.
+     *
+     * @return a &lt;code&gt;String&lt;/code&gt; value
+     */
+    public String getOID()
+    {
+<span class="nc" id="L292">        return oid;</span>
+    }
+
+    /**
+     * Concatenation of gid and oid.
+     *
+     * @return a &lt;code&gt;String&lt;/code&gt; value
+     */
+    public String getObjectKey()
+    {
+<span class="fc" id="L302">        return gid + oid;</span>
+    }
+
+    /**
+     * Default object to map this group to.
+     *
+     * @return a &lt;code&gt;String&lt;/code&gt; value
+     */
+    public String getDefaultMapToObject()
+    {
+<span class="fc" id="L312">        return defaultMapToObject;</span>
+    }
+
+    /**
+     * Describe &lt;code&gt;getObjects&lt;/code&gt; method here.
+     *
+     * @param pp a &lt;code&gt;ValueParser&lt;/code&gt; value
+     * @return an &lt;code&gt;ArrayList&lt;/code&gt; value
+     * @throws IntakeException if an error occurs
+     */
+    public List&lt;Group&gt; getObjects(ValueParser pp) throws IntakeException
+    {
+<span class="nc" id="L324">        ArrayList&lt;Group&gt; objs = null;</span>
+<span class="nc" id="L325">        String[] oids = pp.getStrings(gid);</span>
+<span class="nc bnc" id="L326" title="All 2 branches missed.">        if (oids != null)</span>
+        {
+<span class="nc" id="L328">            objs = new ArrayList&lt;Group&gt;(oids.length);</span>
+<span class="nc bnc" id="L329" title="All 2 branches missed.">            for (int i = oids.length - 1; i &gt;= 0; i--)</span>
+            {
+<span class="nc" id="L331">                objs.add(IntakeServiceFacade.getGroup(name).init(oids[i], pp));</span>
+            }
+        }
+<span class="nc" id="L334">        return objs;</span>
+    }
+
+    /**
+     * Get the Field
+     *
+     * @param fieldName the name of the field
+     * @return the named field
+     * @throws IntakeException indicates the field could not be found.
+     */
+    public Field&lt;?&gt; get(String fieldName)
+            throws IntakeException
+    {
+<span class="pc bpc" id="L347" title="1 of 2 branches missed.">        if (fieldsByName.containsKey(fieldName))</span>
+        {
+<span class="fc" id="L349">            return fieldsByName.get(fieldName);</span>
+        }
+        else
+        {
+<span class="nc" id="L353">            throw new IntakeException(&quot;Intake Field name: &quot; + fieldName +</span>
+                    &quot; not found in Group &quot; + name);
+        }
+    }
+
+    /**
+     * Get the list of Fields.
+     * @return list of Fields
+     */
+    public List&lt;Field&lt;?&gt;&gt; getFields()
+    {
+<span class="fc" id="L364">        return fields;</span>
+    }
+
+    /**
+     * Set a collection of fields for this group
+     *
+     * @param inputFields the fields to set
+     */
+    @XmlElement(name=&quot;field&quot;)
+    @XmlJavaTypeAdapter(FieldAdapter.class)
+    protected void setFields(List&lt;Field&lt;?&gt;&gt; inputFields)
+    {
+<span class="nc" id="L376">        fields = new LinkedList&lt;Field&lt;?&gt;&gt;(inputFields);</span>
+<span class="nc" id="L377">    }</span>
+
+    /**
+     * Performs an AND between all the fields in this group.
+     *
+     * @return a &lt;code&gt;boolean&lt;/code&gt; value
+     */
+    public boolean isAllValid()
+    {
+<span class="nc" id="L386">        boolean valid = true;</span>
+<span class="nc bnc" id="L387" title="All 2 branches missed.">        for (ListIterator&lt;Field&lt;?&gt;&gt; i = fields.listIterator(fields.size()); i.hasPrevious();)</span>
+        {
+<span class="nc" id="L389">            Field&lt;?&gt; field = i.previous();</span>
+<span class="nc" id="L390">            valid &amp;= field.isValid();</span>
+<span class="nc bnc" id="L391" title="All 4 branches missed.">            if (log.isDebugEnabled() &amp;&amp; !field.isValid())</span>
+            {
+<span class="nc" id="L393">                log.debug(&quot;Group(&quot; + oid + &quot;): &quot; + name + &quot;; Field: &quot;</span>
+<span class="nc" id="L394">                        + field.getName() + &quot;; value=&quot; +</span>
+<span class="nc" id="L395">                        field.getValue() + &quot; is invalid!&quot;);</span>
+            }
+<span class="nc" id="L397">        }</span>
+<span class="nc" id="L398">        return valid;</span>
+    }
+
+    /**
+     * Calls a setter methods on obj, for fields which have been set.
+     *
+     * @param obj Object to be set with the values from the group.
+     * @throws IntakeException indicates that a failure occurred while
+     * executing the setter methods of the mapped object.
+     */
+    public void setProperties(Object obj) throws IntakeException
+    {
+<span class="fc" id="L410">        Class&lt;?&gt; cls = obj.getClass();</span>
+
+<span class="fc bfc" id="L412" title="All 2 branches covered.">        while (cls != null)</span>
+        {
+<span class="pc bpc" id="L414" title="1 of 2 branches missed.">            if (log.isDebugEnabled())</span>
+            {
+<span class="nc" id="L416">                log.debug(&quot;setProperties(&quot; + cls.getName() + &quot;)&quot;);</span>
+            }
+
+<span class="fc" id="L419">            Field&lt;?&gt;[] flds = mapToObjectFields.get(cls.getName());</span>
+<span class="pc bpc" id="L420" title="1 of 2 branches missed.">            if (flds != null)</span>
+            {
+<span class="nc bnc" id="L422" title="All 2 branches missed.">                for (int i = flds.length - 1; i &gt;= 0; i--)</span>
+                {
+<span class="nc" id="L424">                    flds[i].setProperty(obj);</span>
+                }
+            }
+
+            // Also check any interfaces
+<span class="fc" id="L429">            Class&lt;?&gt;[] interfaces = cls.getInterfaces();</span>
+<span class="fc bfc" id="L430" title="All 2 branches covered.">            for (int idx = 0; idx &lt; interfaces.length; idx++)</span>
+            {
+<span class="fc" id="L432">                Field&lt;?&gt;[] interfaceFields =</span>
+<span class="fc" id="L433">                    mapToObjectFields.get(interfaces[idx].getName());</span>
+<span class="pc bpc" id="L434" title="1 of 2 branches missed.">                if (interfaceFields != null)</span>
+                {
+<span class="fc bfc" id="L436" title="All 2 branches covered.">                    for (int i = 0; i &lt; interfaceFields.length; i++)</span>
+                    {
+<span class="fc" id="L438">                        interfaceFields[i].setProperty(obj);</span>
+                    }
+                }
+            }
+
+<span class="fc" id="L443">            cls = cls.getSuperclass();</span>
+<span class="fc" id="L444">        }</span>
+
+<span class="fc" id="L446">        log.debug(&quot;setProperties() finished&quot;);</span>
+<span class="fc" id="L447">    }</span>
+
+    /**
+     * Calls a setter methods on obj, for fields which pass validity tests.
+     * In most cases one should call Intake.isAllValid() and then if that
+     * test passes call setProperties.  Use this method when some data is
+     * known to be invalid, but you still want to set the object properties
+     * that are valid.
+     *
+     * @param obj the object to set the properties for
+     */
+    public void setValidProperties(Object obj)
+    {
+<span class="nc" id="L460">        Class&lt;?&gt; cls = obj.getClass();</span>
+<span class="nc bnc" id="L461" title="All 2 branches missed.">        while (cls != null)</span>
+        {
+<span class="nc" id="L463">            Field&lt;?&gt;[] flds = mapToObjectFields.get(cls.getName());</span>
+<span class="nc bnc" id="L464" title="All 2 branches missed.">            if (flds != null)</span>
+            {
+<span class="nc bnc" id="L466" title="All 2 branches missed.">                for (int i = flds.length - 1; i &gt;= 0; i--)</span>
+                {
+                    try
+                    {
+<span class="nc" id="L470">                        flds[i].setProperty(obj);</span>
+                    }
+<span class="nc" id="L472">                    catch (IntakeException e)</span>
+                    {
+                        // just move on to next field
+<span class="nc" id="L475">                    }</span>
+                }
+            }
+
+            // Also check any interfaces
+<span class="nc" id="L480">            Class&lt;?&gt;[] interfaces = cls.getInterfaces();</span>
+<span class="nc bnc" id="L481" title="All 2 branches missed.">            for (int idx = 0; idx &lt; interfaces.length; idx++)</span>
+            {
+<span class="nc" id="L483">                Field&lt;?&gt;[] interfaceFields =</span>
+<span class="nc" id="L484">                    mapToObjectFields.get(interfaces[idx].getName());</span>
+<span class="nc bnc" id="L485" title="All 2 branches missed.">                if (interfaceFields != null)</span>
+                {
+<span class="nc bnc" id="L487" title="All 2 branches missed.">                    for (int i = 0; i &lt; interfaceFields.length; i++)</span>
+                    {
+                        try
+                        {
+<span class="nc" id="L491">                            interfaceFields[i].setProperty(obj);</span>
+                        }
+<span class="nc" id="L493">                        catch(IntakeException e)</span>
+                        {
+                            // just move on to next field
+<span class="nc" id="L496">                        }</span>
+                    }
+                }
+            }
+
+<span class="nc" id="L501">            cls = cls.getSuperclass();</span>
+<span class="nc" id="L502">        }</span>
+<span class="nc" id="L503">    }</span>
+
+    /**
+     * Calls getter methods on objects that are known to Intake
+     * so that field values in forms can be initialized from
+     * the values contained in the intake tool.
+     *
+     * @param obj Object that will be used to as a source of data for
+     * setting the values of the fields within the group.
+     * @throws IntakeException indicates that a failure occurred while
+     * executing the setter methods of the mapped object.
+     */
+    public void getProperties(Object obj) throws IntakeException
+    {
+<span class="nc" id="L517">        Class&lt;?&gt; cls = obj.getClass();</span>
+
+<span class="nc bnc" id="L519" title="All 2 branches missed.">        while (cls != null)</span>
+        {
+<span class="nc" id="L521">            Field&lt;?&gt;[] flds = mapToObjectFields.get(cls.getName());</span>
+<span class="nc bnc" id="L522" title="All 2 branches missed.">            if (flds != null)</span>
+            {
+<span class="nc bnc" id="L524" title="All 2 branches missed.">                for (int i = flds.length - 1; i &gt;= 0; i--)</span>
+                {
+<span class="nc" id="L526">                    flds[i].getProperty(obj);</span>
+                }
+            }
+
+            // Also check any interfaces
+<span class="nc" id="L531">            Class&lt;?&gt;[] interfaces = cls.getInterfaces();</span>
+<span class="nc bnc" id="L532" title="All 2 branches missed.">            for (int idx = 0; idx &lt; interfaces.length; idx++)</span>
+            {
+<span class="nc" id="L534">                Field&lt;?&gt;[] interfaceFields =</span>
+<span class="nc" id="L535">                    mapToObjectFields.get(interfaces[idx].getName());</span>
+<span class="nc bnc" id="L536" title="All 2 branches missed.">                if (interfaceFields != null)</span>
+                {
+<span class="nc bnc" id="L538" title="All 2 branches missed.">                    for (int i = 0; i &lt; interfaceFields.length; i++)</span>
+                    {
+<span class="nc" id="L540">                        interfaceFields[i].getProperty(obj);</span>
+                    }
+                }
+            }
+
+<span class="nc" id="L545">            cls = cls.getSuperclass();</span>
+<span class="nc" id="L546">        }</span>
+<span class="nc" id="L547">    }</span>
+
+    /**
+     * Removes references to this group and its fields from the
+     * query parameters
+     */
+    public void removeFromRequest()
+    {
+<span class="nc bnc" id="L555" title="All 2 branches missed.">        if (pp != null)</span>
+        {
+<span class="nc" id="L557">            String[] groups = pp.getStrings(gid);</span>
+<span class="nc bnc" id="L558" title="All 2 branches missed.">            if (groups != null)</span>
+            {
+<span class="nc" id="L560">                pp.remove(gid);</span>
+<span class="nc bnc" id="L561" title="All 2 branches missed.">                for (int i = 0; i &lt; groups.length; i++)</span>
+                {
+<span class="nc bnc" id="L563" title="All 4 branches missed.">                    if (groups[i] != null &amp;&amp; !groups[i].equals(oid))</span>
+                    {
+<span class="nc" id="L565">                        pp.add(gid, groups[i]);</span>
+                    }
+                }
+<span class="nc bnc" id="L568" title="All 2 branches missed.">                for (ListIterator&lt;Field&lt;?&gt;&gt; i = fields.listIterator(fields.size()); i.hasPrevious();)</span>
+                {
+<span class="nc" id="L570">                    i.previous().removeFromRequest();</span>
+                }
+            }
+        }
+<span class="nc" id="L574">    }</span>
+
+    /**
+     * To be used in the event this group is used within multiple
+     * forms within the same template.
+     */
+    public void resetDeclared()
+    {
+<span class="nc" id="L582">        isDeclared = false;</span>
+<span class="nc" id="L583">    }</span>
+
+    /**
+     * A xhtml valid hidden input field that notifies intake of the
+     * group's presence.
+     *
+     * @return a &lt;code&gt;String&lt;/code&gt; value
+     */
+    public String getHtmlFormInput()
+    {
+<span class="nc" id="L593">        StringBuilder sb = new StringBuilder(64);</span>
+<span class="nc" id="L594">        appendHtmlFormInput(sb);</span>
+<span class="nc" id="L595">        return sb.toString();</span>
+    }
+
+    /**
+     * A xhtml valid hidden input field that notifies intake of the
+     * group's presence.
+     *
+     * @param sb the string builder to append the HTML to
+     */
+    public void appendHtmlFormInput(StringBuilder sb)
+    {
+<span class="nc bnc" id="L606" title="All 2 branches missed.">        if (!isDeclared)</span>
+        {
+<span class="nc" id="L608">            isDeclared = true;</span>
+<span class="nc" id="L609">            sb.append(&quot;&lt;input type=\&quot;hidden\&quot; name=\&quot;&quot;)</span>
+<span class="nc" id="L610">                    .append(gid)</span>
+<span class="nc" id="L611">                    .append(&quot;\&quot; value=\&quot;&quot;)</span>
+<span class="nc" id="L612">                    .append(oid)</span>
+<span class="nc" id="L613">                    .append(&quot;\&quot;/&gt;\n&quot;);</span>
+        }
+<span class="nc" id="L615">    }</span>
+
+    /**
+     * Creates a string representation of this input group. This
+     * is an xml representation.
+     */
+    @Override
+    public String toString()
+    {
+<span class="nc" id="L624">        StringBuilder result = new StringBuilder();</span>
+
+<span class="nc" id="L626">        result.append(&quot;&lt;group name=\&quot;&quot;).append(getIntakeGroupName()).append(&quot;\&quot;&quot;);</span>
+<span class="nc" id="L627">        result.append(&quot; key=\&quot;&quot;).append(getGID()).append(&quot;\&quot;&quot;);</span>
+<span class="nc" id="L628">        result.append(&quot;&gt;\n&quot;);</span>
+
+<span class="nc bnc" id="L630" title="All 2 branches missed.">        if (fields != null)</span>
+        {
+<span class="nc bnc" id="L632" title="All 2 branches missed.">            for (Field&lt;?&gt; field : fields)</span>
+            {
+<span class="nc" id="L634">                result.append(field);</span>
+<span class="nc" id="L635">            }</span>
+        }
+
+<span class="nc" id="L638">        result.append(&quot;&lt;/group&gt;\n&quot;);</span>
+
+<span class="nc" id="L640">        return result.toString();</span>
+    }
+
+    /**
+     * Get the parent AppData for this group
+     *
+     * @return the parent
+     */
+    public AppData getAppData()
+    {
+<span class="nc" id="L650">        return parent;</span>
+    }
+
+    /**
+     * JAXB callback to set the parent object
+     *
+     * @param um the Unmarshaller
+     * @param parent the parent object (an AppData object)
+     */
+    public void afterUnmarshal(Unmarshaller um, Object parent)
+    {
+<span class="fc" id="L661">        this.parent = (AppData)parent;</span>
+
+        // Build map
+<span class="fc" id="L664">        fieldsByName = new HashMap&lt;String, Field&lt;?&gt;&gt;((int) (1.25 * fields.size() + 1));</span>
+
+<span class="fc bfc" id="L666" title="All 2 branches covered.">        for (Field&lt;?&gt; field : fields)</span>
+        {
+<span class="fc" id="L668">            fieldsByName.put(field.getName(), field);</span>
+<span class="fc" id="L669">        }</span>
+
+<span class="fc" id="L671">        Map&lt;String, List&lt;Field&lt;?&gt;&gt;&gt; mapToObjectFieldLists =</span>
+<span class="fc" id="L672">                new HashMap&lt;String, List&lt;Field&lt;?&gt;&gt;&gt;((int) (1.25 * fields.size() + 1));</span>
+
+        // Fix fields
+<span class="fc bfc" id="L675" title="All 2 branches covered.">        for (Field&lt;?&gt; field : fields)</span>
+        {
+<span class="fc bfc" id="L677" title="All 2 branches covered.">            if (StringUtils.isNotEmpty(field.mapToObject))</span>
+            {
+<span class="fc" id="L679">                field.mapToObject = this.parent.getBasePackage() + field.mapToObject;</span>
+            }
+
+            // map fields by their mapToObject
+<span class="fc" id="L683">            List&lt;Field&lt;?&gt;&gt; tmpFields = mapToObjectFieldLists.get(field.getMapToObject());</span>
+<span class="fc bfc" id="L684" title="All 2 branches covered.">            if (tmpFields == null)</span>
+            {
+<span class="fc" id="L686">                tmpFields = new ArrayList&lt;Field&lt;?&gt;&gt;(fields.size());</span>
+<span class="fc" id="L687">                mapToObjectFieldLists.put(field.getMapToObject(), tmpFields);</span>
+            }
+
+<span class="fc" id="L690">            tmpFields.add(field);</span>
+<span class="fc" id="L691">        }</span>
+
+        // Change the mapToObjectFields values to Field[]
+<span class="fc" id="L694">        mapToObjectFields = new HashMap&lt;String, Field&lt;?&gt;[]&gt;((int) (1.25 * fields.size() + 1));</span>
+
+<span class="fc bfc" id="L696" title="All 2 branches covered.">        for (Map.Entry&lt;String, List&lt;Field&lt;?&gt;&gt;&gt; entry : mapToObjectFieldLists.entrySet())</span>
+        {
+<span class="fc" id="L698">            mapToObjectFields.put(entry.getKey(),</span>
+<span class="fc" id="L699">                entry.getValue().toArray(new Field[entry.getValue().size()]));</span>
+<span class="fc" id="L700">        }</span>
+<span class="fc" id="L701">    }</span>
+
+    // ********** PoolableObjectFactory implementation ******************
+
+    public static class GroupFactory
+            extends BaseKeyedPooledObjectFactory&lt;String, Group&gt;
+    {
+        private final AppData appData;
+
+        public GroupFactory(AppData appData)
+<span class="fc" id="L711">        {</span>
+<span class="fc" id="L712">            this.appData = appData;</span>
+<span class="fc" id="L713">        }</span>
+
+        /**
+         * Creates an instance that can be returned by the pool.
+         * @param key the name of the group
+         * @return an instance that can be returned by the pool.
+         * @throws IntakeException indicates that the group could not be retrieved
+         */
+        @Override
+        public Group create(String key) throws IntakeException
+        {
+<span class="fc" id="L724">            return appData.getGroup(key);</span>
+        }
+
+        /**
+         * @see org.apache.commons.pool2.BaseKeyedPooledObjectFactory#wrap(java.lang.Object)
+         */
+        @Override
+        public PooledObject&lt;Group&gt; wrap(Group group)
+        {
+<span class="fc" id="L733">            return new DefaultPooledObject&lt;Group&gt;(group);</span>
+        }
+
+        /**
+         * Uninitialize an instance to be returned to the pool.
+         * @param key the name of the group
+         * @param pooledGroup the instance to be passivated
+         */
+        @Override
+        public void passivateObject(String key, PooledObject&lt;Group&gt; pooledGroup)
+        {
+<span class="nc" id="L744">            Group group = pooledGroup.getObject();</span>
+<span class="nc" id="L745">            group.oid = null;</span>
+<span class="nc" id="L746">            group.pp = null;</span>
+<span class="nc" id="L747">            for (ListIterator&lt;Field&lt;?&gt;&gt; i = group.fields.listIterator(group.fields.size());</span>
+<span class="nc bnc" id="L748" title="All 2 branches missed.">                    i.hasPrevious();)</span>
+            {
+<span class="nc" id="L750">                i.previous().dispose();</span>
+            }
+<span class="nc" id="L752">            group.isDeclared = false;</span>
+<span class="nc" id="L753">        }</span>
+    }
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IntegerRangeValidator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Intake Service</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.intake.validator</a> &gt; <span class="el_source">IntegerRangeValidator.java</span></div><h1>IntegerRangeValidator.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.intake.validator;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.fulcrum.intake.model.Field;
+import org.apache.fulcrum.intake.model.Group;
+import org.apache.fulcrum.intake.validator.FieldReference.Comparison;
+
+/**
+ * Validates an int field in dependency on another int field.
+ *
+ * &lt;table&gt;
+ * &lt;caption&gt;Validation rules&lt;/caption&gt;
+ * &lt;tr&gt;
+ *   &lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Valid Values&lt;/th&gt;&lt;th&gt;Default Value&lt;/th&gt;
+ * &lt;/tr&gt;
+ * &lt;tr&gt;
+ *   &lt;td&gt;less-than&lt;/td&gt;
+ *   &lt;td&gt;&amp;lt;name of other field&amp;gt;&lt;/td&gt;
+ *   &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+ * &lt;/tr&gt;
+ * &lt;tr&gt;
+ *   &lt;td&gt;greater-than&lt;/td&gt;
+ *   &lt;td&gt;&amp;lt;name of other field&amp;gt;&lt;/td&gt;
+ *   &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+ * &lt;/tr&gt;
+ * &lt;tr&gt;
+ *   &lt;td&gt;less-than-or-equal&lt;/td&gt;
+ *   &lt;td&gt;&amp;lt;name of other field&amp;gt;&lt;/td&gt;
+ *   &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+ * &lt;/tr&gt;
+ * &lt;tr&gt;
+ *   &lt;td&gt;greater-than-or-equal&lt;/td&gt;
+ *   &lt;td&gt;&amp;lt;name of other field&amp;gt;&lt;/td&gt;
+ *   &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+ * &lt;/tr&gt;
+ * &lt;/table&gt;
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id$
+ */
+public class IntegerRangeValidator
+        extends IntegerValidator
+{
+    /** List of FieldReferences for multiple comparisons */
+    List&lt;FieldReference&gt; fieldReferences;
+
+    /** Callback for the actual compare operation */
+    CompareCallback&lt;Integer&gt; compareCallback;
+
+    /**
+     *  Default constructor
+     */
+    public IntegerRangeValidator()
+    {
+<span class="fc" id="L79">        super();</span>
+<span class="fc" id="L80">    }</span>
+
+    /**
+     * Constructor to use when initializing Object
+     *
+     * @param paramMap a map of parameters
+     * @throws InvalidMaskException one of the mask rules is invalid
+     */
+    @Override
+	public void init(Map&lt;String, ? extends Constraint&gt; paramMap)
+            throws InvalidMaskException
+    {
+<span class="fc" id="L92">        super.init(paramMap);</span>
+
+<span class="fc" id="L94">        compareCallback = new CompareCallback&lt;Integer&gt;()</span>
+<span class="fc" id="L95">            {</span>
+                /**
+                 * Compare the given values using the compare operation provided
+                 *
+                 * @param compare type of compare operation
+                 * @param thisValue value of this field
+                 * @param refValue value of the reference field
+                 *
+                 * @return the result of the comparison
+                 */
+                @Override
+				public boolean compareValues(Comparison compare, Integer thisValue, Integer refValue)
+                {
+<span class="fc" id="L108">                    boolean result = true;</span>
+
+<span class="pc bpc" id="L110" title="4 of 5 branches missed.">                    switch (compare)</span>
+                    {
+                        case LT:
+<span class="nc bnc" id="L113" title="All 2 branches missed.">                            result = thisValue.compareTo(refValue) &lt; 0;</span>
+<span class="nc" id="L114">                            break;</span>
+
+                        case LTE:
+<span class="nc bnc" id="L117" title="All 2 branches missed.">                            result = thisValue.compareTo(refValue) &lt;= 0;</span>
+<span class="nc" id="L118">                            break;</span>
+
+                        case GT:
+<span class="fc bfc" id="L121" title="All 2 branches covered.">                            result = thisValue.compareTo(refValue) &gt; 0;</span>
+<span class="fc" id="L122">                            break;</span>
+
+                        case GTE:
+<span class="nc bnc" id="L125" title="All 2 branches missed.">                            result = thisValue.compareTo(refValue) &gt;= 0;</span>
+                            break;
+                    }
+
+<span class="fc" id="L129">                    return result;</span>
+                }
+            };
+
+<span class="fc" id="L133">        fieldReferences = new ArrayList&lt;FieldReference&gt;(10);</span>
+
+<span class="fc bfc" id="L135" title="All 2 branches covered.">        for (Map.Entry&lt;String, ? extends Constraint&gt; entry : paramMap.entrySet())</span>
+        {
+<span class="fc" id="L137">            String key = entry.getKey();</span>
+<span class="fc" id="L138">            Constraint constraint = entry.getValue();</span>
+
+<span class="fc" id="L140">            Comparison compare = FieldReference.getComparisonType(key);</span>
+
+<span class="fc bfc" id="L142" title="All 2 branches covered.">            if (compare != null)</span>
+            {
+                // found matching constraint
+<span class="fc" id="L145">                FieldReference fieldref = new FieldReference();</span>
+<span class="fc" id="L146">                fieldref.setComparison(compare);</span>
+<span class="fc" id="L147">                fieldref.setFieldName(constraint.getValue());</span>
+<span class="fc" id="L148">                fieldref.setMessage(constraint.getMessage());</span>
+
+<span class="fc" id="L150">                fieldReferences.add(fieldref);</span>
+            }
+<span class="fc" id="L152">        }</span>
+
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">        if (fieldReferences.isEmpty())</span>
+        {
+<span class="nc" id="L156">            log.warn(&quot;No reference field rules have been found.&quot;);</span>
+        }
+<span class="fc" id="L158">    }</span>
+
+    /**
+     * Determine whether a testValue meets the criteria specified
+     * in the constraints defined for this validator
+     *
+     * @param testField a &lt;code&gt;Field&lt;/code&gt; to be tested
+     * @throws ValidationException containing an error message if the
+     * testValue did not pass the validation tests.
+     */
+    @Override
+	public void assertValidity(final Field&lt;Integer&gt; testField)
+        throws ValidationException
+    {
+<span class="nc" id="L172">        super.assertValidity(testField);</span>
+
+<span class="nc" id="L174">        Group thisGroup = testField.getGroup();</span>
+<span class="nc" id="L175">        Locale locale = testField.getLocale();</span>
+
+<span class="nc bnc" id="L177" title="All 2 branches missed.">        if (testField.isMultiValued())</span>
+        {
+<span class="nc" id="L179">            String[] stringValues = (String[])testField.getTestValue();</span>
+
+<span class="nc bnc" id="L181" title="All 2 branches missed.">            for (int i = 0; i &lt; stringValues.length; i++)</span>
+            {
+<span class="nc" id="L183">                assertValidity(stringValues[i], thisGroup, locale);</span>
+            }
+<span class="nc" id="L185">        }</span>
+        else
+        {
+<span class="nc" id="L188">            String testValue = (String)testField.getTestValue();</span>
+
+<span class="nc" id="L190">            assertValidity(testValue, thisGroup, locale);</span>
+        }
+<span class="nc" id="L192">    }</span>
+
+    /**
+     * Determine whether a testValue meets the criteria specified
+     * in the constraints defined for this validator
+     *
+     * @param testValue a &lt;code&gt;String&lt;/code&gt; to be tested
+     * @param group the group this field belongs to
+     * @param locale the locale for this field
+     *
+     * @throws ValidationException containing an error message if the
+     * testValue did not pass the validation tests.
+     */
+    public void assertValidity(final String testValue, final Group group, final Locale locale)
+        throws ValidationException
+    {
+<span class="pc bpc" id="L208" title="3 of 4 branches missed.">        if (required || StringUtils.isNotEmpty(testValue))</span>
+        {
+            Integer testInt;
+
+			try
+			{
+<span class="fc" id="L214">				testInt = parseNumber(testValue, locale);</span>
+			}
+<span class="fc" id="L216">			catch (NumberFormatException e)</span>
+			{
+<span class="fc" id="L218">				errorMessage = invalidNumberMessage;</span>
+<span class="fc" id="L219">				throw new ValidationException(invalidNumberMessage);</span>
+<span class="fc" id="L220">			}</span>
+
+            try
+            {
+<span class="fc" id="L224">                FieldReference.checkReferences(fieldReferences, compareCallback,</span>
+                        testInt, group);
+            }
+<span class="fc" id="L227">            catch (ValidationException e)</span>
+            {
+<span class="fc" id="L229">                errorMessage = e.getMessage();</span>
+<span class="fc" id="L230">                throw e;</span>
+<span class="fc" id="L231">            }</span>
+        }
+<span class="fc" id="L233">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

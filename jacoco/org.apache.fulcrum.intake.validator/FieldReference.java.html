@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FieldReference.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Intake Service</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.intake.validator</a> &gt; <span class="el_source">FieldReference.java</span></div><h1>FieldReference.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.intake.validator;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.util.List;
+
+import org.apache.fulcrum.intake.IntakeException;
+import org.apache.fulcrum.intake.model.Field;
+import org.apache.fulcrum.intake.model.Group;
+
+/**
+ * Helper Class to manage relations between fields. The following
+ * comparisons are supported:
+ *
+ * &lt;table&gt;
+ * &lt;caption&gt;Validation rules&lt;/caption&gt;
+ * &lt;tr&gt;
+ *   &lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Valid Values&lt;/th&gt;&lt;th&gt;Default Value&lt;/th&gt;
+ * &lt;/tr&gt;
+ * &lt;tr&gt;
+ *   &lt;td&gt;less-than&lt;/td&gt;
+ *   &lt;td&gt;&amp;lt;name of other field&amp;gt;&lt;/td&gt;
+ *   &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+ * &lt;/tr&gt;
+ * &lt;tr&gt;
+ *   &lt;td&gt;greater-than&lt;/td&gt;
+ *   &lt;td&gt;&amp;lt;name of other field&amp;gt;&lt;/td&gt;
+ *   &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+ * &lt;/tr&gt;
+ * &lt;tr&gt;
+ *   &lt;td&gt;less-than-or-equal&lt;/td&gt;
+ *   &lt;td&gt;&amp;lt;name of other field&amp;gt;&lt;/td&gt;
+ *   &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+ * &lt;/tr&gt;
+ * &lt;tr&gt;
+ *   &lt;td&gt;greater-than-or-equal&lt;/td&gt;
+ *   &lt;td&gt;&amp;lt;name of other field&amp;gt;&lt;/td&gt;
+ *   &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+ * &lt;/tr&gt;
+ * &lt;/table&gt;
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id$
+ */
+public class FieldReference
+{
+<span class="fc" id="L64">	public static enum Comparison</span>
+	{
+	    /** Rule for &quot;&amp;lt;&quot; comparison */
+<span class="fc" id="L67">		LT (&quot;less-than&quot;),</span>
+
+		/** Rule for &quot;&amp;gt;&quot; comparison */
+<span class="fc" id="L70">		GT (&quot;greater-than&quot;),</span>
+
+	    /** Rule for &quot;&amp;lt;=&quot; comparison */
+<span class="fc" id="L73">		LTE (&quot;less-than-or-equal&quot;),</span>
+
+	    /** Rule for &quot;&amp;gt;=&quot; comparison */
+<span class="fc" id="L76">		GTE (&quot;greater-than-or-equal&quot;);</span>
+
+		private final String text;
+
+		private Comparison(String text)
+<span class="fc" id="L81">		{</span>
+<span class="fc" id="L82">			this.text = text;</span>
+<span class="fc" id="L83">		}</span>
+
+		@Override
+		public String toString()
+		{
+<span class="nc" id="L88">			return text;</span>
+		}
+
+		public static Comparison fromString(String string)
+		{
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">		    if (string != null)</span>
+		    {
+<span class="fc bfc" id="L95" title="All 2 branches covered.">		    	for (Comparison c : Comparison.values())</span>
+		    	{
+<span class="fc bfc" id="L97" title="All 2 branches covered.">		    		if (string.equals(c.text))</span>
+		    		{
+<span class="fc" id="L99">		    			return c;</span>
+		    		}
+		    	}
+		    }
+
+<span class="fc" id="L104">		    return null;</span>
+		}
+	}
+
+    /** Numeric comparison */
+<span class="fc" id="L109">    private Comparison compare = null;</span>
+
+    /** Name of referenced field */
+<span class="fc" id="L112">    private String fieldName = null;</span>
+
+    /** Error message */
+<span class="fc" id="L115">    private String message = null;</span>
+
+    /**
+     *  Constructor
+     */
+    public FieldReference()
+<span class="fc" id="L121">    {</span>
+        // do nothing
+<span class="fc" id="L123">    }</span>
+
+    /**
+     * @return the comparison type
+     */
+    public Comparison getComparison()
+    {
+<span class="fc" id="L130">        return compare;</span>
+    }
+
+    /**
+     * @param compare the comparison type to set
+     */
+    public void setComparison(Comparison compare)
+    {
+<span class="fc" id="L138">        this.compare = compare;</span>
+<span class="fc" id="L139">    }</span>
+
+    /**
+     * @return the field name
+     */
+    public String getFieldName()
+    {
+<span class="fc" id="L146">        return fieldName;</span>
+    }
+
+    /**
+     * @param fieldName the field name to set
+     */
+    public void setFieldName(String fieldName)
+    {
+<span class="fc" id="L154">        this.fieldName = fieldName;</span>
+<span class="fc" id="L155">    }</span>
+
+    /**
+     * @return the message
+     */
+    public String getMessage()
+    {
+<span class="fc" id="L162">        return message;</span>
+    }
+
+    /**
+     * @param message the message to set
+     */
+    public void setMessage(String message)
+    {
+<span class="fc" id="L170">        this.message = message;</span>
+<span class="fc" id="L171">    }</span>
+
+    /**
+     * Map the comparison strings to their numeric counterparts
+     *
+     * @param key the string representation of a comparison operator
+     * @return the numeric representation of the given comparison operator
+     */
+    public static Comparison getComparisonType(String key)
+    {
+<span class="fc" id="L181">    	return Comparison.fromString(key);</span>
+    }
+
+    /**
+     * Check the parsed value against the referenced fields
+     *
+     * @param fieldReferences List of field references to check
+     * @param compareCallback Callback to the actual compare operation
+     * @param value the parsed value of the related field
+     * @param group the group the related field belongs to
+     *
+     * @param &lt;T&gt; the field type
+     *
+     * @throws ValidationException if the validation against at least one related field fails
+     */
+    public static &lt;T&gt; void checkReferences(List&lt;FieldReference&gt; fieldReferences, CompareCallback&lt;T&gt; compareCallback,
+            T value, Group group)
+        throws ValidationException
+    {
+<span class="fc bfc" id="L200" title="All 2 branches covered.">        for (FieldReference ref : fieldReferences)</span>
+        {
+<span class="fc" id="L202">            boolean comp_true = true;</span>
+
+            try
+            {
+                @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L207">                Field&lt;T&gt; refField = (Field&lt;T&gt;) group.get(ref.getFieldName());</span>
+
+<span class="pc bpc" id="L209" title="1 of 2 branches missed.">                if (refField.isSet())</span>
+                {
+                    /*
+                     * Fields are processed in sequence so that our
+                     * reference field might have been set but not
+                     * yet validated. We check this here.
+                     */
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">                    if (!refField.isValidated())</span>
+                    {
+<span class="nc" id="L218">                        refField.validate();</span>
+                    }
+
+<span class="pc bpc" id="L221" title="1 of 2 branches missed.">                    if (refField.isValid())</span>
+                    {
+<span class="fc" id="L223">                        comp_true = compareCallback.compareValues(ref.getComparison(),</span>
+                                value,
+<span class="fc" id="L225">                                refField.getValue());</span>
+                    }
+                }
+            }
+<span class="nc" id="L229">            catch (IntakeException e)</span>
+            {
+<span class="nc" id="L231">                throw new ValidationException(ref.getMessage());</span>
+<span class="fc" id="L232">            }</span>
+
+<span class="fc bfc" id="L234" title="All 2 branches covered.">            if (comp_true == false)</span>
+            {
+<span class="fc" id="L236">                throw new ValidationException(ref.getMessage());</span>
+            }
+<span class="fc" id="L238">        }</span>
+<span class="fc" id="L239">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

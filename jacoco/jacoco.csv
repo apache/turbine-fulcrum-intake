@@ -1,0 +1,59 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Fulcrum Intake Service,org.apache.fulcrum.intake,IntakeService,0,4,0,0,0,1,0,1,0,1
+Fulcrum Intake Service,org.apache.fulcrum.intake,IntakeServiceFacade,28,26,2,2,8,8,8,6,6,6
+Fulcrum Intake Service,org.apache.fulcrum.intake,IntakeServiceImpl.AvalonLogEnabledListener,0,20,0,2,0,5,0,3,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake,IntakeRuntimeException,16,0,0,0,8,0,4,0,4,0
+Fulcrum Intake Service,org.apache.fulcrum.intake,IntakeServiceImpl,419,928,48,62,72,214,47,24,5,11
+Fulcrum Intake Service,org.apache.fulcrum.intake,IntakeError,16,0,0,0,8,0,4,0,4,0
+Fulcrum Intake Service,org.apache.fulcrum.intake,IntakeException,12,4,0,0,6,2,3,1,3,1
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,BooleanValidator,6,130,6,10,2,23,5,7,0,4
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,FieldReference.Comparison,3,83,1,5,1,13,2,5,1,3
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,IntegerRangeValidator,49,104,8,6,12,30,6,5,1,3
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,DoubleValidator,0,15,0,0,0,5,0,2,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,InvalidMaskException,9,0,0,0,4,0,2,0,2,0
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,DateRangeValidator.new CompareCallback() {...},22,20,8,1,5,6,6,2,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,DateRangeValidator,44,105,8,6,11,31,6,5,1,3
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,FloatValidator,0,15,0,0,0,5,0,2,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,IntegerValidator,0,9,0,0,0,4,0,2,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,FieldReference,10,81,3,7,3,28,3,11,0,9
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,FileValidator,81,0,8,0,25,0,7,0,3,0
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,DefaultValidator,97,156,6,22,41,41,19,15,15,5
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,NumberValidator,63,210,1,23,19,55,11,16,10,5
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,ValidationException,0,4,0,0,0,2,0,1,0,1
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,DateStringValidator,59,175,13,17,15,51,15,11,5,6
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,ShortValidator,0,9,0,0,0,4,0,2,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,IntegerRangeValidator.new CompareCallback() {...},26,24,10,3,5,6,7,3,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,BigDecimalValidator,0,17,0,0,0,5,0,2,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,LongValidator,0,9,0,0,0,4,0,2,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.validator,StringValidator,25,105,1,9,6,26,4,8,3,4
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,FieldType.new FieldType() {...},0,13,0,0,0,2,0,2,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,FieldAdapter,23,18,1,1,3,6,2,2,1,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,FieldType.new FieldType() {...},23,7,0,0,2,1,1,1,1,1
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,DoubleField,85,20,12,2,19,9,9,4,2,4
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,BooleanField,102,20,12,2,24,9,10,4,3,4
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,AppData,76,56,9,7,19,18,9,8,2,7
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,BigDecimalField,56,20,8,2,13,9,6,4,1,4
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,LongField,79,20,12,2,18,9,9,4,2,4
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,UploadPartField,154,35,28,4,39,13,18,5,2,5
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,FieldType.new FieldType() {...},0,13,0,0,0,2,0,2,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,Rule,41,12,2,0,9,4,2,4,1,4
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,FieldType.new FieldType() {...},0,13,0,0,0,2,0,2,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,Group,545,320,73,27,117,63,53,24,14,13
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,FieldType.new FieldType() {...},0,13,0,0,0,2,0,2,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,IntegerField,32,67,7,7,9,19,6,7,1,5
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,FieldType.new FieldType() {...},0,13,0,0,0,2,0,2,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,FieldType.new FieldType() {...},0,13,0,0,0,2,0,2,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,FieldType.new FieldType() {...},6,7,0,0,1,1,1,1,1,1
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,FieldType.new FieldType() {...},0,13,0,0,0,2,0,2,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,FieldType,3,155,0,0,1,17,1,2,1,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,FieldType.new FieldType() {...},0,13,0,0,0,2,0,2,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,FloatField,85,20,12,2,19,9,9,4,2,4
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,Field,695,468,54,40,131,126,60,35,21,27
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,XmlField,149,126,19,9,31,36,16,22,5,19
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,FieldType.new FieldType() {...},0,13,0,0,0,2,0,2,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,FieldType.new FieldType() {...},0,13,0,0,0,2,0,2,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,FieldType.new FieldType() {...},46,49,3,3,6,8,3,2,0,2
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,ShortField,87,20,14,2,22,9,10,4,2,4
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,DateStringField,149,69,20,8,36,22,15,6,1,6
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,Group.GroupFactory,32,16,2,0,8,5,2,3,1,3
+Fulcrum Intake Service,org.apache.fulcrum.intake.model,StringField,109,33,24,2,26,11,14,5,1,5

@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NumberValidator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Intake Service</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.intake.validator</a> &gt; <span class="el_source">NumberValidator.java</span></div><h1>NumberValidator.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.intake.validator;
+
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.ParsePosition;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.util.Locale;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.fulcrum.intake.model.Field;
+
+/**
+ * Validates numbers with the following constraints in addition to those
+ * listed in DefaultValidator.
+ *
+ * &lt;table&gt;
+ * &lt;caption&gt;Validation rules&lt;/caption&gt;
+ * &lt;tr&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Valid Values&lt;/th&gt;&lt;th&gt;Default Value&lt;/th&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;minValue&lt;/td&gt;&lt;td&gt;greater than BigDecimal.MIN_VALUE&lt;/td&gt;
+ * &lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;maxValue&lt;/td&gt;&lt;td&gt;less than BigDecimal.MAX_VALUE&lt;/td&gt;
+ * &lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;notANumberMessage&lt;/td&gt;&lt;td&gt;Some text&lt;/td&gt;
+ * &lt;td&gt;Entry was not a valid number&lt;/td&gt;&lt;/tr&gt;
+ * &lt;/table&gt;
+ *
+ * @author &lt;a href=&quot;mailto:jmcnally@collab.net&quot;&gt;John McNally&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:quintonm@bellsouth.net&quot;&gt;Quinton McCombs&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:Colin.Chalmers@maxware.nl&quot;&gt;Colin Chalmers&lt;/a&gt;
+ * @version $Id$
+ */
+public abstract class NumberValidator&lt;T extends Number&gt;
+        extends DefaultValidator&lt;T&gt;
+{
+    /** The message to show if field fails min-value test */
+<span class="fc" id="L56">    String minValueMessage = null;</span>
+
+    /** The message to show if field fails max-value test */
+<span class="fc" id="L59">    String maxValueMessage = null;</span>
+
+    /** The message to use for invalid numbers */
+<span class="fc" id="L62">    String invalidNumberMessage = null;</span>
+
+<span class="fc" id="L64">    private T minValue = null;</span>
+<span class="fc" id="L65">    private T maxValue = null;</span>
+
+    /**
+     * Default Constructor
+     */
+    public NumberValidator()
+    {
+<span class="fc" id="L72">        super();</span>
+<span class="fc" id="L73">    }</span>
+
+    /**
+     * Extract the relevant parameters from the constraints listed
+     * in &amp;lt;rule&amp;gt; tags within the intake.xml file.
+     *
+     * @param paramMap a &lt;code&gt;Map&lt;/code&gt; of &lt;code&gt;rule&lt;/code&gt;'s
+     * containing constraints on the input.
+     * @throws InvalidMaskException an invalid mask was specified
+     */
+    @Override
+	public void init(Map&lt;String, ? extends Constraint&gt; paramMap)
+            throws InvalidMaskException
+    {
+<span class="fc" id="L87">        super.init(paramMap);</span>
+
+<span class="fc" id="L89">        Constraint constraint = paramMap.get(INVALID_NUMBER_RULE_NAME);</span>
+
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        if (constraint != null)</span>
+        {
+<span class="fc" id="L93">            invalidNumberMessage = constraint.getMessage();</span>
+        }
+
+<span class="fc" id="L96">        constraint = paramMap.get(MIN_VALUE_RULE_NAME);</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (constraint != null)</span>
+        {
+<span class="fc" id="L99">            String param = constraint.getValue();</span>
+            try
+            {
+<span class="fc" id="L102">                minValue = parseNumber(param, Locale.US);</span>
+            }
+<span class="nc" id="L104">            catch (NumberFormatException e)</span>
+            {
+<span class="nc" id="L106">                throw new InvalidMaskException(&quot;Could not parse minimum value &quot; + param, e);</span>
+<span class="fc" id="L107">            }</span>
+<span class="fc" id="L108">            minValueMessage = constraint.getMessage();</span>
+        }
+
+<span class="fc" id="L111">        constraint = paramMap.get(MAX_VALUE_RULE_NAME);</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        if (constraint != null)</span>
+        {
+<span class="fc" id="L114">            String param = constraint.getValue();</span>
+            try
+            {
+<span class="fc" id="L117">                maxValue = parseNumber(param, Locale.US);</span>
+            }
+<span class="nc" id="L119">            catch (NumberFormatException e)</span>
+            {
+<span class="nc" id="L121">                throw new InvalidMaskException(&quot;Could not parse minimum value &quot; + param, e);</span>
+<span class="fc" id="L122">            }</span>
+<span class="fc" id="L123">            maxValueMessage = constraint.getMessage();</span>
+        }
+<span class="fc" id="L125">    }</span>
+
+    /**
+     * Parse the actual value out of a string
+     *
+     * @param stringValue the string value
+     * @param locale the locale to use while parsing
+     *
+     * @return the value
+     *
+     * @throws NumberFormatException if the value could not be parsed
+     */
+    protected abstract T parseNumber(String stringValue, Locale locale) throws NumberFormatException;
+
+    /**
+     * Helper method to parse a number object out of a string
+     *
+     * @param stringValue the string value
+     * @param locale the locale to use while parsing
+     *
+     * @return the Number
+     *
+     * @throws NumberFormatException if the value could not be parsed
+     */
+    protected Number parseIntoNumber(String stringValue, Locale locale) throws NumberFormatException
+    {
+<span class="fc" id="L151">        NumberFormat nf = NumberFormat.getInstance(locale);</span>
+
+        try
+        {
+<span class="fc" id="L155">            ParsePosition pos = new ParsePosition(0);</span>
+<span class="fc" id="L156">            Number number = nf.parse(stringValue, pos);</span>
+
+<span class="fc bfc" id="L158" title="All 2 branches covered.">            if (pos.getIndex() != stringValue.length())</span>
+            {
+<span class="fc" id="L160">                throw new ParseException(&quot;Could not parse string completely&quot;, pos.getErrorIndex());</span>
+            }
+
+<span class="fc" id="L163">            return number;</span>
+        }
+<span class="fc" id="L165">        catch (ParseException e)</span>
+        {
+<span class="fc" id="L167">            throw new NumberFormatException(e.getMessage());</span>
+        }
+    }
+
+    /**
+     * Determine whether a field meets the criteria specified
+     * in the constraints defined for this validator
+     *
+     * @param field a &lt;code&gt;Field&lt;/code&gt; to be tested
+     * @throws ValidationException containing an error message if the
+     * testValue did not pass the validation tests.
+     */
+    @Override
+	public void assertValidity(Field&lt;T&gt; field) throws ValidationException
+    {
+<span class="fc" id="L182">        Locale locale = field.getLocale();</span>
+
+<span class="fc bfc" id="L184" title="All 2 branches covered.">        if (field.isMultiValued())</span>
+        {
+<span class="fc" id="L186">            String[] stringValues = (String[])field.getTestValue();</span>
+
+<span class="fc bfc" id="L188" title="All 2 branches covered.">            for (int i = 0; i &lt; stringValues.length; i++)</span>
+            {
+<span class="fc" id="L190">                assertValidity(stringValues[i], locale);</span>
+            }
+<span class="fc" id="L192">        }</span>
+        else
+        {
+<span class="fc" id="L195">            assertValidity((String)field.getTestValue(), locale);</span>
+        }
+<span class="fc" id="L197">    }</span>
+
+    /**
+     * Determine whether a testValue meets the criteria specified
+     * in the constraints defined for this validator
+     *
+     * @param testValue a &lt;code&gt;String&lt;/code&gt; to be tested
+     * @param locale the Locale of the associated field
+     * @throws ValidationException containing an error message if the
+     * testValue did not pass the validation tests.
+     */
+    public void assertValidity(String testValue, Locale locale) throws ValidationException
+    {
+<span class="fc" id="L210">        super.assertValidity(testValue);</span>
+
+<span class="pc bpc" id="L212" title="1 of 4 branches missed.">        if (required || StringUtils.isNotEmpty(testValue))</span>
+        {
+<span class="fc" id="L214">            T number = null;</span>
+            try
+            {
+<span class="fc" id="L217">                number = parseNumber(testValue, locale);</span>
+            }
+<span class="fc" id="L219">            catch (NumberFormatException e)</span>
+            {
+<span class="fc" id="L221">                errorMessage = invalidNumberMessage;</span>
+<span class="fc" id="L222">                throw new ValidationException(invalidNumberMessage);</span>
+<span class="fc" id="L223">            }</span>
+
+<span class="fc bfc" id="L225" title="All 4 branches covered.">            if (minValue != null &amp;&amp; number.doubleValue() &lt; minValue.doubleValue())</span>
+            {
+<span class="fc" id="L227">                errorMessage = minValueMessage;</span>
+<span class="fc" id="L228">                throw new ValidationException(minValueMessage);</span>
+            }
+<span class="fc bfc" id="L230" title="All 4 branches covered.">            if (maxValue != null &amp;&amp; number.doubleValue() &gt; maxValue.doubleValue())</span>
+            {
+<span class="fc" id="L232">                errorMessage = maxValueMessage;</span>
+<span class="fc" id="L233">                throw new ValidationException(maxValueMessage);</span>
+            }
+        }
+<span class="fc" id="L236">    }</span>
+
+    // ************************************************************
+    // **                Bean accessor methods                   **
+    // ************************************************************
+
+    /**
+     * Get the value of minValueMessage.
+     *
+     * @return value of minValueMessage.
+     */
+    public String getMinValueMessage()
+    {
+<span class="nc" id="L249">        return minValueMessage;</span>
+    }
+
+    /**
+     * Set the value of minValueMessage.
+     *
+     * @param minValueMessage  Value to assign to minValueMessage.
+     */
+    public void setMinValueMessage(String minValueMessage)
+    {
+<span class="nc" id="L259">        this.minValueMessage = minValueMessage;</span>
+<span class="nc" id="L260">    }</span>
+
+    /**
+     * Get the value of maxValueMessage.
+     *
+     * @return value of maxValueMessage.
+     */
+    public String getMaxValueMessage()
+    {
+<span class="nc" id="L269">        return maxValueMessage;</span>
+    }
+
+    /**
+     * Set the value of maxValueMessage.
+     *
+     * @param maxValueMessage  Value to assign to maxValueMessage.
+     */
+    public void setMaxValueMessage(String maxValueMessage)
+    {
+<span class="nc" id="L279">        this.maxValueMessage = maxValueMessage;</span>
+<span class="nc" id="L280">    }</span>
+
+    /**
+     * Get the value of invalidNumberMessage.
+     *
+     * @return value of invalidNumberMessage.
+     */
+    public String getInvalidNumberMessage()
+    {
+<span class="nc" id="L289">        return invalidNumberMessage;</span>
+    }
+
+    /**
+     *
+     * Set the value of invalidNumberMessage.
+     * @param invalidNumberMessage  Value to assign to invalidNumberMessage.
+     */
+    public void setInvalidNumberMessage(String invalidNumberMessage)
+    {
+<span class="nc" id="L299">        this.invalidNumberMessage = invalidNumberMessage;</span>
+<span class="nc" id="L300">    }</span>
+
+    /**
+     * Get the value of minValue.
+     *
+     * @return value of minValue.
+     */
+    public T getMinValue()
+    {
+<span class="nc" id="L309">        return minValue;</span>
+    }
+
+    /**
+     * Set the value of minValue.
+     *
+     * @param minValue  Value to assign to minValue.
+     */
+    public void setMinValue(T minValue)
+    {
+<span class="nc" id="L319">        this.minValue = minValue;</span>
+<span class="nc" id="L320">    }</span>
+
+    /**
+     * Get the value of maxValue.
+     *
+     * @return value of maxValue.
+     */
+    public T getMaxValue()
+    {
+<span class="nc" id="L329">        return maxValue;</span>
+    }
+
+    /**
+     * Set the value of maxValue.
+     *
+     * @param maxValue  Value to assign to maxValue.
+     */
+    public void setMaxValue(T maxValue)
+    {
+<span class="nc" id="L339">        this.maxValue = maxValue;</span>
+<span class="nc" id="L340">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IntakeServiceFacade.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Intake Service</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.intake</a> &gt; <span class="el_source">IntakeServiceFacade.java</span></div><h1>IntakeServiceFacade.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.intake;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.beans.IntrospectionException;
+import java.lang.reflect.Method;
+
+import org.apache.fulcrum.intake.model.Group;
+
+/**
+ * This is a Facade class for IntakeService.
+ *
+ * This class provides static methods that call related methods of the
+ * implementation of the IntakeService used by the System, according to the
+ * settings in your intake.xml file.
+ *
+ * Note: How should a facade class work? It seems to me that maybe it should
+ * only have a hook into the Avalon Component Manager somehow?
+ *
+ * @author &lt;a href=&quot;mailto:jmcnally@collab.net&quot;&gt;John McNally&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:quintonm@bellsouth.net&quot;&gt;Quinton McCombs&lt;/a&gt;
+ * @version $Id$
+ */
+<span class="nc" id="L41">public class IntakeServiceFacade</span>
+{
+    /** Static instance of the intakeService. */
+    private static IntakeService intakeService;
+
+    /**
+     * Return whether the intake service has been initialized.
+     * @return true if the service has been initialized
+     */
+    public static boolean isInitialized()
+    {
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        return intakeService != null;</span>
+    }
+
+    /**
+     * Gets an instance of a named group either from the pool or by calling the
+     * Factory Service if the pool is empty.
+     *
+     * @param groupName
+     *            the name of the group.
+     * @return a Group instance.
+     * @throws IntakeException
+     *             if recycling fails.
+     */
+    public static Group getGroup(String groupName) throws IntakeException
+    {
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (groupName == null)</span>
+        {
+<span class="nc" id="L69">            throw new IntakeException(&quot;IntakeServiceFacade.getGroup(groupName) is null&quot;);</span>
+        }
+<span class="fc" id="L71">        return getService().getGroup(groupName);</span>
+    }
+
+    /**
+     * Puts a group back to the pool.
+     *
+     * @param instance
+     *            the object instance to recycle.
+     * @throws IntakeException
+     *             A non existant group was passed
+     */
+    public static void releaseGroup(Group instance) throws IntakeException
+    {
+<span class="nc" id="L84">        getService().releaseGroup(instance);</span>
+<span class="nc" id="L85">    }</span>
+
+    /**
+     * Gets the current size of the pool for a named group.
+     *
+     * @param groupName
+     *            the name of the group.
+     * @return the current pool size
+     * @throws IntakeException
+     *             A non-existent group was passed
+     */
+    public static int getSize(String groupName) throws IntakeException
+    {
+<span class="nc" id="L98">        return getService().getSize(groupName);</span>
+    }
+
+    /**
+     * Names of all the defined groups.
+     *
+     * @return array of names.
+     */
+    public static String[] getGroupNames()
+    {
+<span class="nc" id="L108">        return getService().getGroupNames();</span>
+    }
+
+    /**
+     * Gets the key (usually a short identifier) for a group.
+     *
+     * @param groupName
+     *            the name of the group.
+     * @return the the key.
+     */
+    public static String getGroupKey(String groupName)
+    {
+<span class="nc" id="L120">        return getService().getGroupKey(groupName);</span>
+    }
+
+    /**
+     * Gets the group name given its key.
+     *
+     * @param groupKey
+     *            the key.
+     * @return groupName the name of the group.
+     */
+    public static String getGroupName(String groupKey)
+    {
+<span class="nc" id="L132">        return getService().getGroupName(groupKey);</span>
+    }
+
+    /**
+     * Gets the Method that can be used to set a property.
+     *
+     * @param className
+     *            the name of the object.
+     * @param propName
+     *            the name of the property.
+     * @return the setter.
+     * @throws ClassNotFoundException if the class specified could not be loaded
+     * @throws IntrospectionException if the property setter could not be called
+     */
+    public static Method getFieldSetter(String className, String propName) throws IntrospectionException, ClassNotFoundException
+    {
+<span class="fc" id="L148">        return getService().getFieldSetter(className, propName);</span>
+    }
+
+    /**
+     * Gets the Method that can be used to get a property value.
+     *
+     * @param className
+     *            the name of the object.
+     * @param propName
+     *            the name of the property.
+     * @return the getter.
+     * @throws ClassNotFoundException if the class specified could not be loaded
+     * @throws IntrospectionException if the property getter could not be called
+     */
+    public static Method getFieldGetter(String className, String propName) throws IntrospectionException, ClassNotFoundException
+    {
+<span class="fc" id="L164">        return getService().getFieldGetter(className, propName);</span>
+    }
+
+    /**
+     * Utility method for accessing the service implementation
+     *
+     * @return a IntakeService implementation instance
+     */
+    private static IntakeService getService()
+    {
+<span class="fc" id="L174">        return intakeService;</span>
+    }
+
+    public static void setIntakeService(IntakeService service)
+    {
+<span class="fc" id="L179">        intakeService = service;</span>
+<span class="fc" id="L180">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

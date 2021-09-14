@@ -1,0 +1,937 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IntakeServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Intake Service</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.intake</a> &gt; <span class="el_source">IntakeServiceImpl.java</span></div><h1>IntakeServiceImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.intake;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.Unmarshaller.Listener;
+import javax.xml.bind.helpers.DefaultValidationEventHandler;
+import javax.xml.validation.SchemaFactory;
+
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.context.Context;
+import org.apache.avalon.framework.context.ContextException;
+import org.apache.avalon.framework.context.Contextualizable;
+import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.framework.logger.LogEnabled;
+import org.apache.avalon.framework.service.ServiceException;
+import org.apache.avalon.framework.service.ServiceManager;
+import org.apache.avalon.framework.service.Serviceable;
+import org.apache.commons.pool2.KeyedObjectPool;
+import org.apache.commons.pool2.KeyedPooledObjectFactory;
+import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
+import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
+import org.apache.fulcrum.intake.model.AppData;
+import org.apache.fulcrum.intake.model.Field;
+import org.apache.fulcrum.intake.model.Group;
+
+/**
+ * This service provides access to input processing objects based on an XML
+ * specification.
+ *
+ * avalon.component name=&quot;intake&quot;
+ * avalon.service type=&quot;org.apache.fulcrum.intake.IntakeService&quot;
+ *
+ * @author &lt;a href=&quot;mailto:jmcnally@collab.net&quot;&gt;John McNally&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:hps@intermeta.de&quot;&gt;Henning P. Schmiedehausen&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:quintonm@bellsouth.net&quot;&gt;Quinton McCombs&lt;/a&gt;
+ * @version $Id$
+ */
+<span class="fc" id="L80">public class IntakeServiceImpl extends AbstractLogEnabled implements</span>
+        IntakeService, Configurable, Initializable, Contextualizable,
+        Serviceable
+{
+    /** Map of groupNames -&gt; appData elements */
+    private Map&lt;String, AppData&gt; groupNames;
+
+    /** The cache of group names. */
+    private Map&lt;String, String&gt; groupNameMap;
+
+    /** The cache of group keys. */
+    private Map&lt;String, String&gt; groupKeyMap;
+
+    /** The cache of property getters. */
+    private Map&lt;String, Map&lt;String, Method&gt;&gt; getterMap;
+
+    /** The cache of property setters. */
+    private Map&lt;String, Map&lt;String, Method&gt;&gt; setterMap;
+
+    /** AppData -&gt; keyed Pools Map */
+    private Map&lt;AppData, KeyedObjectPool&lt;String, Group&gt;&gt; keyedPools;
+
+    /** The Avalon Container root directory */
+    private String applicationRoot;
+
+    /** List of configured xml specification files */
+<span class="fc" id="L106">    private List&lt;String&gt; xmlPathes = null;</span>
+
+    /** Configured location of the serialization file */
+<span class="fc" id="L109">    private String serialDataPath = null;</span>
+
+    /**
+     * Local Class to enable Avalon logging on the model classes
+     *
+     */
+<span class="fc" id="L115">    private class AvalonLogEnabledListener extends Listener</span>
+    {
+		/**
+		 * @see javax.xml.bind.Unmarshaller.Listener#beforeUnmarshal(java.lang.Object, java.lang.Object)
+		 */
+		@Override
+		public void beforeUnmarshal(Object target, Object parent)
+		{
+<span class="fc" id="L123">			super.beforeUnmarshal(target, parent);</span>
+
+<span class="fc bfc" id="L125" title="All 2 branches covered.">			if (target instanceof LogEnabled)</span>
+			{
+<span class="fc" id="L127">				((LogEnabled)target).enableLogging(getLogger());</span>
+			}
+<span class="fc" id="L129">		}</span>
+
+    }
+
+    /**
+     * Registers a given group name in the system
+     *
+     * @param groupName
+     *            The name to register the group under
+     * @param group
+     *            The Group to register in
+     * @param appData
+     *            The app Data object where the group can be found
+     * @param checkKey
+     *            Whether to check if the key also exists.
+     *
+     * @return true if successful, false if not
+     */
+    private boolean registerGroup(String groupName, Group group,
+            AppData appData, boolean checkKey)
+    {
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">        if (groupNames.containsKey(groupName))</span>
+        {
+            // This name already exists.
+<span class="nc" id="L153">            return false;</span>
+        }
+
+<span class="fc" id="L156">        boolean keyExists = groupNameMap.containsKey(group.getGID());</span>
+
+<span class="pc bpc" id="L158" title="2 of 4 branches missed.">        if (checkKey &amp;&amp; keyExists)</span>
+        {
+            // The key for this package is already registered for another group
+<span class="nc" id="L161">            return false;</span>
+        }
+
+<span class="fc" id="L164">        groupNames.put(groupName, appData);</span>
+<span class="fc" id="L165">        groupKeyMap.put(groupName, group.getGID());</span>
+
+<span class="pc bpc" id="L167" title="1 of 2 branches missed.">        if (!keyExists)</span>
+        {
+            // This key does not exist. Add it to the hash.
+<span class="fc" id="L170">            groupNameMap.put(group.getGID(), groupName);</span>
+        }
+
+<span class="fc" id="L173">        List&lt;Field&lt;?&gt;&gt; fields = group.getFields();</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">        for (Field&lt;?&gt; field : fields)</span>
+        {
+<span class="fc" id="L176">            String className = field.getMapToObject();</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">            if (!getterMap.containsKey(className))</span>
+            {
+<span class="fc" id="L179">                getterMap.put(className, new HashMap&lt;String, Method&gt;());</span>
+<span class="fc" id="L180">                setterMap.put(className, new HashMap&lt;String, Method&gt;());</span>
+            }
+<span class="fc" id="L182">        }</span>
+<span class="fc" id="L183">        return true;</span>
+    }
+
+    /**
+     * Tries to load a serialized Intake Group file. This can reduce the startup
+     * time of Turbine.
+     *
+     * @param serialDataPath
+     *            The path of the File to load.
+     *
+     * @return A map with appData objects loaded from the file or null if the
+     *         map could not be loaded.
+     */
+    private Map&lt;AppData, File&gt; loadSerialized(String serialDataPath, long timeStamp)
+    {
+<span class="fc" id="L198">        getLogger().debug(</span>
+                &quot;Entered loadSerialized(&quot; + serialDataPath + &quot;, &quot; + timeStamp
+                        + &quot;)&quot;);
+
+<span class="fc" id="L202">        long timer = System.currentTimeMillis();</span>
+
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">        if (serialDataPath == null)</span>
+        {
+<span class="nc" id="L206">            return null;</span>
+        }
+
+<span class="fc" id="L209">        File serialDataFile = new File(serialDataPath);</span>
+
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        if (!serialDataFile.exists())</span>
+        {
+<span class="fc" id="L213">            getLogger().info(&quot;No serialized file found, parsing XML&quot;);</span>
+<span class="fc" id="L214">            return null;</span>
+        }
+
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">        if (serialDataFile.lastModified() &lt;= timeStamp)</span>
+        {
+<span class="nc" id="L219">            getLogger().info(&quot;serialized file too old, parsing XML&quot;);</span>
+<span class="nc" id="L220">            return null;</span>
+        }
+
+<span class="fc" id="L223">        ObjectInputStream in = null;</span>
+<span class="fc" id="L224">        Map&lt;AppData, File&gt; serialData = null;</span>
+
+        try
+        {
+<span class="fc" id="L228">        	FileInputStream fin = new FileInputStream(serialDataFile);</span>
+<span class="fc" id="L229">            in = new ObjectInputStream(fin);</span>
+<span class="fc" id="L230">            Object o = in.readObject();</span>
+
+<span class="pc bpc" id="L232" title="1 of 2 branches missed.">            if (o instanceof Map)</span>
+            {
+                @SuppressWarnings(&quot;unchecked&quot;) // checked with instanceof
+<span class="fc" id="L235">				Map&lt;AppData, File&gt; map = (Map&lt;AppData, File&gt;) o;</span>
+<span class="fc" id="L236">				serialData = map;</span>
+<span class="fc" id="L237">            }</span>
+            else
+            {
+                // This could be old file from intake. Try to delete it
+<span class="nc" id="L241">                getLogger().info(&quot;serialized object is not an intake map, ignoring&quot;);</span>
+<span class="nc" id="L242">                in.close();</span>
+<span class="nc" id="L243">                in = null;</span>
+                
+                // Try to delete the file
+<span class="nc" id="L246">                boolean result = serialDataFile.delete();</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">                if ( result == false )</span>
+                {
+<span class="nc" id="L249">                	getLogger().error(&quot;Unknown serialized file could not be removed&quot;);</span>
+                }
+            }
+        }
+<span class="nc" id="L253">        catch (IOException e)</span>
+        {
+<span class="nc" id="L255">            getLogger().error(&quot;Serialized File could not be read.&quot;, e);</span>
+
+            // We got a corrupt file for some reason.
+            // Null out serialData to be sure
+<span class="nc" id="L259">            serialData = null;</span>
+        }
+<span class="nc" id="L261">        catch (ClassNotFoundException e)</span>
+        {
+<span class="nc" id="L263">            getLogger().error(&quot;Objects could not be read from serialized file.&quot;, e);</span>
+
+            // This should not happen
+            // Null out serialData to be sure
+<span class="nc" id="L267">            serialData = null;</span>
+        }
+        finally
+        {
+            // Could be null if we opened a file, didn't find it to be a
+            // Map object and then nuked it away.
+            try
+            {
+<span class="pc bpc" id="L275" title="1 of 2 branches missed.">                if (in != null)</span>
+                {
+<span class="fc" id="L277">                    in.close();</span>
+                }
+            }
+<span class="nc" id="L280">            catch (IOException e)</span>
+            {
+<span class="nc" id="L282">                getLogger().error(&quot;Exception while closing file&quot;, e);</span>
+<span class="fc" id="L283">            }</span>
+        }
+
+        // Recreate transient loggers
+<span class="pc bpc" id="L287" title="1 of 2 branches missed.">        if (serialData != null)</span>
+        {
+<span class="fc bfc" id="L289" title="All 2 branches covered.">        	for (AppData appData : serialData.keySet())</span>
+        	{
+<span class="fc bfc" id="L291" title="All 2 branches covered.">        		for (Group group : appData.getGroups())</span>
+        		{
+<span class="pc bpc" id="L293" title="1 of 2 branches missed.">        			if (group instanceof LogEnabled)</span>
+        			{
+<span class="fc" id="L295">        				((LogEnabled)group).enableLogging(getLogger());</span>
+        			}
+
+<span class="fc bfc" id="L298" title="All 2 branches covered.">    				for (Field&lt;?&gt; field : group.getFields())</span>
+    				{
+<span class="pc bpc" id="L300" title="1 of 2 branches missed.">            			if (field instanceof LogEnabled)</span>
+            			{
+<span class="fc" id="L302">            				((LogEnabled)field).enableLogging(getLogger());</span>
+            			}
+<span class="fc" id="L304">    				}</span>
+<span class="fc" id="L305">        		}</span>
+<span class="fc" id="L306">        	}</span>
+        }
+<span class="fc" id="L308">        getLogger().info(&quot;Loaded serialized map object, ignoring XML&quot;);</span>
+<span class="fc" id="L309">        getLogger().debug(&quot;Loading took &quot; + (System.currentTimeMillis() - timer));</span>
+<span class="fc" id="L310">        return serialData;</span>
+    }
+
+    /**
+     * Writes a parsed XML map with all the appData groups into a file. This
+     * will speed up loading time when you restart the Intake Service because it
+     * will only unserialize this file instead of reloading all of the XML files
+     *
+     * @param serialDataPath
+     *            The path of the file to write to
+     * @param appDataElements
+     *            A Map containing all of the XML parsed appdata elements
+     */
+    private void saveSerialized(String serialDataPath, Map&lt;AppData, File&gt; appDataElements)
+    {
+
+<span class="fc" id="L326">        getLogger().debug(</span>
+                &quot;Entered saveSerialized(&quot; + serialDataPath
+                        + &quot;, appDataElements)&quot;);
+
+<span class="fc" id="L330">        long timer = System.currentTimeMillis();</span>
+
+<span class="pc bpc" id="L332" title="1 of 2 branches missed.">        if (serialDataPath == null)</span>
+        {
+<span class="nc" id="L334">            return;</span>
+        }
+
+<span class="fc" id="L337">        File serialData = new File(serialDataPath);</span>
+
+        try
+        {
+<span class="fc" id="L341">            boolean result = serialData.createNewFile();</span>
+<span class="pc bpc" id="L342" title="1 of 2 branches missed.">            if ( result == false )</span>
+            {
+<span class="nc" id="L344">            	getLogger().error(&quot;Could not create new serialized file&quot;);</span>
+            }
+
+            // Try to delete the file
+<span class="fc" id="L348">            result = serialData.delete();</span>
+<span class="pc bpc" id="L349" title="1 of 2 branches missed.">            if ( result == false )</span>
+            {
+<span class="nc" id="L351">            	getLogger().error(&quot;Serialized file could not be removed&quot;);</span>
+            }
+            
+        }
+<span class="nc" id="L355">        catch (IOException e)</span>
+        {
+<span class="nc" id="L357">            getLogger().info(</span>
+                    &quot;Could not create serialized file &quot; + serialDataPath
+                            + &quot;, not serializing the XML data&quot;, e);
+<span class="nc" id="L360">            return;</span>
+<span class="fc" id="L361">        }</span>
+
+<span class="fc" id="L363">        ObjectOutputStream out = null;</span>
+<span class="fc" id="L364">        ObjectInputStream in = null;</span>
+
+        try
+        {
+            // write the appData file out
+<span class="fc" id="L369">        	FileOutputStream fout = new FileOutputStream(serialDataPath);</span>
+<span class="fc" id="L370">            out = new ObjectOutputStream(fout);</span>
+<span class="fc" id="L371">            out.writeObject(appDataElements);</span>
+<span class="fc" id="L372">            out.flush();</span>
+
+            // read the file back in. for some reason on OSX 10.1
+            // this is necessary.
+<span class="fc" id="L376">            FileInputStream fin = new FileInputStream(serialDataPath);</span>
+<span class="fc" id="L377">            in = new ObjectInputStream(fin);</span>
+<span class="fc" id="L378">            /* Map dummy = (Map) */ in.readObject();</span>
+
+<span class="fc" id="L380">            getLogger().debug(&quot;Serializing successful&quot;);</span>
+        }
+<span class="nc" id="L382">        catch (IOException e)</span>
+        {
+<span class="nc" id="L384">            getLogger().info(</span>
+                    &quot;Could not write serialized file to &quot; + serialDataPath
+                            + &quot;, not serializing the XML data&quot;, e);
+        }
+<span class="nc" id="L388">        catch (ClassNotFoundException e)</span>
+        {
+<span class="nc" id="L390">            getLogger().info(</span>
+                    &quot;Could not re-read serialized file from &quot; + serialDataPath, e);
+        }
+        finally
+        {
+            try
+            {
+<span class="pc bpc" id="L397" title="1 of 2 branches missed.">                if (out != null)</span>
+                {
+<span class="fc" id="L399">                    out.close();</span>
+                }
+            }
+<span class="nc" id="L402">            catch (IOException e)</span>
+            {
+<span class="nc" id="L404">                getLogger().error(&quot;Exception while closing file&quot;, e);</span>
+<span class="fc" id="L405">            }</span>
+            try
+            {
+<span class="pc bpc" id="L408" title="1 of 2 branches missed.">                if (in != null)</span>
+                {
+<span class="fc" id="L410">                    in.close();</span>
+                }
+            }
+<span class="nc" id="L413">            catch (IOException e)</span>
+            {
+<span class="nc" id="L415">                getLogger().error(&quot;Exception while closing file&quot;, e);</span>
+<span class="fc" id="L416">            }</span>
+        }
+
+<span class="fc" id="L419">        getLogger().debug(&quot;Saving took &quot; + (System.currentTimeMillis() - timer));</span>
+<span class="fc" id="L420">    }</span>
+
+    /**
+     * Gets an instance of a named group either from the pool or by calling the
+     * Factory Service if the pool is empty.
+     *
+     * @param groupName
+     *            the name of the group.
+     * @return a Group instance.
+     * @throws IntakeException
+     *             if recycling fails.
+     */
+    @Override
+    public Group getGroup(String groupName) throws IntakeException
+    {
+<span class="fc" id="L435">        Group group = null;</span>
+
+<span class="fc" id="L437">        AppData appData = groupNames.get(groupName);</span>
+
+<span class="pc bpc" id="L439" title="1 of 2 branches missed.">        if (groupName == null)</span>
+        {
+<span class="nc" id="L441">            throw new IntakeException(</span>
+                    &quot;Intake IntakeServiceImpl.getGroup(groupName) is null&quot;);
+        }
+
+<span class="pc bpc" id="L445" title="1 of 2 branches missed.">        if (appData == null)</span>
+        {
+<span class="nc" id="L447">            throw new IntakeException(</span>
+                    &quot;Intake IntakeServiceImpl.getGroup(groupName): No XML definition for Group &quot;
+                            + groupName + &quot; found&quot;);
+        }
+        try
+        {
+<span class="fc" id="L453">            group = keyedPools.get(appData).borrowObject(groupName);</span>
+        }
+<span class="nc" id="L455">        catch (Exception e)</span>
+        {
+<span class="nc" id="L457">            throw new IntakeException(&quot;Could not get group &quot; + groupName, e);</span>
+<span class="fc" id="L458">        }</span>
+<span class="fc" id="L459">        return group;</span>
+    }
+
+    /**
+     * Puts a Group back to the pool.
+     *
+     * @param instance
+     *            the object instance to recycle.
+     *
+     * @throws IntakeException
+     *             The passed group name does not exist.
+     */
+    @Override
+    public void releaseGroup(Group instance) throws IntakeException
+    {
+<span class="nc bnc" id="L474" title="All 2 branches missed.">        if (instance != null)</span>
+        {
+<span class="nc" id="L476">            String groupName = instance.getIntakeGroupName();</span>
+<span class="nc" id="L477">            AppData appData = groupNames.get(groupName);</span>
+
+<span class="nc bnc" id="L479" title="All 2 branches missed.">            if (appData == null)</span>
+            {
+<span class="nc" id="L481">                throw new IntakeException(</span>
+                        &quot;Intake IntakeServiceImpl.releaseGroup(groupName): &quot;
+                                + &quot;No XML definition for Group &quot; + groupName
+                                + &quot; found&quot;);
+            }
+
+            try
+            {
+<span class="nc" id="L489">                keyedPools.get(appData).returnObject(groupName, instance);</span>
+            }
+<span class="nc" id="L491">            catch (Exception e)</span>
+            {
+<span class="nc" id="L493">                throw new IntakeException(&quot;Could not get group &quot; + groupName, e);</span>
+<span class="nc" id="L494">            }</span>
+        }
+<span class="nc" id="L496">    }</span>
+
+    /**
+     * Gets the current size of the pool for a group.
+     *
+     * @param groupName
+     *            the name of the group.
+     *
+     * @throws IntakeException
+     *             The passed group name does not exist.
+     */
+    @Override
+    public int getSize(String groupName) throws IntakeException
+    {
+<span class="nc" id="L510">        AppData appData = groupNames.get(groupName);</span>
+<span class="nc bnc" id="L511" title="All 2 branches missed.">        if (appData == null)</span>
+        {
+<span class="nc" id="L513">            throw new IntakeException(</span>
+                    &quot;Intake IntakeServiceImpl.Size(groupName): No XML definition for Group &quot;
+                            + groupName + &quot; found&quot;);
+        }
+
+<span class="nc" id="L518">        KeyedObjectPool&lt;String, Group&gt; kop = keyedPools.get(appData);</span>
+
+<span class="nc" id="L520">        return kop.getNumActive(groupName) + kop.getNumIdle(groupName);</span>
+    }
+
+    /**
+     * Names of all the defined groups.
+     *
+     * @return array of names.
+     */
+    @Override
+    public String[] getGroupNames()
+    {
+<span class="nc" id="L531">        return groupNames.keySet().toArray(new String[0]);</span>
+    }
+
+    /**
+     * Gets the key (usually a short identifier) for a group.
+     *
+     * @param groupName
+     *            the name of the group.
+     * @return the the key.
+     */
+    @Override
+    public String getGroupKey(String groupName)
+    {
+<span class="nc" id="L544">        return groupKeyMap.get(groupName);</span>
+    }
+
+    /**
+     * Gets the group name given its key.
+     *
+     * @param groupKey
+     *            the key.
+     * @return groupName the name of the group.
+     */
+    @Override
+    public String getGroupName(String groupKey)
+    {
+<span class="nc" id="L557">        return groupNameMap.get(groupKey);</span>
+    }
+
+    /**
+     * Gets the Method that can be used to set a property.
+     *
+     * @param className
+     *            the name of the object.
+     * @param propName
+     *            the name of the property.
+     * @return the setter.
+     * @throws ClassNotFoundException if the class specified could not be loaded
+     * @throws IntrospectionException if the property setter could not be called
+     */
+    @Override
+    public Method getFieldSetter(String className, String propName)
+            throws ClassNotFoundException, IntrospectionException
+    {
+<span class="fc" id="L575">        Map&lt;String, Method&gt; settersForClassName = setterMap.get(className);</span>
+
+<span class="pc bpc" id="L577" title="1 of 2 branches missed.">        if (settersForClassName == null)</span>
+        {
+<span class="nc" id="L579">            throw new IntrospectionException(&quot;No setter Map for &quot; + className</span>
+                    + &quot; available!&quot;);
+        }
+
+<span class="fc" id="L583">        Method setter = settersForClassName.get(propName);</span>
+
+<span class="pc bpc" id="L585" title="1 of 2 branches missed.">        if (setter == null)</span>
+        {
+<span class="fc" id="L587">            PropertyDescriptor pd = new PropertyDescriptor(propName, Class</span>
+<span class="fc" id="L588">                    .forName(className));</span>
+<span class="fc" id="L589">            synchronized (setterMap)</span>
+            {
+<span class="fc" id="L591">                setter = pd.getWriteMethod();</span>
+<span class="fc" id="L592">                settersForClassName.put(propName, setter);</span>
+<span class="pc bpc" id="L593" title="1 of 2 branches missed.">                if (setter == null)</span>
+                {
+<span class="nc" id="L595">                    getLogger().error(</span>
+                            &quot;Intake: setter for '&quot; + propName + &quot;' in class '&quot;
+                                    + className + &quot;' could not be found.&quot;);
+                }
+<span class="fc" id="L599">            }</span>
+            // we have already completed the reflection on the getter, so
+            // save it so we do not have to repeat
+<span class="fc" id="L602">            synchronized (getterMap)</span>
+            {
+<span class="fc" id="L604">                Map&lt;String, Method&gt; gettersForClassName = getterMap.get(className);</span>
+
+<span class="pc bpc" id="L606" title="1 of 2 branches missed.">                if (gettersForClassName != null)</span>
+                {
+<span class="fc" id="L608">                    Method getter = pd.getReadMethod();</span>
+<span class="pc bpc" id="L609" title="1 of 2 branches missed.">                    if (getter != null)</span>
+                    {
+<span class="fc" id="L611">                        gettersForClassName.put(propName, getter);</span>
+                    }
+                }
+<span class="fc" id="L614">            }</span>
+        }
+<span class="fc" id="L616">        return setter;</span>
+    }
+
+    /**
+     * Gets the Method that can be used to get a property value.
+     *
+     * @param className
+     *            the name of the object.
+     * @param propName
+     *            the name of the property.
+     * @return the getter.
+     * @throws ClassNotFoundException if the class specified could not be loaded
+     * @throws IntrospectionException if the property getter could not be called
+     */
+    @Override
+    public Method getFieldGetter(String className, String propName)
+            throws ClassNotFoundException, IntrospectionException
+    {
+<span class="fc" id="L634">        Map&lt;String, Method&gt; gettersForClassName = getterMap.get(className);</span>
+
+<span class="pc bpc" id="L636" title="1 of 2 branches missed.">        if (gettersForClassName == null)</span>
+        {
+<span class="nc" id="L638">            throw new IntrospectionException(&quot;No getter Map for &quot; + className</span>
+                    + &quot; available!&quot;);
+        }
+
+<span class="fc" id="L642">        Method getter = gettersForClassName.get(propName);</span>
+
+<span class="pc bpc" id="L644" title="1 of 2 branches missed.">        if (getter == null)</span>
+        {
+<span class="fc" id="L646">            PropertyDescriptor pd = null;</span>
+<span class="fc" id="L647">            synchronized (getterMap)</span>
+            {
+<span class="fc" id="L649">                pd = new PropertyDescriptor(propName, Class.forName(className));</span>
+<span class="fc" id="L650">                getter = pd.getReadMethod();</span>
+<span class="fc" id="L651">                gettersForClassName.put(propName, getter);</span>
+<span class="pc bpc" id="L652" title="1 of 2 branches missed.">                if (getter == null)</span>
+                {
+<span class="nc" id="L654">                    getLogger().error(</span>
+                            &quot;Intake: getter for '&quot; + propName + &quot;' in class '&quot;
+                                    + className + &quot;' could not be found.&quot;);
+                }
+<span class="fc" id="L658">            }</span>
+            // we have already completed the reflection on the setter, so
+            // save it so we do not have to repeat
+<span class="fc" id="L661">            synchronized (setterMap)</span>
+            {
+<span class="fc" id="L663">                Map&lt;String, Method&gt; settersForClassName = getterMap.get(className);</span>
+
+<span class="pc bpc" id="L665" title="1 of 2 branches missed.">                if (settersForClassName != null)</span>
+                {
+<span class="fc" id="L667">                    Method setter = pd.getWriteMethod();</span>
+<span class="pc bpc" id="L668" title="1 of 2 branches missed.">                    if (setter != null)</span>
+                    {
+<span class="fc" id="L670">                        settersForClassName.put(propName, setter);</span>
+                    }
+                }
+<span class="fc" id="L673">            }</span>
+        }
+<span class="fc" id="L675">        return getter;</span>
+    }
+
+    // ---------------- Avalon Lifecycle Methods ---------------------
+    /**
+     * Avalon component lifecycle method
+     */
+    @Override
+    public void configure(Configuration conf) throws ConfigurationException
+    {
+<span class="fc" id="L685">        final Configuration xmlPaths = conf.getChild(XML_PATHS, false);</span>
+
+<span class="fc" id="L687">        xmlPathes = new ArrayList&lt;String&gt;();</span>
+
+<span class="pc bpc" id="L689" title="1 of 2 branches missed.">        if (xmlPaths == null)</span>
+        {
+<span class="nc" id="L691">            xmlPathes.add(XML_PATH_DEFAULT);</span>
+        }
+        else
+        {
+<span class="fc" id="L695">            Configuration[] nameVal = xmlPaths.getChildren();</span>
+<span class="fc bfc" id="L696" title="All 2 branches covered.">            for (int i = 0; i &lt; nameVal.length; i++)</span>
+            {
+<span class="fc" id="L698">                String val = nameVal[i].getValue();</span>
+<span class="fc" id="L699">                xmlPathes.add(val);</span>
+            }
+        }
+
+<span class="fc" id="L703">        serialDataPath = conf.getChild(SERIAL_XML, false).getValue(SERIAL_XML_DEFAULT);</span>
+
+<span class="pc bpc" id="L705" title="1 of 2 branches missed.">        if (!serialDataPath.equalsIgnoreCase(&quot;none&quot;))</span>
+        {
+<span class="fc" id="L707">            serialDataPath = new File(applicationRoot, serialDataPath).getAbsolutePath();</span>
+        }
+        else
+        {
+<span class="nc" id="L711">            serialDataPath = null;</span>
+        }
+
+<span class="fc" id="L714">        getLogger().debug(&quot;Path for serializing: &quot; + serialDataPath);</span>
+<span class="fc" id="L715">    }</span>
+
+    /**
+     * Avalon component lifecycle method Initializes the service by loading
+     * xml rule files and creating the Intake groups.
+     *
+     * @throws Exception
+     *             if initialization fails.
+     */
+    @Override
+    public void initialize() throws Exception
+    {
+<span class="fc" id="L727">        Map&lt;AppData, File&gt; appDataElements = null;</span>
+
+<span class="fc" id="L729">        groupNames = new HashMap&lt;String, AppData&gt;();</span>
+<span class="fc" id="L730">        groupKeyMap = new HashMap&lt;String, String&gt;();</span>
+<span class="fc" id="L731">        groupNameMap = new HashMap&lt;String, String&gt;();</span>
+<span class="fc" id="L732">        getterMap = new HashMap&lt;String, Map&lt;String,Method&gt;&gt;();</span>
+<span class="fc" id="L733">        setterMap = new HashMap&lt;String, Map&lt;String,Method&gt;&gt;();</span>
+<span class="fc" id="L734">        keyedPools = new HashMap&lt;AppData, KeyedObjectPool&lt;String, Group&gt;&gt;();</span>
+
+<span class="fc" id="L736">        Set&lt;File&gt; xmlFiles = new HashSet&lt;File&gt;();</span>
+
+<span class="fc" id="L738">        long timeStamp = 0;</span>
+        
+<span class="fc" id="L740">        getLogger().debug(&quot;logger is &quot; + getLogger().getClass().getSimpleName());</span>
+
+<span class="fc bfc" id="L742" title="All 2 branches covered.">        for (String xmlPath : xmlPathes)</span>
+        {
+            // Files are webapp.root relative
+<span class="fc" id="L745">            File xmlFile = new File(applicationRoot, xmlPath).getAbsoluteFile();</span>
+
+<span class="fc" id="L747">            getLogger().debug(&quot;Path for XML File: &quot; + xmlFile);</span>
+
+<span class="pc bpc" id="L749" title="1 of 2 branches missed.">            if (!xmlFile.canRead())</span>
+            {
+<span class="nc" id="L751">                String READ_ERR = &quot;Could not read input file with path &quot;</span>
+                        + xmlPath + &quot;.  Looking for file &quot; + xmlFile;
+
+<span class="nc" id="L754">                getLogger().error(READ_ERR);</span>
+<span class="nc" id="L755">                throw new Exception(READ_ERR);</span>
+            }
+
+<span class="fc" id="L758">            xmlFiles.add(xmlFile);</span>
+
+<span class="fc" id="L760">            getLogger().debug(&quot;Added &quot; + xmlPath + &quot; as File to parse&quot;);</span>
+
+            // Get the timestamp of the youngest file to be compared with
+            // a serialized file. If it is younger than the serialized file,
+            // then we have to parse the XML anyway.
+<span class="pc bpc" id="L765" title="1 of 2 branches missed.">            timeStamp = xmlFile.lastModified() &gt; timeStamp ? xmlFile</span>
+<span class="pc" id="L766">                    .lastModified() : timeStamp;</span>
+<span class="fc" id="L767">        }</span>
+
+<span class="fc" id="L769">        Map&lt;AppData, File&gt; serializedMap = loadSerialized(serialDataPath, timeStamp);</span>
+
+<span class="fc bfc" id="L771" title="All 2 branches covered.">        if (serializedMap != null)</span>
+        {
+            // Use the serialized data as XML groups. Don't parse.
+<span class="fc" id="L774">            appDataElements = serializedMap;</span>
+<span class="fc" id="L775">            getLogger().debug(&quot;Using the serialized map&quot;);</span>
+        }
+        else
+        {
+<span class="fc" id="L779">        	long timer = System.currentTimeMillis();</span>
+
+            // Parse all the given XML files
+<span class="fc" id="L782">            JAXBContext jaxb = JAXBContext.newInstance(AppData.class);</span>
+<span class="fc" id="L783">            Unmarshaller um = jaxb.createUnmarshaller();</span>
+
+            // Debug mapping
+<span class="fc" id="L786">            um.setEventHandler(new DefaultValidationEventHandler());</span>
+
+            // Enable logging
+<span class="fc" id="L789">            Listener logEnabledListener = new AvalonLogEnabledListener();</span>
+<span class="fc" id="L790">            um.setListener(logEnabledListener);</span>
+
+<span class="fc" id="L792">            URL schemaURL = getClass().getResource(&quot;/intake.xsd&quot;);</span>
+<span class="fc" id="L793">            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);</span>
+<span class="fc" id="L794">            um.setSchema(schemaFactory.newSchema(schemaURL));</span>
+<span class="fc" id="L795">            appDataElements = new HashMap&lt;AppData, File&gt;();</span>
+
+<span class="fc bfc" id="L797" title="All 2 branches covered.">            for (File xmlFile : xmlFiles)</span>
+            {
+<span class="fc" id="L799">                getLogger().debug(&quot;Now parsing: &quot; + xmlFile);</span>
+<span class="fc" id="L800">                FileInputStream fis = null;</span>
+                try
+                {
+<span class="fc" id="L803">                    fis = new FileInputStream(xmlFile);</span>
+<span class="fc" id="L804">                    AppData appData = (AppData) um.unmarshal(fis);</span>
+
+<span class="fc" id="L806">                    appDataElements.put(appData, xmlFile);</span>
+<span class="fc" id="L807">                    getLogger().debug(&quot;Saving AppData for &quot; + xmlFile);</span>
+                }
+                finally
+                {
+<span class="pc bpc" id="L811" title="1 of 2 branches missed.">                    if (fis != null)</span>
+                    {
+                        try
+                        {
+<span class="fc" id="L815">                            fis.close();</span>
+                        }
+<span class="nc" id="L817">                        catch (IOException e)</span>
+                        {
+<span class="nc" id="L819">                            getLogger().warn(&quot;Could not close file &quot; + xmlFile);</span>
+<span class="fc" id="L820">                        }</span>
+                    }
+                }
+<span class="fc" id="L823">            }</span>
+
+<span class="fc" id="L825">            getLogger().debug(&quot;Parsing took &quot; + (System.currentTimeMillis() - timer));</span>
+<span class="fc" id="L826">            saveSerialized(serialDataPath, appDataElements);</span>
+        }
+
+<span class="fc" id="L829">        int counter = 0;</span>
+        AppData appData;
+        File dataFile;
+<span class="fc bfc" id="L832" title="All 2 branches covered.">        for ( Entry&lt;AppData, File&gt; entry : appDataElements.entrySet() )</span>
+        {
+        	// Set the entry pair
+<span class="fc" id="L835">        	appData = entry.getKey();</span>
+<span class="fc" id="L836">        	dataFile = entry.getValue();</span>
+        	
+<span class="fc" id="L838">            int maxPooledGroups = 0;</span>
+<span class="fc" id="L839">            List&lt;Group&gt; glist = appData.getGroups();</span>
+
+<span class="fc" id="L841">            String groupPrefix = appData.getGroupPrefix();</span>
+
+<span class="fc bfc" id="L843" title="All 2 branches covered.">            for (ListIterator&lt;Group&gt; i = glist.listIterator(glist.size()); i.hasPrevious();)</span>
+            {
+<span class="fc" id="L845">                Group g = i.previous();</span>
+<span class="fc" id="L846">                String groupName = g.getIntakeGroupName();</span>
+
+<span class="fc" id="L848">                boolean registerUnqualified = registerGroup(groupName, g, appData, true);</span>
+
+<span class="pc bpc" id="L850" title="1 of 2 branches missed.">                if (!registerUnqualified)</span>
+                {
+<span class="nc" id="L852">                    getLogger().info(</span>
+                            &quot;Ignored redefinition of Group &quot; + groupName
+<span class="nc" id="L854">                                    + &quot; or Key &quot; + g.getGID() + &quot; from &quot;</span>
+                                    + dataFile);
+                }
+
+<span class="pc bpc" id="L858" title="1 of 2 branches missed.">                if (groupPrefix != null)</span>
+                {
+<span class="nc" id="L860">                    StringBuilder qualifiedName = new StringBuilder();</span>
+<span class="nc" id="L861">                    qualifiedName.append(groupPrefix).append(':').append(groupName);</span>
+
+                    // Add the fully qualified group name. Do _not_ check
+                    // for
+                    // the existence of the key if the unqualified
+                    // registration succeeded
+                    // (because then it was added by the registerGroup
+                    // above).
+<span class="nc bnc" id="L869" title="All 4 branches missed.">                    if (!registerGroup(qualifiedName.toString(), g,</span>
+                            appData, !registerUnqualified))
+                    {
+<span class="nc" id="L872">                        getLogger().error(</span>
+                            &quot;Could not register fully qualified name &quot;
+                                    + qualifiedName
+                                    + &quot;, maybe two XML files have the same prefix. Ignoring it.&quot;);
+                    }
+                }
+
+                // Init fields
+<span class="fc bfc" id="L880" title="All 2 branches covered.">                for (Field&lt;?&gt; f : g.getFields())</span>
+                {
+<span class="fc" id="L882">                    f.initGetterAndSetter();</span>
+<span class="fc" id="L883">                }</span>
+
+<span class="fc" id="L885">                maxPooledGroups = Math.max(maxPooledGroups, g.getPoolCapacity());</span>
+<span class="fc" id="L886">            }</span>
+
+<span class="fc" id="L888">            KeyedPooledObjectFactory&lt;String, Group&gt; factory =</span>
+                new Group.GroupFactory(appData);
+
+<span class="fc" id="L891">            GenericKeyedObjectPoolConfig&lt;Group&gt; poolConfig = new GenericKeyedObjectPoolConfig&lt;Group&gt;();</span>
+<span class="fc" id="L892">            poolConfig.setMaxTotalPerKey(maxPooledGroups);</span>
+<span class="fc" id="L893">            poolConfig.setJmxEnabled(true);</span>
+<span class="fc" id="L894">            poolConfig.setJmxNamePrefix(&quot;fulcrum-intake-pool-&quot; + counter++);</span>
+
+<span class="fc" id="L896">            keyedPools.put(appData,</span>
+                new GenericKeyedObjectPool&lt;String, Group&gt;(factory, poolConfig));
+<span class="fc" id="L898">        }</span>
+
+<span class="pc bpc" id="L900" title="1 of 2 branches missed.">        if (getLogger().isInfoEnabled())</span>
+        {
+<span class="fc" id="L902">            getLogger().info(&quot;Intake Service is initialized now.&quot;);</span>
+        }
+<span class="fc" id="L904">    }</span>
+
+    /**
+     * Note that the avalon.entry key=&quot;urn:avalon:home&quot; 
+     * and the type is {@link java.io.File}
+     * 
+     * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
+     * 
+     * @param context the Context to use
+     * @throws ContextException if the context is not found
+     */
+    @Override
+    public void contextualize(Context context) throws ContextException
+    {
+<span class="fc" id="L918">        this.applicationRoot = context.get(&quot;urn:avalon:home&quot;).toString();</span>
+<span class="fc" id="L919">    }</span>
+
+    /**
+     * Avalon component lifecycle method
+     *
+     * avalon.dependency type=&quot;org.apache.fulcrum.localization.LocalizationService&quot;
+     * 
+     * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
+     * 
+     * @param manager the service manager
+     * @throws ServiceException generic exception
+     */
+    @Override
+    public void service(ServiceManager manager) throws ServiceException
+    {
+<span class="fc" id="L934">        IntakeServiceFacade.setIntakeService(this);</span>
+<span class="fc" id="L935">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

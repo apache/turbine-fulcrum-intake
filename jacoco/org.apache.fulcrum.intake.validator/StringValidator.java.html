@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StringValidator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Intake Service</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.intake.validator</a> &gt; <span class="el_source">StringValidator.java</span></div><h1>StringValidator.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.intake.validator;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import org.apache.commons.lang3.StringUtils;
+
+/**
+ * A validator that will compare a testValue against the following
+ * constraints:
+ * &lt;table&gt;
+ * &lt;caption&gt;Validation rules&lt;/caption&gt;
+ * &lt;tr&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Valid Values&lt;/th&gt;&lt;th&gt;Default Value&lt;/th&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;required&lt;/td&gt;&lt;td&gt;true|false&lt;/td&gt;&lt;td&gt;false&lt;/td&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;mask&lt;/td&gt;&lt;td&gt;regexp&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;minLength&lt;/td&gt;&lt;td&gt;integer&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;maxLength&lt;/td&gt;&lt;td&gt;integer&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;
+ * &lt;/table&gt;
+ *
+ * This validator can serve as the base class for more specific validators
+ *
+ * @author &lt;a href=&quot;mailto:jmcnally@collab.net&quot;&gt;John McNally&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:quintonm@bellsouth.net&quot;&gt;Quinton McCombs&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:Colin.Chalmers@maxware.nl&quot;&gt;Colin Chalmers&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:jh@byteaction.de&quot;&gt;J&amp;uuml;rgen Hoffmann&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id$
+ */
+public class StringValidator
+        extends DefaultValidator&lt;String&gt;
+{
+    /** The matching mask String as supplied by the XML input */
+<span class="fc" id="L53">    protected String maskString = null;</span>
+
+    /** The compiled Regular Expression */
+<span class="fc" id="L56">    protected Pattern maskPattern = null;</span>
+
+    /** The message to report if the mask constraint is not satisfied */
+<span class="fc" id="L59">    protected String maskMessage = null;</span>
+
+    /**
+     * Default constructor
+     */
+    public StringValidator()
+    {
+<span class="fc" id="L66">        super();</span>
+<span class="fc" id="L67">    }</span>
+
+    /**
+     * Extract the relevant parameters from the constraints listed
+     * in &amp;lt;rule&amp;gt; tags within the intake.xml file.
+     *
+     * @param paramMap a &lt;code&gt;Map&lt;/code&gt; of &lt;code&gt;Rule&lt;/code&gt;'s
+     * containing constraints on the input.
+     * @throws InvalidMaskException An invalid mask was specified for one of the rules
+     */
+    @Override
+	public void init(Map&lt;String, ? extends Constraint&gt; paramMap)
+            throws InvalidMaskException
+    {
+<span class="fc" id="L81">        super.init(paramMap);</span>
+
+<span class="fc" id="L83">        Constraint constraint = paramMap.get(MASK_RULE_NAME);</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        if (constraint != null)</span>
+        {
+<span class="fc" id="L86">            String param = constraint.getValue();</span>
+<span class="fc" id="L87">            setMask(param);</span>
+<span class="fc" id="L88">            maskMessage = constraint.getMessage();</span>
+        }
+
+<span class="fc" id="L91">    }</span>
+
+    /**
+     * Determine whether a testValue meets the criteria specified
+     * in the constraints defined for this validator
+     *
+     * @param testValue a &lt;code&gt;String&lt;/code&gt; to be tested
+     * @throws ValidationException containing an error message if the
+     * testValue did not pass the validation tests.
+     */
+    @Override
+	public void assertValidity(String testValue)
+            throws ValidationException
+    {
+<span class="fc" id="L105">        super.assertValidity(testValue);</span>
+
+<span class="pc bpc" id="L107" title="1 of 6 branches missed.">        if ((required || StringUtils.isNotEmpty(testValue)) &amp;&amp; maskPattern != null)</span>
+        {
+            /** JDK 1.4 matcher */
+<span class="fc" id="L110">            boolean patternMatch = maskPattern.matcher(testValue).matches();</span>
+
+<span class="fc" id="L112">            log.debug(&quot;Trying to match &quot; + testValue</span>
+                    + &quot; to pattern &quot; + maskString);
+
+<span class="fc bfc" id="L115" title="All 2 branches covered.">            if (!patternMatch)</span>
+            {
+<span class="fc" id="L117">                errorMessage = maskMessage;</span>
+<span class="fc" id="L118">                throw new ValidationException(maskMessage);</span>
+            }
+        }
+<span class="fc" id="L121">    }</span>
+
+    // ************************************************************
+    // **                Bean accessor methods                   **
+    // ************************************************************
+
+    /**
+     * Get the value of mask.
+     *
+     * @return value of mask.
+     */
+    public String getMask()
+    {
+<span class="nc" id="L134">        return maskString;</span>
+    }
+
+    /**
+     * Set the value of mask.
+     *
+     * @param mask  Value to assign to mask.
+     * @throws InvalidMaskException the mask could not be compiled.
+     */
+    public void setMask(String mask)
+            throws InvalidMaskException
+    {
+<span class="fc" id="L146">        maskString = mask;</span>
+
+        // Fixme. We should make this configureable by the XML file -- hps
+<span class="fc" id="L149">        int maskOptions = 0;</span>
+
+        try
+        {
+<span class="fc" id="L153">            log.debug(&quot;Compiling pattern &quot; + maskString);</span>
+<span class="fc" id="L154">            maskPattern = Pattern.compile(maskString, maskOptions);</span>
+        }
+<span class="nc" id="L156">        catch (PatternSyntaxException pe)</span>
+        {
+<span class="nc" id="L158">            throw new InvalidMaskException(&quot;Could not compile pattern &quot; + maskString, pe);</span>
+<span class="fc" id="L159">        }</span>
+<span class="fc" id="L160">    }</span>
+
+    /**
+     * Get the value of maskMessage.
+     *
+     * @return value of maskMessage.
+     */
+    public String getMaskMessage()
+    {
+<span class="nc" id="L169">        return maskMessage;</span>
+    }
+
+    /**
+     * Set the value of maskMessage.
+     *
+     * @param message  Value to assign to maskMessage.
+     */
+    public void setMaskMessage(String message)
+    {
+<span class="nc" id="L179">        this.maskMessage = message;</span>
+<span class="nc" id="L180">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

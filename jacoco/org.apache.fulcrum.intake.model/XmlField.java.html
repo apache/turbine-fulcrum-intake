@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>XmlField.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Intake Service</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.intake.model</a> &gt; <span class="el_source">XmlField.java</span></div><h1>XmlField.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.intake.model;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+
+import org.apache.avalon.framework.logger.LogEnabled;
+import org.apache.avalon.framework.logger.Logger;
+import org.apache.commons.lang3.StringUtils;
+
+/**
+ * A Class for holding data about a property used in an Application.
+ *
+ * @author &lt;a href=&quot;mailto:jmcnally@collab.net&quot;&gt;John McNally&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:hps@intermeta.de&quot;&gt;Henning P. Schmiedehausen&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:quintonm@bellsouth.net&quot;&gt;Quinton McCombs&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id$
+ */
+@XmlType(name=&quot;field&quot;)
+@XmlAccessorType(XmlAccessType.NONE)
+public class XmlField
+        implements Serializable, LogEnabled
+{
+    /**
+     * Serial version id
+     */
+    private static final long serialVersionUID = -734309157828058007L;
+
+    @XmlAttribute(required=true)
+    private String key;
+
+    @XmlAttribute(required=true)
+    private String name;
+
+    @XmlAttribute
+    private String displayName;
+
+    @XmlAttribute
+    private String displaySize;
+
+<span class="fc" id="L73">    @XmlAttribute</span>
+    private FieldType type = FieldType.FIELD_STRING;
+
+<span class="fc" id="L76">    @XmlAttribute</span>
+    private boolean multiValued = false;
+
+    @XmlAttribute
+    private String fieldClass;
+
+    @XmlAttribute
+    private String mapToObject;
+
+    @XmlAttribute
+    private String mapToProperty;
+
+    @XmlAttribute
+    private String validator;
+
+    @XmlAttribute
+    private String defaultValue;
+
+    @XmlAttribute
+    private String emptyValue;
+
+    private List&lt;Rule&gt; rules;
+    private Map&lt;String, Rule&gt; ruleMap;
+
+    private Group parent;
+
+    private Logger log;
+
+    /**
+     * Default Constructor
+     */
+    public XmlField()
+<span class="fc" id="L108">    {</span>
+<span class="fc" id="L109">        rules = new ArrayList&lt;Rule&gt;();</span>
+<span class="fc" id="L110">        ruleMap = new HashMap&lt;String, Rule&gt;();</span>
+<span class="fc" id="L111">    }</span>
+
+    /**
+	 * Enable Avalon Logging
+	 */
+	@Override
+	public void enableLogging(Logger logger)
+	{
+<span class="fc" id="L119">		this.log = logger;</span>
+<span class="fc" id="L120">	}</span>
+
+	/**
+	 * Return Avalon logger
+	 *
+	 * @return the logger
+	 */
+	public Logger getLogger()
+	{
+<span class="fc" id="L129">		return log;</span>
+	}
+
+    /**
+     * Get the name of the property
+     *
+     * @return the raw name of the property
+     */
+    public String getRawName()
+    {
+<span class="nc" id="L139">        return name;</span>
+    }
+
+    /**
+     * Get the name of the property
+     *
+     * @return the name of the property with underscores removed
+     */
+    public String getName()
+    {
+<span class="fc" id="L149">        return StringUtils.replace(name, &quot;_&quot;, &quot;&quot;);</span>
+    }
+
+    /**
+     * Get the display name of the property
+     *
+     * @return the display name of the property
+     */
+    public String getDisplayName()
+    {
+<span class="fc" id="L159">        return displayName;</span>
+    }
+
+    /**
+     * Gets the display size of the field.  This is
+     * useful for constructing the HTML input tag.
+     *
+     * @return the display size for the field
+     */
+    public String getDisplaySize()
+    {
+<span class="fc" id="L170">        return this.displaySize;</span>
+    }
+
+    /**
+     * Get the parameter key of the property
+     *
+     * @return the key of the property
+     */
+    public String getKey()
+    {
+<span class="fc" id="L180">        return key;</span>
+    }
+
+    /**
+     * Get the type of the property
+     *
+     * @return the type of the field
+     */
+    public FieldType getType()
+    {
+<span class="fc" id="L190">        return type;</span>
+    }
+
+    /**
+     * Can this field have several values?
+     *
+     * @return true if the field can have multiple values
+     */
+    public boolean isMultiValued()
+    {
+<span class="fc" id="L200">        return multiValued;</span>
+    }
+
+    /**
+     * Get the name of the object that takes this input
+     *
+     * @return the name of the mapped object
+     */
+    public String getMapToObject()
+    {
+<span class="fc" id="L210">        return mapToObject;</span>
+    }
+
+    /**
+     * Get the property method that takes this input
+     *
+     * @return the property this field is mapped to
+     */
+    public String getMapToProperty()
+    {
+<span class="fc bfc" id="L220" title="All 2 branches covered.">        if (mapToProperty == null)</span>
+        {
+<span class="fc" id="L222">            return getName();</span>
+        }
+        else
+        {
+<span class="fc" id="L226">            return mapToProperty;</span>
+        }
+    }
+
+    /**
+     * Get the className of the validator
+     *
+     * @return the validator class name
+     */
+    public String getValidator()
+    {
+<span class="fc" id="L237">        return validator;</span>
+    }
+
+    /**
+     * Get the default Value.
+     *
+     * @return The default value for this field.
+     */
+    public String getDefaultValue()
+    {
+<span class="fc" id="L247">        return defaultValue;</span>
+    }
+
+    /**
+     * Get the empty Value.
+     *
+     * @return The empty value for this field.
+     */
+    public String getEmptyValue()
+    {
+<span class="fc" id="L257">        return emptyValue;</span>
+    }
+
+    /**
+     * Get the parent XmlGroup of the field
+     *
+     * @return the group this field belongs to
+     */
+    public Group getGroup()
+    {
+<span class="fc" id="L267">        return this.parent;</span>
+    }
+
+    /**
+     * Get the value of fieldClass.
+     *
+     * @return value of fieldClass.
+     */
+    public String getFieldClass()
+    {
+<span class="fc" id="L277">        return fieldClass;</span>
+    }
+
+    /**
+     * The collection of rules for this field.
+     *
+     * @return a &lt;code&gt;List&lt;/code&gt; value
+     */
+    public List&lt;Rule&gt; getRules()
+    {
+<span class="fc" id="L287">        return rules;</span>
+    }
+
+    /**
+     * Set the collection of rules for this field
+     *
+     * @param rules the rules to set
+     */
+    @XmlElement(name=&quot;rule&quot;)
+    public void setRules(List&lt;Rule&gt; rules)
+    {
+<span class="nc" id="L298">        this.rules = rules;</span>
+<span class="nc" id="L299">    }</span>
+
+    /**
+     * The collection of rules for this field keyed by
+     * parameter name.
+     *
+     * @return a &lt;code&gt;Map&lt;/code&gt; value
+     */
+    public Map&lt;String, Rule&gt; getRuleMap()
+    {
+<span class="fc" id="L309">        return ruleMap;</span>
+    }
+
+    /**
+     * JAXB callback to set the parent object
+     *
+     * @param um the Unmarshaller
+     * @param parent the parent object (an XmlGroup)
+     */
+    public void afterUnmarshal(Unmarshaller um, Object parent)
+    {
+<span class="fc" id="L320">        this.parent = (Group)parent;</span>
+
+        // Build map
+<span class="fc" id="L323">        this.ruleMap.clear();</span>
+<span class="fc bfc" id="L324" title="All 2 branches covered.">        for (Rule rule : rules)</span>
+        {
+<span class="fc" id="L326">            ruleMap.put(rule.getName(), rule);</span>
+<span class="fc" id="L327">        }</span>
+
+        // if a mapToProperty exists, set the object to this group's default
+<span class="pc bpc" id="L330" title="1 of 4 branches missed.">        if (mapToObject == null &amp;&amp; </span>
+        		mapToProperty != null &amp;&amp;
+<span class="pc bpc" id="L332" title="1 of 2 branches missed.">        		StringUtils.isNotEmpty(mapToProperty) &amp;&amp;</span>
+<span class="pc bpc" id="L333" title="1 of 2 branches missed.">        		this.parent.getDefaultMapToObject() != null)</span>
+        {
+<span class="fc" id="L335">        	mapToObject = this.parent.getDefaultMapToObject();</span>
+        }
+<span class="fc" id="L337">    }</span>
+
+    /**
+     * String representation of the column. This
+     * is an xml representation.
+     *
+     * @return the value of this field as an XML representation
+     */
+    @Override
+    public String toString()
+    {
+<span class="nc" id="L348">        StringBuilder result = new StringBuilder();</span>
+<span class="nc" id="L349">        result.append(&quot; &lt;field name=\&quot;&quot;).append(name).append(&quot;\&quot;&quot;)</span>
+<span class="nc" id="L350">            .append(&quot; key=\&quot;&quot;).append(key).append(&quot;\&quot;&quot;)</span>
+<span class="nc" id="L351">            .append(&quot; type=\&quot;&quot;).append(type.value()).append(&quot;\&quot;&quot;);</span>
+
+<span class="nc bnc" id="L353" title="All 2 branches missed.">        if (displayName != null)</span>
+        {
+<span class="nc" id="L355">            result.append(&quot; displayName=\&quot;&quot;).append(displayName).append(&quot;\&quot;&quot;);</span>
+        }
+<span class="nc bnc" id="L357" title="All 2 branches missed.">        if (mapToObject != null)</span>
+        {
+<span class="nc" id="L359">            result.append(&quot; mapToObject=\&quot;&quot;).append(mapToObject).append(&quot;\&quot;&quot;);</span>
+        }
+<span class="nc bnc" id="L361" title="All 2 branches missed.">        if (mapToProperty != null)</span>
+        {
+<span class="nc" id="L363">            result.append(&quot; mapToProperty=\&quot;&quot;).append(mapToProperty).append(&quot;\&quot;&quot;);</span>
+        }
+<span class="nc bnc" id="L365" title="All 2 branches missed.">        if (validator != null)</span>
+        {
+<span class="nc" id="L367">            result.append(&quot; validator=\&quot;&quot;).append(validator).append(&quot;\&quot;&quot;);</span>
+        }
+<span class="nc bnc" id="L369" title="All 2 branches missed.">        if (defaultValue != null)</span>
+        {
+<span class="nc" id="L371">            result.append(&quot; defaultValue=\&quot;&quot;).append(defaultValue).append(&quot;\&quot;&quot;);</span>
+        }
+
+<span class="nc bnc" id="L374" title="All 2 branches missed.">        if (emptyValue != null)</span>
+        {
+<span class="nc" id="L376">            result.append(&quot; emptyValue=\&quot;&quot;).append(emptyValue).append(&quot;\&quot;&quot;);</span>
+        }
+
+<span class="nc bnc" id="L379" title="All 2 branches missed.">        if (rules.size() == 0)</span>
+        {
+<span class="nc" id="L381">            result.append(&quot; /&gt;\n&quot;);</span>
+        }
+        else
+        {
+<span class="nc" id="L385">            result.append(&quot;&gt;\n&quot;);</span>
+<span class="nc bnc" id="L386" title="All 2 branches missed.">            for (Rule rule : rules)</span>
+            {
+<span class="nc" id="L388">                result.append(rule);</span>
+<span class="nc" id="L389">            }</span>
+<span class="nc" id="L390">            result.append(&quot;&lt;/field&gt;\n&quot;);</span>
+        }
+
+<span class="nc" id="L393">        return result.toString();</span>
+    }
+
+    // this methods are called during serialization
+    private void writeObject(ObjectOutputStream stream)
+            throws IOException
+    {
+<span class="nc" id="L400">        stream.defaultWriteObject();</span>
+<span class="nc" id="L401">    }</span>
+
+    private void readObject(ObjectInputStream stream)
+            throws IOException, ClassNotFoundException
+    {
+<span class="nc" id="L406">        stream.defaultReadObject();</span>
+<span class="nc" id="L407">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

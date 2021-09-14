@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BooleanValidator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Intake Service</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.intake.validator</a> &gt; <span class="el_source">BooleanValidator.java</span></div><h1>BooleanValidator.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.intake.validator;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.text.ParseException;
+
+import org.apache.commons.lang3.StringUtils;
+
+/**
+ * Validator for boolean field types.&lt;br&gt;&lt;br&gt;
+ *
+ * Values are validated by attempting to match the value to
+ * a list of strings for true and false values.  The string
+ * values are compared without regard to case.&lt;br&gt;
+ *
+ * Valid values for Boolean.TRUE:
+ * &lt;ul&gt;
+ * &lt;li&gt;TRUE&lt;/li&gt;
+ * &lt;li&gt;T&lt;/li&gt;
+ * &lt;li&gt;YES&lt;/li&gt;
+ * &lt;li&gt;Y&lt;/li&gt;
+ * &lt;li&gt;1&lt;/li&gt;
+ * &lt;li&gt;ON&lt;/li&gt;
+ * &lt;/ul&gt;
+ * Valid values for Boolean.FALSE:
+ * &lt;ul&gt;
+ * &lt;li&gt;FALSE&lt;/li&gt;
+ * &lt;li&gt;F&lt;/li&gt;
+ * &lt;li&gt;NO&lt;/li&gt;
+ * &lt;li&gt;N&lt;/li&gt;
+ * &lt;li&gt;0&lt;/li&gt;
+ * &lt;li&gt;OFF&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * @author &lt;a href=&quot;mailto:quintonm@bellsouth.net&quot;&gt;Quinton McCombs&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:Colin.Chalmers@maxware.nl&quot;&gt;Colin Chalmers&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:jh@byteaction.de&quot;&gt;J&amp;uuml;rgen Hoffmann&lt;/a&gt;
+ * @version $Id$
+ */
+public class BooleanValidator
+        extends DefaultValidator&lt;Boolean&gt;
+{
+    /** String values which would evaluate to Boolean.TRUE */
+<span class="fc" id="L61">    private static String[] trueValues = {&quot;TRUE&quot;,&quot;T&quot;,&quot;YES&quot;,&quot;Y&quot;,&quot;1&quot;,&quot;ON&quot;};</span>
+
+    /** String values which would evaluate to Boolean.FALSE */
+<span class="fc" id="L64">    private static String[] falseValues = {&quot;FALSE&quot;,&quot;F&quot;,&quot;NO&quot;,&quot;N&quot;,&quot;0&quot;,&quot;OFF&quot;};</span>
+
+    /**
+     * Default Constructor
+     */
+    public BooleanValidator()
+    {
+<span class="fc" id="L71">        super();</span>
+<span class="fc" id="L72">    }</span>
+
+    /**
+     * Determine whether a testValue meets the criteria specified
+     * in the constraints defined for this validator
+     *
+     * @param testValue a &lt;code&gt;String&lt;/code&gt; to be tested
+     * @throws ValidationException containing an error message if the
+     * testValue did not pass the validation tests.
+     */
+    @Override
+	public void assertValidity(String testValue)
+            throws ValidationException
+    {
+<span class="fc" id="L86">        super.assertValidity(testValue);</span>
+
+<span class="pc bpc" id="L88" title="3 of 4 branches missed.">        if (required || StringUtils.isNotEmpty(testValue))</span>
+        {
+            try
+            {
+<span class="fc" id="L92">                parse(testValue);</span>
+            }
+<span class="fc" id="L94">            catch (ParseException e)</span>
+            {
+<span class="fc" id="L96">                throw new ValidationException(e.getMessage());</span>
+<span class="fc" id="L97">            }</span>
+        }
+<span class="fc" id="L99">    }</span>
+
+    /**
+     * Parses a string value into a Boolean object.
+     *
+     * @param stringValue the value to parse
+     * @return a &lt;code&gt;Boolean&lt;/code&gt; object
+     * @throws ParseException if the value cannot be parsed to a boolean
+     */
+    public Boolean parse(String stringValue)
+            throws ParseException
+    {
+<span class="fc" id="L111">        Boolean result = null;</span>
+
+<span class="fc" id="L113">        for (int cnt = 0;</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">             cnt &lt; Math.max(trueValues.length, falseValues.length); cnt++)</span>
+        {
+            // Short-cut evaluation or bust!
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">            if (cnt &lt; trueValues.length &amp;&amp;</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">                    stringValue.equalsIgnoreCase(trueValues[cnt]))</span>
+            {
+<span class="fc" id="L120">                result = Boolean.TRUE;</span>
+<span class="fc" id="L121">                break;</span>
+            }
+
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">            if (cnt &lt; falseValues.length &amp;&amp;</span>
+<span class="pc bpc" id="L125" title="1 of 2 branches missed.">                    stringValue.equalsIgnoreCase(falseValues[cnt]))</span>
+            {
+<span class="nc" id="L127">                result = Boolean.FALSE;</span>
+<span class="nc" id="L128">                break;</span>
+            }
+        }
+
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        if (result == null)</span>
+        {
+<span class="fc" id="L134">            throw new ParseException(stringValue +</span>
+                    &quot; could not be converted to a Boolean&quot;, 0);
+        }
+<span class="fc" id="L137">        return result;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

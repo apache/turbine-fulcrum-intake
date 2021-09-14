@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AppData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Intake Service</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.intake.model</a> &gt; <span class="el_source">AppData.java</span></div><h1>AppData.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.intake.model;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.io.Serializable;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import org.apache.fulcrum.intake.IntakeException;
+
+/**
+ * A class for holding application data structures.
+ *
+ * @author &lt;a href=&quot;mailto:jmcnally@collab.net&quot;&gt;John McNally&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:hps@intermeta.de&quot;&gt;Henning P. Schmiedehausen&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id$
+ */
+@XmlRootElement(name=&quot;input-data&quot;)
+@XmlAccessorType(XmlAccessType.NONE)
+<span class="fc" id="L43">public class AppData implements Serializable</span>
+{
+    /**
+     * Serial version id
+     */
+    private static final long serialVersionUID = -3953843038383617960L;
+
+    /** List of groups */
+    private List&lt;Group&gt; groups;
+
+    /** Package that will be used for all mapTo objects */
+<span class="fc" id="L54">    private String basePackage = &quot;&quot;;</span>
+
+    /** Prefix string that will be used to qualify &amp;lt;prefix&amp;gt;:&amp;lt;intakegroup&amp;gt; names */
+    private String groupPrefix;
+
+    /**
+     * Return a collection of input sections (&amp;lt;group&amp;gt;).
+     * The names of the groups returned here are only unique
+     * to this AppData object and not qualified with the groupPrefix.
+     * This method is used in the IntakeService to register all the
+     * groups with and without prefix in the service.
+     *
+     * @return the list of groups
+     */
+    public List&lt;Group&gt; getGroups()
+    {
+<span class="fc" id="L70">        return groups;</span>
+    }
+
+    /**
+     * Set the collection of groups
+     *
+     * @param groups the groups to set
+     */
+    @XmlElement(name=&quot;group&quot;)
+    public void setGroups(List&lt;Group&gt; groups)
+    {
+<span class="fc" id="L81">        this.groups = groups;</span>
+<span class="fc" id="L82">    }</span>
+
+    /**
+     * Get a XmlGroup with the given name. It finds both
+     * qualified and unqualified names in this package.
+     *
+     * @param groupName a &lt;code&gt;String&lt;/code&gt; value
+     * @return a &lt;code&gt;Group&lt;/code&gt; value
+     * @throws IntakeException indicates that the groupName was null
+     */
+    public Group getGroup(String groupName)
+            throws IntakeException
+    {
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">        if (groupName == null)</span>
+        {
+<span class="nc" id="L97">            throw new IntakeException(</span>
+                    &quot;Intake AppData.getGroup(groupName) is null&quot;);
+        }
+
+<span class="fc" id="L101">        String groupPrefix = getGroupPrefix();</span>
+
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">        for (Group group : groups)</span>
+        {
+<span class="fc bfc" id="L105" title="All 2 branches covered.">            if (group.getIntakeGroupName().equals(groupName))</span>
+            {
+<span class="fc" id="L107">                return group;</span>
+            }
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">            if (groupPrefix != null)</span>
+            {
+<span class="nc" id="L111">                StringBuilder qualifiedGroupName = new StringBuilder();</span>
+
+<span class="nc" id="L113">                qualifiedGroupName.append(groupPrefix)</span>
+<span class="nc" id="L114">                        .append(':')</span>
+<span class="nc" id="L115">                        .append(group.getIntakeGroupName());</span>
+
+<span class="nc bnc" id="L117" title="All 2 branches missed.">                if (qualifiedGroupName.toString().equals(groupName))</span>
+                {
+<span class="nc" id="L119">                    return group;</span>
+                }
+            }
+<span class="fc" id="L122">        }</span>
+<span class="nc" id="L123">        return null;</span>
+    }
+
+    /**
+     * Get the base package String that will be appended to
+     * any mapToObjects
+     *
+     * @return value of basePackage.
+     */
+    public String getBasePackage()
+    {
+<span class="fc" id="L134">        return basePackage;</span>
+    }
+
+    /**
+     * Set the base package String that will be appended to
+     * any mapToObjects
+     *
+     * @param v  Value to assign to basePackage.
+     */
+    @XmlAttribute
+    public void setBasePackage(String v)
+    {
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">        if (v == null)</span>
+        {
+<span class="nc" id="L148">            this.basePackage = &quot;&quot;;</span>
+        }
+        else
+        {
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">            if (v.endsWith(&quot;.&quot;))</span>
+            {
+<span class="fc" id="L154">                this.basePackage = v;</span>
+            }
+            else
+            {
+<span class="nc" id="L158">                this.basePackage = v + &quot;.&quot;;</span>
+            }
+        }
+
+<span class="fc" id="L162">    }</span>
+
+    /**
+     * Get the prefix String that will be used to qualify
+     * intake groups when using multiple XML files
+     *
+     * @return value of groupPrefix
+     */
+    public String getGroupPrefix()
+    {
+<span class="fc" id="L172">        return groupPrefix;</span>
+    }
+
+    /**
+     * Set the prefix String that will be used to qualify
+     * intake groups when using multiple XML files
+     *
+     * @param groupPrefix  Value to assign to basePackage.
+     */
+    @XmlAttribute
+    public void setGroupPrefix(String groupPrefix)
+    {
+<span class="nc" id="L184">        this.groupPrefix = groupPrefix;</span>
+<span class="nc" id="L185">    }</span>
+
+    /**
+     * Creates a string representation of this AppData.
+     * The representation is given in xml format.
+     */
+    @Override
+    public String toString()
+    {
+<span class="nc" id="L194">        StringBuilder result = new StringBuilder();</span>
+
+<span class="nc" id="L196">        result.append(&quot;&lt;input-data&gt;\n&quot;);</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">        for (Group group : groups)</span>
+        {
+<span class="nc" id="L199">            result.append(group);</span>
+<span class="nc" id="L200">        }</span>
+<span class="nc" id="L201">        result.append(&quot;&lt;/input-data&gt;&quot;);</span>
+<span class="nc" id="L202">        return result.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

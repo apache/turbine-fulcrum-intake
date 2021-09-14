@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UploadPartField.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Intake Service</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.intake.model</a> &gt; <span class="el_source">UploadPartField.java</span></div><h1>UploadPartField.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.intake.model;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import javax.servlet.http.Part;
+
+import org.apache.fulcrum.intake.IntakeException;
+import org.apache.fulcrum.intake.IntakeRuntimeException;
+import org.apache.fulcrum.intake.validator.FileValidator;
+import org.apache.fulcrum.intake.validator.ValidationException;
+import org.apache.fulcrum.parser.ParameterParser;
+import org.apache.fulcrum.parser.ValueParser;
+
+/**
+ * @author &lt;a href=&quot;mailto:jmcnally@collab.net&quot;&gt;John McNally&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:hps@intermeta.de&quot;&gt;Henning P. Schmiedehausen&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:quintonm@bellsouth.net&quot;&gt;Quinton McCombs&lt;/a&gt;
+ * @version $Id$
+ */
+public class UploadPartField
+        extends Field&lt;Part&gt;
+{
+    /** Serial version */
+	private static final long serialVersionUID = -963692413506822188L;
+
+	/**
+     * Constructor.
+     *
+     * @param field xml field definition object
+     * @param group xml group definition object
+     * @throws IntakeException thrown by superclass
+     */
+    public UploadPartField(XmlField field, Group group)
+            throws IntakeException
+    {
+<span class="fc" id="L53">        super(field, group);</span>
+<span class="fc" id="L54">    }</span>
+
+    /**
+     * It is not possible to set the default value for this field type.
+     * Calling this method with a non-null parameter will result in a
+     * IntakeRuntimeException
+     *
+     * @param prop Parameter for the default values
+     * @throws IntakeRuntimeException if the parameter is not null
+     */
+    @Override
+	public void setDefaultValue(String prop)
+    {
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (prop != null)</span>
+        {
+<span class="nc" id="L69">            throw new IntakeRuntimeException(</span>
+                    &quot;Default values are not valid for &quot;
+<span class="nc" id="L71">                    + this.getClass().getName());</span>
+        }
+
+<span class="fc" id="L74">        defaultValue = null;</span>
+<span class="fc" id="L75">    }</span>
+
+    /**
+     * It is not possible to set the empty value for this field type.
+     * Calling this method with a non-null parameter will result in a
+     * IntakeRuntimeException
+     *
+     * @param prop Parameter for the empty values
+     * @throws IntakeRuntimeException if the parameter is not null
+     */
+    @Override
+	public void setEmptyValue(String prop)
+    {
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (prop != null)</span>
+        {
+<span class="nc" id="L90">            throw new IntakeRuntimeException(</span>
+                    &quot;Empty values are not valid for &quot;
+<span class="nc" id="L92">                    + this.getClass().getName());</span>
+        }
+
+<span class="fc" id="L95">        emptyValue = null;</span>
+<span class="fc" id="L96">    }</span>
+
+    /**
+     * A suitable validator.
+     *
+     * @return A suitable validator
+     */
+    @Override
+	protected String getDefaultValidator()
+    {
+<span class="fc" id="L106">        return FileValidator.class.getName();</span>
+    }
+
+    /**
+     * Method called when this field (the group it belongs to) is
+     * pulled from the pool.  The request data is searched to determine
+     * if a value has been supplied for this field.  if so, the value
+     * is validated.
+     *
+     * @param vp a &lt;code&gt;ValueParser&lt;/code&gt; value
+     * @return a &lt;code&gt;Field&lt;/code&gt; value
+     * @throws IntakeException if an error occurs
+     */
+    @Override
+	public Field&lt;Part&gt; init(ValueParser vp)
+            throws IntakeException
+    {
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">        if (!(vp instanceof ParameterParser))</span>
+        {
+<span class="nc" id="L125">            throw new IntakeException(</span>
+                    &quot;UploadPartFields can only be used with ParameterParser&quot;);
+        }
+
+<span class="fc" id="L129">        super.init(vp);</span>
+
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">        if (parser.containsKey(getKey()))</span>
+        {
+<span class="nc" id="L133">            setSet(true);</span>
+<span class="nc" id="L134">            validate();</span>
+        }
+
+<span class="fc" id="L137">        return this;</span>
+    }
+
+    /**
+     * Compares request data with constraints and sets the valid flag.
+     *
+     * @return the valid flag
+     */
+    @Override
+	public boolean validate()
+    {
+<span class="nc" id="L148">        ParameterParser pp = (ParameterParser) super.parser;</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">        if (isMultiValued())</span>
+        {
+<span class="nc" id="L151">            Part[] ss = pp.getParts(getKey());</span>
+            // this definition of not set might need refined.  But
+            // not sure the situation will arise.
+<span class="nc bnc" id="L154" title="All 2 branches missed.">            if (ss.length == 0)</span>
+            {
+<span class="nc" id="L156">                setSet(false);</span>
+            }
+
+<span class="nc bnc" id="L159" title="All 2 branches missed.">            if (getValidator() != null)</span>
+            {
+<span class="nc bnc" id="L161" title="All 2 branches missed.">                for (int i = 0; i &lt; ss.length; i++)</span>
+                {
+                    try
+                    {
+<span class="nc" id="L165">                        ((FileValidator) getValidator()).assertValidity(ss[i]);</span>
+                    }
+<span class="nc" id="L167">                    catch (ValidationException ve)</span>
+                    {
+<span class="nc" id="L169">                        setMessage(ve.getMessage());</span>
+<span class="nc" id="L170">                    }</span>
+                }
+            }
+
+<span class="nc bnc" id="L174" title="All 4 branches missed.">            if (isSet() &amp;&amp; isValid())</span>
+            {
+<span class="nc" id="L176">                doSetValue();</span>
+            }
+<span class="nc" id="L178">        }</span>
+        else
+        {
+<span class="nc" id="L181">            Part s = pp.getPart(getKey());</span>
+<span class="nc bnc" id="L182" title="All 4 branches missed.">            if (s == null || s.getSize() == 0)</span>
+            {
+<span class="nc" id="L184">                setSet(false);</span>
+            }
+
+<span class="nc bnc" id="L187" title="All 2 branches missed.">            if (getValidator() != null)</span>
+            {
+                try
+                {
+<span class="nc" id="L191">                    ((FileValidator) getValidator()).assertValidity(s);</span>
+
+<span class="nc bnc" id="L193" title="All 2 branches missed.">                    if (isSet())</span>
+                    {
+<span class="nc" id="L195">                        doSetValue();</span>
+                    }
+                }
+<span class="nc" id="L198">                catch (ValidationException ve)</span>
+                {
+<span class="nc" id="L200">                    setMessage(ve.getMessage());</span>
+<span class="nc" id="L201">                }</span>
+            }
+<span class="nc bnc" id="L203" title="All 2 branches missed.">            else if (isSet())</span>
+            {
+<span class="nc" id="L205">                doSetValue();</span>
+            }
+        }
+
+<span class="nc" id="L209">        return isValid();</span>
+    }
+
+    /**
+     * Sets the value of the field from data in the parser.
+     */
+    @Override
+	protected void doSetValue()
+    {
+<span class="nc" id="L218">        ParameterParser pp = (ParameterParser) super.parser;</span>
+<span class="nc bnc" id="L219" title="All 2 branches missed.">        if (isMultiValued())</span>
+        {
+<span class="nc" id="L221">            setTestValue(pp.getParts(getKey()));</span>
+        }
+        else
+        {
+<span class="nc" id="L225">            setTestValue(pp.getPart(getKey()));</span>
+        }
+<span class="nc" id="L227">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

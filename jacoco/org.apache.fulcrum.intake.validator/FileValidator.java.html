@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FileValidator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Intake Service</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.intake.validator</a> &gt; <span class="el_source">FileValidator.java</span></div><h1>FileValidator.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.intake.validator;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.Part;
+
+/**
+ * A validator that will compare a Part testValue against the following
+ * constraints in addition to those listed in DefaultValidator.
+ *
+ * This validator can serve as the base class for more specific validators
+ *
+ * @author &lt;a href=&quot;mailto:jmcnally@collab.net&quot;&gt;John McNally&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:quintonm@bellsouth.net&quot;&gt;Quinton McCombs&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:Colin.Chalmers@maxware.nl&quot;&gt;Colin Chalmers&lt;/a&gt;
+ * @version $Id$
+ */
+public class FileValidator
+        extends DefaultValidator&lt;Part&gt;
+{
+<span class="nc" id="L45">    private final static Pattern charsetPattern = Pattern.compile(&quot;.+charset\\s*=\\s*(.+)&quot;);</span>
+
+    /**
+     * Default constructor
+     */
+    public FileValidator()
+    {
+<span class="nc" id="L52">        super();</span>
+<span class="nc" id="L53">    }</span>
+
+    /**
+     * Determine whether a testValue meets the criteria specified
+     * in the constraints defined for this validator
+     *
+     * @param testValue a &lt;code&gt;Part&lt;/code&gt; to be tested
+     * @throws ValidationException containing an error message if the
+     * testValue did not pass the validation tests.
+     */
+    public void assertValidity(Part testValue)
+            throws ValidationException
+    {
+<span class="nc" id="L66">        byte[] fileData = new byte[(int) testValue.getSize()];</span>
+<span class="nc" id="L67">        String contentType = testValue.getContentType();</span>
+<span class="nc" id="L68">        String charset = Charset.defaultCharset().name();</span>
+
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        if (contentType.contains(&quot;charset&quot;))</span>
+        {
+<span class="nc" id="L72">            Matcher matcher = charsetPattern.matcher(contentType);</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">            if (matcher.matches())</span>
+            {
+<span class="nc" id="L75">                charset = matcher.group(1);</span>
+            }
+        }
+
+<span class="nc" id="L79">        try (InputStream fis = testValue.getInputStream())</span>
+        {
+<span class="nc" id="L81">            int byteSize = fis.read(fileData);</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">            if ( fileData.length != byteSize )</span>
+            {
+<span class="nc" id="L84">            	throw new ValidationException(&quot;Byte length mismatch found&quot;);</span>
+            }
+            
+        }
+<span class="nc" id="L88">        catch (IOException e)</span>
+        {
+<span class="nc" id="L90">            fileData = null;</span>
+<span class="nc" id="L91">        }</span>
+
+<span class="nc" id="L93">        String content = null;</span>
+        try
+        {
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        	if ( fileData != null )</span>
+        	{
+<span class="nc" id="L98">        		content = new String(fileData, charset);</span>
+        	}
+        }
+<span class="nc" id="L101">        catch (UnsupportedEncodingException e)</span>
+        {
+<span class="nc" id="L103">            throw new ValidationException(&quot;Invalid charset &quot; + charset);</span>
+<span class="nc" id="L104">        }</span>
+
+<span class="nc" id="L106">        super.assertValidity(content);</span>
+<span class="nc" id="L107">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IntakeRuntimeException.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Intake Service</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.intake</a> &gt; <span class="el_source">IntakeRuntimeException.java</span></div><h1>IntakeRuntimeException.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.intake;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+/**
+ * Base runtime exception thrown by the Intake service.
+ *
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id$
+ */
+public class IntakeRuntimeException extends RuntimeException
+{
+    /**
+     * Serial version id
+     */
+    private static final long serialVersionUID = -6874511109052092373L;
+
+    /**
+     * Constructs a new &lt;code&gt;IntakeRuntimeException&lt;/code&gt; without specified
+     * detail message.
+     */
+    public IntakeRuntimeException()
+    {
+<span class="nc" id="L41">        super();</span>
+<span class="nc" id="L42">    }</span>
+
+    /**
+     * Constructs a new &lt;code&gt;IntakeRuntimeException&lt;/code&gt; with specified
+     * detail message.
+     *
+     * @param msg The error message.
+     */
+    public IntakeRuntimeException(String msg)
+    {
+<span class="nc" id="L52">        super(msg);</span>
+<span class="nc" id="L53">    }</span>
+
+    /**
+     * Constructs a new &lt;code&gt;IntakeRuntimeException&lt;/code&gt; with specified
+     * nested &lt;code&gt;Throwable&lt;/code&gt;.
+     *
+     * @param nested The exception or error that caused this exception
+     *               to be thrown.
+     */
+    public IntakeRuntimeException(Throwable nested)
+    {
+<span class="nc" id="L64">        super(nested);</span>
+<span class="nc" id="L65">    }</span>
+
+    /**
+     * Constructs a new &lt;code&gt;IntakeRuntimeException&lt;/code&gt; with specified
+     * detail message and nested &lt;code&gt;Throwable&lt;/code&gt;.
+     *
+     * @param msg    The error message.
+     * @param nested The exception or error that caused this exception
+     *               to be thrown.
+     */
+    public IntakeRuntimeException(String msg, Throwable nested)
+    {
+<span class="nc" id="L77">        super(msg, nested);</span>
+<span class="nc" id="L78">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

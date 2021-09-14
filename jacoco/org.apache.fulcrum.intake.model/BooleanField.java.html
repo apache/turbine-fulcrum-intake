@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BooleanField.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Intake Service</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.intake.model</a> &gt; <span class="el_source">BooleanField.java</span></div><h1>BooleanField.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.intake.model;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import org.apache.fulcrum.intake.IntakeException;
+import org.apache.fulcrum.intake.validator.BooleanValidator;
+
+/**
+ * Processor for boolean fields.
+ *
+ * @version $Id$
+ */
+public class BooleanField
+        extends Field&lt;Boolean&gt;
+{
+    /** Serial version */
+	private static final long serialVersionUID = 6689670469518374083L;
+
+	/**
+     * Constructor.
+     *
+     * @param field xml field definition object
+     * @param group xml group definition object
+     * @throws IntakeException thrown by superclass
+     */
+    public BooleanField(XmlField field, Group group)
+            throws IntakeException
+    {
+<span class="fc" id="L46">        super(field, group);</span>
+<span class="fc" id="L47">    }</span>
+
+    /**
+     * Sets the default value for a Boolean field
+     *
+     * @param prop Parameter for the default values
+     */
+    @Override
+	public void setDefaultValue(String prop)
+    {
+<span class="fc" id="L57">        defaultValue = null;</span>
+
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">        if (prop == null)</span>
+        {
+<span class="fc" id="L61">            return;</span>
+        }
+
+<span class="nc" id="L64">        defaultValue = Boolean.valueOf(prop);</span>
+<span class="nc" id="L65">    }</span>
+
+    /**
+     * Set the empty Value. This value is used if Intake
+     * maps a field to a parameter returned by the user and
+     * the corresponding field is either empty (empty string)
+     * or non-existant.
+     *
+     * @param prop The value to use if the field is empty.
+     */
+    @Override
+	public void setEmptyValue(String prop)
+    {
+<span class="fc" id="L78">        emptyValue = null;</span>
+
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (prop == null)</span>
+        {
+<span class="fc" id="L82">            return;</span>
+        }
+
+<span class="nc" id="L85">        emptyValue = Boolean.valueOf(prop);</span>
+<span class="nc" id="L86">    }</span>
+
+    /**
+     * Provides access to emptyValue such that the value returned will be
+     * acceptable as an argument parameter to Method.invoke.  Subclasses
+     * that deal with primitive types should ensure that they return an
+     * appropriate value wrapped in the object wrapper class for the
+     * primitive type.
+     *
+     * @return the value to use when the field is empty or an Object that
+     * wraps the empty value for primitive types.
+     */
+    @Override
+	protected Object getSafeEmptyValue()
+    {
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        if (isMultiValued())</span>
+        {
+<span class="nc" id="L103">            return new boolean[0];</span>
+        }
+        else
+        {
+<span class="nc bnc" id="L107" title="All 2 branches missed.">            return (null == getEmptyValue()) ? Boolean.FALSE : getEmptyValue();</span>
+        }
+    }
+
+    /**
+     * A suitable validator.
+     *
+     * @return class name of the validator
+     */
+    @Override
+	protected String getDefaultValidator()
+    {
+<span class="fc" id="L119">        return BooleanValidator.class.getName();</span>
+    }
+
+    /**
+     * Sets the value of the field from data in the parser.
+     */
+    @Override
+	protected void doSetValue()
+    {
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        if (isMultiValued())</span>
+        {
+<span class="nc" id="L130">            Boolean[] inputs = parser.getBooleanObjects(getKey());</span>
+<span class="nc" id="L131">            boolean[] values = new boolean[inputs.length];</span>
+
+<span class="nc bnc" id="L133" title="All 2 branches missed.">            for (int i = 0; i &lt; inputs.length; i++)</span>
+            {
+<span class="nc bnc" id="L135" title="All 2 branches missed.">                values[i] = inputs[i] == null</span>
+<span class="nc" id="L136">                        ? getEmptyValue().booleanValue()</span>
+<span class="nc" id="L137">                        : inputs[i].booleanValue();</span>
+            }
+
+<span class="nc" id="L140">            setTestValue(values);</span>
+<span class="nc" id="L141">        }</span>
+        else
+        {
+<span class="nc" id="L144">            setTestValue(parser.getBooleanObject(getKey(), getEmptyValue()));</span>
+        }
+<span class="nc" id="L146">    }</span>
+
+    /**
+     * Gets the boolean value of the field.  A value of false will be returned
+     * if the value of the field is null.
+     *
+     * @return value of the field.
+     */
+    public boolean booleanValue()
+    {
+<span class="nc" id="L156">        boolean result = false;</span>
+        try
+        {
+<span class="nc" id="L159">            result = getValue().booleanValue();</span>
+        }
+<span class="nc" id="L161">        catch (Exception e)</span>
+        {
+<span class="nc" id="L163">            log.error(&quot;Error getting boolean value &quot; + getValue(), e);</span>
+<span class="nc" id="L164">        }</span>
+<span class="nc" id="L165">        return result;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

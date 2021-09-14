@@ -1,0 +1,1150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Field.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Intake Service</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.intake.model</a> &gt; <span class="el_source">Field.java</span></div><h1>Field.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.intake.model;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Locale;
+import java.util.Map;
+
+import org.apache.avalon.framework.logger.LogEnabled;
+import org.apache.avalon.framework.logger.Logger;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.fulcrum.intake.IntakeError;
+import org.apache.fulcrum.intake.IntakeException;
+import org.apache.fulcrum.intake.IntakeServiceFacade;
+import org.apache.fulcrum.intake.Retrievable;
+import org.apache.fulcrum.intake.validator.DefaultValidator;
+import org.apache.fulcrum.intake.validator.InitableByConstraintMap;
+import org.apache.fulcrum.intake.validator.ValidationException;
+import org.apache.fulcrum.intake.validator.Validator;
+import org.apache.fulcrum.parser.ValueParser;
+
+/**
+ * Base class for Intake generated input processing classes.
+ *
+ * @author &lt;a href=&quot;mailto:jmcnally@collab.net&quot;&gt;John McNally&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:dlr@finemaltcoding.com&quot;&gt;Daniel Rall&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:hps@intermeta.de&quot;&gt;Henning P. Schmiedehausen&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:quintonm@bellsouth.net&quot;&gt;Quinton McCombs&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:jh@byteaction.de&quot;&gt;J&amp;uuml;rgen Hoffmann&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id$
+ */
+public abstract class Field&lt;T&gt; implements Serializable, LogEnabled
+{
+    /** Serial version */
+    private static final long serialVersionUID = 6897267716698096895L;
+
+    /** Empty Value */
+    private static final String EMPTY = &quot;&quot;;
+
+    /** CGI Key for &quot;value if absent&quot; */
+    private static final String VALUE_IF_ABSENT_KEY = &quot;_vifa_&quot;;
+
+    /** Default Validator Package */
+    public static final String defaultValidatorPackage = &quot;org.apache.fulcrum.intake.validator.&quot;;
+
+    /** Default Field Package */
+    public static final String defaultFieldPackage = &quot;org.apache.fulcrum.intake.model.&quot;;
+
+    // the following are set from the xml file and are permanent (final)
+
+    /** Name of the field. */
+    private final String name;
+
+    /** Key used to identify the field in the parser */
+    private final String key;
+
+    /** Display size of the field */
+    private final String displaySize;
+
+    /** Class name of the object to which the field is mapped */
+    protected String mapToObject;
+
+    /** Optional property name of the object to which the field is mapped */
+    private String mapToProperty;
+
+    /** Class name of the validator (for deserialization) */
+    private String validatorClassName;
+
+    /** Used to validate the contents of the field */
+    private transient Validator&lt;T&gt; validator;
+
+    /** Getter method in the mapped object used to populate the field */
+    private Method getter;
+
+    /** Setter method in the mapped object used to store the value of field */
+    private Method setter;
+
+    /** Error message set on the field if required and not set by parser */
+    private String ifRequiredMessage;
+
+    /** Does this field accept multiple values? */
+    private final boolean isMultiValued;
+
+    /** Group to which the field belongs */
+    private final Group group;
+
+    /** Is this field always required?  This is only set through the XML file */
+    private boolean alwaysRequired;
+
+    /** Default value of the field */
+    protected T defaultValue;
+
+    /** Value of the field to use if the mapped parameter is empty or non-existent */
+    protected T emptyValue;
+
+    /** Display name of the field to be used on data entry forms... */
+    private String displayName;
+
+    /** Max size of the field */
+    private String maxSize;
+
+    // these are reset when the Field is returned to the pool
+
+    /** Has the field has been set from the parser? */
+    private boolean setFlag;
+
+    /** Has the field passed the validation test? */
+    private boolean validFlag;
+
+    /** Has the field been validated? */
+    private boolean validated;
+
+    /** Does the field require a value? */
+    private boolean required;
+
+    /** Has the field has been set from the parser? */
+    private boolean initialized;
+
+    /** Error message, is any, resulting from validation */
+    private String message;
+
+    /** Mapped object used to set the initial field value */
+    private Retrievable retrievable;
+
+    /** Locale of the field */
+    private Locale locale;
+
+    /** String value of the field */
+    private String stringValue;
+
+    /** String values of the field if isMultiValued=true */
+    private String[] stringValues;
+
+    /** Stores the value of the field from the Retrievable object */
+    private T validValue;
+
+    /** Stores the value of the field from the parser */
+    private Object testValue;
+
+    /** Used to pass testValue to the setter method through reflection */
+    private final Object[] valArray;
+
+    /** The object containing the field data. */
+    protected ValueParser parser;
+
+    /** Store rules for deserialization */
+    private Map&lt;String, Rule&gt; ruleMap;
+
+    /** Logging */
+    protected transient Logger log;
+
+    /**
+     * Constructs a field based on data in the xml specification
+     * and assigns it to a Group.
+     *
+     * @param field a &lt;code&gt;XmlField&lt;/code&gt; value
+     * @param group a &lt;code&gt;Group&lt;/code&gt; value
+     * @throws IntakeException indicates the validator was not valid or
+     * could not be loaded.
+     */
+    public Field(XmlField field, Group group) throws IntakeException
+<span class="fc" id="L182">    {</span>
+<span class="fc" id="L183">    	enableLogging(field.getLogger());</span>
+<span class="fc" id="L184">        this.group = group;</span>
+<span class="fc" id="L185">        key = field.getKey();</span>
+<span class="fc" id="L186">        name = field.getName();</span>
+<span class="fc" id="L187">        displayName = field.getDisplayName();</span>
+<span class="fc" id="L188">        displaySize = field.getDisplaySize();</span>
+<span class="fc" id="L189">        isMultiValued = field.isMultiValued();</span>
+<span class="fc" id="L190">        ruleMap = field.getRuleMap();</span>
+
+        try
+        {
+<span class="fc" id="L194">            setDefaultValue(field.getDefaultValue());</span>
+        }
+<span class="nc" id="L196">        catch (RuntimeException e)</span>
+        {
+<span class="nc" id="L198">            log.error(&quot;Could not set default value of &quot; +</span>
+<span class="nc" id="L199">                    this.getDisplayName() + &quot; to &quot;</span>
+<span class="nc" id="L200">                    + field.getDefaultValue(), e);</span>
+<span class="fc" id="L201">        }</span>
+
+        try
+        {
+<span class="fc" id="L205">            setEmptyValue(field.getEmptyValue());</span>
+        }
+<span class="nc" id="L207">        catch (RuntimeException e)</span>
+        {
+<span class="nc" id="L209">            log.error(&quot;Could not set empty value of &quot; +</span>
+<span class="nc" id="L210">                    this.getDisplayName() + &quot; to &quot;</span>
+<span class="nc" id="L211">                    + field.getEmptyValue(), e);</span>
+<span class="fc" id="L212">        }</span>
+
+<span class="fc" id="L214">        this.validatorClassName = field.getValidator();</span>
+<span class="fc bfc" id="L215" title="All 2 branches covered.">        if (validatorClassName == null)</span>
+        {
+<span class="fc" id="L217">            validatorClassName = getDefaultValidator();</span>
+        }
+<span class="pc bpc" id="L219" title="1 of 2 branches missed.">        else if (validatorClassName.indexOf('.') == -1)</span>
+        {
+<span class="fc" id="L221">            validatorClassName = defaultValidatorPackage + validatorClassName;</span>
+        }
+
+        // field may have been declared as always required in the xml spec
+<span class="fc" id="L225">        Rule reqRule = field.getRuleMap().get(Validator.REQUIRED_RULE_NAME);</span>
+<span class="fc bfc" id="L226" title="All 2 branches covered.">        if (reqRule != null)</span>
+        {
+<span class="fc" id="L228">            alwaysRequired = Boolean.valueOf(reqRule.getValue()).booleanValue();</span>
+<span class="fc" id="L229">            ifRequiredMessage = reqRule.getMessage();</span>
+        }
+
+<span class="fc" id="L232">        Rule maxLengthRule = field.getRuleMap().get(Validator.MAX_LENGTH_RULE_NAME);</span>
+<span class="fc bfc" id="L233" title="All 2 branches covered.">        if (maxLengthRule != null)</span>
+        {
+<span class="fc" id="L235">            maxSize = maxLengthRule.getValue();</span>
+        }
+
+        // map the getter and setter methods
+<span class="fc" id="L239">        mapToObject = field.getMapToObject();</span>
+<span class="fc" id="L240">        mapToProperty = field.getMapToProperty();</span>
+<span class="fc" id="L241">        valArray = new Object[1];</span>
+<span class="fc" id="L242">    }</span>
+
+    /**
+	 * Enable Avalon Logging
+	 */
+	@Override
+	public void enableLogging(Logger logger)
+	{
+<span class="fc" id="L250">		this.log = logger.getChildLogger(getClass().getSimpleName());</span>
+<span class="fc" id="L251">	}</span>
+
+    /**
+     * Initialize getter and setter from properties
+     */
+    public void initGetterAndSetter()
+    {
+<span class="fc" id="L258">        Method tmpGetter = null;</span>
+<span class="fc" id="L259">        Method tmpSetter = null;</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">        if (StringUtils.isNotEmpty(mapToObject)</span>
+<span class="pc bpc" id="L261" title="1 of 2 branches missed.">                &amp;&amp; StringUtils.isNotEmpty(mapToProperty))</span>
+        {
+            try
+            {
+<span class="fc" id="L265">                tmpGetter = IntakeServiceFacade.getFieldGetter(mapToObject, mapToProperty);</span>
+            }
+<span class="nc" id="L267">            catch (Exception e)</span>
+            {
+<span class="nc" id="L269">                log.error(&quot;IntakeService could not map the getter for field &quot;</span>
+<span class="nc" id="L270">                        + this.getDisplayName() + &quot; in group &quot;</span>
+<span class="nc" id="L271">                        + this.group.getIntakeGroupName()</span>
+                        + &quot; to the property &quot; + mapToProperty + &quot; in object &quot;
+                        + mapToObject, e);
+<span class="fc" id="L274">            }</span>
+            try
+            {
+<span class="fc" id="L277">                tmpSetter = IntakeServiceFacade.getFieldSetter(mapToObject, mapToProperty);</span>
+            }
+<span class="nc" id="L279">            catch (Exception e)</span>
+            {
+<span class="nc" id="L281">                log.error(&quot;IntakeService could not map the setter for field &quot;</span>
+<span class="nc" id="L282">                        + this.getDisplayName() + &quot; in group &quot;</span>
+<span class="nc" id="L283">                        + this.group.getIntakeGroupName()</span>
+                        + &quot; to the property &quot; + mapToProperty + &quot; in object &quot;
+                        + mapToObject, e);
+<span class="fc" id="L286">            }</span>
+        }
+<span class="fc" id="L288">        getter = tmpGetter;</span>
+<span class="fc" id="L289">        setter = tmpSetter;</span>
+<span class="fc" id="L290">    }</span>
+
+    /**
+     * Method called when this field (the group it belongs to) is
+     * pulled from the pool.  The request data is searched to determine
+     * if a value has been supplied for this field.  If so, the value
+     * is validated.
+     *
+     * @param pp a &lt;code&gt;ValueParser&lt;/code&gt; value
+     * @return a &lt;code&gt;Field&lt;/code&gt; value
+     * @throws IntakeException this exception is only thrown by subclasses
+     * overriding this implementation.
+     */
+    public Field&lt;T&gt; init(ValueParser pp)
+            throws IntakeException
+    {
+<span class="fc" id="L306">        this.parser = pp;</span>
+<span class="fc" id="L307">        setValid(true);</span>
+<span class="fc" id="L308">        setValidated(false);</span>
+
+<span class="fc" id="L310">        this.locale = pp.getLocale();</span>
+
+<span class="fc bfc" id="L312" title="All 2 branches covered.">        if (pp.containsKey(getKey()))</span>
+        {
+<span class="pc bpc" id="L314" title="1 of 2 branches missed.">            if (log.isDebugEnabled())</span>
+            {
+<span class="nc" id="L316">                log.debug(name + &quot;: Found our Key in the request, setting Value&quot;);</span>
+            }
+<span class="pc bpc" id="L318" title="1 of 2 branches missed.">            if (pp.getString(getKey()) != null)</span>
+            {
+<span class="fc" id="L320">                setFlag = true;</span>
+            }
+            // validate();
+        }
+<span class="pc bpc" id="L324" title="1 of 2 branches missed.">        else if (pp.containsKey(getValueIfAbsent()) &amp;&amp;</span>
+<span class="nc bnc" id="L325" title="All 2 branches missed.">                pp.getString(getValueIfAbsent()) != null)</span>
+        {
+<span class="nc" id="L327">            pp.add(getKey(), pp.getString(getValueIfAbsent()));</span>
+<span class="nc" id="L328">            setFlag = true;</span>
+            // validate();
+        }
+
+<span class="fc" id="L332">        initialized = true;</span>
+<span class="fc" id="L333">        return this;</span>
+    }
+
+    /**
+     * Method called when this field or the group it belongs to is
+     * pulled from the pool.  The retrievable object can provide
+     * a default value for the field, or using setProperty the field's
+     * value can be transferred to the retrievable.
+     *
+     * @param obj a &lt;code&gt;Retrievable&lt;/code&gt; value
+     * @return a &lt;code&gt;Field&lt;/code&gt; value
+     */
+    public Field&lt;T&gt; init(Retrievable obj)
+    {
+<span class="nc bnc" id="L347" title="All 2 branches missed.">        if (!initialized)</span>
+        {
+<span class="nc" id="L349">            validFlag = true;</span>
+<span class="nc" id="L350">            validated = false;</span>
+        }
+<span class="nc" id="L352">        retrievable = obj;</span>
+<span class="nc" id="L353">        return this;</span>
+    }
+
+    /**
+     * Returns the &lt;code&gt;Group&lt;/code&gt; this field belongs to
+     * or &lt;code&gt;null&lt;/code&gt; if unknown.
+     *
+     * @return The group this field belongs to.
+     */
+    public Group getGroup()
+    {
+<span class="nc" id="L364">        return group;</span>
+    }
+
+    /**
+     * Returns the &lt;code&gt;Locale&lt;/code&gt; used when localizing data for
+     * this field, or &lt;code&gt;null&lt;/code&gt; if unknown.
+     *
+     * @return Where to localize for.
+     */
+    public Locale getLocale()
+    {
+<span class="fc" id="L375">        return locale;</span>
+    }
+
+    /**
+     * Produces the fully qualified class name of the default validator.
+     *
+     * @return class name of the default validator
+     */
+    protected String getDefaultValidator()
+    {
+<span class="nc" id="L385">        return DefaultValidator.class.getName();</span>
+    }
+
+    /**
+     * Gets the Validator object for this field.
+     * @return a &lt;code&gt;Validator&lt;/code&gt; object
+     */
+    public Validator&lt;T&gt; getValidator()
+    {
+<span class="pc bpc" id="L394" title="1 of 4 branches missed.">    	if (validator == null &amp;&amp; validatorClassName != null)</span>
+        {
+            try
+            {
+<span class="fc" id="L398">				validator = createValidator(validatorClassName);</span>
+			}
+<span class="nc" id="L400">            catch (IntakeException e)</span>
+            {
+<span class="nc" id="L402">            	log.error(&quot;Could not create validator&quot;, e);</span>
+<span class="fc" id="L403">			}</span>
+        }
+<span class="fc" id="L405">        return validator;</span>
+    }
+
+    /**
+     * Get the name of the object that takes this input
+     *
+     * @return the name of the mapped object
+     */
+    public String getMapToObject()
+    {
+<span class="fc" id="L415">        return mapToObject;</span>
+    }
+
+    /**
+     * Flag to determine whether the field has been declared as multi-valued.
+     *
+     * @return value of isMultiValued.
+     */
+    public boolean isMultiValued()
+    {
+<span class="fc" id="L425">        return isMultiValued;</span>
+    }
+
+    /**
+     * Flag to determine whether the field has been declared as required.
+     *
+     * @return value of required.
+     */
+    public boolean isRequired()
+    {
+<span class="pc bpc" id="L435" title="1 of 4 branches missed.">        return alwaysRequired || required;</span>
+    }
+
+    /**
+     * Set whether this field is required to have a value.  If the field
+     * is already required due to a setting in the XML file, this method
+     * can not set it to false.
+     *
+     * @param v  Value to assign to required.
+     */
+    public void setRequired(boolean v)
+    {
+<span class="nc" id="L447">        setRequired(v, ifRequiredMessage);</span>
+<span class="nc" id="L448">    }</span>
+
+    /**
+     * Set the value of required.
+     *
+     * @param v a &lt;code&gt;boolean&lt;/code&gt; value
+     * @param message override the value from intake.xml
+     */
+    public void setRequired(boolean v, String message)
+    {
+<span class="nc" id="L458">        this.required = v;</span>
+<span class="nc bnc" id="L459" title="All 6 branches missed.">        if (v &amp;&amp; (!setFlag || null == getTestValue()))</span>
+        {
+<span class="nc" id="L461">            validFlag = false;</span>
+<span class="nc" id="L462">            this.message = message;</span>
+        }
+<span class="nc" id="L464">    }</span>
+
+    /**
+     * Removes references to this group and its fields from the
+     * query parameters
+     */
+    public void removeFromRequest()
+    {
+<span class="nc" id="L472">        parser.remove(getKey());</span>
+<span class="nc" id="L473">        parser.remove(getKey()+ VALUE_IF_ABSENT_KEY);</span>
+<span class="nc" id="L474">    }</span>
+
+    /**
+     * Disposes the object after use. The method is called
+     * when the Group is returned to its pool.
+     * if overridden, super.dispose() should be called.
+     */
+    public void dispose()
+    {
+<span class="nc" id="L483">        parser = null;</span>
+<span class="nc" id="L484">        initialized = false;</span>
+<span class="nc" id="L485">        setFlag = false;</span>
+<span class="nc" id="L486">        validFlag = false;</span>
+<span class="nc" id="L487">        validated = false;</span>
+<span class="nc" id="L488">        required = false;</span>
+<span class="nc" id="L489">        message = null;</span>
+<span class="nc" id="L490">        retrievable = null;</span>
+
+<span class="nc" id="L492">        locale = null;</span>
+<span class="nc" id="L493">        stringValue = null;</span>
+<span class="nc" id="L494">        stringValues = null;</span>
+<span class="nc" id="L495">        validValue = null;</span>
+<span class="nc" id="L496">        testValue = null;</span>
+<span class="nc" id="L497">        valArray[0] = null;</span>
+<span class="nc" id="L498">    }</span>
+
+    /**
+     * Get the key used to identify the field.
+     *
+     * @return the query data key.
+     */
+    public String getKey()
+    {
+<span class="pc bpc" id="L507" title="1 of 2 branches missed.">        return (group == null) ? key : group.getObjectKey() + key;</span>
+    }
+
+    /**
+     * Use in a hidden field assign a default value in the event the
+     * field is absent from the query parameters.  Used to track checkboxes,
+     * since they only show up if checked.
+     *
+     * @return the value if not in the request
+     */
+    public String getValueIfAbsent()
+    {
+<span class="fc" id="L519">        return getKey() + VALUE_IF_ABSENT_KEY;</span>
+    }
+
+    /**
+     * Flag set to true, if the test value met the constraints.
+     * Is also true, in the case the test value was not set,
+     * unless this field has been marked as required.
+     *
+     * @return a &lt;code&gt;boolean&lt;/code&gt; value
+     */
+    public boolean isValid()
+    {
+<span class="fc" id="L531">        return validFlag;</span>
+    }
+
+    /**
+     * Flag to determine whether the field has been validated.
+     *
+     * @return value of validated.
+     */
+    public boolean isValidated()
+    {
+<span class="fc" id="L541">        return validated;</span>
+    }
+
+    /**
+     * Flag set to true, if the test value has been set by the parser (even to
+     * an empty value, so don't used this to determine if the field contains a
+     * non-empty value).  Validation will only be executed for fields that have
+     * been set in this manner.
+     *
+     * @return a &lt;code&gt;boolean&lt;/code&gt; value
+     */
+    public boolean isSet()
+    {
+<span class="fc" id="L554">        return setFlag;</span>
+    }
+
+    /**
+     * Get the display name of the field. Useful for building
+     * data entry forms. Returns name of field if no display
+     * name has been assigned to the field by xml input file.
+     *
+     * @return a &lt;code&gt;String&lt;/code&gt; value
+     */
+    public String getDisplayName()
+    {
+<span class="nc bnc" id="L566" title="All 2 branches missed.">        return (displayName == null) ? name : displayName;</span>
+    }
+
+    /**
+     * Set the display name of the field. Display names are
+     * used in building data entry forms and serve as a
+     * user friendly description of the data contained in
+     * the field.
+     *
+     * @param newDisplayName the new display name for the field
+     */
+    public void setDisplayName(String newDisplayName)
+    {
+<span class="nc" id="L579">        displayName = newDisplayName;</span>
+<span class="nc" id="L580">    }</span>
+
+    /**
+     * Get any error message resulting from invalid input.
+     *
+     * @return a &lt;code&gt;String&lt;/code&gt; value
+     */
+    public String getMessage()
+    {
+<span class="nc bnc" id="L589" title="All 2 branches missed.">        return (message == null) ? EMPTY : message;</span>
+    }
+
+    /**
+     * Sets an error message.  The field is also marked as invalid.
+     *
+     * @param message the new error message
+     */
+    public void setMessage(String message)
+    {
+<span class="nc" id="L599">        this.message = message;</span>
+<span class="nc" id="L600">        validFlag = false;</span>
+<span class="nc" id="L601">    }</span>
+
+    /**
+     * Set the internal flag that the field has been set
+     *
+     * @param setFlag the setFlag to set
+     */
+    protected void setSet(boolean setFlag)
+    {
+<span class="nc" id="L610">        this.setFlag = setFlag;</span>
+<span class="nc" id="L611">    }</span>
+
+    /**
+     * Set the internal flag that the field is valid
+     *
+     * @param validFlag the validFlag to set
+     */
+    protected void setValid(boolean validFlag)
+    {
+<span class="fc" id="L620">        this.validFlag = validFlag;</span>
+<span class="fc" id="L621">    }</span>
+
+    /**
+     * Set the internal flag that the field has been validated
+     *
+     * @param validated the validated to set
+     */
+    protected void setValidated(boolean validated)
+    {
+<span class="fc" id="L630">        this.validated = validated;</span>
+<span class="fc" id="L631">    }</span>
+
+    /**
+     * Compares request data with constraints and sets the valid flag.
+     *
+     * @return true if the validation succeeded
+     */
+    public boolean validate()
+    {
+<span class="fc" id="L640">        log.debug(name + &quot;: validate()&quot;);</span>
+<span class="fc" id="L641">        Validator&lt;T&gt; v = getValidator();</span>
+
+<span class="fc bfc" id="L643" title="All 2 branches covered.">        if (isMultiValued())</span>
+        {
+<span class="fc" id="L645">            stringValues = parser.getStrings(getKey());</span>
+
+<span class="pc bpc" id="L647" title="1 of 2 branches missed.">            if (log.isDebugEnabled())</span>
+            {
+<span class="nc" id="L649">                log.debug(name + &quot;: Multi-Valued, Value is &quot; + stringValue);</span>
+<span class="nc bnc" id="L650" title="All 2 branches missed.">                if (stringValues != null)</span>
+                {
+<span class="nc bnc" id="L652" title="All 2 branches missed.">                    for (int i = 0; i &lt; stringValues.length; i++)</span>
+                    {
+<span class="nc" id="L654">                        log.debug(name + &quot;: &quot; + i + &quot;. Value: &quot; + stringValues[i]);</span>
+                    }
+                }
+            }
+
+<span class="pc bpc" id="L659" title="1 of 2 branches missed.">            if (v != null)</span>
+            {
+                // set the test value as a String[] which might be replaced by
+                // the correct type if the input is valid.
+<span class="fc" id="L663">                setTestValue(stringValues);</span>
+
+                try
+                {
+<span class="fc" id="L667">                    v.assertValidity(this);</span>
+                }
+<span class="nc" id="L669">                catch (ValidationException ve)</span>
+                {
+<span class="nc" id="L671">                    setMessage(ve.getMessage());</span>
+<span class="fc" id="L672">                }</span>
+            }
+
+<span class="pc bpc" id="L675" title="1 of 2 branches missed.">            if (validFlag)</span>
+            {
+<span class="fc" id="L677">                doSetValue();</span>
+            }
+        }
+        else
+        {
+<span class="fc" id="L682">            stringValue = parser.getString(getKey());</span>
+
+<span class="pc bpc" id="L684" title="1 of 2 branches missed.">            if (log.isDebugEnabled())</span>
+            {
+<span class="nc" id="L686">                log.debug(name + &quot;: Single Valued, Value is &quot; + stringValue);</span>
+            }
+
+<span class="pc bpc" id="L689" title="1 of 2 branches missed.">            if (v != null)</span>
+            {
+                // set the test value as a String which might be replaced by
+                // the correct type if the input is valid.
+<span class="fc" id="L693">                setTestValue(stringValue);</span>
+
+                try
+                {
+<span class="fc" id="L697">                    v.assertValidity(this);</span>
+<span class="fc" id="L698">                    log.debug(name + &quot;: Value is ok&quot;);</span>
+<span class="fc" id="L699">                    doSetValue();</span>
+                }
+<span class="nc" id="L701">                catch (ValidationException ve)</span>
+                {
+<span class="nc" id="L703">                    log.debug(name + &quot;: Value failed validation!&quot;);</span>
+<span class="nc" id="L704">                    setMessage(ve.getMessage());</span>
+<span class="pc" id="L705">                }</span>
+            }
+            else
+            {
+<span class="nc" id="L709">                doSetValue();</span>
+            }
+        }
+
+<span class="fc" id="L713">        validated = true;</span>
+
+<span class="fc" id="L715">        return validFlag;</span>
+    }
+
+    /**
+     * Set the default Value. This value is used if
+     * Intake should map this field to a new object.
+     *
+     * @param prop The value to use if the field is mapped to a new object.
+     */
+    public abstract void setDefaultValue(String prop);
+
+    /**
+     * Set the empty Value. This value is used if Intake
+     * maps a field to a parameter returned by the user and
+     * the corresponding field is either empty (empty string)
+     * or non-existent.
+     *
+     * @param prop The value to use if the field is empty.
+     */
+    public abstract void setEmptyValue(String prop);
+
+    /**
+     * Sets the value of the field from data in the parser.
+     */
+    protected abstract void doSetValue();
+
+    /**
+     * Set the value used as a default, in the event the field
+     * has not been set yet.
+     *
+     * @param obj an &lt;code&gt;Object&lt;/code&gt; value
+     */
+    void setInitialValue(T obj)
+    {
+<span class="nc" id="L749">        validValue = obj;</span>
+<span class="nc" id="L750">    }</span>
+
+    /**
+     * Get the value used as a default.  If the initial value has
+     * not been set and a &lt;code&gt;Retrievable&lt;/code&gt; object has
+     * been associated with this field, the objects property will
+     * be used as the initial value.
+     *
+     * @return an &lt;code&gt;Object&lt;/code&gt; value
+     * @throws IntakeException indicates the value could not be
+     * returned from the mapped object
+     */
+    public T getInitialValue() throws IntakeException
+    {
+<span class="pc bpc" id="L764" title="1 of 2 branches missed.">        if (validValue == null)</span>
+        {
+<span class="pc bpc" id="L766" title="1 of 2 branches missed.">            if (retrievable != null)</span>
+            {
+<span class="nc" id="L768">                getProperty(retrievable);</span>
+            }
+            else
+            {
+<span class="fc" id="L772">                getDefault();</span>
+            }
+        }
+
+<span class="fc" id="L776">        return validValue;</span>
+    }
+
+    /**
+     * Set the value input by a user that will be validated.
+     *
+     * @param obj an &lt;code&gt;Object&lt;/code&gt; value
+     */
+    void setTestValue(Object obj)
+    {
+<span class="fc" id="L786">        testValue = obj;</span>
+<span class="fc" id="L787">    }</span>
+
+    /**
+     * Get the value input by a user that will be validated.
+     *
+     * @param &lt;TT&gt; the type of the test value
+     * @return an &lt;code&gt;TT&lt;/code&gt; value
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;TT&gt; TT getTestValue()
+    {
+<span class="fc" id="L798">        return (TT)testValue;</span>
+    }
+
+    /**
+     * Get the value of the field.  if a test value has been set, it
+     * will be returned as is, unless it is so badly formed that the
+     * validation could not parse it.  In most cases the test value
+     * is returned even though invalid, so that it can be returned to
+     * the user to make modifications.  If the test value is not set
+     * the initial value is returned.
+     *
+     * @return an &lt;code&gt;Object&lt;/code&gt; value
+     */
+    public T getValue()
+    {
+<span class="fc" id="L813">        T val = null;</span>
+        try
+        {
+<span class="fc" id="L816">            val = getInitialValue();</span>
+        }
+<span class="nc" id="L818">        catch (IntakeException e)</span>
+        {
+<span class="nc" id="L820">            log.error(&quot;Could not get intial value of &quot; + this.getDisplayName() +</span>
+<span class="nc" id="L821">                    &quot; in group &quot; + this.group.getIntakeGroupName(), e);</span>
+<span class="fc" id="L822">        }</span>
+
+<span class="pc bpc" id="L824" title="1 of 2 branches missed.">        if (getTestValue() != null)</span>
+        {
+<span class="fc" id="L826">            val = getTestValue();</span>
+        }
+
+<span class="fc" id="L829">        return val;</span>
+    }
+
+    /**
+     * Calls toString() on the object returned by getValue(),
+     * unless null; and then it returns &quot;&quot;, the empty String.
+     *
+     * @return a &lt;code&gt;String&lt;/code&gt; value
+     */
+    @Override
+    public String toString()
+    {
+<span class="nc" id="L841">        String res = EMPTY;</span>
+
+<span class="nc bnc" id="L843" title="All 2 branches missed.">        if (stringValue != null)</span>
+        {
+<span class="nc" id="L845">            res = stringValue;</span>
+        }
+<span class="nc bnc" id="L847" title="All 2 branches missed.">        else if (getValue() != null)</span>
+        {
+<span class="nc" id="L849">            res = getValue().toString();</span>
+        }
+<span class="nc" id="L851">        return res;</span>
+    }
+
+    /**
+     * Calls toString() on the object returned by getValue(),
+     * unless null; and then it returns &quot;&quot;, the empty String.
+     * Escapes &amp;quot; characters to be able to display these
+     * in HTML form fields.
+     *
+     * @return a &lt;code&gt;String&lt;/code&gt; value
+     */
+    public String getHTMLString()
+    {
+<span class="nc" id="L864">        String res = toString();</span>
+<span class="nc" id="L865">        return StringUtils.replace(res, &quot;\&quot;&quot;, &quot;&amp;quot;&quot;);</span>
+    }
+
+    /**
+     * Loads the valid value from a bean
+     *
+     * @param obj the object whose getter to call
+     *
+     * @throws IntakeException indicates a problem during the execution of the
+     * object's getter method
+     */
+    public void getProperty(Object obj)
+            throws IntakeException
+    {
+        try
+        {
+            @SuppressWarnings(&quot;unchecked&quot;) // invoke returns Object
+<span class="nc" id="L882">			T t = (T)getter.invoke(obj);</span>
+<span class="nc" id="L883">			validValue = t;</span>
+        }
+<span class="nc" id="L885">        catch (IllegalAccessException e)</span>
+        {
+<span class="nc" id="L887">            throwSetGetException(&quot;getter&quot;, obj, this.getDisplayName(),</span>
+<span class="nc" id="L888">                    this.group.getIntakeGroupName(), e);</span>
+        }
+<span class="nc" id="L890">        catch (IllegalArgumentException e)</span>
+        {
+<span class="nc" id="L892">            throwSetGetException(&quot;getter&quot;, obj, this.getDisplayName(),</span>
+<span class="nc" id="L893">                    this.group.getIntakeGroupName(), e);</span>
+        }
+<span class="nc" id="L895">        catch (InvocationTargetException e)</span>
+        {
+<span class="nc" id="L897">            throwSetGetException(&quot;getter&quot;, obj, this.getDisplayName(),</span>
+<span class="nc" id="L898">                    this.group.getIntakeGroupName(), e);</span>
+<span class="nc" id="L899">        }</span>
+<span class="nc" id="L900">    }</span>
+
+    /**
+     * Loads the default value from the object
+     */
+    public void getDefault()
+    {
+<span class="fc" id="L907">        validValue = getDefaultValue();</span>
+<span class="fc" id="L908">    }</span>
+
+    /**
+     * Calls a setter method on obj, if this field has been set.
+     *
+     * @param obj the object whose setter to call
+     *
+     * @throws IntakeException indicates a problem during the execution of the
+     * object's setter method
+     */
+    public void setProperty(Object obj) throws IntakeException
+    {
+<span class="pc bpc" id="L920" title="1 of 2 branches missed.">        if (log.isDebugEnabled())</span>
+        {
+<span class="nc" id="L922">            log.debug(name + &quot;.setProperty(&quot; + obj.getClass().getName() + &quot;)&quot;);</span>
+        }
+
+<span class="pc bpc" id="L925" title="1 of 2 branches missed.">        if (!isValid())</span>
+        {
+<span class="nc" id="L927">            throw new IntakeException(</span>
+                    &quot;Attempted to assign an invalid input.&quot;);
+        }
+<span class="pc bpc" id="L930" title="2 of 4 branches missed.">        if (isSet() &amp;&amp; null != getTestValue())</span>
+        {
+<span class="fc" id="L932">            valArray[0] = getTestValue();</span>
+<span class="pc bpc" id="L933" title="1 of 2 branches missed.">            if (log.isDebugEnabled())</span>
+            {
+<span class="nc" id="L935">                log.debug(name + &quot;: Property is set, value is &quot; + valArray[0]);</span>
+            }
+        }
+        else
+        {
+<span class="nc" id="L940">            valArray[0] = getSafeEmptyValue();</span>
+<span class="nc bnc" id="L941" title="All 2 branches missed.">            if (log.isDebugEnabled())</span>
+            {
+<span class="nc" id="L943">                log.debug(name + &quot;: Property is not set, using emptyValue &quot; + valArray[0]);</span>
+            }
+        }
+
+        try
+        {
+            /*
+             * In the case we map a Group to an Object using mapToObject, and we
+             * want to add an additional Field which should not be mapped, and
+             * we leave the mapToProperty empty, we will get a NPE here. So we
+             * have to double check, if we really have a setter set.
+             */
+<span class="pc bpc" id="L955" title="1 of 2 branches missed.">            if(setter != null)</span>
+            {
+<span class="fc" id="L957">                setter.invoke(obj, valArray);</span>
+            }
+<span class="nc bnc" id="L959" title="All 2 branches missed.">            else if (log.isDebugEnabled())</span>
+            {
+<span class="nc" id="L961">                log.debug(name + &quot;: has a null setter for the mapToProperty&quot;</span>
+                        + &quot; Attribute, although all Fields should be mapped&quot;
+                        + &quot; to &quot; + mapToObject + &quot;. If this is unwanted, you&quot;
+                        + &quot; should double check the mapToProperty Attribute, and&quot;
+                        + &quot; consult the logs. The Turbine Intake Service will&quot;
+                        + &quot; have logged a detailed Message with the error.&quot;);
+            }
+        }
+<span class="nc" id="L969">        catch (IllegalAccessException e)</span>
+        {
+<span class="nc" id="L971">            throwSetGetException(&quot;setter&quot;, obj, this.getDisplayName(),</span>
+<span class="nc" id="L972">                    this.group.getIntakeGroupName(), e);</span>
+        }
+<span class="nc" id="L974">        catch (IllegalArgumentException e)</span>
+        {
+<span class="nc" id="L976">            throwSetGetException(&quot;setter&quot;, obj, this.getDisplayName(),</span>
+<span class="nc" id="L977">                    this.group.getIntakeGroupName(), e);</span>
+        }
+<span class="nc" id="L979">        catch (InvocationTargetException e)</span>
+        {
+<span class="nc" id="L981">            throwSetGetException(&quot;setter&quot;, obj, this.getDisplayName(),</span>
+<span class="nc" id="L982">                    this.group.getIntakeGroupName(), e);</span>
+<span class="pc" id="L983">        }</span>
+<span class="fc" id="L984">    }</span>
+
+    /**
+     * Used to throw an IntakeException when an error occurs executing the
+     * get/set method of the mapped persistent object.
+     *
+     * @param type Type of method. (setter/getter)
+     * @param fieldName Name of the field
+     * @param groupName Name of the group
+     * @param e Exception that was thrown
+     * @throws IntakeException New exception with formatted message
+     */
+    private void throwSetGetException(String type, Object obj,
+                                      String fieldName, String groupName,
+                                      Exception e)
+            throws IntakeException
+    {
+<span class="nc" id="L1001">        throw new IntakeException(&quot;Could not execute &quot; + type</span>
+                + &quot; method for &quot; + fieldName + &quot; in group &quot; + groupName
+<span class="nc" id="L1003">                + &quot; on &quot; + obj.getClass().getName(), e);</span>
+
+    }
+
+    /**
+     * Get the default Value
+     *
+     * @return the default value
+     */
+    public T getDefaultValue()
+    {
+<span class="fc" id="L1014">        return defaultValue;</span>
+    }
+
+    /**
+     * Get the Value to use if the field is empty
+     *
+     * @return the value to use if the field is empty.
+     */
+    public T getEmptyValue()
+    {
+<span class="fc" id="L1024">        return emptyValue;</span>
+    }
+
+    /**
+     * Provides access to emptyValue such that the value returned will be
+     * acceptable as an argument parameter to Method.invoke.  Subclasses
+     * that deal with primitive types should ensure that they return an
+     * appropriate value wrapped in the object wrapper class for the
+     * primitive type.
+     *
+     * @return the value to use when the field is empty or an Object that
+     * wraps the empty value for primitive types.
+     */
+    protected Object getSafeEmptyValue()
+    {
+<span class="nc" id="L1039">        return getEmptyValue();</span>
+    }
+
+    /**
+     * Gets the name of the field.
+     *
+     * @return name of the field as specified in the XML file.
+     */
+    public String getName()
+    {
+<span class="fc" id="L1049">        return name;</span>
+    }
+
+    /**
+     * Gets the display size of the field.  This is useful when
+     * building the HTML input tag. If no displaySize was set,
+     * an empty string is returned.
+     *
+     * @return the size information for this field
+     */
+    public String getDisplaySize()
+    {
+<span class="nc bnc" id="L1061" title="All 2 branches missed.">        return (StringUtils.isEmpty(displaySize) ? &quot;&quot; : displaySize);</span>
+    }
+
+    /**
+     * Gets the maximum size of the field.  This is useful when
+     * building the HTML input tag.  The maxSize is set with the maxLength
+     * rule. If this rule was not set, an empty string is returned.
+     *
+     * @return the maximum size information of the field
+     */
+    public String getMaxSize()
+    {
+<span class="nc bnc" id="L1073" title="All 2 branches missed.">        return (StringUtils.isEmpty(maxSize) ? &quot;&quot; : maxSize);</span>
+    }
+
+    /**
+     * Gets the String representation of the Value. This is basically a wrapper
+     * method for the toString method which doesn't seem to show anything on
+     * screen if accessed from Template. Name is also more in line with getValue
+     * method which returns the actual Object.
+     * This is useful for displaying correctly formatted data such as dates,
+     * such as 18/11/1968 instead of the toString dump of a Date Object.
+     *
+     * @return the String Value
+     */
+    public String getStringValue()
+    {
+<span class="nc" id="L1088">        return this.toString();</span>
+    }
+
+    /**
+     * Create a validator instance for the given class name
+     *
+     * @param validatorClassName the class name
+     * @param field the related xml field containing the rule map
+     * @return the validator instance
+     * @throws IntakeException if the instance could not be created
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    private Validator&lt;T&gt; createValidator(String validatorClassName)
+            throws IntakeException
+    {
+        Validator&lt;T&gt; v;
+
+        try
+        {
+<span class="fc" id="L1107">            v = (Validator&lt;T&gt;)</span>
+<span class="fc" id="L1108">                    Class.forName(validatorClassName).newInstance();</span>
+        }
+<span class="nc" id="L1110">        catch (InstantiationException e)</span>
+        {
+<span class="nc" id="L1112">            throw new IntakeException(</span>
+                    &quot;Could not create new instance of Validator(&quot;
+                    + validatorClassName + &quot;)&quot;, e);
+        }
+<span class="nc" id="L1116">        catch (IllegalAccessException e)</span>
+        {
+<span class="nc" id="L1118">            throw new IntakeException(</span>
+                    &quot;Could not create new instance of Validator(&quot;
+                    + validatorClassName + &quot;)&quot;, e);
+        }
+<span class="nc" id="L1122">        catch (ClassNotFoundException e)</span>
+        {
+<span class="nc" id="L1124">            throw new IntakeException(</span>
+                    &quot;Could not load Validator class(&quot;
+                    + validatorClassName + &quot;)&quot;, e);
+<span class="fc" id="L1127">        }</span>
+
+<span class="pc bpc" id="L1129" title="1 of 2 branches missed.">        if (v instanceof LogEnabled)</span>
+        {
+<span class="fc" id="L1131">        	((LogEnabled)v).enableLogging(log);</span>
+        }
+
+        // this should always be true for now
+        // (until bean property initialization is implemented)
+<span class="pc bpc" id="L1136" title="1 of 2 branches missed.">        if (v instanceof InitableByConstraintMap)</span>
+        {
+<span class="fc" id="L1138">            ((InitableByConstraintMap) v).init(this.ruleMap);</span>
+        }
+        else
+        {
+<span class="nc" id="L1142">            throw new IntakeError(</span>
+                    &quot;All Validation objects must be subclasses of &quot;
+                    + &quot;InitableByConstraintMap&quot;);
+        }
+
+<span class="fc" id="L1147">        return v;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

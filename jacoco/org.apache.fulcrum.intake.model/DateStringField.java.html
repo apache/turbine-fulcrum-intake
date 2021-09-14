@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DateStringField.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Intake Service</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.intake.model</a> &gt; <span class="el_source">DateStringField.java</span></div><h1>DateStringField.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.intake.model;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Date;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.fulcrum.intake.IntakeException;
+import org.apache.fulcrum.intake.IntakeRuntimeException;
+import org.apache.fulcrum.intake.validator.DateStringValidator;
+import org.apache.fulcrum.intake.validator.Validator;
+
+
+/**
+ * Field for date inputs as free form text.  The parsing of date strings
+ * is dependent on any rules that are defined, so this field will expect that
+ * any validator will be (or extend) DateStringValidator.
+ *
+ * @author &lt;a href=&quot;mailto:jmcnally@collab.net&quot;&gt;John McNally&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:hps@intermeta.de&quot;&gt;Henning P. Schmiedehausen&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:quintonm@bellsouth.net&quot;&gt;Quinton McCombs&lt;/a&gt;
+ * @version $Id$
+ */
+public class DateStringField
+        extends Field&lt;Date&gt;
+{
+    /** Serial version */
+	private static final long serialVersionUID = 3659498567870484883L;
+
+	/** date format */
+<span class="fc" id="L50">    private DateFormat df = null;</span>
+
+    /**
+     * Constructor.
+     *
+     * @param field xml field definition object
+     * @param group xml group definition object
+     * @throws IntakeException thrown by superclass
+     */
+    public DateStringField(XmlField field, Group group)
+            throws IntakeException
+    {
+<span class="fc" id="L62">        super(field, group);</span>
+
+<span class="fc" id="L64">        Validator&lt;?&gt; validator = getValidator();</span>
+<span class="pc bpc" id="L65" title="2 of 4 branches missed.">        if (validator == null || !(validator instanceof DateStringValidator))</span>
+        {
+<span class="nc" id="L67">            df = DateFormat.getInstance();</span>
+<span class="nc" id="L68">            df.setLenient(true);</span>
+        }
+<span class="fc" id="L70">    }</span>
+
+    /**
+     * Sets the default value for a DateString field
+     *
+     * @param prop Parameter for the default values
+     */
+    @Override
+	public void setDefaultValue(String prop)
+    {
+<span class="fc" id="L80">        defaultValue = null;</span>
+
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (prop == null)</span>
+        {
+<span class="fc" id="L84">            return;</span>
+        }
+
+        try
+        {
+<span class="nc" id="L89">            defaultValue = getDate(prop);</span>
+        }
+<span class="nc" id="L91">        catch (ParseException e)</span>
+        {
+<span class="nc" id="L93">            throw new IntakeRuntimeException(&quot;Could not parse &quot; + prop</span>
+                    + &quot; into a valid Date for the default value&quot;, e);
+<span class="nc" id="L95">        }</span>
+<span class="nc" id="L96">    }</span>
+
+    /**
+     * Set the empty Value. This value is used if Intake
+     * maps a field to a parameter returned by the user and
+     * the corresponding field is either empty (empty string)
+     * or non-existant.
+     *
+     * @param prop The value to use if the field is empty.
+     */
+    @Override
+	public void setEmptyValue(String prop)
+    {
+<span class="fc" id="L109">        emptyValue = null;</span>
+
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">        if (prop == null)</span>
+        {
+<span class="fc" id="L113">            return;</span>
+        }
+
+        try
+        {
+<span class="nc" id="L118">            emptyValue = getDate(prop);</span>
+        }
+<span class="nc" id="L120">        catch (ParseException e)</span>
+        {
+<span class="nc" id="L122">            throw new IntakeRuntimeException(&quot;Could not parse &quot; + prop</span>
+                    + &quot; into a valid Date for the empty value&quot;, e);
+<span class="nc" id="L124">        }</span>
+<span class="nc" id="L125">    }</span>
+
+    /**
+     * A suitable validator.
+     *
+     * @return &quot;DateStringValidator&quot;
+     */
+    @Override
+	protected String getDefaultValidator()
+    {
+<span class="fc" id="L135">        return DateStringValidator.class.getName();</span>
+    }
+
+    /**
+     * Sets the value of the field from data in the parser.
+     */
+    @Override
+	protected void doSetValue()
+    {
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">        if (isMultiValued())</span>
+        {
+<span class="nc" id="L146">            String[] inputs = parser.getStrings(getKey());</span>
+<span class="nc" id="L147">            Date[] values = new Date[inputs.length];</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">            for (int i = 0; i &lt; inputs.length; i++)</span>
+            {
+                try
+                {
+<span class="nc bnc" id="L152" title="All 2 branches missed.">                    values[i] = StringUtils.isNotEmpty(inputs[i])</span>
+<span class="nc" id="L153">                            ? getDate(inputs[i]) : getEmptyValue();</span>
+                }
+<span class="nc" id="L155">                catch (ParseException e)</span>
+                {
+<span class="nc" id="L157">                    values[i] = null;</span>
+<span class="nc" id="L158">                }</span>
+            }
+<span class="nc" id="L160">            setTestValue(values);</span>
+<span class="nc" id="L161">        }</span>
+        else
+        {
+<span class="fc" id="L164">            String val = parser.getString(getKey());</span>
+            try
+            {
+<span class="pc bpc" id="L167" title="1 of 2 branches missed.">                setTestValue(StringUtils.isNotEmpty(val) ? getDate(val) : getEmptyValue());</span>
+            }
+<span class="nc" id="L169">            catch (ParseException e)</span>
+            {
+<span class="nc" id="L171">                setTestValue(null);</span>
+<span class="fc" id="L172">            }</span>
+        }
+<span class="fc" id="L174">    }</span>
+
+    /**
+     * Parses a test date string using the Validator if it exists and
+     * is an instance of DateStringValidator.  Otherwise, DateFormat.parse()
+     * is used.
+     *
+     * @param dateString The string date to parse
+     * @return A &lt;code&gt;Date&lt;/code&gt; object
+     * @throws ParseException The date could not be parsed.
+     */
+    private Date getDate(String dateString)
+            throws ParseException
+    {
+<span class="fc" id="L188">        Date date = null;</span>
+        // FIXME: Canonicalize user-entered date strings.
+<span class="fc" id="L190">        Validator&lt;?&gt; validator = getValidator();</span>
+<span class="pc bpc" id="L191" title="2 of 4 branches missed.">        if (validator != null &amp;&amp; validator instanceof DateStringValidator)</span>
+        {
+<span class="fc" id="L193">            date = ((DateStringValidator) validator).parse(dateString);</span>
+        }
+        else
+        {
+<span class="nc" id="L197">            date = df.parse(dateString);</span>
+        }
+<span class="fc" id="L199">        return date;</span>
+    }
+
+    /**
+     * returns a String representation
+     *
+     * @return a String representation
+     */
+    @Override
+	public String toString()
+    {
+<span class="nc" id="L210">        String s = null;</span>
+<span class="nc" id="L211">        Object value = getValue();</span>
+<span class="nc" id="L212">        Validator&lt;?&gt; validator = getValidator();</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">        if (value == null)</span>
+        {
+<span class="nc" id="L215">            s = &quot;&quot;;</span>
+        }
+<span class="nc bnc" id="L217" title="All 2 branches missed.">        else if (value instanceof String)</span>
+        {
+<span class="nc" id="L219">            s = (String) value;</span>
+        }
+<span class="nc bnc" id="L221" title="All 4 branches missed.">        else if (validator != null &amp;&amp; validator instanceof DateStringValidator)</span>
+        {
+<span class="nc" id="L223">            s = ((DateStringValidator) validator).format((Date) value);</span>
+        }
+        else
+        {
+<span class="nc" id="L227">            s = df.format((Date) value);</span>
+        }
+<span class="nc" id="L229">        return s;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FieldType.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Intake Service</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.intake.model</a> &gt; <span class="el_source">FieldType.java</span></div><h1>FieldType.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.intake.model;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.io.Serializable;
+import java.lang.reflect.Constructor;
+
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
+
+import org.apache.fulcrum.intake.IntakeException;
+
+/**
+ * Enum for valid field types.
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ */
+<span class="fc" id="L35">@XmlEnum(String.class)</span>
+public enum FieldType implements Serializable
+{
+<span class="fc" id="L38">    @XmlEnumValue(&quot;boolean&quot;) FIELD_BOOLEAN(&quot;boolean&quot;)</span>
+    {
+        @Override
+        public Field&lt;?&gt; getInstance(XmlField f, Group g) throws IntakeException
+        {
+<span class="fc" id="L43">            return new BooleanField(f, g);</span>
+        }
+    },
+<span class="fc" id="L46">    @XmlEnumValue(&quot;BigDecimal&quot;) FIELD_BIGDECIMAL(&quot;BigDecimal&quot;)</span>
+    {
+        @Override
+        public Field&lt;?&gt; getInstance(XmlField f, Group g) throws IntakeException
+        {
+<span class="fc" id="L51">            return new BigDecimalField(f, g);</span>
+        }
+    },
+<span class="fc" id="L54">    @XmlEnumValue(&quot;int&quot;) FIELD_INT(&quot;int&quot;)</span>
+    {
+        @Override
+        public Field&lt;?&gt; getInstance(XmlField f, Group g) throws IntakeException
+        {
+<span class="fc" id="L59">            return new IntegerField(f, g);</span>
+        }
+    },
+<span class="fc" id="L62">    @XmlEnumValue(&quot;float&quot;) FIELD_FLOAT(&quot;float&quot;)</span>
+    {
+        @Override
+        public Field&lt;?&gt; getInstance(XmlField f, Group g) throws IntakeException
+        {
+<span class="fc" id="L67">            return new FloatField(f, g);</span>
+        }
+    },
+<span class="fc" id="L70">    @Deprecated</span>
+<span class="fc" id="L71">    @XmlEnumValue(&quot;FileItem&quot;) FIELD_FILEITEM(&quot;FileItem&quot;)</span>
+    {
+        @Override
+        public Field&lt;?&gt; getInstance(XmlField f, Group g) throws IntakeException
+        {
+<span class="fc" id="L76">            return new UploadPartField(f, g);</span>
+        }
+    },
+<span class="fc" id="L79">    @XmlEnumValue(&quot;UploadPart&quot;) FIELD_UPLOADPART(&quot;UploadPart&quot;)</span>
+    {
+        @Override
+        public Field&lt;?&gt; getInstance(XmlField f, Group g) throws IntakeException
+        {
+<span class="nc" id="L84">            return new UploadPartField(f, g);</span>
+        }
+    },
+<span class="fc" id="L87">    @XmlEnumValue(&quot;String&quot;) FIELD_STRING(&quot;String&quot;)</span>
+    {
+        @Override
+        public Field&lt;?&gt; getInstance(XmlField f, Group g) throws IntakeException
+        {
+<span class="fc" id="L92">            return new StringField(f, g);</span>
+        }
+    },
+<span class="fc" id="L95">    @XmlEnumValue(&quot;DateString&quot;) FIELD_DATESTRING(&quot;DateString&quot;)</span>
+    {
+        @Override
+        public Field&lt;?&gt; getInstance(XmlField f, Group g) throws IntakeException
+        {
+<span class="fc" id="L100">            return new DateStringField(f, g);</span>
+        }
+    },
+<span class="fc" id="L103">    @XmlEnumValue(&quot;ComboKey&quot;) FIELD_COMBOKEY(&quot;ComboKey&quot;)</span>
+    {
+        @Override
+        public Field&lt;?&gt; getInstance(XmlField f, Group g) throws IntakeException
+        {
+<span class="nc" id="L108">            throw new IntakeException(&quot;An unsupported type has been specified for &quot; +</span>
+<span class="nc" id="L109">                    f.getName() + &quot; in group &quot; + g.getIntakeGroupName() + &quot; type = &quot; + value());</span>
+        }
+    },
+<span class="fc" id="L112">    @XmlEnumValue(&quot;double&quot;) FIELD_DOUBLE(&quot;double&quot;)</span>
+    {
+        @Override
+        public Field&lt;?&gt; getInstance(XmlField f, Group g) throws IntakeException
+        {
+<span class="fc" id="L117">            return new DoubleField(f, g);</span>
+        }
+    },
+<span class="fc" id="L120">    @XmlEnumValue(&quot;short&quot;) FIELD_SHORT(&quot;short&quot;)</span>
+    {
+        @Override
+        public Field&lt;?&gt; getInstance(XmlField f, Group g) throws IntakeException
+        {
+<span class="fc" id="L125">            return new ShortField(f, g);</span>
+        }
+    },
+<span class="fc" id="L128">    @XmlEnumValue(&quot;long&quot;) FIELD_LONG(&quot;long&quot;)</span>
+    {
+        @Override
+        public Field&lt;?&gt; getInstance(XmlField f, Group g) throws IntakeException
+        {
+<span class="fc" id="L133">            return new LongField(f, g);</span>
+        }
+    },
+<span class="fc" id="L136">    @XmlEnumValue(&quot;custom&quot;) FIELD_CUSTOM(&quot;custom&quot;)</span>
+    {
+        @Override
+        public Field&lt;?&gt; getInstance(XmlField f, Group g) throws IntakeException
+        {
+<span class="fc" id="L141">            String fieldClass = f.getFieldClass();</span>
+
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">            if (fieldClass != null</span>
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">                    &amp;&amp; fieldClass.indexOf('.') == -1)</span>
+            {
+<span class="nc" id="L146">                fieldClass = Field.defaultFieldPackage + fieldClass;</span>
+            }
+
+<span class="pc bpc" id="L149" title="1 of 2 branches missed.">            if (fieldClass != null)</span>
+            {
+                Class&lt;?&gt; field;
+
+                try
+                {
+<span class="fc" id="L155">                    field = Class.forName(fieldClass);</span>
+<span class="fc" id="L156">                    Constructor&lt;?&gt; constructor = field.getConstructor(XmlField.class, Group.class);</span>
+
+<span class="fc" id="L158">                    return (Field&lt;?&gt;) constructor.newInstance(f, g);</span>
+                }
+<span class="nc" id="L160">                catch (ClassNotFoundException e)</span>
+                {
+<span class="nc" id="L162">                    throw new IntakeException(</span>
+                            &quot;Could not load Field class(&quot;
+                                    + fieldClass + &quot;)&quot;,
+                            e);
+                }
+<span class="nc" id="L167">                catch (Exception e)</span>
+                {
+<span class="nc" id="L169">                    throw new IntakeException(</span>
+                            &quot;Could not create new instance of Field(&quot;
+                                    + fieldClass + &quot;)&quot;,
+                            e);
+                }
+            }
+            else
+            {
+<span class="nc" id="L177">                throw new IntakeException(</span>
+                        &quot;Custom field types must define a fieldClass&quot;);
+            }
+        }
+    };
+
+    /** Serial version */
+    private static final long serialVersionUID = -8563326491799622016L;
+
+    /** String value of the field type */
+    private String stringValue;
+
+    /**
+     * Constructor
+     *
+     * @param stringValue
+     */
+    FieldType(String stringValue)
+<span class="fc" id="L195">    {</span>
+<span class="fc" id="L196">        this.stringValue = stringValue;</span>
+<span class="fc" id="L197">    }</span>
+
+    /**
+     * Return the string value
+     *
+     * @return a &lt;code&gt;String&lt;/code&gt; value
+     */
+    public String value()
+    {
+<span class="nc" id="L206">        return stringValue;</span>
+    }
+
+    /**
+     * Create a specific field instance from its XML representation
+     *
+     * @param f the XML object
+     * @param g the group this field belongs to
+     * @return a Field&amp;lt;?&amp;gt; instance
+     *
+     * @throws IntakeException if the field could not be created
+     */
+    public abstract Field&lt;?&gt; getInstance(XmlField f, Group g) throws IntakeException;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
