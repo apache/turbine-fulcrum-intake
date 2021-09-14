@@ -19,8 +19,8 @@
   <parent>
     <groupId>org.apache.turbine</groupId>
     <artifactId>turbine-parent</artifactId>
-    <version>8</version>
-    <relativePath></relativePath>
+    <version>9-SNAPSHOT</version>
+    <relativePath/>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -30,14 +30,16 @@
   <name>Fulcrum Intake Service</name>
   <inceptionYear>2005</inceptionYear>
   <description>This Service provides rule-based input validation</description>
-  <url>http://turbine.apache.org/fulcrum/fulcrum-intake</url>
+  <url>https://turbine.apache.org/fulcrum/fulcrum-intake</url>
 
   <!-- Required for staging to work -->
   <distributionManagement>
-    <site>
-       <id>turbine.apache.org</id>
-       <url>https://turbine.apache.org/fulcrum/fulcrum-intake/</url>
-    </site>
+       <site>
+        <id>apache.website</id>
+        <!-- scmPubUrl uses turbine.site.path
+        If not defined scmPubUrl uses default value ${project.distributionManagement.site.url} -->
+        <url>scm:git:${turbine.scmPubUrl}</url>
+      </site>
   </distributionManagement>
 		
   <scm>
@@ -178,7 +180,7 @@
   </build>
 
   <properties>
-    <turbine.site.path>fulcrum/fulcrum-intake</turbine.site.path>
+    <turbine.site.path>turbine-fulcrum-intake</turbine.site.path>
     <turbine.scmPubCheckoutDirectory>${turbine.site.cache}/fulcrum/intake</turbine.scmPubCheckoutDirectory>
     <turbine.site.cache>${project.build.directory}/turbine-sites</turbine.site.cache>
     <siteContent.path>${project.build.directory}/staging</siteContent.path><!-- default stagingSiteURL -->
