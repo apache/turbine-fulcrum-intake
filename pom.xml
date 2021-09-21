@@ -35,7 +35,7 @@
   <!-- Required for staging to work -->
   <distributionManagement>
        <site>
-        <id>apache.website</id>
+        <id>apache.org</id>
         <!-- scmPubUrl uses turbine.site.path
         If not defined scmPubUrl uses default value ${project.distributionManagement.site.url} -->
         <url>scm:git:${turbine.scmPubUrl}</url>
@@ -45,7 +45,8 @@
   <scm>
     <connection>scm:git:https://gitbox.apache.org/repos/asf/turbine-fulcrum-intake.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/turbine-fulcrum-intake.git</developerConnection>
-    <url>https://gitbox.apache.org/repos/asf/turbine-fulcrum-intake.git</url>
+    <url>https://github.com/apache/${turbine.site.path}/tree/${project.scm.tag}</url>
+    <tag>HEAD</tag>
   </scm>
 
   <developers>
