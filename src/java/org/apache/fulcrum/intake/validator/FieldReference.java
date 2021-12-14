@@ -19,6 +19,7 @@ package org.apache.fulcrum.intake.validator;
  * under the License.
  */
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.fulcrum.intake.IntakeException;
@@ -92,13 +93,9 @@ public class FieldReference
 		{
 		    if (string != null)
 		    {
-		    	for (Comparison c : Comparison.values())
-		    	{
-		    		if (string.equals(c.text))
-		    		{
-		    			return c;
-		    		}
-		    	}
+                return Arrays.stream(Comparison.values())
+                        .filter(c -> string.equals(c.text)).findFirst()
+                        .orElse(null);
 		    }
 
 		    return null;

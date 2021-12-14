@@ -21,6 +21,7 @@ package org.apache.fulcrum.intake.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -191,14 +192,9 @@ public class AppData implements Serializable
     @Override
     public String toString()
     {
-        StringBuilder result = new StringBuilder();
-
-        result.append("<input-data>\n");
-        for (Group group : groups)
-        {
-            result.append(group);
-        }
-        result.append("</input-data>");
-        return result.toString();
+        return groups.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining("", "<input-data>\n",
+                        "</input-data>"));
     }
 }

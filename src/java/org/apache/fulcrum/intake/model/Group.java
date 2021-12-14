@@ -680,12 +680,9 @@ public class Group implements Serializable, LogEnabled
             }
 
             // map fields by their mapToObject
-            List<Field<?>> tmpFields = mapToObjectFieldLists.get(field.getMapToObject());
-            if (tmpFields == null)
-            {
-                tmpFields = new ArrayList<Field<?>>(fields.size());
-                mapToObjectFieldLists.put(field.getMapToObject(), tmpFields);
-            }
+            List<Field<?>> tmpFields = mapToObjectFieldLists.computeIfAbsent(
+                    field.getMapToObject(),
+                    k -> new ArrayList<Field<?>>(fields.size()));
 
             tmpFields.add(field);
         }
