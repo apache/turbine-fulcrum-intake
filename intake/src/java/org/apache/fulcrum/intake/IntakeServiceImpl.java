@@ -220,13 +220,11 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             return null;
         }
 
-        ObjectInputStream in = null;
         Map<AppData, File> serialData = null;
 
-        try
+        try (FileInputStream fin = new FileInputStream(serialDataFile);
+             ObjectInputStream in = new ObjectInputStream(fin))
         {
-        	FileInputStream fin = new FileInputStream(serialDataFile);
-            in = new ObjectInputStream(fin);
             Object o = in.readObject();
 
             if (o instanceof Map)
@@ -238,10 +236,9 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             else
             {
                 // This could be old file from intake. Try to delete it
-                getLogger().info("serialized object is not an intake map, ignoring");
+                getLogger().info("Serialized object is not an intake map, ignoring");
                 in.close();
-                in = null;
-                
+
                 // Try to delete the file
                 boolean result = serialDataFile.delete();
                 if ( result == false )
@@ -265,22 +262,6 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             // This should not happen
             // Null out serialData to be sure
             serialData = null;
-        }
-        finally
-        {
-            // Could be null if we opened a file, didn't find it to be a
-            // Map object and then nuked it away.
-            try
-            {
-                if (in != null)
-                {
-                    in.close();
-                }
-            }
-            catch (IOException e)
-            {
-                getLogger().error("Exception while closing file", e);
-            }
         }
 
         // Recreate transient loggers
@@ -350,7 +331,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             {
             	getLogger().error("Serialized file could not be removed");
             }
-            
+
         }
         catch (IOException e)
         {
@@ -360,21 +341,17 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             return;
         }
 
-        ObjectOutputStream out = null;
-        ObjectInputStream in = null;
-
-        try
+        try (FileOutputStream fout = new FileOutputStream(serialDataPath);
+             ObjectOutputStream out = new ObjectOutputStream(fout);
+             FileInputStream fin = new FileInputStream(serialDataPath);
+             ObjectInputStream in = new ObjectInputStream(fin))
         {
             // write the appData file out
-        	FileOutputStream fout = new FileOutputStream(serialDataPath);
-            out = new ObjectOutputStream(fout);
             out.writeObject(appDataElements);
             out.flush();
 
             // read the file back in. for some reason on OSX 10.1
             // this is necessary.
-            FileInputStream fin = new FileInputStream(serialDataPath);
-            in = new ObjectInputStream(fin);
             /* Map dummy = (Map) */ in.readObject();
 
             getLogger().debug("Serializing successful");
@@ -389,31 +366,6 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
         {
             getLogger().info(
                     "Could not re-read serialized file from " + serialDataPath, e);
-        }
-        finally
-        {
-            try
-            {
-                if (out != null)
-                {
-                    out.close();
-                }
-            }
-            catch (IOException e)
-            {
-                getLogger().error("Exception while closing file", e);
-            }
-            try
-            {
-                if (in != null)
-                {
-                    in.close();
-                }
-            }
-            catch (IOException e)
-            {
-                getLogger().error("Exception while closing file", e);
-            }
         }
 
         getLogger().debug("Saving took " + (System.currentTimeMillis() - timer));
@@ -490,7 +442,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             }
             catch (Exception e)
             {
-                throw new IntakeException("Could not get group " + groupName, e);
+                throw new IntakeException("Could not release group " + groupName, e);
             }
         }
     }
@@ -736,7 +688,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
         Set<File> xmlFiles = new HashSet<File>();
 
         long timeStamp = 0;
-        
+
         getLogger().debug("logger is " + getLogger().getClass().getSimpleName());
 
         for (String xmlPath : xmlPathes)
@@ -748,11 +700,8 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
 
             if (!xmlFile.canRead())
             {
-                String READ_ERR = "Could not read input file with path "
-                        + xmlPath + ".  Looking for file " + xmlFile;
-
-                getLogger().error(READ_ERR);
-                throw new Exception(READ_ERR);
+                throw new Exception("Could not read input file with path "
+                        + xmlPath + ".  Looking for file " + xmlFile);
             }
 
             xmlFiles.add(xmlFile);
@@ -797,28 +746,11 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             for (File xmlFile : xmlFiles)
             {
                 getLogger().debug("Now parsing: " + xmlFile);
-                FileInputStream fis = null;
-                try
+                try (FileInputStream fis = new FileInputStream(xmlFile))
                 {
-                    fis = new FileInputStream(xmlFile);
                     AppData appData = (AppData) um.unmarshal(fis);
-
                     appDataElements.put(appData, xmlFile);
                     getLogger().debug("Saving AppData for " + xmlFile);
-                }
-                finally
-                {
-                    if (fis != null)
-                    {
-                        try
-                        {
-                            fis.close();
-                        }
-                        catch (IOException e)
-                        {
-                            getLogger().warn("Could not close file " + xmlFile);
-                        }
-                    }
                 }
             }
 
@@ -834,7 +766,7 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
         	// Set the entry pair
         	appData = entry.getKey();
         	dataFile = entry.getValue();
-        	
+
             int maxPooledGroups = 0;
             List<Group> glist = appData.getGroups();
 
@@ -904,11 +836,11 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
     }
 
     /**
-     * Note that the avalon.entry key="urn:avalon:home" 
+     * Note that the avalon.entry key="urn:avalon:home"
      * and the type is {@link java.io.File}
-     * 
+     *
      * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
-     * 
+     *
      * @param context the Context to use
      * @throws ContextException if the context is not found
      */
@@ -922,9 +854,9 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
      * Avalon component lifecycle method
      *
      * avalon.dependency type="org.apache.fulcrum.localization.LocalizationService"
-     * 
+     *
      * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
-     * 
+     *
      * @param manager the service manager
      * @throws ServiceException generic exception
      */
