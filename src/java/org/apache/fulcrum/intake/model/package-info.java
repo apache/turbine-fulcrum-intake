@@ -1,6 +1,6 @@
-@javax.xml.bind.annotation.XmlSchema(
+@jakarta.xml.bind.annotation.XmlSchema(
     namespace = "http://turbine.apache.org/schema/intake/4.0",
-    elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+    elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED)
 
 package org.apache.fulcrum.intake.model;
 

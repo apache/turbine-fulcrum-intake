@@ -27,14 +27,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 import org.apache.avalon.framework.logger.LogEnabled;
 import org.apache.avalon.framework.logger.Logger;
 import org.apache.commons.lang3.StringUtils;
@@ -45,6 +37,14 @@ import org.apache.fulcrum.intake.IntakeException;
 import org.apache.fulcrum.intake.IntakeServiceFacade;
 import org.apache.fulcrum.intake.Retrievable;
 import org.apache.fulcrum.parser.ValueParser;
+
+import jakarta.xml.bind.Unmarshaller;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Holds a group of Fields
@@ -651,7 +651,7 @@ public class Group implements Serializable, LogEnabled
     }
 
     /**
-     * JAXB callback to set the parent object
+     * JAXB / Jakarta callback to set the parent object
      *
      * @param um the Unmarshaller
      * @param parent the parent object (an AppData object)

@@ -19,9 +19,10 @@ package org.apache.fulcrum.intake.model;
  * under the License.
  */
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.fulcrum.intake.IntakeException;
+
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * Creates Field objects.

@@ -22,10 +22,11 @@ package org.apache.fulcrum.intake.model;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 
 import org.apache.fulcrum.intake.IntakeException;
+
+import jakarta.xml.bind.annotation.XmlEnum;
+import jakarta.xml.bind.annotation.XmlEnumValue;
 
 /**
  * Enum for valid field types.

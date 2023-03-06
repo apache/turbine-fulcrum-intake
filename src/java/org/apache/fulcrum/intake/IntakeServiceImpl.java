@@ -39,10 +39,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.Unmarshaller.Listener;
-import javax.xml.bind.helpers.DefaultValidationEventHandler;
 import javax.xml.validation.SchemaFactory;
 
 import org.apache.avalon.framework.activity.Initializable;
@@ -64,6 +60,11 @@ import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
 import org.apache.fulcrum.intake.model.AppData;
 import org.apache.fulcrum.intake.model.Field;
 import org.apache.fulcrum.intake.model.Group;
+
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Unmarshaller;
+import jakarta.xml.bind.Unmarshaller.Listener;
+import jakarta.xml.bind.helpers.DefaultValidationEventHandler;
 
 /**
  * This service provides access to input processing objects based on an XML
