@@ -19,14 +19,14 @@
   <parent>
     <groupId>org.apache.turbine</groupId>
     <artifactId>turbine-parent</artifactId>
-    <version>12-SNAPSHOT</version>
-    <relativePath/>
+    <version>12</version>
+    <relativePath />
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.fulcrum</groupId>
   <artifactId>fulcrum-intake</artifactId>
-  <version>2.0.1-SNAPSHOT</version>
+  <version>2.0.1</version>
   <name>Fulcrum Intake Service</name>
   <inceptionYear>2005</inceptionYear>
   <description>This Service provides rule-based input validation</description>
@@ -46,7 +46,7 @@
     <connection>scm:git:https://gitbox.apache.org/repos/asf/turbine-fulcrum-intake.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/turbine-fulcrum-intake.git</developerConnection>
     <url>https://github.com/apache/${turbine.site.path}/tree/${project.scm.tag}</url>
-    <tag>HEAD</tag>
+    <tag>fulcrum-intake-2.0.1-candidate</tag>
   </scm>
 
   <developers>
