@@ -46,7 +46,7 @@
     <connection>scm:git:https://gitbox.apache.org/repos/asf/turbine-fulcrum-intake.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/turbine-fulcrum-intake.git</developerConnection>
     <url>https://github.com/apache/${turbine.site.path}/tree/${project.scm.tag}</url>
-    <tag>fulcrum-intake-2.0.1-candidate</tag>
+    <tag>fulcrum-intake-3.0.1-candidate</tag>
   </scm>
 
   <developers>
