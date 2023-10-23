@@ -489,6 +489,16 @@ public class IntakeServiceImpl extends AbstractLogEnabled implements
             {
                 keyedPools.get(appData).returnObject(groupName, instance);
             }
+            catch (IllegalStateException e)
+            {
+                if (getLogger().isDebugEnabled()) {
+                    throw new IntakeException("group " + groupName + " was never borrowed or is already invalid.", e); 
+                } else { 
+                    throw new IntakeException( "group " + groupName
+                            + " was never borrowed or is already invalid (stacktrace with log-level debug): "
+                            + e.getMessage()); 
+                }
+            }
             catch (Exception e)
             {
                 throw new IntakeException("Could not get group " + groupName, e);
