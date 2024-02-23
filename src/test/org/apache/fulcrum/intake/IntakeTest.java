@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.fulcrum.intake.model.Field;
@@ -313,4 +314,35 @@ public class IntakeTest extends BaseUnit5Test
             assertEquals("Not a number", ve.getMessage(), "Entry was not a valid BigDecimal");
         }
     }
+    
+    /**
+     * @throws Exception generic exception
+     *
+     *  TODO getObjects is not working, deprecated?
+     */
+    @Test
+    public void testObjects() throws Exception
+    {
+        IntakeService is = (IntakeService) this.lookup( IntakeService.ROLE );
+        Group group = is.getGroup("ValidationTest");
+        assertNotNull(group);
+        
+        ParserService ps = (ParserService) this.lookup( ParserService.ROLE );
+        ValueParser pp = ps.getParser(DefaultParameterParser.class);
+
+        pp.setString("vt_0itf", "15");
+//        pp.setString("Username", "Joe");
+        
+        //  object leak in the init() method in IntakeTool?
+        group.init(pp);
+        
+        String html = group.getHtmlFormInput();
+        
+        List<Group> foundGroups = group.getObjects(pp);
+
+        System.out.println("foundGroups should not be null: " + foundGroups);
+        //assertTrue(foundGroups.size()>0, "The size should be > 0");
+        
+    }
+
 }
