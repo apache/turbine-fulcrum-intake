@@ -26,7 +26,8 @@ import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.http.Part;
+import jakarta.servlet.http.Part;
+
 
 /**
  * A validator that will compare a Part testValue against the following
