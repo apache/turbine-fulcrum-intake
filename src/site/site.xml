@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  Licensed to the Apache Software Foundation (ASF) under one
  or more contributor license agreements.  See the NOTICE file
@@ -17,14 +17,58 @@
  specific language governing permissions and limitations
  under the License.
 -->
-<project name="Fulcrum Intake">
+<site xmlns="http://maven.apache.org/SITE/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd"
+  name="Apache Turbine - Fulcrum Intake" combine.self="merge">  
 
+  <bannerLeft href="https://turbine.apache.org/">
+    <image src="https://turbine.apache.org/images/turbine-project.png" alt="Apache Turbine" />
+  </bannerLeft>
+  
+   <bannerRight/>
+    
+    <publishDate format="dd MMMM yyyy" position="left" />
+    <version position="left" />
+   
+    <!-- IMPORTANT Notice: elements like bannerLeft, publishDate, version, links, skin and custom
+      are redundant after updating to released parent pom v14 which allows skin inheritance again.
+    -->
+   <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>2.0.0-M11</version>
+  </skin>
   
   <body>
+    <head/>
+  
+     <links>
+        <item name="Apache" href="https://www.apache.org/"> </item>
+        <item name="Turbine" href="https://turbine.apache.org/">  </item>
+          <item name="Fulcrum" href="/fulcrum/"> </item>
+    </links>
+   
     <menu name="Overview">
       <item name="Main"                 href="/index.html"/>
       <item name="Howto"                href="/howto.html"/>
-    </menu>
-  </body>
+     </menu>  
+    <menu ref="reports"></menu>
 
-</project>
+    <footer/>
+  </body>
+   <custom>
+        <fluidoSkin>
+            <topBarEnabled>false</topBarEnabled>
+            <sideBarEnabled>true</sideBarEnabled>
+            <googleSearch>
+                <sitesearch>${project.url}</sitesearch>
+            </googleSearch>
+            <gitHub>
+                <projectId>apache/${turbine.site.path}</projectId>
+                <ribbonOrientation>right</ribbonOrientation>
+                <ribbonColor>gray</ribbonColor>
+            </gitHub>
+        </fluidoSkin>
+    </custom>
+    
+</site>
