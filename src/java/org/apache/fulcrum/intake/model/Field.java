@@ -1105,15 +1105,10 @@ public abstract class Field<T> implements Serializable, LogEnabled
         try
         {
             v = (Validator<T>)
-                    Class.forName(validatorClassName).newInstance();
+                    Class.forName(validatorClassName).getDeclaredConstructor().newInstance();
         }
-        catch (InstantiationException e)
-        {
-            throw new IntakeException(
-                    "Could not create new instance of Validator("
-                    + validatorClassName + ")", e);
-        }
-        catch (IllegalAccessException e)
+        catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
+                InvocationTargetException | NoSuchMethodException e)
         {
             throw new IntakeException(
                     "Could not create new instance of Validator("
@@ -1126,16 +1121,16 @@ public abstract class Field<T> implements Serializable, LogEnabled
                     + validatorClassName + ")", e);
         }
 
-        if (v instanceof LogEnabled)
+        if (v instanceof LogEnabled logEnabled)
         {
-        	((LogEnabled)v).enableLogging(log);
+        	logEnabled.enableLogging(log);
         }
 
         // this should always be true for now
         // (until bean property initialization is implemented)
-        if (v instanceof InitableByConstraintMap)
+        if (v instanceof InitableByConstraintMap initable)
         {
-            ((InitableByConstraintMap) v).init(this.ruleMap);
+            initable.init(this.ruleMap);
         }
         else
         {

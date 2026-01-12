@@ -62,7 +62,7 @@ public class FloatField
             return;
         }
 
-        defaultValue = new Float(prop);
+        defaultValue = Float.valueOf(prop);
     }
 
     /**
@@ -83,7 +83,7 @@ public class FloatField
             return;
         }
 
-        emptyValue = new Float(prop);
+        emptyValue = Float.valueOf(prop);
     }
 
     /**
@@ -106,7 +106,7 @@ public class FloatField
         else
         {
             return (null == getEmptyValue())
-                    ? new Float(0.0) : getEmptyValue();
+                    ? Float.valueOf(0.0f) : getEmptyValue();
         }
     }
 

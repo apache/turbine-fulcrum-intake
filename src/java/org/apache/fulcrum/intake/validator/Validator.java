@@ -26,7 +26,6 @@ import org.apache.fulcrum.intake.model.Field;
  *
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
- * @version $Id$
  */
 public interface Validator<T>
 {
@@ -86,6 +85,7 @@ public interface Validator<T>
      *
      * @deprecated use isValid(Field) instead
      */
+    @Deprecated
     boolean isValid(String testValue);
 
     /**

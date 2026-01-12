@@ -62,7 +62,7 @@ public class DoubleField
             return;
         }
 
-        defaultValue = new Double(prop);
+        defaultValue = Double.valueOf(prop);
     }
 
     /**
@@ -83,7 +83,7 @@ public class DoubleField
             return;
         }
 
-        emptyValue = new Double(prop);
+        emptyValue = Double.valueOf(prop);
     }
 
     /**
@@ -106,7 +106,7 @@ public class DoubleField
         else
         {
             return (null == getEmptyValue())
-                    ? new Double(0.0) : getEmptyValue();
+                    ? Double.valueOf(0.0) : getEmptyValue();
         }
     }
 
